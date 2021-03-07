@@ -17,6 +17,9 @@ import (
 func TestWalkTemplates(t *testing.T) {
 	searchDir := "../templates/"
 	err := filepath.Walk(searchDir, func(path string, fi os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		if fi == nil {
 			t.Fatalf("invalid path " + searchDir)
 		}
@@ -46,6 +49,9 @@ func TestWalkTemplates(t *testing.T) {
 			return fmt.Errorf("unknown kind '%s", tpl.Kind)
 		}
 
+		_, err = UnmarshalTemplateIntoDataStructure(templateData)
+		assert.Equal(t, nil, err)
+
 		return nil
 	})
 	assert.Equal(t, nil, err)
@@ -56,6 +62,8 @@ func TestEvaluateTemplateConstants(t *testing.T) {
 constants:
   u8[2] I: c'I' 00
   u8[3] X: c'XX' 00
+layout:
+  -
 `
 	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData))
 	assert.Equal(t, nil, err)

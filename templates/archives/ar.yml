@@ -12,11 +12,15 @@ mime: application/x-archive
 
 endian: big  # XXX
 
-header:
-  ascii[16] Identifier: ??
-  ascii[12] File modification time: ?? # XXX ascii decimal ?
-  u8[6] Owner ID: ?? # XXX decimal
-  u8[6] Group ID: ?? # XXX decimal
-  u8[8] File mode: ?? # XXX octal
-  u8[10] File size: ?? # XXX decimal, in bytes
-  #u8[2] Signature: 60 0a
+structs:
+  header:
+    ascii[16] Identifier: ??
+    ascii[12] File modification time: ?? # XXX ascii decimal ?
+    u8[6] Owner ID: ?? # XXX decimal
+    u8[6] Group ID: ?? # XXX decimal
+    u8[8] File mode: ?? # XXX octal
+    u8[10] File size: ?? # XXX decimal, in bytes
+    #u8[2] Signature: 60 0a
+
+layout:
+  - header Header

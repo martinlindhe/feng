@@ -13,14 +13,18 @@ mime: application/zlib
 
 endian: little # XXX ???
 
-header:
-  u8 Compression method and flags:
-    bit b0000_1111: CM      # Compression method. XXX CM 8 = DEFLATE (gzip,png)
-    bit b1111_0000: CINFO   # Compression info. only used with CM=8
-  u8 Flag:
-    bit b0001_1111: FCHECK  # check bits for CMF and FLG
-    bit b0010_0000: FDICT   # Dictionary present
-    bit b1100_0000: FLEVEL  # Compression level. XXX: 0=fastest, 1=fast, 2=default, 3=max compression
+structs:
+  header:
+    u8 Compression method and flags:
+      bit b0000_1111: CM      # Compression method. XXX CM 8 = DEFLATE (gzip,png)
+      bit b1111_0000: CINFO   # Compression info. only used with CM=8
+    u8 Flag:
+      bit b0001_1111: FCHECK  # check bits for CMF and FLG
+      bit b0010_0000: FDICT   # Dictionary present
+      bit b1100_0000: FLEVEL  # Compression level. XXX: 0=fastest, 1=fast, 2=default, 3=max compression
 
-  #if Flag[FDICT]:
-  #  ...compressed data...|    ADLER32
+    #if Flag[FDICT]:
+    #  ...compressed data...|    ADLER32
+
+layout:
+  - header Header

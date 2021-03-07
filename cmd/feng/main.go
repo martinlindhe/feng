@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -45,21 +44,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, layout := range fl.Structs {
-		fmt.Printf("%s\n", layout.Label)
-
-		for _, field := range layout.Fields {
-			kind := field.Format.PresentType()
-			if field.Format.SingleUnitSize() > 1 {
-				if field.Endian == "little" {
-					kind += " le"
-				} else {
-					kind += " be"
-				}
-			}
-
-			fmt.Printf("  [%06x] %-30s %-10s %-10s %-20s\n",
-				field.Offset, field.Format.Label, kind, field.PresentValue(), fmt.Sprintf("% 02x", field.Value))
-		}
-	}
+	fl.Present()
 }

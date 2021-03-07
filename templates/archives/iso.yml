@@ -12,5 +12,10 @@ mime: application/x-iso9660-image
 
 endian: little    # XXX
 
-header:
-  # XXX header at 0x8000:   01 c'CD'
+structs:
+  header:
+    # XXX header at 0x8000:   01 c'CD'
+    u8 crap: ??
+
+layout:
+  - header Header

@@ -12,5 +12,9 @@ kind: archive   # XXX or "disk image" or "file system image" ?
 
 endian: little    # XXX
 
-header:
-  ascii[4] Signature: c'LUKS'
+structs:
+  header:
+    ascii[4] Signature: c'LUKS'
+
+layout:
+  - header Header

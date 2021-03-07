@@ -140,7 +140,7 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 			}
 
 		default:
-			log.Fatalf("evaluateStructs: cant handle %T", val)
+			log.Fatalf("evaluateStructs: cant handle type '%T'", val)
 		}
 	}
 

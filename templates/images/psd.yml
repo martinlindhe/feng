@@ -12,20 +12,24 @@ mime: image/vnd.adobe.photoshop
 
 endian: big
 
-header:
-  ascii[4] Signature: c'8BPS'
-  u16 Version: ??       # XXX version 2 is "big" format, larger fields?
-  u8[6] Reserved: ??
-  u16 Channels: ??
-  u32 Height: ??
-  u32 Width: ??
-  u16 Bit depth: ??
-  u16 Color mode:       # XXX map u16 forms
-    eq 00: Bitmap
-    eq 01: Grayscale
-    eq 02: Indexed
-    eq 03: RGB
-    eq 04: CMYK
-    eq 07: Multichannel
-    eq 08: Duotone
-    eq 09: LAB
+structs:
+  header:
+    ascii[4] Signature: c'8BPS'
+    u16 Version: ??       # XXX version 2 is "big" format, larger fields?
+    u8[6] Reserved: ??
+    u16 Channels: ??
+    u32 Height: ??
+    u32 Width: ??
+    u16 Bit depth: ??
+    u16 Color mode:       # XXX map u16 forms
+      eq 00: Bitmap
+      eq 01: Grayscale
+      eq 02: Indexed
+      eq 03: RGB
+      eq 04: CMYK
+      eq 07: Multichannel
+      eq 08: Duotone
+      eq 09: LAB
+
+layout:
+  - header Header

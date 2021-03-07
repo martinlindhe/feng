@@ -2,7 +2,6 @@ package mapper
 
 import (
 	"bytes"
-	"encoding/binary"
 	"fmt"
 	"io"
 	"log"
@@ -12,51 +11,9 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-type fileField struct {
-	Offset uint64
-	Length uint64
-
-	// value in network byte order (big)
-	Value []byte
-
-	// on-disk endianness
-	Endian string
-
-	// underlying data structure
-	Format value.DataField
-}
-
-// decodes simple value types for presentation
-func (ff *fileField) PresentValue() string {
-
-	if ff.Format.Slice || ff.Format.Range != "" {
-		return ""
-	}
-
-	switch ff.Format.Kind {
-	case "u32":
-		v := binary.BigEndian.Uint32(ff.Value)
-		return fmt.Sprintf("%d", v)
-	}
-	log.Fatalf("PresentValue unhandled kind %s", ff.Format.Kind)
-	return ""
-}
-
 const (
-	DEBUG = false
+	DEBUG = true
 )
-
-// parsed file data from a template "layout"
-type FileLayout struct {
-	Structs []FileStruct
-}
-
-// parsed file data section from a template "struct"
-type FileStruct struct {
-	Label string
-
-	Fields []fileField
-}
 
 // produces a list of fields with offsets and sizes from input reader based on data structure
 func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
@@ -75,12 +32,15 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			log.Fatalf("TODO handle ranged layout %#v", layout)
 		}
 		if DEBUG {
-			fmt.Printf("appending struct '%s'\n", layout.PresentType())
+			log.Printf("mapping struct '%s'\n", layout.PresentType())
 		}
 
 		struct_, err := ds.FindStructure(&layout)
 		if err != nil {
 			panic(err)
+		}
+		if DEBUG {
+			log.Printf("mapped '%s' to %v\n", layout.PresentType(), struct_)
 		}
 
 		fs := FileStruct{Label: layout.Label}
@@ -97,7 +57,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 			case "u8", "u16", "u32", "u64":
 				if es.Field.IsRangeUnit() {
-					log.Fatalf("XXX invalid u8[%s] form", es.Field.Range)
+					log.Fatalf("invalid %s form: %s", es.Field.Kind, es.Field.PresentType())
 				}
 
 				unitLength := es.Field.SingleUnitSize()
@@ -114,7 +74,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 				val := make([]byte, totalLength)
 				if DEBUG {
-					log.Printf("[%08x] reading %d bytes", offset, totalLength)
+					log.Printf("[%08x] reading %d bytes for '%s' %s", offset, totalLength, es.Field.Label, es.Field.PresentType())
 				}
 				if _, err := io.ReadFull(r, val); err != nil {
 					return nil, err
@@ -140,7 +100,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 				fs.Fields = append(fs.Fields, field)
 
 			default:
-				return nil, fmt.Errorf("MapReader: unhandled field kind '%s'", es.Field.Kind)
+				return nil, fmt.Errorf("MapReader: unhandled field '%#v'", es.Field)
 			}
 			offset += field.Length
 		}

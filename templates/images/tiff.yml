@@ -15,16 +15,20 @@ mime: image/tiff
 
 endian: big     # TODO endian must be enforced by signature
 
-header:
-  ascii[2] Signature: ??
-  # XXX ENDIANNESS is set by header
-  #if Signature in["MM"]:
-  #  endian big
-  #if Signature in["II"]:
-  #  endian little
-  #if not Signature in["MM","II"]:
-  #  invalid            # XXX IF SIGNATURE NOT MM or II, its not a valid file
+structs:
+  header:
+    ascii[2] Signature: ??
+    # XXX ENDIANNESS is set by header
+    #if Signature in["MM"]:
+    #  endian big
+    #if Signature in["II"]:
+    #  endian little
+    #if not Signature in["MM","II"]:
+    #  invalid            # XXX IF SIGNATURE NOT MM or II, its not a valid file
 
-  u16 Arbitrary number: 00 2a # XXX for big endian "00 2a", for little endian "2a 00"
+    u16 Arbitrary number: 00 2a # XXX for big endian "00 2a", for little endian "2a 00"
 
-  # XXX rest
+    # XXX rest
+
+layout:
+  - header Header

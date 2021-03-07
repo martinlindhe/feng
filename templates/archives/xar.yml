@@ -12,17 +12,21 @@ mime: application/x-xar
 
 endian: big
 
-header:
-  u8[4] Signature: c'xar!'
-  u16 Header size: ??
-  u16 Version: ??  # XXX ONLY 01 is known
-  u64 Compressed TOC length: ??
-  u64 Uncompressed TOC length: ??
-  u32 Checksum algorithm: ??     # XXX u32 + eq
-  #  eq 00: none
-  #  eq 01: SHA1
-  #  eq 02: MD5
-  #  eq 03: SHA-256
-  #  eq 04: SHA-512
+structs:
+  header:
+    u8[4] Signature: c'xar!'
+    u16 Header size: ??
+    u16 Version: ??  # XXX ONLY 01 is known
+    u64 Compressed TOC length: ??
+    u64 Uncompressed TOC length: ??
+    u32 Checksum algorithm: ??     # XXX u32 + eq
+    #  eq 00: none
+    #  eq 01: SHA1
+    #  eq 02: MD5
+    #  eq 03: SHA-256
+    #  eq 04: SHA-512
 
-  # XXX
+    # XXX
+
+layout:
+  - header Header

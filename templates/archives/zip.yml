@@ -16,19 +16,23 @@ mime: application/zip
 
 endian: little
 
-header:
-  u8[4] Signature: c'PK' 03 04
-  u16 Version needed to extract: ??
-  u16 General purpose bit flag: ??
-  u16 Compression method: ??
-  # XXX a single 32bit "MS-DOS time+date" field:
-  u16 File last modification time: ?? # XXX format?  "MS-DOS time" ?  37372 decimal = 18:15:56
-  u16 File last modification date: ?? # XXX format?  "MS-DOS date" ?  17214 decimal = 2013-09-30
-  u32 CRC32 of uncompressed data: ?? # XXX form ?
-  u32 Compressed size: ??   # or 0xffffffff for ZIP64
-  u32 Uncompressed size: ?? # or 0xffffffff for ZIP64
-  u16 File name length: ??
-  u16 Extra field length: ??
-  # XXX:
-  #u8[File name length] File name: ??
-  #u8[Extra field length] Extra field: ??
+structs:
+  header:
+    u8[4] Signature: c'PK' 03 04
+    u16 Version needed to extract: ??
+    u16 General purpose bit flag: ??
+    u16 Compression method: ??
+    # XXX a single 32bit "MS-DOS time+date" field:
+    u16 File last modification time: ?? # XXX format?  "MS-DOS time" ?  37372 decimal = 18:15:56
+    u16 File last modification date: ?? # XXX format?  "MS-DOS date" ?  17214 decimal = 2013-09-30
+    u32 CRC32 of uncompressed data: ?? # XXX form ?
+    u32 Compressed size: ??   # or 0xffffffff for ZIP64
+    u32 Uncompressed size: ?? # or 0xffffffff for ZIP64
+    u16 File name length: ??
+    u16 Extra field length: ??
+    # XXX:
+    #u8[File name length] File name: ??
+    #u8[Extra field length] Extra field: ??
+
+layout:
+  - header Header

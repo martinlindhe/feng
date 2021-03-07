@@ -3,6 +3,7 @@
 
 references:
   - https://en.wikipedia.org/wiki/BMP_file_format
+  - https://github.com/synalysis/Grammars/blob/master/bitmap.grammar
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/BMP.tcl
   - https://www.sweetscape.com/010editor/repository/files/BMP.bt
   - https://github.com/martinlindhe/formats/blob/master/parse/image/img_bmp.go
@@ -22,12 +23,12 @@ structs:
     # DIB header
     u32 DIB header size: ??
 
-    # XXX 2. !!!: handle "if header field value in[1,2,3]". single and multi value IF-case
-    #if DIB header size in[12]:       # OS/2 V1 - BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
-    #  u16 Width: ??
-    #  u16 Height: ??
-    #  u16 Color planes: ??
-    #  u16 Bits per pixel: ??
+    # XXX !!!: handle "if header field value in[1,2,3]". single and multi value IF-case
+    if DIB header size in[12]:       # OS/2 V1 - BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
+      u16 Width: ??
+      u16 Height: ??
+      u16 Color planes: ??
+      u16 Bits per pixel: ??
 
   headerTODO:
     #if DIB header size in[40,64]:      # Windows V3 - BITMAPINFOHEADER (size 40)

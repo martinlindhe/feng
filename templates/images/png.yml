@@ -80,7 +80,7 @@ structs:
 
 
 layout:
-  - header
+  - header Header
 
   # XXX unknown amount of chunks until end of file:
   - chunk[] Chunk

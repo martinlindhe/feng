@@ -14,70 +14,74 @@ mime: application/x-lzh-compressed
 
 endian: little
 
-header:
-  u8 Header size: ??          # seen 0x34
-  u8 Checksum: ??             # xxx algorithm: This is low 1 byte of the total of each bytes of whole header without 2 bytes of the head. Header checksum is 0xC3 in the foregoing sample. (Total of each bytes of whole header without 2 bytes of the head is 0x07C3.)
-  ascii[3] Signature: c'-lh'
-  u8 Compression method:
-    eq c'0': None
-    eq c'1': LZW, 4K sliding window. Dynamic Huffman
-    eq c'2': LZW, 8K sliding window. Dynamic Huffman
-    eq c'3': LZW, 8K sliding window. Static Huffman (lh3)
-    eq c'4': LZW, 4K sliding window. Static Huffman
-    eq c'5': LZW, 8K sliding window. Static Huffman (lh5)
-    eq c'6': LZW, 32K sliding window. Static Huffman
-    eq c'7': LZW, 64K sliding window. Static Huffman
-    # default: invalid
-  u8 Signature: c'-'
-  u32 Compressed size: ??
-  u32 Uncompressed size: ??
-  u16 File modified time: ??  # XXX MS-DOS time format? see msDosTimeToTime() in https://golang.org/src/archive/zip/struct.go
-  u16 File modified date: ??  # XXX MS-DOS date format?
+structs:
+  header:
+    u8 Header size: ??          # seen 0x34
+    u8 Checksum: ??             # xxx algorithm: This is low 1 byte of the total of each bytes of whole header without 2 bytes of the head. Header checksum is 0xC3 in the foregoing sample. (Total of each bytes of whole header without 2 bytes of the head is 0x07C3.)
+    ascii[3] Signature: c'-lh'
+    u8 Compression method:
+      eq c'0': None
+      eq c'1': LZW, 4K sliding window. Dynamic Huffman
+      eq c'2': LZW, 8K sliding window. Dynamic Huffman
+      eq c'3': LZW, 8K sliding window. Static Huffman (lh3)
+      eq c'4': LZW, 4K sliding window. Static Huffman
+      eq c'5': LZW, 8K sliding window. Static Huffman (lh5)
+      eq c'6': LZW, 32K sliding window. Static Huffman
+      eq c'7': LZW, 64K sliding window. Static Huffman
+      # default: invalid
+    u8 Signature: c'-'
+    u32 Compressed size: ??
+    u32 Uncompressed size: ??
+    u16 File modified time: ??  # XXX MS-DOS time format? see msDosTimeToTime() in https://golang.org/src/archive/zip/struct.go
+    u16 File modified date: ??  # XXX MS-DOS date format?
 
 
-  # LEVEL 0 header:
-  #u8 File attributes: ??     # XXX ? flags? ms-dos file attributes. should be "20" for normal file
-  #u8 Header Level: "00" # must be 00 for "level 0 header"
-  #u8 Filename length: ??
-  #ascii[Filename length] Path and filename: ??
+    # LEVEL 0 header:
+    #u8 File attributes: ??     # XXX ? flags? ms-dos file attributes. should be "20" for normal file
+    #u8 Header Level: "00" # must be 00 for "level 0 header"
+    #u8 Filename length: ??
+    #ascii[Filename length] Path and filename: ??
 
-  # LEVEL 1 header:
-  # XXX variable size with filenames embedded...
-  # SEE https://web.archive.org/web/20070912142508/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/Level1Header.html
-  # NEED SAMPLES WITH LEVEL 1 HEADER
-
-
+    # LEVEL 1 header:
+    # XXX variable size with filenames embedded...
+    # SEE https://web.archive.org/web/20070912142508/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/Level1Header.html
+    # NEED SAMPLES WITH LEVEL 1 HEADER
 
 
-  # LEVEL 2 header:
-  u8 Signature: "20"
-  u8 Header Level: "02" # must be 02 for "level 2 header"   XXX 02 for "level 3 header"
-  u16 Uncompressed CRC16: ??    # XXX ALSO LV3 header
-  u8 OS ID:                     # XXX ALSO LV3 header
-    eq 00: MS-DOS (generic)
-    eq 32: OS/2
-    eq 33: OS/386
-    eq 39: OS-9
-    eq 43: CP/M
-    eq 46: FLEX (OS for 6809)
-    eq 48: Human68K (OS for X68000)
-    eq 4A: Java VM
-    eq 4B: OS/68K
-    eq 4D: MS-DOS
-    eq 52: Runser (OS for FM-7)
-    eq 54: TownsOS (OS for FM-Towns)
-    eq 55: UNIX
-    eq 57: Windows NT
-    eq 58: XOSK
-    eq 6D: Macintosh developed by Apple
-    eq 77: Windows 95
 
-  u16 Size of next extended header: ??    # XXX ONLY Lv2 header
 
-  # XXX only LEVEL 3 headers:
-  #u32 Size of header: ??
-  #u32 Size of next extended header: ??
+    # LEVEL 2 header:
+    u8 Signature: "20"
+    u8 Header Level: "02" # must be 02 for "level 2 header"   XXX 02 for "level 3 header"
+    u16 Uncompressed CRC16: ??    # XXX ALSO LV3 header
+    u8 OS ID:                     # XXX ALSO LV3 header
+      eq 00: MS-DOS (generic)
+      eq 32: OS/2
+      eq 33: OS/386
+      eq 39: OS-9
+      eq 43: CP/M
+      eq 46: FLEX (OS for 6809)
+      eq 48: Human68K (OS for X68000)
+      eq 4A: Java VM
+      eq 4B: OS/68K
+      eq 4D: MS-DOS
+      eq 52: Runser (OS for FM-7)
+      eq 54: TownsOS (OS for FM-Towns)
+      eq 55: UNIX
+      eq 57: Windows NT
+      eq 58: XOSK
+      eq 6D: Macintosh developed by Apple
+      eq 77: Windows 95
 
-  # BODY:
-  u16 Uncompressed CRC16: ??
-  #u8[Compressed size] Compressed data: ??
+    u16 Size of next extended header: ??    # XXX ONLY Lv2 header
+
+    # XXX only LEVEL 3 headers:
+    #u32 Size of header: ??
+    #u32 Size of next extended header: ??
+
+    # BODY:
+    u16 Uncompressed CRC16: ??
+    #u8[Compressed size] Compressed data: ??
+
+layout:
+  - header Header

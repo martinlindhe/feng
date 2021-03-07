@@ -44,7 +44,7 @@ structs:
 
 
 layout:
-  - header
+  - header Header
 
   # XXX what follows is Resources `n` ICONDIRENTRY structs:
-  - ICONDIRENTRY[header.Resources]  # XXX custom struct define !
+  - ICONDIRENTRY[header.Resources] Resource # XXX custom struct define !
