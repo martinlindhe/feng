@@ -49,7 +49,17 @@ func main() {
 		fmt.Printf("%s\n", layout.Label)
 
 		for _, field := range layout.Fields {
-			fmt.Printf("  [%06x] %-30s % 02x\n", field.Offset, field.Label, field.Value)
+			kind := field.Format.PresentType()
+			if field.Format.SingleUnitSize() > 1 {
+				if field.Endian == "little" {
+					kind += " le"
+				} else {
+					kind += " be"
+				}
+			}
+
+			fmt.Printf("  [%06x] %-30s %-10s %-10s %-20s\n",
+				field.Offset, field.Format.Label, kind, field.PresentValue(), fmt.Sprintf("% 02x", field.Value))
 		}
 	}
 }

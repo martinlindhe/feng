@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"bytes"
+	"encoding/binary"
 	"fmt"
 	"io"
 	"log"
@@ -14,10 +15,31 @@ import (
 type fileField struct {
 	Offset uint64
 	Length uint64
-	Label  string
 
 	// value in network byte order (big)
 	Value []byte
+
+	// on-disk endianness
+	Endian string
+
+	// underlying data structure
+	Format value.DataField
+}
+
+// decodes simple value types for presentation
+func (ff *fileField) PresentValue() string {
+
+	if ff.Format.Slice || ff.Format.Range != "" {
+		return ""
+	}
+
+	switch ff.Format.Kind {
+	case "u32":
+		v := binary.BigEndian.Uint32(ff.Value)
+		return fmt.Sprintf("%d", v)
+	}
+	log.Fatalf("PresentValue unhandled kind %s", ff.Format.Kind)
+	return ""
 }
 
 const (
@@ -114,7 +136,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 					}
 				}
 
-				field = fileField{Offset: offset, Length: totalLength, Value: val, Label: es.Field.Label}
+				field = fileField{Offset: offset, Length: totalLength, Value: val, Format: es.Field, Endian: endian}
 				fs.Fields = append(fs.Fields, field)
 
 			default:

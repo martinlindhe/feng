@@ -18,33 +18,34 @@ structs:
     u32 File size: ??
     u32 Reserved: 00 00 00 00   # XXX not sure if must be zeroed
     u32 Starting address: ??
+
+    # DIB header
     u32 DIB header size: ??
 
-    # TODO !!!!: handle "if header field value in[1,2,3]" multi value IF-case
-
-    # XXX if DIB header size is decimal 12, then BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
-    #if DIB header size in[12]:      # OS/2 V1 - BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
+    # XXX 2. !!!: handle "if header field value in[1,2,3]". single and multi value IF-case
+    #if DIB header size in[12]:       # OS/2 V1 - BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
     #  u16 Width: ??
     #  u16 Height: ??
-    #  u16 Color planes: ?? # XXX must be 01 ?
+    #  u16 Color planes: ??
     #  u16 Bits per pixel: ??
 
+  headerTODO:
     #if DIB header size in[40,64]:      # Windows V3 - BITMAPINFOHEADER (size 40)
     u32 Width: ??
     u32 Height: ??
-    u16 Color planes: ?? # XXX must be 01 ?
+    u16 Color planes: ??
     u16 Bits per pixel: ??
-    u32 Compression method: ??  #  TODO handle multiple values for u32
-    #  eq 00: BI_RGB (none)
-    #  eq 01: BI_RLE8
-    #  eq 02: BI_RLE4
-    #  eq 03: BI_BITFIELDS
-    #  eq 04: BI_JPEG
-    #  eq 05: BI_PNG
-    #  eq 06: BI_ALPHABITFIELDS
-    #  eq 0b: BI_CMYK
-    #  eq 0c: BI_CMYKRLE8
-    #  eq 0d: BI_CMYKRLE4
+    u32 Compression method:   #  XXX handle multiple values for u32 !?
+      eq 00: BI_RGB (none)
+      eq 01: BI_RLE8
+      eq 02: BI_RLE4
+      eq 03: BI_BITFIELDS
+      eq 04: BI_JPEG
+      eq 05: BI_PNG
+      eq 06: BI_ALPHABITFIELDS
+      eq 0b: BI_CMYK
+      eq 0c: BI_CMYKRLE8
+      eq 0d: BI_CMYKRLE4
     u32 Image data size: ??
     u32 Horizontal resolution: ??
     u32 Vertical resolution: ??
