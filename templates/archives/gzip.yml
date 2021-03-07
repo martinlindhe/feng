@@ -1,0 +1,80 @@
+# STATUS: 5%
+# - HI: u8[range] Data: ??   syntax. need parser rework to act like crc32[range]
+#
+# - LOW: crc16. WANT sample file with FLAG_CRC16
+# - SAMPLE: WANT sample file with FLAG_EXTRA
+
+references:
+  - https://tools.ietf.org/html/rfc1952
+  - https://forensicswiki.xyz/page/Gzip
+  - https://www.sweetscape.com/010editor/repository/files/GZip.bt
+  - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/GZIP.tcl
+
+kind: archive
+extensions: [.gz, .tgz]
+mime: application/gzip
+
+endian: little
+
+header:
+  u8[2] Signature: 1f 8b
+  u8 Compression method:
+    eq 00: Stored
+    eq 01: Compressed
+    eq 02: Packed
+    eq 03: LZH:ed
+    eq 08: Deflate
+  u8 Header flags:
+    bit b0000_0001: FLAG_TEXT       # File is ASCII text
+    bit b0000_0010: FLAG_CRC16      # Header checksum present
+    bit b0000_0100: FLAG_EXTRA      # Extra fields present
+    bit b0000_1000: FLAG_NAME       # Filename present
+    bit b0001_0000: FLAG_COMMENT    # Comment present
+  time_t_32 Modification time: ??
+  u8 Compression flags:
+    eq 02: max compression (deflate)
+    eq 04: fastest compression (deflate)
+  u8 Operating system:
+    eq 00: FAT filesystem (MS-DOS, OS/2, NT/Win32)
+    eq 01: Amiga
+    eq 02: VMS (or OpenVMS)
+    eq 03: Unix
+    eq 04: VM/CMS
+    eq 05: Atari TOS
+    eq 06: HPFS filesystem (OS/2, NT)
+    eq 07: Macintosh
+    eq 08: Z-System
+    eq 09: CPM
+    eq 0a: TOPS-20
+    eq 0b: NTFS filesystem (NT)
+    eq 0c: QDOS
+    eq 0d: Acorn RISCOS
+    eq ff: Unknown OS
+
+    #TODO crc16. WANT sample file with FLAG_CRC16
+  #if Header flags[FLAG_CRC16]:
+  #  crc16[0000:000a] Header checksum: ??   # XXX cmd to validate all checksums ?
+
+  # TODO WANT sample file with FLAG_EXTRA
+  #if Header flags[FLAG_EXTRA]:            # XXX format: u16 length + byte[len] data
+  #  u16 Length: ??
+  #  # TODO u8[Length] where size is a previous field
+  #  u8[Length] Data: ??
+
+  if Header flags[FLAG_NAME]:
+    asciiz Filename: ??
+
+  if Header flags[FLAG_COMMENT]:
+    # TODO WANT sample file with FLAG_COMMENT
+    asciiz Comment: ??
+
+# WIP :::
+
+  #if Compression method[Deflate]:  # XXX TODO mark as "deflate" data type for auto extraction
+  # XXX need to rework so range expansion works for u8[] like it does for crc32[]
+  u8[FILE_SIZE-self.offset-8] Data: ??
+
+  #if !Compression method[Deflate]: # TODO IF NOT
+  #  b[FILE_SIZE-len(header)-8] Data: ??
+  crc32[Data.offset:self.offset] Data checksum: ??         # XXX of compressed or uncompressed data?
+  u32 Uncompressed size modulo 2^32: ??

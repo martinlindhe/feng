@@ -1,0 +1,57 @@
+# STATUS: 1%
+# - HI: octal ascii parsing?!
+
+# NOTE: this is the extended "ustar" (unix standard tar) format, not the older "tar"
+
+references:
+  - https://en.wikipedia.org/wiki/Tar_(computing)
+  - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/TAR.tcl
+
+kind: archive
+extensions: [.tar]
+mime: application/x-tar
+
+# NOTE format only uses byte streams and numbers encoded as octal ascii in them
+# TODO: could specify 2 details on a data field: meaning (uint32,crc32), encoding (ascii+octal)
+endian: big
+
+# XXX each file object start with 512 byte header then untouched data rounded up to a multiple of 512 bytes (zero pad)
+# XXX The end of an archive is marked by at least two consecutive zero-filled records.
+# XXX The final block of an archive is padded out to full length with zeros.
+header:
+  ascii[100] Filename: ??
+  ascii[8] File mode: ??     # XXX octal ascii number, like "000644 "
+  ascii[8] Owner ID: ??      # XXX octal ascii number
+  ascii[8] Group ID: ??      # XXX octal ascii number
+  ascii[12] File size in bytes (OCTAL): ?? # XXX octal ascii number, like "00000000002 "
+  ascii[12] Modification time (unix time, OCTAL): ?? # XXX octal ascii number, like "14020143052 "
+  # special tar checksum format: The checksum is calculated by taking the sum of the unsigned byte values of the header record with the eight checksum bytes taken to be ASCII spaces (decimal value 32). It is stored as a six digit octal number with leading zeroes followed by a NUL and then a space
+  ascii[8] Checksum: ??      # XXX octal ascii ??? like "010577"
+  u8 File type:
+    # NOTE: only 0,1,2 is valid for classic tar, the rest is ustar only
+    eq c'0': Normal file
+    eq c'1': Hard link
+    eq c'2': Symbolic link
+    eq c'3': Character special
+    eq c'4': Block special
+    eq c'5': Directory
+    eq c'6': FIFO
+    eq c'7': Contiguous file
+    eq c'g': Global extended header with meta data (POSIX.1-2001)
+    eq c'x': Extended header with meta data for the next file in the archive (POSIX.1-2001)
+    # A-Z: Vendor specific extensions (POSIX.1-1988)
+  ascii[100] Name of linked file: ??
+
+  # start of ustar header
+  ascii[6] Signature: c'ustar' 00
+  ascii[2] Version: c'00'
+  ascii[32] Owner name: ??
+  ascii[32] Group name: ??
+  ascii[8] Device major number: ?? # XXX octal ascii number
+  ascii[8] Device minor number: ?? # XXX octal ascii number
+  ascii[155] Filename prefix: ??
+  u8[12] Reserved: ??
+
+
+  # BODY XXX:
+  #u8[512] File data: ??

@@ -1,0 +1,50 @@
+# STATUS: 1%
+#  - HI: u16 eq match type: if Image type[Icon]
+#  - HI: need for Resources or something to specify all ICONDIRENTRY
+#  - LOW: prober need to fail match in case of unrecognized value "Image type"
+
+
+
+references:
+  - https://en.wikipedia.org/wiki/ICO_(file_format)
+  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_ico.go
+  - https://www.sweetscape.com/010editor/repository/files/ICO.bt
+
+kind: image
+extensions: [.ico, .cur]
+mime: image/x-icon          # XXX "image/vnd.microsoft.icon" for Cursor
+
+endian: little
+
+structs:
+  ICONDIRENTRY:
+    u8 Width: ??
+    u8 Height: ??
+    u8 Palette colors: ??  # 0 = doesn't use palette
+    u8 Reserved: ?? # xxx should be 0
+    #if Image type[Icon]:     # XXX u16 types
+    u16 Color planes: ?? # 0 or 1
+    u16 Bits per pixel: ??
+    #if Image type[Cursor]:
+    #  u16 Horizontal hotspot: ??
+    #  u16 Vertical hotspot: ??
+    u32 Image data size: ??
+    u32 Image data offset: ?? # XXX from beginning of file
+
+    # XXX could be BMP without header or full PNG
+    #u8[Image data offset:Image data offset+Image data size] Image data: ??
+
+  header:
+    u16 Reserved: 00 00
+    u16 Image type:             # XXX .cur format is almost identical, handle both here?
+      eq 01: Icon
+      eq 02: Cursor
+      # XXX any other value: file is not valid !
+    u16 Resources: ??           # number of image resources in file
+
+
+layout:
+  - header
+
+  # XXX what follows is Resources `n` ICONDIRENTRY structs:
+  - ICONDIRENTRY[header.Resources]  # XXX custom struct define !

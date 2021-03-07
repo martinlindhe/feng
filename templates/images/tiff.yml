@@ -1,0 +1,30 @@
+# STATUS: 1%
+# - HI: match in: if Signature in["MM"]:
+# - HI: endian is enforced by header field
+# - MAGIC:if not Signature in["MM","II"]: reject file if signature not MM or II
+
+references:
+  - https://en.wikipedia.org/wiki/TIFF
+  - https://www.sweetscape.com/010editor/repository/files/TIF.bt
+  - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/TIFF.tcl
+  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_tiff.go
+
+kind: image
+extensions: [.tiff, .tif]
+mime: image/tiff
+
+endian: big     # TODO endian must be enforced by signature
+
+header:
+  ascii[2] Signature: ??
+  # XXX ENDIANNESS is set by header
+  #if Signature in["MM"]:
+  #  endian big
+  #if Signature in["II"]:
+  #  endian little
+  #if not Signature in["MM","II"]:
+  #  invalid            # XXX IF SIGNATURE NOT MM or II, its not a valid file
+
+  u16 Arbitrary number: 00 2a # XXX for big endian "00 2a", for little endian "2a 00"
+
+  # XXX rest

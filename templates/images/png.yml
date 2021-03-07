@@ -1,0 +1,86 @@
+# STATUS: 1%
+# - HI: need to solve chunk listing syntax
+
+references:
+  - https://en.wikipedia.org/wiki/Portable_Network_Graphics
+  - https://www.w3.org/TR/PNG-Chunks.html
+  - https://www.sweetscape.com/010editor/repository/files/PNG.bt
+  - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/PNG.tcl
+  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_png.go
+
+kind: image
+extensions: [.png]
+mime: image/png
+
+endian: big
+
+structs:
+  header:
+    u8[8] Signature: 89 c'PNG' 0d 0a 1a 0a
+
+  chunk:
+    u32 Length: ??
+    u8[4] Type: ??
+
+    # CHUNK IHDR:
+    #u32 Width: ??
+    #u32 Height: ??
+    #u8 Bit depth:
+    #  eq 01: 1 bpp
+    #  eq 02: 2 bpp
+    #  eq 04: 4 bpp
+    #  eq 08: 8 bpp
+    #  eq 10: 16 bpp
+    #u8 Color type:
+    #  eq 00: grayscale
+    #  eq 02: RGB
+    #  eq 03: palette
+    #  eq 04: grayscale+alpha
+    #  eq 06: RGBA
+    #u8 Compression method:
+    #  eq 00: deflate          # XXX raw deflate or zlib headers?.  XXX the concatenation of the contents of all the IDAT chunks makes up a zlib datastream
+    #u8 Filter method:
+    #  eq 00: none+sub+up+average+paeth
+    #u8 Interlace method:
+    #  eq 00: no interlace
+    #  eq 01: Adam7 interlace
+
+    # CHUNK sBIT:
+    #if Color type[grayscale]:
+    #  u8 significant bits grayscale: ??
+    #if Color type[RGB]:
+    #  u8 significant bits red: ??
+    #  u8 significant bits green: ??
+    #  u8 significant bits blue: ??
+    #if Color type[palette]:
+    #  u8 significant bits red: ??
+    #  u8 significant bits green: ??
+    #  u8 significant bits blue: ??
+    #if Color type[grayscale+alpha]:
+    #  u8 significant bits grayscale: ??
+    #  u8 significant bits alpha: ??
+    #if Color type[RGBA]:
+    #  u8 significant bits red: ??
+    #  u8 significant bits green: ??
+    #  u8 significant bits blue: ??
+    #  u8 significant bits alpha: ??
+    #crc32[Type_sBIT.offset:self.offset] Checksum: ??       # XXX
+
+    # CHUNK IDAT:
+    #u8[Length_IDAT] Image data: ?? # XXX FIXME
+    #u8[3311] Image data: ??   # XXX ZLIB COMPRESSED ???
+    #crc32[Type_IDAT.offset:self.offset] Checksum: ??       # XXX
+
+    # CHUNK IEND:   # XXX checksum always AE426082 (hash of "IEND")
+
+    # UNKNOWN CHUNK TYPE:
+    u8[Length] Chunk data: ??
+
+    crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field
+
+
+layout:
+  - header
+
+  # XXX unknown amount of chunks until end of file:
+  - chunk[] Chunk

@@ -1,0 +1,49 @@
+# STATUS: 1%
+# - HI: u16 bit flags!
+
+references:
+  - https://en.wikipedia.org/wiki/Cabinet_(file_format)
+  - https://www.sweetscape.com/010editor/repository/files/CAB.bt
+  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_cab.go
+
+kind: archive
+extensions: [.cab]
+mime: application/vnd.ms-cab-compressed
+
+endian: little
+
+header:
+  ascii[4] Signature: c'MSCF'
+  u32 Reserved 1: 00 00 00 00
+  u32 File size: ??
+  u32 Reserved 2: 00 00 00 00
+  u32 CFFILE offset: ??
+  u32 Reserved 3: 00 00 00 00
+  u8 Minor version: ??
+  u8 Major version: ??
+  u16 CFFOLDER entries: ??
+  u16 CFFILE entries: ??
+  u16 Flags:  # XXX u16 bit flags
+    bit b0001: Prev cabinet
+    bit b0010: Next cabinet
+    bit b0100: Reserve present
+  u16 Set ID: ??
+  u16 Cabinet number: ??
+
+  # XXX u16 bit flags !!
+  #if Flags[Reserve present]:
+  #  u16 cbCFHeader: ??  # size of per-cabinet reserved area
+  #  u8 cbCFFolder: ??   # size of per-folder reserved area
+  #  u8 cbCFData: ??     # size of per-datablock reserved area
+  # XXXXXXX:
+  #if (cbCFHeader > 0)
+  #  char abReserve[cbCFHeader]  # per-cabinet reserved area
+
+
+  #if Flags[Prev cabinet]:
+  #  u8 szCabinetPrev[]: ??  # XXX length? name of previous cabinet file
+  #  u8 szDiskPrev[]: ??     # XXX length? name of previous disk
+
+  #if Flags[Next cabinet]:
+  #  u8 szCabinetNext[]: ??  # XXX length? name of next cabinet file
+  #  u8 szDiskNext[]: ??     # XXX length? name of next disk

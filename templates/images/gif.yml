@@ -1,0 +1,47 @@
+# STATUS: 1%
+# - HI: need calculated value of multi-bit field "Global Color Table size"
+
+references:
+  - https://www.w3.org/Graphics/GIF/spec-gif89a.txt
+  - https://en.wikipedia.org/wiki/GIF
+  - https://www.sweetscape.com/010editor/repository/files/GIF.bt
+  - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/GIF.tcl
+  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_gif.go
+
+kind: image
+extensions: [.gif]
+mime: image/gif
+
+endian: little
+
+header:
+  ascii[3] Signature: c'GIF'
+  ascii[3] Version: c'89a'      # FIXME, match both 87a/89a  but no other variations
+  u16 Logical screen width: ??
+  u16 Logical screen height: ??
+  # XXX listing should show value of multi-bit fields:
+  # 0000000a: Screen descriptor (Global Color Table size=VALUE, Color resolution=VALUE, Global Color Table present)
+  u8 Screen descriptor:
+    bit b0000_0111: Global Color Table size
+    bit b0000_1000: Sort flag
+    bit b0111_0000: Color resolution
+    bit b1000_0000: Global Color Table present
+  u8 Background color: ??
+  u8 Aspect ratio: ??
+
+  # WIP
+  # XXX need to calculate 3-bit value of Global Color Table size and allow this index form:
+  #if Screen descriptor[Global Color Table present]:
+  #  u8[Screen descriptor.Global Color Table size] Global Color Table: ?? # XXX format?
+
+
+# SECTIONS:
+
+# Thereafter, the file is divided into segments, each introduced by a 1-byte sentinel:
+
+#An image (introduced by 0x2C, an ASCII comma ',')
+#An extension block (introduced by 0x21, an ASCII exclamation point '!')
+#The trailer (a single byte of value 0x3B, an ASCII semicolon ';'),
+
+
+# XXX image data is encoded with LZW

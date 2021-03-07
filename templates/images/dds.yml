@@ -1,0 +1,52 @@
+# STATUS: 1%
+# - HI: need u32 bit match
+# - HI: need u32[sized] array     - GENERIC datatype[sized] form !!!???
+
+references:
+  - https://en.wikipedia.org/wiki/DirectDraw_Surface
+  - https://docs.microsoft.com/en-us/windows/win32/direct3ddds/dx-graphics-dds-pguide
+  - https://www.sweetscape.com/010editor/repository/files/DDS.bt
+
+kind: image
+extensions: [.dds]
+mime: image/vnd-ms.dds
+
+endian: little
+
+header:
+  ascii[4] Signature: c'DDS '
+
+  # header
+  u32 Header size: 00 00 00 7c
+  u32 Header flags: ?? # XXX u32 bit match
+  #  bit b00000001: DDSD_CAPS
+  #  bit b00000010: DDSD_HEIGHT
+  #  bit b00000100: DDSD_WIDTH
+  #  bit b00001000: DDSD_PITCH
+  #  bit b00010000_00000000: DDSD_PIXELFORMAT
+  #  bit b00100000_00000000: DDSD_MIPMAPCOUNT
+  #  bit b10000000_00000000: DDSD_LINEARSIZE
+  #  bit b10000000_00000000_00000000: DDSD_DEPTH
+
+  u32 Height: ??
+  u32 Width: ??
+  u32 PitchOrLinearSize: ??
+  u32 Depth: ??
+  u32 MipMapCount: ??
+  u8[44] Reserved1: ??   # XXX u32 array:          u32[11] Reserved1: ??
+
+  #DDS_PIXELFORMAT:
+  u32 Pixel format size: ??
+  u32 Pixel format flags: ??
+  ascii[4] Pixel format FourCC: ??    # "DXT1"
+  u32 Pixel format GBBitCount: ??
+  u32 Pixel format RBitMask: ??
+  u32 Pixel format GBitMask: ??
+  u32 Pixel format BBitMask: ??
+  u32 Pixel format ABitMask: ??
+
+  u32 Caps: ??
+  u32 Caps2: ??
+  u32 Caps3: ??
+  u32 Caps4: ??
+  u32 Reserved2: ??

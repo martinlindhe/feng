@@ -1,0 +1,69 @@
+# STATUS: 1%
+# - HI: file is a stream of packets with different signature. parse until EOF
+
+references:
+  - https://en.wikipedia.org/wiki/JPEG
+  - https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format
+  - https://www.sweetscape.com/010editor/repository/files/JPG.bt
+  - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/JPEG.tcl
+  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_jpeg.go
+
+kind: image
+extensions: [.jpg, .jpeg]
+mime: image/jpeg
+
+constants:
+  u8[5] JFIF_APP0: c'JFIF' 00
+  u8[5] JFXX_APP0: c'JFXX' 00
+
+  u8[2] M_APP0: ff e0
+  u8[2] M_APP1: ff e1
+
+structs:
+  header:
+    endian: big
+    u8[2] SOI marker: ff d8
+
+  segment:
+    u8[2] Signature: ??
+    u16 Length: ??  # length of segment excluding APP0 marker
+
+    if Signature == M_APP0:
+      ascii[5] Identifier: ??
+
+      if ! Identifier in[JFIF_APP0,JFXX_APP0]:
+        u8[Length] Unknown data: ?? # XXX verify this Length
+
+      if Identifier == JFIF_APP0:
+        u8 Major version: ??
+        u8 Minor version: ??
+        u8 Density units:
+          eq 00: No units
+          eq 01: Pixels per inch
+          eq 02: Pixels per centimeter
+        u16 Xdensity: ??
+        u16 Ydensity: ??
+        u8 Xthumbnail: ??
+        u8 Ythumbnail: ??
+        if Xthumbnail != 0 && Ythumbnail != 0: # XXX ?! if form ...
+          rgb8[Xthumbnail*Ythumbnail*3] Thumbnail data: ?? # XXX 8 bit per channel rgb: R, G, B bytes
+
+      if Identifier == JFXX_APP0:
+        u8 Thumbnail format:
+          eq 10: JPEG format
+          eq 11: 1bpp palettized format
+          eq 13: 3bpp RGB format
+        u8[10] Thumbnail data: ?? # XXX size depends on Thumbnail format, see tagApp0 in https://www.sweetscape.com/010editor/repository/files/JPG.bt
+
+      if Signature == M_APP1:
+        ascii[6] EXIF: c'Exif' 00 00 # XXX
+        ascii[2] Align: ??
+        if Align == c'II':
+          endian: little      # XXX what is big endian marker?
+        u16 tagMark: ??
+        u32 offsetFirstID: ?? # XXX
+        # XXX WHAT FOLLOWS IS A LIST OF SECTIONS ...
+
+layout:
+  - header Header
+  - segment[] Segment

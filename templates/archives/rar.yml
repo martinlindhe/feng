@@ -1,0 +1,109 @@
+# STATUS: 5%
+# - HI: u16 eq
+# - HI: ascii[NameSize] Length   format
+
+references:
+  - https://www.rarlab.com/technote.htm
+  - https://codedread.github.io/bitjs/docs/unrar.html
+  - https://www.sweetscape.com/010editor/repository/files/RAR.bt
+  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_rar.go
+
+kind: archive
+extensions: [.rar, .r00, .r01]
+mime: application/vnd.rar
+
+endian: little # XXX
+
+header:
+  ascii[6] Signature: c'Rar!' 1a 07
+  u8 Header type:
+    eq 00: Classic
+    eq 01: V5
+  if Header type[V5]:
+    u8 Signature: "00"
+
+
+  # XXX classic "volume header":
+  u16 Header CRC: ??  # XXX kind ?
+  u8 Header type:
+    eq 72: MARK_HEAD
+    eq 73: MAIN_HEAD
+    eq 74: FILE_HEAD
+    eq 75: COMM_HEAD
+    eq 76: AV_HEAD
+    eq 77: SUB_HEAD
+    eq 78: PROTECT_HEAD
+    eq 79: SIGN_HEAD
+    eq 7a: NEWSUB_HEAD
+    eq 7b: ENDARC_HEAD
+
+  #if Header type[MAIN_HEAD]:  ## XXX DONT MATCH!?!
+  u16 Main header flags:  # XXX eq for u16 ??
+    bit 0001: MHD_VOLUME
+    bit 0002: MHD_COMMENT
+    bit 0004: MHD_LOCK
+    bit 0008: MHD_SOLID
+    bit 0010: MHD_PACK_COMMENT or MHD_NEWNUMBERING
+    bit 0020: MHD_AV
+    bit 0040: MHD_PROTECT
+    bit 0080: MHD_PASSWORD
+    bit 0100: MHD_FIRSTVOLUME
+    bit 0200: MHD_ENCRYPTVER
+  u16 Header size: ??
+  u16 HighPosAv: ??
+  u32 PosAV: ??
+  #if Main header flags[MHD_ENCRYPTVER]:
+  #  u8 EncryptVer: ??
+
+  # XXX NEXT SECTION FILE_HEAD  (rar_001_linux.rar)
+  #if Header type[FILE_HEAD]:  ## XXX DONT MATCH!?!
+  u16 Header CRC: ??  # XXX kind ?
+  u8 Header type:   # XXX all headers start with crc+type fields
+    eq 72: MARK_HEAD
+    eq 73: MAIN_HEAD
+    eq 74: FILE_HEAD
+    eq 75: COMM_HEAD
+    eq 76: AV_HEAD
+    eq 77: SUB_HEAD
+    eq 78: PROTECT_HEAD
+    eq 79: SIGN_HEAD
+    eq 7a: NEWSUB_HEAD
+    eq 7b: ENDARC_HEAD
+
+  u16 File header flags:  # XXX eq for u16 ??
+    bit 0001: LHD_SPLIT_BEFORE
+    bit 0002: LHD_SPLIT_AFTER
+    bit 0004: LHD_PASSWORD
+    bit 0008: LHD_COMMENT
+    bit 0010: LHD_SOLID
+    bit 0100: LHD_LARGE
+    bit 0200: LHD_UNICODE   # XXX indicates filename is in unicode
+    bit 0400: LHD_SALT
+    bit 0800: LHD_VERSION
+    bit 1000: LHD_EXTTIME
+    bit 2000: LHD_EXTFLAGS
+  u16 Header size: ??
+
+  u32 Compressed size: ??
+  u32 Uncompressed size: ??
+  u8 Host OS: ?? # XXX meaning
+  u32 File CRC: ?? # XXX type?
+  u32 File time: ?? # XXX format?
+  u8 UnpVer: ?? # xxx ?
+  u8 Method: ?? # XXX
+  u16 NameSize: ?? # XXX
+  u32 FileAttr: ?? # XXX
+
+  #if File header flags[LHD_LARGE]:
+  #  u32 HighPackSize: ??
+  #  u32 HighUnpSize: ??
+
+  ascii[5] Filename: ?? # XXX  ascii[NameSize] Filename: ??
+
+  #if File header flags[LHD_SALT]:
+  #  u64 Salt: ??
+
+  #if File header flags[LHD_EXTTIME]:
+  #  ExtTime Structure       See Description (only present if LHD_EXTTIME is set)
+
+  #Packed Data             (Total Packed Size) bytes

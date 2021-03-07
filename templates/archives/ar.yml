@@ -1,0 +1,22 @@
+# STATUS: 1%
+# - HI: does not map perfectly to .deb file. need other samples
+
+references:
+  - https://en.wikipedia.org/wiki/Ar_(Unix)
+  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_deb.go
+  - https://www.sweetscape.com/010editor/repository/files/AR.bt
+
+kind: archive
+extensions: [.a, .lib, .ar, .deb]
+mime: application/x-archive
+
+endian: big  # XXX
+
+header:
+  ascii[16] Identifier: ??
+  ascii[12] File modification time: ?? # XXX ascii decimal ?
+  u8[6] Owner ID: ?? # XXX decimal
+  u8[6] Group ID: ?? # XXX decimal
+  u8[8] File mode: ?? # XXX octal
+  u8[10] File size: ?? # XXX decimal, in bytes
+  #u8[2] Signature: 60 0a

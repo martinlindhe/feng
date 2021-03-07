@@ -1,0 +1,45 @@
+# STATUS: 1%
+
+references:
+  - https://en.wikipedia.org/wiki/PCX
+  - https://www.sweetscape.com/010editor/repository/files/PCX.bt
+  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_pcx.go
+
+kind: image
+extensions: [.pcx]
+mime: image/x-pcx
+
+endian: little
+
+header:
+  u8 Signature: 0a
+  u8 Version:
+    eq 00: PC Paintbrush version 2.5 using a fixed EGA palette
+    eq 02: PC Paintbrush version 2.8 using a modifiable EGA palette
+    eq 03: PC Paintbrush version 2.8 using no palette
+    eq 04: PC Paintbrush for Windows
+    eq 05: PC Paintbrush version 3.0, including 24-bit images
+  u8 Encoding:
+    eq 00: None
+    eq 01: RLE
+  u8 Bits per pixel:
+    eq 01: 1bpp (monochrome)
+    eq 02: 2bpp (4 colors)
+    eq 04: 4bpp (16 colors, EGA)
+    eq 08: 8bpp (256 colors, VGA)
+  u16 Minimum X position: ??
+  u16 Minimum Y position: ??
+  u16 Maximum X position: ??
+  u16 Maximum Y position: ??
+  u16 Horizontal resolution in DPI: ??
+  u16 Vertical resolution in DPI: ??
+  u8[48] EGA palette: ?? # XXX for 16-color images. always present??
+  u8 Reserved: ??
+  u8 Color planes: ??
+  u16 Bytes representing a scan line: ??
+  u16 Palette mode:
+    eq 01: Monochrome or color information
+    eq 02: Grayscale information
+  u16 Horizontal resolution: ??
+  u16 Vertical resolution: ??
+  u8[54] Reserved: ??

@@ -1,0 +1,31 @@
+# STATUS: 1%
+# - HI: map u16 eq forms
+
+references:
+  - https://en.wikipedia.org/wiki/Adobe_Photoshop#File_format
+  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_psd.go
+  - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/PSD.tcl
+
+kind: image
+extensions: [.psd]
+mime: image/vnd.adobe.photoshop
+
+endian: big
+
+header:
+  ascii[4] Signature: c'8BPS'
+  u16 Version: ??       # XXX version 2 is "big" format, larger fields?
+  u8[6] Reserved: ??
+  u16 Channels: ??
+  u32 Height: ??
+  u32 Width: ??
+  u16 Bit depth: ??
+  u16 Color mode:       # XXX map u16 forms
+    eq 00: Bitmap
+    eq 01: Grayscale
+    eq 02: Indexed
+    eq 03: RGB
+    eq 04: CMYK
+    eq 07: Multichannel
+    eq 08: Duotone
+    eq 09: LAB
