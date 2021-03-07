@@ -1,13 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/martinlindhe/feng/mapper"
 	"github.com/martinlindhe/feng/template"
 )
@@ -40,12 +40,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	ff, err := mapper.MapReader(r, ds)
+	fl, err := mapper.MapReader(r, ds)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// XXX TODO 2. cli - file structure listing, meaning + actual data
+	for _, layout := range fl.Structs {
+		fmt.Printf("%s\n", layout.Label)
 
-	spew.Dump(ff)
+		for _, field := range layout.Fields {
+			fmt.Printf("  [%06x] %-30s % 02x\n", field.Offset, field.Label, field.Value)
+		}
+	}
 }

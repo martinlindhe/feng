@@ -30,6 +30,10 @@ func UnmarshalTemplateIntoDataStructure(b []byte) (*DataStructure, error) {
 		return nil, err
 	}
 
+	if len(ds.Layout) == 0 {
+		return nil, fmt.Errorf("no layout section found in template")
+	}
+
 	return ds, err
 }
 

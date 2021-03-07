@@ -21,16 +21,29 @@ type fileField struct {
 }
 
 const (
-	DEBUG = true
+	DEBUG = false
 )
 
+// parsed file data from a template "layout"
+type FileLayout struct {
+	Structs []FileStruct
+}
+
+// parsed file data section from a template "struct"
+type FileStruct struct {
+	Label string
+
+	Fields []fileField
+}
+
 // produces a list of fields with offsets and sizes from input reader based on data structure
-func MapReader(r io.Reader, ds *template.DataStructure) ([]fileField, error) {
+func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 	endian := ""
 
-	fileStruct := []fileField{}
 	offset := uint64(0)
+
+	fileLayout := FileLayout{}
 
 	for _, layout := range ds.Layout {
 		if layout.Slice {
@@ -47,6 +60,8 @@ func MapReader(r io.Reader, ds *template.DataStructure) ([]fileField, error) {
 		if err != nil {
 			panic(err)
 		}
+
+		fs := FileStruct{Label: layout.Label}
 
 		for _, es := range struct_.Expressions {
 			var field fileField
@@ -100,14 +115,16 @@ func MapReader(r io.Reader, ds *template.DataStructure) ([]fileField, error) {
 				}
 
 				field = fileField{Offset: offset, Length: totalLength, Value: val, Label: es.Field.Label}
-				fileStruct = append(fileStruct, field)
+				fs.Fields = append(fs.Fields, field)
 
 			default:
-				log.Printf("MapReader: unhandled es.Field.Kind '%s'", es.Field.Kind)
+				return nil, fmt.Errorf("MapReader: unhandled field kind '%s'", es.Field.Kind)
 			}
 			offset += field.Length
 		}
+
+		fileLayout.Structs = append(fileLayout.Structs, fs)
 	}
 
-	return fileStruct, nil
+	return &fileLayout, nil
 }

@@ -11,63 +11,66 @@ kind: image
 extensions: [.bmp]
 mime: image/bmp
 
-endian: little
+structs:
+  header:
+    endian: little
+    u8[2] Signature: c'BM' # XXX ascii
+    u32 File size: ??
+    u32 Reserved: 00 00 00 00   # XXX not sure if must be zeroed
+    u32 Starting address: ??
+    u32 DIB header size: ??
 
-header:
-  ascii[2] Signature: c'BM'
-  u32 File size: ??           # XXX should be equal to FILE_SIZE
-  u32 Reserved: 00 00 00 00   # XXX not sure if must be zeroed
-  u32 Starting address: ??
-  u32 DIB header size: ??
+    # TODO !!!!: handle "if header field value in[1,2,3]" multi value IF-case
 
-  # TODO !!!!: handle "if header field value in[1,2,3]" multi value IF-case
+    # XXX if DIB header size is decimal 12, then BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
+    #if DIB header size in[12]:      # OS/2 V1 - BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
+    #  u16 Width: ??
+    #  u16 Height: ??
+    #  u16 Color planes: ?? # XXX must be 01 ?
+    #  u16 Bits per pixel: ??
 
-  # XXX if DIB header size is decimal 12, then BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
-  #if DIB header size in[12]:      # OS/2 V1 - BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
-  #  u16 Width: ??
-  #  u16 Height: ??
-  #  u16 Color planes: ?? # XXX must be 01 ?
-  #  u16 Bits per pixel: ??
+    #if DIB header size in[40,64]:      # Windows V3 - BITMAPINFOHEADER (size 40)
+    u32 Width: ??
+    u32 Height: ??
+    u16 Color planes: ?? # XXX must be 01 ?
+    u16 Bits per pixel: ??
+    u32 Compression method: ??  #  TODO handle multiple values for u32
+    #  eq 00: BI_RGB (none)
+    #  eq 01: BI_RLE8
+    #  eq 02: BI_RLE4
+    #  eq 03: BI_BITFIELDS
+    #  eq 04: BI_JPEG
+    #  eq 05: BI_PNG
+    #  eq 06: BI_ALPHABITFIELDS
+    #  eq 0b: BI_CMYK
+    #  eq 0c: BI_CMYKRLE8
+    #  eq 0d: BI_CMYKRLE4
+    u32 Image data size: ??
+    u32 Horizontal resolution: ??
+    u32 Vertical resolution: ??
+    u32 Colors in palette: ??
+    u32 Important colors: ??
 
-  #if DIB header size in[40,64]:      # Windows V3 - BITMAPINFOHEADER (size 40)
-  u32 Width: ??
-  u32 Height: ??
-  u16 Color planes: ?? # XXX must be 01 ?
-  u16 Bits per pixel: ??
-  u32 Compression method: ??  #  TODO handle multiple values for u32
-  #  eq 00: BI_RGB (none)
-  #  eq 01: BI_RLE8
-  #  eq 02: BI_RLE4
-  #  eq 03: BI_BITFIELDS
-  #  eq 04: BI_JPEG
-  #  eq 05: BI_PNG
-  #  eq 06: BI_ALPHABITFIELDS
-  #  eq 0b: BI_CMYK
-  #  eq 0c: BI_CMYKRLE8
-  #  eq 0d: BI_CMYKRLE4
-  u32 Image data size: ??
-  u32 Horizontal resolution: ??
-  u32 Vertical resolution: ??
-  u32 Colors in palette: ??
-  u32 Important colors: ??
-
-  #if DIB header size in[64]:        # OS/2 V2 OS22XBITMAPHEADER (directly after BITMAPINFOHEADER)
-  #u16 Unit for the horizontal and vertical resolutions: ??  # XXX should always be 00 ???
-  #u16 Reserved: ?? # XXX always 00 ???
-  #u16 An enumerated value indicating the direction in which the bits fill the bitmap: ?? # XXX should always be 0 ?
-  #u16 Halftoning algorithm: # XXX u16 eq
-  #  eq 00: none
-  #  eq 01: Error diffusion
-  #  eq 02: PANDA
-  #  eq 03: Super-circle
-  #u32 Halftoning parameter 1: ??
-  #u32 Halftoning parameter 2: ??
-  #u32 Color encoding: ?? # XXX
-  #u32 Application-defined identifier: ?? # XXX
+    #if DIB header size in[64]:        # OS/2 V2 OS22XBITMAPHEADER (directly after BITMAPINFOHEADER)
+    #u16 Unit for the horizontal and vertical resolutions: ??  # XXX should always be 00 ???
+    #u16 Reserved: ?? # XXX always 00 ???
+    #u16 An enumerated value indicating the direction in which the bits fill the bitmap: ?? # XXX should always be 0 ?
+    #u16 Halftoning algorithm: # XXX u16 eq
+    #  eq 00: none
+    #  eq 01: Error diffusion
+    #  eq 02: PANDA
+    #  eq 03: Super-circle
+    #u32 Halftoning parameter 1: ??
+    #u32 Halftoning parameter 2: ??
+    #u32 Color encoding: ?? # XXX
+    #u32 Application-defined identifier: ?? # XXX
 
 
-  # XXX palette follows
+    # XXX palette follows
 
-  # XXX after palette is image data
-  # XXX unhandled format:
-  #u8[Starting address:eof] Image data: ??
+    # XXX after palette is image data
+    # XXX unhandled format:
+    #u8[Starting address:eof] Image data: ??
+
+layout:
+  - header Header
