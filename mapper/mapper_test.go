@@ -186,17 +186,17 @@ structs:
 
 structs:
   header:
-    u8[2] Signature: 44 22
-    u8 Number: 04
+    u8[2] Signature: "44 22"
+    u8 Number: "04"
 
     if Number in[4]:
-      u8 Four: 04
+      u8 Four: "04"
 
-    if Number in[4]:
-      u8 YesFour: bb
+    #if Number in[4]:
+    #  u8 YesFour: "bb"
 
-    if Number notin[6]:
-      u8 NoFour: aa
+    #if Number notin[6]:
+    #  u8 NoFour: "aa"
 
 layout:
   - header Header
@@ -211,7 +211,7 @@ layout:
 		0x04, // Number
 
 		0x04, // Four
-		0xAA, // AlwaysTrue
+		0xAA, // YesFour
 	}
 
 	r := bytes.NewReader(data)
@@ -220,5 +220,7 @@ layout:
 	assert.Equal(t, nil, err)
 
 	spew.Dump(ff)
-	// XXX 1. make sure if Number1 in[4]is true, if Number1 in[6] is false
+
+	// XXX 1. make sure parsed form match expectation
+	assert.Equal(t, "xx", ff)
 }

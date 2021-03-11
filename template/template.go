@@ -106,6 +106,8 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 			return es, err
 		}
 
+		var expr expression
+
 		switch val := v.Value.(type) {
 		case []yaml.MapItem:
 			// if current node is u8, u16, u32 or u64, childs must be pattern matchers (bit / eq)
@@ -114,7 +116,7 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				if err != nil {
 					return es, err
 				}
-				es.Expressions = append(es.Expressions, expression{field, value.DataPattern{}, []expression{}, matchPatterns})
+				expr = expression{field, value.DataPattern{}, []expression{}, matchPatterns}
 
 			} else {
 
@@ -123,25 +125,29 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				if err != nil {
 					return es, err
 				}
-				es.Expressions = append(es.Expressions, expression{field, value.DataPattern{}, children.Expressions, []matchPattern{}})
+				expr = expression{field, value.DataPattern{}, children.Expressions, []matchPattern{}}
 			}
 
 		case string:
 			if field.Kind == "endian" {
 				pattern := value.DataPattern{Known: true, Value: val}
-				es.Expressions = append(es.Expressions, expression{field, pattern, []expression{}, []matchPattern{}})
+				expr = expression{field, pattern, []expression{}, []matchPattern{}}
 			} else {
 				pattern, err := value.ParseDataPattern(val)
 				if err != nil {
 					log.Fatalf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
 					return es, err
 				}
-				es.Expressions = append(es.Expressions, expression{field, pattern, []expression{}, []matchPattern{}})
+				expr = expression{field, pattern, []expression{}, []matchPattern{}}
 			}
 
 		default:
-			log.Fatalf("evaluateStructs: cant handle type '%T'", val)
+			log.Fatalf("evaluateStructs: cant handle type '%T' in '%#v'", val, v)
 		}
+		if DEBUG {
+			log.Printf("evaluateStruct: appending %v", expr)
+		}
+		es.Expressions = append(es.Expressions, expr)
 	}
 
 	return es, nil

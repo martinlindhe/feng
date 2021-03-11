@@ -11,10 +11,6 @@ import (
 	"github.com/martinlindhe/feng/template"
 )
 
-func init() {
-	log.SetFlags(log.Lshortfile)
-}
-
 var (
 	filename     = kingpin.Arg("filename", "Input file.").Required().String()
 	templateName = kingpin.Flag("template", "Enforce specific template.").Required().String()

@@ -12,8 +12,12 @@ import (
 )
 
 const (
-	DEBUG = true
+	DEBUG = false
 )
+
+func init() {
+	log.SetFlags(log.Lshortfile)
+}
 
 // produces a list of fields with offsets and sizes from input reader based on data structure
 func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
