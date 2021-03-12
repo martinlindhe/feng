@@ -28,7 +28,7 @@ structs:
       eq c'5': LZW, 8K sliding window. Static Huffman (lh5)
       eq c'6': LZW, 32K sliding window. Static Huffman
       eq c'7': LZW, 64K sliding window. Static Huffman
-      # default: invalid
+      default: invalid
     u8 Signature: c'-'
     u32 Compressed size: ??
     u32 Uncompressed size: ??

@@ -3,6 +3,7 @@ package template
 import (
 	"fmt"
 	"log"
+	"math/bits"
 	"strings"
 
 	"github.com/martinlindhe/feng/value"
@@ -69,7 +70,7 @@ type expression struct {
 	children []expression
 
 	// represents u8/u16/u32/u64 child patterns (eq, bit, default)
-	matchPatterns []matchPattern
+	MatchPatterns []MatchPattern
 }
 
 // a "structs" node
@@ -77,6 +78,64 @@ type evaluatedStruct struct {
 	Name string
 
 	Expressions []expression
+}
+
+func (es *expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, error) {
+	res := []value.MatchedPattern{}
+	invalidIfNoMatch := false
+	actual := value.AsUint64(es.Field.Kind, b)
+
+	for _, mp := range es.MatchPatterns {
+		if DEBUG {
+			log.Printf("--- MatchPattern: %#v", mp)
+		}
+
+		switch mp.Operation {
+		case "bit":
+			bitmaskSlice, err := value.ParseDataString(mp.Pattern)
+			if err != nil {
+				return nil, err
+			}
+			bitmask := value.AsUint64(es.Field.Kind, bitmaskSlice)
+			masked := bitmask & actual
+			shift := bits.TrailingZeros64(masked)
+			val := masked >> shift
+
+			if DEBUG {
+				log.Printf("--- MatchPattern %s %s: bitmask %02x %08b on value %02x %08b == res %02x %08b", mp.Operation, es.Field.Kind, bitmask, bitmask, actual, actual, val, val)
+			}
+			res = append(res, value.MatchedPattern{Label: mp.Label, Operation: mp.Operation, Value: val})
+
+		case "eq":
+			patternData, err := value.ParseDataString(mp.Pattern)
+			if err != nil {
+				return nil, err
+			}
+			pattern := value.AsUint64(es.Field.Kind, patternData)
+			match := actual == pattern
+
+			if DEBUG {
+				log.Printf("--- MatchPattern %s %s: %08x == %08x is %v", mp.Operation, es.Field.Kind, actual, pattern, match)
+			}
+			if match {
+				res = append(res, value.MatchedPattern{Label: mp.Label, Operation: mp.Operation, Value: actual})
+			}
+
+		case "default":
+			if mp.Label != "invalid" {
+				return nil, fmt.Errorf("invalid default value '%s'", mp.Label)
+			}
+			invalidIfNoMatch = true
+
+		default:
+			log.Fatalf("unhandled matchpattern operation '%s'", mp.Operation)
+		}
+	}
+	if invalidIfNoMatch && len(res) == 0 {
+		// if we don't find any patterns, return error
+		return nil, fmt.Errorf("value %08x for %s is not valid", actual, es.Field.Label)
+	}
+	return res, nil
 }
 
 func (t *Template) evaluateStructs() ([]evaluatedStruct, error) {
@@ -125,27 +184,27 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				if err != nil {
 					return es, err
 				}
-				expr = expression{field, value.DataPattern{}, children.Expressions, []matchPattern{}}
+				expr = expression{field, value.DataPattern{}, children.Expressions, []MatchPattern{}}
 			}
 
 		case string:
 			if field.Kind == "endian" {
 				pattern := value.DataPattern{Known: true, Value: val}
-				expr = expression{field, pattern, []expression{}, []matchPattern{}}
+				expr = expression{field, pattern, []expression{}, []MatchPattern{}}
 			} else {
 				pattern, err := value.ParseDataPattern(val)
 				if err != nil {
 					log.Fatalf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
 					return es, err
 				}
-				expr = expression{field, pattern, []expression{}, []matchPattern{}}
+				expr = expression{field, pattern, []expression{}, []MatchPattern{}}
 			}
 
 		default:
 			log.Fatalf("evaluateStructs: cant handle type '%T' in '%#v'", val, v)
 		}
 		if DEBUG {
-			log.Printf("evaluateStruct: appending %v", expr)
+			log.Printf("evaluateStruct: appending %+v", expr)
 		}
 		es.Expressions = append(es.Expressions, expr)
 	}
@@ -153,21 +212,21 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 	return es, nil
 }
 
-type matchPattern struct {
-	// eq, bit
-	operation string
-
-	pattern string // XXX how to store evaluated ?!
-
+type MatchPattern struct {
 	// pattern description
-	label string
+	Label string
+
+	// eq, bit
+	Operation string
+
+	Pattern string
 }
 
-func evaluateMatchPatterns(mi []yaml.MapItem) ([]matchPattern, error) {
-	res := []matchPattern{}
+func evaluateMatchPatterns(mi []yaml.MapItem) ([]MatchPattern, error) {
+	res := []MatchPattern{}
 
 	for _, item := range mi {
-		p := matchPattern{}
+		p := MatchPattern{}
 
 		key := strings.TrimSpace(item.Key.(string))
 		value := strings.TrimSpace(item.Value.(string))
@@ -179,11 +238,11 @@ func evaluateMatchPatterns(mi []yaml.MapItem) ([]matchPattern, error) {
 
 		switch parts[0] {
 		case "eq", "bit", "default":
-			p.operation = parts[0]
+			p.Operation = parts[0]
 			if len(parts) >= 2 {
-				p.pattern = parts[1] // XXX should pattern be evaluated here?
+				p.Pattern = parts[1]
 			}
-			p.label = value
+			p.Label = value
 
 		default:
 			log.Fatalf("evaluateMatchPatterns: unrecognized form '%s': %s", parts[0], key)

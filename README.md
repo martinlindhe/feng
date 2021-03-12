@@ -114,3 +114,10 @@ hex fiend templates
 
 
 http://www.nyangau.org/be/be.htm - TODO evaluate
+
+
+
+https://davidkoloski.me/blog/rkyv-is-faster-than/
+    TODO evaluate rust relatives mentioned here:
+        "rkyv is faster than {bincode, capnp, cbor, flatbuffers, postcard, prost, serde_json}"
+    STATUS: we could build generators for bincode or whatever from our source format, in addition to pure no dependencies-rust

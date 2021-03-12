@@ -1,12 +1,17 @@
 package value
 
 import (
+	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"log"
 	"regexp"
 	"strconv"
 	"strings"
+)
+
+const (
+	DEBUG = true
 )
 
 var (
@@ -36,7 +41,7 @@ type DataPattern struct {
 	Value string
 }
 
-// parses "00 0a 0b" or "c'aazz'" into a byte array
+// parses a textual representation of data into a byte array
 func ParseDataString(s string) ([]byte, error) {
 
 	var err error
@@ -76,18 +81,49 @@ func replaceNextBitTag(s string) (string, error) {
 	idx := bitExpressionRE.FindStringSubmatchIndex(s)
 
 	m := strings.ReplaceAll(matches[1], "_", "")
-	i, err := strconv.ParseInt(m, 2, 64)
+	i, err := strconv.ParseUint(m, 2, 64)
 	if err != nil {
 		return "", err
 	}
 
-	if i > 255 {
-		panic("big binary number unhandled")
+	if DEBUG {
+		log.Printf("replaceNextBitTag(%s): %d", m, i)
 	}
 
-	s = s[0:idx[0]] + fmt.Sprintf("%02x", i) + s[idx[1]:]
+	// XXX fix bit sizing
+	lm := len(m)
+	res := ""
+	switch {
+	case lm <= 8: // u8
+		res = fmt.Sprintf("%02x", i)
+
+	case lm <= 16: // u16
+		x := u64toBytesBigEndian(i)
+		res = fmt.Sprintf("% 02x", x[6:8])
+
+	case lm <= 24: // 3 bytes
+		x := u64toBytesBigEndian(i)
+		res = fmt.Sprintf("% 02x", x[5:8])
+
+	case lm <= 32: // u32
+		x := u64toBytesBigEndian(i)
+		res = fmt.Sprintf("% 02x", x[4:8])
+
+	default:
+		log.Fatalf("unhandled bit length %d", lm)
+	}
+
+	s = s[0:idx[0]] + res + s[idx[1]:]
 
 	return s, nil
+}
+
+func u64toBytesBigEndian(val uint64) []byte {
+	r := make([]byte, 8)
+	for i := uint64(0); i < 8; i++ {
+		r[7-i] = byte((val >> (i * 8)) & 0xff)
+	}
+	return r
 }
 
 // find next ascii between c'' characters and replace with hex
@@ -172,6 +208,18 @@ type DataField struct {
 	Label string
 }
 
+// A match for values of a fileField.
+// Based on template.MatchPattern data from file template.
+type MatchedPattern struct {
+	Label string
+
+	// for debugging
+	Operation string
+
+	// parsed value of bit field
+	Value uint64
+}
+
 func (df *DataField) SingleUnitSize() uint64 {
 	switch df.Kind {
 	case "u8":
@@ -236,4 +284,23 @@ func ReverseBytes(b []byte, unitLength int) []byte {
 	}
 
 	return res
+}
+
+// decodes value in network byte order (big) to unsigned integer
+func AsUint64(kind string, b []byte) uint64 {
+	if DEBUG {
+		log.Printf("AsUint64 converting [%02x] to %s", b, kind)
+	}
+	switch kind {
+	case "u8":
+		return uint64(b[0])
+	case "u16":
+		return uint64(binary.BigEndian.Uint16(b))
+	case "u32":
+		return uint64(binary.BigEndian.Uint32(b))
+	case "u64":
+		return binary.BigEndian.Uint64(b)
+	}
+	log.Fatalf("AsUint64 unhandled kind %s", kind)
+	return 0
 }

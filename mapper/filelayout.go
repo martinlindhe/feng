@@ -1,9 +1,7 @@
 package mapper
 
 import (
-	"encoding/binary"
 	"fmt"
-	"log"
 
 	"github.com/martinlindhe/feng/value"
 )
@@ -32,22 +30,18 @@ type fileField struct {
 
 	// underlying data structure
 	Format value.DataField
+
+	// matched patterns
+	MatchedPatterns []value.MatchedPattern
 }
 
 // decodes simple value types for presentation
 func (ff *fileField) Present() string {
-
 	if ff.Format.Slice || ff.Format.Range != "" {
 		return ""
 	}
-
-	switch ff.Format.Kind {
-	case "u32":
-		v := binary.BigEndian.Uint32(ff.Value)
-		return fmt.Sprintf("%d", v)
-	}
-	log.Fatalf("Present unhandled kind %s", ff.Format.Kind)
-	return ""
+	v := value.AsUint64(ff.Format.Kind, ff.Value)
+	return fmt.Sprintf("%d", v)
 }
 
 func (fl *FileLayout) Present() {

@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	DEBUG = false
+	DEBUG = true
 )
 
 func init() {
@@ -44,7 +44,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			panic(err)
 		}
 		if DEBUG {
-			log.Printf("mapped '%s' to %v\n", layout.PresentType(), struct_)
+			log.Printf("mapped '%s' to %+v\n", layout.PresentType(), struct_)
 		}
 
 		fs := FileStruct{Label: layout.Label}
@@ -100,7 +100,14 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 					}
 				}
 
-				field = fileField{Offset: offset, Length: totalLength, Value: val, Format: es.Field, Endian: endian}
+				format := es.Field
+
+				matchPatterns, err := es.EvaluateMatchPatterns(val)
+				if err != nil {
+					return nil, err
+				}
+
+				field = fileField{Offset: offset, Length: totalLength, Value: val, Format: format, Endian: endian, MatchedPatterns: matchPatterns}
 				fs.Fields = append(fs.Fields, field)
 
 			default:

@@ -83,6 +83,10 @@ structs:
       eq 00: No units
       eq 01: Pixels per inch
       default: invalid
+    u8 Unit:
+      bit b0001: B0
+      bit b0110: Rest
+      default: invalid
     if Unit == 4:
       u8 Child data: ??
 
@@ -94,31 +98,34 @@ layout:
 	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData))
 	assert.Equal(t, nil, err)
 
-	// structs
-	assert.Equal(t, 2, len(ds.structs))
-	assert.Equal(t, "header", ds.structs[0].Name)
-	assert.Equal(t, true, ds.structs[0].Expressions[0].Pattern.Known)
-	assert.Equal(t, []byte{0xff, 0xd8}, ds.structs[0].Expressions[0].Pattern.Pattern)
-	assert.Equal(t, "segment", ds.structs[1].Name)
+	assert.Equal(t, &DataStructure{
+		constants: []evaluatedConstant{},
+		structs: []evaluatedStruct{
+			{Name: "header", Expressions: []expression{
+				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: true, Pattern: []uint8{0xff, 0xd8}, Value: ""}, children: []expression{}, MatchPatterns: []MatchPattern{}}},
+			},
+			{Name: "segment", Expressions: []expression{
+				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, children: []expression{}, MatchPatterns: []MatchPattern{}},
+				{Field: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Unit"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, children: []expression{}, MatchPatterns: []MatchPattern{
+					{Operation: "eq", Pattern: "00", Label: "No units"},
+					{Operation: "eq", Pattern: "01", Label: "Pixels per inch"},
+					{Operation: "default", Pattern: "", Label: "invalid"},
+				}},
+				{Field: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Unit"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, children: []expression{}, MatchPatterns: []MatchPattern{
+					{Operation: "bit", Pattern: "b0001", Label: "B0"},
+					{Operation: "bit", Pattern: "b0110", Label: "Rest"},
+					{Operation: "default", Pattern: "", Label: "invalid"},
+				}},
+				{Field: value.DataField{Kind: "if", Range: "", Slice: false, Label: "Unit == 4"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, children: []expression{
+					{Field: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Child data"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, children: []expression{}, MatchPatterns: []MatchPattern{}},
+				}, MatchPatterns: []MatchPattern{}},
+			}},
+		},
+		Layout: []value.DataField{
+			{Kind: "header", Range: "", Slice: false, Label: "Header"},
+			{Kind: "segment", Range: "header.Unit", Slice: false, Label: "segments"},
+			{Kind: "other_segment", Range: "", Slice: true, Label: "other_segments"},
+		},
+	}, ds)
 
-	assert.Equal(t, false, ds.structs[1].Expressions[1].Pattern.Known)
-	assert.Equal(t, "u16", ds.structs[1].Expressions[1].Field.Kind)
-	assert.Equal(t, "Unit", ds.structs[1].Expressions[1].Field.Label)
-
-	// pattern match
-	assert.Equal(t, []matchPattern{
-		{operation: "eq", pattern: "00", label: "No units"},
-		{operation: "eq", pattern: "01", label: "Pixels per inch"},
-		{operation: "default", pattern: "", label: "invalid"}},
-		ds.structs[1].Expressions[1].matchPatterns)
-
-	assert.Equal(t, "if", ds.structs[1].Expressions[2].Field.Kind)
-	assert.Equal(t, "Unit == 4", ds.structs[1].Expressions[2].Field.Label)
-	assert.Equal(t, "u8", ds.structs[1].Expressions[2].children[0].Field.Kind)
-	assert.Equal(t, "Child data", ds.structs[1].Expressions[2].children[0].Field.Label)
-
-	// layouts
-	assert.Equal(t, "segment", ds.Layout[1].Kind)
-	assert.Equal(t, "header.Unit", ds.Layout[1].Range)
-	assert.Equal(t, "segments", ds.Layout[1].Label)
 }
