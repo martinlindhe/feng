@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
@@ -13,6 +15,10 @@ import (
 
 const (
 	DEBUG = true
+)
+
+var (
+	ifMatchExpressionRE = regexp.MustCompile(`([\w .]+) (in|notin) \(([\w]+)\)`)
 )
 
 func init() {
@@ -64,60 +70,143 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 					log.Fatalf("invalid %s form: %s", es.Field.Kind, es.Field.PresentType())
 				}
 
-				unitLength := es.Field.SingleUnitSize()
-				rangeLength := uint64(1)
+				unitLength, totalLength := es.Field.GetLength()
 
-				if es.Field.Range != "" {
-					rangeLength, err = strconv.ParseUint(es.Field.Range, 10, 64) // XXX evaluate range
-					if err != nil {
-						log.Fatalf("cant parse uint '%s': %v", es.Field.Range, err)
-					}
-				}
-
-				totalLength := unitLength * rangeLength
-
-				val := make([]byte, totalLength)
 				if DEBUG {
 					log.Printf("[%08x] reading %d bytes for '%s' %s", offset, totalLength, es.Field.Label, es.Field.PresentType())
 				}
-				if _, err := io.ReadFull(r, val); err != nil {
+				val, err := readBytes(r, totalLength, unitLength, endian)
+				if err != nil {
 					return nil, err
-				}
-
-				if unitLength > 1 && endian == "" {
-					return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
-				}
-
-				// always convert read value to network byte order (big) before comparisions
-				if unitLength > 1 && endian == "little" {
-					val = value.ReverseBytes(val, int(unitLength))
 				}
 
 				// if known value, see if value is in file data
 				if es.Pattern.Known {
 					if !bytes.Equal(es.Pattern.Pattern, val) {
-						return nil, fmt.Errorf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'", offset, es.Field.Label, es.Pattern.Pattern, val)
+						return nil, fmt.Errorf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'",
+							offset, es.Field.Label, es.Pattern.Pattern, val)
 					}
 				}
-
-				format := es.Field
 
 				matchPatterns, err := es.EvaluateMatchPatterns(val)
 				if err != nil {
 					return nil, err
 				}
 
-				field = fileField{Offset: offset, Length: totalLength, Value: val, Format: format, Endian: endian, MatchedPatterns: matchPatterns}
+				field = fileField{Offset: offset, Length: totalLength, Value: val, Format: es.Field, Endian: endian, MatchedPatterns: matchPatterns}
 				fs.Fields = append(fs.Fields, field)
+				offset += field.Length
+
+			case "if":
+				matches := ifMatchExpressionRE.FindStringSubmatch(es.Field.Label)
+				if len(matches) > 0 {
+
+					key := matches[1]
+					operation := matches[2] // "in" or "notin"
+					pattern := matches[3]
+
+					if DEBUG {
+						log.Printf("-- matching IF key=%s, operation=%s, pattern=%s", key, operation, pattern)
+					}
+
+					switch operation {
+					case "in", "notin":
+						// find value of "key" in current struct
+						kind, val, err := fs.GetValue(key)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						if DEBUG {
+							log.Printf("if-match: %s %02x", kind, val)
+						}
+
+						// XXX TODO -- evaluate pattern variables to integer values (NOT NEEDED FOR TRIVIAL TEST)
+
+						fieldVal := value.AsUint64(kind, val)
+
+						patternValues, err := parsePattern(pattern)
+						if err != nil {
+							log.Fatal(err)
+						}
+						matched := false
+						for _, patternVal := range patternValues {
+							if operation == "in" && fieldVal == patternVal {
+								matched = true
+							}
+							if operation == "notin" && fieldVal != patternVal {
+								matched = true
+							}
+						}
+
+						if matched {
+							// if evaluation is true, append all child nodes to fileLayout
+							for _, child := range es.Children {
+								if DEBUG {
+									log.Printf("[%08x] if-match: adding child %s", offset, child.Field.Label)
+								}
+								unitLength, totalLength := child.Field.GetLength()
+
+								childVal, err := readBytes(r, totalLength, unitLength, endian)
+								if err != nil {
+									log.Fatal(err)
+								}
+
+								length := child.Field.SingleUnitSize()
+
+								field = fileField{Offset: offset, Length: length, Value: childVal, Format: child.Field, Endian: endian}
+								fs.Fields = append(fs.Fields, field)
+
+								offset += length
+							}
+						}
+
+					default:
+						log.Fatalf("XXX unhandled if-match operation '%s'", operation)
+					}
+				}
 
 			default:
-				return nil, fmt.Errorf("MapReader: unhandled field '%#v'", es.Field)
+				log.Printf("unhandled field '%#v'", es.Field)
+				return nil, fmt.Errorf("unhandled field kind '%s'", es.Field.Kind)
 			}
-			offset += field.Length
 		}
 
 		fileLayout.Structs = append(fileLayout.Structs, fs)
 	}
 
 	return &fileLayout, nil
+}
+
+// reads bytes from reader and returns them in network byte order (big endian)
+func readBytes(r io.Reader, totalLength, unitLength uint64, endian string) ([]byte, error) {
+
+	val := make([]byte, totalLength)
+	if _, err := io.ReadFull(r, val); err != nil {
+		return nil, err
+	}
+
+	if unitLength > 1 && endian == "" {
+		return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
+	}
+
+	// convert to network byte order
+	if unitLength > 1 && endian == "little" {
+		val = value.ReverseBytes(val, int(unitLength))
+	}
+
+	return val, nil
+}
+
+// parses a comma-separated string of unsigned integers
+func parsePattern(s string) ([]uint64, error) {
+	res := []uint64{}
+	for _, part := range strings.Split(s, ",") {
+		v, err := strconv.ParseUint(part, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, v)
+	}
+	return res, nil
 }

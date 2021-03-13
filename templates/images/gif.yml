@@ -1,5 +1,8 @@
 # STATUS: 1%
-# - HI: need calculated value of multi-bit field "Global Color Table size"
+# - NEED: "ascii" kind
+
+# -DONE ???: need calculated value of multi-bit field "Global Color Table size"
+
 
 references:
   - https://www.w3.org/Graphics/GIF/spec-gif89a.txt
@@ -12,16 +15,17 @@ kind: image
 extensions: [.gif]
 mime: image/gif
 
-endian: little
-
 structs:
   header:
-    ascii[3] Signature: c'GIF'
-    ascii[3] Version: c'89a'      # FIXME, match both 87a/89a  but no other variations
+    endian: little
+    u8[4] Signature: c'GIF8'      # XXX "ascii[4]" kind
+    u8 Version:
+      eq c'7': GIF87a             # XXX "ascii" kind
+      eq c'9': GIF89a
+      default: invalid
+    u8 Signature: c'a'
     u16 Logical screen width: ??
     u16 Logical screen height: ??
-    # XXX listing should show value of multi-bit fields:
-    # 0000000a: Screen descriptor (Global Color Table size=VALUE, Color resolution=VALUE, Global Color Table present)
     u8 Screen descriptor:
       bit b0000_0111: Global Color Table size
       bit b0000_1000: Sort flag
@@ -31,9 +35,10 @@ structs:
     u8 Aspect ratio: ??
 
     # WIP
-    # XXX need to calculate 3-bit value of Global Color Table size and allow this index form:
-    #if Screen descriptor[Global Color Table present]:
-    #  u8[Screen descriptor.Global Color Table size] Global Color Table: ?? # XXX format?
+    if Screen descriptor.Global Color Table present in (1):
+      u8 GLOBAL_COLOR_TABLE_WIP: ??
+      # XXX need to calculate 3-bit value of Global Color Table size and allow this index form:
+      # u8[Screen descriptor.Global Color Table size] Global Color Table: ?? # XXX format?
 
 
   # SECTIONS:

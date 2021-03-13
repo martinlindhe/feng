@@ -64,7 +64,7 @@ layout:
 		0x17, 0x16, 0x15, 0x14, 0x13, 0x12, 0x11, 0x10, 0x27, 0x26, 0x25, 0x24, 0x23, 0x22, 0x21, 0x20, // u64[2] U64LE array
 	}
 
-	ff, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds)
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -86,7 +86,7 @@ layout:
 					{Offset: 0x3f, Length: 0x8, Value: []uint8{0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88}, Endian: "little", Format: value.DataField{Kind: "u64", Range: "", Slice: false, Label: "U64LE single"}, MatchedPatterns: []value.MatchedPattern{}},
 					{Offset: 0x47, Length: 0x10, Value: []uint8{0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27}, Endian: "little", Format: value.DataField{Kind: "u64", Range: "2", Slice: false, Label: "U64LE array"}, MatchedPatterns: []value.MatchedPattern{}},
 				}}},
-		}, ff)
+		}, fl)
 }
 
 func TestMapReaderMatchPatterns(t *testing.T) {
@@ -169,10 +169,10 @@ layout:
 	}
 
 	for _, tt := range test {
-		ff, err := MapReader(bytes.NewReader(tt.in), ds)
+		fl, err := MapReader(bytes.NewReader(tt.in), ds)
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
-			assert.Equal(t, tt.out, ff)
+			assert.Equal(t, tt.out, fl)
 		}
 	}
 }
@@ -194,7 +194,7 @@ layout:
 	data := []byte{
 		0xff, // Bitfield
 	}
-	ff, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds)
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -209,7 +209,7 @@ layout:
 							{Operation: "bit", Label: "B3", Value: 1},
 							{Operation: "bit", Label: "Hi", Value: 7},
 						}},
-				}}}}, ff)
+				}}}}, fl)
 }
 
 func TestEvaluateBitFieldU16(t *testing.T) {
@@ -255,6 +255,7 @@ structs:
     u8 Field:
       eq 00: No units
       eq 01: One
+      eq c'a': Letter A
       default: invalid
 layout:
   - header Header
@@ -291,30 +292,21 @@ layout:
 	}
 
 	for _, tt := range test {
-		ff, err := MapReader(bytes.NewReader(tt.in), ds)
+		fl, err := MapReader(bytes.NewReader(tt.in), ds)
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
-			assert.Equal(t, tt.out, ff)
+			assert.Equal(t, tt.out, fl)
 		}
 	}
 }
 
-/*
-func TestEvaluateIf(t *testing.T) {
+func TestGetValue(t *testing.T) {
 	templateData := `
 structs:
   header:
-    u8[2] Signature: "44 22"
     u8 Number: "04"
-
-    if Number in[4]:
-      u8 Four: "04"
-
-    #if Number in[4]:
-    #  u8 YesFour: "bb"
-
-    #if Number notin[6]:
-    #  u8 NoFour: "aa"
+    u8 Field:
+      bit b1000_0000: High bit
 
 layout:
   - header Header
@@ -322,24 +314,99 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
 	assert.Equal(t, nil, err)
 
-	//	spew.Dump(ds)
-
 	data := []byte{
-		0x44, 0x22, // Signature
 		0x04, // Number
-
-		0x04, // Four
-		0xAA, // YesFour
+		0xff, // Field
 	}
 
-	r := bytes.NewReader(data)
-
-	ff, err := MapReader(r, ds)
+	fl, err := MapReader(bytes.NewReader(data), ds)
 	assert.Equal(t, nil, err)
 
-	spew.Dump(ff)
+	_, val, err := fl.GetValue("Header", "Number")
+	assert.Equal(t, nil, err)
+	assert.Equal(t, []byte{4}, val)
 
-	// XXX 1. make sure parsed form match expectation
-	assert.Equal(t, "xx", ff)
+	_, val, err = fl.GetValue("Header", "Field.High bit")
+	assert.Equal(t, nil, err)
+	assert.Equal(t, []byte{1}, val)
+
 }
-*/
+
+func TestEvaluateIf(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    u8 Number: "04"
+
+    if Number in (4):
+      u8 Four: "ff"
+
+    if Number notin (6):
+      u8 NotSix: "aa"
+
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		0x04, // Number
+		0xff, // Four
+		0xaa, // NotSix
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	assert.Equal(t,
+
+		&FileLayout{
+			Structs: []FileStruct{
+				{
+					Label: "Header",
+					Fields: []fileField{
+						{Offset: 0x0, Length: 0x1, Value: []uint8{0x4}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Number"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x1, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Four"}},
+						{Offset: 0x2, Length: 0x1, Value: []uint8{0xaa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "NotSix"}},
+					},
+				}}}, fl)
+}
+
+func TestEvaluateIfBitfield(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    u8 Bit field:
+      bit b1000_0000: High bit
+
+    if Bit field.High bit in (1):
+      u8 HighSet: "aa"
+
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		0xff, // Bit field
+		0xaa, // HighSet
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	assert.Equal(t,
+
+		&FileLayout{
+			Structs: []FileStruct{
+				{
+					Label: "Header",
+					Fields: []fileField{
+						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bit field"},
+							MatchedPatterns: []value.MatchedPattern{{Label: "High bit", Operation: "bit", Value: 1}}},
+						{Offset: 0x1, Length: 0x1, Value: []uint8{0xaa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "HighSet"}},
+					},
+				}}}, fl)
+}

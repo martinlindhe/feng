@@ -2,6 +2,8 @@ package mapper
 
 import (
 	"fmt"
+	"log"
+	"strings"
 
 	"github.com/martinlindhe/feng/value"
 )
@@ -60,6 +62,66 @@ func (fl *FileLayout) Present() {
 
 			fmt.Printf("  [%06x] %-30s %-10s %-10s %-20s\n",
 				field.Offset, field.Format.Label, kind, field.Present(), fmt.Sprintf("% 02x", field.Value))
+
+			for _, child := range field.MatchedPatterns {
+				fmt.Printf("           - %-28s %-10s %d\n", child.Label, child.Operation, child.Value)
+			}
 		}
 	}
+}
+
+// finds the first field named `structName`.`fieldName`
+// returns: kind, bytes, error
+func (fl *FileLayout) GetValue(structName, fieldName string) (string, []byte, error) {
+	if DEBUG {
+		log.Printf("searching for %s.%s", structName, fieldName)
+	}
+	for _, struct_ := range fl.Structs {
+		if DEBUG {
+			log.Printf("comparing struct %s to %s", struct_.Label, structName)
+		}
+		if struct_.Label == structName {
+			return struct_.GetValue(fieldName)
+		}
+	}
+	return "", nil, fmt.Errorf("struct not found")
+}
+
+// returns: kind, bytes, error
+func (fs *FileStruct) GetValue(fieldName string) (string, []byte, error) {
+	childName := ""
+	separator := strings.Index(fieldName, ".")
+	if separator != -1 {
+		childName = fieldName[separator+1:]
+		fieldName = fieldName[0:separator]
+	}
+
+	if DEBUG {
+		log.Printf("searching for '%s.%s.%s'", fs.Label, fieldName, childName)
+	}
+
+	for _, field := range fs.Fields {
+		if DEBUG {
+			log.Printf("comparing field %s to %s", field.Format.Label, fieldName)
+		}
+		if field.Format.Label == fieldName {
+			if !field.Format.IsSimpleUnit() {
+				return "", nil, fmt.Errorf("type '%s' cannot be used in IF-statement", field.Format.PresentType())
+			}
+			if childName == "" {
+				return field.Format.Kind, field.Value, nil
+			}
+
+			for _, child := range field.MatchedPatterns {
+				if DEBUG {
+					log.Printf("comparing matched pattern %s to %s", child.Label, childName)
+				}
+				if child.Label == childName {
+					val := value.U64toBytesBigEndian(child.Value, field.Format.SingleUnitSize())
+					return field.Format.Kind, val, nil
+				}
+			}
+		}
+	}
+	return "", nil, fmt.Errorf("field not found")
 }

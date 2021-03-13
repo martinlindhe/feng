@@ -67,7 +67,7 @@ type expression struct {
 	Pattern value.DataPattern
 
 	// represents a branch such as "if <expression>" child nodes
-	children []expression
+	Children []expression
 
 	// represents u8/u16/u32/u64 child patterns (eq, bit, default)
 	MatchPatterns []MatchPattern
@@ -178,7 +178,6 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				expr = expression{field, value.DataPattern{}, []expression{}, matchPatterns}
 
 			} else {
-
 				// evaluate all child nodes (if <expression>)
 				children, err := evaluateStruct(&v)
 				if err != nil {

@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	DEBUG = true
+	DEBUG = false
 )
 
 var (
@@ -98,16 +98,16 @@ func replaceNextBitTag(s string) (string, error) {
 		res = fmt.Sprintf("%02x", i)
 
 	case lm <= 16: // u16
-		x := u64toBytesBigEndian(i)
-		res = fmt.Sprintf("% 02x", x[6:8])
+		x := U64toBytesBigEndian(i, 2)
+		res = fmt.Sprintf("% 02x", x)
 
 	case lm <= 24: // 3 bytes
-		x := u64toBytesBigEndian(i)
-		res = fmt.Sprintf("% 02x", x[5:8])
+		x := U64toBytesBigEndian(i, 3)
+		res = fmt.Sprintf("% 02x", x)
 
 	case lm <= 32: // u32
-		x := u64toBytesBigEndian(i)
-		res = fmt.Sprintf("% 02x", x[4:8])
+		x := U64toBytesBigEndian(i, 4)
+		res = fmt.Sprintf("% 02x", x)
 
 	default:
 		log.Fatalf("unhandled bit length %d", lm)
@@ -118,10 +118,25 @@ func replaceNextBitTag(s string) (string, error) {
 	return s, nil
 }
 
-func u64toBytesBigEndian(val uint64) []byte {
+func U64toBytesBigEndian(val uint64, unitSize uint64) []byte {
 	r := make([]byte, 8)
 	for i := uint64(0); i < 8; i++ {
 		r[7-i] = byte((val >> (i * 8)) & 0xff)
+	}
+
+	switch unitSize {
+	case 1:
+		return r[7:8]
+	case 2:
+		return r[6:8]
+	case 3:
+		return r[5:8]
+	case 4:
+		return r[4:8]
+	case 8:
+		return r
+	default:
+		log.Fatalf("unhandled unit size %d", unitSize)
 	}
 	return r
 }
@@ -220,6 +235,23 @@ type MatchedPattern struct {
 	Value uint64
 }
 
+// returns unitLength, totalLength
+func (df *DataField) GetLength() (uint64, uint64) {
+
+	var err error
+	unitLength := df.SingleUnitSize()
+	rangeLength := uint64(1)
+	if df.Range != "" {
+		rangeLength, err = strconv.ParseUint(df.Range, 10, 64) // XXX evaluate range
+		if err != nil {
+			log.Fatalf("cant parse uint '%s': %v", df.Range, err)
+		}
+	}
+	totalLength := unitLength * rangeLength
+
+	return unitLength, totalLength
+}
+
 func (df *DataField) SingleUnitSize() uint64 {
 	switch df.Kind {
 	case "u8":
@@ -231,7 +263,8 @@ func (df *DataField) SingleUnitSize() uint64 {
 	case "u64":
 		return 8
 	}
-	panic("unreachable")
+	log.Fatalf("SingleUnitSize cant handle kind '%s'", df.Kind)
+	return 0
 }
 
 // presents the underlying type as it is known in the template format
@@ -255,6 +288,11 @@ func (df *DataField) IsPatternableUnit() bool {
 		return true
 	}
 	return false
+}
+
+// returns true if unit is a single u8, u16, u32 or u64 that can be used in IF statements
+func (df *DataField) IsSimpleUnit() bool {
+	return df.IsPatternableUnit()
 }
 
 // returns true if df.Range should be interpreted as a Kind[Start:End] range or false if its Kind[Length]
