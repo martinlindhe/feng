@@ -264,7 +264,11 @@ func (df *DataField) GetLength() (uint64, uint64) {
 }
 
 func (df *DataField) SingleUnitSize() uint64 {
-	switch df.Kind {
+	return SingleUnitSize(df.Kind)
+}
+
+func SingleUnitSize(kind string) uint64 {
+	switch kind {
 	case "u8":
 		return 1
 	case "u16":
@@ -274,7 +278,7 @@ func (df *DataField) SingleUnitSize() uint64 {
 	case "u64":
 		return 8
 	}
-	log.Fatalf("SingleUnitSize cant handle kind '%s'", df.Kind)
+	log.Fatalf("SingleUnitSize cant handle kind '%s'", kind)
 	return 0
 }
 

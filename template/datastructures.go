@@ -2,6 +2,9 @@ package template
 
 import (
 	"fmt"
+	"log"
+	"strconv"
+	"strings"
 
 	"github.com/martinlindhe/feng/value"
 	"gopkg.in/yaml.v2"
@@ -10,7 +13,7 @@ import (
 type DataStructure struct {
 
 	// evaluated constants
-	constants []evaluatedConstant
+	Constants []EvaluatedConstant
 
 	// evaluated file structs
 	structs []evaluatedStruct
@@ -63,4 +66,38 @@ func (ds *DataStructure) FindStructure(df *value.DataField) (*evaluatedStruct, e
 		}
 	}
 	return nil, fmt.Errorf("not found in structs: '%s'", df.Kind)
+}
+
+// parses a comma-separated string of constants and integers
+func (ds *DataStructure) ParsePattern(in, kind string) ([][]byte, error) {
+	res := [][]byte{}
+	for _, part := range strings.Split(in, ",") {
+
+		v, ok := ds.FindConstant(part)
+
+		if ok {
+			res = append(res, v)
+			continue
+		}
+
+		i, err := strconv.ParseUint(part, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, value.U64toBytesBigEndian(i, value.SingleUnitSize(kind)))
+	}
+	log.Printf("ParsePattern: %s %s => %v", kind, in, res)
+	return res, nil
+}
+
+// returns value and true if found
+func (ds *DataStructure) FindConstant(name string) ([]byte, bool) {
+	log.Printf("FindConstant: looking for %s", name)
+	for _, c := range ds.Constants {
+		if c.Field.Label == name {
+			log.Printf("FindConstant: found %v", c)
+			return c.Value, true
+		}
+	}
+	return nil, false
 }

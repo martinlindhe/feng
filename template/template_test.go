@@ -68,8 +68,8 @@ layout:
 	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData))
 	assert.Equal(t, nil, err)
 
-	assert.Equal(t, evaluatedConstant{value.DataField{Kind: "u8", Range: "2", Label: "I"}, []byte{0x49, 0x0}}, ds.constants[0])
-	assert.Equal(t, evaluatedConstant{value.DataField{Kind: "u8", Range: "3", Label: "X"}, []byte{0x58, 0x58, 0x0}}, ds.constants[1])
+	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "2", Label: "I"}, []byte{0x49, 0x0}}, ds.Constants[0])
+	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "3", Label: "X"}, []byte{0x58, 0x58, 0x0}}, ds.Constants[1])
 }
 
 func TestEvaluateStructsAndLayout(t *testing.T) {
@@ -99,7 +99,7 @@ layout:
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, &DataStructure{
-		constants: []evaluatedConstant{},
+		Constants: []EvaluatedConstant{},
 		structs: []evaluatedStruct{
 			{Name: "header", Expressions: []expression{
 				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: true, Pattern: []uint8{0xff, 0xd8}, Value: ""}, Children: []expression{}, MatchPatterns: []MatchPattern{}}},

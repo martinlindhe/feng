@@ -38,13 +38,13 @@ type Template struct {
 	Layout []string
 }
 
-type evaluatedConstant struct {
+type EvaluatedConstant struct {
 	Field value.DataField
 	Value []byte
 }
 
-func (t *Template) evaluateConstants() ([]evaluatedConstant, error) {
-	res := []evaluatedConstant{}
+func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
+	res := []EvaluatedConstant{}
 	for _, c := range t.Constants {
 		key, err := value.ParseDataField(c.Key.(string))
 		if err != nil {
@@ -54,7 +54,7 @@ func (t *Template) evaluateConstants() ([]evaluatedConstant, error) {
 		if err != nil {
 			return nil, err
 		}
-		res = append(res, evaluatedConstant{key, val})
+		res = append(res, EvaluatedConstant{key, val})
 	}
 
 	return res, nil

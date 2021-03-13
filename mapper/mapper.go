@@ -6,8 +6,6 @@ import (
 	"io"
 	"log"
 	"regexp"
-	"strconv"
-	"strings"
 
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
@@ -125,20 +123,19 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 							log.Printf("if-match: %s %02x", kind, val)
 						}
 
-						// XXX MAYBE TODO -- evaluate pattern variables to integer values (NO NEEDED CASE YET)
-
-						fieldVal := value.AsUint64(kind, val)
-
-						patternValues, err := parsePattern(pattern)
+						patternValues, err := ds.ParsePattern(pattern, kind)
 						if err != nil {
 							log.Fatal(err)
 						}
 						matched := false
 						for _, patternVal := range patternValues {
-							if operation == "in" && fieldVal == patternVal {
+							if DEBUG {
+								log.Printf("if-match: comparing '%v' %s '%v'", val, operation, patternVal)
+							}
+							if operation == "in" && bytes.Equal(val, patternVal) {
 								matched = true
 							}
-							if operation == "notin" && fieldVal != patternVal {
+							if operation == "notin" && !bytes.Equal(val, patternVal) {
 								matched = true
 							}
 						}
@@ -171,7 +168,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 						}
 
 					default:
-						log.Fatalf("XXX unhandled if-match operation '%s'", operation)
+						log.Fatalf("unhandled if-match operation '%s'", operation)
 					}
 				}
 
@@ -205,17 +202,4 @@ func readBytes(r io.Reader, totalLength, unitLength uint64, endian string) ([]by
 	}
 
 	return val, nil
-}
-
-// parses a comma-separated string of unsigned integers
-func parsePattern(s string) ([]uint64, error) {
-	res := []uint64{}
-	for _, part := range strings.Split(s, ",") {
-		v, err := strconv.ParseUint(part, 10, 64)
-		if err != nil {
-			return nil, err
-		}
-		res = append(res, v)
-	}
-	return res, nil
 }

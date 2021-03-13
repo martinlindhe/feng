@@ -1,4 +1,7 @@
 # STATUS: 2%
+# - HI: need "if variable in (CONSTANT)" expression
+# - HI: section[] slice syntax
+# - HI: need to use custom "rgb" type as defined
 # - NEED: "ascii" kind
 
 
@@ -13,7 +16,37 @@ kind: image
 extensions: [.gif]
 mime: image/gif
 
+constants:
+  #u8 BLOCK_IMAGE:     "2c"
+  u8 BLOCK_EXTENSION: "21"
+  #u8 BLOCK_TRAILER:   "3b"
+
+  #u8 EXT_PLAIN_TEXT:      "01"
+  u8 EXT_GRAPHIC_CONTROL: "f9"
+  #u8 EXT_COMMENT:         "fe"
+  #u8 EXT_APPLICATION:     "ff"
+
 structs:
+  rgb:
+    u8 Red: ??
+    u8 Green: ??
+    u8 Blue: ??
+
+  section:
+    u8 Block type: ??
+    if Block type in (BLOCK_EXTENSION):
+      u8 Extension type: ??
+      if Extension type in (EXT_GRAPHIC_CONTROL):
+        u8 Size: "04" # XXX should always be 04
+        u8 Flags:
+          bit b0000_0001: Transparent color
+          bit b0000_0010: User input
+          bit b0001_1100: Disposal method
+          #bit b1110_0000: Reserved
+        u16 Delay time: ??
+        u8 Transparent color index: ??
+        u8 Block terminator: "00"
+
   header:
     endian: little
     u8[4] Signature: c'GIF8'      # XXX "ascii[4]" kind
@@ -34,22 +67,11 @@ structs:
 
     # WIP
     if Screen descriptor.Global Color Table present in (1):
-      # XXX need to calculate 3-bit value of Global Color Table size and allow this index form:
+      u8[3 * (2 << (Screen descriptor.Global Color Table size))] Global Color Table: ??   # FIXME use rgb type
+      #rgb[2 << (Screen descriptor.Global Color Table size)] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
 
-      # XXX format is 3 bytes per color, RGB
-      u8[3 * (2 << (Screen descriptor.Global Color Table size))] Global Color Table: ??
+    section[] Section: ??   # XXX slice of sections
 
-
-  # SECTIONS:
-
-  # Thereafter, the file is divided into segments, each introduced by a 1-byte sentinel:
-
-  #An image (introduced by 0x2C, an ASCII comma ',')
-  #An extension block (introduced by 0x21, an ASCII exclamation point '!')
-  #The trailer (a single byte of value 0x3B, an ASCII semicolon ';'),
-
-
-  # XXX image data is encoded with LZW
 
 layout:
   - header Header

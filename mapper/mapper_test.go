@@ -369,6 +369,9 @@ layout:
 
 func TestEvaluateIf(t *testing.T) {
 	templateData := `
+constants:
+  u8 C1: "04"
+
 structs:
   header:
     u8 Number: "04"
@@ -378,6 +381,9 @@ structs:
 
     if Number notin (6):
       u8 NotSix: "aa"
+
+    if Number in (C1):
+      u8 FourConstant: "ee"
 
 layout:
   - header Header
@@ -389,6 +395,7 @@ layout:
 		0x04, // Number
 		0xff, // Four
 		0xaa, // NotSix
+		0xee, // FourConstant
 	}
 
 	fl, err := MapReader(bytes.NewReader(data), ds)
@@ -404,6 +411,7 @@ layout:
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0x4}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Number"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x1, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Four"}},
 						{Offset: 0x2, Length: 0x1, Value: []uint8{0xaa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "NotSix"}},
+						{Offset: 0x3, Length: 0x1, Value: []uint8{0xee}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "FourConstant"}},
 					},
 				}}}, fl)
 }
