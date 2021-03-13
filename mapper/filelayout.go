@@ -3,6 +3,7 @@ package mapper
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 
 	"github.com/martinlindhe/feng/value"
@@ -124,4 +125,44 @@ func (fs *FileStruct) GetValue(fieldName string) (string, []byte, error) {
 		}
 	}
 	return "", nil, fmt.Errorf("field not found")
+}
+
+// replace variables with their values
+func (fs *FileStruct) ExpandVariables(s string) string {
+	log.Printf("ExpandVariables: %s", s)
+
+	for {
+		expanded := fs.expandVariable(s)
+		if expanded == s {
+			break
+		}
+		log.Printf("ExpandVariables: %s => %s", s, expanded)
+		s = expanded
+	}
+
+	return s
+}
+
+func (fs *FileStruct) expandVariable(s string) string {
+	variableExpressionRE := regexp.MustCompile(`\(([\w .]+)\)`)
+
+	matches := variableExpressionRE.FindStringSubmatch(s)
+	if len(matches) == 0 {
+		return s
+	}
+
+	// XXX 1 expansion, then recurse until no difference
+
+	idx := variableExpressionRE.FindStringSubmatchIndex(s)
+
+	kind, val, err := fs.GetValue(matches[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("ExpandVariables: MATCHED %s to %s %v", matches[1], kind, val)
+
+	i := value.AsUint64(kind, val)
+
+	return s[0:idx[0]] + fmt.Sprintf("%d", i) + s[idx[1]:]
 }

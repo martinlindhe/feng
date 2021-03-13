@@ -70,6 +70,10 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 					log.Fatalf("invalid %s form: %s", es.Field.Kind, es.Field.PresentType())
 				}
 
+				if es.Field.Range != "" {
+					es.Field.Range = fs.ExpandVariables(es.Field.Range)
+				}
+
 				unitLength, totalLength := es.Field.GetLength()
 
 				if DEBUG {
@@ -121,7 +125,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 							log.Printf("if-match: %s %02x", kind, val)
 						}
 
-						// XXX TODO -- evaluate pattern variables to integer values (NOT NEEDED FOR TRIVIAL TEST)
+						// XXX MAYBE TODO -- evaluate pattern variables to integer values (NO NEEDED CASE YET)
 
 						fieldVal := value.AsUint64(kind, val)
 
@@ -145,6 +149,11 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 								if DEBUG {
 									log.Printf("[%08x] if-match: adding child %s", offset, child.Field.Label)
 								}
+
+								if child.Field.Range != "" {
+									child.Field.Range = fs.ExpandVariables(child.Field.Range)
+								}
+
 								unitLength, totalLength := child.Field.GetLength()
 
 								childVal, err := readBytes(r, totalLength, unitLength, endian)

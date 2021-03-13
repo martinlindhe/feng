@@ -8,6 +8,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/maja42/goval"
 )
 
 const (
@@ -238,13 +240,22 @@ type MatchedPattern struct {
 // returns unitLength, totalLength
 func (df *DataField) GetLength() (uint64, uint64) {
 
-	var err error
 	unitLength := df.SingleUnitSize()
 	rangeLength := uint64(1)
 	if df.Range != "" {
-		rangeLength, err = strconv.ParseUint(df.Range, 10, 64) // XXX evaluate range
+
+		eval := goval.NewEvaluator()
+		result, err := eval.Evaluate(df.Range, nil, nil)
+
 		if err != nil {
-			log.Fatalf("cant parse uint '%s': %v", df.Range, err)
+			log.Fatalf("cant evaluate '%s': %v", df.Range, err)
+		}
+
+		switch v := result.(type) {
+		case int:
+			rangeLength = uint64(v)
+		default:
+			log.Fatalf("unhandled result type %T", result)
 		}
 	}
 	totalLength := unitLength * rangeLength
@@ -273,7 +284,10 @@ func (df *DataField) PresentType() string {
 		return fmt.Sprintf("%s[]", df.Kind)
 	}
 	if df.Range != "" {
-		return fmt.Sprintf("%s[%s]", df.Kind, df.Range)
+
+		_, totalLength := df.GetLength() // XXX totalLength is only correct in bytes
+
+		return fmt.Sprintf("%s[%d]", df.Kind, totalLength)
 	}
 	return df.Kind
 }

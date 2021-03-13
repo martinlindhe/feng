@@ -329,7 +329,42 @@ layout:
 	_, val, err = fl.GetValue("Header", "Field.High bit")
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{1}, val)
+}
 
+func TestExpandVariables(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    u8 Field:
+      bit b0000_0011: Size
+    u8[1 << (Field.Size)] Data: ??
+
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		0xff,                                           // Field
+		0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, // Data
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	s := fl.Structs[0].ExpandVariables("(Field.Size)")
+	assert.Equal(t, "3", s)
+
+	assert.Equal(t,
+		&FileLayout{
+			Structs: []FileStruct{
+				{Label: "Header",
+					Fields: []fileField{
+						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"}, MatchedPatterns: []value.MatchedPattern{{Label: "Size", Operation: "bit", Value: 0x3}}},
+						{Offset: 0x1, Length: 0x8, Value: []uint8{0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7}, Endian: "", Format: value.DataField{Kind: "u8", Range: "1 << 3", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
+					},
+				}}}, fl)
 }
 
 func TestEvaluateIf(t *testing.T) {

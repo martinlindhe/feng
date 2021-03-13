@@ -1,7 +1,5 @@
-# STATUS: 1%
+# STATUS: 2%
 # - NEED: "ascii" kind
-
-# -DONE ???: need calculated value of multi-bit field "Global Color Table size"
 
 
 references:
@@ -36,9 +34,10 @@ structs:
 
     # WIP
     if Screen descriptor.Global Color Table present in (1):
-      u8 GLOBAL_COLOR_TABLE_WIP: ??
       # XXX need to calculate 3-bit value of Global Color Table size and allow this index form:
-      # u8[Screen descriptor.Global Color Table size] Global Color Table: ?? # XXX format?
+
+      # XXX format is 3 bytes per color, RGB
+      u8[3 * (2 << (Screen descriptor.Global Color Table size))] Global Color Table: ??
 
 
   # SECTIONS:
