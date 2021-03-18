@@ -1,7 +1,5 @@
 # STATUS: 1%
-# - HI: u16 eq
 # - HI: block syntax
-# - PROBE: Stream flags unmapped value = invalid
 
 references:
   - https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/xz-file-format.txt;hb=HEAD
@@ -11,18 +9,17 @@ kind: archive
 extensions: [.xz]
 mime: application/x-xz
 
-endian: big # XXX !`?
-
 structs:
   header:
+    endian: big # XXX !`?
     # stream header. valid xz contains 1 or more streams with header+data
-    ascii[6] Signature: FD c'7zXZ' 00
-    u16 Stream flags:   # XXX u16 eq ...
+    u8[6] Signature: FD c'7zXZ' 00          # XXX ascii
+    u16 Stream flags:
       eq 0000: None
       eq 0001: CRC32    # XXX 4 bytes
       eq 0004: CRC64     # XXX 8 bytes
       eq 000a: SHA-256    # XXX 32 bytes
-      # XXX ALL OTHER VALUES ARE RESERVED
+      default: invalid
 
     # XXX calculated over Reserved+Stream flags (2 bytes)
     u32 CRC32: ?? # XXX seems header always has a crc32, the Stream flags checksum is used elsewhere ???

@@ -1,5 +1,7 @@
-# STATUS: 1%
-# - HI: need if value in[1,2,3] syntax!
+# STATUS: 5%
+# HIGH figure out v2 format better. 010 seem to have it
+# LO: ascii + signed integer types
+# LO: dont use header size constants compare vs u32 DIB header size "eq" value
 
 references:
   - https://en.wikipedia.org/wiki/BMP_file_format
@@ -12,60 +14,67 @@ kind: image
 extensions: [.bmp]
 mime: image/bmp
 
+constants:
+  u32 BITMAPCOREHEADER:  "0000000c"  # V1 (OS/2)   aka OS21XBITMAPHEADER (12 bytes)
+  u32 OS22XBITMAPHEADER: "00000040"  # V2 (OS/2) OS22XBITMAPHEADER (BITMAPINFOHEADER + another 24 bytes, 64 bytes total)          XXX not fully supported
+  u32 BITMAPINFOHEADER:  "00000028"  # V3 (Windows) - BITMAPINFOHEADER (40 bytes)
+
 structs:
   header:
     endian: little
-    u8[2] Signature: c'BM' # XXX ascii
+    u8[2] Signature: c'BM'      # XXX ascii
     u32 File size: ??
-    u32 Reserved: 00 00 00 00   # XXX not sure if must be zeroed
+    u32 Reserved: ??            # usually zeroed
     u32 Starting address: ??
 
-    # DIB header
-    u32 DIB header size: ??
+    u32 DIB header size:
+      eq 0000_000c: BITMAPCOREHEADER (V1)
+      eq 0000_0040: OS22XBITMAPHEADER (V2)
+      eq 0000_0028: BITMAPINFOHEADER (V3)
+      default: invalid # XXX handle other header sizes (V4, V5 ...)
 
-    # XXX !!!: handle "if header field value in[1,2,3]". single and multi value IF-case
-    if DIB header size in[12]:       # OS/2 V1 - BITMAPCOREHEADER (very similar to OS21XBITMAPHEADER)
+    if self.DIB header size in (BITMAPCOREHEADER):
       u16 Width: ??
       u16 Height: ??
       u16 Color planes: ??
       u16 Bits per pixel: ??
 
-  headerTODO:
-    #if DIB header size in[40,64]:      # Windows V3 - BITMAPINFOHEADER (size 40)
-    u32 Width: ??
-    u32 Height: ??
-    u16 Color planes: ??
-    u16 Bits per pixel: ??
-    u32 Compression method:   #  XXX handle multiple values for u32 !?
-      eq 00: BI_RGB (none)
-      eq 01: BI_RLE8
-      eq 02: BI_RLE4
-      eq 03: BI_BITFIELDS
-      eq 04: BI_JPEG
-      eq 05: BI_PNG
-      eq 06: BI_ALPHABITFIELDS
-      eq 0b: BI_CMYK
-      eq 0c: BI_CMYKRLE8
-      eq 0d: BI_CMYKRLE4
-    u32 Image data size: ??
-    u32 Horizontal resolution: ??
-    u32 Vertical resolution: ??
-    u32 Colors in palette: ??
-    u32 Important colors: ??
+    if self.DIB header size in (BITMAPINFOHEADER, OS22XBITMAPHEADER):  # XXX compare vs u32 DIB header size "eq" value
+      u32 Width: ??             # XXX signed integer
+      u32 Height: ??            # XXX signed integer
+      u16 Color planes: ??      # XXX must be 1
+      u16 Bits per pixel: ??
+      u32 Compression method:
+        eq 0000_0000: BI_RGB (none)
+        eq 0000_0001: BI_RLE8
+        eq 0000_0002: BI_RLE4
+        eq 0000_0003: BI_BITFIELDS
+        eq 0000_0004: BI_JPEG
+        eq 0000_0005: BI_PNG
+        eq 0000_0006: BI_ALPHABITFIELDS
+        eq 0000_000b: BI_CMYK
+        eq 0000_000c: BI_CMYKRLE8
+        eq 0000_000d: BI_CMYKRLE4
+      u32 Image data size: ??
+      u32 Horizontal resolution: ??  # biXPelsPerMeter, XXX signed integer
+      u32 Vertical resolution: ??    # XXX signed integer
+      u32 Colors in palette: ??
+      u32 Important colors: ??
 
-    #if DIB header size in[64]:        # OS/2 V2 OS22XBITMAPHEADER (directly after BITMAPINFOHEADER)
-    #u16 Unit for the horizontal and vertical resolutions: ??  # XXX should always be 00 ???
-    #u16 Reserved: ?? # XXX always 00 ???
-    #u16 An enumerated value indicating the direction in which the bits fill the bitmap: ?? # XXX should always be 0 ?
-    #u16 Halftoning algorithm: # XXX u16 eq
-    #  eq 00: none
-    #  eq 01: Error diffusion
-    #  eq 02: PANDA
-    #  eq 03: Super-circle
-    #u32 Halftoning parameter 1: ??
-    #u32 Halftoning parameter 2: ??
-    #u32 Color encoding: ?? # XXX
-    #u32 Application-defined identifier: ?? # XXX
+    # XXX v2... this not shown in hex fiend ....
+    if self.DIB header size in (OS22XBITMAPHEADER):
+      u16 Unit for the horizontal and vertical resolutions: ??  # XXX should always be 00 ???
+      u16 Reserved: ?? # XXX always 00 ???
+      u16 An enumerated value indicating the direction in which the bits fill the bitmap: ?? # XXX should always be 0 ?
+      u16 Halftoning algorithm:
+        eq 0000: none
+        eq 0001: Error diffusion
+        eq 0002: PANDA
+        eq 0003: Super-circle
+      u32 Halftoning parameter 1: ??
+      u32 Halftoning parameter 2: ??
+      u32 Color encoding: ?? # XXX
+      u32 Application-defined identifier: ?? # XXX
 
 
     # XXX palette follows

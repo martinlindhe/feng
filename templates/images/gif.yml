@@ -1,7 +1,6 @@
 # STATUS: 2%
-# - HI: need "if variable in (CONSTANT)" expression
-# - HI: section[] slice syntax
 # - HI: need to use custom "rgb" type as defined
+# - HI: section[] slice syntax
 # - NEED: "ascii" kind
 
 

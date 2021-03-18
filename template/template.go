@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	DEBUG = true
+	DEBUG = false
 )
 
 // Template represents a templates/*.yml file
@@ -61,13 +61,13 @@ func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
 }
 
 // holds a parsed expression
-type expression struct {
+type Expression struct {
 	Field value.DataField
 
 	Pattern value.DataPattern
 
 	// represents a branch such as "if <expression>" child nodes
-	Children []expression
+	Children []Expression
 
 	// represents u8/u16/u32/u64 child patterns (eq, bit, default)
 	MatchPatterns []MatchPattern
@@ -77,10 +77,10 @@ type expression struct {
 type evaluatedStruct struct {
 	Name string
 
-	Expressions []expression
+	Expressions []Expression
 }
 
-func (es *expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, error) {
+func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, error) {
 	res := []value.MatchedPattern{}
 	invalidIfNoMatch := false
 	actual := value.AsUint64(es.Field.Kind, b)
@@ -165,7 +165,7 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 			return es, err
 		}
 
-		var expr expression
+		var expr Expression
 
 		switch val := v.Value.(type) {
 		case []yaml.MapItem:
@@ -175,7 +175,7 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				if err != nil {
 					return es, err
 				}
-				expr = expression{field, value.DataPattern{}, []expression{}, matchPatterns}
+				expr = Expression{field, value.DataPattern{}, []Expression{}, matchPatterns}
 
 			} else {
 				// evaluate all child nodes (if <expression>)
@@ -183,20 +183,20 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				if err != nil {
 					return es, err
 				}
-				expr = expression{field, value.DataPattern{}, children.Expressions, []MatchPattern{}}
+				expr = Expression{field, value.DataPattern{}, children.Expressions, []MatchPattern{}}
 			}
 
 		case string:
 			if field.Kind == "endian" {
 				pattern := value.DataPattern{Known: true, Value: val}
-				expr = expression{field, pattern, []expression{}, []MatchPattern{}}
+				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 			} else {
 				pattern, err := value.ParseDataPattern(val)
 				if err != nil {
 					log.Fatalf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
 					return es, err
 				}
-				expr = expression{field, pattern, []expression{}, []MatchPattern{}}
+				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 			}
 
 		default:
@@ -221,6 +221,7 @@ type MatchPattern struct {
 	Pattern string
 }
 
+// XXX rename func
 func evaluateMatchPatterns(mi []yaml.MapItem) ([]MatchPattern, error) {
 	res := []MatchPattern{}
 

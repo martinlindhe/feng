@@ -10,8 +10,6 @@ kind: archive   # XXX or "disk image" or "file system image" ?
 extensions: [.iso]
 mime: application/x-iso9660-image
 
-endian: little    # XXX
-
 structs:
   header:
     # XXX header at 0x8000:   01 c'CD'

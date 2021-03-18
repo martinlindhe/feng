@@ -1,7 +1,5 @@
 # STATUS: 1%
-#  - HI: u16 eq match type: if Image type[Icon]
-#  - HI: need for Resources or something to specify all ICONDIRENTRY
-#  - LOW: prober need to fail match in case of unrecognized value "Image type"
+#  - HI: "ICONDIRENTRY[header.Resources] Resource" syntax
 
 
 
@@ -13,8 +11,6 @@ references:
 kind: image
 extensions: [.ico, .cur]
 mime: image/x-icon          # XXX "image/vnd.microsoft.icon" for Cursor
-
-endian: little
 
 structs:
   ICONDIRENTRY:
@@ -35,11 +31,12 @@ structs:
     #u8[Image data offset:Image data offset+Image data size] Image data: ??
 
   header:
+    endian: little
     u16 Reserved: 00 00
     u16 Image type:             # XXX .cur format is almost identical, handle both here?
-      eq 01: Icon
-      eq 02: Cursor
-      # XXX any other value: file is not valid !
+      eq 0001: Icon
+      eq 0002: Cursor
+      default: invalid
     u16 Resources: ??           # number of image resources in file
 
 

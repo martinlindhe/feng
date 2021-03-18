@@ -12,10 +12,9 @@ kind: image
 extensions: [.png]
 mime: image/png
 
-endian: big
-
 structs:
   header:
+    endian: big
     u8[8] Signature: 89 c'PNG' 0d 0a 1a 0a
 
   chunk:

@@ -102,7 +102,11 @@ Hexinator / Synalyze It! - Universal Parsing Engine
 
 
 
-quickbms - xxx
+quickbms - TODO evaluate
+
+
+ "Game Extractor" by "WATTO" - TODO evaluate
+
 
 
 010 editor templates

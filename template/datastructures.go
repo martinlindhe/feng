@@ -71,7 +71,9 @@ func (ds *DataStructure) FindStructure(df *value.DataField) (*evaluatedStruct, e
 // parses a comma-separated string of constants and integers
 func (ds *DataStructure) ParsePattern(in, kind string) ([][]byte, error) {
 	res := [][]byte{}
-	for _, part := range strings.Split(in, ",") {
+	allIn := strings.Split(in, ",")
+	for _, part := range allIn {
+		part = strings.TrimSpace(part)
 
 		v, ok := ds.FindConstant(part)
 
@@ -86,7 +88,7 @@ func (ds *DataStructure) ParsePattern(in, kind string) ([][]byte, error) {
 		}
 		res = append(res, value.U64toBytesBigEndian(i, value.SingleUnitSize(kind)))
 	}
-	log.Printf("ParsePattern: %s %s => %v", kind, in, res)
+	log.Printf("ParsePattern: %s %v => %v", kind, allIn, res)
 	return res, nil
 }
 

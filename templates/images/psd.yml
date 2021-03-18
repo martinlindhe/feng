@@ -1,5 +1,5 @@
-# STATUS: 1%
-# - HI: map u16 eq forms
+# STATUS: 2%
+# - LO: ascii type
 
 references:
   - https://en.wikipedia.org/wiki/Adobe_Photoshop#File_format
@@ -10,26 +10,26 @@ kind: image
 extensions: [.psd]
 mime: image/vnd.adobe.photoshop
 
-endian: big
-
 structs:
   header:
-    ascii[4] Signature: c'8BPS'
+    endian: big
+    u8[4] Signature: c'8BPS'     # XXX ascii
     u16 Version: ??       # XXX version 2 is "big" format, larger fields?
     u8[6] Reserved: ??
     u16 Channels: ??
     u32 Height: ??
     u32 Width: ??
     u16 Bit depth: ??
-    u16 Color mode:       # XXX map u16 forms
-      eq 00: Bitmap
-      eq 01: Grayscale
-      eq 02: Indexed
-      eq 03: RGB
-      eq 04: CMYK
-      eq 07: Multichannel
-      eq 08: Duotone
-      eq 09: LAB
+    u16 Color mode:
+      eq 0000: Bitmap
+      eq 0001: Grayscale
+      eq 0002: Indexed
+      eq 0003: RGB
+      eq 0004: CMYK
+      eq 0007: Multichannel
+      eq 0008: Duotone
+      eq 0009: LAB
+      default: invalid
 
 layout:
   - header Header

@@ -65,6 +65,7 @@ func ParseDataString(s string) ([]byte, error) {
 	}
 
 	s = strings.ReplaceAll(s, " ", "")
+	s = strings.ReplaceAll(s, "_", "")
 	res, err := hex.DecodeString(s)
 	if err != nil {
 		return nil, fmt.Errorf("hex decode '%s' failed: %v", s, err)

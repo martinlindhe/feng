@@ -13,7 +13,6 @@ mime: application/x-tar
 
 # NOTE format only uses byte streams and numbers encoded as octal ascii in them
 # TODO: could specify 2 details on a data field: meaning (uint32,crc32), encoding (ascii+octal)
-endian: big
 
 structs:
   # XXX each file object start with 512 byte header then untouched data rounded up to a multiple of 512 bytes (zero pad)

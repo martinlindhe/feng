@@ -1,5 +1,9 @@
 # STATUS: 1%
-# - HI: need u32 bit match
+# - HI: u32 bit match is broken! ADD TEST CASE!!! input b00001010_00010000_00000111 reports DDSD_PITCH and DDSD_DEPTH as true while they are false
+# - HI: "u32[11] Reserved1" is displayed as u32[44]  (bytes not unit size!!!)
+# - HI: "if self.Header flags.DDSD_PIXELFORMAT:"   should evaluate to true if this bit field is non-zero
+
+# - LO: need ascii type
 # - HI: need u32[sized] array     - GENERIC datatype[sized] form !!!???
 
 references:
@@ -11,40 +15,40 @@ kind: image
 extensions: [.dds]
 mime: image/vnd-ms.dds
 
-endian: little
-
 structs:
   header:
-    ascii[4] Signature: c'DDS '
+    endian: little
+    u8[4] Signature: c'DDS '     # XXX ASCII
 
     # header
     u32 Header size: 00 00 00 7c
-    u32 Header flags: ?? # XXX u32 bit match
-    #  bit b00000001: DDSD_CAPS
-    #  bit b00000010: DDSD_HEIGHT
-    #  bit b00000100: DDSD_WIDTH
-    #  bit b00001000: DDSD_PITCH
-    #  bit b00010000_00000000: DDSD_PIXELFORMAT
-    #  bit b00100000_00000000: DDSD_MIPMAPCOUNT
-    #  bit b10000000_00000000: DDSD_LINEARSIZE
-    #  bit b10000000_00000000_00000000: DDSD_DEPTH
+    u32 Header flags:
+      bit b00000000_00000000_00000000_00000001: DDSD_CAPS
+      bit b00000000_00000000_00000000_00000010: DDSD_HEIGHT
+      bit b00000000_00000000_00000000_00000100: DDSD_WIDTH
+      bit b00000000_00000000_00000000_00001000: DDSD_PITCH        # XXX broken, matches when value is 0
+      bit b00000000_00000000_00010000_00000000: DDSD_PIXELFORMAT
+      bit b00000000_00000000_00100000_00000000: DDSD_MIPMAPCOUNT
+      bit b00000000_00000000_10000000_00000000: DDSD_LINEARSIZE
+      bit b00000000_10000000_00000000_00000000: DDSD_DEPTH        # XXX broken, matches when value is 0
 
     u32 Height: ??
     u32 Width: ??
     u32 PitchOrLinearSize: ??
     u32 Depth: ??
     u32 MipMapCount: ??
-    u8[44] Reserved1: ??   # XXX u32 array:          u32[11] Reserved1: ??
+    u32[11] Reserved1: ??
 
-    #DDS_PIXELFORMAT:
-    u32 Pixel format size: ??
-    u32 Pixel format flags: ??
-    ascii[4] Pixel format FourCC: ??    # "DXT1"
-    u32 Pixel format GBBitCount: ??
-    u32 Pixel format RBitMask: ??
-    u32 Pixel format GBitMask: ??
-    u32 Pixel format BBitMask: ??
-    u32 Pixel format ABitMask: ??
+    # FIXME should evaluate to true if this bit field is non-zero
+    if self.Header flags.DDSD_PIXELFORMAT: ## XXXX
+      u32 Pixel format size: ??
+      u32 Pixel format flags: ??
+      u8[4] Pixel format FourCC: ??    # "DXT1"     # XXX ascii
+      u32 Pixel format GBBitCount: ??
+      u32 Pixel format RBitMask: ??
+      u32 Pixel format GBitMask: ??
+      u32 Pixel format BBitMask: ??
+      u32 Pixel format ABitMask: ??
 
     u32 Caps: ??
     u32 Caps2: ??

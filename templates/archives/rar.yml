@@ -12,15 +12,14 @@ kind: archive
 extensions: [.rar, .r00, .r01]
 mime: application/vnd.rar
 
-endian: little # XXX
-
 structs:
   header:
-    ascii[6] Signature: c'Rar!' 1a 07
+    endian: little
+    u8[6] Signature: c'Rar!' 1a 07      # XXX ascii
     u8 Header type:
       eq 00: Classic
       eq 01: V5
-    if Header type[V5]:
+    if self.Header type.V5:
       u8 Signature: "00"
 
 
@@ -99,7 +98,7 @@ structs:
     #  u32 HighPackSize: ??
     #  u32 HighUnpSize: ??
 
-    ascii[5] Filename: ?? # XXX  ascii[NameSize] Filename: ??
+    u8[5] Filename: ?? # XXX  ascii[NameSize] Filename: ??        # XXX ASCII
 
     #if File header flags[LHD_SALT]:
     #  u64 Salt: ??

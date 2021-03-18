@@ -10,11 +10,9 @@ kind: archive   # XXX or "disk image" or "file system image" ?
 #extensions: [.xxx]
 #mime: xxx
 
-endian: little    # XXX
-
 structs:
   header:
-    ascii[4] Signature: c'LUKS'
+    u8[4] Signature: c'LUKS'     # XXX ascii
 
 layout:
   - header Header

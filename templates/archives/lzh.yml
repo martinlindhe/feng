@@ -1,5 +1,4 @@
-# STATUS: 1%
-# - MATCH: default = invalid to magic match if all valid
+# STATUS: 2%
 # - LOW: dos time+date format fields
 # - LOW: header checksum algorithm
 
@@ -12,13 +11,12 @@ kind: archive
 extensions: [.lzh, .lha]
 mime: application/x-lzh-compressed
 
-endian: little
-
 structs:
   header:
+    endian: little
     u8 Header size: ??          # seen 0x34
     u8 Checksum: ??             # xxx algorithm: This is low 1 byte of the total of each bytes of whole header without 2 bytes of the head. Header checksum is 0xC3 in the foregoing sample. (Total of each bytes of whole header without 2 bytes of the head is 0x07C3.)
-    ascii[3] Signature: c'-lh'
+    u8[3] Signature: c'-lh'     # XXX ascii
     u8 Compression method:
       eq c'0': None
       eq c'1': LZW, 4K sliding window. Dynamic Huffman

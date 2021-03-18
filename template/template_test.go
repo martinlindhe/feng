@@ -101,23 +101,23 @@ layout:
 	assert.Equal(t, &DataStructure{
 		Constants: []EvaluatedConstant{},
 		structs: []evaluatedStruct{
-			{Name: "header", Expressions: []expression{
-				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: true, Pattern: []uint8{0xff, 0xd8}, Value: ""}, Children: []expression{}, MatchPatterns: []MatchPattern{}}},
+			{Name: "header", Expressions: []Expression{
+				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: true, Pattern: []uint8{0xff, 0xd8}, Value: ""}, Children: []Expression{}, MatchPatterns: []MatchPattern{}}},
 			},
-			{Name: "segment", Expressions: []expression{
-				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []expression{}, MatchPatterns: []MatchPattern{}},
-				{Field: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Unit"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []expression{}, MatchPatterns: []MatchPattern{
+			{Name: "segment", Expressions: []Expression{
+				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []Expression{}, MatchPatterns: []MatchPattern{}},
+				{Field: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Unit"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []Expression{}, MatchPatterns: []MatchPattern{
 					{Operation: "eq", Pattern: "00", Label: "No units"},
 					{Operation: "eq", Pattern: "01", Label: "Pixels per inch"},
 					{Operation: "default", Pattern: "", Label: "invalid"},
 				}},
-				{Field: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Unit"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []expression{}, MatchPatterns: []MatchPattern{
+				{Field: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Unit"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []Expression{}, MatchPatterns: []MatchPattern{
 					{Operation: "bit", Pattern: "b0001", Label: "B0"},
 					{Operation: "bit", Pattern: "b0110", Label: "Rest"},
 					{Operation: "default", Pattern: "", Label: "invalid"},
 				}},
-				{Field: value.DataField{Kind: "if", Range: "", Slice: false, Label: "Unit == 4"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []expression{
-					{Field: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Child data"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []expression{}, MatchPatterns: []MatchPattern{}},
+				{Field: value.DataField{Kind: "if", Range: "", Slice: false, Label: "Unit == 4"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []Expression{
+					{Field: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Child data"}, Pattern: value.DataPattern{Known: false, Pattern: []uint8(nil), Value: ""}, Children: []Expression{}, MatchPatterns: []MatchPattern{}},
 				}, MatchPatterns: []MatchPattern{}},
 			}},
 		},

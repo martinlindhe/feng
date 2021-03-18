@@ -1,4 +1,7 @@
-# STATUS: 1%
+# STATUS: 5% (does not map image data)
+# - vs 010: 100%
+
+# - HI: is "EGA palette" always present?
 
 references:
   - https://en.wikipedia.org/wiki/PCX
@@ -9,10 +12,9 @@ kind: image
 extensions: [.pcx]
 mime: image/x-pcx
 
-endian: little
-
 structs:
   header:
+    endian: little
     u8 Signature: 0a
     u8 Version:
       eq 00: PC Paintbrush version 2.5 using a fixed EGA palette
@@ -20,14 +22,17 @@ structs:
       eq 03: PC Paintbrush version 2.8 using no palette
       eq 04: PC Paintbrush for Windows
       eq 05: PC Paintbrush version 3.0, including 24-bit images
+      default: invalid
     u8 Encoding:
       eq 00: None
       eq 01: RLE
+      default: invalid
     u8 Bits per pixel:
       eq 01: 1bpp (monochrome)
       eq 02: 2bpp (4 colors)
       eq 04: 4bpp (16 colors, EGA)
       eq 08: 8bpp (256 colors, VGA)
+      default: invalid
     u16 Minimum X position: ??
     u16 Minimum Y position: ??
     u16 Maximum X position: ??
@@ -37,10 +42,11 @@ structs:
     u8[48] EGA palette: ?? # XXX for 16-color images. always present??
     u8 Reserved: ??
     u8 Color planes: ??
-    u16 Bytes representing a scan line: ??
+    u16 Bytes per line: ??
     u16 Palette mode:
-      eq 01: Monochrome or color information
-      eq 02: Grayscale information
+      eq 0001: Monochrome or color information
+      eq 0002: Grayscale information
+      default: invalid
     u16 Horizontal resolution: ??
     u16 Vertical resolution: ??
     u8[54] Reserved: ??

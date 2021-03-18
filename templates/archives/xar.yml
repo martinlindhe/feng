@@ -1,32 +1,31 @@
 # STATUS: 1%
-# - HI: u32 eq
 
 references:
   - https://en.wikipedia.org/wiki/Xar_(archiver)
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/XAR.tcl
-  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_xar.go
+  - (USELESS) https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_xar.go
 
 kind: archive
 extensions: [.xar,.pkg,.xip]
 mime: application/x-xar
 
-endian: big
-
 structs:
   header:
+    endian: big
     u8[4] Signature: c'xar!'
     u16 Header size: ??
-    u16 Version: ??  # XXX ONLY 01 is known
+    u16 Version: ??                       # NOTE: only version 01 is known
     u64 Compressed TOC length: ??
     u64 Uncompressed TOC length: ??
-    u32 Checksum algorithm: ??     # XXX u32 + eq
-    #  eq 00: none
-    #  eq 01: SHA1
-    #  eq 02: MD5
-    #  eq 03: SHA-256
-    #  eq 04: SHA-512
+    u32 Checksum algorithm:
+      eq 0000_0000: none
+      eq 0000_0001: SHA1
+      eq 0000_0002: MD5
+      eq 0000_0003: SHA-256
+      eq 0000_0004: SHA-512
+      default: invalid
 
-    # XXX
+    # XXX toc is zlib compressed, so extract it. contains xml with rest of file struct. HexField template has some hints
 
 layout:
   - header Header

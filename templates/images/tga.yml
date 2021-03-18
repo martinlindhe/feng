@@ -1,6 +1,5 @@
-# STATUS: 1%
+# STATUS: 2%
 # - SAMPLE: need samples with image ID field
-# - MAGIC: handle default: must be valid match for Color map and Image type (or get a ton of false matches)
 
 references:
   - https://en.wikipedia.org/wiki/Truevision_TGA
@@ -13,19 +12,18 @@ kind: image
 extensions: [.tga]
 mime: image/x-tga
 
-endian: little
-
 structs:
   header:
+    endian: little
     u8 ID length: ??
     u8 Color map:
       eq 00: No color map
       eq 01: Present
-      default: invalid # XXX if non-matching, file is invalid!
+      default: invalid
     u8 Image type:  # XXX decode type value (multi-bit) in describe()
       bit b0000_0111: type
       bit b0000_1000: RLE  # if false, image data is uncompressed
-      default: invalid # XXX if non-matching, file is invalid! (in case non-specified bits is set)
+      default: invalid
       # is enumerated in the lower three bits, with the fourth bit as a flag for RLE. Some possible values are:
       #  type 0: no image data is present
       #  type 1: uncompressed color-mapped image
