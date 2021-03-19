@@ -106,7 +106,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 			}
 			bitmask := value.AsUint64(es.Field.Kind, bitmaskSlice)
 			masked := bitmask & actual
-			shift := bits.TrailingZeros64(masked)
+			shift := bits.TrailingZeros64(bitmask)
 			val := masked >> shift
 
 			if DEBUG {
