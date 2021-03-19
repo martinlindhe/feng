@@ -1,5 +1,4 @@
 # STATUS: 2%
-# - LO: ascii type
 
 references:
   - https://en.wikipedia.org/wiki/Adobe_Photoshop#File_format
@@ -13,7 +12,7 @@ mime: image/vnd.adobe.photoshop
 structs:
   header:
     endian: big
-    u8[4] Signature: c'8BPS'     # XXX ascii
+    ascii[4] Signature: c'8BPS'
     u16 Version: ??       # XXX version 2 is "big" format, larger fields?
     u8[6] Reserved: ??
     u16 Channels: ??

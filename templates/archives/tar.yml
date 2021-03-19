@@ -1,5 +1,5 @@
 # STATUS: 1%
-# - HI: octal ascii parsing?!
+# - LO: octal ascii parsing?!
 
 # NOTE: this is the extended "ustar" (unix standard tar) format, not the older "tar"
 

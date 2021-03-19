@@ -1,7 +1,8 @@
 # STATUS: 2%
 # - HI: need to use custom "rgb" type as defined
 # - HI: section[] slice syntax
-# - NEED: "ascii" kind
+
+# - LO: match on "ascii" kind
 
 
 references:
@@ -36,21 +37,21 @@ structs:
     if Block type in (BLOCK_EXTENSION):
       u8 Extension type: ??
       if Extension type in (EXT_GRAPHIC_CONTROL):
-        u8 Size: "04" # XXX should always be 04
+        u8 Size: "04"                       # NOTE: should always be 04
         u8 Flags:
           bit b0000_0001: Transparent color
           bit b0000_0010: User input
           bit b0001_1100: Disposal method
-          #bit b1110_0000: Reserved
+          bit b1110_0000: Reserved
         u16 Delay time: ??
         u8 Transparent color index: ??
         u8 Block terminator: "00"
 
   header:
     endian: little
-    u8[4] Signature: c'GIF8'      # XXX "ascii[4]" kind
-    u8 Version:
-      eq c'7': GIF87a             # XXX "ascii" kind
+    ascii[4] Signature: c'GIF8'
+    u8 Version:                 # XXX cannot match on "ascii" kind
+      eq c'7': GIF87a
       eq c'9': GIF89a
       default: invalid
     u8 Signature: c'a'
@@ -65,12 +66,10 @@ structs:
     u8 Aspect ratio: ??
 
     # WIP
-    if Screen descriptor.Global Color Table present in (1):
-      u8[3 * (2 << (Screen descriptor.Global Color Table size))] Global Color Table: ??   # FIXME use rgb type
+    if self.Screen descriptor.Global Color Table present in (1):
+      u8[3 * (2 << (self.Screen descriptor.Global Color Table size))] Global Color Table: ??   # FIXME use rgb type
       #rgb[2 << (Screen descriptor.Global Color Table size)] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
-
-    section[] Section: ??   # XXX slice of sections
-
 
 layout:
   - header Header
+  #- section[] Section   # XXX slice of sections

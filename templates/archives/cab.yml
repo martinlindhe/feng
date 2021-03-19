@@ -6,9 +6,6 @@
 # SAMPLE: need with "self.Flags.Next cabinet" set
 
 # - HI: need sized list in layout: - "CFFOLDER[Header.cFolders] CFFOLDER
-# - HI: need asciiz data type (zero terminated ascii)
-
-# - LO: ascii type
 
 
 references:
@@ -23,7 +20,7 @@ mime: application/vnd.ms-cab-compressed
 structs:
   header:
     endian: little
-    u8[4] Signature: c'MSCF'        # XXX ascii
+    ascii[4] Signature: c'MSCF'
     u32 Reserved 1: 00 00 00 00
     u32 File size: ??
     u32 Reserved 2: 00 00 00 00
@@ -67,8 +64,8 @@ structs:
     u16 Time: ?? # XXX format?
     u16 Attributes: ?? # XXX format?
 
-    u8[2] Filename: ?? # XXX zero terminated ascii!!!
-    #asciiz Name: ??   # XXX ascii zero terminated string
+    asciiz Name: ??
+    # XXX
 
 layout:
   - header Header

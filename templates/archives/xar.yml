@@ -1,5 +1,7 @@
 # STATUS: 1%
 
+# - HI: decompress zlib section and then process it further
+
 references:
   - https://en.wikipedia.org/wiki/Xar_(archiver)
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/XAR.tcl
@@ -12,7 +14,7 @@ mime: application/x-xar
 structs:
   header:
     endian: big
-    u8[4] Signature: c'xar!'
+    ascii[4] Signature: c'xar!'
     u16 Header size: ??
     u16 Version: ??                       # NOTE: only version 01 is known
     u64 Compressed TOC length: ??

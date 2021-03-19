@@ -2,6 +2,8 @@
 # - LOW: dos time+date format fields
 # - LOW: header checksum algorithm
 
+# - LO: match on 'ascii' type
+
 references:
   - https://web.archive.org/web/20080724142842/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/Notes.html
   - https://en.wikipedia.org/wiki/LHA_(file_format)
@@ -16,8 +18,8 @@ structs:
     endian: little
     u8 Header size: ??          # seen 0x34
     u8 Checksum: ??             # xxx algorithm: This is low 1 byte of the total of each bytes of whole header without 2 bytes of the head. Header checksum is 0xC3 in the foregoing sample. (Total of each bytes of whole header without 2 bytes of the head is 0x07C3.)
-    u8[3] Signature: c'-lh'     # XXX ascii
-    u8 Compression method:
+    ascii[3] Signature: c'-lh'
+    u8 Compression method:      # XXX match on 'ascii' type
       eq c'0': None
       eq c'1': LZW, 4K sliding window. Dynamic Huffman
       eq c'2': LZW, 8K sliding window. Dynamic Huffman
@@ -27,7 +29,7 @@ structs:
       eq c'6': LZW, 32K sliding window. Static Huffman
       eq c'7': LZW, 64K sliding window. Static Huffman
       default: invalid
-    u8 Signature: c'-'
+    ascii Signature: c'-'
     u32 Compressed size: ??
     u32 Uncompressed size: ??
     u16 File modified time: ??  # XXX MS-DOS time format? see msDosTimeToTime() in https://golang.org/src/archive/zip/struct.go

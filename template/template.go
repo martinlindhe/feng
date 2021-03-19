@@ -82,7 +82,11 @@ type evaluatedStruct struct {
 
 func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, error) {
 	res := []value.MatchedPattern{}
+	if len(es.MatchPatterns) == 0 {
+		return res, nil
+	}
 	invalidIfNoMatch := false
+	//log.Printf("EvaluateMatchPatterns: AsUint64 %s %v", es.Field.Kind, b)
 	actual := value.AsUint64(es.Field.Kind, b)
 
 	for _, mp := range es.MatchPatterns {

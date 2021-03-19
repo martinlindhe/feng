@@ -1,6 +1,6 @@
 # STATUS: 5%
 # HIGH figure out v2 format better. 010 seem to have it
-# LO: ascii + signed integer types
+# LO: signed integer types
 # LO: dont use header size constants compare vs u32 DIB header size "eq" value
 
 references:
@@ -22,7 +22,7 @@ constants:
 structs:
   header:
     endian: little
-    u8[2] Signature: c'BM'      # XXX ascii
+    ascii[2] Signature: c'BM'
     u32 File size: ??
     u32 Reserved: ??            # usually zeroed
     u32 Starting address: ??

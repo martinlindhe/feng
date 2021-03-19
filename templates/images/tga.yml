@@ -20,9 +20,9 @@ structs:
       eq 00: No color map
       eq 01: Present
       default: invalid
-    u8 Image type:  # XXX decode type value (multi-bit) in describe()
-      bit b0000_0111: type
-      bit b0000_1000: RLE  # if false, image data is uncompressed
+    u8 Image type:
+      bit b0000_0111: Type
+      bit b0000_1000: RLE
       default: invalid
       # is enumerated in the lower three bits, with the fourth bit as a flag for RLE. Some possible values are:
       #  type 0: no image data is present

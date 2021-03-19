@@ -1,7 +1,9 @@
 # STATUS: 5% (does not map image data)
 # - vs 010: 100%
 
-# - HI: is "EGA palette" always present?
+# - HI: map image data (need FILE_SIZE  and header.length)
+
+# - HI: map image palette (need sample!)
 
 references:
   - https://en.wikipedia.org/wiki/PCX
@@ -17,11 +19,11 @@ structs:
     endian: little
     u8 Signature: 0a
     u8 Version:
-      eq 00: PC Paintbrush version 2.5 using a fixed EGA palette
-      eq 02: PC Paintbrush version 2.8 using a modifiable EGA palette
-      eq 03: PC Paintbrush version 2.8 using no palette
+      eq 00: PC Paintbrush 2.5 + fixed EGA palette
+      eq 02: PC Paintbrush 2.8 + modifiable EGA palette
+      eq 03: PC Paintbrush 2.8 + no palette
       eq 04: PC Paintbrush for Windows
-      eq 05: PC Paintbrush version 3.0, including 24-bit images
+      eq 05: PC Paintbrush 3.0, including 24-bit images
       default: invalid
     u8 Encoding:
       eq 00: None
@@ -39,13 +41,13 @@ structs:
     u16 Maximum Y position: ??
     u16 Horizontal resolution in DPI: ??
     u16 Vertical resolution in DPI: ??
-    u8[48] EGA palette: ?? # XXX for 16-color images. always present??
+    u8[48] EGA palette: ??
     u8 Reserved: ??
     u8 Color planes: ??
     u16 Bytes per line: ??
     u16 Palette mode:
-      eq 0001: Monochrome or color information
-      eq 0002: Grayscale information
+      eq 0001: Monochrome or color
+      eq 0002: Grayscale
       default: invalid
     u16 Horizontal resolution: ??
     u16 Vertical resolution: ??
@@ -53,3 +55,7 @@ structs:
 
 layout:
   - header Header
+  - u8[FILE_SIZE - Header.length] Image data # XXX ignores trailing palette if exists
+
+  # XXX: (optional) 256-color palette (after image data)
+  #   If a PCX file has a 256-color palette, it is found 768 bytes from the end of the file. In this case the value in the byte preceding the palette should be 12 (0x0C). The palette is stored as a sequence of RGB triples; its usable length is defined by the number of colors in the image

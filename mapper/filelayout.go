@@ -60,11 +60,7 @@ func (field *Field) Present() string {
 		}
 	}
 
-	fieldValue := ""
-	if !field.Format.Slice && field.Format.Range == "" {
-		v := value.AsUint64(field.Format.Kind, field.Value)
-		fieldValue = fmt.Sprintf("%d", v)
-	}
+	fieldValue := value.Present(field.Format, field.Value)
 
 	res := fmt.Sprintf("  [%06x] %-30s %-10s %-10s %-20s\n",
 		field.Offset, field.Format.Label, kind, fieldValue, fmt.Sprintf("% 02x", field.Value))
@@ -78,7 +74,6 @@ func (field *Field) Present() string {
 func (fl *FileLayout) Present() {
 	for _, layout := range fl.Structs {
 		fmt.Printf("%s\n", layout.Label)
-
 		for _, field := range layout.Fields {
 			fmt.Print(field.Present())
 		}
@@ -94,7 +89,7 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 			return &str, nil
 		}
 	}
-	return nil, fmt.Errorf("struct not found")
+	return nil, fmt.Errorf("FileLayout.GetStruct: %s not found", name)
 }
 
 // finds the first field named `structName`.`fieldName`
@@ -141,7 +136,7 @@ func (fl *FileLayout) GetValue(s string) (string, []byte, error) {
 		}
 	}
 
-	return "", nil, fmt.Errorf("struct not found")
+	return "", nil, fmt.Errorf("FileLayout.GetValue: %s not found", s)
 }
 
 // replace variables with their values

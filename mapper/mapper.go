@@ -87,7 +87,7 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 				fmt.Printf("endian changed to '%s'\n", fl.endian)
 			}
 
-		case "u8", "u16", "u32", "u64":
+		case "u8", "u16", "u32", "u64", "ascii":
 			if es.Field.IsRangeUnit() {
 				log.Fatalf("invalid %s form: %s", es.Field.Kind, es.Field.PresentType())
 			}
@@ -121,6 +121,16 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 			}
 
 			field = Field{Offset: fl.offset, Length: totalLength, Value: val, Format: es.Field, Endian: fl.endian, MatchedPatterns: matchPatterns}
+			fs.Fields = append(fs.Fields, field)
+			fl.offset += field.Length
+
+		case "asciiz":
+			val, err := readBytesUntilZero(r)
+			if err != nil {
+				return err
+			}
+
+			field = Field{Offset: fl.offset, Length: uint64(len(val)), Value: val, Format: es.Field, Endian: fl.endian}
 			fs.Fields = append(fs.Fields, field)
 			fl.offset += field.Length
 
@@ -239,4 +249,23 @@ func readBytes(r io.Reader, totalLength, unitLength uint64, endian string) ([]by
 	}
 
 	return val, nil
+}
+
+// reads bytes from reader until 0x00 is found. returned data includes the terminating 0x00
+func readBytesUntilZero(r io.Reader) ([]byte, error) {
+
+	b := make([]byte, 1)
+
+	res := []byte{}
+
+	for {
+		if _, err := io.ReadFull(r, b); err != nil {
+			return nil, err
+		}
+		res = append(res, b[0])
+		if b[0] == 0x00 {
+			break
+		}
+	}
+	return res, nil
 }

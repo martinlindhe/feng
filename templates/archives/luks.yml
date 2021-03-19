@@ -12,7 +12,7 @@ kind: archive   # XXX or "disk image" or "file system image" ?
 
 structs:
   header:
-    u8[4] Signature: c'LUKS'     # XXX ascii
+    ascii[4] Signature: c'LUKS'
 
 layout:
   - header Header

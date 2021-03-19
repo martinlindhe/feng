@@ -13,7 +13,7 @@ structs:
   header:
     endian: big # XXX !`?
     # stream header. valid xz contains 1 or more streams with header+data
-    u8[6] Signature: FD c'7zXZ' 00          # XXX ascii
+    u8[6] Signature: FD c'7zXZ' 00
     u16 Stream flags:
       eq 0000: None
       eq 0001: CRC32    # XXX 4 bytes

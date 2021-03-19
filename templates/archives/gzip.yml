@@ -63,7 +63,7 @@ structs:
       u8[self.Extra Length] Data: ??
 
     if self.Header flags.FLAG_NAME:
-      asciiz Filename: ??                       # XXX need asciiz
+      asciiz Filename: ??
 
     # TODO NEED sample with FLAG_COMMENT
     if self.Header flags.FLAG_COMMENT:

@@ -1,5 +1,5 @@
 # STATUS: 5%
-# - HI: u16 eq
+# - HI: "if self.Header version.V5" dont work
 # - HI: ascii[NameSize] Length   format
 
 references:
@@ -15,13 +15,13 @@ mime: application/vnd.rar
 structs:
   header:
     endian: little
-    u8[6] Signature: c'Rar!' 1a 07      # XXX ascii
-    u8 Header type:
+    ascii[6] Signature: c'Rar!' 1a 07
+    u8 Header version:
       eq 00: Classic
       eq 01: V5
-    if self.Header type.V5:
-      u8 Signature: "00"
 
+    #if self.Header version.V5:
+    #u8 Signature: "00"
 
     # XXX classic "volume header":
     u16 Header CRC: ??  # XXX kind ?
@@ -38,7 +38,7 @@ structs:
       eq 7b: ENDARC_HEAD
 
     #if Header type[MAIN_HEAD]:  ## XXX DONT MATCH!?!
-    u16 Main header flags:  # XXX eq for u16 ??
+    u16 Main header flags:
       bit 0001: MHD_VOLUME
       bit 0002: MHD_COMMENT
       bit 0004: MHD_LOCK

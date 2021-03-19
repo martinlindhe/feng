@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/maja42/goval"
 )
 
@@ -270,7 +271,7 @@ func (df *DataField) SingleUnitSize() uint64 {
 
 func SingleUnitSize(kind string) uint64 {
 	switch kind {
-	case "u8":
+	case "u8", "ascii", "asciiz":
 		return 1
 	case "u16":
 		return 2
@@ -359,4 +360,46 @@ func AsUint64(kind string, b []byte) uint64 {
 	}
 	log.Fatalf("AsUint64 unhandled kind %s", kind)
 	return 0
+}
+
+func Present(format DataField, b []byte) string {
+	switch format.Kind {
+	case "u8", "u16", "u32", "u64":
+		if format.Slice || format.Range != "" {
+			return ""
+		}
+		return fmt.Sprintf("%d", AsUint64(format.Kind, b))
+	case "ascii", "asciiz":
+		v, _ := asciiZString(b, len(b))
+		return v
+	}
+
+	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", format.Kind, format.Slice, format.Range, b)
+	return ""
+}
+
+var (
+	red = color.New(color.FgRed).SprintFunc()
+)
+
+// returns decoded string and length in bytes
+func asciiZString(b []byte, maxLength int) (string, uint64) {
+	length := uint64(0)
+	decoded := ""
+	for _, v := range b {
+		length++
+		if v == 0 {
+			break
+		}
+		if v >= 0x20 && v < 0x7f {
+			decoded += string(v)
+		} else {
+			// red dots is visual queue for non-ascii
+			decoded += red(".")
+		}
+		if maxLength > 0 && length >= uint64(maxLength) {
+			break
+		}
+	}
+	return decoded, length
 }

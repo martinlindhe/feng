@@ -430,7 +430,6 @@ layout:
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
-
 		&FileLayout{
 			Structs: []Struct{
 				{
@@ -473,7 +472,6 @@ layout:
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
-
 		&FileLayout{
 			Structs: []Struct{
 				{
@@ -488,6 +486,37 @@ layout:
 					},
 				}},
 			offset: 0x3}, fl)
+}
+
+func TestEvaluateAsciiz(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    asciiz Name: ??
+
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		'f', 'o', 'o', 0x00, // Name
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	assert.Equal(t,
+		&FileLayout{
+			Structs: []Struct{
+				{
+					Label: "Header",
+					Fields: []Field{
+						{Offset: 0x0, Length: 0x4, Value: []uint8{'f', 'o', 'o', 0x00}, Endian: "", Format: value.DataField{Kind: "asciiz", Range: "", Slice: false, Label: "Name"}},
+					},
+				}},
+			offset: 0x4}, fl)
 }
 
 /*
@@ -518,7 +547,6 @@ layout:
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
-
 		&FileLayout{
 			Structs: []Struct{
 				{

@@ -1,5 +1,5 @@
 # STATUS: 1%
-# - HI: ArchiveVersion version: ?? # XXX custom struct define!
+# - LO: ArchiveVersion version: ?? # XXX custom struct define!
 
 references:
   - https://en.wikipedia.org/wiki/7z

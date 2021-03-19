@@ -75,7 +75,8 @@ structs:
     # UNKNOWN CHUNK TYPE:
     u8[Length] Chunk data: ??
 
-    crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field
+    #crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field
+    u32 Checksum: ?? # XXX crc32 type
 
 
 layout:
