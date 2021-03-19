@@ -50,12 +50,29 @@ var (
 )
 
 // decodes simple value types for presentation
-func (ff *Field) Present() string {
-	if ff.Format.Slice || ff.Format.Range != "" {
-		return ""
+func (field *Field) Present() string {
+	kind := field.Format.PresentType()
+	if field.Format.SingleUnitSize() > 1 {
+		if field.Endian == "little" {
+			kind += " le"
+		} else {
+			kind += " be"
+		}
 	}
-	v := value.AsUint64(ff.Format.Kind, ff.Value)
-	return fmt.Sprintf("%d", v)
+
+	fieldValue := ""
+	if !field.Format.Slice && field.Format.Range == "" {
+		v := value.AsUint64(field.Format.Kind, field.Value)
+		fieldValue = fmt.Sprintf("%d", v)
+	}
+
+	res := fmt.Sprintf("  [%06x] %-30s %-10s %-10s %-20s\n",
+		field.Offset, field.Format.Label, kind, fieldValue, fmt.Sprintf("% 02x", field.Value))
+
+	for _, child := range field.MatchedPatterns {
+		res += fmt.Sprintf("           - %-28s %-10s %d\n", child.Label, child.Operation, child.Value)
+	}
+	return res
 }
 
 func (fl *FileLayout) Present() {
@@ -63,21 +80,7 @@ func (fl *FileLayout) Present() {
 		fmt.Printf("%s\n", layout.Label)
 
 		for _, field := range layout.Fields {
-			kind := field.Format.PresentType()
-			if field.Format.SingleUnitSize() > 1 {
-				if field.Endian == "little" {
-					kind += " le"
-				} else {
-					kind += " be"
-				}
-			}
-
-			fmt.Printf("  [%06x] %-30s %-10s %-10s %-20s\n",
-				field.Offset, field.Format.Label, kind, field.Present(), fmt.Sprintf("% 02x", field.Value))
-
-			for _, child := range field.MatchedPatterns {
-				fmt.Printf("           - %-28s %-10s %d\n", child.Label, child.Operation, child.Value)
-			}
+			fmt.Print(field.Present())
 		}
 	}
 }

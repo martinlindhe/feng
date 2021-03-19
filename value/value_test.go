@@ -68,7 +68,6 @@ func TestParseDataField(t *testing.T) {
 		{"endian big", DataField{Kind: "endian", Range: "", Label: "big"}},
 		{"Seg[self.offset+4] My label", DataField{Kind: "Seg", Range: "self.offset+4", Label: "My label"}},
 	}
-
 	for _, h := range test {
 		field, err := ParseDataField(h.field)
 		assert.Equal(t, nil, err)
@@ -86,4 +85,19 @@ func TestReverseBytes(t *testing.T) {
 	// u32
 	assert.Equal(t, []byte{0x11, 0x22, 0x33, 0x44}, ReverseBytes([]byte{0x44, 0x33, 0x22, 0x11}, 4))
 	assert.Equal(t, []byte{0x11, 0x22, 0x33, 0x44, 0x10, 0x21, 0x32, 0x43}, ReverseBytes([]byte{0x44, 0x33, 0x22, 0x11, 0x43, 0x32, 0x21, 0x10}, 4))
+}
+
+func TestDataFieldPresentType(t *testing.T) {
+
+	test := []struct {
+		field    DataField
+		expected string
+	}{
+		{DataField{Kind: "u32", Range: "2"}, "u32[2]"},
+		{DataField{Kind: "u8", Range: "2"}, "u8[2]"},
+		{DataField{Kind: "u32"}, "u32"},
+	}
+	for _, h := range test {
+		assert.Equal(t, h.expected, h.field.PresentType())
+	}
 }

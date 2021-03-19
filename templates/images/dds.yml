@@ -1,7 +1,4 @@
-# STATUS: 1%
-# - HI: u32 bit match is broken! ADD TEST CASE!!! input b00001010_00010000_00000111 reports DDSD_PITCH and DDSD_DEPTH as true while they are false
-# - HI: "u32[11] Reserved1" is displayed as u32[44]  (bytes not unit size!!!)
-# - HI: "if self.Header flags.DDSD_PIXELFORMAT:"   should evaluate to true if this bit field is non-zero
+# STATUS: 2%
 
 # - LO: need ascii type
 # - HI: need u32[sized] array     - GENERIC datatype[sized] form !!!???
@@ -26,11 +23,11 @@ structs:
       bit b00000000_00000000_00000000_00000001: DDSD_CAPS
       bit b00000000_00000000_00000000_00000010: DDSD_HEIGHT
       bit b00000000_00000000_00000000_00000100: DDSD_WIDTH
-      bit b00000000_00000000_00000000_00001000: DDSD_PITCH        # XXX broken, matches when value is 0
+      bit b00000000_00000000_00000000_00001000: DDSD_PITCH
       bit b00000000_00000000_00010000_00000000: DDSD_PIXELFORMAT
       bit b00000000_00000000_00100000_00000000: DDSD_MIPMAPCOUNT
       bit b00000000_00000000_10000000_00000000: DDSD_LINEARSIZE
-      bit b00000000_10000000_00000000_00000000: DDSD_DEPTH        # XXX broken, matches when value is 0
+      bit b00000000_10000000_00000000_00000000: DDSD_DEPTH
 
     u32 Height: ??
     u32 Width: ??
@@ -39,8 +36,7 @@ structs:
     u32 MipMapCount: ??
     u32[11] Reserved1: ??
 
-    # FIXME should evaluate to true if this bit field is non-zero
-    if self.Header flags.DDSD_PIXELFORMAT: ## XXXX
+    if self.Header flags.DDSD_PIXELFORMAT:
       u32 Pixel format size: ??
       u32 Pixel format flags: ??
       u8[4] Pixel format FourCC: ??    # "DXT1"     # XXX ascii

@@ -289,10 +289,9 @@ func (df *DataField) PresentType() string {
 		return fmt.Sprintf("%s[]", df.Kind)
 	}
 	if df.Range != "" {
-
-		_, totalLength := df.GetLength() // XXX totalLength is only correct in bytes
-
-		return fmt.Sprintf("%s[%d]", df.Kind, totalLength)
+		unitLength, totalLength := df.GetLength()
+		fieldLength := totalLength / unitLength
+		return fmt.Sprintf("%s[%d]", df.Kind, fieldLength)
 	}
 	return df.Kind
 }
