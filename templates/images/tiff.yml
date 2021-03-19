@@ -1,5 +1,4 @@
-# STATUS: 1%
-# - HI (magic):if not Signature in["MM","II"]: reject file if signature not MM or II
+# STATUS: 2%
 
 references:
   - https://en.wikipedia.org/wiki/TIFF
@@ -12,19 +11,21 @@ extensions: [.tiff, .tif]
 mime: image/tiff
 
 constants:
-  u16 BIG_ENDIAN_MAGIC:    c'MM'
-  u16 LITTLE_ENDIAN_MAGIC: c'II'
+  ascii[2] BIG_ENDIAN_MAGIC:    c'MM'
+  ascii[2] LITTLE_ENDIAN_MAGIC: c'II'
 
 structs:
   header:
-    u8[2] Signature: ??       # XXX ascii
-    # XXX ENDIANNESS is set by header
+    ascii[2] Signature: ??
+
     if self.Signature in (BIG_ENDIAN_MAGIC):
       endian: big
     if self.Signature in (LITTLE_ENDIAN_MAGIC):
       endian: little
-    #if self.Signature notin (BIG_ENDIAN_MAGIC, LITTLE_ENDIAN_MAGIC):
-    #  invalid            # XXX IF SIGNATURE NOT MM or II, its not a valid file
+
+    # invalidate file not matching signature
+    if self.Signature notin (BIG_ENDIAN_MAGIC, LITTLE_ENDIAN_MAGIC):
+      file: invalid
 
     u16 Arbitrary number: 00 2a # XXX for big endian "00 2a", for little endian "2a 00"
 

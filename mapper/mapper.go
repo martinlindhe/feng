@@ -86,6 +86,11 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 			if DEBUG {
 				fmt.Printf("endian changed to '%s'\n", fl.endian)
 			}
+		case "file":
+			if es.Pattern.Value != "invalid" {
+				log.Fatalf("unhandled file value '%s", es.Pattern.Value)
+			}
+			return fmt.Errorf("file invalidated by template")
 
 		case "u8", "u16", "u32", "u64", "ascii":
 			if es.Field.IsRangeUnit() {
@@ -165,21 +170,20 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 					}
 					matched := false
 					for _, patternVal := range patternValues {
-						if operation == "in" && bytes.Equal(val, patternVal) {
+						if bytes.Equal(val, patternVal) {
+							// op "in": if match in any of values, count as true
+							// op "notin": if match in NONE of values, count as true
 							matched = true
-						}
-						if operation == "notin" && !bytes.Equal(val, patternVal) {
-							matched = true
-						}
-						if DEBUG {
-							log.Printf("if-match: compared '%v' %s '%v' to %v", val, operation, patternVal, matched)
 						}
 					}
+					if DEBUG {
+						log.Printf("if-match: compared '%v' %s '%v' to %v", val, operation, patternValues, matched)
+					}
 
-					if matched {
+					if (operation == "in" && matched) || (operation == "notin" && !matched) {
 						err := fl.expandChildren(r, fs, df, ds, es.Children)
 						if err != nil {
-							log.Fatal(err)
+							return err
 						}
 					}
 

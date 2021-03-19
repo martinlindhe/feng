@@ -1,9 +1,7 @@
 # STATUS: 2%
-# - HI: need to use custom "rgb" type as defined
+
 # - HI: section[] slice syntax
-
-# - LO: match on "ascii" kind
-
+# - MID: need to use custom "rgb" type as defined
 
 references:
   - https://www.w3.org/Graphics/GIF/spec-gif89a.txt
@@ -17,7 +15,7 @@ extensions: [.gif]
 mime: image/gif
 
 constants:
-  #u8 BLOCK_IMAGE:     "2c"
+  u8 BLOCK_IMAGE:     "2c"
   u8 BLOCK_EXTENSION: "21"
   #u8 BLOCK_TRAILER:   "3b"
 
@@ -26,35 +24,22 @@ constants:
   #u8 EXT_COMMENT:         "fe"
   #u8 EXT_APPLICATION:     "ff"
 
-structs:
+# XXX implement custom types!
+types:
   rgb:
     u8 Red: ??
     u8 Green: ??
     u8 Blue: ??
 
-  section:
-    u8 Block type: ??
-    if Block type in (BLOCK_EXTENSION):
-      u8 Extension type: ??
-      if Extension type in (EXT_GRAPHIC_CONTROL):
-        u8 Size: "04"                       # NOTE: should always be 04
-        u8 Flags:
-          bit b0000_0001: Transparent color
-          bit b0000_0010: User input
-          bit b0001_1100: Disposal method
-          bit b1110_0000: Reserved
-        u16 Delay time: ??
-        u8 Transparent color index: ??
-        u8 Block terminator: "00"
-
+structs:
   header:
     endian: little
-    ascii[4] Signature: c'GIF8'
-    u8 Version:                 # XXX cannot match on "ascii" kind
+    ascii[4] Signature 1: c'GIF8'
+    ascii Version:
       eq c'7': GIF87a
       eq c'9': GIF89a
       default: invalid
-    u8 Signature: c'a'
+    u8 Signature 2: c'a'
     u16 Logical screen width: ??
     u16 Logical screen height: ??
     u8 Screen descriptor:
@@ -65,11 +50,43 @@ structs:
     u8 Background color: ??
     u8 Aspect ratio: ??
 
-    # WIP
     if self.Screen descriptor.Global Color Table present in (1):
       u8[3 * (2 << (self.Screen descriptor.Global Color Table size))] Global Color Table: ??   # FIXME use rgb type
       #rgb[2 << (Screen descriptor.Global Color Table size)] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
 
+  section:
+    u8 Block type: ??
+    # XXX FINISH BLOCK_EXTENSION
+    if self.Block type in (BLOCK_EXTENSION):
+      u8 Extension type: ??
+      if self.Extension type in (EXT_GRAPHIC_CONTROL):
+        u8 Size: "04"                       # NOTE: should always be 04
+        u8 Flags:
+          bit b0000_0001: Transparent color
+          bit b0000_0010: User input
+          bit b0001_1100: Disposal method
+          bit b1110_0000: Reserved
+        u16 Delay time: ??
+        u8 Transparent color index: ??
+        u8 Block terminator: "00"
+
+    if self.Block type in (BLOCK_IMAGE):
+      u16 Left position: ??
+      u16 Top position: ??
+      u16 Image width: ??
+      u16 Image height: ??
+      u8 Image descriptor flags: # aka IMAGEDESCRIPTOR_PACKEDFIELDS
+        bit b0000_0001: LocalColorTableFlag
+        bit b0000_0010: InterlaceFlag
+        bit b0000_0100: SortFlag
+        bit b0001_1000: Reserved
+        bit b1110_0000: SizeOfLocalColorTable
+      u8 LZWMinimumCodeSize: ??   # XXX meaning?
+      u8 Size: ??
+      u8[self.Size] Image data: ??
+      u8 Delimiter: ??  # XXX should be 00 ???
+
 layout:
   - header Header
+  - section Section   # XXX
   #- section[] Section   # XXX slice of sections

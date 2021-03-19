@@ -88,16 +88,22 @@ func (ds *DataStructure) ParsePattern(in, kind string) ([][]byte, error) {
 		}
 		res = append(res, value.U64toBytesBigEndian(i, value.SingleUnitSize(kind)))
 	}
-	log.Printf("ParsePattern: %s %v => %v", kind, allIn, res)
+	if DEBUG {
+		log.Printf("ParsePattern: %s %v => %v", kind, allIn, res)
+	}
 	return res, nil
 }
 
 // returns value and true if found
 func (ds *DataStructure) FindConstant(name string) ([]byte, bool) {
-	log.Printf("FindConstant: looking for %s", name)
+	if DEBUG {
+		log.Printf("FindConstant: looking for %s", name)
+	}
 	for _, c := range ds.Constants {
 		if c.Field.Label == name {
-			log.Printf("FindConstant: found %v", c)
+			if DEBUG {
+				log.Printf("FindConstant: found %v", c)
+			}
 			return c.Value, true
 		}
 	}

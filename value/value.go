@@ -21,7 +21,7 @@ var (
 	bitExpressionRE = regexp.MustCompile(`b([01_]+)`)
 )
 
-// parses an "structs" data value (used by structs parser)
+// parses a "structs" data value (used by structs parser)
 func ParseDataPattern(s string) (DataPattern, error) {
 	dp := DataPattern{}
 	if s == "??" {
@@ -303,7 +303,7 @@ func (df *DataField) IsPatternableUnit() bool {
 		return false
 	}
 	switch df.Kind {
-	case "u8", "u16", "u32", "u64":
+	case "u8", "u16", "u32", "u64", "ascii":
 		return true
 	}
 	return false
@@ -349,7 +349,7 @@ func AsUint64(kind string, b []byte) uint64 {
 		log.Printf("AsUint64 converting [%02x] to %s", b, kind)
 	}
 	switch kind {
-	case "u8":
+	case "u8", "ascii":
 		return uint64(b[0])
 	case "u16":
 		return uint64(binary.BigEndian.Uint16(b))

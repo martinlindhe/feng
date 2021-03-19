@@ -175,9 +175,11 @@ func TestEvaluateBitFieldU8(t *testing.T) {
 structs:
   header:
     u8 Bitfield:
-      bit b0000_0111: Lo
-      bit b0000_1000: B3
-      bit b0111_0000: Hi
+      bit b0000_0001: LocalColorTable
+      bit b0000_0010: Interlace
+      bit b0000_0100: Sort
+      bit b0001_1000: Reserved
+      bit b1110_0000: Size
 layout:
   - header Header
 `
@@ -185,7 +187,7 @@ layout:
 	assert.Equal(t, nil, err)
 
 	data := []byte{
-		0xff, // Bitfield
+		0b1100_0111, // Bitfield
 	}
 	fl, err := MapReader(bytes.NewReader(data), ds)
 	assert.Equal(t, nil, err)
@@ -195,12 +197,14 @@ layout:
 			Structs: []Struct{
 				{Label: "Header", Fields: []Field{
 					{
-						Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "",
+						Offset: 0x0, Length: 0x1, Value: []uint8{0xc7}, Endian: "",
 						Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bitfield"},
 						MatchedPatterns: []value.MatchedPattern{
-							{Operation: "bit", Label: "Lo", Value: 7},
-							{Operation: "bit", Label: "B3", Value: 1},
-							{Operation: "bit", Label: "Hi", Value: 7},
+							{Operation: "bit", Label: "LocalColorTable", Value: 1},
+							{Operation: "bit", Label: "Interlace", Value: 1},
+							{Operation: "bit", Label: "Sort", Value: 1},
+							{Operation: "bit", Label: "Reserved", Value: 0},
+							{Operation: "bit", Label: "Size", Value: 6},
 						}},
 				}}}, offset: 0x1}, fl)
 }
@@ -441,6 +445,74 @@ layout:
 						{Offset: 0x3, Length: 0x1, Value: []uint8{0xee}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "FourConstant"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 				}}, offset: 0x4}, fl)
+}
+
+func TestEvaluateIfMulti(t *testing.T) {
+	// simplified form of tiff type validation
+	templateData := `
+constants:
+  ascii[2] BIG:    c'MM'
+  ascii[2] LITTLE: c'II'
+
+structs:
+  header:
+    ascii[2] Signature: ??
+
+    if self.Signature in (BIG):
+      endian: big
+    if self.Signature in (LITTLE):
+      endian: little
+
+    if self.Signature notin (BIG, LITTLE):
+      file: invalid
+
+layout:
+  - header Header
+`
+
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	test := []struct {
+		in  []byte
+		out *FileLayout
+		err error
+	}{
+		// BIG
+		{[]byte{'M', 'M'},
+			&FileLayout{
+				Structs: []Struct{
+					{
+						Label: "Header",
+						Fields: []Field{
+							{Offset: 0x0, Length: 0x2, Value: []uint8{'M', 'M'}, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
+						},
+					}}, offset: 0x2, endian: "big"},
+			nil},
+
+		// LITTLE
+		{[]byte{'I', 'I'},
+			&FileLayout{
+				Structs: []Struct{
+					{
+						Label: "Header",
+						Fields: []Field{
+							{Offset: 0x0, Length: 0x2, Value: []uint8{'I', 'I'}, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
+						},
+					}}, offset: 0x2, endian: "little"},
+			nil},
+
+		// invalid
+		{[]byte{'M', 'a'}, nil, fmt.Errorf("file invalidated by template")},
+	}
+
+	for _, tt := range test {
+		fl, err := MapReader(bytes.NewReader(tt.in), ds)
+		assert.Equal(t, tt.err, err)
+		if tt.err == nil {
+			assert.Equal(t, tt.out, fl)
+		}
+	}
 }
 
 func TestEvaluateIfBitfield(t *testing.T) {

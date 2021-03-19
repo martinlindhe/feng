@@ -89,7 +89,7 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 			return &str, nil
 		}
 	}
-	return nil, fmt.Errorf("FileLayout.GetStruct: %s not found", name)
+	return nil, fmt.Errorf("GetStruct: %s not found", name)
 }
 
 // finds the first field named `structName`.`fieldName`
@@ -100,6 +100,9 @@ func (fl *FileLayout) GetValue(s string) (string, []byte, error) {
 	}
 
 	parts := strings.SplitN(s, ".", 3)
+	if len(parts) < 2 {
+		return "", nil, fmt.Errorf("GetValue: unexpected format '%s'", s)
+	}
 	structName := parts[0]
 	fieldName := parts[1]
 	childName := ""
@@ -114,13 +117,10 @@ func (fl *FileLayout) GetValue(s string) (string, []byte, error) {
 
 	for _, field := range str.Fields {
 		if DEBUG {
-			log.Printf("GetValue: comparing field %s to %s", field.Format.Label, fieldName)
+			log.Printf("comparing field %s to %s", field.Format.Label, fieldName)
 		}
 		if field.Format.Label == fieldName {
-			if !field.Format.IsSimpleUnit() {
-				return "", nil, fmt.Errorf("type '%s' cannot be used in IF-statement", field.Format.PresentType())
-			}
-			if childName == "" {
+			if !field.Format.IsSimpleUnit() || childName == "" {
 				return field.Format.Kind, field.Value, nil
 			}
 
@@ -136,7 +136,7 @@ func (fl *FileLayout) GetValue(s string) (string, []byte, error) {
 		}
 	}
 
-	return "", nil, fmt.Errorf("FileLayout.GetValue: %s not found", s)
+	return "", nil, fmt.Errorf("GetValue: '%s' not found", s)
 }
 
 // replace variables with their values
@@ -145,14 +145,18 @@ func (fl *FileLayout) ExpandVariables(s string) string {
 		s = "(" + s + ")"
 	}
 
-	log.Printf("ExpandVariables: %s", s)
+	if DEBUG {
+		log.Printf("ExpandVariables: %s", s)
+	}
 
 	for {
 		expanded := fl.expandVariable(s)
 		if expanded == s {
 			break
 		}
-		log.Printf("ExpandVariables: %s => %s", s, expanded)
+		if DEBUG {
+			log.Printf("ExpandVariables: %s => %s", s, expanded)
+		}
 		s = expanded
 	}
 

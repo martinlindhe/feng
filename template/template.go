@@ -6,6 +6,7 @@ import (
 	"math/bits"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/martinlindhe/feng/value"
 	"gopkg.in/yaml.v2"
 )
@@ -86,12 +87,15 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 		return res, nil
 	}
 	invalidIfNoMatch := false
-	//log.Printf("EvaluateMatchPatterns: AsUint64 %s %v", es.Field.Kind, b)
 	actual := value.AsUint64(es.Field.Kind, b)
+
+	if DEBUG {
+		log.Printf("MatchPattern: %#v ... %08b", b, actual)
+	}
 
 	for _, mp := range es.MatchPatterns {
 		if DEBUG {
-			log.Printf("--- MatchPattern: %#v", mp)
+			log.Printf("--- %#v", mp)
 		}
 
 		switch mp.Operation {
@@ -106,7 +110,8 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 			val := masked >> shift
 
 			if DEBUG {
-				log.Printf("--- MatchPattern %s %s: bitmask %02x %08b on value %02x %08b == res %02x %08b", mp.Operation, es.Field.Kind, bitmask, bitmask, actual, actual, val, val)
+				log.Printf("--- %s %s: bitmask %02x %08b on value %02x %08b == res %02x %08b",
+					mp.Operation, es.Field.Kind, bitmask, bitmask, actual, actual, val, val)
 			}
 			res = append(res, value.MatchedPattern{Label: mp.Label, Operation: mp.Operation, Value: val})
 
@@ -119,7 +124,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 			match := actual == pattern
 
 			if DEBUG {
-				log.Printf("--- MatchPattern %s %s: %08x == %08x is %v", mp.Operation, es.Field.Kind, actual, pattern, match)
+				log.Printf("--- %s %s: %08x == %08x is %v", mp.Operation, es.Field.Kind, actual, pattern, match)
 			}
 			if match {
 				res = append(res, value.MatchedPattern{Label: mp.Label, Operation: mp.Operation, Value: actual})
@@ -146,7 +151,7 @@ func (t *Template) evaluateStructs() ([]evaluatedStruct, error) {
 	res := []evaluatedStruct{}
 	for _, c := range t.Structs {
 
-		es, err := evaluateStruct(&c)
+		es, err := parseStruct(&c)
 		if err != nil {
 			return nil, err
 		}
@@ -156,8 +161,8 @@ func (t *Template) evaluateStructs() ([]evaluatedStruct, error) {
 	return res, nil
 }
 
-// evaluates a "struct" child with all their child nodes
-func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
+// parses a "struct" child with all their child nodes
+func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 
 	key := c.Key.(string)
 	es := evaluatedStruct{Name: key}
@@ -165,17 +170,23 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 	for _, v := range c.Value.([]yaml.MapItem) {
 		field, err := value.ParseDataField(v.Key.(string))
 		if err != nil {
-			log.Fatalf("ERROR IN TEMPLATE: cant parse field '%s': %v", v.Key.(string), err)
+			log.Printf("TEMPLATE ERROR: cant parse field '%s': %v", v.Key.(string), err)
 			return es, err
 		}
 
-		var expr Expression
+		if DEBUG {
+			log.Printf("parsing %#v", v.Value)
+		}
 
+		var expr Expression
 		switch val := v.Value.(type) {
 		case []yaml.MapItem:
+			if DEBUG {
+				log.Printf("parsing 2: %#v", val)
+			}
 			// if current node is u8, u16, u32 or u64, childs must be pattern matchers (bit / eq)
 			if field.IsPatternableUnit() {
-				matchPatterns, err := evaluateMatchPatterns(val)
+				matchPatterns, err := parseMatchPatterns(val)
 				if err != nil {
 					return es, err
 				}
@@ -183,7 +194,7 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 
 			} else {
 				// evaluate all child nodes (if <expression>)
-				children, err := evaluateStruct(&v)
+				children, err := parseStruct(&v)
 				if err != nil {
 					return es, err
 				}
@@ -191,12 +202,15 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 			}
 
 		case string:
-			if field.Kind == "endian" {
+			switch field.Kind {
+			case "endian", "file":
 				pattern := value.DataPattern{Known: true, Value: val}
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
-			} else {
+
+			default:
 				pattern, err := value.ParseDataPattern(val)
 				if err != nil {
+					spew.Dump(field)
 					log.Fatalf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
 					return es, err
 				}
@@ -204,10 +218,10 @@ func evaluateStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 			}
 
 		default:
-			log.Fatalf("evaluateStructs: cant handle type '%T' in '%#v'", val, v)
+			log.Fatalf("cant handle type '%T' in '%#v'", val, v)
 		}
 		if DEBUG {
-			log.Printf("evaluateStruct: appending %+v", expr)
+			log.Printf("appending %+v", expr)
 		}
 		es.Expressions = append(es.Expressions, expr)
 	}
@@ -225,8 +239,7 @@ type MatchPattern struct {
 	Pattern string
 }
 
-// XXX rename func
-func evaluateMatchPatterns(mi []yaml.MapItem) ([]MatchPattern, error) {
+func parseMatchPatterns(mi []yaml.MapItem) ([]MatchPattern, error) {
 	res := []MatchPattern{}
 
 	for _, item := range mi {
