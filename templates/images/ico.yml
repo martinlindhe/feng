@@ -1,6 +1,8 @@
 # STATUS: 1%
-#  - HI: "ICONDIRENTRY[header.Resources] Resource" syntax
 
+# - HI: "ICONDIRENTRY[header.Resources] Resource" syntax
+
+# - HI: map image data at end of the file from offsets and length in ICONDIRENTRY
 
 
 references:
@@ -10,38 +12,43 @@ references:
 
 kind: image
 extensions: [.ico, .cur]
-mime: image/x-icon          # XXX "image/vnd.microsoft.icon" for Cursor
+mime: image/x-icon
 
 structs:
+  ICONDIR:
+    endian: little
+    u16 Reserved: 00 00
+    u16 Type:
+      eq 0001: Icon
+      eq 0002: Cursor
+      default: invalid
+    u16 Resources: ??             # number of image resources in file
+
   ICONDIRENTRY:
     u8 Width: ??
     u8 Height: ??
-    u8 Palette colors: ??  # 0 = doesn't use palette
-    u8 Reserved: ?? # xxx should be 0
-    #if Image type[Icon]:     # XXX u16 types
-    u16 Color planes: ?? # 0 or 1
-    u16 Bits per pixel: ??
-    #if Image type[Cursor]:
-    #  u16 Horizontal hotspot: ??
-    #  u16 Vertical hotspot: ??
+    u8 Palette colors: ??         # 0 = doesn't use palette
+    u8 Reserved: ??               # should be 0
+
+    if IconDir.Type.Icon:
+      u16 Color planes: ??        # should be 0 or 1
+      u16 Bits per pixel: ??
+    if IconDir.Type.Cursor:
+      u16 Horizontal hotspot: ??
+      u16 Vertical hotspot: ??
+
     u32 Image data size: ??
-    u32 Image data offset: ?? # XXX from beginning of file
+    u32 Image data offset: ??     # XXX from beginning of file
+
+    # NOTE: offset points to an area after all of the ICONDIRENTRYs
 
     # XXX could be BMP without header or full PNG
     #u8[Image data offset:Image data offset+Image data size] Image data: ??
 
-  header:
-    endian: little
-    u16 Reserved: 00 00
-    u16 Image type:             # XXX .cur format is almost identical, handle both here?
-      eq 0001: Icon
-      eq 0002: Cursor
-      default: invalid
-    u16 Resources: ??           # number of image resources in file
-
 
 layout:
-  - header Header
+  - ICONDIR IconDir
 
   # XXX what follows is Resources `n` ICONDIRENTRY structs:
-  - ICONDIRENTRY[header.Resources] Resource # XXX custom struct define !
+  - ICONDIRENTRY[IconDir.Resources] Resource
+  #- ICONDIRENTRY Resource

@@ -86,7 +86,7 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 			if DEBUG {
 				fmt.Printf("endian changed to '%s'\n", fl.endian)
 			}
-		case "file":
+		case "data":
 			if es.Pattern.Value != "invalid" {
 				log.Fatalf("unhandled file value '%s", es.Pattern.Value)
 			}
@@ -199,21 +199,19 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 				}
 
 				_, val, err := fl.GetValue(key)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				matched := false
-				for _, b := range val {
-					if b != 0 {
-						matched = true
+				if err == nil {
+					matched := false
+					for _, b := range val {
+						if b != 0 {
+							matched = true
+						}
 					}
-				}
 
-				if matched {
-					err := fl.expandChildren(r, fs, df, ds, es.Children)
-					if err != nil {
-						log.Fatal(err)
+					if matched {
+						err := fl.expandChildren(r, fs, df, ds, es.Children)
+						if err != nil {
+							log.Fatal(err)
+						}
 					}
 				}
 			}

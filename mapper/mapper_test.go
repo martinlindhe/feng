@@ -464,7 +464,7 @@ structs:
       endian: little
 
     if self.Signature notin (BIG, LITTLE):
-      file: invalid
+      data: invalid
 
 layout:
   - header Header

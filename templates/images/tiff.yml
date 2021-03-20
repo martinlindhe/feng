@@ -25,7 +25,7 @@ structs:
 
     # invalidate file not matching signature
     if self.Signature notin (BIG_ENDIAN_MAGIC, LITTLE_ENDIAN_MAGIC):
-      file: invalid
+      data: invalid
 
     u16 Arbitrary number: 00 2a # XXX for big endian "00 2a", for little endian "2a 00"
 

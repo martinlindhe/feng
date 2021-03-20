@@ -1,6 +1,9 @@
-# STATUS: 2%
+# STATUS: 5%
 
 # - HI: section[] slice syntax
+
+# - HI: "data_sub_block[] Image data: ??" with custom type and "data: eos" marker to end slice stream
+
 # - MID: need to use custom "rgb" type as defined
 
 references:
@@ -30,6 +33,12 @@ types:
     u8 Red: ??
     u8 Green: ??
     u8 Blue: ??
+
+  data_sub_block:
+    u8 Size: ??
+    u8[self.Size] Image data: ??
+    if self.Size in (0):
+      data: eos  # XXX marks end of stream
 
 structs:
   header:
@@ -75,16 +84,19 @@ structs:
       u16 Top position: ??
       u16 Image width: ??
       u16 Image height: ??
-      u8 Image descriptor flags: # aka IMAGEDESCRIPTOR_PACKEDFIELDS
-        bit b0000_0001: LocalColorTableFlag
-        bit b0000_0010: InterlaceFlag
-        bit b0000_0100: SortFlag
+      u8 Image descriptor: # aka IMAGEDESCRIPTOR_PACKEDFIELDS
+        bit b0000_0111: Local color table size
         bit b0001_1000: Reserved
-        bit b1110_0000: SizeOfLocalColorTable
+        bit b0010_0000: Sort
+        bit b0100_0000: Interlace
+        bit b1000_0000: Local color table
+      if self.Image descriptor.Local color table:
+        u8[3 * (2 << (self.Image descriptor.Local color table size))] Local color table: ?? # XXX RGB type !!!!!!
       u8 LZWMinimumCodeSize: ??   # XXX meaning?
-      u8 Size: ??
-      u8[self.Size] Image data: ??
-      u8 Delimiter: ??  # XXX should be 00 ???
+
+      # XXX series of data blocks. last block is one with Size==0
+      data_sub_block[] Image data: ??
+
 
 layout:
   - header Header
