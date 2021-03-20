@@ -2,6 +2,8 @@
 
 # - HI: need u32[sized] array     - GENERIC datatype[sized] form !!!???
 
+# - HI: allow custom type in struct for DDS_PIXELFORMAT
+
 references:
   - https://en.wikipedia.org/wiki/DirectDraw_Surface
   - https://docs.microsoft.com/en-us/windows/win32/direct3ddds/dx-graphics-dds-pguide
@@ -17,7 +19,7 @@ structs:
     ascii[4] Signature: c'DDS '
 
     # header
-    u32 Header size: 00 00 00 7c
+    u32 Header size: 0000007c
     u32 Header flags:
       bit b00000000_00000000_00000000_00000001: DDSD_CAPS
       bit b00000000_00000000_00000000_00000010: DDSD_HEIGHT
@@ -36,8 +38,16 @@ structs:
     u32[11] Reserved1: ??
 
     if self.Header flags.DDSD_PIXELFORMAT:
-      u32 Pixel format size: ??
-      u32 Pixel format flags: ??
+      # XXX this is type DDS_PIXELFORMAT:
+      u32 Pixel format size: ??           # XXX always 32 bytes?
+      u32 Pixel format flags:
+        bit b00000000_00000000_00000000_00000001: DDPF_ALPHAPIXELS
+        bit b00000000_00000000_00000000_00000010: DDPF_ALPHA
+        bit b00000000_00000000_00000000_00000100: DDPF_FOURCC
+        bit b00000000_00000000_00000000_01000000: DDPF_RGB
+        bit b00000000_00000000_00000010_00000000: DDPF_YUV
+        bit b00000000_00000010_00000000_00000000: DDPF_LUMINANCE
+
       ascii[4] Pixel format FourCC: ??    # "DXT1"
       u32 Pixel format GBBitCount: ??
       u32 Pixel format RBitMask: ??

@@ -53,21 +53,18 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 			baseLabel := df.Label
 			for i := uint64(0); i < parsedRange; i++ {
-				oldOffset := fileLayout.offset
-				df.Label = fmt.Sprintf("%s #%d", baseLabel, i+1)
+				df.Label = fmt.Sprintf("%s[%d]", baseLabel, i)
 				if err := fileLayout.expandStruct(r, &df, ds, es.Expressions); err != nil {
 					return nil, err
 				}
-				log.Printf(" -- OFFSET AFTER %s FROM %08x to %08x", df.Label, oldOffset, fileLayout.offset)
+				df.Label = baseLabel
 			}
 			continue
 		}
 
-		oldOffset := fileLayout.offset
 		if err := fileLayout.expandStruct(r, &df, ds, es.Expressions); err != nil {
 			return nil, err
 		}
-		log.Printf(" -- OFFSET AFTER %s FROM %08x to %08x", df.Label, oldOffset, fileLayout.offset)
 	}
 
 	return &fileLayout, nil
@@ -117,6 +114,10 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 			}
 
 			unitLength, totalLength := es.Field.GetLength()
+			if totalLength == 0 {
+				log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, es.Field.PresentType())
+				continue
+			}
 
 			val, err := readBytes(r, totalLength, unitLength, fl.endian)
 			if DEBUG {

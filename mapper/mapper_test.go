@@ -19,6 +19,7 @@ structs:
   header:
     u8 U8 single: fb
     u8[2] U8 array: ff d8
+    u8[0] Empty data: ??
 
     endian: big
     u16 U16BE single: aaf0
