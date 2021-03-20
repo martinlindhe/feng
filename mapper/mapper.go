@@ -31,22 +31,36 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	fileLayout := FileLayout{}
 
 	for _, df := range ds.Layout {
-		if df.Slice {
-			log.Fatalf("TODO handle sliced layout %#v", df)
-		}
-		if df.Range != "" {
-			log.Fatalf("TODO handle ranged layout %#v", df)
-		}
-		if DEBUG {
-			log.Printf("mapping struct '%s'\n", df.PresentType())
-		}
-
 		es, err := ds.FindStructure(&df)
 		if err != nil {
 			log.Fatal(err)
 		}
 		if DEBUG {
-			log.Printf("mapped '%s' to %+v\n", df.PresentType(), es)
+			log.Printf("mapping struct '%s' (kind %s) to %+v\n", df.Label, df.Kind, es)
+		}
+
+		if df.Slice {
+			log.Fatalf("TODO handle sliced layout %#v", df)
+		}
+		if df.Range != "" {
+			kind, val, err := fileLayout.GetValue(df.Range)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			parsedRange := value.AsUint64(kind, val)
+			log.Printf("appending ranged %s[%d]", df.Kind, parsedRange)
+
+			baseLabel := df.Label
+			for i := uint64(0); i < parsedRange; i++ {
+				oldOffset := fileLayout.offset
+				df.Label = fmt.Sprintf("%s #%d", baseLabel, i+1)
+				if err := fileLayout.expandStruct(r, &df, ds, es.Expressions); err != nil {
+					return nil, err
+				}
+				log.Printf(" -- OFFSET AFTER %s FROM %08x to %08x", df.Label, oldOffset, fileLayout.offset)
+			}
+			continue
 		}
 
 		oldOffset := fileLayout.offset

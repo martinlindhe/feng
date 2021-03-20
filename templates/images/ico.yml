@@ -45,10 +45,6 @@ structs:
     # XXX could be BMP without header or full PNG
     #u8[Image data offset:Image data offset+Image data size] Image data: ??
 
-
 layout:
   - ICONDIR IconDir
-
-  # XXX what follows is Resources `n` ICONDIRENTRY structs:
   - ICONDIRENTRY[IconDir.Resources] Resource
-  #- ICONDIRENTRY Resource
