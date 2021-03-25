@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"regexp"
 	"strings"
@@ -30,6 +31,11 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 	fileLayout := FileLayout{}
 
+	// read all data to get the total length
+	b, _ := ioutil.ReadAll(r)
+	fileLayout.size = uint64(len(b))
+	rr := bytes.NewReader(b)
+
 	for _, df := range ds.Layout {
 		es, err := ds.FindStructure(&df)
 		if err != nil {
@@ -54,7 +60,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			baseLabel := df.Label
 			for i := uint64(0); i < parsedRange; i++ {
 				df.Label = fmt.Sprintf("%s[%d]", baseLabel, i)
-				if err := fileLayout.expandStruct(r, &df, ds, es.Expressions); err != nil {
+				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
 					return nil, err
 				}
 				df.Label = baseLabel
@@ -62,7 +68,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			continue
 		}
 
-		if err := fileLayout.expandStruct(r, &df, ds, es.Expressions); err != nil {
+		if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
 			return nil, err
 		}
 	}

@@ -87,7 +87,7 @@ layout:
 					{Offset: 0x3f, Length: 0x8, Value: []uint8{0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88}, Endian: "little", Format: value.DataField{Kind: "u64", Range: "", Slice: false, Label: "U64LE single"}, MatchedPatterns: []value.MatchedPattern{}},
 					{Offset: 0x47, Length: 0x10, Value: []uint8{0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27}, Endian: "little", Format: value.DataField{Kind: "u64", Range: "2", Slice: false, Label: "U64LE array"}, MatchedPatterns: []value.MatchedPattern{}},
 				}}},
-			endian: "little", offset: 0x57}, fl)
+			endian: "little", offset: 0x57, size: 0x57}, fl)
 }
 
 func TestMapReaderMatchPatterns(t *testing.T) {
@@ -144,7 +144,7 @@ layout:
 						{Offset: 0x9, Length: 0x4, Value: []uint8{0x12, 0x34, 0x56, 0x78}, Endian: "big", Format: value.DataField{Kind: "u32", Range: "", Slice: false, Label: "U32BE single"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0xd, Length: 0x8, Value: []uint8{0x22, 0x22, 0x33, 0x33, 0x44, 0x44, 0x55, 0x55}, Endian: "big", Format: value.DataField{Kind: "u32", Range: "2", Slice: false, Label: "U32BE array"}, MatchedPatterns: []value.MatchedPattern{}},
 					}}},
-				offset: 0x15, endian: "big"}, nil},
+				offset: 0x15, size: 0x15, endian: "big"}, nil},
 
 		{[]byte{
 			// wrong first byte
@@ -207,7 +207,7 @@ layout:
 							{Operation: "bit", Label: "Reserved", Value: 0},
 							{Operation: "bit", Label: "Size", Value: 6},
 						}},
-				}}}, offset: 0x1}, fl)
+				}}}, offset: 0x1, size: 1}, fl)
 }
 
 func TestEvaluateBitFieldU16(t *testing.T) {
@@ -244,7 +244,7 @@ layout:
 							{Operation: "bit", Label: "Hi", Value: 0xf},
 						}},
 				}}},
-			offset: 0x2, endian: "little"}, ff)
+			offset: 0x2, size: 0x2, endian: "little"}, ff)
 }
 
 func TestEvaluateEqFieldU8(t *testing.T) {
@@ -278,7 +278,7 @@ layout:
 							MatchedPatterns: []value.MatchedPattern{
 								{Operation: "eq", Label: "One", Value: 1},
 							}},
-					}}}, offset: 0x1},
+					}}}, offset: 0x1, size: 1},
 			nil,
 		},
 		{
@@ -364,7 +364,7 @@ layout:
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"}, MatchedPatterns: []value.MatchedPattern{{Label: "Size", Operation: "bit", Value: 0x3}}},
 						{Offset: 0x1, Length: 0x8, Value: []uint8{0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7}, Endian: "", Format: value.DataField{Kind: "u8", Range: "1 << 3", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
-				}}, offset: 0x9}, fl)
+				}}, offset: 0x9, size: 9}, fl)
 }
 
 func TestExpandStructValue(t *testing.T) {
@@ -397,7 +397,7 @@ layout:
 						{Offset: 0x0, Length: 0x2, Value: []uint8{0x0, 0x2}, Endian: "little", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Length"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x2, Length: 0x2, Value: []uint8{0x44, 0x55}, Endian: "little", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
-				}}, offset: 0x4, endian: "little"}, fl)
+				}}, offset: 0x4, size: 4, endian: "little"}, fl)
 }
 
 func TestEvaluateIfChildren(t *testing.T) {
@@ -445,7 +445,7 @@ layout:
 						{Offset: 0x2, Length: 0x1, Value: []uint8{0xaa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "NotSix"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x3, Length: 0x1, Value: []uint8{0xee}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "FourConstant"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
-				}}, offset: 0x4}, fl)
+				}}, offset: 0x4, size: 4}, fl)
 }
 
 func TestEvaluateIfMulti(t *testing.T) {
@@ -488,7 +488,7 @@ layout:
 						Fields: []Field{
 							{Offset: 0x0, Length: 0x2, Value: []uint8{'M', 'M'}, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
 						},
-					}}, offset: 0x2, endian: "big"},
+					}}, offset: 0x2, size: 2, endian: "big"},
 			nil},
 
 		// LITTLE
@@ -500,7 +500,7 @@ layout:
 						Fields: []Field{
 							{Offset: 0x0, Length: 0x2, Value: []uint8{'I', 'I'}, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
 						},
-					}}, offset: 0x2, endian: "little"},
+					}}, offset: 0x2, size: 2, endian: "little"},
 			nil},
 
 		// invalid
@@ -558,7 +558,7 @@ layout:
 							MatchedPatterns: []value.MatchedPattern{}},
 					},
 				}},
-			offset: 0x3}, fl)
+			offset: 0x3, size: 3}, fl)
 }
 
 func TestEvaluateAsciiz(t *testing.T) {
@@ -589,7 +589,7 @@ layout:
 						{Offset: 0x0, Length: 0x4, Value: []uint8{'f', 'o', 'o', 0x00}, Endian: "", Format: value.DataField{Kind: "asciiz", Range: "", Slice: false, Label: "Name"}},
 					},
 				}},
-			offset: 0x4}, fl)
+			offset: 0x4, size: 4}, fl)
 }
 
 /*

@@ -11,7 +11,7 @@ kind: archive
 extensions: [.7z]
 mime: application/x-7z-compressed
 
-structs:
+types:
   # XXX impl!!!
   ArchiveVersion:      # XXX or standard type "version16" byte 0=major, byte 1=minor
     u8 Major: ??
@@ -23,6 +23,7 @@ structs:
     u64 NextHeaderSize: ??
     u32 NextHeaderCRC: ??
 
+structs:
   header:
     endian: little
     # SignatureHeader

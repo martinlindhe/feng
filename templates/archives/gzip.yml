@@ -1,5 +1,5 @@
 # STATUS: 5%
-# - HI: u8[range] Data: ??   syntax. need parser rework to act like crc32[range]
+# - HI: u8[range] Data: ??
 #
 # - LOW: need time_t_32 type
 # - LOW: crc16. WANT sample file with FLAG_CRC16
@@ -71,14 +71,12 @@ structs:
 
   # WIP :::
 
-    #if Compression method[Deflate]:  # XXX TODO mark as "deflate" data type for auto extraction
-    # XXX need to rework so range expansion works for u8[] like it does for crc32[]
-    #u8[FILE_SIZE-self.offset-8] Data: ??
+    # XXX if deflate, mark data as such
+    u8[FILE_SIZE-self.offset-8] Data: ??
 
-    #if !Compression method[Deflate]: # TODO IF NOT
-    #  b[FILE_SIZE-len(header)-8] Data: ??
     #crc32[Data.offset:self.offset] Data checksum: ??         # XXX of compressed or uncompressed data?
     u32 Data checksum: ?? # XXX crc32 type!
+
     u32 Uncompressed size modulo 2^32: ??
 
 layout:

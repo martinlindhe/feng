@@ -19,6 +19,9 @@ type FileLayout struct {
 
 	// current offset
 	offset uint64
+
+	// total size of data (FILE_SIZE)
+	size uint64
 }
 
 // parsed file data section from a template "struct"
