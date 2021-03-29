@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 
 	"github.com/martinlindhe/feng/template"
@@ -11,6 +12,8 @@ import (
 
 func TestFieldPresent(t *testing.T) {
 
+	fl := &FileLayout{}
+
 	test := []struct {
 		field    Field
 		expected string
@@ -18,7 +21,7 @@ func TestFieldPresent(t *testing.T) {
 		{Field{Offset: 0x1, Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "U8 array"}}, "  [000001] U8 array                       u8[2]                 ff d8               \n"},
 	}
 	for _, h := range test {
-		assert.Equal(t, h.expected, h.field.Present())
+		assert.Equal(t, h.expected, fl.PresentField(&h.field))
 	}
 }
 
@@ -29,6 +32,8 @@ structs:
     u8 Number: ??
     u8 Field:
       bit b1000_0000: High bit
+    if self.Number in (5):
+      u8[FILE_SIZE-4] Extra: ??
 
 layout:
   - header Header
@@ -40,7 +45,7 @@ layout:
 
 	data := []byte{
 		0x04, 0xff, // Header
-		0x05, 0x00, // Header2
+		0x05, 0x00, 0xbb, 0xaa, // Header2
 	}
 
 	fl, err := MapReader(bytes.NewReader(data), ds)
@@ -55,9 +60,12 @@ layout:
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{4}, val)
 
-	_, val, err = fl.GetValue("Header.Field.High bit", &ds.Layout[0])
+	_, val, err = fl.GetValue("self.Field.High bit", &ds.Layout[0])
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{1}, val)
+
+	_, _, err = fl.GetValue("self.Extra", &ds.Layout[0])
+	assert.Equal(t, fmt.Errorf("GetValue: 'Header.Extra' not found"), err)
 
 	// Header2
 	_, val, err = fl.GetValue("Header2.Number", &ds.Layout[0])
@@ -67,4 +75,27 @@ layout:
 	_, val, err = fl.GetValue("self.Number", &ds.Layout[1])
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{5}, val)
+
+	// assert that "u8[FILE_SIZE-4]" evaluates to u8[2]
+	assert.Equal(t, "  [000004] Extra                          u8[2]                 bb aa               \n", fl.PresentField(&fl.Structs[1].Fields[2]))
+	_, val, err = fl.GetValue("self.Extra", &ds.Layout[1])
+	assert.Equal(t, nil, err)
+	assert.Equal(t, []byte{0xbb, 0xaa}, val)
+}
+
+func TestDataFieldPresentType(t *testing.T) {
+
+	fl := FileLayout{}
+
+	test := []struct {
+		field    value.DataField
+		expected string
+	}{
+		{value.DataField{Kind: "u32", Range: "2"}, "u32[2]"},
+		{value.DataField{Kind: "u8", Range: "2"}, "u8[2]"},
+		{value.DataField{Kind: "u32"}, "u32"},
+	}
+	for _, h := range test {
+		assert.Equal(t, h.expected, fl.PresentType(&h.field))
+	}
 }

@@ -110,7 +110,7 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 
 		case "u8", "u16", "u32", "u64", "ascii":
 			if es.Field.IsRangeUnit() {
-				log.Fatalf("invalid %s form: %s", es.Field.Kind, es.Field.PresentType())
+				log.Fatalf("invalid %s form: %s", es.Field.Kind, fl.PresentType(&es.Field))
 			}
 
 			if es.Field.Range != "" {
@@ -121,15 +121,15 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 				}
 			}
 
-			unitLength, totalLength := es.Field.GetLength()
+			unitLength, totalLength := fl.GetLength(&es.Field)
 			if totalLength == 0 {
-				log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, es.Field.PresentType())
+				log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
 				continue
 			}
 
 			val, err := readBytes(r, totalLength, unitLength, fl.endian)
 			if DEBUG {
-				log.Printf("[%08x] reading %d bytes for '%s' %s: %02x", fl.offset, totalLength, es.Field.Label, es.Field.PresentType(), val)
+				log.Printf("[%08x] reading %d bytes for '%s' %s: %02x", fl.offset, totalLength, es.Field.Label, fl.PresentType(&es.Field), val)
 			}
 			if err != nil {
 				return err

@@ -255,23 +255,6 @@ func EvaluateExpression(s string) (uint64, error) {
 	return 0, fmt.Errorf("unhandled result type %T", result)
 }
 
-// returns unitLength, totalLength
-func (df *DataField) GetLength() (uint64, uint64) {
-
-	unitLength := df.SingleUnitSize()
-	rangeLength := uint64(1)
-	if df.Range != "" {
-		var err error
-		rangeLength, err = EvaluateExpression(df.Range)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	totalLength := unitLength * rangeLength
-
-	return unitLength, totalLength
-}
-
 func (df *DataField) SingleUnitSize() uint64 {
 	return SingleUnitSize(df.Kind)
 }
@@ -289,19 +272,6 @@ func SingleUnitSize(kind string) uint64 {
 	}
 	log.Fatalf("SingleUnitSize cant handle kind '%s'", kind)
 	return 0
-}
-
-// presents the underlying type as it is known in the template format
-func (df *DataField) PresentType() string {
-	if df.Slice {
-		return fmt.Sprintf("%s[]", df.Kind)
-	}
-	if df.Range != "" {
-		unitLength, totalLength := df.GetLength()
-		fieldLength := totalLength / unitLength
-		return fmt.Sprintf("%s[%d]", df.Kind, fieldLength)
-	}
-	return df.Kind
 }
 
 // returns true if unit is a single u8, u16, u32 or u64 that can have eq/bit field as child

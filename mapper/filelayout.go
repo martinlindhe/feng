@@ -53,8 +53,8 @@ var (
 )
 
 // decodes simple value types for presentation
-func (field *Field) Present() string {
-	kind := field.Format.PresentType()
+func (fl *FileLayout) PresentField(field *Field) string {
+	kind := fl.PresentType(&field.Format)
 	if field.Format.SingleUnitSize() > 1 {
 		if field.Endian == "little" {
 			kind += " le"
@@ -78,7 +78,7 @@ func (fl *FileLayout) Present() {
 	for _, layout := range fl.Structs {
 		fmt.Printf("%s\n", layout.Label)
 		for _, field := range layout.Fields {
-			fmt.Print(field.Present())
+			fmt.Print(fl.PresentField(&field))
 		}
 	}
 }
@@ -143,6 +143,38 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 	}
 
 	return "", nil, fmt.Errorf("GetValue: '%s' not found", s)
+}
+
+// returns unitLength, totalLength
+func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
+
+	unitLength := df.SingleUnitSize()
+	rangeLength := uint64(1)
+	if df.Range != "" {
+		var err error
+		r := df.Range
+		r = strings.Replace(r, "FILE_SIZE", fmt.Sprintf("%d", fl.size), 1)
+		rangeLength, err = value.EvaluateExpression(r)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	totalLength := unitLength * rangeLength
+
+	return unitLength, totalLength
+}
+
+// presents the underlying type as it is known in the template format
+func (fl *FileLayout) PresentType(df *value.DataField) string {
+	if df.Slice {
+		return fmt.Sprintf("%s[]", df.Kind)
+	}
+	if df.Range != "" {
+		unitLength, totalLength := fl.GetLength(df)
+		fieldLength := totalLength / unitLength
+		return fmt.Sprintf("%s[%d]", df.Kind, fieldLength)
+	}
+	return df.Kind
 }
 
 // replace variables with their values
