@@ -18,6 +18,7 @@
     u8, u16, u32, u64
     ascii[5]
     asciiz              zero terminated ascii string
+    time_t_32           32-bit unix timestamp
 
 
 # arrays

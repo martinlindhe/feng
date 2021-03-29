@@ -18,7 +18,8 @@ func TestFieldPresent(t *testing.T) {
 		field    Field
 		expected string
 	}{
-		{Field{Offset: 0x1, Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "U8 array"}}, "  [000001] U8 array                       u8[2]                 ff d8               \n"},
+		{Field{Offset: 0x1, Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "U8 array"}}, "  [000001] U8 array                       u8[2]                               ff d8               \n"},
+		{Field{Offset: 0x1, Length: 0x4, Value: []uint8{0x52, 0x5e, 0x65, 0xef}, Endian: "little", Format: value.DataField{Kind: "time_t_32", Range: "", Slice: false, Label: "TimeT_32_LE"}}, "  [000001] TimeT_32_LE                    time_t_32 le  2013-10-16T10:09:51Z  52 5e 65 ef         \n"},
 	}
 	for _, h := range test {
 		assert.Equal(t, h.expected, fl.PresentField(&h.field))
@@ -77,7 +78,7 @@ layout:
 	assert.Equal(t, []byte{5}, val)
 
 	// assert that "u8[FILE_SIZE-self.offset]" evaluates to u8[6-4] == u8[2] (all remaining bytes)
-	assert.Equal(t, "  [000004] Extra                          u8[2]                 bb aa               \n", fl.PresentField(&fl.Structs[1].Fields[2]))
+	assert.Equal(t, "  [000004] Extra                          u8[2]                               bb aa               \n", fl.PresentField(&fl.Structs[1].Fields[2]))
 	_, val, err = fl.GetValue("self.Extra", &ds.Layout[1])
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{0xbb, 0xaa}, val)

@@ -1,8 +1,8 @@
 # STATUS: 50%
 #
-# - HI: need time_t_32 type (unix timestamp)
-# - LOW: crc32 for data
-# - LOW: crc16
+# - MID later: mark deflate data for decompression
+# - MID later: mark crc32 for data validation
+# - MID later: mark crc16 for header validation
 #
 # - SAMPLE: WANT sample file with FLAG_CRC16
 # - SAMPLE: WANT sample file with FLAG_EXTRA
@@ -22,7 +22,7 @@ structs:
   header:
     endian: little
     u8[2] Signature: 1f 8b
-    u8 Compression method:
+    u8 Compression method:            # NOTE: only deflate is in active use
       eq 00: Stored
       eq 01: Compressed
       eq 02: Packed
@@ -34,7 +34,7 @@ structs:
       bit b0000_0100: FLAG_EXTRA      # Extra fields present
       bit b0000_1000: FLAG_NAME       # Filename present
       bit b0001_0000: FLAG_COMMENT    # Comment present
-    u32 Modification time: ??     # XXX data type "time_t_32"
+    time_t_32 Modification time: ??
     u8 Compression flags:
       eq 02: max compression (deflate)
       eq 04: fastest compression (deflate)

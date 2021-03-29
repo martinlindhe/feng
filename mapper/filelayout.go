@@ -65,11 +65,11 @@ func (fl *FileLayout) PresentField(field *Field) string {
 
 	fieldValue := value.Present(field.Format, field.Value)
 
-	res := fmt.Sprintf("  [%06x] %-30s %-10s %-10s %-20s\n",
+	res := fmt.Sprintf("  [%06x] %-30s %-13s %-21s %-20s\n",
 		field.Offset, field.Format.Label, kind, fieldValue, fmt.Sprintf("% 02x", field.Value))
 
 	for _, child := range field.MatchedPatterns {
-		res += fmt.Sprintf("           - %-28s %-10s %d\n", child.Label, child.Operation, child.Value)
+		res += fmt.Sprintf("           - %-28s %-13s %d\n", child.Label, child.Operation, child.Value)
 	}
 	return res
 }

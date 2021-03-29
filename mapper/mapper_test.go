@@ -37,6 +37,8 @@ structs:
     u64 U64LE single: "1122334455667788"
     u64[2] U64LE array: 1011121314151617 2021222324252627
 
+    time_t_32 TimeT_32_LE: 525e65ef
+
 layout:
   - header Header
 `
@@ -63,6 +65,8 @@ layout:
 		0x13, 0x12, 0x11, 0x10, 0x23, 0x22, 0x21, 0x20, // u32[2] U32LE array
 		0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11, // U64LE single
 		0x17, 0x16, 0x15, 0x14, 0x13, 0x12, 0x11, 0x10, 0x27, 0x26, 0x25, 0x24, 0x23, 0x22, 0x21, 0x20, // u64[2] U64LE array
+
+		0xef, 0x65, 0x5e, 0x52, // TimeT_32_LE
 	}
 
 	fl, err := MapReader(bytes.NewReader(data), ds)
@@ -86,8 +90,9 @@ layout:
 					{Offset: 0x37, Length: 0x8, Value: []uint8{0x10, 0x11, 0x12, 0x13, 0x20, 0x21, 0x22, 0x23}, Endian: "little", Format: value.DataField{Kind: "u32", Range: "2", Slice: false, Label: "U32LE array"}, MatchedPatterns: []value.MatchedPattern{}},
 					{Offset: 0x3f, Length: 0x8, Value: []uint8{0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88}, Endian: "little", Format: value.DataField{Kind: "u64", Range: "", Slice: false, Label: "U64LE single"}, MatchedPatterns: []value.MatchedPattern{}},
 					{Offset: 0x47, Length: 0x10, Value: []uint8{0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27}, Endian: "little", Format: value.DataField{Kind: "u64", Range: "2", Slice: false, Label: "U64LE array"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x57, Length: 0x04, Value: []uint8{0x52, 0x5e, 0x65, 0xef}, Endian: "little", Format: value.DataField{Kind: "time_t_32", Range: "", Slice: false, Label: "TimeT_32_LE"}, MatchedPatterns: []value.MatchedPattern{}},
 				}}},
-			endian: "little", offset: 0x57, size: 0x57}, fl)
+			endian: "little", offset: 0x5b, size: 0x5b}, fl)
 }
 
 func TestMapReaderMatchPatterns(t *testing.T) {

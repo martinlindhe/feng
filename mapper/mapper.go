@@ -108,7 +108,7 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 			}
 			return fmt.Errorf("file invalidated by template")
 
-		case "u8", "u16", "u32", "u64", "ascii":
+		case "u8", "u16", "u32", "u64", "ascii", "time_t_32":
 			if es.Field.IsRangeUnit() {
 				log.Fatalf("invalid %s form: %s", es.Field.Kind, fl.PresentType(&es.Field))
 			}

@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/maja42/goval"
@@ -15,6 +16,9 @@ import (
 
 const (
 	DEBUG = false
+
+	// TODO: make IN_UTC configurable from cli
+	IN_UTC = true
 )
 
 var (
@@ -265,7 +269,7 @@ func SingleUnitSize(kind string) uint64 {
 		return 1
 	case "u16":
 		return 2
-	case "u32":
+	case "u32", "time_t_32":
 		return 4
 	case "u64":
 		return 8
@@ -330,7 +334,7 @@ func AsUint64(kind string, b []byte) uint64 {
 		return uint64(b[0])
 	case "u16":
 		return uint64(binary.BigEndian.Uint16(b))
-	case "u32":
+	case "u32", "time_t_32":
 		return uint64(binary.BigEndian.Uint32(b))
 	case "u64":
 		return binary.BigEndian.Uint64(b)
@@ -349,6 +353,13 @@ func Present(format DataField, b []byte) string {
 	case "ascii", "asciiz":
 		v, _ := asciiZString(b, len(b))
 		return v
+	case "time_t_32":
+		v := AsUint64(format.Kind, b)
+		timestamp := time.Unix(int64(v), 0)
+		if IN_UTC {
+			timestamp = timestamp.UTC()
+		}
+		return timestamp.Format(time.RFC3339)
 	}
 
 	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", format.Kind, format.Slice, format.Range, b)
