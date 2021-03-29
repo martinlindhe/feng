@@ -24,3 +24,8 @@
 
     u32[4]
     u8[FILE_SIZE-10]
+
+
+# tricks
+
+    u8[FILE_SIZE-self.offset] Extra: ??             tags the remaining bytes

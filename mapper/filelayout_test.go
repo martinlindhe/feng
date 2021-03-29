@@ -33,7 +33,7 @@ structs:
     u8 Field:
       bit b1000_0000: High bit
     if self.Number in (5):
-      u8[FILE_SIZE-4] Extra: ??
+      u8[FILE_SIZE-self.offset] Extra: ??
 
 layout:
   - header Header
@@ -76,7 +76,7 @@ layout:
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{5}, val)
 
-	// assert that "u8[FILE_SIZE-4]" evaluates to u8[2]
+	// assert that "u8[FILE_SIZE-self.offset]" evaluates to u8[6-4] == u8[2] (all remaining bytes)
 	assert.Equal(t, "  [000004] Extra                          u8[2]                 bb aa               \n", fl.PresentField(&fl.Structs[1].Fields[2]))
 	_, val, err = fl.GetValue("self.Extra", &ds.Layout[1])
 	assert.Equal(t, nil, err)

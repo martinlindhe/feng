@@ -179,6 +179,9 @@ func (fl *FileLayout) PresentType(df *value.DataField) string {
 
 // replace variables with their values
 func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, error) {
+
+	s = strings.Replace(s, "self.offset", fmt.Sprintf("%d", fl.offset), 1)
+
 	if !strings.Contains(s, "(") && !strings.Contains(s, ")") {
 		s = "(" + s + ")"
 	}
@@ -205,8 +208,14 @@ func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, er
 }
 
 func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, error) {
+	if DEBUG {
+		log.Printf("expandVariable: %s", s)
+	}
 	matches := variableExpressionRE.FindStringSubmatch(s)
 	if len(matches) == 0 {
+		if DEBUG {
+			log.Printf("expandVariable: NO MATCH")
+		}
 		return s, nil
 	}
 

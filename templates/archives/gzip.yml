@@ -1,9 +1,12 @@
-# STATUS: 5%
-# - HI: u8[range] Data: ??
+# STATUS: 50%
 #
-# - LOW: need time_t_32 type
-# - LOW: crc16. WANT sample file with FLAG_CRC16
+# - HI: need time_t_32 type (unix timestamp)
+# - LOW: crc32 for data
+# - LOW: crc16
+#
+# - SAMPLE: WANT sample file with FLAG_CRC16
 # - SAMPLE: WANT sample file with FLAG_EXTRA
+# - SAMPLE: WANT sample file with FLAG_COMMENT
 
 references:
   - https://tools.ietf.org/html/rfc1952
@@ -68,8 +71,6 @@ structs:
     # TODO NEED sample with FLAG_COMMENT
     if self.Header flags.FLAG_COMMENT:
       asciiz Comment: ??
-
-  # WIP :::
 
     # XXX if deflate, mark data as such
     u8[FILE_SIZE-self.offset-8] Data: ??
