@@ -299,38 +299,6 @@ layout:
 	}
 }
 
-func TestGetValue(t *testing.T) {
-	templateData := `
-structs:
-  header:
-    u8 Number: "04"
-    u8 Field:
-      bit b1000_0000: High bit
-
-layout:
-  - header Header
-`
-
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
-	assert.Equal(t, nil, err)
-
-	data := []byte{
-		0x04, // Number
-		0xff, // Field
-	}
-
-	fl, err := MapReader(bytes.NewReader(data), ds)
-	assert.Equal(t, nil, err)
-
-	_, val, err := fl.GetValue("Header.Number")
-	assert.Equal(t, nil, err)
-	assert.Equal(t, []byte{4}, val)
-
-	_, val, err = fl.GetValue("Header.Field.High bit")
-	assert.Equal(t, nil, err)
-	assert.Equal(t, []byte{1}, val)
-}
-
 func TestExpandBitfieldValue(t *testing.T) {
 	templateData := `
 structs:
@@ -353,7 +321,8 @@ layout:
 	fl, err := MapReader(bytes.NewReader(data), ds)
 	assert.Equal(t, nil, err)
 
-	s := fl.ExpandVariables("Header.Field.Size")
+	s, err := fl.ExpandVariables("Header.Field.Size", &fl.Structs[0].Fields[0].Format)
+	assert.Equal(t, nil, err)
 	assert.Equal(t, "3", s)
 
 	assert.Equal(t,

@@ -97,7 +97,10 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 
 // finds the first field named `structName`.`fieldName`
 // returns: kind, bytes, error
-func (fl *FileLayout) GetValue(s string) (string, []byte, error) {
+func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, error) {
+
+	s = strings.Replace(s, "self.", df.Label+".", 1)
+
 	if DEBUG {
 		log.Printf("GetValue: searching for %s", s)
 	}
@@ -128,11 +131,11 @@ func (fl *FileLayout) GetValue(s string) (string, []byte, error) {
 			}
 
 			for _, child := range field.MatchedPatterns {
-				if DEBUG {
-					log.Printf("comparing matched pattern %s to %s", child.Label, childName)
-				}
 				if child.Label == childName {
 					val := value.U64toBytesBigEndian(child.Value, field.Format.SingleUnitSize())
+					if DEBUG {
+						log.Printf("matched pattern %s = %d", child.Label, val)
+					}
 					return field.Format.Kind, val, nil
 				}
 			}
@@ -143,7 +146,7 @@ func (fl *FileLayout) GetValue(s string) (string, []byte, error) {
 }
 
 // replace variables with their values
-func (fl *FileLayout) ExpandVariables(s string) string {
+func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, error) {
 	if !strings.Contains(s, "(") && !strings.Contains(s, ")") {
 		s = "(" + s + ")"
 	}
@@ -153,7 +156,10 @@ func (fl *FileLayout) ExpandVariables(s string) string {
 	}
 
 	for {
-		expanded := fl.expandVariable(s)
+		expanded, err := fl.expandVariable(s, df)
+		if err != nil {
+			return "", err
+		}
 		if expanded == s {
 			break
 		}
@@ -163,13 +169,13 @@ func (fl *FileLayout) ExpandVariables(s string) string {
 		s = expanded
 	}
 
-	return s
+	return s, nil
 }
 
-func (fl *FileLayout) expandVariable(s string) string {
+func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, error) {
 	matches := variableExpressionRE.FindStringSubmatch(s)
 	if len(matches) == 0 {
-		return s
+		return s, nil
 	}
 
 	idx := variableExpressionRE.FindStringSubmatchIndex(s)
@@ -178,19 +184,19 @@ func (fl *FileLayout) expandVariable(s string) string {
 
 	// don't resolve if integer-like
 	if isIntegerString(key) {
-		return s[0:idx[0]] + key + s[idx[1]:]
+		return s[0:idx[0]] + key + s[idx[1]:], nil
 	}
 
-	kind, val, err := fl.GetValue(key)
+	kind, val, err := fl.GetValue(key, df)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
 	log.Printf("ExpandVariables: MATCHED %s to %s %v", key, kind, val)
 
 	i := value.AsUint64(kind, val)
 
-	return s[0:idx[0]] + fmt.Sprintf("%d", i) + s[idx[1]:]
+	return s[0:idx[0]] + fmt.Sprintf("%d", i) + s[idx[1]:], nil
 }
 
 // returns true if string represents an integer

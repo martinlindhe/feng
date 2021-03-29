@@ -19,13 +19,6 @@ STATUS: private draft work
 
 # TODO 5 mars 2021:
 
-CURRENT TODO 1. finish rewrite (data to layout mapping, final layout parsing, present listing)
-
-
-TODO soon ? : a lot of data need "" escape in yaml, so might as well go to toml before more templates will need to convert?
-    - pro/con
-
-
 
 
 TODO 1000. example client app in a blog about it (need easy to use end-user API)
@@ -126,6 +119,13 @@ https://davidkoloski.me/blog/rkyv-is-faster-than/
         "rkyv is faster than {bincode, capnp, cbor, flatbuffers, postcard, prost, serde_json}"
     STATUS: we could build generators for bincode or whatever from our source format, in addition to pure no dependencies-rust
 
+
+
+
+# ADVANCED SIMILAR WORKS - asset extractors
+
+"Ninja ripper" - TODO evaluate
+    extract individual models from games
 
 
 

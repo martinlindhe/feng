@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"regexp"
-	"strings"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/martinlindhe/feng/template"
@@ -49,7 +48,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			log.Fatalf("TODO handle sliced layout %#v", df)
 		}
 		if df.Range != "" {
-			kind, val, err := fileLayout.GetValue(df.Range)
+			kind, val, err := fileLayout.GetValue(df.Range, &df)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -115,8 +114,11 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 			}
 
 			if es.Field.Range != "" {
-				es.Field.Range = strings.Replace(es.Field.Range, "self.", df.Label+".", 1)
-				es.Field.Range = fl.ExpandVariables(es.Field.Range)
+				var err error
+				es.Field.Range, err = fl.ExpandVariables(es.Field.Range, df)
+				if err != nil {
+					return err
+				}
 			}
 
 			unitLength, totalLength := es.Field.GetLength()
@@ -168,15 +170,13 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 				operation := matches[2] // "in" or "notin"
 				pattern := matches[3]
 
-				key = strings.Replace(key, "self.", df.Label+".", 1)
-
-				if DEBUG {
-					log.Printf("-- matching IF key=%s, operation=%s, pattern=%s", key, operation, pattern)
-				}
-
 				switch operation {
 				case "in", "notin":
-					kind, val, err := fl.GetValue(key)
+					if DEBUG {
+						log.Printf("-- matching IF key=%s, operation=%s, pattern=%s", key, operation, pattern)
+					}
+
+					kind, val, err := fl.GetValue(key, df)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -213,13 +213,12 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 				}
 			} else {
 				key := es.Field.Label
-				key = strings.Replace(key, "self.", df.Label+".", 1)
 
 				if DEBUG {
 					log.Printf("-- matching IF NOTZERO key=%s", key)
 				}
 
-				_, val, err := fl.GetValue(key)
+				_, val, err := fl.GetValue(key, df)
 				if err == nil {
 					matched := false
 					for _, b := range val {

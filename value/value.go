@@ -239,25 +239,32 @@ type MatchedPattern struct {
 	Value uint64
 }
 
+func EvaluateExpression(s string) (uint64, error) {
+
+	eval := goval.NewEvaluator()
+	result, err := eval.Evaluate(s, nil, nil)
+
+	if err != nil {
+		return 0, fmt.Errorf("cant evaluate '%s': %v", s, err)
+	}
+
+	switch v := result.(type) {
+	case int:
+		return uint64(v), nil
+	}
+	return 0, fmt.Errorf("unhandled result type %T", result)
+}
+
 // returns unitLength, totalLength
 func (df *DataField) GetLength() (uint64, uint64) {
 
 	unitLength := df.SingleUnitSize()
 	rangeLength := uint64(1)
 	if df.Range != "" {
-
-		eval := goval.NewEvaluator()
-		result, err := eval.Evaluate(df.Range, nil, nil)
-
+		var err error
+		rangeLength, err = EvaluateExpression(df.Range)
 		if err != nil {
-			log.Fatalf("cant evaluate '%s': %v", df.Range, err)
-		}
-
-		switch v := result.(type) {
-		case int:
-			rangeLength = uint64(v)
-		default:
-			log.Fatalf("unhandled result type %T", result)
+			log.Fatal(err)
 		}
 	}
 	totalLength := unitLength * rangeLength
