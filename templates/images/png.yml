@@ -1,4 +1,5 @@
-# STATUS: 1%
+# STATUS: 5%
+#
 # - HI: need chunk[] Chunk syntax
 
 references:
@@ -13,10 +14,9 @@ extensions: [.png]
 mime: image/png
 
 constants:
-  ascii[4] IHDR: c'IHDR'
   ascii[4] IDAT: c'IDAT'
   ascii[4] IEND: c'IEND'
-  #ascii[4] sBIT: c'sBIT'
+  ascii[4] sBIT: c'sBIT'
 
 
 structs:
@@ -24,60 +24,62 @@ structs:
     endian: big
     u8[8] Signature: 89 c'PNG' 0d 0a 1a 0a
 
-  chunk:
+  ihdr:
     u32 Length: ??
+    ascii[4] Type: c'IHDR'
+
+    u32 Width: ??
+    u32 Height: ??
+    u8 Bit depth:
+      eq 01: 1 bpp
+      eq 02: 2 bpp
+      eq 04: 4 bpp
+      eq 08: 8 bpp
+      eq 10: 16 bpp
+    u8 Color type:
+      eq 00: grayscale
+      eq 02: RGB
+      eq 03: palette
+      eq 04: grayscale+alpha
+      eq 06: RGBA
+    u8 Compression method:
+      eq 00: deflate          # XXX the concatenation of the contents of all the IDAT chunks makes up a zlib datastream
+    u8 Filter method:
+      eq 00: none+sub+up+average+paeth
+    u8 Interlace method:
+      eq 00: no interlace
+      eq 01: Adam7 interlace
+    u32 Checksum: ?? # XXX crc32 type
+
+  chunk:
+    u32 Length: ??            # length of chunk data (excluding Length and Type fields)
     ascii[4] Type: ??
 
-    if self.Type in (IHDR):   # XXX evaluates like 1st chunk for 2nd chunk too ????
-      # XXX this should be a separate type definition called IHDR_CHUNK
-      u32 Width: ??
-      u32 Height: ??
-      u8 Bit depth:
-        eq 01: 1 bpp
-        eq 02: 2 bpp
-        eq 04: 4 bpp
-        eq 08: 8 bpp
-        eq 10: 16 bpp
-      u8 Color type:
-        eq 00: grayscale
-        eq 02: RGB
-        eq 03: palette
-        eq 04: grayscale+alpha
-        eq 06: RGBA
-      u8 Compression method:
-        eq 00: deflate          # XXX the concatenation of the contents of all the IDAT chunks makes up a zlib datastream
-      u8 Filter method:
-        eq 00: none+sub+up+average+paeth
-      u8 Interlace method:
-        eq 00: no interlace
-        eq 01: Adam7 interlace
-
-    #if self.Type in (sBIT):
-    # CHUNK sBIT:
-    #if Color type[grayscale]:               # XXX in order to work we MUST have a IHDR_CHUNK type to refer to!
-    #  u8 significant bits grayscale: ??
-    #if Color type[RGB]:
-    #  u8 significant bits red: ??
-    #  u8 significant bits green: ??
-    #  u8 significant bits blue: ??
-    #if Color type[palette]:
-    #  u8 significant bits red: ??
-    #  u8 significant bits green: ??
-    #  u8 significant bits blue: ??
-    #if Color type[grayscale+alpha]:
-    #  u8 significant bits grayscale: ??
-    #  u8 significant bits alpha: ??
-    #if Color type[RGBA]:
-    #  u8 significant bits red: ??
-    #  u8 significant bits green: ??
-    #  u8 significant bits blue: ??
-    #  u8 significant bits alpha: ??
+    if self.Type in (sBIT):
+      if IHDR.Color type.grayscale:
+        u8 significant bits grayscale: ??
+      if IHDR.Color type.RGB:
+        u8 significant bits red: ??
+        u8 significant bits green: ??
+        u8 significant bits blue: ??
+      if IHDR.Color type.palette:
+        u8 significant bits red: ??
+        u8 significant bits green: ??
+        u8 significant bits blue: ??
+      if IHDR.Color type.grayscale+alpha:
+        u8 significant bits grayscale: ??
+        u8 significant bits alpha: ??
+      if IHDR.Color type.RGBA:
+        u8 significant bits red: ??
+        u8 significant bits green: ??
+        u8 significant bits blue: ??
+        u8 significant bits alpha: ??
 
     if self.Type in (IDAT):
       u8[self.Length] Image data: ??
 
     # UNKNOWN CHUNK TYPE:
-    if self.Type notin (IHDR, IDAT):
+    if self.Type notin (IDAT, sBIT):
       u8[self.Length] Chunk data: ??
 
     #crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field
@@ -87,10 +89,11 @@ structs:
 layout:
   - header Header
 
-  # XXX unknown amount of chunks until end of file:
+  - ihdr IHDR    # a valid PNG must start with an IHDR chunk (FIXME: this breaks if IHDR is missing and another chunk is matched)
+
+    # XXX unknown amount of chunks until end of file:
   #- chunk[] Chunk
 
-  - chunk Chunk1
   - chunk Chunk2
   - chunk Chunk3
   - chunk Chunk4

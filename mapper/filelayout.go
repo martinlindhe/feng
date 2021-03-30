@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/martinlindhe/feng/value"
 )
 
@@ -50,6 +51,8 @@ type Field struct {
 
 var (
 	variableExpressionRE = regexp.MustCompile(`\(([\w .]+)\)`)
+
+	red = color.New(color.FgRed).SprintfFunc()
 )
 
 // decodes simple value types for presentation
@@ -80,6 +83,14 @@ func (fl *FileLayout) Present() {
 		for _, field := range layout.Fields {
 			fmt.Print(fl.PresentField(&field))
 		}
+		fmt.Println()
+	}
+
+	if fl.offset < fl.size {
+		unmapped := fl.size - fl.offset
+		fmt.Println(red("  [%06x] %04x (%d) unmapped trailing bytes", fl.offset, unmapped, unmapped))
+	} else {
+		fmt.Println("EOF")
 	}
 }
 

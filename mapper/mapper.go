@@ -128,7 +128,7 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 
 			val, err := readBytes(r, totalLength, unitLength, fl.endian)
 			if DEBUG {
-				log.Printf("[%08x] reading %d bytes for '%s' %s: %02x", fl.offset, totalLength, es.Field.Label, fl.PresentType(&es.Field), val)
+				log.Printf("[%08x] reading %d bytes for '%s.%s' %s: %02x", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val)
 			}
 			if err != nil {
 				return err
