@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math"
 	"regexp"
 
 	"github.com/martinlindhe/feng/template"
@@ -13,7 +14,7 @@ import (
 )
 
 const (
-	DEBUG = true
+	DEBUG = false
 )
 
 var (
@@ -44,7 +45,24 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		}
 
 		if df.Slice {
-			log.Fatalf("TODO handle sliced layout %#v", df)
+			// like ranged layout but keep reading until EOF
+			if DEBUG {
+				log.Printf("appending sliced %s[]", df.Kind)
+			}
+
+			baseLabel := df.Label
+			for i := uint64(0); i < math.MaxUint64; i++ {
+				df.Label = fmt.Sprintf("%s[%d]", baseLabel, i)
+				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
+					if err == io.EOF {
+						break
+					}
+					return nil, err
+				}
+				df.Label = baseLabel
+			}
+			continue
+
 		}
 		if df.Range != "" {
 			kind, val, err := fileLayout.GetValue(df.Range, &df)
@@ -53,7 +71,9 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			}
 
 			parsedRange := value.AsUint64(kind, val)
-			log.Printf("appending ranged %s[%d]", df.Kind, parsedRange)
+			if DEBUG {
+				log.Printf("appending ranged %s[%d]", df.Kind, parsedRange)
+			}
 
 			baseLabel := df.Label
 			for i := uint64(0); i < parsedRange; i++ {
@@ -81,9 +101,16 @@ func (fl *FileLayout) expandStruct(r io.Reader, df *value.DataField, ds *templat
 	}
 
 	fl.Structs = append(fl.Structs, Struct{Label: df.Label})
-	fs := &fl.Structs[len(fl.Structs)-1]
 
-	return fl.expandChildren(r, fs, df, ds, expressions)
+	idx := len(fl.Structs) - 1
+	fs := &fl.Structs[idx]
+
+	err := fl.expandChildren(r, fs, df, ds, expressions)
+	if err != nil {
+		// remove last struct in case of error
+		fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
+	}
+	return err
 }
 
 func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
@@ -122,7 +149,9 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 
 			unitLength, totalLength := fl.GetLength(&es.Field)
 			if totalLength == 0 {
-				log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
+				if DEBUG {
+					log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
+				}
 				continue
 			}
 

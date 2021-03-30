@@ -1,10 +1,10 @@
-# STATUS: 5%
-#
-# - HI: need chunk[] Chunk syntax
+# STATUS: 50%
+
+# - LOW: crc32 data type
 
 references:
   - https://en.wikipedia.org/wiki/Portable_Network_Graphics
-  - https://www.w3.org/TR/PNG-Chunks.html
+  - http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
   - https://www.sweetscape.com/010editor/repository/files/PNG.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/PNG.tcl
   - https://github.com/martinlindhe/formats/blob/master/parse/image/img_png.go
@@ -17,7 +17,8 @@ constants:
   ascii[4] IDAT: c'IDAT'
   ascii[4] IEND: c'IEND'
   ascii[4] sBIT: c'sBIT'
-
+  ascii[4] sRGB: c'sRGB'
+  ascii[4] pHYs: c'pHYs'
 
 structs:
   header:
@@ -27,7 +28,6 @@ structs:
   ihdr:
     u32 Length: ??
     ascii[4] Type: c'IHDR'
-
     u32 Width: ??
     u32 Height: ??
     u8 Bit depth:
@@ -43,17 +43,20 @@ structs:
       eq 04: grayscale+alpha
       eq 06: RGBA
     u8 Compression method:
-      eq 00: deflate          # XXX the concatenation of the contents of all the IDAT chunks makes up a zlib datastream
+      eq 00: deflate                        # NOTE: the concatenation of the contents of all the IDAT chunks makes up a zlib datastream
     u8 Filter method:
       eq 00: none+sub+up+average+paeth
     u8 Interlace method:
       eq 00: no interlace
       eq 01: Adam7 interlace
-    u32 Checksum: ?? # XXX crc32 type
+    u32 Checksum: ??                        # XXX crc32 type
 
   chunk:
-    u32 Length: ??            # length of chunk data (excluding Length and Type fields)
+    u32 Length: ??                          # length of chunk data (excluding Length and Type fields)
     ascii[4] Type: ??
+
+    if self.Type in (IDAT):
+      u8[self.Length] Image data: ??
 
     if self.Type in (sBIT):
       if IHDR.Color type.grayscale:
@@ -75,25 +78,28 @@ structs:
         u8 significant bits blue: ??
         u8 significant bits alpha: ??
 
-    if self.Type in (IDAT):
-      u8[self.Length] Image data: ??
+    if self.Type in (sRGB):
+      u8 Rendering intent:
+        eq 00: Perceptual
+        eq 01: Relative colorimetric
+        eq 02: Saturation
+        eq 03: Absolute colorimetric
 
-    # UNKNOWN CHUNK TYPE:
-    if self.Type notin (IDAT, sBIT):
+    if self.Type in (pHYs):
+      u32 Pixels per unit, X axis: ??
+      u32 Pixels per unit, Y axis: ??
+      u8 Unit specifier:
+        eq 00: Unknown
+        eq 01: Meter
+
+    # UNKNOWN CHUNK TYPE
+    if self.Type notin (IDAT, sBIT, sRGB, pHYs):
       u8[self.Length] Chunk data: ??
 
     #crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field
-    u32 Checksum: ?? # XXX crc32 type
-
+    u32 Checksum: ??                        # XXX crc32 type
 
 layout:
   - header Header
-
-  - ihdr IHDR    # a valid PNG must start with an IHDR chunk (FIXME: this breaks if IHDR is missing and another chunk is matched)
-
-    # XXX unknown amount of chunks until end of file:
-  #- chunk[] Chunk
-
-  - chunk Chunk2
-  - chunk Chunk3
-  - chunk Chunk4
+  - ihdr IHDR                               # a valid PNG must start with an IHDR chunk (FIXME: this breaks if IHDR is missing and another chunk is matched)
+  - chunk[] Chunk                           # unknown amount of chunks until end of file

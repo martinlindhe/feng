@@ -244,7 +244,9 @@ func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, err
 		return "", err
 	}
 
-	log.Printf("ExpandVariables: MATCHED %s to %s %v", key, kind, val)
+	if DEBUG {
+		log.Printf("ExpandVariables: MATCHED %s to %s %v", key, kind, val)
+	}
 
 	i := value.AsUint64(kind, val)
 

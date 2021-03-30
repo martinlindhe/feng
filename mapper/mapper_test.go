@@ -563,23 +563,21 @@ layout:
 						{Offset: 0x0, Length: 0x4, Value: []uint8{'f', 'o', 'o', 0x00}, Endian: "", Format: value.DataField{Kind: "asciiz", Range: "", Slice: false, Label: "Name"}},
 					},
 				}},
-			offset: 0x4, size: 4}, fl)
+			offset: 0x4, size: 0x4}, fl)
 }
 
-/*
-func TestEvaluateCustomSizedStruct(t *testing.T) {
+func TestEvaluateStructSlice(t *testing.T) {
 	templateData := `
 structs:
-  block:                        # XXX "block" is never parsed because currently parsing is done thru definitions in layout .... !!!
+  block:
     u8 First: ??
     u8 Second: ??
   header:
-    u8 Size: ??
-    block[self.Size] Sized block: ??
-    ##block[] Unsized block: ??   # XXX should be parsed until we reach EOF (?)
+    u8 ID: "02"
 
 layout:
   - header Header
+  - block[] Unsized block   # XXX should be parsed until we reach EOF
 `
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
 	assert.Equal(t, nil, err)
@@ -599,9 +597,25 @@ layout:
 				{
 					Label: "Header",
 					Fields: []Field{
-						{Offset: 0x0, Length: 0x1, Value: []uint8{0x02}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Size"}},
-						//{Offset: 0x1, Length: 0x1, Value: []uint8{0xaa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "HighSet"}},
+						{Offset: 0x0, Length: 0x1, Value: []uint8{0x02}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "ID"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
-				}}}, fl)
+				},
+
+				{
+					Label: "Unsized block[0]",
+					Fields: []Field{
+						{Offset: 0x1, Length: 0x1, Value: []uint8{0x80}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x2, Length: 0x1, Value: []uint8{0x81}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
+					},
+				},
+
+				{
+					Label: "Unsized block[1]",
+					Fields: []Field{
+						{Offset: 0x3, Length: 0x1, Value: []uint8{0x90}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x4, Length: 0x1, Value: []uint8{0x91}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
+					},
+				},
+			},
+			offset: 0x5, size: 0x5}, fl)
 }
-*/
