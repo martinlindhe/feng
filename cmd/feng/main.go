@@ -5,22 +5,23 @@ import (
 	"log"
 	"os"
 
-	"gopkg.in/alecthomas/kingpin.v2"
-
+	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng/mapper"
 	"github.com/martinlindhe/feng/template"
 )
 
-var (
-	filename     = kingpin.Arg("filename", "Input file.").Required().String()
-	templateName = kingpin.Flag("template", "Enforce specific template.").Required().String()
-)
+var args struct {
+	Filename string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
+	Template string `kong:"required"  type:"existingfile" help:"Enforce specific template." placeholder:"FILE"`
+}
 
 func main() {
 
-	kingpin.Parse()
+	_ = kong.Parse(&args,
+		kong.Name("feng"),
+		kong.Description("A binary template reader and data presenter."))
 
-	templateData, err := ioutil.ReadFile(*templateName)
+	templateData, err := ioutil.ReadFile(args.Template)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	r, err := os.Open(*filename)
+	r, err := os.Open(args.Filename)
 	if err != nil {
 		log.Fatal(err)
 	}

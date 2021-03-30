@@ -6,7 +6,6 @@ import (
 	"math/bits"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/martinlindhe/feng/value"
 	"gopkg.in/yaml.v2"
 )
@@ -210,7 +209,7 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 			default:
 				pattern, err := value.ParseDataPattern(val)
 				if err != nil {
-					spew.Dump(field)
+					log.Printf("%#v", field)
 					log.Fatalf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
 					return es, err
 				}

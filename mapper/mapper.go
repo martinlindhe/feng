@@ -8,7 +8,6 @@ import (
 	"log"
 	"regexp"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
 )
@@ -243,7 +242,7 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 				log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
 			}
 
-			spew.Dump(customStruct)
+			log.Printf("%#v", customStruct)
 
 			log.Printf("unhandled field '%#v'", es.Field)
 			return fmt.Errorf("unhandled field kind '%s'", es.Field.Kind)
