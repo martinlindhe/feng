@@ -34,7 +34,7 @@ structs:
     u8 Field:
       bit b1000_0000: High bit
     if self.Number in (5):
-      u8[FILE_SIZE-self.offset] Extra: ??
+      u8[FILE_SIZE-self.offset] Extra: ??   # refers to current field offset
 
 layout:
   - header Header
@@ -45,8 +45,14 @@ layout:
 	assert.Equal(t, nil, err)
 
 	data := []byte{
-		0x04, 0xff, // Header
-		0x05, 0x00, 0xbb, 0xaa, // Header2
+		// Header
+		0x04, // Number
+		0xff, // Field
+
+		// Header2
+		0x05,       // Number
+		0x00,       // Field
+		0xbb, 0xaa, // Extra
 	}
 
 	fl, err := MapReader(bytes.NewReader(data), ds)
@@ -82,6 +88,82 @@ layout:
 	_, val, err = fl.GetValue("self.Extra", &ds.Layout[1])
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{0xbb, 0xaa}, val)
+
+}
+
+func TestGetFieldOffset(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    u8[2] Number: ??
+    u8 ID: ??
+    u8[self.ID.offset] Padding: ??          # refers to a previous field
+
+layout:
+  - header Header
+`
+
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		// Header
+		0x04, 0x05, // Number
+		0x07,       // ID
+		0xff, 0xfe, // Padding
+
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	// Header
+	_, val, err := fl.GetValue("Header.Number", &ds.Layout[0])
+	assert.Equal(t, nil, err)
+	assert.Equal(t, []byte{0x04, 0x05}, val)
+
+	_, val, err = fl.GetValue("self.Padding", &ds.Layout[0])
+	assert.Equal(t, nil, err)
+	assert.Equal(t, []byte{0xff, 0xfe}, val)
+}
+
+func TestGetFieldLen(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    u8[3] Number: ??
+    u8[self.Number.len] Pad1: ??                        # refers to a previous field
+    u8[self.Pad1.offset - self.Pad1.len + 1] Pad2: ??   # expression with multiple variables    3 - 3 + 1 = 1
+
+layout:
+  - header Header
+`
+
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		// Header
+		0x04, 0x05, 0x06, // Number
+		0xff, 0xfe, 0xfd, // Pad1
+		0xaa, // Pad2
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	// Header
+	_, val, err := fl.GetValue("Header.Number", &ds.Layout[0])
+	assert.Equal(t, nil, err)
+	assert.Equal(t, []byte{0x04, 0x05, 0x06}, val)
+
+	_, val, err = fl.GetValue("self.Pad1", &ds.Layout[0])
+	assert.Equal(t, nil, err)
+	assert.Equal(t, []byte{0xff, 0xfe, 0xfd}, val)
+
+	_, val, err = fl.GetValue("self.Pad2", &ds.Layout[0])
+	assert.Equal(t, nil, err)
+	assert.Equal(t, []byte{0xaa}, val)
 }
 
 func TestDataFieldPresentType(t *testing.T) {

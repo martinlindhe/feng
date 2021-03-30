@@ -1,8 +1,6 @@
 # directives
 
-
     data: invalid       invalidates the file
-    data: eos           marks end of stream (for slices)    TODO
 
     endian: big         big/little. set endian
 
@@ -11,7 +9,8 @@
 
     FILE_SIZE           the file size in bytes
 
-    self.offset         current offset                  TODO
+    field.offset        field offset
+    field.len           field length
 
 
 # data types
@@ -25,6 +24,10 @@
 
     u32[4]
     u8[FILE_SIZE-10]
+
+
+# slices
+    chunk[]
 
 
 # tricks

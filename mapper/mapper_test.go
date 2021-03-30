@@ -310,7 +310,7 @@ structs:
   header:
     u8 Field:
       bit b0000_0011: Size
-    u8[1 << (self.Field.Size)] Data: ??
+    u8[1 << self.Field.Size] Data: ??
 
 layout:
   - header Header
@@ -336,7 +336,7 @@ layout:
 				{Label: "Header",
 					Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"}, MatchedPatterns: []value.MatchedPattern{{Label: "Size", Operation: "bit", Value: 0x3}}},
-						{Offset: 0x1, Length: 0x8, Value: []uint8{0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7}, Endian: "", Format: value.DataField{Kind: "u8", Range: "1 << 3", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x1, Length: 0x8, Value: []uint8{0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7}, Endian: "", Format: value.DataField{Kind: "u8", Range: "1 <<3", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 				}}, offset: 0x9, size: 9}, fl)
 }

@@ -50,7 +50,7 @@ type Field struct {
 }
 
 var (
-	variableExpressionRE = regexp.MustCompile(`\(([\w .]+)\)`)
+	variableExpressionRE = regexp.MustCompile(`([\w .]+)`)
 
 	red = color.New(color.FgRed).SprintfFunc()
 )
@@ -99,16 +99,19 @@ func (fl *FileLayout) Present() {
 
 	if fl.offset < fl.size {
 		unmapped := fl.size - fl.offset
-		fmt.Println(red("  [%06x] %04x (%d) unmapped trailing bytes", fl.offset, unmapped, unmapped))
+		fmt.Println(red("  [%06x] 0x%04x (%d) unmapped trailing bytes", fl.offset, unmapped, unmapped))
 	} else {
 		fmt.Println("EOF")
 	}
 }
 
 func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
+	if DEBUG {
+		log.Printf("GetStruct: searching for %s", name)
+	}
 	for _, str := range fl.Structs {
 		if DEBUG {
-			log.Printf("GetStruct: searching struct %s (%d fields)", str.Label, len(str.Fields))
+			//log.Printf("GetStruct: searching struct %s (%d fields)", str.Label, len(str.Fields))
 		}
 		if str.Label == name {
 			return &str, nil
@@ -124,7 +127,7 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 	s = strings.Replace(s, "self.", df.Label+".", 1)
 
 	if DEBUG {
-		log.Printf("GetValue: searching for %s", s)
+		log.Printf("GetValue: searching for '%s'", s)
 	}
 
 	parts := strings.SplitN(s, ".", 3)
@@ -145,9 +148,18 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 
 	for _, field := range str.Fields {
 		if DEBUG {
-			log.Printf("comparing field %s to %s", field.Format.Label, fieldName)
+			//log.Printf("comparing field %s to %s", field.Format.Label, fieldName)
 		}
 		if field.Format.Label == fieldName {
+			switch childName {
+			case "offset":
+				val := value.U64toBytesBigEndian(field.Offset, 8)
+				return "u64", val, nil
+			case "len":
+				val := value.U64toBytesBigEndian(field.Length, 8)
+				return "u64", val, nil
+			}
+
 			if !field.Format.IsSimpleUnit() || childName == "" {
 				return field.Format.Kind, field.Value, nil
 			}
@@ -175,7 +187,6 @@ func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
 	if df.Range != "" {
 		var err error
 		r := df.Range
-		r = strings.Replace(r, "FILE_SIZE", fmt.Sprintf("%d", fl.size), 1)
 		rangeLength, err = value.EvaluateExpression(r)
 		if err != nil {
 			log.Fatal(err)
@@ -203,10 +214,7 @@ func (fl *FileLayout) PresentType(df *value.DataField) string {
 func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, error) {
 
 	s = strings.Replace(s, "self.offset", fmt.Sprintf("%d", fl.offset), 1)
-
-	if !strings.Contains(s, "(") && !strings.Contains(s, ")") {
-		s = "(" + s + ")"
-	}
+	s = strings.Replace(s, "FILE_SIZE", fmt.Sprintf("%d", fl.size), 1)
 
 	if DEBUG {
 		log.Printf("ExpandVariables: %s", s)
@@ -233,7 +241,7 @@ func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, err
 	if DEBUG {
 		log.Printf("expandVariable: %s", s)
 	}
-	matches := variableExpressionRE.FindStringSubmatch(s)
+	matches := variableExpressionRE.FindAllStringSubmatch(s, -1)
 	if len(matches) == 0 {
 		if DEBUG {
 			log.Printf("expandVariable: NO MATCH")
@@ -241,27 +249,30 @@ func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, err
 		return s, nil
 	}
 
-	idx := variableExpressionRE.FindStringSubmatchIndex(s)
+	indexes := variableExpressionRE.FindAllStringSubmatchIndex(s, -1)
 
-	key := matches[1]
+	for idx, match := range matches {
 
-	// don't resolve if integer-like
-	if isIntegerString(key) {
-		return s[0:idx[0]] + key + s[idx[1]:], nil
+		key := strings.TrimSpace(match[0])
+		if key == "" || isIntegerString(key) {
+			continue
+		}
+
+		kind, val, err := fl.GetValue(key, df)
+		if err != nil {
+			return "", err
+		}
+
+		if DEBUG {
+			log.Printf("expandVariable: MATCHED %s to %s %v", key, kind, val)
+		}
+
+		i := value.AsUint64(kind, val)
+
+		return s[0:indexes[idx][0]] + fmt.Sprintf("%d", i) + s[indexes[idx][1]:], nil
 	}
 
-	kind, val, err := fl.GetValue(key, df)
-	if err != nil {
-		return "", err
-	}
-
-	if DEBUG {
-		log.Printf("ExpandVariables: MATCHED %s to %s %v", key, kind, val)
-	}
-
-	i := value.AsUint64(kind, val)
-
-	return s[0:idx[0]] + fmt.Sprintf("%d", i) + s[idx[1]:], nil
+	return s, nil
 }
 
 // returns true if string represents an integer

@@ -1,4 +1,9 @@
-# STATUS: 50%
+# STATUS: 60% (most files parse fully. PLTE chunk is broken! - 2021-03-30)
+
+# - HI: decode "PLTE" chunk (need to allow custom type "rgb")
+# - HI: decode "vpAg" chunk (need docs)
+
+# - HI: decode utf8 text in iTXt
 
 # - LOW: crc32 data type
 
@@ -15,10 +20,27 @@ mime: image/png
 
 constants:
   ascii[4] IDAT: c'IDAT'
+  ascii[4] PLTE: c'PLTE'
   ascii[4] IEND: c'IEND'
   ascii[4] sBIT: c'sBIT'
   ascii[4] sRGB: c'sRGB'
   ascii[4] pHYs: c'pHYs'
+  ascii[4] tEXt: c'tEXt'
+  ascii[4] zTXt: c'zTXt'
+  ascii[4] iTXt: c'iTXt'
+  ascii[4] iCCP: c'iCCP'
+  ascii[4] tIME: c'tIME'
+  ascii[4] bKGD: c'bKGD'
+  ascii[4] cHRM: c'cHRM'
+  ascii[4] gAMA: c'gAMA'
+
+  ascii[4] iDOT: c'iDOT'                  # non-registered chunk used by Apple
+
+types:
+  rgb:
+    u8 Red: ??
+    u8 Green: ??
+    u8 Blue: ??
 
 structs:
   header:
@@ -58,25 +80,24 @@ structs:
     if self.Type in (IDAT):
       u8[self.Length] Image data: ??
 
+    if self.Type in (PLTE):
+      rgb[self.Length / 3] Palette: ??      # XXX chunk Length 768 = 256 palette values (R, G, B)   need to use custom type "rgb"
+
     if self.Type in (sBIT):
-      if IHDR.Color type.grayscale:
-        u8 significant bits grayscale: ??
-      if IHDR.Color type.RGB:
-        u8 significant bits red: ??
-        u8 significant bits green: ??
-        u8 significant bits blue: ??
-      if IHDR.Color type.palette:
-        u8 significant bits red: ??
-        u8 significant bits green: ??
-        u8 significant bits blue: ??
-      if IHDR.Color type.grayscale+alpha:
-        u8 significant bits grayscale: ??
-        u8 significant bits alpha: ??
-      if IHDR.Color type.RGBA:
-        u8 significant bits red: ??
-        u8 significant bits green: ??
-        u8 significant bits blue: ??
-        u8 significant bits alpha: ??
+      if IHDR.Color type in (0): # grayscale
+        u8 Significant bits grayscale: ??
+      if IHDR.Color type in (2,3): # RGB or palette
+        u8 Significant bits red: ??
+        u8 Significant bits green: ??
+        u8 Significant bits blue: ??
+      if IHDR.Color type in (4):  # grayscale+alpha
+        u8 Significant bits grayscale: ??
+        u8 Significant bits alpha: ??
+      if IHDR.Color type in (6):  # RGBA
+        u8 Significant bits red: ??
+        u8 Significant bits green: ??
+        u8 Significant bits blue: ??
+        u8 Significant bits alpha: ??
 
     if self.Type in (sRGB):
       u8 Rendering intent:
@@ -92,8 +113,82 @@ structs:
         eq 00: Unknown
         eq 01: Meter
 
+    if self.Type in (tEXt):
+      asciiz Keyword: ??
+      ascii[self.Length - self.Keyword.len] Text: ??
+
+    if self.Type in (zTXt):
+      asciiz Keyword: ??
+      u8 Compression method:
+        eq 00: Deflate
+        default: invalid
+      u8[self.Length - (self.offset - self.Keyword.offset)] Compressed text: ??            # XXX mark as deflate for decompression
+
+    if self.Type in (iTXt):
+      asciiz Keyword: ??
+      u8 Compression flag:
+        eq 00: Uncompressed
+        eq 01: Compressed
+      u8 Compression method:
+        eq 00: Deflate
+        default: invalid
+      asciiz Language tag: ??
+      asciiz Translated keyword: ??
+      ascii[self.Length - (self.offset - self.Keyword.offset)] Text: ?? # XXX is UTF-8 encoded, not ascii !!!
+
+    if self.Type in (iCCP):
+      asciiz Profile name: ??
+      u8 Compression method:
+        eq 00: Deflate
+        default: invalid
+      u8[self.Length - (self.offset - self.Profile name.offset)] Compressed profile: ??   # XXX mark as deflate for decompression
+
+    if self.Type in (tIME):
+      # time in UTC
+      u16 Year: ??
+      u8 Month: ??
+      u8 Day: ??
+      u8 Hour: ??
+      u8 Minute: ??
+      u8 Second: ??
+
+    if self.Type in (bKGD):
+      if IHDR.Color type in(3):             # indexed
+        u8 Palette index: ??
+
+      if IHDR.Color type in (0,4):          # grayscale or grayscale+alpha
+        u16 Gray: ??
+
+      if IHDR.Color type in (2,6):          # RGB or RGBA
+        u16 Red: ??
+        u16 Green: ??
+        u16 Blue: ??
+
+    if self.Type in (cHRM):
+      u32 White Point x: ??
+      u32 White Point y: ??
+      u32 Red x: ??
+      u32 Red y: ??
+      u32 Green x: ??
+      u32 Green y: ??
+      u32 Blue x: ??
+      u32 Blue y: ??
+
+    if self.Type in (gAMA):
+      u32 Gamma: ??
+
+    if self.Type in (iDOT):
+      # NOTE: based on guesses from https://www.hackerfactor.com/blog/index.php?/archives/895-Connecting-the-iDOTs.html
+      u32 Height divisor: ??
+      u32 Unknown: ??           # always 0 ?
+      u32 Divided height: ??
+      u32 Unknown: ??   # XXX always 0x40 ?
+      u32 First half height: ??
+      u32 Second half height: ??
+      u32 IDAT restart offset: ??
+
     # UNKNOWN CHUNK TYPE
-    if self.Type notin (IDAT, sBIT, sRGB, pHYs):
+    if self.Type notin (IDAT, PLTE, sBIT, sRGB, pHYs, tEXt, zTXt, iTXt, iCCP, tIME, bKGD, cHRM, gAMA, iDOT):
       u8[self.Length] Chunk data: ??
 
     #crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field

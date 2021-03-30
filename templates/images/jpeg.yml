@@ -1,4 +1,7 @@
 # STATUS: 1%
+
+# - HI: figure out how to decode image data stream (between SOI and EOI markers)
+
 # - HI: file is a stream of packets with different signature. parse until EOF
 
 references:
@@ -18,6 +21,7 @@ constants:
 
   u8[2] M_APP0: ff e0
   u8[2] M_APP1: ff e1
+  u8[2] M_COMM: ff fe
 
 structs:
   header:
@@ -28,13 +32,13 @@ structs:
     u8[2] Signature: ??
     u16 Length: ??  # length of segment excluding APP0 marker
 
-    if Signature == M_APP0:
+    if self.Signature in (M_APP0):
       ascii[5] Identifier: ??
 
-      if ! Identifier in[JFIF_APP0,JFXX_APP0]:
+      if self.Identifier notin (JFIF_APP0, JFXX_APP0):
         u8[Length] Unknown data: ?? # XXX verify this Length
 
-      if Identifier == JFIF_APP0:
+      if self.Identifier in (JFIF_APP0):
         u8 Major version: ??
         u8 Minor version: ??
         u8 Density units:
@@ -46,24 +50,44 @@ structs:
         u8 Xthumbnail: ??
         u8 Ythumbnail: ??
         if Xthumbnail != 0 && Ythumbnail != 0: # XXX ?! if form ...
-          rgb8[Xthumbnail*Ythumbnail*3] Thumbnail data: ?? # XXX 8 bit per channel rgb: R, G, B bytes
+          rgb8[Xthumbnail * Ythumbnail * 3] Thumbnail data: ?? # XXX 8 bit per channel rgb: R, G, B bytes
 
-      if Identifier == JFXX_APP0:
+      if self.Identifier in (JFXX_APP0):
         u8 Thumbnail format:
           eq 10: JPEG format
           eq 11: 1bpp palettized format
           eq 13: 3bpp RGB format
         u8[10] Thumbnail data: ?? # XXX size depends on Thumbnail format, see tagApp0 in https://www.sweetscape.com/010editor/repository/files/JPG.bt
 
-      if Signature == M_APP1:
-        ascii[6] EXIF: c'Exif' 00 00 # XXX
-        ascii[2] Align: ??
-        if Align == c'II':
-          endian: little      # XXX what is big endian marker?
-        u16 tagMark: ??
-        u32 offsetFirstID: ?? # XXX
-        # XXX WHAT FOLLOWS IS A LIST OF SECTIONS ...
+    if self.Signature in (M_APP1):
+      ascii[6] EXIF: c'Exif' 00 00 # XXX
+      ascii[2] Align: ??
+      if Align in (c'II'):
+        endian: little      # XXX what is big endian marker?
+      u16 tagMark: ??
+      u32 offsetFirstID: ?? # XXX
+      # XXX WHAT FOLLOWS IS A LIST OF SECTIONS ...
+
+    if self.Signature in (M_COMM):
+      ascii[self.Length - 2] Comment: ??
+
+    if self.Signature notin (M_APP0, M_APP1, M_COMM):
+      u8[self.Length - 2] Data: ??
 
 layout:
   - header Header
-  - segment[] Segment
+
+  # XXX for jpeg_001.jpg
+  - segment APP0
+  - segment COMMENT
+  - segment DQT0
+  - segment DQT1
+  - segment SOFx sof2
+  - segment DHT0
+  - segment DHT1
+  - segment SOS     # XXX SOS holds image data after that segment, all data is between SOI and EOI markers
+
+
+
+  # XXX slices
+  #- segment[] Segment

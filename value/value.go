@@ -254,6 +254,9 @@ func EvaluateExpression(s string) (uint64, error) {
 
 	switch v := result.(type) {
 	case int:
+		if DEBUG {
+			log.Printf("EvaluateExpression: %s => %d", s, v)
+		}
 		return uint64(v), nil
 	}
 	return 0, fmt.Errorf("unhandled result type %T", result)

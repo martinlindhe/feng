@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	DEBUG = false
+	DEBUG = true
 )
 
 var (
@@ -57,7 +57,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 					if err == io.EOF {
 						break
 					}
-					return nil, err
+					return &fileLayout, err
 				}
 				df.Label = baseLabel
 			}
@@ -79,7 +79,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			for i := uint64(0); i < parsedRange; i++ {
 				df.Label = fmt.Sprintf("%s[%d]", baseLabel, i)
 				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
-					return nil, err
+					return &fileLayout, err
 				}
 				df.Label = baseLabel
 			}
@@ -87,7 +87,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		}
 
 		if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
-			return nil, err
+			return &fileLayout, err
 		}
 	}
 

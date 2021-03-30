@@ -1,10 +1,9 @@
 # STATUS: 5%
 
-# - HI: section[] slice syntax
-
 # - HI: "data_sub_block[] Image data: ??" with custom type and "data: eos" marker to end slice stream
-
 # - MID: need to use custom "rgb" type as defined
+
+# - DONE(CONFIRM!!!): section[] slice syntax (untested on GIF)
 
 references:
   - https://www.w3.org/Graphics/GIF/spec-gif89a.txt
@@ -38,7 +37,7 @@ types:
     u8 Size: ??
     u8[self.Size] Image data: ??
     if self.Size in (0):
-      data: eos  # XXX marks end of stream
+      data: eos  # FIXME TODO - XXX marks end of stream
 
 structs:
   header:
@@ -60,8 +59,8 @@ structs:
     u8 Aspect ratio: ??
 
     if self.Screen descriptor.Global Color Table present in (1):
-      u8[3 * (2 << (self.Screen descriptor.Global Color Table size))] Global Color Table: ??   # FIXME use rgb type
-      #rgb[2 << (Screen descriptor.Global Color Table size)] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
+      u8[3 * (2 << self.Screen descriptor.Global Color Table size)] Global Color Table: ??   # FIXME use rgb type
+      #rgb[2 << Screen descriptor.Global Color Table size] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
 
   section:
     u8 Block type: ??
@@ -95,7 +94,7 @@ structs:
       u8 LZWMinimumCodeSize: ??   # XXX meaning?
 
       # XXX series of data blocks. last block is one with Size==0
-      data_sub_block[] Image data: ??
+      #data_sub_block[] Image data: ??
 
 
 layout:
