@@ -55,6 +55,10 @@ var (
 	red = color.New(color.FgRed).SprintfFunc()
 )
 
+const (
+	maxHexDisplayLength = 0x20
+)
+
 // decodes simple value types for presentation
 func (fl *FileLayout) PresentField(field *Field) string {
 	kind := fl.PresentType(&field.Format)
@@ -68,8 +72,15 @@ func (fl *FileLayout) PresentField(field *Field) string {
 
 	fieldValue := value.Present(field.Format, field.Value)
 
+	hexValue := ""
+	if len(field.Value) <= maxHexDisplayLength {
+		hexValue = fmt.Sprintf("% 02x", field.Value)
+	} else {
+		hexValue = fmt.Sprintf("% 02x ...", field.Value[0:maxHexDisplayLength])
+	}
+
 	res := fmt.Sprintf("  [%06x] %-30s %-13s %-21s %-20s\n",
-		field.Offset, field.Format.Label, kind, fieldValue, fmt.Sprintf("% 02x", field.Value))
+		field.Offset, field.Format.Label, kind, fieldValue, hexValue)
 
 	for _, child := range field.MatchedPatterns {
 		res += fmt.Sprintf("           - %-28s %-13s %d\n", child.Label, child.Operation, child.Value)
