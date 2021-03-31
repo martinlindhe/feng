@@ -28,7 +28,7 @@ func init() {
 // produces a list of fields with offsets and sizes from input reader based on data structure
 func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
-	fileLayout := FileLayout{}
+	fileLayout := FileLayout{endian: ds.Endian}
 
 	// read all data to get the total length
 	b, _ := ioutil.ReadAll(r)

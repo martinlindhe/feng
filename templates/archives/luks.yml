@@ -9,6 +9,7 @@ references:
 kind: archive   # XXX or "disk image" or "file system image" ?
 #extensions: [.xxx]
 #mime: xxx
+endian: little  # XXX
 
 structs:
   header:

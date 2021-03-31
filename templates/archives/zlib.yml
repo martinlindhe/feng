@@ -10,7 +10,6 @@ references:
 kind: archive
 extensions: [.zlib]
 mime: application/zlib
-
 endian: little # XXX ???
 
 structs:

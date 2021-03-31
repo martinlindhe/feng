@@ -28,6 +28,12 @@ type Template struct {
 	// mime type
 	Mime string
 
+	// descriptive file format name
+	Name string
+
+	// endianness (big, little), can be overridden in a struct declaration
+	Endian string
+
 	// constants
 	Constants []yaml.MapItem
 

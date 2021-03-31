@@ -13,10 +13,10 @@ references:
 kind: image
 extensions: [.pcx]
 mime: image/x-pcx
+endian: little
 
 structs:
   header:
-    endian: little
     u8 Signature: 0a
     u8 Version:
       eq 00: PC Paintbrush 2.5 + fixed EGA palette

@@ -8,10 +8,10 @@ references:
 kind: archive
 extensions: [.xz]
 mime: application/x-xz
+endian: big # XXX
 
 structs:
   header:
-    endian: big # XXX !`?
     # stream header. valid xz contains 1 or more streams with header+data
     u8[6] Signature: FD c'7zXZ' 00
     u16 Stream flags:

@@ -1,26 +1,29 @@
-# STATUS: 2%
+# STATUS: 30%
 
-# - HI: need u32[sized] array     - GENERIC datatype[sized] form !!!???
-
-# - HI: allow custom type in struct for DDS_PIXELFORMAT
+# - HI: need DX10 sample
+# - LOW: declare custom type for DDS_PIXELFORMAT
 
 references:
   - https://en.wikipedia.org/wiki/DirectDraw_Surface
+  - http://fileformats.archiveteam.org/wiki/DirectDraw_Surface
+  - https://docs.microsoft.com/en-us/windows/win32/direct3ddds/dx-graphics-dds-reference
   - https://docs.microsoft.com/en-us/windows/win32/direct3ddds/dx-graphics-dds-pguide
   - https://www.sweetscape.com/010editor/repository/files/DDS.bt
+  - https://github.com/PistonDevelopers/ddsfile
 
 kind: image
+name: DirectDraw Surface
 extensions: [.dds]
 mime: image/vnd-ms.dds
+endian: little
 
 structs:
   header:
-    endian: little
     ascii[4] Signature: c'DDS '
 
     # header
-    u32 Header size: 0000007c
-    u32 Header flags:
+    u32 Size: 0000007c
+    u32 Flags:
       bit b00000000_00000000_00000000_00000001: DDSD_CAPS
       bit b00000000_00000000_00000000_00000010: DDSD_HEIGHT
       bit b00000000_00000000_00000000_00000100: DDSD_WIDTH
@@ -37,7 +40,7 @@ structs:
     u32 MipMapCount: ??
     u32[11] Reserved1: ??
 
-    if self.Header flags.DDSD_PIXELFORMAT:
+    if self.Flags.DDSD_PIXELFORMAT:
       # XXX this is type DDS_PIXELFORMAT:
       u32 Pixel format size: ??           # XXX always 32 bytes?
       u32 Pixel format flags:
@@ -48,7 +51,7 @@ structs:
         bit b00000000_00000000_00000010_00000000: DDPF_YUV
         bit b00000000_00000010_00000000_00000000: DDPF_LUMINANCE
 
-      ascii[4] Pixel format FourCC: ??    # "DXT1"
+      ascii[4] Pixel format FourCC: ??    # "DXT1"       # XXX if "DX10", then DirectX10 header follows normal header
       u32 Pixel format GBBitCount: ??
       u32 Pixel format RBitMask: ??
       u32 Pixel format GBitMask: ??
@@ -61,5 +64,8 @@ structs:
     u32 Caps4: ??
     u32 Reserved2: ??
 
+    # opaque image data
+    u8[FILE_SIZE - DDS_HEADER.Size - 4] Image data: ??
+
 layout:
-  - header Header
+  - header DDS_HEADER

@@ -9,7 +9,6 @@ references:
 kind: archive
 extensions: [.a, .lib, .ar, .deb]
 mime: application/x-archive
-
 endian: big  # XXX
 
 structs:

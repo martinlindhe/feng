@@ -10,6 +10,7 @@ references:
 kind: archive
 extensions: [.tar]
 mime: application/x-tar
+# NOTE: endian-neutral format
 
 # NOTE format only uses byte streams and numbers encoded as octal ascii in them
 # TODO: could specify 2 details on a data field: meaning (uint32,crc32), encoding (ascii+octal)

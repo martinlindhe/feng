@@ -11,10 +11,10 @@ references:
 kind: archive
 extensions: [.rar, .r00, .r01]
 mime: application/vnd.rar
+endian: little
 
 structs:
   header:
-    endian: little
     ascii[6] Signature: c'Rar!' 1a 07
     u8 Header version:
       eq 00: Classic

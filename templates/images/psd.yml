@@ -8,10 +8,10 @@ references:
 kind: image
 extensions: [.psd]
 mime: image/vnd.adobe.photoshop
+endian: big
 
 structs:
   header:
-    endian: big
     ascii[4] Signature: c'8BPS'
     u16 Version: ??       # XXX version 2 is "big" format, larger fields?
     u8[6] Reserved: ??

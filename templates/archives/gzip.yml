@@ -17,10 +17,10 @@ references:
 kind: archive
 extensions: [.gz, .tgz]
 mime: application/gzip
+endian: little
 
 structs:
   header:
-    endian: little
     u8[2] Signature: 1f 8b
     u8 Compression method:            # NOTE: only deflate is in active use
       eq 00: Stored

@@ -13,10 +13,10 @@ references:
 kind: archive
 extensions: [.zip]
 mime: application/zip
+endian: little
 
 structs:
   header:
-    endian: little
     u8[4] Signature: c'PK' 03 04
     u16 Version needed to extract: ??
     u16 General purpose bit flag: ??

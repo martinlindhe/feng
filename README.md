@@ -133,3 +133,11 @@ https://davidkoloski.me/blog/rkyv-is-faster-than/
 # RESOURCES
 
 http://fileformats.archiveteam.org/wiki/File_Formats
+https://www.fileformat.info/
+
+https://github.com/kaitai-io/kaitai_struct_formats
+
+
+# SAMPLES
+
+https://telparia.com/fileFormatSamples/

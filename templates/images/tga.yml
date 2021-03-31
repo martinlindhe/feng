@@ -11,11 +11,11 @@ references:
 kind: image
 extensions: [.tga]
 mime: image/x-tga
+endian: little
 
 structs:
   header:
-    endian: little
-    u8 ID length: ??
+u8 ID length: ??
     u8 Color map:
       eq 00: No color map
       eq 01: Present

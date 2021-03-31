@@ -15,6 +15,7 @@ references:
 kind: image
 extensions: [.gif]
 mime: image/gif
+endian: little
 
 constants:
   u8 BLOCK_IMAGE:     "2c"
@@ -41,7 +42,6 @@ types:
 
 structs:
   header:
-    endian: little
     ascii[4] Signature 1: c'GIF8'
     ascii Version:
       eq c'7': GIF87a

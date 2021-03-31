@@ -17,6 +17,7 @@ references:
 kind: image
 extensions: [.png]
 mime: image/png
+endian: big
 
 constants:
   ascii[4] IDAT: c'IDAT'
@@ -44,7 +45,6 @@ types:
 
 structs:
   header:
-    endian: big
     u8[8] Signature: 89 c'PNG' 0d 0a 1a 0a
 
   ihdr:

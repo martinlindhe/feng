@@ -10,10 +10,10 @@ references:
 kind: archive
 extensions: [.xar,.pkg,.xip]
 mime: application/x-xar
+endian: big
 
 structs:
   header:
-    endian: big
     ascii[4] Signature: c'xar!'
     u16 Header size: ??
     u16 Version: ??                       # NOTE: only version 01 is known

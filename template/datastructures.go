@@ -19,6 +19,9 @@ type DataStructure struct {
 	structs []evaluatedStruct
 
 	Layout []value.DataField
+
+	// endian
+	Endian string
 }
 
 func UnmarshalTemplateIntoDataStructure(b []byte) (*DataStructure, error) {
@@ -55,7 +58,7 @@ func NewDataStructureFrom(template *Template) (*DataStructure, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &DataStructure{constants, structs, layout}, nil
+	return &DataStructure{constants, structs, layout, template.Endian}, nil
 }
 
 // looks up layout name from sections

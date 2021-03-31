@@ -10,6 +10,7 @@ references:
 kind: archive
 extensions: [.7z]
 mime: application/x-7z-compressed
+endian: little
 
 types:
   # XXX impl!!!
@@ -25,7 +26,6 @@ types:
 
 structs:
   header:
-    endian: little
     # SignatureHeader
     u8[6] Signature: c'7z' bc af 27 1c
 

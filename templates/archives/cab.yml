@@ -16,10 +16,10 @@ references:
 kind: archive
 extensions: [.cab]
 mime: application/vnd.ms-cab-compressed
+endian: little
 
 structs:
   header:
-    endian: little
     ascii[4] Signature: c'MSCF'
     u32 Reserved 1: 00 00 00 00
     u32 File size: ??

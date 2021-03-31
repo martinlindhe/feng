@@ -1,20 +1,23 @@
 # STATUS: 10%
 
 # - HI: map image data at end of the file from offsets and length in ICONDIRENTRY
+# - HI: map icon palette... !!!
 
+# - MID: allow to append text to current section label with special directive
+# - MID: offer special template %INDEX% to decorate label!
 
 references:
   - https://en.wikipedia.org/wiki/ICO_(file_format)
-  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_ico.go
   - https://www.sweetscape.com/010editor/repository/files/ICO.bt
 
 kind: image
+name: Microsoft Windows icon and cursor files
 extensions: [.ico, .cur]
 mime: image/x-icon
+endian: little
 
 structs:
-  ICONDIR:
-    endian: little
+  icon_dir:
     u16 Reserved: 00 00
     u16 Type:
       eq 0001: Icon
@@ -22,27 +25,27 @@ structs:
       default: invalid
     u16 Resources: ??             # number of image resources in file
 
-  ICONDIRENTRY:
+  icon_dir_entry:
     u8 Width: ??
     u8 Height: ??
     u8 Palette colors: ??         # 0 = doesn't use palette
-    u8 Reserved: ??               # should be 0
+    u8 Reserved: ??
 
-    if IconDir.Type.Icon:
-      u16 Color planes: ??        # should be 0 or 1
+    if ICONDIR.Type.Icon:
+      u16 Color planes: ??
       u16 Bits per pixel: ??
-    if IconDir.Type.Cursor:
+    if ICONDIR.Type.Cursor:
       u16 Horizontal hotspot: ??
       u16 Vertical hotspot: ??
 
-    u32 Image data size: ??
-    u32 Image data offset: ??     # XXX from beginning of file
+    u32 Data size: ??
+    u32 Data offset: ??     # XXX from beginning of file
 
-    # NOTE: offset points to an area after all of the ICONDIRENTRYs
+    # NOTE: offset points to an area after all of the ICONDIRENTRY:s
 
-    # XXX could be BMP without header or full PNG
-    #u8[Image data offset:Image data offset+Image data size] Image data: ??
+    # XXX need syntax START_OFFSET:LENGTH since data is not sequential
+    #u8[self.Data offset:self.Data size] Image data: ??
 
 layout:
-  - ICONDIR IconDir
-  - ICONDIRENTRY[IconDir.Resources] Resource
+  - icon_dir ICONDIR
+  - icon_dir_entry[ICONDIR.Resources] ICONDIRENTRY

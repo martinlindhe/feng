@@ -1,4 +1,4 @@
-# STATUS: 60% (all samples maps 100%)
+# STATUS: 60%
 #
 # IMPORTANT: This implements the Windows bitmap format. OS/2 variants is IGNORED (OS22XBITMAPHEADER etc should be implemented in a separate file)
 #
@@ -12,11 +12,12 @@ references:
   - https://github.com/synalysis/Grammars/blob/master/bitmap.grammar
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/BMP.tcl
   - https://www.sweetscape.com/010editor/repository/files/BMP.bt
-  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_bmp.go
 
 kind: image
+name: Microsoft Windows Bitmap
 extensions: [.bmp]
 mime: image/bmp
+endian: little
 
 constants:
   u32 WIN2XBITMAPHEADER: "0000000c"  # V2 (Windows 2.x)
@@ -26,7 +27,6 @@ constants:
 
 structs:
   file_header:
-    endian: little
     ascii[2] Signature: c'BM'
     u32 File size: ??
     u32 Reserved: ??
@@ -47,7 +47,7 @@ structs:
       u16 Color planes: ??
       u16 Bits per pixel: ??
 
-    # V3 (WIN3XBITMAPHEADER)  aka BITMAPINFOHEADER, used by V3, V4, V5
+    # V3 (WIN3XBITMAPHEADER) aka BITMAPINFOHEADER, used by V3, V4, V5
     if self.Header size in (WIN3XBITMAPHEADER, WIN4XBITMAPHEADER, BITMAPV5HEADER):
       u32 Width: ??             # XXX signed integer
       u32 Height: ??            # XXX signed integer
