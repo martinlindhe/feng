@@ -291,7 +291,7 @@ layout:
 				0x03, // invalid field
 			},
 			nil,
-			fmt.Errorf("value 00000003 for Field is not valid"),
+			fmt.Errorf("value 00000003 (3) for Field is not valid"),
 		},
 	}
 

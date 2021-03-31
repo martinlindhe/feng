@@ -141,7 +141,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 	}
 	if invalidIfNoMatch && len(res) == 0 {
 		// if we don't find any patterns, return error
-		return nil, fmt.Errorf("value %08x for %s is not valid", actual, es.Field.Label)
+		return nil, fmt.Errorf("value %08x (%d) for %s is not valid", actual, actual, es.Field.Label)
 	}
 	return res, nil
 }

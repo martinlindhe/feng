@@ -2,15 +2,24 @@
     "cSpell.words": [
         "alphabitfields",
         "bitmapcoreheader",
+        "bitmapfileheader",
         "bitmapinfoheader",
+        "bitmapv",
+        "ciexyz",
+        "ciexyztriple",
         "cmyk",
         "cmykrle",
+        "dibheader",
+        "dot",
         "feng",
+        "fileheader",
+        "fxpt",
         "idat",
         "imagedescriptor",
         "os",
         "packedfields",
         "plte",
+        "rgbquad",
         "xbitmapheader"
     ]
 }
