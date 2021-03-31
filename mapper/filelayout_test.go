@@ -15,11 +15,17 @@ func TestFieldPresent(t *testing.T) {
 	fl := &FileLayout{}
 
 	test := []struct {
-		field    Field
 		expected string
+		field    Field
 	}{
-		{Field{Offset: 0x1, Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "U8 array"}}, "  [000001] U8 array                       u8[2]                               ff d8               \n"},
-		{Field{Offset: 0x1, Length: 0x4, Value: []uint8{0x52, 0x5e, 0x65, 0xef}, Endian: "little", Format: value.DataField{Kind: "time_t_32", Range: "", Slice: false, Label: "TimeT_32_LE"}}, "  [000001] TimeT_32_LE                    time_t_32 le  2013-10-16T10:09:51Z  52 5e 65 ef         \n"},
+		{"  [000000] U8 array                       u8[2]                               ff d8               \n", Field{Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "U8 array"}}},
+		{"  [000000] TimeT_32_LE                    time_t_32 le  2013-10-16T10:09:51Z  52 5e 65 ef         \n", Field{Length: 0x4, Value: []uint8{0x52, 0x5e, 0x65, 0xef}, Endian: "little", Format: value.DataField{Kind: "time_t_32", Range: "", Slice: false, Label: "TimeT_32_LE"}}},
+
+		//i8 signed: ff  # XXX -1
+		{"  [000000] Signed                         i8            -1                    ff                  \n", Field{Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "i8", Slice: false, Label: "Signed"}}},
+		{"  [000000] Signed                         i16 le        -1                    ff ff               \n", Field{Length: 0x2, Value: []uint8{0xff, 0xff}, Endian: "little", Format: value.DataField{Kind: "i16", Slice: false, Label: "Signed"}}},
+		{"  [000000] Signed                         i32 le        -1                    ff ff ff ff         \n", Field{Length: 0x4, Value: []uint8{0xff, 0xff, 0xff, 0xff}, Endian: "little", Format: value.DataField{Kind: "i32", Slice: false, Label: "Signed"}}},
+		{"  [000000] Signed                         i64 le        -1                    ff ff ff ff ff ff ff ff\n", Field{Length: 0x8, Value: []uint8{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}, Endian: "little", Format: value.DataField{Kind: "i64", Slice: false, Label: "Signed"}}},
 	}
 	for _, h := range test {
 		assert.Equal(t, h.expected, fl.PresentField(&h.field))

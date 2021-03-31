@@ -2,9 +2,8 @@
 #
 # IMPORTANT: This implements the Windows bitmap format. OS/2 variants is IGNORED (OS22XBITMAPHEADER etc should be implemented in a separate file)
 #
-# - LO: signed integer types (i16, i32)
 # - LO: custom bgr type for V2 palette (u8 blue,green,red)
-# - LO: custom bgrquad for V3 palette (u8 blue,green,red,reserved)
+# - LO: custom bgrquad type for V3 palette (u8 blue,green,red,reserved)
 
 references:
   - https://en.wikipedia.org/wiki/BMP_file_format
@@ -42,15 +41,15 @@ structs:
 
     # V2 (WIN2XBITMAPHEADER) aka BITMAPCOREHEADER
     if self.Header size in (WIN2XBITMAPHEADER):
-      u16 Width: ??             # XXX signed integer
-      u16 Height: ??            # XXX signed integer
+      i16 Width: ??
+      i16 Height: ??
       u16 Color planes: ??
       u16 Bits per pixel: ??
 
     # V3 (WIN3XBITMAPHEADER) aka BITMAPINFOHEADER, used by V3, V4, V5
     if self.Header size in (WIN3XBITMAPHEADER, WIN4XBITMAPHEADER, BITMAPV5HEADER):
-      u32 Width: ??             # XXX signed integer
-      u32 Height: ??            # XXX signed integer
+      i32 Width: ??
+      i32 Height: ??
       u16 Color planes: ??
       u16 Bits per pixel: ??
       u32 Compression method:
@@ -65,8 +64,8 @@ structs:
         eq 0000_000c: BI_CMYKRLE8
         eq 0000_000d: BI_CMYKRLE4
       u32 Image data size: ??
-      u32 Horizontal resolution: ??  # XXX signed integer
-      u32 Vertical resolution: ??    # XXX signed integer
+      i32 Horizontal resolution: ??
+      i32 Vertical resolution: ??
       u32 Used colors: ??
       u32 Important colors: ??
 

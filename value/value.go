@@ -23,7 +23,7 @@ const (
 
 var (
 	bitExpressionRE           = regexp.MustCompile(`b([01_]+)`)
-	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s]+):([\d\s]+)`)
+	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s\+\-\*\/]+):([\d\s\+\-\*\/]+)`)
 )
 
 // parses a "structs" data value (used by structs parser)
@@ -269,13 +269,13 @@ func (df *DataField) SingleUnitSize() uint64 {
 
 func SingleUnitSize(kind string) uint64 {
 	switch kind {
-	case "u8", "ascii", "asciiz":
+	case "u8", "i8", "ascii", "asciiz":
 		return 1
-	case "u16":
+	case "u16", "i16":
 		return 2
-	case "u32", "time_t_32":
+	case "u32", "i32", "time_t_32":
 		return 4
-	case "u64":
+	case "u64", "i64":
 		return 8
 	}
 	log.Fatalf("SingleUnitSize cant handle kind '%s'", kind)
@@ -303,6 +303,9 @@ func (df *DataField) GetAbsoluteAddress() (uint64, uint64) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if DEBUG {
+		log.Printf("GetAbsoluteAddress: evaluated %s to %d:%d", df.Range, rangeOffset, rangeLength)
+	}
 	return rangeOffset, rangeLength
 }
 
@@ -312,7 +315,7 @@ func (df *DataField) IsPatternableUnit() bool {
 		return false
 	}
 	switch df.Kind {
-	case "u8", "u16", "u32", "u64", "ascii":
+	case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64", "ascii":
 		return true
 	}
 	return false
@@ -346,16 +349,35 @@ func AsUint64(kind string, b []byte) uint64 {
 		log.Printf("AsUint64 converting [%02x] to %s", b, kind)
 	}
 	switch kind {
-	case "u8", "ascii":
+	case "u8", "i8", "ascii":
 		return uint64(b[0])
-	case "u16":
+	case "u16", "i16":
 		return uint64(binary.BigEndian.Uint16(b))
-	case "u32", "time_t_32":
+	case "u32", "i32", "time_t_32":
 		return uint64(binary.BigEndian.Uint32(b))
-	case "u64":
+	case "u64", "i64":
 		return binary.BigEndian.Uint64(b)
 	}
 	log.Fatalf("AsUint64 unhandled kind %s", kind)
+	return 0
+}
+
+// decodes value in network byte order (big) to signed integer
+func AsInt64(kind string, b []byte) int64 {
+	if DEBUG {
+		log.Printf("AsInt64 converting [%02x] to %s", b, kind)
+	}
+	switch kind {
+	case "i8":
+		return int64(int8(b[0]))
+	case "i16":
+		return int64(int16(binary.BigEndian.Uint16(b)))
+	case "i32":
+		return int64(int32(binary.BigEndian.Uint32(b)))
+	case "i64":
+		return int64(binary.BigEndian.Uint64(b))
+	}
+	log.Fatalf("AsInt64 unhandled kind %s", kind)
 	return 0
 }
 
@@ -366,6 +388,12 @@ func Present(format DataField, b []byte) string {
 			return ""
 		}
 		return fmt.Sprintf("%d", AsUint64(format.Kind, b))
+	case "i8", "i16", "i32", "i64":
+		if format.Slice || format.Range != "" {
+			return ""
+		}
+		return fmt.Sprintf("%d", AsInt64(format.Kind, b))
+
 	case "ascii", "asciiz":
 		v, _ := asciiZString(b, len(b))
 		return v

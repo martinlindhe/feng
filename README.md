@@ -17,23 +17,10 @@ STATUS: private draft work
 
 
 
-# TODO 5 mars 2021:
-
-
-
-TODO 1000. example client app in a blog about it (need easy to use end-user API)
-    show how to make a gameboy rom header frontend using template or something
-
-
-
-
-
-
 # FUTURE POSSIBLE FEATURES
 
 - render the yaml template representation as a zim language input data validator (code-gen)
 
-TODO 3. cli - checksum field validator
 
 
 - universal raw data expander:
@@ -63,6 +50,7 @@ TODO 3. cli - checksum field validator
 
 
 - low prio TODO: terminal ui hex editor, like in formats cmd. proof of concept and dogfooding
+
 
 
 # SCRIPTING

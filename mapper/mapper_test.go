@@ -107,16 +107,6 @@ structs:
     u16[2] Sig16be_array: ??
     u32 U32BE single: ??
     u32[2] U32BE array: ??
-    #u64 U64BE single: "1122334455667788"
-    #u64[2] U64BE array: 1011121314151617 2021222324252627
-
-    #endian: little
-    #u16 U16LE single: aaf0
-    #u16[2] U16LE array: 1011 2021
-    #u32 U32LE single: "11223344"
-    #u32[2] U32LE array: 10111213 20212223
-    #u64 U64LE single: "1122334455667788"
-    #u64[2] U64LE array: 1011121314151617 2021222324252627
 
 layout:
   - header Header
@@ -577,7 +567,7 @@ structs:
 
 layout:
   - header Header
-  - block[] Unsized block   # XXX should be parsed until we reach EOF
+  - block[] Unsized block
 `
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
 	assert.Equal(t, nil, err)

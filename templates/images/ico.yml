@@ -1,6 +1,7 @@
-# STATUS: 70%
+# STATUS: 60%
 
-# - HI: map icon palette... !!!
+# - MID: map "image data" area: BITMAPINFOHEADER and then IMAGEDATA
+#   this is an embedded DIB bitmap... OR, an embedded PNG. so able to refer to a separate template might be helpful?
 
 references:
   - https://en.wikipedia.org/wiki/ICO_(file_format)
@@ -37,6 +38,7 @@ structs:
     u32 Data size: ??
     u32 Data offset: ??
 
+    # XXX the "image data" area contains a DIB header and data or a PNG
     u8[self.Data offset:self.Data size] Image data: ??
 
 layout:
