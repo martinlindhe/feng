@@ -1,10 +1,6 @@
-# STATUS: 10%
+# STATUS: 70%
 
-# - HI: map image data at end of the file from offsets and length in ICONDIRENTRY
 # - HI: map icon palette... !!!
-
-# - MID: allow to append text to current section label with special directive
-# - MID: offer special template %INDEX% to decorate label!
 
 references:
   - https://en.wikipedia.org/wiki/ICO_(file_format)
@@ -39,12 +35,9 @@ structs:
       u16 Vertical hotspot: ??
 
     u32 Data size: ??
-    u32 Data offset: ??     # XXX from beginning of file
+    u32 Data offset: ??
 
-    # NOTE: offset points to an area after all of the ICONDIRENTRY:s
-
-    # XXX need syntax START_OFFSET:LENGTH since data is not sequential
-    #u8[self.Data offset:self.Data size] Image data: ??
+    u8[self.Data offset:self.Data size] Image data: ??
 
 layout:
   - icon_dir ICONDIR

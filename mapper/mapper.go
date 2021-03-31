@@ -94,7 +94,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	return &fileLayout, nil
 }
 
-func (fl *FileLayout) expandStruct(r io.Reader, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG {
 		log.Printf("expandStruct: adding struct %s", df.Label)
@@ -113,7 +113,7 @@ func (fl *FileLayout) expandStruct(r io.Reader, df *value.DataField, ds *templat
 	return err
 }
 
-func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG {
 		log.Printf("expandChildren: working with struct %s", df.Label)
@@ -135,10 +135,6 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 			return fmt.Errorf("file invalidated by template")
 
 		case "u8", "u16", "u32", "u64", "ascii", "time_t_32":
-			if es.Field.IsRangeUnit() {
-				log.Fatalf("invalid %s form: %s", es.Field.Kind, fl.PresentType(&es.Field))
-			}
-
 			if es.Field.Range != "" {
 				var err error
 				es.Field.Range, err = fl.ExpandVariables(es.Field.Range, df)
@@ -153,6 +149,20 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 					log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
 				}
 				continue
+			}
+
+			prevOffset := fl.offset
+			if es.Field.IsAbsoluteAddress() {
+				// if range = start:len, first move to given offset
+				rangeStart, _ := es.Field.GetAbsoluteAddress()
+
+				log.Printf("--- SEEKING TO ABSOLUTE OFFSET %08x", rangeStart)
+				_, err := r.Seek(int64(rangeStart), io.SeekStart)
+				if err != nil {
+					return err
+				}
+
+				fl.offset = rangeStart
 			}
 
 			val, err := readBytes(r, totalLength, unitLength, fl.endian)
@@ -178,7 +188,16 @@ func (fl *FileLayout) expandChildren(r io.Reader, fs *Struct, df *value.DataFiel
 
 			field = Field{Offset: fl.offset, Length: totalLength, Value: val, Format: es.Field, Endian: fl.endian, MatchedPatterns: matchPatterns}
 			fs.Fields = append(fs.Fields, field)
-			fl.offset += field.Length
+			if es.Field.IsAbsoluteAddress() {
+				fl.offset = prevOffset
+				log.Printf("--- RESTORING FILE POSITION TO ABSOLUTE OFFSET %08x", fl.offset)
+				_, err := r.Seek(int64(fl.offset), io.SeekStart)
+				if err != nil {
+					return err
+				}
+			} else {
+				fl.offset += field.Length
+			}
 
 		case "asciiz":
 			val, err := readBytesUntilZero(r)

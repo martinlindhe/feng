@@ -97,12 +97,26 @@ func (fl *FileLayout) Present() {
 		fmt.Println()
 	}
 
-	if fl.offset < fl.size {
-		unmapped := fl.size - fl.offset
-		fmt.Println(red("  [%06x] 0x%04x (%d) unmapped trailing bytes", fl.offset, unmapped, unmapped))
+	mappedBytes := fl.MappedBytes()
+	if mappedBytes < fl.size {
+		unmapped := fl.size - mappedBytes
+		fmt.Println(red("0x%04x (%d) unmapped bytes", unmapped, unmapped))
+	} else if mappedBytes > fl.size {
+		fmt.Println(red("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x", fl.size, mappedBytes))
 	} else {
 		fmt.Println("EOF")
 	}
+}
+
+// return the number of mapped bytes
+func (fl *FileLayout) MappedBytes() uint64 {
+	count := uint64(0)
+	for _, layout := range fl.Structs {
+		for _, field := range layout.Fields {
+			count += field.Length
+		}
+	}
+	return count
 }
 
 func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
@@ -110,9 +124,6 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 		log.Printf("GetStruct: searching for %s", name)
 	}
 	for _, str := range fl.Structs {
-		if DEBUG {
-			//log.Printf("GetStruct: searching struct %s (%d fields)", str.Label, len(str.Fields))
-		}
 		if str.Label == name {
 			return &str, nil
 		}
@@ -147,9 +158,6 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 	}
 
 	for _, field := range str.Fields {
-		if DEBUG {
-			//log.Printf("comparing field %s to %s", field.Format.Label, fieldName)
-		}
 		if field.Format.Label == fieldName {
 			switch childName {
 			case "offset":
@@ -184,12 +192,16 @@ func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
 
 	unitLength := df.SingleUnitSize()
 	rangeLength := uint64(1)
+	var err error
+
 	if df.Range != "" {
-		var err error
-		r := df.Range
-		rangeLength, err = value.EvaluateExpression(r)
-		if err != nil {
-			log.Fatal(err)
+		if df.IsAbsoluteAddress() {
+			_, rangeLength = df.GetAbsoluteAddress()
+		} else {
+			rangeLength, err = value.EvaluateExpression(df.Range)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 	totalLength := unitLength * rangeLength

@@ -569,11 +569,11 @@ layout:
 func TestEvaluateStructSlice(t *testing.T) {
 	templateData := `
 structs:
+  header:
+    u8 ID: "02"
   block:
     u8 First: ??
     u8 Second: ??
-  header:
-    u8 ID: "02"
 
 layout:
   - header Header
@@ -618,4 +618,59 @@ layout:
 				},
 			},
 			offset: 0x5, size: 0x5}, fl)
+}
+
+func TestEvaluateAbsoluteArray(t *testing.T) {
+	// tests that "u8[start:length]" syntax works
+	templateData := `
+structs:
+  header:
+    u8 Offset1: ??
+    u8 Length1: ??
+    u8 Offset2: ??
+    u8 Length2: ??
+    u8[self.Offset1:self.Length1] Data1: ??
+    u8[self.Offset2:self.Length2] Data2: ??
+
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		0x06, // Offset1
+		0x03, // Length1
+
+		0x0a, // Offset2
+		0x02, // Length2
+
+		0xb0, 0xb1, // unmapped padding
+		0xf0, 0xf1, 0xf2, // Data1
+		0xb2, // unmapped padding
+
+		0xf3, 0xf4, // Data2
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	assert.Equal(t,
+		&FileLayout{
+			Structs: []Struct{
+				{
+					Label: "Header",
+					Fields: []Field{
+						{Offset: 0x0, Length: 0x1, Value: []uint8{0x6}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Offset1"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x1, Length: 0x1, Value: []uint8{0x3}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Length1"}, MatchedPatterns: []value.MatchedPattern{}},
+
+						{Offset: 0x2, Length: 0x1, Value: []uint8{0xa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Offset2"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x3, Length: 0x1, Value: []uint8{0x2}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Length2"}, MatchedPatterns: []value.MatchedPattern{}},
+
+						{Offset: 0x6, Length: 0x3, Value: []uint8{0xf0, 0xf1, 0xf2}, Endian: "", Format: value.DataField{Kind: "u8", Range: "6:3", Slice: false, Label: "Data1"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0xa, Length: 0x2, Value: []uint8{0xf3, 0xf4}, Endian: "", Format: value.DataField{Kind: "u8", Range: "10:2", Slice: false, Label: "Data2"}, MatchedPatterns: []value.MatchedPattern{}},
+					},
+				},
+			},
+			offset: 0x4, size: 0xc}, fl)
 }

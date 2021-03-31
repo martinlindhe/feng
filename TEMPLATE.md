@@ -25,7 +25,7 @@
     u32[4]
     u8[FILE_SIZE-10]
 
-    u8[self.Data offset:self.Data offset+self.Data size]   TODO ...  "start:end" offset syntax
+    u8[self.Data offset:self.Data size]     "start:length" offset syntax
 
 
 # slices

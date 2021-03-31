@@ -22,7 +22,8 @@ const (
 )
 
 var (
-	bitExpressionRE = regexp.MustCompile(`b([01_]+)`)
+	bitExpressionRE           = regexp.MustCompile(`b([01_]+)`)
+	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s]+):([\d\s]+)`)
 )
 
 // parses a "structs" data value (used by structs parser)
@@ -221,7 +222,7 @@ type DataField struct {
 	// u8, ascii etc
 	Kind string
 
-	// ranged value if set. data field is type Kind[Length] or Kind[Start:End] (crc32)
+	// ranged value if set. data field is type Kind[Length] or Kind[Start:Length]
 	Range string
 
 	// a slice type if true. data field is type Kind[]
@@ -281,6 +282,30 @@ func SingleUnitSize(kind string) uint64 {
 	return 0
 }
 
+// returns true if Range is of "offset:length" syntax
+func (df *DataField) IsAbsoluteAddress() bool {
+	matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
+	return len(matches) == 1 && len(matches[0]) == 3
+}
+
+// returns offset, length from Range "offset:length" syntax
+func (df *DataField) GetAbsoluteAddress() (uint64, uint64) {
+	if !df.IsAbsoluteAddress() {
+		log.Fatalf("range is not absolute '%s'", df.Range)
+	}
+
+	matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
+	rangeOffset, err := EvaluateExpression(matches[0][1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	rangeLength, err := EvaluateExpression(matches[0][2])
+	if err != nil {
+		log.Fatal(err)
+	}
+	return rangeOffset, rangeLength
+}
+
 // returns true if unit is a single u8, u16, u32 or u64 that can have eq/bit field as child
 func (df *DataField) IsPatternableUnit() bool {
 	if df.Slice || df.Range != "" {
@@ -296,18 +321,6 @@ func (df *DataField) IsPatternableUnit() bool {
 // returns true if unit is a single u8, u16, u32 or u64 that can be used in IF statements
 func (df *DataField) IsSimpleUnit() bool {
 	return df.IsPatternableUnit()
-}
-
-// returns true if df.Range should be interpreted as a Kind[Start:End] range or false if its Kind[Length]
-func (df *DataField) IsRangeUnit() bool {
-	if df.Slice || df.Range == "" {
-		return false
-	}
-	switch df.Kind {
-	case "crc32":
-		return true
-	}
-	return false
 }
 
 // reverse byte order in groups of `unitLength` to handle u16/u32 ordering
