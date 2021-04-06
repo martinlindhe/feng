@@ -48,6 +48,9 @@ STATUS: private draft work
 - LATER: "gnu file" lookalike ?
 
 
+- LATER: "binwalk" like feature ?
+
+
 
 - low prio TODO: terminal ui hex editor, like in formats cmd. proof of concept and dogfooding
 
