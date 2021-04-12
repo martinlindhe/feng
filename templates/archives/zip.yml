@@ -29,7 +29,7 @@ structs:
     u16 File name length: ??
     u16 Extra field length: ??
 
-    u8[self.File name length] File name: ??       # XXX ascii
+    ascii[self.File name length] File name: ??
     u8[self.Extra field length] Extra field: ??
 
     # XXX rest
