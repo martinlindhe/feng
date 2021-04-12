@@ -53,6 +53,8 @@ structs:
     u16 HighPosAv: ??
     u32 PosAV: ??
 
+  # TODO support this too
+  rest_of_header:
     if self.Main header flags.MHD_ENCRYPTVER:
       u8 EncryptVer: ??
 
