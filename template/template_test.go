@@ -49,6 +49,10 @@ func TestWalkTemplates(t *testing.T) {
 			return fmt.Errorf("unknown kind '%s", tpl.Kind)
 		}
 
+		if len(tpl.Extensions) == 0 {
+			return fmt.Errorf("extensions missing")
+		}
+
 		_, err = UnmarshalTemplateIntoDataStructure(templateData)
 		assert.Equal(t, nil, err)
 

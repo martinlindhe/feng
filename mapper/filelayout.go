@@ -23,6 +23,9 @@ type FileLayout struct {
 
 	// total size of data (FILE_SIZE)
 	size uint64
+
+	// default extension
+	Extension string
 }
 
 // parsed file data section from a template "struct"
