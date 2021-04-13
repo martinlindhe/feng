@@ -13,6 +13,7 @@ import (
 
 var args struct {
 	Filename string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
+	Verbose  bool   `help:"Be more verbose."`
 }
 
 func main() {
@@ -44,7 +45,9 @@ func main() {
 		fl, err := mapper.MapReader(r, ds)
 		if err != nil {
 			// template don't match, try another
-			//log.Println(tpl, ":", err)
+			if args.Verbose {
+				log.Println(tpl, ":", err)
+			}
 			continue
 		}
 
@@ -53,5 +56,4 @@ func main() {
 		fl.Present()
 		break
 	}
-
 }

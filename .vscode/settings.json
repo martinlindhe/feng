@@ -21,6 +21,7 @@
         "os",
         "packedfields",
         "plte",
+        "rgba",
         "rgbquad",
         "xbitmapheader"
     ]

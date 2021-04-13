@@ -12,6 +12,10 @@ STATUS: private draft work
 - TODO: extract data from file
 
 
+# Command line tools
+
+    cmd/renamer: Renames all files in input folder to use the correct file extensions.
+
 
 
 

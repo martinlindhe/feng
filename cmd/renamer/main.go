@@ -15,8 +15,9 @@ import (
 )
 
 var args struct {
-	Folder string `kong:"arg" name:"folder" type:"existingdir" help:"Input folder."`
-	Fix    bool   `help:"Rename incorrect extensions."`
+	Folder  string `kong:"arg" name:"folder" type:"existingdir" help:"Input folder."`
+	Fix     bool   `help:"Rename incorrect extensions."`
+	Verbose bool   `help:"Be more verbose."`
 }
 
 var (
@@ -65,7 +66,9 @@ func main() {
 			r.Close()
 			if err != nil {
 				// template don't match, try another
-				//log.Println(tpl, ":", err)
+				if args.Verbose {
+					log.Println(tpl, ":", err)
+				}
 				continue
 			}
 
@@ -74,12 +77,22 @@ func main() {
 
 		ext := filepath.Ext(fp)
 		if len(extensions) == 1 && ext == extensions[0] {
-			fmt.Println(green("OK %s: %v", fp, extensions))
+			if args.Verbose {
+				fmt.Println(green("OK %s: %v", fp, extensions))
+			}
 		} else if len(extensions) == 1 {
 			if args.Fix {
 				newName := strings.TrimSuffix(fp, filepath.Ext(fp)) + extensions[0]
 				fmt.Println(red("RENAMING %s => %s", fp, newName))
-				if err := os.Rename(fp, newName); err != nil {
+				oldName, err := filepath.Abs(fp)
+				if err != nil {
+					log.Fatal(err)
+				}
+				newName, err = filepath.Abs(newName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				if err := os.Rename(oldName, newName); err != nil {
 					log.Fatal(err)
 				}
 			} else {
@@ -98,5 +111,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
