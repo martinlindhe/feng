@@ -487,10 +487,10 @@ structs:
     u8 Bit field:
       bit b1000_0000: High bit
 
-    if self.Bit field.High bit in (1):   # true if exact value from bit field
+    if self.Bit field.High bit in (1):   # true if bitfield value is exactly 1
       u8 HighExact: "aa"
 
-    if self.Bit field.High bit:          # true if non-zero
+    if self.Bit field.High bit:          # true if bitfield value is non-zero
       u8 HighSet: "bb"
 
 layout:

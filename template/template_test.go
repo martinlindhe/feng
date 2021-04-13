@@ -3,8 +3,6 @@ package template
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,51 +12,35 @@ import (
 )
 
 // evaluate all templates, validate some fields
-func TestWalkTemplates(t *testing.T) {
-	searchDir := "../templates/"
-	err := filepath.Walk(searchDir, func(path string, fi os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if fi == nil {
-			t.Fatalf("invalid path " + searchDir)
-		}
-		if fi.IsDir() {
-			return nil
-		}
+func TestEvaluateAllTemplates(t *testing.T) {
 
-		if filepath.Ext(fi.Name()) != ".yml" {
-			return nil
-		}
+	templates, err := GetAllFilenames("../templates/")
+	assert.Equal(t, nil, err)
+
+	for _, path := range templates {
 
 		templateData, err := ioutil.ReadFile(path)
-		if err != nil {
-			return err
-		}
+		assert.Equal(t, nil, err)
 
 		fmt.Println("processing", path)
 
 		var tpl Template
 		err = yaml.Unmarshal(templateData, &tpl)
-		if err != nil {
-			return err
-		}
+		assert.Equal(t, nil, err)
+
 		switch tpl.Kind {
 		case "image", "archive":
 		default:
-			return fmt.Errorf("unknown kind '%s", tpl.Kind)
+			t.Errorf("unknown kind '%s", tpl.Kind)
 		}
 
 		if len(tpl.Extensions) == 0 {
-			return fmt.Errorf("extensions missing")
+			t.Errorf("extensions missing")
 		}
 
 		_, err = UnmarshalTemplateIntoDataStructure(templateData)
 		assert.Equal(t, nil, err)
-
-		return nil
-	})
-	assert.Equal(t, nil, err)
+	}
 }
 
 func TestEvaluateTemplateConstants(t *testing.T) {
