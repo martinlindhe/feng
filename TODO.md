@@ -1,23 +1,27 @@
-feng TODO - april 2021
+# feng TODO - July 2021
+
+priority levels: MAX/MID/LOW
 
 
-- HI: allow complex "if" expression with multiple checks. allow "ELSE" block (needed for proper mapping of palette) (PCX)
 
-- HI: figure out how to decode image data stream (between SOI and EOI markers) (JPEG)
+- MAX: allow complex "if" expression with multiple checks. allow "ELSE" block (needed for proper mapping of palette) (PCX)
 
-- HI: "data_sub_block[] Image data: ??" with custom type and "data: eos" marker to end slice stream  (GIF)
+- MAX: figure out how to decode image data stream (between SOI and EOI markers) (JPEG)
+
+- MAX: "data_sub_block[] Image data: ??" with custom type and "data: eos" marker to end slice stream  (GIF)
 
 
 
 # SLICE SYNTAX (done, need verify)
-- HI: "chunk[] Chunk" syntax (PNG-DONE, JPEG-TODO VERIFY, GIF-TODO VERIFY)
+- MAX: "chunk[] Chunk" syntax (PNG-DONE, JPEG-TODO VERIFY, GIF-TODO VERIFY)
 
 
 
 # CUSTOM TYPES:
-- HI: decode "PLTE" chunk (need to allow custom type "rgb")  (PNG)
-- HI: allow custom type in struct for DDS_PIXELFORMAT (DDS)
+- MAX: decode "PLTE" chunk (need to allow custom type "rgb")  (PNG)
+- MAX: allow custom type in struct for DDS_PIXELFORMAT (DDS)
 - MID: need to use custom "rgb" type as defined (GIF)
+
 
 
 # USER FRIENDLINESS
