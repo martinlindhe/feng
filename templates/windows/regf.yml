@@ -1,0 +1,48 @@
+# STATUS: 1%
+
+references:
+  - https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc
+  - https://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md
+
+kind: system
+name: Windows NT Registry File
+extensions: [.dat] # has no standard extension
+#mime: # has no mime
+endian: little
+
+structs:
+  file_header:
+    ascii[4] Signature: c'regf'
+    u32 Primary seq number: ??
+    u32 Secondary seq number: ??
+    u64 Last modification date and time: ?? # XXX FILETIME in UTC
+    u32 Major version: ??
+    u32 Minor version: ??
+    u32 File type: ??  # 0 means Registry hive file, 1 = Transaction log variant 1, 2 = Transaction log variant 2. 6 = Transaction log variant 6
+    u32 File format: ?? #  1 means direct memory load
+    u32 Root cell offset: ??
+    u32 Hive bins data size: ??
+    u32 Clustering factor: ??
+    u8[64] File name: ??  # XXX UTF-16LE string
+    u8[396] Reserved: ??
+    u32 Checksum: ?? # XXX xor-32 of the previous 508 bytes
+    u8[3576] Reserved: ??
+    u32 Boot type: ??
+    u32 Boot recover: ??
+  
+  hive_bin_header:
+    ascii[4] Signature: c'hbin'
+    u32 Offset: ??   # XXX relative offset to after header. XXX make use of
+    u32 Size: ??
+    u64 Reserved: ??
+    u64 Timestamp: ??  # XXX FILETIME in UTC
+    u32 Spare: ??
+
+    # hive bin cell:
+    # XXX relative offset from header to here
+    u32 Cell size: ??
+    u8[self.Size] Cell data: ??
+
+layout:
+  - file_header FILE HEADER
+  - hive_bin_header HIVE BIN HEADER

@@ -29,9 +29,9 @@ func TestEvaluateAllTemplates(t *testing.T) {
 		assert.Equal(t, nil, err)
 
 		switch tpl.Kind {
-		case "image", "archive":
+		case "image", "archive", "system":
 		default:
-			t.Errorf("unknown kind '%s", tpl.Kind)
+			t.Errorf("unknown kind: %s", tpl.Kind)
 		}
 
 		if len(tpl.Extensions) == 0 {
