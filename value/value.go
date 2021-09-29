@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 	"unicode/utf16"
 	"unicode/utf8"
@@ -278,7 +279,7 @@ func SingleUnitSize(kind string) uint64 {
 		return 2
 	case "u32", "i32", "time_t_32":
 		return 4
-	case "u64", "i64":
+	case "u64", "i64", "filetime":
 		return 8
 	}
 	log.Fatalf("SingleUnitSize cant handle kind '%s'", kind)
@@ -408,6 +409,17 @@ func Present(format DataField, b []byte) string {
 	case "time_t_32":
 		v := AsUint64(format.Kind, b)
 		timestamp := time.Unix(int64(v), 0)
+		if IN_UTC {
+			timestamp = timestamp.UTC()
+		}
+		return timestamp.Format(time.RFC3339)
+
+	case "filetime":
+		ft := &syscall.Filetime{
+			HighDateTime: binary.BigEndian.Uint32(b[:4]),
+			LowDateTime:  binary.BigEndian.Uint32(b[4:]),
+		}
+		timestamp := time.Unix(0, ft.Nanoseconds())
 		if IN_UTC {
 			timestamp = timestamp.UTC()
 		}

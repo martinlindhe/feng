@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/alecthomas/kong v0.2.17
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.12.0
 	github.com/maja42/goval v1.2.1
 	github.com/mattn/go-isatty v0.0.13 // indirect

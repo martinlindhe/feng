@@ -1,9 +1,10 @@
 # STATUS: 1%
-# TODO: data type FILETIME in UTC
+# TODO: need to get absolute value of hive_bin_header.Cell size
 
 references:
   - https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc
   - https://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md
+  - https://www.sweetscape.com/010editor/repository/files/RegistryHive.bt
 
 kind: system
 name: Windows NT Registry File
@@ -15,7 +16,7 @@ structs:
     ascii[4] Signature: c'regf'
     u32 Primary seq number: ??
     u32 Secondary seq number: ??
-    u64 Timestamp: ?? # XXX FILETIME in UTC
+    filetime Timestamp: ??
     u32 Major version: ??
     u32 Minor version: ??
     u32 File type: ??  # 0 means Registry hive file, 1 = Transaction log variant 1, 2 = Transaction log variant 2. 6 = Transaction log variant 6
@@ -34,13 +35,14 @@ structs:
     ascii[4] Signature: c'hbin'
     u32 Offset: ??   # XXX relative offset to after header. XXX make use of
     u32 Size: ??
-    u64 Reserved: ??
-    u64 Timestamp: ??  # XXX FILETIME in UTC
+    u32 Unknown 1: ??
+    u32 Unknown 2: ??
+    filetime Timestamp: ??
     u32 Spare: ??
 
     # hive bin cell:
     # XXX relative offset from header to here
-    u32 Cell size: ??
+    i32 Cell size: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use absolute values for calculations)
     u8[self.Size] Cell data: ??
 
 layout:

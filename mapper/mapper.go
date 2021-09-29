@@ -139,7 +139,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			}
 			return fmt.Errorf("file invalidated by template")
 
-		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64", "ascii", "utf16le", "time_t_32":
+		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64", "ascii", "utf16le", "time_t_32", "filetime":
 			if es.Field.Range != "" {
 				var err error
 				es.Field.Range, err = fl.ExpandVariables(es.Field.Range, df)
