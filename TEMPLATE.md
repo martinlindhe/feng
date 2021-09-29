@@ -22,8 +22,9 @@
 # data types
 
     u8, u16, u32, u64
-    ascii[5]
+    ascii[5]            ascii string
     asciiz              zero terminated ascii string
+    utf16le[5]            utf16-le string  (TODO LE or BE depending on endianness of file  ????   allow "utf16le" and "utf16be" to become type "utf16", endianness big/little)  
     time_t_32           32-bit unix timestamp
 
 

@@ -1,6 +1,7 @@
 package value
 
 import (
+	"bytes"
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
@@ -9,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf16"
+	"unicode/utf8"
 
 	"github.com/fatih/color"
 	"github.com/maja42/goval"
@@ -271,7 +274,7 @@ func SingleUnitSize(kind string) uint64 {
 	switch kind {
 	case "u8", "i8", "ascii", "asciiz":
 		return 1
-	case "u16", "i16":
+	case "u16", "i16", "utf16le":
 		return 2
 	case "u32", "i32", "time_t_32":
 		return 4
@@ -397,6 +400,11 @@ func Present(format DataField, b []byte) string {
 	case "ascii", "asciiz":
 		v, _ := asciiZString(b, len(b))
 		return v
+
+	case "utf16le":
+		v := utf16leString(b)
+		return v
+
 	case "time_t_32":
 		v := AsUint64(format.Kind, b)
 		timestamp := time.Unix(int64(v), 0)
@@ -413,6 +421,26 @@ func Present(format DataField, b []byte) string {
 var (
 	red = color.New(color.FgRed).SprintFunc()
 )
+
+func utf16leString(b []byte) string {
+	if len(b)%2 != 0 {
+		log.Fatal("unexpected utf16 length", len(b))
+	}
+
+	u16s := make([]uint16, 1)
+	ret := &bytes.Buffer{}
+	b8buf := make([]byte, 4)
+
+	lb := len(b)
+	for i := 0; i < lb; i += 2 {
+		u16s[0] = uint16(b[i+1]) + (uint16(b[i]) << 8)
+		r := utf16.Decode(u16s)
+		n := utf8.EncodeRune(b8buf, r[0])
+		ret.Write(b8buf[:n])
+	}
+
+	return ret.String()
+}
 
 // returns decoded string and length in bytes
 func asciiZString(b []byte, maxLength int) (string, uint64) {

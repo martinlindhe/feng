@@ -14,6 +14,7 @@ import (
 var args struct {
 	Filename string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
 	Verbose  bool   `help:"Be more verbose."`
+	HideRaw  bool   `help:"Hide raw values"`
 }
 
 func main() {
@@ -53,7 +54,7 @@ func main() {
 
 		fmt.Println(tpl)
 
-		fl.Present()
+		fl.Present(args.HideRaw)
 		break
 	}
 }

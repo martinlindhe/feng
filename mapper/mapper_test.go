@@ -556,6 +556,35 @@ layout:
 			offset: 0x4, size: 0x4}, fl)
 }
 
+func TestEvaluateUTF16LE(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    endian: little
+    utf16le[3] Name: ??
+
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		'f', 0x00, 'o', 0x00, 'o', 0x00, // Name
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	assert.Equal(t,
+		&FileLayout{
+			Structs: []Struct{
+				{
+					Label:  "Header",
+					Fields: []Field{{Offset: 0x0, Length: 0x6, Value: []uint8{'f', 0x00, 'o', 0x00, 'o', 0x00}, Endian: "little", Format: value.DataField{Kind: "utf16le", Range: "3", Slice: false, Label: "Name"}, MatchedPatterns: []value.MatchedPattern{}}}}},
+			endian: "little", offset: 0x6, size: 0x6}, fl)
+}
+
 func TestEvaluateStructSlice(t *testing.T) {
 	templateData := `
 structs:

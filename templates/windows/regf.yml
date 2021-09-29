@@ -1,4 +1,5 @@
 # STATUS: 1%
+# TODO: data type FILETIME in UTC
 
 references:
   - https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc
@@ -7,7 +8,6 @@ references:
 kind: system
 name: Windows NT Registry File
 extensions: [.dat] # has no standard extension
-#mime: # has no mime
 endian: little
 
 structs:
@@ -15,7 +15,7 @@ structs:
     ascii[4] Signature: c'regf'
     u32 Primary seq number: ??
     u32 Secondary seq number: ??
-    u64 Last modification date and time: ?? # XXX FILETIME in UTC
+    u64 Timestamp: ?? # XXX FILETIME in UTC
     u32 Major version: ??
     u32 Minor version: ??
     u32 File type: ??  # 0 means Registry hive file, 1 = Transaction log variant 1, 2 = Transaction log variant 2. 6 = Transaction log variant 6
@@ -23,7 +23,7 @@ structs:
     u32 Root cell offset: ??
     u32 Hive bins data size: ??
     u32 Clustering factor: ??
-    u8[64] File name: ??  # XXX UTF-16LE string
+    utf16le[32] File name: ??
     u8[396] Reserved: ??
     u32 Checksum: ?? # XXX xor-32 of the previous 508 bytes
     u8[3576] Reserved: ??

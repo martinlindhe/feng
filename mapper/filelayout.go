@@ -63,7 +63,7 @@ const (
 )
 
 // decodes simple value types for presentation
-func (fl *FileLayout) PresentField(field *Field) string {
+func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 	kind := fl.PresentType(&field.Format)
 	if field.Format.SingleUnitSize() > 1 {
 		if field.Endian == "little" {
@@ -75,15 +75,20 @@ func (fl *FileLayout) PresentField(field *Field) string {
 
 	fieldValue := value.Present(field.Format, field.Value)
 
-	hexValue := ""
-	if len(field.Value) <= maxHexDisplayLength {
-		hexValue = fmt.Sprintf("% 02x", field.Value)
+	res := ""
+	if hideRaw {
+		res = fmt.Sprintf("  [%06x] %-30s %-13s %-21s\n",
+			field.Offset, field.Format.Label, kind, fieldValue)
 	} else {
-		hexValue = fmt.Sprintf("% 02x ...", field.Value[0:maxHexDisplayLength])
+		hexValue := ""
+		if len(field.Value) <= maxHexDisplayLength {
+			hexValue = fmt.Sprintf("% 02x", field.Value)
+		} else {
+			hexValue = fmt.Sprintf("% 02x ...", field.Value[0:maxHexDisplayLength])
+		}
+		res = fmt.Sprintf("  [%06x] %-30s %-13s %-21s %-20s\n",
+			field.Offset, field.Format.Label, kind, fieldValue, hexValue)
 	}
-
-	res := fmt.Sprintf("  [%06x] %-30s %-13s %-21s %-20s\n",
-		field.Offset, field.Format.Label, kind, fieldValue, hexValue)
 
 	for _, child := range field.MatchedPatterns {
 		res += fmt.Sprintf("           - %-28s %-13s %d\n", child.Label, child.Operation, child.Value)
@@ -91,11 +96,11 @@ func (fl *FileLayout) PresentField(field *Field) string {
 	return res
 }
 
-func (fl *FileLayout) Present() {
+func (fl *FileLayout) Present(hideRaw bool) {
 	for _, layout := range fl.Structs {
 		fmt.Printf("%s\n", layout.Label)
 		for _, field := range layout.Fields {
-			fmt.Print(fl.PresentField(&field))
+			fmt.Print(fl.PresentField(&field, hideRaw))
 		}
 		fmt.Println()
 	}
