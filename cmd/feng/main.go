@@ -46,14 +46,15 @@ func main() {
 		fl, err := mapper.MapReader(r, ds)
 		if err != nil {
 			// template don't match, try another
-			if args.Verbose {
+			if _, ok := err.(mapper.EvaluateError); ok {
+				log.Println(tpl, ":", err)
+			} else if args.Verbose {
 				log.Println(tpl, ":", err)
 			}
 			continue
 		}
 
-		fmt.Println(tpl)
-
+		fmt.Println("Parsed as", tpl)
 		fl.Present(args.HideRaw)
 		break
 	}

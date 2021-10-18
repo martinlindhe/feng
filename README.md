@@ -10,6 +10,7 @@ STATUS: private draft work
 - command line print-out of binary file structure (WIP)
 - TODO: auto validate file checksums
 - TODO: extract data from file
+- TODO: binwalk-type of program
 
 
 # Command line tools

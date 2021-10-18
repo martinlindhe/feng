@@ -175,7 +175,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 			val, err := readBytes(r, totalLength, unitLength, fl.endian)
 			if DEBUG {
-				log.Printf("[%08x] reading %d bytes for '%s.%s' %s: %02x", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val)
+				log.Printf("[%08x] reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
 			}
 			if err != nil {
 				return err
@@ -184,6 +184,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			// if known value, see if value is in file data
 			if es.Pattern.Known {
 				if !bytes.Equal(es.Pattern.Pattern, val) {
+					if DEBUG {
+						log.Printf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'", fl.offset, es.Field.Label, es.Pattern.Pattern, val)
+					}
 					return fmt.Errorf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'",
 						fl.offset, es.Field.Label, es.Pattern.Pattern, val)
 				}
@@ -285,7 +288,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 					if matched {
 						err := fl.expandChildren(r, fs, df, ds, es.Children)
 						if err != nil {
-							log.Fatal(err)
+							return err
 						}
 					}
 				}

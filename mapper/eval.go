@@ -10,6 +10,15 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
+type EvaluateError struct {
+	input string
+	msg   string
+}
+
+func (e EvaluateError) Error() string {
+	return e.input + ": " + e.msg
+}
+
 func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 
 	eval := goval.NewEvaluator()
@@ -43,7 +52,7 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 
 	result, err := eval.Evaluate(s, variables, functions)
 	if err != nil {
-		return 0, fmt.Errorf("cant evaluate '%s': %v", s, err)
+		return 0, EvaluateError{input: s, msg: err.Error()}
 	}
 
 	switch v := result.(type) {

@@ -53,7 +53,7 @@ type Field struct {
 }
 
 var (
-	variableExpressionRE = regexp.MustCompile(`([\w .+\-*/()]+)`)
+	variableExpressionRE = regexp.MustCompile(`([\w .+\-*/()<>]+)`)
 
 	red = color.New(color.FgRed).SprintfFunc()
 )

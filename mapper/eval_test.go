@@ -26,8 +26,13 @@ func TestEvaluateExpression(t *testing.T) {
 		expected uint64
 	}{
 		{"4+2", 6},
+		{"2 << 10", 0x800},
 		{"abs(-44)", 44},
-		{"Header.Offset + 2", 8}, // should become 6 + 2
+		{"Header.Offset * 2", 12},
+
+		//        u8[1 << self.Field.Size] Data: ??
+
+		//templates\images\gif.yml : cant evaluate '3 * (2 << self.Screen descriptor.Global Color Table size)': var error: variable "self" does not exist
 	}
 	for _, h := range test {
 		a, err := fl.EvaluateExpression(h.expr)
