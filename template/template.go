@@ -131,7 +131,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 			match := actual == pattern
 
 			if DEBUG {
-				log.Printf("--- %s %s: %08x == %08x is %v", mp.Operation, es.Field.Kind, actual, pattern, match)
+				log.Printf("--- %s %s: %08x == %08x is %v (%s)", mp.Operation, es.Field.Kind, actual, pattern, match, mp.Label)
 			}
 			if match {
 				res = append(res, value.MatchedPattern{Label: mp.Label, Operation: mp.Operation, Value: actual})

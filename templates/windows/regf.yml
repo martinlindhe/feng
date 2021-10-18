@@ -1,5 +1,5 @@
 # STATUS: 1%
-# TODO: need to get absolute value of hive_bin_header.Cell size
+# TODO: need to get absolute value of hive_bin_header.Cell size. we must evaluate all expressions and add an abs() function
 
 references:
   - https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc
@@ -11,6 +11,9 @@ name: Windows NT Registry File
 extensions: [.dat] # has no standard extension
 endian: little
 
+constants:
+  ascii[2] CELL_NK: c'nk'
+
 structs:
   file_header:
     ascii[4] Signature: c'regf'
@@ -19,8 +22,10 @@ structs:
     filetime Timestamp: ??
     u32 Major version: ??
     u32 Minor version: ??
-    u32 File type: ??  # 0 means Registry hive file, 1 = Transaction log variant 1, 2 = Transaction log variant 2. 6 = Transaction log variant 6
-    u32 File format: ?? #  1 means direct memory load
+    u32 File type:
+      eq 0000_0000: Primary file
+    u32 File format:
+      eq 0000_0001: Direct memory load
     u32 Root cell offset: ??
     u32 Hive bins data size: ??
     u32 Clustering factor: ??
@@ -35,15 +40,54 @@ structs:
     ascii[4] Signature: c'hbin'
     u32 Offset: ??   # XXX relative offset to after header. XXX make use of
     u32 Size: ??
-    u32 Unknown 1: ??
-    u32 Unknown 2: ??
+    u8[8] Reserved: ??
     filetime Timestamp: ??
     u32 Spare: ??
 
     # hive bin cell:
     # XXX relative offset from header to here
     i32 Cell size: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use absolute values for calculations)
-    u8[self.Size] Cell data: ??
+    ascii[2] Cell signature: ??
+
+    # KEY NODE
+    if self.Cell signature in (CELL_NK):
+      u16 Flags:
+        bit 00_01: KEY_VOLATILE
+        bit 00_02: KEY_HIVE_EXIT
+        bit 00_04: KEY_HIVE_ENTRY
+        bit 00_08: KEY_NO_DELETE
+        bit 00_10: KEY_SYM_LINK
+        bit 00_20: KEY_COMP_NAME
+        bit 00_40: KEY_PREDEF_HANDLE
+        bit 00_80: VirtualSource
+        bit 01_00: VirtualTarget
+        bit 02_00: VirtualStore
+
+      filetime Timestamp: ??
+      u32 Access bits:
+        bit 0000_0001: was accessed before registry was initialized
+        bit 0000_0002: was accessed after registry was initialized
+
+      u32 Parent cell offset: ??
+      i32 Number of subkeys: ??
+      i32 Number of volatile subkeys: ??
+      i32 Subkeys list offset: ??
+      i32 Volatile subkeys list offset: ??
+      i32 Number of key values: ??
+      i32 Key values list offset: ??
+      i32 Key security offset: ??
+      i32 Class name offset: ??
+      i32 Largest subkey name length: ??
+      i32 Largest subkey class name length: ??
+      i32 Largest value name length: ??
+      i32 Largest value data size: ??
+      i32 WorkVar: ??
+      u16 Key name length: ??
+      u16 Class name length: ??
+      ascii[self.Key name length] Key name string: ??
+      # XXX padding ...
+
+
 
 layout:
   - file_header FILE HEADER

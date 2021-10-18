@@ -581,7 +581,7 @@ layout:
 			Structs: []Struct{
 				{
 					Label:  "Header",
-					Fields: []Field{{Offset: 0x0, Length: 0x6, Value: []uint8{'f', 0x00, 'o', 0x00, 'o', 0x00}, Endian: "little", Format: value.DataField{Kind: "utf16le", Range: "3", Slice: false, Label: "Name"}, MatchedPatterns: []value.MatchedPattern{}}}}},
+					Fields: []Field{{Offset: 0x0, Length: 0x6, Value: []uint8{0x00, 'f', 0x00, 'o', 0x00, 'o'}, Endian: "little", Format: value.DataField{Kind: "utf16le", Range: "3", Slice: false, Label: "Name"}, MatchedPatterns: []value.MatchedPattern{}}}}},
 			endian: "little", offset: 0x6, size: 0x6}, fl)
 }
 
