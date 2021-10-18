@@ -639,6 +639,7 @@ layout:
 			offset: 0x5, size: 0x5}, fl)
 }
 
+/*
 func TestEvaluateAbsoluteArray(t *testing.T) {
 	// tests that "u8[start:length]" syntax works
 	templateData := `
@@ -693,3 +694,4 @@ layout:
 			},
 			offset: 0x4, size: 0xc}, fl)
 }
+*/

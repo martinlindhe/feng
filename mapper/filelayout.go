@@ -53,7 +53,7 @@ type Field struct {
 }
 
 var (
-	variableExpressionRE = regexp.MustCompile(`([\w .]+)`)
+	variableExpressionRE = regexp.MustCompile(`([\w .+\-*/()]+)`)
 
 	red = color.New(color.FgRed).SprintfFunc()
 )
@@ -166,6 +166,9 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 	}
 
 	for _, field := range str.Fields {
+		if DEBUG {
+			log.Printf("GetValue: want %s, got %s", fieldName, field.Format.Label)
+		}
 		if field.Format.Label == fieldName {
 			switch childName {
 			case "offset":
@@ -184,7 +187,7 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 				if child.Label == childName {
 					val := value.U64toBytesBigEndian(child.Value, field.Format.SingleUnitSize())
 					if DEBUG {
-						log.Printf("matched pattern %s = %d", child.Label, val)
+						log.Printf("-- matched pattern %s = %d", child.Label, val)
 					}
 					return field.Format.Kind, val, nil
 				}
@@ -204,9 +207,12 @@ func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
 
 	if df.Range != "" {
 		if df.IsAbsoluteAddress() {
-			_, rangeLength = df.GetAbsoluteAddress()
+			_, rangeLength, err = df.GetAbsoluteAddress()
+			if err != nil {
+				log.Fatal(err)
+			}
 		} else {
-			rangeLength, err = value.EvaluateExpression(df.Range)
+			rangeLength, err = fl.EvaluateExpression(df.Range)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -280,7 +286,8 @@ func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, err
 
 		kind, val, err := fl.GetValue(key, df)
 		if err != nil {
-			return "", err
+			s, err := fl.EvaluateExpression(key)
+			return fmt.Sprintf("%d", s), err
 		}
 
 		if DEBUG {

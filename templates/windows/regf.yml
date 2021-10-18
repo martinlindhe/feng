@@ -14,12 +14,19 @@ endian: little
 constants:
   ascii[2] CELL_NK: c'nk'
 
+types:
+  # XXX impl!!!
+  version:
+    u32 Major: ??
+    u32 Minor: ??
+
 structs:
   file_header:
     ascii[4] Signature: c'regf'
     u32 Primary seq number: ??
     u32 Secondary seq number: ??
     filetime Timestamp: ??
+    # version Version: ??   # XXX impl
     u32 Major version: ??
     u32 Minor version: ??
     u32 File type:

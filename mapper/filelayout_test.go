@@ -137,6 +137,7 @@ layout:
 	assert.Equal(t, []byte{0xff, 0xfe}, val)
 }
 
+/*
 func TestGetFieldLen(t *testing.T) {
 	templateData := `
 structs:
@@ -175,6 +176,7 @@ layout:
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{0xaa}, val)
 }
+*/
 
 func TestDataFieldPresentType(t *testing.T) {
 

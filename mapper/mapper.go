@@ -72,7 +72,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		if df.Range != "" {
 			kind, val, err := fileLayout.GetValue(df.Range, &df)
 			if err != nil {
-				log.Fatal(err)
+				return nil, err
 			}
 
 			parsedRange := value.AsUint64(kind, val)
@@ -159,10 +159,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			prevOffset := fl.offset
 			if es.Field.IsAbsoluteAddress() {
 				// if range = start:len, first move to given offset
-				rangeStart, _ := es.Field.GetAbsoluteAddress()
+				rangeStart, _, err := es.Field.GetAbsoluteAddress()
+				if err != nil {
+					log.Fatal(err)
+				}
 
 				log.Printf("--- SEEKING TO ABSOLUTE OFFSET %08x", rangeStart)
-				_, err := r.Seek(int64(rangeStart), io.SeekStart)
+				_, err = r.Seek(int64(rangeStart), io.SeekStart)
 				if err != nil {
 					return err
 				}
@@ -230,7 +233,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 					kind, val, err := fl.GetValue(key, df)
 					if err != nil {
-						log.Fatal(err)
+						return err
 					}
 
 					if DEBUG {
@@ -292,7 +295,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			// XXX find custom struct with given name
 			customStruct, err := fl.GetStruct(es.Field.Kind)
 			if err != nil {
-				log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
+				return fmt.Errorf("error fetching struct '%s': %v", es.Field.Kind, err)
 			}
 
 			log.Printf("%#v", customStruct)

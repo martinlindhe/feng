@@ -27,7 +27,7 @@ structs:
     if self.Signature notin (BIG_ENDIAN_MAGIC, LITTLE_ENDIAN_MAGIC):
       data: invalid
 
-    u16 Arbitrary number: 00 2a # XXX for big endian "00 2a", for little endian "2a 00"
+    u16 Arbitrary number: 00 2a # XXX for big endian "00 2a", for little endian "2a 00" (should decode the same due to endian directive above. TODO VERIFY)
 
     # XXX rest
 

@@ -15,7 +15,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/fatih/color"
-	"github.com/maja42/goval"
 )
 
 const (
@@ -248,25 +247,6 @@ type MatchedPattern struct {
 	Value uint64
 }
 
-func EvaluateExpression(s string) (uint64, error) {
-
-	eval := goval.NewEvaluator()
-	result, err := eval.Evaluate(s, nil, nil)
-
-	if err != nil {
-		return 0, fmt.Errorf("cant evaluate '%s': %v", s, err)
-	}
-
-	switch v := result.(type) {
-	case int:
-		if DEBUG {
-			log.Printf("EvaluateExpression: %s => %d", s, v)
-		}
-		return uint64(v), nil
-	}
-	return 0, fmt.Errorf("unhandled result type %T", result)
-}
-
 func (df *DataField) SingleUnitSize() uint64 {
 	return SingleUnitSize(df.Kind)
 }
@@ -293,24 +273,27 @@ func (df *DataField) IsAbsoluteAddress() bool {
 }
 
 // returns offset, length from Range "offset:length" syntax
-func (df *DataField) GetAbsoluteAddress() (uint64, uint64) {
-	if !df.IsAbsoluteAddress() {
-		log.Fatalf("range is not absolute '%s'", df.Range)
-	}
+func (df *DataField) GetAbsoluteAddress() (uint64, uint64, error) {
+	/*
+		if !df.IsAbsoluteAddress() {
+			log.Fatalf("range is not absolute '%s'", df.Range)
+		}
 
-	matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
-	rangeOffset, err := EvaluateExpression(matches[0][1])
-	if err != nil {
-		log.Fatal(err)
-	}
-	rangeLength, err := EvaluateExpression(matches[0][2])
-	if err != nil {
-		log.Fatal(err)
-	}
-	if DEBUG {
-		log.Printf("GetAbsoluteAddress: evaluated %s to %d:%d", df.Range, rangeOffset, rangeLength)
-	}
-	return rangeOffset, rangeLength
+		matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
+		rangeOffset, err := EvaluateExpression(matches[0][1])
+		if err != nil {
+			return 0, 0, err
+		}
+		rangeLength, err := EvaluateExpression(matches[0][2])
+		if err != nil {
+			return 0, 0, err
+		}
+		if DEBUG {
+			log.Printf("GetAbsoluteAddress: evaluated %s to %d:%d", df.Range, rangeOffset, rangeLength)
+		}
+		return rangeOffset, rangeLength, nil
+	*/
+	panic("XXX who uses GetAbsoluteAddress ???")
 }
 
 // returns true if unit is a single u8, u16, u32 or u64 that can have eq/bit field as child

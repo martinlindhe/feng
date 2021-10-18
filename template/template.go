@@ -191,7 +191,7 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 			if DEBUG {
 				log.Printf("parsing 2: %#v", val)
 			}
-			// if current node is u8, u16, u32 or u64, childs must be pattern matchers (bit / eq)
+			// if current node is u8, u16, u32 or u64, children must be pattern matchers (bit / eq)
 			if field.IsPatternableUnit() {
 				matchPatterns, err := parseMatchPatterns(val)
 				if err != nil {
