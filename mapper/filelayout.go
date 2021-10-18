@@ -53,7 +53,8 @@ type Field struct {
 }
 
 var (
-	variableExpressionRE = regexp.MustCompile(`([\w .+\-*/()<>]+)`)
+	variableExpressionRE      = regexp.MustCompile(`([\w .+\-*/()<>]+)`)
+	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s\+\-\*\/]+):([\d\s\+\-\*\/]+)`)
 
 	red = color.New(color.FgRed).SprintfFunc()
 )
@@ -206,8 +207,8 @@ func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
 	var err error
 
 	if df.Range != "" {
-		if df.IsAbsoluteAddress() {
-			_, rangeLength, err = df.GetAbsoluteAddress()
+		if fl.IsAbsoluteAddress(df) {
+			_, rangeLength, err = fl.GetAbsoluteAddress(df)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -221,6 +222,34 @@ func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
 	totalLength := unitLength * rangeLength
 
 	return unitLength, totalLength
+}
+
+// returns offset, length from Range "offset:length" syntax. used by images/ico.yml
+func (fl *FileLayout) GetAbsoluteAddress(df *value.DataField) (uint64, uint64, error) {
+
+	if !fl.IsAbsoluteAddress(df) {
+		log.Fatalf("range is not absolute '%s'", df.Range)
+	}
+
+	matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
+	rangeOffset, err := fl.EvaluateExpression(matches[0][1])
+	if err != nil {
+		return 0, 0, err
+	}
+	rangeLength, err := fl.EvaluateExpression(matches[0][2])
+	if err != nil {
+		return 0, 0, err
+	}
+	if DEBUG {
+		log.Printf("GetAbsoluteAddress: evaluated %s to %d:%d", df.Range, rangeOffset, rangeLength)
+	}
+	return rangeOffset, rangeLength, nil
+}
+
+// returns true if Range is of "offset:length" syntax
+func (fl *FileLayout) IsAbsoluteAddress(df *value.DataField) bool {
+	matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
+	return len(matches) == 1 && len(matches[0]) == 3
 }
 
 // presents the underlying type as it is known in the template format

@@ -13,7 +13,7 @@ import (
 
 var args struct {
 	Filename string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
-	Verbose  bool   `help:"Be more verbose."`
+	Verbose  bool   `short:"v" help:"Be more verbose."`
 	HideRaw  bool   `help:"Hide raw values"`
 }
 

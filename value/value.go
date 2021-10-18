@@ -25,8 +25,7 @@ const (
 )
 
 var (
-	bitExpressionRE           = regexp.MustCompile(`b([01_]+)`)
-	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s\+\-\*\/]+):([\d\s\+\-\*\/]+)`)
+	bitExpressionRE = regexp.MustCompile(`b([01_]+)`)
 )
 
 // parses a "structs" data value (used by structs parser)
@@ -264,36 +263,6 @@ func SingleUnitSize(kind string) uint64 {
 	}
 	log.Fatalf("SingleUnitSize cant handle kind '%s'", kind)
 	return 0
-}
-
-// returns true if Range is of "offset:length" syntax
-func (df *DataField) IsAbsoluteAddress() bool {
-	matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
-	return len(matches) == 1 && len(matches[0]) == 3
-}
-
-// returns offset, length from Range "offset:length" syntax
-func (df *DataField) GetAbsoluteAddress() (uint64, uint64, error) {
-	/*
-		if !df.IsAbsoluteAddress() {
-			log.Fatalf("range is not absolute '%s'", df.Range)
-		}
-
-		matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
-		rangeOffset, err := EvaluateExpression(matches[0][1])
-		if err != nil {
-			return 0, 0, err
-		}
-		rangeLength, err := EvaluateExpression(matches[0][2])
-		if err != nil {
-			return 0, 0, err
-		}
-		if DEBUG {
-			log.Printf("GetAbsoluteAddress: evaluated %s to %d:%d", df.Range, rangeOffset, rangeLength)
-		}
-		return rangeOffset, rangeLength, nil
-	*/
-	panic("XXX who uses GetAbsoluteAddress ???")
 }
 
 // returns true if unit is a single u8, u16, u32 or u64 that can have eq/bit field as child

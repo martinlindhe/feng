@@ -44,14 +44,14 @@ structs:
       i16 Width: ??
       i16 Height: ??
       u16 Color planes: ??
-      u16 Bits per pixel: ??
+      u16 BitsPerPixel: ??
 
     # V3 (WIN3XBITMAPHEADER) aka BITMAPINFOHEADER, used by V3, V4, V5
     if self.Header size in (WIN3XBITMAPHEADER, WIN4XBITMAPHEADER, BITMAPV5HEADER):
       i32 Width: ??
       i32 Height: ??
       u16 Color planes: ??
-      u16 Bits per pixel: ??
+      u16 BitsPerPixel: ??
       u32 Compression method:
         eq 0000_0000: BI_RGB (none)
         eq 0000_0001: BI_RLE8
@@ -106,20 +106,20 @@ structs:
     # V2, color palette
     if self.Header size in (WIN2XBITMAPHEADER):
         # XXX need bgr data type
-        u8[3 * (1 << self.Bits per pixel)] Color palette: ??  # in "u8 B,G,R" format
+        u8[3 * (1 << self.BitsPerPixel)] Color palette: ??  # in "u8 B,G,R" format
 
     # V3, color table  ... XXX also used in V4 and V5 ???
     if self.Header size in (WIN3XBITMAPHEADER):
     # XXX custom type for RGBQUAD (u8 blue,green,red,reserved)
-      if self.Bits per pixel notin (24, 32):
+      if self.BitsPerPixel notin (24, 32):
         if self.Used colors notin (0):
           u32[self.Used colors] RGBQUAD: ??
         if self.Used colors in (0):
-          u32[1 << self.Bits per pixel] RGBQUAD: ??
+          u32[1 << self.BitsPerPixel] RGBQUAD: ??
 
     # image data
     # XXX one row for each DIBHEADER.Height
-    u8[DIBHEADER.Height * ( ((DIBHEADER.Bits per pixel * DIBHEADER.Width + 31) / 32) * 4 )] Image data: ??
+    u8[DIBHEADER.Height * ( ((DIBHEADER.BitsPerPixel * DIBHEADER.Width + 31) / 32) * 4 )] Image data: ??
 
 layout:
   - file_header FILEHEADER

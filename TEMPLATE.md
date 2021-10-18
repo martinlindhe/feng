@@ -34,7 +34,7 @@
     u32[4]
     u8[FILE_SIZE-10]
 
-    u8[self.Data offset:self.Data size]         "start:length" offset syntax
+    u8[self.Data offset:self.Data size]         "start:length" offset syntax      used by images/ico.yml
 
 
 # slices

@@ -60,7 +60,7 @@ structs:
 
     if self.Screen descriptor.Global Color Table present in (1):
       u8[3 * (2 << self.Screen descriptor.Global Color Table size)] Global Color Table: ??   # FIXME use rgb type
-      #rgb[2 << Screen descriptor.Global Color Table size] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
+      #rgb[2 << self.Screen descriptor.Global Color Table size] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
 
   section:
     u8 Block type: ??

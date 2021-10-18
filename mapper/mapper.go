@@ -157,9 +157,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			}
 
 			prevOffset := fl.offset
-			if es.Field.IsAbsoluteAddress() {
+			if fl.IsAbsoluteAddress(&es.Field) {
 				// if range = start:len, first move to given offset
-				rangeStart, _, err := es.Field.GetAbsoluteAddress()
+				rangeStart, _, err := fl.GetAbsoluteAddress(&es.Field)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -199,7 +199,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 			field = Field{Offset: fl.offset, Length: totalLength, Value: val, Format: es.Field, Endian: fl.endian, MatchedPatterns: matchPatterns}
 			fs.Fields = append(fs.Fields, field)
-			if es.Field.IsAbsoluteAddress() {
+			if fl.IsAbsoluteAddress(&es.Field) {
 				fl.offset = prevOffset
 				log.Printf("--- RESTORING FILE POSITION TO ABSOLUTE OFFSET %08x", fl.offset)
 				_, err := r.Seek(int64(fl.offset), io.SeekStart)

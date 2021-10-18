@@ -1,5 +1,5 @@
 # STATUS: 5%
-# - HI: "if self.Header version.V5" dont work
+# - HI: "if self.Header version.V5" don't work
 # - HI: if MHD_PASSWORD is set, rest of file is scrambled, so stop decoding
 
 references:
@@ -37,7 +37,7 @@ structs:
       eq 7a: NEWSUB_HEAD
       eq 7b: ENDARC_HEAD
 
-    #if Header type[MAIN_HEAD]:  ## XXX DONT MATCH!?!
+    #if Header type[MAIN_HEAD]:  ## XXX DON'T MATCH!?!
     u16 Main header flags:
       bit 0001: MHD_VOLUME
       bit 0002: MHD_COMMENT
@@ -59,7 +59,7 @@ structs:
       u8 EncryptVer: ??
 
     # XXX NEXT SECTION FILE_HEAD  (rar_001_linux.rar)
-    #if Header type[FILE_HEAD]:  ## XXX DONT MATCH!?!
+    #if Header type[FILE_HEAD]:  ## XXX DON'T MATCH!?!
     u16 Header CRC: ??  # XXX kind ?
     u8 Header type:   # XXX all headers start with crc+type fields
       eq 72: MARK_HEAD
