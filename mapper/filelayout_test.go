@@ -19,12 +19,12 @@ func TestFieldPresent(t *testing.T) {
 		field    Field
 	}{
 		{"  [000000] U8 array                       u8[2]                               ff d8               \n", Field{Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "U8 array"}}},
-		{"  [000000] TimeT_32_LE                    time_t_32 le  2013-10-16T10:09:51Z  52 5e 65 ef         \n", Field{Length: 0x4, Value: []uint8{0x52, 0x5e, 0x65, 0xef}, Endian: "little", Format: value.DataField{Kind: "time_t_32", Range: "", Slice: false, Label: "TimeT_32_LE"}}},
+		{"  [000000] TimeT_32                       time_t_32 le  2013-10-16T10:09:51Z  52 5e 65 ef         \n", Field{Length: 0x4, Value: []uint8{0x52, 0x5e, 0x65, 0xef}, Endian: "little", Format: value.DataField{Kind: "time_t_32", Range: "", Slice: false, Label: "TimeT_32"}}},
 
 		{"  [000000] FileTime                       filetime le   2021-09-29T11:38:29Z  01 d7 b5 26 85 eb f6 9c\n", Field{Length: 0x4, Value: []uint8{0x01, 0xd7, 0xb5, 0x26, 0x85, 0xeb, 0xf6, 0x9c}, Endian: "little", Format: value.DataField{Kind: "filetime", Range: "", Slice: false, Label: "FileTime"}}},
 
 		// XXX "utf16"  + endian flag instead. also both LE and BE tests and verify
-		{"  [000000] UTF16-LE                       utf16le[3] le foo                   00 66 00 6f 00 6f   \n", Field{Length: 0x6, Value: []uint8{0x00, 'f', 0x00, 'o', 0x00, 'o'}, Endian: "little", Format: value.DataField{Kind: "utf16le", Range: "3", Slice: false, Label: "UTF16-LE"}}},
+		{"  [000000] UTF16                          utf16[3] le   foo                   00 66 00 6f 00 6f   \n", Field{Length: 0x6, Value: []uint8{0x00, 'f', 0x00, 'o', 0x00, 'o'}, Endian: "little", Format: value.DataField{Kind: "utf16", Range: "3", Slice: false, Label: "UTF16"}}},
 
 		{"  [000000] Signed                         i8            -1                    ff                  \n", Field{Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "i8", Slice: false, Label: "Signed"}}},
 		{"  [000000] Signed                         i16 le        -1                    ff ff               \n", Field{Length: 0x2, Value: []uint8{0xff, 0xff}, Endian: "little", Format: value.DataField{Kind: "i16", Slice: false, Label: "Signed"}}},

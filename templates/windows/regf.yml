@@ -21,7 +21,7 @@ types:
     u32 Minor: ??
 
 structs:
-  file_header:
+  base_block:
     ascii[4] Signature: c'regf'
     u32 Primary seq number: ??
     u32 Secondary seq number: ??
@@ -36,14 +36,14 @@ structs:
     u32 Root cell offset: ??
     u32 Hive bins data size: ??
     u32 Clustering factor: ??
-    utf16le[32] File name: ??
+    utf16[32] File name: ??
     u8[396] Reserved: ??
     u32 Checksum: ?? # XXX xor-32 of the previous 508 bytes
     u8[3576] Reserved: ??
     u32 Boot type: ??
     u32 Boot recover: ??
   
-  hive_bin_header:
+  hive_bin:
     ascii[4] Signature: c'hbin'
     u32 Offset: ??   # XXX relative offset to after header. XXX make use of
     u32 Size: ??
@@ -97,5 +97,5 @@ structs:
 
 
 layout:
-  - file_header FILE HEADER
-  - hive_bin_header HIVE BIN HEADER
+  - base_block FILE HEADER
+  - hive_bin HIVE BIN HEADER

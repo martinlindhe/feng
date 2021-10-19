@@ -254,7 +254,7 @@ func SingleUnitSize(kind string) uint64 {
 	switch kind {
 	case "u8", "i8", "ascii", "asciiz":
 		return 1
-	case "u16", "i16", "utf16le":
+	case "u16", "i16", "utf16":
 		return 2
 	case "u32", "i32", "time_t_32":
 		return 4
@@ -354,8 +354,8 @@ func Present(format DataField, b []byte) string {
 		v, _ := asciiZString(b, len(b))
 		return v
 
-	case "utf16le":
-		v := utf16leString(b)
+	case "utf16":
+		v := utf16String(b)
 		return v
 
 	case "time_t_32":
@@ -386,7 +386,7 @@ var (
 	red = color.New(color.FgRed).SprintFunc()
 )
 
-func utf16leString(b []byte) string {
+func utf16String(b []byte) string {
 	if len(b)%2 != 0 {
 		log.Fatal("unexpected utf16 length", len(b))
 	}
