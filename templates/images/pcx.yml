@@ -55,6 +55,8 @@ structs:
     # TODO need "else" in order to not overlap palette on image data area
     u8[FILE_SIZE - self.offset] Image data: ??
 
+    # TEST WITH: ..\formats\samples\image\pcx\rgb8_with_palette.pcx
+    # XXX syntax:    if in(self.Version, (3,4,5)) && in(xxx)      XXXX add built-in in() function
     if self.Version in (3,4,5):  # TODO multiple IF in one line
       if self.Bits per pixel in (8):
         if self.Color planes in (1):

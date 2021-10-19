@@ -52,12 +52,43 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 	functions := make(map[string]goval.ExpressionFunction)
 
 	functions["abs"] = func(args ...interface{}) (interface{}, error) {
+		// 1 arg: integer. return absolute value
 		if len(args) != 1 {
 			return nil, fmt.Errorf("expected exactly 1 argument")
 		}
 		i, ok := args[0].(int)
 		if ok {
 			return int(math.Abs(float64(i))), nil
+		}
+		return nil, fmt.Errorf("expected int")
+	}
+	functions["offset"] = func(args ...interface{}) (interface{}, error) {
+		// 1 arg: name of variable. return its offset as int
+		if len(args) != 1 {
+			return nil, fmt.Errorf("expected exactly 1 argument")
+		}
+		s, ok := args[0].(string)
+		if ok {
+			i, err := fl.GetOffset(s, nil)
+			if err != nil {
+				panic(err)
+			}
+			return i, nil
+		}
+		return nil, fmt.Errorf("expected string")
+	}
+	functions["len"] = func(args ...interface{}) (interface{}, error) {
+		// 1 arg: name of variable. return its offset as int
+		if len(args) != 1 {
+			return nil, fmt.Errorf("expected exactly 1 argument")
+		}
+		s, ok := args[0].(string)
+		if ok {
+			i, err := fl.GetLength(s, nil)
+			if err != nil {
+				panic(err)
+			}
+			return i, nil
 		}
 		return nil, fmt.Errorf("expected string")
 	}

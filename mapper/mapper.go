@@ -57,7 +57,8 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 			baseLabel := df.Label
 			for i := uint64(0); i < math.MaxUint64; i++ {
-				df.Label = fmt.Sprintf("%s[%d]", baseLabel, i)
+				//df.Label = fmt.Sprintf("%s[%d]", baseLabel, i)
+				df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
 					if err == io.EOF {
 						break
@@ -150,7 +151,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				}
 			}
 
-			unitLength, totalLength := fl.GetLength(&es.Field)
+			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 			if totalLength == 0 {
 				if DEBUG {
 					log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
@@ -161,7 +162,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			prevOffset := fl.offset
 			if fl.IsAbsoluteAddress(&es.Field) {
 				// if range = start:len, first move to given offset
-				rangeStart, _, err := fl.GetAbsoluteAddress(&es.Field)
+				rangeStart, _, err := fl.GetAbsoluteAddressRange(&es.Field)
 				if err != nil {
 					log.Fatal(err)
 				}

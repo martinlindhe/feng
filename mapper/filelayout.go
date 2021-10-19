@@ -53,7 +53,7 @@ type Field struct {
 }
 
 var (
-	variableExpressionRE      = regexp.MustCompile(`([\w .+\-*/()<>]+)`)
+	variableExpressionRE      = regexp.MustCompile(`([\w .+\-*/()<>"]+)`)
 	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s\+\-\*\/]+):([\d\s\+\-\*\/]+)`)
 
 	red = color.New(color.FgRed).SprintfFunc()
@@ -144,7 +144,9 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 // returns: kind, bytes, error
 func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, error) {
 
-	s = strings.Replace(s, "self.", df.Label+".", 1)
+	if df != nil {
+		s = strings.Replace(s, "self.", df.Label+".", 1)
+	}
 
 	if DEBUG {
 		log.Printf("GetValue: searching for '%s'", s)
@@ -199,8 +201,80 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 	return "", nil, fmt.Errorf("GetValue: '%s' not found", s)
 }
 
+// finds the first field named `structName`.`fieldName`
+// returns: offset,error
+func (fl *FileLayout) GetOffset(s string, df *value.DataField) (int, error) {
+
+	if df != nil {
+		s = strings.Replace(s, "self.", df.Label+".", 1)
+	}
+
+	if DEBUG {
+		log.Printf("GetOffset: searching for '%s'", s)
+	}
+
+	parts := strings.SplitN(s, ".", 3)
+	if len(parts) < 2 {
+		return 0, fmt.Errorf("GetOffset: unexpected format '%s'", s)
+	}
+	structName := parts[0]
+	fieldName := parts[1]
+
+	str, err := fl.GetStruct(structName)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, field := range str.Fields {
+		if DEBUG {
+			log.Printf("GetOffset: want %s, got %s", fieldName, field.Format.Label)
+		}
+		if field.Format.Label == fieldName {
+			return int(field.Offset), nil
+		}
+	}
+
+	return 0, fmt.Errorf("GetOffset: '%s' not found", s)
+}
+
+// finds the first field named `structName`.`fieldName`
+// returns: offset,error
+func (fl *FileLayout) GetLength(s string, df *value.DataField) (int, error) {
+
+	if df != nil {
+		s = strings.Replace(s, "self.", df.Label+".", 1)
+	}
+
+	if DEBUG {
+		log.Printf("GetLength: searching for '%s'", s)
+	}
+
+	parts := strings.SplitN(s, ".", 3)
+	if len(parts) < 2 {
+		return 0, fmt.Errorf("GetLength: unexpected format '%s'", s)
+	}
+	structName := parts[0]
+	fieldName := parts[1]
+
+	str, err := fl.GetStruct(structName)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, field := range str.Fields {
+		if DEBUG {
+			log.Printf("GetLength: want %s, got %s", fieldName, field.Format.Label)
+		}
+		if field.Format.Label == fieldName {
+			return int(field.Length), nil
+		}
+	}
+
+	return 0, fmt.Errorf("GetLength: '%s' not found", s)
+}
+
 // returns unitLength, totalLength
-func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
+func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64) {
 
 	unitLength := df.SingleUnitSize()
 	rangeLength := uint64(1)
@@ -208,7 +282,7 @@ func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
 
 	if df.Range != "" {
 		if fl.IsAbsoluteAddress(df) {
-			_, rangeLength, err = fl.GetAbsoluteAddress(df)
+			_, rangeLength, err = fl.GetAbsoluteAddressRange(df)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -230,7 +304,7 @@ func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
 }
 
 // returns offset, length from Range "offset:length" syntax. used by images/ico.yml
-func (fl *FileLayout) GetAbsoluteAddress(df *value.DataField) (uint64, uint64, error) {
+func (fl *FileLayout) GetAbsoluteAddressRange(df *value.DataField) (uint64, uint64, error) {
 
 	if !fl.IsAbsoluteAddress(df) {
 		log.Fatalf("range is not absolute '%s'", df.Range)
@@ -263,7 +337,7 @@ func (fl *FileLayout) PresentType(df *value.DataField) string {
 		return fmt.Sprintf("%s[]", df.Kind)
 	}
 	if df.Range != "" {
-		unitLength, totalLength := fl.GetLength(df)
+		unitLength, totalLength := fl.GetAddressLengthPair(df)
 		fieldLength := totalLength / unitLength
 		return fmt.Sprintf("%s[%d]", df.Kind, fieldLength)
 	}

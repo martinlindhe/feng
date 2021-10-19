@@ -81,7 +81,8 @@ structs:
       u8[self.Length] Image data: ??
 
     if self.Type in (PLTE):
-      rgb[self.Length / 3] Palette: ??      # XXX chunk Length 768 = 256 palette values (R, G, B)   need to use custom type "rgb"
+      #rgb[self.Length / 3] Palette: ??      # XXX chunk Length 768 = 256 palette values (R, G, B)   need to use custom type "rgb"
+      u8[self.Length] Palette: ??
 
     if self.Type in (sBIT):
       if IHDR.Color type in (0): # grayscale
@@ -115,14 +116,14 @@ structs:
 
     if self.Type in (tEXt):
       asciiz Keyword: ??
-      ascii[self.Length - self.Keyword.len] Text: ??
+      ascii[self.Length - len("self.Keyword")] Text: ??
 
     if self.Type in (zTXt):
       asciiz Keyword: ??
       u8 Compression method:
         eq 00: Deflate
         default: invalid
-      u8[self.Length - (self.offset - self.Keyword.offset)] Compressed text: ??            # XXX mark as deflate for decompression
+      u8[self.Length - (self.offset - offset("self.Keyword"))] Compressed text: ??            # XXX mark as deflate for decompression
 
     if self.Type in (iTXt):
       asciiz Keyword: ??
@@ -134,14 +135,14 @@ structs:
         default: invalid
       asciiz Language tag: ??
       asciiz Translated keyword: ??
-      ascii[self.Length - (self.offset - self.Keyword.offset)] Text: ?? # XXX is UTF-8 encoded, not ascii !!!
+      ascii[self.Length - (self.offset - offset("self.Keyword"))] Text: ?? # XXX is UTF-8 encoded, not ascii !!!
 
     if self.Type in (iCCP):
-      asciiz Profile name: ??
+      asciiz ProfileName: ??
       u8 Compression method:
         eq 00: Deflate
         default: invalid
-      u8[self.Length - (self.offset - self.Profile name.offset)] Compressed profile: ??   # XXX mark as deflate for decompression
+      u8[self.Length - (self.offset - offset("self.ProfileName"))] Compressed profile: ??   # XXX mark as deflate for decompression
 
     if self.Type in (tIME):
       # time in UTC
