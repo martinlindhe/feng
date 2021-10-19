@@ -50,17 +50,17 @@ structs:
     u8 Signature 2: c'a'
     u16 Logical screen width: ??
     u16 Logical screen height: ??
-    u8 Screen descriptor:
-      bit b0000_0111: Global Color Table size
+    u8 ScreenDescriptor:
+      bit b0000_0111: GlobalColorTableSize
       bit b0000_1000: Sort flag
       bit b0111_0000: Color resolution
-      bit b1000_0000: Global Color Table present
+      bit b1000_0000: GlobalColorTablePresent
     u8 Background color: ??
     u8 Aspect ratio: ??
 
-    if self.Screen descriptor.Global Color Table present in (1):
-      u8[3 * (2 << self.Screen descriptor.Global Color Table size)] Global Color Table: ??   # FIXME use rgb type
-      #rgb[2 << self.Screen descriptor.Global Color Table size] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
+    if self.ScreenDescriptor.GlobalColorTablePresent in (1):
+      u8[3 * (2 << self.ScreenDescriptor.GlobalColorTableSize)] Global Color Table: ??   # FIXME use rgb type
+      #rgb[2 << self.ScreenDescriptor.GlobalColorTableSize] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
 
   section:
     u8 Block type: ??
@@ -83,14 +83,14 @@ structs:
       u16 Top position: ??
       u16 Image width: ??
       u16 Image height: ??
-      u8 Image descriptor: # aka IMAGEDESCRIPTOR_PACKEDFIELDS
-        bit b0000_0111: Local color table size
+      u8 ImageDescriptor: # aka IMAGEDESCRIPTOR_PACKEDFIELDS
+        bit b0000_0111: LocalColorTableSize
         bit b0001_1000: Reserved
         bit b0010_0000: Sort
         bit b0100_0000: Interlace
-        bit b1000_0000: Local color table
-      if self.Image descriptor.Local color table:
-        u8[3 * (2 << (self.Image descriptor.Local color table size))] Local color table: ?? # XXX RGB type !!!!!!
+        bit b1000_0000: LocalColorTablePresent
+      if self.ImageDescriptor.LocalColorTablePresent:
+        u8[3 * (2 << (self.ImageDescriptor.LocalColorTableSize))] Local color table: ?? # XXX RGB type !!!!!!
       u8 LZWMinimumCodeSize: ??   # XXX meaning?
 
       # XXX series of data blocks. last block is one with Size==0

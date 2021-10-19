@@ -82,7 +82,7 @@ layout:
   - segment COMMENT
   - segment DQT0
   - segment DQT1
-  - segment SOFx sof2
+  - segment SOFxSOF2 # XXX
   - segment DHT0
   - segment DHT1
   - segment SOS     # XXX SOS holds image data after that segment, all data is between SOI and EOI markers

@@ -12,7 +12,10 @@ extensions: [.dat] # has no standard extension
 endian: little
 
 constants:
-  ascii[2] CELL_NK: c'nk'
+  ascii[2] SIG_NK: c'nk'   # Key Node
+  ascii[2] SIG_SK: c'sk'   # Key Security
+  ascii[2] SIG_VK: c'vk'   # Key Value
+  ascii[2] SIG_LF: c'lf'   # Fast Leaf
 
 types:
   # XXX impl!!!
@@ -51,13 +54,14 @@ structs:
     filetime Timestamp: ??
     u32 Spare: ??
 
-    # hive bin cell:
-    # XXX relative offset from header to here
-    i32 Cell size: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use absolute values for calculations)
+
+  
+  nk_cell:
+    i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
     ascii[2] Cell signature: ??
 
     # KEY NODE
-    if self.Cell signature in (CELL_NK):
+    if self.Cell signature in (SIG_NK):
       u16 Flags:
         bit 00_01: KEY_VOLATILE
         bit 00_02: KEY_HIVE_EXIT
@@ -89,13 +93,54 @@ structs:
       i32 Largest value name length: ??
       i32 Largest value data size: ??
       i32 WorkVar: ??
-      u16 Key name length: ??
+      u16 KeyLength: ??
       u16 Class name length: ??
-      ascii[self.Key name length] Key name string: ??
-      # XXX padding ...
+      ascii[self.KeyLength] Key: ??
+      u8[abs(self.CellSize) - 0x50 - self.KeyLength] Padding: ??
 
+  sk_cell:
+    i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
+    ascii[2] Cell signature: ??
 
+    if self.Cell signature in (SIG_SK):
+      u16 Reserved: ??
+      i32 Flink: ??
+      i32 Blink: ??
+      i32 Reference count: ??
+      i32 DescriptorLength: ??
+      u8[self.DescriptorLength] Descriptor: ??      # XXX decode DESCRIPTOR ... see https://www.sweetscape.com/010editor/repository/files/RegistryHive.bt
+      u8[abs(self.CellSize) - 0x18 - self.DescriptorLength] Padding: ??
+
+  vk_cell:
+    i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
+    ascii[2] Cell signature: ??
+
+    if self.Cell signature in (SIG_VK):
+      u16 Name length: ??
+      i32 Data length: ??
+      i32 Data offset: ??
+      i32 Type: ??
+      u16 Flags: ??
+      u16 Spare: ??
+
+  lf_list:
+    i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
+    ascii[2] Cell signature: ??
+
+    if self.Cell signature in (SIG_LF):
+      i16 NumberOfOffsets: ??
+      u8[8 * self.NumberOfOffsets] Offset: ?? # XXX decode "int offset, char[4] HASH" (8 bytes per entry)
 
 layout:
   - base_block FILE HEADER
-  - hive_bin HIVE BIN HEADER
+  - hive_bin HBINRECORD
+  # XXX listed as winxp SAM atm...
+  - nk_cell CELL_NK0
+  - sk_cell CELL_SK0
+  - nk_cell CELL_NK1
+  - sk_cell CELL_SK1
+  - lf_list LIST_LF0
+  - nk_cell CELL_NK2
+  - vk_cell CELL_VK0
+
+  #- hive_bin[] HBINRECORD     # XXX slice

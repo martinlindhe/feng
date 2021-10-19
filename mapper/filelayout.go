@@ -213,6 +213,11 @@ func (fl *FileLayout) GetLength(df *value.DataField) (uint64, uint64) {
 				log.Fatal(err)
 			}
 		} else {
+			old := df.Range
+			df.Range = strings.Replace(df.Range, "self.", df.Range+".", 1)
+			if df.Range != old {
+				log.Fatalf("%s => %s", old, df.Range)
+			}
 			rangeLength, err = fl.EvaluateExpression(df.Range)
 			if err != nil {
 				log.Fatal(err)
@@ -313,6 +318,7 @@ func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, err
 			continue
 		}
 
+		key = strings.ReplaceAll(key, "self.", df.Label+".")
 		kind, val, err := fl.GetValue(key, df)
 		if err != nil {
 			s, err := fl.EvaluateExpression(key)

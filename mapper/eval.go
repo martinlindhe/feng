@@ -27,11 +27,20 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 	for _, layout := range fl.Structs {
 		mapped := make(map[string]interface{})
 		for _, field := range layout.Fields {
-			value := value.Present(field.Format, field.Value)
-			if i, err := strconv.ParseInt(value, 10, 64); err == nil {
-				mapped[field.Format.Label] = int(i)
+
+			if len(field.MatchedPatterns) > 0 {
+				children := make(map[string]interface{})
+				for _, child := range field.MatchedPatterns {
+					children[child.Label] = int(child.Value)
+				}
+				mapped[field.Format.Label] = children
 			} else {
-				mapped[field.Format.Label] = value
+				value := value.Present(field.Format, field.Value)
+				if i, err := strconv.ParseInt(value, 10, 64); err == nil {
+					mapped[field.Format.Label] = int(i)
+				} else {
+					mapped[field.Format.Label] = value
+				}
 			}
 		}
 		variables[layout.Label] = mapped
