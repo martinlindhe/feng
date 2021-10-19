@@ -257,11 +257,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 							matched = true
 						}
 					}
-					if DEBUG {
-						log.Printf("if-match: compared '%v' %s '%v' to %v", val, operation, patternValues, matched)
-					}
-
+					perform := false
 					if (operation == "in" && matched) || (operation == "notin" && !matched) {
+						perform = true
+					}
+					if DEBUG {
+						log.Printf("if-match: '%v' %s %v matched:%v, result:%v", val, operation, patternValues, matched, perform)
+					}
+					if perform {
 						err := fl.expandChildren(r, fs, df, ds, es.Children)
 						if err != nil {
 							return err
@@ -277,6 +280,8 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				if DEBUG {
 					log.Printf("-- matching IF NOTZERO key=%s", key)
 				}
+
+				//xxx expand
 
 				_, val, err := fl.GetValue(key, df)
 				if err == nil {

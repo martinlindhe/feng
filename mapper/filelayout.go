@@ -129,10 +129,10 @@ func (fl *FileLayout) MappedBytes() uint64 {
 }
 
 func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
-	if DEBUG {
-		log.Printf("GetStruct: searching for %s", name)
-	}
 	for _, str := range fl.Structs {
+		if DEBUG {
+			log.Printf("GetStruct: want %s, got %s", name, str.Label)
+		}
 		if str.Label == name {
 			return &str, nil
 		}

@@ -23,6 +23,10 @@ func main() {
 		kong.Name("feng"),
 		kong.Description("A binary template reader and data presenter."))
 
+	if args.Verbose {
+		//template.DEBUG = true
+	}
+
 	templates, err := template.GetAllFilenames("./templates/")
 	if err != nil {
 		log.Fatal(err)

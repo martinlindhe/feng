@@ -45,6 +45,9 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 		}
 		variables[layout.Label] = mapped
 	}
+	if DEBUG {
+		log.Printf("variables: %#v", variables)
+	}
 
 	functions := make(map[string]goval.ExpressionFunction)
 
