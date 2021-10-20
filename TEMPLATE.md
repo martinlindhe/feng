@@ -29,6 +29,8 @@
     utf16[5]            utf16 string    (utf16 le == wchar_t)
     time_t_32           32-bit unix timestamp, in UTC
     filetime            64-bit windows timestamp, in UTC
+    dosdate             16-bit MS-DOS datestamp, in UTC
+    dostime             16-bit MS-DOS timestamp, in UTC
 
 
 # arrays

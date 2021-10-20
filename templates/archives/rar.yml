@@ -54,7 +54,7 @@ structs:
     u32 PosAV: ??
 
   # TODO support this too
-  rest_of_header:
+  #rest_of_header:
     if self.Main header flags.MHD_ENCRYPTVER:
       u8 EncryptVer: ??
 
@@ -91,7 +91,8 @@ structs:
     u32 Uncompressed size: ??
     u8 Host OS: ?? # XXX meaning
     u32 File CRC: ?? # XXX type?
-    u32 File time: ?? # XXX format?
+    dostime Modified time: ??
+    dosdate Modified date: ??
     u8 UnpVer: ?? # xxx ?
     u8 Method: ?? # XXX
     u16 NameSize: ?? # XXX

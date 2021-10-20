@@ -1,6 +1,5 @@
 # STATUS: 1%
 # - HI: variable size: u8[File name length] File name: ??
-# - LO: dos date + time
 
 references:
   - https://en.wikipedia.org/wiki/ZIP_(file_format)
@@ -21,8 +20,8 @@ structs:
     u16 Version needed to extract: ??
     u16 General purpose bit flag: ??
     u16 Compression method: ??
-    u16 File last modification time: ??     # XXX format?  "MS-DOS time" ?  37372 decimal = 18:15:56
-    u16 File last modification date: ??     # XXX format?  "MS-DOS date" ?  17214 decimal = 2013-09-30
+    dostime Modification time: ??
+    dosdate Modification date: ??
     u32 CRC32 of uncompressed data: ??      # XXX form ?
     u32 Compressed size: ??                 # XXX 0xffffffff for ZIP64
     u32 Uncompressed size: ??               # XXX 0xffffffff for ZIP64

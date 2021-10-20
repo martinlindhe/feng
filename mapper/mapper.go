@@ -157,7 +157,8 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"ascii", "utf16",
-			"time_t_32", "filetime":
+			"time_t_32", "filetime", "dostime", "dosdate":
+			// internal data types
 			if es.Field.Range != "" {
 				var err error
 				es.Field.Range, err = fl.ExpandVariables(es.Field.Range, df)

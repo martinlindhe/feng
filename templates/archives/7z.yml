@@ -4,8 +4,7 @@
 references:
   - https://en.wikipedia.org/wiki/7z
   - https://github.com/kornelski/7z/blob/master/DOC/7zFormat.txt
-  - https://www.sweetscape.com/010editor/repository/files/7ZIP.bt
-  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_7z.go
+  - https://www.sweetscape.com/010editor/repository/files/7ZIP.bt       # very rough
 
 kind: archive
 extensions: [.7z]
@@ -14,8 +13,8 @@ endian: little
 
 types:
   # XXX impl!!!
-  ArchiveVersion:      # XXX or standard type "version16" byte 0=major, byte 1=minor
-    u8 Major: ??
+  ArchiveVersion:       # XXX or standard type "version16" byte 0=major, byte 1=minor
+    u8 Major: ??        # 0.3 and 0.4 is seen in 2021
     u8 Minor: ??
 
   # XXX impl!!!
@@ -25,25 +24,26 @@ types:
     u32 NextHeaderCRC: ??
 
 structs:
-  header:
+  sig_header:
     # SignatureHeader
     u8[6] Signature: c'7z' bc af 27 1c
 
-    #ArchiveVersion Version: ?? # XXX custom struct define!
-    u8 Major version: ?? # XXX max 2021 is 0
-    u8 Minor version: ?? # XXX max 2021 is 4
+    #ArchiveVersion Version: ?? # XXX custom struct define
+    u8 Major version: ??
+    u8 Minor version: ??
 
     # XXX impl crc32
     #crc32[NextHeaderOffset.offset:NextHeaderCRC.offset+4] StartHeaderCRC: ??
-    u32 crc32: ??
+    u32 Start Header CRC: ??
 
-    # StartHeader Next header: ?? # XXX custom struct define!
+  start_header:
+    # StartHeader Next header: ?? # XXX custom struct define
     u64 NextHeaderOffset: ??
     u64 NextHeaderSize: ??
 
     # XXX impl crc32
     #crc32[self.offset+4+NextHeaderOffset.value:self.offset+4+NextHeaderOffset.value+NextHeaderSize.value] NextHeaderCRC: ??
-    u32 crc32: ??
+    u32 Next Header CRC: ??
 
     #XXX seek to NextHeaderOffset
     # [PackedStreams]
@@ -51,5 +51,9 @@ structs:
     # [PackedStreamsForHeaders]
     # XXX
 
+    # u8[self.offset + self.NextHeaderOffset:self.NextHeaderSize] Data: ??  # XXX
+
+
 layout:
-  - header Header
+  - sig_header Signature Header
+  - start_header Start Header

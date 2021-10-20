@@ -86,3 +86,11 @@ func TestReverseBytes(t *testing.T) {
 	assert.Equal(t, []byte{0x11, 0x22, 0x33, 0x44}, ReverseBytes([]byte{0x44, 0x33, 0x22, 0x11}, 4))
 	assert.Equal(t, []byte{0x11, 0x22, 0x33, 0x44, 0x10, 0x21, 0x32, 0x43}, ReverseBytes([]byte{0x44, 0x33, 0x22, 0x11, 0x43, 0x32, 0x21, 0x10}, 4))
 }
+
+func TestDosTime(t *testing.T) {
+	assert.Equal(t, "16:24:50", asDosTime(33561).String())
+}
+
+func TestDosDate(t *testing.T) {
+	assert.Equal(t, "2016-04-10", asDosDate(18570).String())
+}

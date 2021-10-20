@@ -1,12 +1,11 @@
-# STATUS: 5%
+# STATUS: 25%
+
+# - HI: fix CFDATA area tagging
 
 # SAMPLE: need with "Header.Flags.Reserve present" set
 # SAMPLE: need with "self.cbCFHeader" > 0
 # SAMPLE: need with "self.Flags.Prev cabinet" set
 # SAMPLE: need with "self.Flags.Next cabinet" set
-
-# - HI: need sized list in layout: - "CFFOLDER[Header.cFolders] CFFOLDER
-
 
 references:
   - https://en.wikipedia.org/wiki/Cabinet_(file_format)
@@ -17,6 +16,14 @@ kind: archive
 extensions: [.cab]
 mime: application/vnd.ms-cab-compressed
 endian: little
+
+types:
+  CFDATA:
+    # XXX
+    u32 csum: ??
+    u16 cbData: ??
+    u16 cbUncomp: ??
+    ascii[16] ab: ??
 
 structs:
   header:
@@ -56,21 +63,21 @@ structs:
     u16 CFDATA blocks: ??
     u16 Compression type: ?? # XXX map meaning
 
+    # XXX tag up CFDATA areas
+
+
   CFFILE:
     u32 uncompressed size: ??
     u32 uncompressed offset in folder: ??
     u16 index in CFFOLDER: ??
-    u16 Date: ?? # XXX format?
-    u16 Time: ?? # XXX format?
+    dosdate Date: ??
+    dostime Time: ??
     u16 Attributes: ?? # XXX format?
 
     asciiz Name: ??
-    # XXX
-
+  
 layout:
   - header Header
-  #- "CFFOLDER[Header.cFolders] CFFOLDER"     # XXX TODO sized list
-  - CFFOLDER CFFOLDER
-
-  #- CFFILE[Header.cFiles] CFFILE             # XXX TODO sized list
-  - CFFILE CFFILE
+  - CFFOLDER[Header.cFolders] CFFOLDER
+  - CFFILE[Header.cFiles] CFFILE
+#  - CFDATA CFDATA

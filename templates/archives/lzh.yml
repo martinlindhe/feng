@@ -6,8 +6,9 @@
 
 references:
   - https://web.archive.org/web/20080724142842/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/Notes.html
+  - https://web.archive.org/web/20021005080911/http://www.osirusoft.com/joejared/lzhformat.html
   - https://en.wikipedia.org/wiki/LHA_(file_format)
-  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_lzh.go
+  - https://github.com/kaitai-io/kaitai_struct_formats/blob/master/archive/lzh.ksy
 
 kind: archive
 extensions: [.lzh, .lha]
@@ -32,8 +33,8 @@ structs:
     ascii Signature: c'-'
     u32 Compressed size: ??
     u32 Uncompressed size: ??
-    u16 File modified time: ??  # XXX MS-DOS time format? see msDosTimeToTime() in https://golang.org/src/archive/zip/struct.go
-    u16 File modified date: ??  # XXX MS-DOS date format?
+    dosdate File modified date: ??
+    dostime File modified time: ??
 
 
     # LEVEL 0 header:
