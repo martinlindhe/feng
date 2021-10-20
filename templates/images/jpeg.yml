@@ -25,7 +25,8 @@ constants:
   u8[2] M_DQT:  ff db
   # u8[2] M_DHT:  ff c4   # TODO: type requires a built-in function to sum all bytes in a variable value
   u8[2] M_SOS:  ff da
-  u8[2] M_SOFx: ff c2
+  u8[2] M_SOF0: ff c0
+  u8[2] M_SOF2: ff c2
   u8[2] M_EOI:  ff d9
 
 types:
@@ -137,16 +138,23 @@ structs:
       u8[6292] scanData: ??   # XXX matches jpeg_001.jpg
       #u8[2] EOI signature: ff d9
 
-
-    if self.Signature in (M_SOFx):
-      label: "SOFx"
+    if self.Signature in (M_SOF0):
+      label: "SOF0"
       u8 Precision: ??
-      u16 Y_image: ??
-      u16 X_image: ??
+      u16 Image height: ??
+      u16 Image width: ??
       u8 nr_comp: ??
       u8[3 * self.nr_comp] COMPS data: ?? # XXX nr_comp number of COMPS structs. XXX make COMPS a types
 
-    if self.Signature notin (M_APP0, M_APP1, M_COMM, M_DQT, M_SOS, M_SOFx):
+    if self.Signature in (M_SOF2):
+      label: "SOF2"
+      u8 Precision: ??
+      u16 Image height: ??
+      u16 Image width: ??
+      u8 nr_comp: ??
+      u8[3 * self.nr_comp] COMPS data: ?? # XXX nr_comp number of COMPS structs. XXX make COMPS a types
+
+    if self.Signature notin (M_APP0, M_APP1, M_COMM, M_DQT, M_SOS, M_SOF0, M_SOF2):
       u8[self.Length - 2] Data: ??
 
 layout:

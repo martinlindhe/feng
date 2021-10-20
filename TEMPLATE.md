@@ -4,6 +4,8 @@
 
     endian: big         big/little. set endian
 
+    label: "APP0"       set label decoration for the current struct
+
 
 # pre-defined values
 
