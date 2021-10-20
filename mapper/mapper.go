@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -93,6 +94,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		}
 
 		if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
+			log.Println("errors out:", err)
 			return &fileLayout, err
 		}
 	}
@@ -113,9 +115,18 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 
 	err := fl.expandChildren(r, fs, df, ds, expressions)
 	if err != nil {
-		// remove last struct in case of error
+		// remove the added struct in case of error
+		if DEBUG {
+			log.Println("removing struct due to error:", err)
+		}
 		fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
 	}
+
+	if errors.Is(err, io.ErrUnexpectedEOF) {
+		log.Printf("error: unexpected eof at %s %s", df.Kind, df.Label)
+		return nil
+	}
+
 	return err
 }
 
@@ -128,6 +139,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 	for _, es := range expressions {
 		var field Field
 		switch es.Field.Kind {
+		case "label":
+			// "label: APP0". augment node with extra info
+			fs.decoration = es.Pattern.Value
 		case "endian":
 			// special form
 			fl.endian = es.Pattern.Value
@@ -135,6 +149,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				fmt.Printf("endian changed to '%s'\n", fl.endian)
 			}
 		case "data":
+			// the template directive "data:invalid" marks the data stream invalid
 			if es.Pattern.Value != "invalid" {
 				log.Fatalf("unhandled file value '%s", es.Pattern.Value)
 			}
@@ -181,6 +196,10 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				log.Printf("[%08x] reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
 			}
 			if err != nil {
+				if errors.Is(err, io.ErrUnexpectedEOF) {
+					log.Printf("error: [%08x] failed reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
+					continue
+				}
 				return err
 			}
 

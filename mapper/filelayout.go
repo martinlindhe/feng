@@ -30,7 +30,8 @@ type FileLayout struct {
 
 // parsed file data section from a template "struct"
 type Struct struct {
-	Label string
+	Label      string
+	decoration string
 
 	Fields []Field
 }
@@ -99,7 +100,11 @@ func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 
 func (fl *FileLayout) Present(hideRaw bool) {
 	for _, layout := range fl.Structs {
-		fmt.Printf("%s\n", layout.Label)
+		heading := layout.Label
+		if layout.decoration != "" {
+			heading += " " + layout.decoration
+		}
+		fmt.Printf("%s\n", heading)
 		for _, field := range layout.Fields {
 			fmt.Print(fl.PresentField(&field, hideRaw))
 		}

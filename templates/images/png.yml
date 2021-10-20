@@ -1,10 +1,8 @@
-# STATUS: 60% (most files parse fully. PLTE chunk is broken! - 2021-03-30)
+# STATUS: 70% (all test files parse fully)
 
-# - HI: decode "PLTE" chunk (need to allow custom type "rgb")
-# - HI: decode "vpAg" chunk (need docs)
-
-# - HI: decode utf8 text in iTXt
-
+# - MID: PLTE chunk want custom type "rgb"
+# - MID: decode "vpAg" chunk (need docs)
+# - MID: decode utf8 text in iTXt
 # - LOW: crc32 data type
 
 references:
