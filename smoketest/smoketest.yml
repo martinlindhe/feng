@@ -1,5 +1,31 @@
 root: ../../feng-samples
 input:
+  - folder: archives/7z
+    files:
+      - 7z_001_one_file.7z
+      - 7z_002_three_files.7z
+
+  - folder: archives/cab
+    files:
+      - cab_001_win95_mini.cab
+      - cab_002_3_files.cab
+      - cab_003_IE40CIF.cab
+
+  - folder: archives/gzip
+    files:
+      - gzip_001.gz
+      - gzip_002.gz
+      - gzip_003.gz
+
+  - folder: archives/lzh
+    files:
+      - lzh_001_tiny.lzh
+
+  - folder: archives/rar
+    files:
+      # - rar_001_linux.rar   # broken due bug in template
+      - rar_002_winrar420.rar
+
   - folder: archives/tar
     files:
       - tar_001.tar

@@ -1,4 +1,5 @@
-# STATUS: 5%
+# STATUS: 40%
+
 # - HI: "if self.Header version.V5" don't work
 # - HI: if MHD_PASSWORD is set, rest of file is scrambled, so stop decoding
 # - LOW: calculate crc
@@ -7,114 +8,136 @@ references:
   - https://www.rarlab.com/technote.htm
   - https://codedread.github.io/bitjs/docs/unrar.html
   - https://www.sweetscape.com/010editor/repository/files/RAR.bt
-  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_rar.go
 
 kind: archive
 extensions: [.rar, .r00, .r01]
 mime: application/vnd.rar
 endian: little
 
+constants:
+  u8 ARCHIVE:     "73"
+  u8 FILE_OR_DIR: "74"
+  u8 SUBBLOCK:    "7a"
+  u8 END:         "7b"
+
 structs:
   header:
-    u8[2] CRC: c'Ra'
-    u8 Block type: c'r'
-    u16 Flags: c'!' 1a
-    u16 Header size: "07"
-  chunk:
-    u16 Header CRC: ?? # always "Ra" on rar files
-    u8 Block type:
-      eq 72: MARK_HEAD
-      eq 73: MAIN_HEAD
-      eq 74: FILE_HEAD
-      eq 75: COMM_HEAD
-      eq 76: AV_HEAD
-      eq 77: SUB_HEAD
-      eq 78: PROTECT_HEAD
-      eq 79: SIGN_HEAD
-      eq 7a: NEWSUB_HEAD
-      eq 7b: ENDARC_HEAD
+    u16 CRC:   c'a' c'R'
+    u8 Type:
+      eq 72: MARKER
       default: invalid
-    u16 Flags:
-      bit b00000000_00000001: Add size present
-      bit b00000000_00000010: Old version ignore
-      bit b11111111_11111100: Reserved
+    u16 Flags: 1a c'!' 
+    u16 Header size: 00 07
 
+  chunk:
+    u16 CRC: ??
+    u8 Type:
+      eq 72: MARKER # MARK_HEAD
+      eq 73: ARCHIVE #MAIN_HEAD
+      eq 74: FILE_OR_DIR  #FILE_HEAD
+      #eq 75: COMM_HEAD
+      #eq 76: AV_HEAD
+      #eq 77: SUB_HEAD
+      #eq 78: PROTECT_HEAD
+      #eq 79: SIGN_HEAD
+      eq 7a: SUBBLOCK # NEWSUB_HEAD
+      eq 7b: END #ENDARC_HEAD
+      #default: invalid
 
+    if self.Type in (ARCHIVE):
+      label: ARCHIVE
+      u16 Main header flags:
+        bit 0001: ARCHIVE_VOLUME
+        bit 0002: ARCHIVE_COMMENT_PRESENT
+        bit 0004: ARCHIVE_LOCKED
+        bit 0008: ARCHIVE_SOLID
+        bit 0010: NEW_VOLUME_NAMING
+        bit 0020: AV_PRESENT
+        bit 0040: RECOVERY_PRESENT
+        bit 0080: BLOCK_HEADERS_ENCRYPTED # means rest of header is unreadable
+        bit 0100: IS_FIRST_VOLUME
+        bit 4000: OLD_VERSION_IGNORE
+        bit 8000: ADD_SIZE_PRESENT
+      u16 Header size: ??
+      u16 HighPosAv: ??
+      u32 PosAv: ??
 
-    #if Header type[MAIN_HEAD]:  ## XXX DON'T MATCH!?!
-    u16 Main header flags:
-      bit 0001: MHD_VOLUME
-      bit 0002: MHD_COMMENT
-      bit 0004: MHD_LOCK
-      bit 0008: MHD_SOLID
-      bit 0010: MHD_PACK_COMMENT or MHD_NEWNUMBERING
-      bit 0020: MHD_AV
-      bit 0040: MHD_PROTECT
-      bit 0080: MHD_PASSWORD # means rest of header is unreadable
-      bit 0100: MHD_FIRSTVOLUME
-      bit 0200: MHD_ENCRYPTVER
-    u16 Header size: ??
-    u16 HighPosAv: ??
-    u32 PosAV: ??
+    if self.Type in (FILE_OR_DIR):
+      label: FILE_OR_DIR
+      u16 HEAD_FLAGS:
+        bit 0001: FROM_PREV_VOLUME # LHD_SPLIT_BEFORE
+        bit 0002: TO_NEXT_VOLUME   # LHD_SPLIT_AFTER
+        bit 0004: PASSWORD_ENCRYPTED
+        bit 0008: FILE_COMMENT_PRESENT
+        bit 0010: SOLID
+        #bit 0100: DICTIONARY  # XXX 3 bits
+        #bit 0200: LHD_UNICODE   # XXX indicates filename is in unicode
+        #bit 0400: LHD_SALT
+        #bit 0800: LHD_VERSION
+        # byte 2:
+        bit 0100: HIGH_SIZE
+        bit 0200: HAS_UNICODE_FILENAME
+        bit 0400: ENCRYPTION_SALT
+        bit 0800: IS_OLD_FILE_VERSION
+        bit 1000: EXTENDED_TIME_INFO  # LHD_EXTTIME
+        bit 2000: reserved            # LHD_EXTFLAGS
+        bit 4000: OLD_VERSION_IGNORE
+        bit 8000: ADD_SIZE_PRESENT
 
-  # TODO support this too
-  #rest_of_header:
-    if self.Main header flags.MHD_ENCRYPTVER:
-      u8 EncryptVer: ??
+      u16 Header size: ??
+      u32 Compressed size: ??
+      # struct FileHeadBlock START :::
+      u32 Unpacked size: ??
+      u8 Host OS:
+        eq 00: MS-DOS
+        eq 01: OS/2
+        eq 02: Win32
+        eq 03: Unix
+        eq 04: MacOS
+        eq 05: BeOS
+      u32 CRC32: ??
+      dostime Time: ??
+      dosdate Date: ??
+      u8 Version to unpack: ??
+      u8 Pack method:
+        eq 30: Store
+        eq 31: Fastest
+        eq 32: Fast
+        eq 33: Normal
+        eq 34: Good
+        eq 35: Best
+      u16 Name size: ??
+      u32 UnixStyleAttrs: ?? # XXX enum, 010 has mapping
+      ascii[self.Name size] File name: ??
+      # struct FileHeadBlock END :::
 
-    # XXX NEXT SECTION FILE_HEAD  (rar_001_linux.rar)
-    #if Header type[FILE_HEAD]:  ## XXX DON'T MATCH!?!
-    u16 Header CRC: ??  # XXX kind ?
-    u8 Header type:   # XXX all headers start with crc+type fields
-      eq 72: MARK_HEAD
-      eq 73: MAIN_HEAD
-      eq 74: FILE_HEAD
-      eq 75: COMM_HEAD
-      eq 76: AV_HEAD
-      eq 77: SUB_HEAD
-      eq 78: PROTECT_HEAD
-      eq 79: SIGN_HEAD
-      eq 7a: NEWSUB_HEAD
-      eq 7b: ENDARC_HEAD
+      # iOfs = HeaderSize - (FTell() - startOfs)         self.Header size - (self.offset - self.CRC.offset)
+      #u8[self.Header size - (self.offset - self.CRC.offset)] Reserved: ??
+      u8[5] Reserved: ??   # XXX CRITICAL !!!! THIS FIELD SIZE MUST BE CALCULATED CORRECTLY
 
-    u16 File header flags:  # XXX eq for u16 ??
-      bit 0001: LHD_SPLIT_BEFORE
-      bit 0002: LHD_SPLIT_AFTER
-      bit 0004: LHD_PASSWORD
-      bit 0008: LHD_COMMENT
-      bit 0010: LHD_SOLID
-      bit 0100: LHD_LARGE
-      bit 0200: LHD_UNICODE   # XXX indicates filename is in unicode
-      bit 0400: LHD_SALT
-      bit 0800: LHD_VERSION
-      bit 1000: LHD_EXTTIME
-      bit 2000: LHD_EXTFLAGS
-    u16 Header size: ??
+      u8[self.Compressed size] Data: ??
 
-    u32 Compressed size: ??
-    u32 Uncompressed size: ??
-    u8 Host OS: ?? # XXX meaning
-    u32 File CRC: ??
-    dostime Modified time: ??
-    dosdate Modified date: ??
-    u8 UnpVer: ?? # xxx ?
-    u8 Method: ?? # XXX
-    u16 NameSize: ?? # XXX
-    u32 FileAttr: ?? # XXX
+    if self.Type in (SUBBLOCK):
+      label: SUBBLOCK
+      u16 Main header flags:
+        bit 4000: OLD_VERSION_IGNORE
+        bit 8000: ADD_SIZE_PRESENT
+      u16 Header size: ??
+      u32 Data size: ??
+      # struct SubBlock START :::
+      u8[15] Unknown: ??
+      u8 SubTypeLen: ??
+      u8[5] Unknown: ??
+      ascii[self.SubTypeLen] SubType: ??
+      # struct SubBlock END :::
+      u8[self.Data size] Data: ??
 
-    if self.File header flags.LHD_LARGE:
-      u32 HighPackSize: ??
-      u32 HighUnpSize: ??
-
-    ascii[self.NameSize] Filename: ??
-
-    if self.File header flags.LHD_SALT:
-      u64 Salt: ??
-
-    #if self.File header flags.LHD_EXTTIME:
-    #  ExtTime Structure       See Description (only present if LHD_EXTTIME is set)
-
-    #Packed Data             (Total Packed Size) bytes
+    if self.Type in (END):
+      label: END
+      u16 Common block flags:
+        bit 4000: OLD_VERSION_IGNORE
+        bit 8000: ADD_SIZE_PRESENT
+      u16 Header size: ??
 
 layout:
   - header Header

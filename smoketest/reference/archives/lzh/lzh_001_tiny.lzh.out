@@ -1,0 +1,20 @@
+Header
+  [000000] Header size                    u8            52                    34                  
+  [000001] Checksum                       u8            0                     00                  
+  [000002] Signature                      ascii[3]      -lh                   2d 6c 68            
+  [000005] Compression method             ascii         0                     30                  
+           - None                         eq            48
+  [000006] Signature                      ascii         -                     2d                  
+  [000007] Compressed size                u32 le        6                     00 00 00 06         
+  [00000b] Uncompressed size              u32 le        6                     00 00 00 06         
+  [00000f] File modified date             dosdate le    2004-01-10            2f aa               
+  [000011] File modified time             dostime le    11:06:06              58 c3               
+  [000013] Signature                      u8            32                    20                  
+  [000014] Header Level                   u8            2                     02                  
+  [000015] Uncompressed CRC16             u16 le        23092                 5a 34               
+  [000017] OS ID                          u8            85                    55                  
+           - UNIX                         eq            85
+  [000018] Size of next extended header   u16 le        5                     00 05               
+  [00001a] Uncompressed CRC16             u16 le        14336                 38 00               
+
+0x001f (31) unmapped bytes

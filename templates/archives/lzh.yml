@@ -20,7 +20,7 @@ structs:
     u8 Header size: ??          # seen 0x34
     u8 Checksum: ??             # xxx algorithm: This is low 1 byte of the total of each bytes of whole header without 2 bytes of the head. Header checksum is 0xC3 in the foregoing sample. (Total of each bytes of whole header without 2 bytes of the head is 0x07C3.)
     ascii[3] Signature: c'-lh'
-    u8 Compression method:      # XXX match on 'ascii' type
+    ascii Compression method:
       eq c'0': None
       eq c'1': LZW, 4K sliding window. Dynamic Huffman
       eq c'2': LZW, 8K sliding window. Dynamic Huffman

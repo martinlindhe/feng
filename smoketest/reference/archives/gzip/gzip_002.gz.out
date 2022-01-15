@@ -1,0 +1,19 @@
+Header
+  [000000] Signature                      u8[2]                               1f 8b               
+  [000002] Compression method             u8            8                     08                  
+           - Deflate                      eq            8
+  [000003] Header flags                   u8            0                     00                  
+           - FLAG_TEXT                    bit           0
+           - FLAG_CRC16                   bit           0
+           - FLAG_EXTRA                   bit           0
+           - FLAG_NAME                    bit           0
+           - FLAG_COMMENT                 bit           0
+  [000004] Modification time              time_t_32 le  1970-01-01T00:00:00Z  00 00 00 00         
+  [000008] Compression flags              u8            0                     00                  
+  [000009] Operating system               u8            3                     03                  
+           - Unix                         eq            3
+  [00000a] Data                           u8[28]                              ed c1 01 0d 00 00 00 c2 a0 9a ef 9f c4 1c 6e 40 01 00 00 00 00 00 00 00 00 c0 bf 01
+  [000026] Data checksum                  u32 le        2003351769            77 68 b8 d9         
+  [00002a] Uncompressed size modulo 2^32  u32 le        10000                 00 00 27 10         
+
+EOF

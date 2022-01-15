@@ -1,0 +1,12 @@
+Signature Header
+  [000000] Signature                      u8[6]                               37 7a bc af 27 1c   
+  [000006] Major version                  u8            0                     00                  
+  [000007] Minor version                  u8            4                     04                  
+  [000008] Start Header CRC               u32 le        809329955             30 3d 65 23         
+
+Start Header
+  [00000c] NextHeaderOffset               u64 le        140                   00 00 00 00 00 00 00 8c
+  [000014] NextHeaderSize                 u64 le        33                    00 00 00 00 00 00 00 21
+  [00001c] Next Header CRC                u32 le        2059058453            7a ba bd 15         
+
+0x00ad (173) unmapped bytes

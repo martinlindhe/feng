@@ -1,0 +1,20 @@
+Header
+  [000000] Signature                      u8[2]                               1f 8b               
+  [000002] Compression method             u8            8                     08                  
+           - Deflate                      eq            8
+  [000003] Header flags                   u8            8                     08                  
+           - FLAG_TEXT                    bit           0
+           - FLAG_CRC16                   bit           0
+           - FLAG_EXTRA                   bit           0
+           - FLAG_NAME                    bit           1
+           - FLAG_COMMENT                 bit           0
+  [000004] Modification time              time_t_32 le  2013-10-16T10:09:51Z  52 5e 65 ef         
+  [000008] Compression flags              u8            0                     00                  
+  [000009] Operating system               u8            3                     03                  
+           - Unix                         eq            3
+  [00000a] Filename                       asciiz        x                     78 00               
+  [00000c] Data                           u8[7]                               4b 4d 2d a8 e0 02 00
+  [000013] Data checksum                  u32 le        3368712865            c8 ca 7a a1         
+  [000017] Uncompressed size modulo 2^32  u32 le        5                     00 00 00 05         
+
+EOF
