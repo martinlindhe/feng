@@ -1,5 +1,6 @@
-# STATUS: 1%
-# - HI: variable size: u8[File name length] File name: ??
+# STATUS: 95% - can parse all samples fully
+
+# LOW: calculate crc32
 
 references:
   - https://en.wikipedia.org/wiki/ZIP_(file_format)
@@ -14,24 +15,82 @@ extensions: [.zip]
 mime: application/zip
 endian: little
 
+constants:
+  u8[2] ZIPDIRENTRY:    01 02
+  u8[2] ZIPFILERECORD:  03 04
+  u8[2] ZIPENDLOCATOR:  05 06
+  u8[2] ZIPDATADESCR:   07 08
+  #u8[2] ZIPDIGITALSIG:  05 05
+
 structs:
-  header:
-    u8[4] Signature: c'PK' 03 04
-    u16 Version needed to extract: ??
-    u16 General purpose bit flag: ??
-    u16 Compression method: ??
-    dostime Modification time: ??
-    dosdate Modification date: ??
-    u32 CRC32 of uncompressed data: ??      # XXX form ?
-    u32 Compressed size: ??                 # XXX 0xffffffff for ZIP64
-    u32 Uncompressed size: ??               # XXX 0xffffffff for ZIP64
-    u16 File name length: ??
-    u16 Extra field length: ??
+  chunk:
+    ascii[2] Signature: c'PK'
+    u8[2] Type: ??
 
-    ascii[self.File name length] File name: ??
-    u8[self.Extra field length] Extra field: ??
+    if self.Type in (ZIPFILERECORD):
+      label: ZIPFILERECORD
+      u16 Version needed to extract: ??
+      u16 General purpose bit flag: ??
+      u16 Compression:
+        eq 0000: Stored
+        eq 0001: Shrunk
+        eq 0006: Imploded
+        eq 0008: Deflated
+        default: invalid
+      dostime Modification time: ??
+      dosdate Modification date: ??
+      u32 CRC32 of uncompressed data: ??
+      u32 Compressed size: ??
+      u32 Uncompressed size: ??
+      u16 File name length: ??
+      u16 Extra field length: ??
+      ascii[self.File name length] File name: ??
+      u8[self.Extra field length] Extra field: ??
+      u8[self.Compressed size] Data: ??
 
-    # XXX rest
+    if self.Type in (ZIPDIRENTRY):
+      label: ZIPDIRENTRY
+      u16 versionMadeBy: ??
+      u16 versionToExtract: ??
+      u16 Flags: ??
+      u16 Compression:
+        eq 0000: Stored
+        eq 0001: Shrunk
+        eq 0006: Imploded
+        eq 0008: Deflated
+        default: invalid
+      dostime Modification time: ??
+      dosdate Modification date: ??
+      u32 CRC32 of uncompressed data: ??
+      u32 Compressed size: ??
+      u32 Uncompressed size: ??
+      u16 File name length: ??
+      u16 Extra field length: ??
+      u16 Comment length: ??
+      u16 Disk number start: ??
+      u16 Internal attributes: ??
+      u32 External attributes: ??
+      u32 Header offset: ??
+      ascii[self.File name length] File name: ??
+      u8[self.Extra field length] Extra field: ??
+      ascii[self.Comment length] Comment: ??
+
+    if self.Type in (ZIPDATADESCR):
+      label: ZIPDATADESCR
+      u32 CRC: ??
+      u32 Compressed size: ??
+      u32 Uncompressed size: ??
+
+    if self.Type in (ZIPENDLOCATOR):
+      label: ZIPENDLOCATOR
+      u16 Disk number: ??
+      u16 Start Disk Number: ??
+      u16 Entries on disk: ??
+      u16 Entries in directory: ??
+      u32 Directory size: ??
+      u32 Directory offset: ??
+      u16 Comment length: ??
+      ascii[self.Comment length] Comment: ??
 
 layout:
-  - header Header
+  - chunk[] Chunk

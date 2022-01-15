@@ -19,6 +19,8 @@
         "datablock",
         "datastream",
         "dibheader",
+        "dosdate",
+        "dostime",
         "dot",
         "ENCRYPTVER",
         "ENDARC",
@@ -78,6 +80,10 @@
         "XOSK",
         "Xthumbnail",
         "Ydensity",
-        "Ythumbnail"
+        "Ythumbnail",
+        "ZIPDATADESCR",
+        "ZIPDIRENTRY",
+        "ZIPENDLOCATOR",
+        "ZIPFILERECORD"
     ]
 }

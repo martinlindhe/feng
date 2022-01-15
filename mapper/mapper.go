@@ -58,13 +58,13 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 			baseLabel := df.Label
 			for i := uint64(0); i < math.MaxUint64; i++ {
-				//df.Label = fmt.Sprintf("%s[%d]", baseLabel, i)
 				df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
 					if err == io.EOF {
 						break
 					}
-					return &fileLayout, err
+					// do not propagate error, so that trailing data after slices will not count as parse error
+					return &fileLayout, nil
 				}
 				df.Label = baseLabel
 			}
@@ -94,7 +94,9 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		}
 
 		if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
-			log.Println("errors out:", err)
+			if DEBUG {
+				log.Println("errors out:", err)
+			}
 			return &fileLayout, err
 		}
 	}
@@ -116,9 +118,7 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 	err := fl.expandChildren(r, fs, df, ds, expressions)
 	if err != nil {
 		// remove the added struct in case of error
-		if DEBUG {
-			log.Println("removing struct due to error:", err)
-		}
+		log.Printf("removing struct '%s' due to error: %v", fs.Label, err)
 		fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
 	}
 
@@ -198,7 +198,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			}
 			if err != nil {
 				if errors.Is(err, io.ErrUnexpectedEOF) {
-					log.Printf("error: [%08x] failed reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
+					if DEBUG {
+						log.Printf("error: [%08x] failed reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
+					}
 					continue
 				}
 				return err
