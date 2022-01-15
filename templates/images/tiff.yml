@@ -4,7 +4,6 @@ references:
   - https://en.wikipedia.org/wiki/TIFF
   - https://www.sweetscape.com/010editor/repository/files/TIF.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/TIFF.tcl
-  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_tiff.go
 
 kind: image
 extensions: [.tiff, .tif]
