@@ -26,6 +26,9 @@ type FileLayout struct {
 
 	// default extension
 	Extension string
+
+	// lastpath/filename-without-ext, eg "archives/zip"
+	BaseName string
 }
 
 // parsed file data section from a template "struct"
@@ -98,28 +101,29 @@ func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 	return res
 }
 
-func (fl *FileLayout) Present(hideRaw bool) {
+func (fl *FileLayout) Present(hideRaw bool) (res string) {
 	for _, layout := range fl.Structs {
 		heading := layout.Label
 		if layout.decoration != "" {
 			heading += " " + layout.decoration
 		}
-		fmt.Printf("%s\n", heading)
+		res += heading + "\n"
 		for _, field := range layout.Fields {
-			fmt.Print(fl.PresentField(&field, hideRaw))
+			res += fl.PresentField(&field, hideRaw)
 		}
-		fmt.Println()
+		res += "\n"
 	}
 
 	mappedBytes := fl.MappedBytes()
 	if mappedBytes < fl.size {
 		unmapped := fl.size - mappedBytes
-		fmt.Println(red("0x%04x (%d) unmapped bytes", unmapped, unmapped))
+		res += fmt.Sprintf("0x%04x (%d) unmapped bytes\n", unmapped, unmapped)
 	} else if mappedBytes > fl.size {
-		fmt.Println(red("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x", fl.size, mappedBytes))
+		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x\n", fl.size, mappedBytes)
 	} else {
-		fmt.Println("EOF")
+		res += "EOF\n"
 	}
+	return
 }
 
 // return the number of mapped bytes

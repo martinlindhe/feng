@@ -427,8 +427,7 @@ func asciiZString(b []byte, maxLength int) (string, uint64) {
 		if v >= 0x20 && v < 0x7f {
 			decoded += string(v)
 		} else {
-			// red dots is visual queue for non-ascii
-			decoded += red(".")
+			decoded += "."
 		}
 		if maxLength > 0 && length >= uint64(maxLength) {
 			break

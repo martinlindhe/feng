@@ -3,9 +3,9 @@
 
 references:
   - https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/xz-file-format.txt;hb=HEAD
-  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_xz.go
 
 kind: archive
+name: XZ Archive
 extensions: [.xz]
 mime: application/x-xz
 endian: big # XXX
@@ -16,8 +16,8 @@ structs:
     u8[6] Signature: FD c'7zXZ' 00
     u16 Stream flags:
       eq 0000: None
-      eq 0001: CRC32    # XXX 4 bytes
-      eq 0004: CRC64     # XXX 8 bytes
+      eq 0001: CRC32      # XXX 4 bytes
+      eq 0004: CRC64      # XXX 8 bytes
       eq 000a: SHA-256    # XXX 32 bytes
       default: invalid
 

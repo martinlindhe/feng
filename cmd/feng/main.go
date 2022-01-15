@@ -37,7 +37,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		ds, err := template.UnmarshalTemplateIntoDataStructure(templateData)
+		ds, err := template.UnmarshalTemplateIntoDataStructure(templateData, tpl)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -58,8 +58,8 @@ func main() {
 			continue
 		}
 
-		fmt.Println("Parsed as", tpl)
-		fl.Present(args.HideRaw)
+		fmt.Printf("Parsed %s as %s\n\n", args.Filename, tpl)
+		fmt.Print(fl.Present(args.HideRaw))
 		break
 	}
 }

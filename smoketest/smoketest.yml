@@ -1,0 +1,31 @@
+root: ../../feng-samples
+input:
+  - folder: archives/tar
+    files:
+      - tar_001.tar
+      - tar_002_dir.tar
+
+  - folder: archives/xar
+    files:
+      - xar_001_one_file.xar
+      - xar_002_two_files.xar
+      - xar_003_3_files.xar
+      - xar_004_macos_MobileDeviceDevelopment.pkg
+
+  - folder: archives/xz
+    files:
+      - xz_001.xz
+
+  - folder: archives/zip
+    files:
+      - zip_001.zip
+      - zip_002.zip
+      - zip_003_by_winrar420.zip
+      - zip_004_compression_shrunk.zip
+      - zip_005_by_winzip18.zip
+      - zip_006_by_winzip18.zipx
+      - zip_007_encrypted.zip
+      - zip_008_comments.zip
+      - zip_009_password.zip
+      - zip_010_compression_implode.zip
+      - zip_011_trailing_bytes.zip

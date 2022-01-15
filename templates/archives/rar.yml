@@ -1,6 +1,7 @@
 # STATUS: 5%
 # - HI: "if self.Header version.V5" don't work
 # - HI: if MHD_PASSWORD is set, rest of file is scrambled, so stop decoding
+# - LOW: calculate crc
 
 references:
   - https://www.rarlab.com/technote.htm
@@ -15,17 +16,13 @@ endian: little
 
 structs:
   header:
-    ascii[6] Signature: c'Rar!' 1a 07
-    u8 Header version:
-      eq 00: Classic
-      eq 01: V5
-
-    if self.Header version in (1):
-      u8 V5 signature: "00"
-
-    # XXX classic "volume header":
-    u16 Header CRC: ??  # XXX kind ?
-    u8 Header type:
+    u8[2] CRC: c'Ra'
+    u8 Block type: c'r'
+    u16 Flags: c'!' 1a
+    u16 Header size: "07"
+  chunk:
+    u16 Header CRC: ?? # always "Ra" on rar files
+    u8 Block type:
       eq 72: MARK_HEAD
       eq 73: MAIN_HEAD
       eq 74: FILE_HEAD
@@ -36,6 +33,13 @@ structs:
       eq 79: SIGN_HEAD
       eq 7a: NEWSUB_HEAD
       eq 7b: ENDARC_HEAD
+      default: invalid
+    u16 Flags:
+      bit b00000000_00000001: Add size present
+      bit b00000000_00000010: Old version ignore
+      bit b11111111_11111100: Reserved
+
+
 
     #if Header type[MAIN_HEAD]:  ## XXX DON'T MATCH!?!
     u16 Main header flags:
@@ -90,7 +94,7 @@ structs:
     u32 Compressed size: ??
     u32 Uncompressed size: ??
     u8 Host OS: ?? # XXX meaning
-    u32 File CRC: ?? # XXX type?
+    u32 File CRC: ??
     dostime Modified time: ??
     dosdate Modified date: ??
     u8 UnpVer: ?? # xxx ?
@@ -114,3 +118,4 @@ structs:
 
 layout:
   - header Header
+  - chunk []Chunk

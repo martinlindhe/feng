@@ -1,0 +1,129 @@
+Chunk_0 ZIPFILERECORD
+  [000000] Signature                      ascii[2]      PK                    50 4b               
+  [000002] Type                           u8[2]                               03 04               
+  [000004] Version needed to extract      u16 le        10                    00 0a               
+  [000006] Flags                          u16 le        0                     00 00               
+  [000008] Compression                    u16 le        6                     00 06               
+           - Imploded                     eq            6
+  [00000a] Modification time              dostime le    17:51:08              8e 64               
+  [00000c] Modification date              dosdate le    1993-05-22            1a b6               
+  [00000e] CRC32 of uncompressed data     u32 le        1585981413            5e 88 27 e5         
+  [000012] Compressed size                u32 le        1261                  00 00 04 ed         
+  [000016] Uncompressed size              u32 le        2408                  00 00 09 68         
+  [00001a] File name length               u16 le        10                    00 0a               
+  [00001c] Extra field length             u16 le        0                     00 00               
+  [00001e] File name                      ascii[10]     VGAROW.EXE            56 47 41 52 4f 57 2e 45 58 45
+  [000028] Data                           u8[1261]                            0f 00 12 03 24 15 36 27 38 39 6a 7b 4c 9d 6e 1f 09 06 01 13 34 e5 f6 96 f7 9b 6a 45 1b b0 c0 b1 ...
+
+Chunk_1 ZIPFILERECORD
+  [000515] Signature                      ascii[2]      PK                    50 4b               
+  [000517] Type                           u8[2]                               03 04               
+  [000519] Version needed to extract      u16 le        10                    00 0a               
+  [00051b] Flags                          u16 le        6                     00 06               
+  [00051d] Compression                    u16 le        6                     00 06               
+           - Imploded                     eq            6
+  [00051f] Modification time              dostime le    20:53:08              a6 a4               
+  [000521] Modification date              dosdate le    1993-05-22            1a b6               
+  [000523] CRC32 of uncompressed data     u32 le        2472810439            93 64 17 c7         
+  [000527] Compressed size                u32 le        5002                  00 00 13 8a         
+  [00052b] Uncompressed size              u32 le        12534                 00 00 30 f6         
+  [00052f] File name length               u16 le        10                    00 0a               
+  [000531] Extra field length             u16 le        0                     00 00               
+  [000533] File name                      ascii[10]     VGAROW.DOC            56 47 41 52 4f 57 2e 44 4f 43
+  [00053d] Data                           u8[5002]                            61 0a 7b 07 06 1b 06 bb 0c 4b 03 09 07 0b 09 0b 09 07 16 07 08 06 05 06 07 06 05 36 07 16 17 0b ...
+
+Chunk_2 ZIPFILERECORD
+  [0018c7] Signature                      ascii[2]      PK                    50 4b               
+  [0018c9] Type                           u8[2]                               03 04               
+  [0018cb] Version needed to extract      u16 le        10                    00 0a               
+  [0018cd] Flags                          u16 le        0                     00 00               
+  [0018cf] Compression                    u16 le        6                     00 06               
+           - Imploded                     eq            6
+  [0018d1] Modification time              dostime le    20:55:08              a6 e4               
+  [0018d3] Modification date              dosdate le    1993-05-22            1a b6               
+  [0018d5] CRC32 of uncompressed data     u32 le        682160515             28 a8 f1 83         
+  [0018d9] Compressed size                u32 le        378                   00 00 01 7a         
+  [0018dd] Uncompressed size              u32 le        446                   00 00 01 be         
+  [0018e1] File name length               u16 le        10                    00 0a               
+  [0018e3] Extra field length             u16 le        0                     00 00               
+  [0018e5] File name                      ascii[10]     FILEID.DIZ            46 49 4c 45 49 44 2e 44 49 5a
+  [0018ef] Data                           u8[378]                             0d 02 01 12 23 14 15 36 37 68 89 9a db 3c 05 06 12 13 44 c5 f6 96 f7 ad 1e 0d 2a f5 e9 55 90 31 ...
+
+Chunk_3 ZIPDIRENTRY
+  [001a69] Signature                      ascii[2]      PK                    50 4b               
+  [001a6b] Type                           u8[2]                               01 02               
+  [001a6d] Version made by                u16 le        11                    00 0b               
+  [001a6f] Version needed to extract      u16 le        10                    00 0a               
+  [001a71] Flags                          u16 le        0                     00 00               
+  [001a73] Compression                    u16 le        6                     00 06               
+           - Imploded                     eq            6
+  [001a75] Modification time              dostime le    17:51:08              8e 64               
+  [001a77] Modification date              dosdate le    1993-05-22            1a b6               
+  [001a79] CRC32 of uncompressed data     u32 le        1585981413            5e 88 27 e5         
+  [001a7d] Compressed size                u32 le        1261                  00 00 04 ed         
+  [001a81] Uncompressed size              u32 le        2408                  00 00 09 68         
+  [001a85] File name length               u16 le        10                    00 0a               
+  [001a87] Extra field length             u16 le        0                     00 00               
+  [001a89] Comment length                 u16 le        0                     00 00               
+  [001a8b] Disk number start              u16 le        0                     00 00               
+  [001a8d] Internal attributes            u16 le        0                     00 00               
+  [001a8f] External attributes            u32 le        32                    00 00 00 20         
+  [001a93] Header offset                  u32 le        0                     00 00 00 00         
+  [001a97] File name                      ascii[10]     VGAROW.EXE            56 47 41 52 4f 57 2e 45 58 45
+
+Chunk_4 ZIPDIRENTRY
+  [001aa1] Signature                      ascii[2]      PK                    50 4b               
+  [001aa3] Type                           u8[2]                               01 02               
+  [001aa5] Version made by                u16 le        11                    00 0b               
+  [001aa7] Version needed to extract      u16 le        10                    00 0a               
+  [001aa9] Flags                          u16 le        6                     00 06               
+  [001aab] Compression                    u16 le        6                     00 06               
+           - Imploded                     eq            6
+  [001aad] Modification time              dostime le    20:53:08              a6 a4               
+  [001aaf] Modification date              dosdate le    1993-05-22            1a b6               
+  [001ab1] CRC32 of uncompressed data     u32 le        2472810439            93 64 17 c7         
+  [001ab5] Compressed size                u32 le        5002                  00 00 13 8a         
+  [001ab9] Uncompressed size              u32 le        12534                 00 00 30 f6         
+  [001abd] File name length               u16 le        10                    00 0a               
+  [001abf] Extra field length             u16 le        0                     00 00               
+  [001ac1] Comment length                 u16 le        0                     00 00               
+  [001ac3] Disk number start              u16 le        0                     00 00               
+  [001ac5] Internal attributes            u16 le        1                     00 01               
+  [001ac7] External attributes            u32 le        32                    00 00 00 20         
+  [001acb] Header offset                  u32 le        1301                  00 00 05 15         
+  [001acf] File name                      ascii[10]     VGAROW.DOC            56 47 41 52 4f 57 2e 44 4f 43
+
+Chunk_5 ZIPDIRENTRY
+  [001ad9] Signature                      ascii[2]      PK                    50 4b               
+  [001adb] Type                           u8[2]                               01 02               
+  [001add] Version made by                u16 le        11                    00 0b               
+  [001adf] Version needed to extract      u16 le        10                    00 0a               
+  [001ae1] Flags                          u16 le        0                     00 00               
+  [001ae3] Compression                    u16 le        6                     00 06               
+           - Imploded                     eq            6
+  [001ae5] Modification time              dostime le    20:55:08              a6 e4               
+  [001ae7] Modification date              dosdate le    1993-05-22            1a b6               
+  [001ae9] CRC32 of uncompressed data     u32 le        682160515             28 a8 f1 83         
+  [001aed] Compressed size                u32 le        378                   00 00 01 7a         
+  [001af1] Uncompressed size              u32 le        446                   00 00 01 be         
+  [001af5] File name length               u16 le        10                    00 0a               
+  [001af7] Extra field length             u16 le        0                     00 00               
+  [001af9] Comment length                 u16 le        0                     00 00               
+  [001afb] Disk number start              u16 le        0                     00 00               
+  [001afd] Internal attributes            u16 le        1                     00 01               
+  [001aff] External attributes            u32 le        32                    00 00 00 20         
+  [001b03] Header offset                  u32 le        6343                  00 00 18 c7         
+  [001b07] File name                      ascii[10]     FILEID.DIZ            46 49 4c 45 49 44 2e 44 49 5a
+
+Chunk_6 ZIPENDLOCATOR
+  [001b11] Signature                      ascii[2]      PK                    50 4b               
+  [001b13] Type                           u8[2]                               05 06               
+  [001b15] Disk number                    u16 le        0                     00 00               
+  [001b17] Start Disk Number              u16 le        0                     00 00               
+  [001b19] Entries on disk                u16 le        3                     00 03               
+  [001b1b] Entries in directory           u16 le        3                     00 03               
+  [001b1d] Directory size                 u32 le        168                   00 00 00 a8         
+  [001b21] Directory offset               u32 le        6761                  00 00 1a 69         
+  [001b25] Comment length                 u16 le        0                     00 00               
+
+EOF

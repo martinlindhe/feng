@@ -52,7 +52,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			ds, err := template.UnmarshalTemplateIntoDataStructure(templateData)
+			ds, err := template.UnmarshalTemplateIntoDataStructure(templateData, tpl)
 			if err != nil {
 				log.Fatal(err)
 			}

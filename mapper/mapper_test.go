@@ -42,7 +42,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -111,7 +111,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	test := []struct {
@@ -179,7 +179,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -217,7 +217,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -254,7 +254,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	test := []struct {
@@ -305,7 +305,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -342,7 +342,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -385,7 +385,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -435,7 +435,7 @@ layout:
   - header Header
 `
 
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	test := []struct {
@@ -496,7 +496,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -534,7 +534,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -566,7 +566,7 @@ structs:
 layout:
   - header Header
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -598,7 +598,7 @@ layout:
   - header Header
   - block[] Unsized block
 `
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{

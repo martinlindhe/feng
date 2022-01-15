@@ -1,5 +1,6 @@
-# STATUS: 95% - can parse all samples fully
+# STATUS: 95% - parses all samples
 
+# LOW: parse + present "Version made by" and "Version needed to extract" with some data type
 # LOW: calculate crc32
 
 references:
@@ -8,9 +9,9 @@ references:
   - https://golang.org/pkg/archive/zip/
   - https://www.sweetscape.com/010editor/repository/files/ZIP.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/ZIP.tcl
-  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_zip.go
 
 kind: archive
+name: Zip Archive
 extensions: [.zip]
 mime: application/zip
 endian: little
@@ -30,7 +31,7 @@ structs:
     if self.Type in (ZIPFILERECORD):
       label: ZIPFILERECORD
       u16 Version needed to extract: ??
-      u16 General purpose bit flag: ??
+      u16 Flags: ??
       u16 Compression:
         eq 0000: Stored
         eq 0001: Shrunk
@@ -50,8 +51,8 @@ structs:
 
     if self.Type in (ZIPDIRENTRY):
       label: ZIPDIRENTRY
-      u16 versionMadeBy: ??
-      u16 versionToExtract: ??
+      u16 Version made by: ??
+      u16 Version needed to extract: ??
       u16 Flags: ??
       u16 Compression:
         eq 0000: Stored

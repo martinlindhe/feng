@@ -34,7 +34,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		ext = ds.Extensions[0]
 	}
 
-	fileLayout := FileLayout{endian: ds.Endian, Extension: ext}
+	fileLayout := FileLayout{BaseName: ds.BaseName, endian: ds.Endian, Extension: ext}
 
 	// read all data to get the total length
 	b, _ := ioutil.ReadAll(r)
@@ -118,7 +118,7 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 	err := fl.expandChildren(r, fs, df, ds, expressions)
 	if err != nil {
 		// remove the added struct in case of error
-		log.Printf("removing struct '%s' due to error: %v", fs.Label, err)
+		log.Printf("removing struct '%s.%s' due to error: %v", fl.BaseName, fs.Label, err)
 		fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
 	}
 

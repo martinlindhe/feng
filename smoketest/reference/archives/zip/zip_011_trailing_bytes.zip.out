@@ -1,0 +1,91 @@
+Chunk_0 ZIPFILERECORD
+  [000000] Signature                      ascii[2]      PK                    50 4b               
+  [000002] Type                           u8[2]                               03 04               
+  [000004] Version needed to extract      u16 le        20                    00 14               
+  [000006] Flags                          u16 le        0                     00 00               
+  [000008] Compression                    u16 le        8                     00 08               
+           - Deflated                     eq            8
+  [00000a] Modification time              dostime le    04:29:42              23 b5               
+  [00000c] Modification date              dosdate le    1993-06-27            1a db               
+  [00000e] CRC32 of uncompressed data     u32 le        1573800530            5d ce 4a 52         
+  [000012] Compressed size                u32 le        82                    00 00 00 52         
+  [000016] Uncompressed size              u32 le        110                   00 00 00 6e         
+  [00001a] File name length               u16 le        12                    00 0c               
+  [00001c] Extra field length             u16 le        0                     00 00               
+  [00001e] File name                      ascii[12]     RESET_OV.PRG          52 45 53 45 54 5f 4f 56 2e 50 52 47
+  [00002a] Data                           u8[82]                              4b 90 62 60 60 f0 63 c0 0a 9c 96 db db 30 28 f8 39 c6 f8 db db fc ff 0f 64 47 f8 f9 45 f8 db 31 ...
+
+Chunk_1 ZIPFILERECORD
+  [00007c] Signature                      ascii[2]      PK                    50 4b               
+  [00007e] Type                           u8[2]                               03 04               
+  [000080] Version needed to extract      u16 le        20                    00 14               
+  [000082] Flags                          u16 le        0                     00 00               
+  [000084] Compression                    u16 le        8                     00 08               
+           - Deflated                     eq            8
+  [000086] Modification time              dostime le    04:29:32              23 b0               
+  [000088] Modification date              dosdate le    1993-06-27            1a db               
+  [00008a] CRC32 of uncompressed data     u32 le        2918247385            ad f0 eb d9         
+  [00008e] Compressed size                u32 le        97                    00 00 00 61         
+  [000092] Uncompressed size              u32 le        124                   00 00 00 7c         
+  [000096] File name length               u16 le        12                    00 0c               
+  [000098] Extra field length             u16 le        0                     00 00               
+  [00009a] File name                      ascii[12]     SET_OVER.PRG          53 45 54 5f 4f 56 45 52 2e 50 52 47
+  [0000a6] Data                           u8[97]                              4b 90 62 60 60 88 61 c0 0a 9c 96 db db 30 28 f8 39 c6 f8 db db fc ff 0f 64 47 f8 f9 45 f8 db 31 ...
+
+Chunk_2 ZIPDIRENTRY
+  [000107] Signature                      ascii[2]      PK                    50 4b               
+  [000109] Type                           u8[2]                               01 02               
+  [00010b] Version made by                u16 le        1302                  05 16               
+  [00010d] Version needed to extract      u16 le        20                    00 14               
+  [00010f] Flags                          u16 le        0                     00 00               
+  [000111] Compression                    u16 le        8                     00 08               
+           - Deflated                     eq            8
+  [000113] Modification time              dostime le    04:29:42              23 b5               
+  [000115] Modification date              dosdate le    1993-06-27            1a db               
+  [000117] CRC32 of uncompressed data     u32 le        1573800530            5d ce 4a 52         
+  [00011b] Compressed size                u32 le        82                    00 00 00 52         
+  [00011f] Uncompressed size              u32 le        110                   00 00 00 6e         
+  [000123] File name length               u16 le        12                    00 0c               
+  [000125] Extra field length             u16 le        0                     00 00               
+  [000127] Comment length                 u16 le        0                     00 00               
+  [000129] Disk number start              u16 le        0                     00 00               
+  [00012b] Internal attributes            u16 le        0                     00 00               
+  [00012d] External attributes            u32 le        32                    00 00 00 20         
+  [000131] Header offset                  u32 le        0                     00 00 00 00         
+  [000135] File name                      ascii[12]     RESET_OV.PRG          52 45 53 45 54 5f 4f 56 2e 50 52 47
+
+Chunk_3 ZIPDIRENTRY
+  [000141] Signature                      ascii[2]      PK                    50 4b               
+  [000143] Type                           u8[2]                               01 02               
+  [000145] Version made by                u16 le        1302                  05 16               
+  [000147] Version needed to extract      u16 le        20                    00 14               
+  [000149] Flags                          u16 le        0                     00 00               
+  [00014b] Compression                    u16 le        8                     00 08               
+           - Deflated                     eq            8
+  [00014d] Modification time              dostime le    04:29:32              23 b0               
+  [00014f] Modification date              dosdate le    1993-06-27            1a db               
+  [000151] CRC32 of uncompressed data     u32 le        2918247385            ad f0 eb d9         
+  [000155] Compressed size                u32 le        97                    00 00 00 61         
+  [000159] Uncompressed size              u32 le        124                   00 00 00 7c         
+  [00015d] File name length               u16 le        12                    00 0c               
+  [00015f] Extra field length             u16 le        0                     00 00               
+  [000161] Comment length                 u16 le        0                     00 00               
+  [000163] Disk number start              u16 le        0                     00 00               
+  [000165] Internal attributes            u16 le        0                     00 00               
+  [000167] External attributes            u32 le        32                    00 00 00 20         
+  [00016b] Header offset                  u32 le        124                   00 00 00 7c         
+  [00016f] File name                      ascii[12]     SET_OVER.PRG          53 45 54 5f 4f 56 45 52 2e 50 52 47
+
+Chunk_4 ZIPENDLOCATOR
+  [00017b] Signature                      ascii[2]      PK                    50 4b               
+  [00017d] Type                           u8[2]                               05 06               
+  [00017f] Disk number                    u16 le        0                     00 00               
+  [000181] Start Disk Number              u16 le        0                     00 00               
+  [000183] Entries on disk                u16 le        2                     00 02               
+  [000185] Entries in directory           u16 le        2                     00 02               
+  [000187] Directory size                 u32 le        364                   00 00 01 6c         
+  [00018b] Directory offset               u32 le        263                   00 00 01 07         
+  [00018f] Comment length                 u16 le        248                   00 f8               
+  [000191] Comment                        ascii[248]                             -*- This file supplied by -*-..             === The Restaurant at the End of the Universe BBS ===..                  -*- Supporting Atari 16, 24, and 32 bit -*-..                     === 713-531-6011  -  300-14400 BPS ===.. 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 2d 2a 2d 20 54 68 69 ...
+
+0x0077 (119) unmapped bytes

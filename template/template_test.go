@@ -38,7 +38,7 @@ func TestEvaluateAllTemplates(t *testing.T) {
 			t.Errorf("extensions missing")
 		}
 
-		_, err = UnmarshalTemplateIntoDataStructure(templateData)
+		_, err = UnmarshalTemplateIntoDataStructure(templateData, path)
 		assert.Equal(t, nil, err)
 	}
 }
@@ -51,7 +51,7 @@ constants:
 layout:
   -
 `
-	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "2", Label: "I"}, []byte{0x49, 0x0}}, ds.Constants[0])
@@ -81,7 +81,7 @@ layout:
   - segment[header.Unit] segments
   - other_segment[] other_segments
 `
-	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, &DataStructure{

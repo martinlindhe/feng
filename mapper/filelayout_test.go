@@ -51,7 +51,7 @@ layout:
   - header Header2
 `
 
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{
@@ -113,7 +113,7 @@ layout:
   - header Header
 `
 
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData))
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
 	data := []byte{

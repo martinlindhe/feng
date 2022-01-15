@@ -1,13 +1,15 @@
 # STATUS: 1%
 
+# used in macOS X 10.5 and up
+
 # - HI: decompress zlib section and then process it further
 
 references:
   - https://en.wikipedia.org/wiki/Xar_(archiver)
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/XAR.tcl
-  - (USELESS) https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_xar.go
 
 kind: archive
+name: Xar Archive
 extensions: [.xar,.pkg,.xip]
 mime: application/x-xar
 endian: big
@@ -16,7 +18,7 @@ structs:
   header:
     ascii[4] Signature: c'xar!'
     u16 Header size: ??
-    u16 Version: ??                       # NOTE: only version 01 is known
+    u16 Version: ??
     u64 Compressed TOC length: ??
     u64 Uncompressed TOC length: ??
     u32 Checksum algorithm:

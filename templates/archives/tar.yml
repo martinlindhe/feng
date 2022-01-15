@@ -2,6 +2,9 @@
 # - LO: octal ascii parsing?!
 
 # NOTE: this is the extended "ustar" (unix standard tar) format, not the older "tar"
+# NOTE: endian-neutral format
+# NOTE: format only uses byte streams and numbers encoded as octal ascii in them
+# TODO: could specify 2 details on a data field: meaning (uint32,crc32), encoding (ascii+octal)
 
 references:
   - https://en.wikipedia.org/wiki/Tar_(computing)
@@ -10,10 +13,6 @@ references:
 kind: archive
 extensions: [.tar]
 mime: application/x-tar
-# NOTE: endian-neutral format
-
-# NOTE format only uses byte streams and numbers encoded as octal ascii in them
-# TODO: could specify 2 details on a data field: meaning (uint32,crc32), encoding (ascii+octal)
 
 structs:
   # XXX each file object start with 512 byte header then untouched data rounded up to a multiple of 512 bytes (zero pad)
@@ -52,7 +51,6 @@ structs:
     ascii[8] Device minor number: ?? # XXX octal ascii number
     ascii[155] Filename prefix: ??
     u8[12] Reserved: ??
-
 
     # BODY XXX:
     #u8[512] File data: ??

@@ -74,7 +74,9 @@
         "subkeys",
         "ustar",
         "wchar",
+        "winrar",
         "winxp",
+        "winzip",
         "xbitmapheader",
         "Xdensity",
         "XOSK",
@@ -82,8 +84,10 @@
         "Ydensity",
         "Ythumbnail",
         "ZIPDATADESCR",
+        "ZIPDIGITALSIG",
         "ZIPDIRENTRY",
         "ZIPENDLOCATOR",
-        "ZIPFILERECORD"
+        "ZIPFILERECORD",
+        "zipx"
     ]
 }

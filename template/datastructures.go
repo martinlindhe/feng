@@ -10,6 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// structure of a ./templates/ yaml file
 type DataStructure struct {
 
 	// evaluated constants
@@ -25,16 +26,19 @@ type DataStructure struct {
 
 	// extensions
 	Extensions []string
+
+	// lastpath/filename-without-ext, eg "archives/zip"
+	BaseName string
 }
 
-func UnmarshalTemplateIntoDataStructure(b []byte) (*DataStructure, error) {
+func UnmarshalTemplateIntoDataStructure(b []byte, basename string) (*DataStructure, error) {
 	var template Template
 	err := yaml.Unmarshal([]byte(b), &template)
 	if err != nil {
 		return nil, err
 	}
 
-	ds, err := NewDataStructureFrom(&template)
+	ds, err := NewDataStructureFrom(&template, basename)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +50,7 @@ func UnmarshalTemplateIntoDataStructure(b []byte) (*DataStructure, error) {
 	return ds, err
 }
 
-func NewDataStructureFrom(template *Template) (*DataStructure, error) {
+func NewDataStructureFrom(template *Template, basename string) (*DataStructure, error) {
 	constants, err := template.evaluateConstants()
 	if err != nil {
 		return nil, err
@@ -67,6 +71,7 @@ func NewDataStructureFrom(template *Template) (*DataStructure, error) {
 		Layout:     layout,
 		Endian:     template.Endian,
 		Extensions: template.Extensions,
+		BaseName:   basename,
 	}, nil
 }
 
