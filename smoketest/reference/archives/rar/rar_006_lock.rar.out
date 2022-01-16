@@ -6,13 +6,13 @@ Header
   [000005] Header size                    u16 le        7                     00 07               
 
 Chunk_0 ARCHIVE
-  [000007] CRC                            u16 le        37071                 90 cf               
+  [000007] CRC                            u16 le        12469                 30 b5               
   [000009] Type                           u8            115                   73                  
            - ARCHIVE                      eq            115
-  [00000a] ARCHIVE_FLAGS                  u16 le        0                     00 00               
+  [00000a] ARCHIVE_FLAGS                  u16 le        4                     00 04               
            - ARCHIVE_VOLUME               bit           0
            - ARCHIVE_COMMENT_PRESENT      bit           0
-           - ARCHIVE_LOCKED               bit           0
+           - ARCHIVE_LOCKED               bit           1
            - ARCHIVE_SOLID                bit           0
            - NEW_VOLUME_NAMING            bit           0
            - AV_PRESENT                   bit           0

@@ -51,11 +51,11 @@ func TestCompareWithReferenceParses(t *testing.T) {
 
 			data := fl.Present(false)
 
-			actual, err := ioutil.ReadFile(entry.Out)
+			expected, err := ioutil.ReadFile(entry.Out)
 			if err != nil {
 				log.Fatal(err)
 			}
-			assert.Equal(t, data, string(actual))
+			assert.Equal(t, string(expected), data)
 			break
 		}
 	}

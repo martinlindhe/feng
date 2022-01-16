@@ -23,8 +23,14 @@ input:
 
   - folder: archives/rar
     files:
-      # - rar_001_linux.rar   # broken due bug in template
+      - rar_001_linux.rar
       - rar_002_winrar420.rar
+      - rar_003_password_apa.rar
+      - rar_004_comment.rar
+      - rar_005_comment.rar
+      - rar_006_lock.rar
+      - rar_007_solid.rar
+      - rar_008_recovery.rar
 
   - folder: archives/tar
     files:

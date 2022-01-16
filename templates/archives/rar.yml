@@ -1,7 +1,6 @@
-# STATUS: 40%
+# STATUS: 60% - parses many samples
 
-# - HI: "if self.Header version.V5" don't work
-# - HI: if MHD_PASSWORD is set, rest of file is scrambled, so stop decoding
+# - MID: if MHD_PASSWORD is set, rest of file is scrambled, so stop decoding
 # - LOW: calculate crc
 
 references:
@@ -27,7 +26,7 @@ structs:
       eq 72: MARKER
       default: invalid
     u16 Flags: 1a c'!' 
-    u16 Header size: 00 07
+    u16 Header size: ?? # seen "00 07", "01 07" (v5)
 
   chunk:
     u16 CRC: ??
@@ -46,7 +45,7 @@ structs:
 
     if self.Type in (ARCHIVE):
       label: ARCHIVE
-      u16 Main header flags:
+      u16 ARCHIVE_FLAGS:
         bit 0001: ARCHIVE_VOLUME
         bit 0002: ARCHIVE_COMMENT_PRESENT
         bit 0004: ARCHIVE_LOCKED
@@ -61,6 +60,14 @@ structs:
       u16 Header size: ??
       u16 HighPosAv: ??
       u32 PosAv: ??
+      if self.ARCHIVE_FLAGS.ARCHIVE_COMMENT_PRESENT:
+        # XXX struct MainComment
+        u16 Head CRC: ??
+        u8 Head Type:
+          eq 75: COMMENT_OLD
+        u16 Head Flags: ?? # XXX
+        u16 Head size: ??
+        #XXX more, see problem_archive_comment.rar
 
     if self.Type in (FILE_OR_DIR):
       label: FILE_OR_DIR
@@ -84,7 +91,7 @@ structs:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
 
-      u16 Header size: ??
+      u16 HeaderSize: ??
       u32 Compressed size: ??
       # struct FileHeadBlock START :::
       u32 Unpacked size: ??
@@ -111,9 +118,7 @@ structs:
       ascii[self.Name size] File name: ??
       # struct FileHeadBlock END :::
 
-      # iOfs = HeaderSize - (FTell() - startOfs)         self.Header size - (self.offset - self.CRC.offset)
-      #u8[self.Header size - (self.offset - self.CRC.offset)] Reserved: ??
-      u8[5] Reserved: ??   # XXX CRITICAL !!!! THIS FIELD SIZE MUST BE CALCULATED CORRECTLY
+      u8[self.HeaderSize - (self.offset - offset("self.CRC"))] Reserved: ??
 
       u8[self.Compressed size] Data: ??
 
@@ -122,7 +127,7 @@ structs:
       u16 Main header flags:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
-      u16 Header size: ??
+      u16 HeaderSize: ??
       u32 Data size: ??
       # struct SubBlock START :::
       u8[15] Unknown: ??
@@ -130,6 +135,8 @@ structs:
       u8[5] Unknown: ??
       ascii[self.SubTypeLen] SubType: ??
       # struct SubBlock END :::
+
+      u8[self.HeaderSize - (self.offset - offset("self.CRC"))] Reserved: ??
       u8[self.Data size] Data: ??
 
     if self.Type in (END):

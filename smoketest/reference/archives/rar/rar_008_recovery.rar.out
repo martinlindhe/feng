@@ -6,17 +6,17 @@ Header
   [000005] Header size                    u16 le        7                     00 07               
 
 Chunk_0 ARCHIVE
-  [000007] CRC                            u16 le        37071                 90 cf               
+  [000007] CRC                            u16 le        38767                 97 6f               
   [000009] Type                           u8            115                   73                  
            - ARCHIVE                      eq            115
-  [00000a] ARCHIVE_FLAGS                  u16 le        0                     00 00               
+  [00000a] ARCHIVE_FLAGS                  u16 le        64                    00 40               
            - ARCHIVE_VOLUME               bit           0
            - ARCHIVE_COMMENT_PRESENT      bit           0
            - ARCHIVE_LOCKED               bit           0
            - ARCHIVE_SOLID                bit           0
            - NEW_VOLUME_NAMING            bit           0
            - AV_PRESENT                   bit           0
-           - RECOVERY_PRESENT             bit           0
+           - RECOVERY_PRESENT             bit           1
            - BLOCK_HEADERS_ENCRYPTED      bit           0
            - IS_FIRST_VOLUME              bit           0
            - OLD_VERSION_IGNORE           bit           0
@@ -60,13 +60,29 @@ Chunk_1 FILE_OR_DIR
   [00003c] Reserved                       u8[5]                               00 b0 9d 04 11      
   [000041] Data                           u8[5]                               48 45 4c 4c 4f      
 
-Chunk_2 END
-  [000046] CRC                            u16 le        15812                 3d c4               
-  [000048] Type                           u8            123                   7b                  
+Chunk_2 SUBBLOCK
+  [000046] CRC                            u16 le        38206                 95 3e               
+  [000048] Type                           u8            122                   7a                  
+           - SUBBLOCK                     eq            122
+  [000049] Main header flags              u16 le        49152                 c0 00               
+           - OLD_VERSION_IGNORE           bit           1
+           - ADD_SIZE_PRESENT             bit           1
+  [00004b] HeaderSize                     u16 le        54                    00 36               
+  [00004d] Data size                      u32 le        514                   00 00 02 02         
+  [000051] Unknown                        u8[15]                              02 02 00 00 02 46 9c 11 9f 00 00 00 00 1d 30
+  [000060] SubTypeLen                     u8            2                     02                  
+  [000061] Unknown                        u8[5]                               00 00 00 00 00      
+  [000066] SubType                        ascii[2]      RR                    52 52               
+  [000068] Reserved                       u8[20]                              50 72 6f 74 65 63 74 2b 01 00 00 00 01 00 00 00 00 00 00 00
+  [00007c] Data                           u8[514]                             9f ea 52 61 72 21 1a 07 00 6f 97 73 40 00 0d 00 00 00 00 00 00 00 b4 d8 74 20 90 2d 00 05 00 00 ...
+
+Chunk_3 END
+  [00027e] CRC                            u16 le        15812                 3d c4               
+  [000280] Type                           u8            123                   7b                  
            - END                          eq            123
-  [000049] Common block flags             u16 le        16384                 40 00               
+  [000281] Common block flags             u16 le        16384                 40 00               
            - OLD_VERSION_IGNORE           bit           1
            - ADD_SIZE_PRESENT             bit           0
-  [00004b] Header size                    u16 le        7                     00 07               
+  [000283] Header size                    u16 le        7                     00 07               
 
 EOF

@@ -1,8 +1,8 @@
-# STATUS: 50%
+# STATUS: 95% - parses all samples
 #
-# - MID later: mark deflate data for decompression
-# - MID later: mark crc32 for data validation
-# - MID later: mark crc16 for header validation
+# - LOW: mark deflate data for decompression
+# - LOW: mark crc32 for data validation
+# - LOW: mark crc16 for header validation
 #
 # - SAMPLE: WANT sample file with FLAG_CRC16
 # - SAMPLE: WANT sample file with FLAG_EXTRA
@@ -22,7 +22,7 @@ endian: little
 structs:
   header:
     u8[2] Signature: 1f 8b
-    u8 Compression method:            # NOTE: only deflate is in active use
+    u8 Compression method:
       eq 00: Stored
       eq 01: Compressed
       eq 02: Packed

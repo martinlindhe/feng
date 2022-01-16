@@ -212,19 +212,19 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 
 // finds the first field named `structName`.`fieldName`
 // returns: offset,error
-func (fl *FileLayout) GetOffset(s string, df *value.DataField) (int, error) {
+func (fl *FileLayout) GetOffset(query string, df *value.DataField) (int, error) {
 
 	if df != nil {
-		s = strings.Replace(s, "self.", df.Label+".", 1)
+		query = strings.Replace(query, "self.", df.Label+".", 1)
 	}
 
 	if DEBUG {
-		log.Printf("GetOffset: searching for '%s'", s)
+		log.Printf("GetOffset: searching for '%s'", query)
 	}
 
-	parts := strings.SplitN(s, ".", 3)
+	parts := strings.SplitN(query, ".", 3)
 	if len(parts) < 2 {
-		return 0, fmt.Errorf("GetOffset: unexpected format '%s'", s)
+		return 0, fmt.Errorf("GetOffset: unexpected format '%s'", query)
 	}
 	structName := parts[0]
 	fieldName := parts[1]
@@ -243,7 +243,7 @@ func (fl *FileLayout) GetOffset(s string, df *value.DataField) (int, error) {
 		}
 	}
 
-	return 0, fmt.Errorf("GetOffset: '%s' not found", s)
+	return 0, fmt.Errorf("GetOffset: '%s' not found", query)
 }
 
 // finds the first field named `structName`.`fieldName`

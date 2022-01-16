@@ -1,0 +1,87 @@
+Header
+  [000000] CRC                            u16 le        24914                 61 52               
+  [000002] Type                           u8            114                   72                  
+           - MARKER                       eq            114
+  [000003] Flags                          u16 le        6689                  1a 21               
+  [000005] Header size                    u16 le        7                     00 07               
+
+Chunk_0 ARCHIVE
+  [000007] CRC                            u16 le        37071                 90 cf               
+  [000009] Type                           u8            115                   73                  
+           - ARCHIVE                      eq            115
+  [00000a] ARCHIVE_FLAGS                  u16 le        0                     00 00               
+           - ARCHIVE_VOLUME               bit           0
+           - ARCHIVE_COMMENT_PRESENT      bit           0
+           - ARCHIVE_LOCKED               bit           0
+           - ARCHIVE_SOLID                bit           0
+           - NEW_VOLUME_NAMING            bit           0
+           - AV_PRESENT                   bit           0
+           - RECOVERY_PRESENT             bit           0
+           - BLOCK_HEADERS_ENCRYPTED      bit           0
+           - IS_FIRST_VOLUME              bit           0
+           - OLD_VERSION_IGNORE           bit           0
+           - ADD_SIZE_PRESENT             bit           0
+  [00000c] Header size                    u16 le        13                    00 0d               
+  [00000e] HighPosAv                      u16 le        0                     00 00               
+  [000010] PosAv                          u32 le        0                     00 00 00 00         
+
+Chunk_1 SUBBLOCK
+  [000014] CRC                            u16 le        5038                  13 ae               
+  [000016] Type                           u8            122                   7a                  
+           - SUBBLOCK                     eq            122
+  [000017] Main header flags              u16 le        32768                 80 00               
+           - OLD_VERSION_IGNORE           bit           0
+           - ADD_SIZE_PRESENT             bit           1
+  [000019] HeaderSize                     u16 le        35                    00 23               
+  [00001b] Data size                      u32 le        38                    00 00 00 26         
+  [00001f] Unknown                        u8[15]                              24 00 00 00 02 6d f0 8e e2 00 00 00 00 1d 33
+  [00002e] SubTypeLen                     u8            3                     03                  
+  [00002f] Unknown                        u8[5]                               00 01 00 00 00      
+  [000034] SubType                        ascii[3]      CMT                   43 4d 54            
+  [000037] Data                           u8[38]                              08 0d 0c be 90 e6 28 e6 b7 c2 08 5a a8 52 ee cf eb 81 f0 e1 f0 84 09 aa b9 d3 68 c9 c2 86 24 c1 ...
+
+Chunk_2 FILE_OR_DIR
+  [00005d] CRC                            u16 le        55476                 d8 b4               
+  [00005f] Type                           u8            116                   74                  
+           - FILE_OR_DIR                  eq            116
+  [000060] HEAD_FLAGS                     u16 le        36896                 90 20               
+           - FROM_PREV_VOLUME             bit           0
+           - TO_NEXT_VOLUME               bit           0
+           - PASSWORD_ENCRYPTED           bit           0
+           - FILE_COMMENT_PRESENT         bit           0
+           - SOLID                        bit           0
+           - HIGH_SIZE                    bit           0
+           - HAS_UNICODE_FILENAME         bit           0
+           - ENCRYPTION_SALT              bit           0
+           - IS_OLD_FILE_VERSION          bit           0
+           - EXTENDED_TIME_INFO           bit           1
+           - reserved                     bit           0
+           - OLD_VERSION_IGNORE           bit           0
+           - ADD_SIZE_PRESENT             bit           1
+  [000062] HeaderSize                     u16 le        45                    00 2d               
+  [000064] Compressed size                u32 le        5                     00 00 00 05         
+  [000068] Unpacked size                  u32 le        5                     00 00 00 05         
+  [00006c] Host OS                        u8            2                     02                  
+           - Win32                        eq            2
+  [00006d] CRC32                          u32 le        3242484790            c1 44 64 36         
+  [000071] Time                           dostime le    16:12:26              81 8d               
+  [000073] Date                           dosdate le    2014-04-02            44 82               
+  [000075] Version to unpack              u8            29                    1d                  
+  [000076] Pack method                    u8            48                    30                  
+           - Store                        eq            48
+  [000077] Name size                      u16 le        8                     00 08               
+  [000079] UnixStyleAttrs                 u32 le        32                    00 00 00 20         
+  [00007d] File name                      ascii[8]      file.txt              66 69 6c 65 2e 74 78 74
+  [000085] Reserved                       u8[5]                               00 b0 9d 04 11      
+  [00008a] Data                           u8[5]                               48 45 4c 4c 4f      
+
+Chunk_3 END
+  [00008f] CRC                            u16 le        15812                 3d c4               
+  [000091] Type                           u8            123                   7b                  
+           - END                          eq            123
+  [000092] Common block flags             u16 le        16384                 40 00               
+           - OLD_VERSION_IGNORE           bit           1
+           - ADD_SIZE_PRESENT             bit           0
+  [000094] Header size                    u16 le        7                     00 07               
+
+EOF

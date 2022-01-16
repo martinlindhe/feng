@@ -46,7 +46,7 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 		variables[layout.Label] = mapped
 	}
 	if DEBUG {
-		//log.Printf("variables: %#v", variables)
+		log.Printf("variables: %#v", variables)
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)
@@ -60,7 +60,7 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 		if ok {
 			return int(math.Abs(float64(i))), nil
 		}
-		return nil, fmt.Errorf("expected int")
+		return nil, fmt.Errorf("expected int, got %T", args[0])
 	}
 	functions["offset"] = func(args ...interface{}) (interface{}, error) {
 		// 1 arg: name of variable. return its offset as int
@@ -75,7 +75,7 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 			}
 			return i, nil
 		}
-		return nil, fmt.Errorf("expected string")
+		return nil, fmt.Errorf("expected string, got %T", args[0])
 	}
 	functions["len"] = func(args ...interface{}) (interface{}, error) {
 		// 1 arg: name of variable. return its offset as int
@@ -90,7 +90,7 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 			}
 			return i, nil
 		}
-		return nil, fmt.Errorf("expected string")
+		return nil, fmt.Errorf("expected string, got %T", args[0])
 	}
 
 	result, err := eval.Evaluate(s, variables, functions)
