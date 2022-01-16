@@ -160,3 +160,9 @@ input:
       - rgb6.gif
       - rgb8.gif
 
+  - folder: images/ico-windows
+    files:
+      - cursor_win2k_cross.cur
+      - icon_24bit_01.ico
+      - icon_embedded_png.ico
+      - icon_two_resources.ico

@@ -1,4 +1,4 @@
-# STATUS: 60% - all samples are 100% mapped
+# STATUS: 90% - all samples are fully mapped
 
 # - LOW: map "image data" area: BITMAPINFOHEADER and then IMAGEDATA 
 #   this is an embedded DIB bitmap... OR, an embedded PNG. so able to refer to a separate template might be helpful?
@@ -39,7 +39,7 @@ structs:
     u32 Data size: ??
     u32 Data offset: ??
 
-    # XXX the "image data" area contains a DIB header and data, or a PNG
+    # TODO: the "image data" area contains a DIB header and data, or a PNG - could be parsed recursively?
     u8[self.Data offset:self.Data size] Image data: ??
 
 layout:
