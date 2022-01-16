@@ -88,3 +88,59 @@ input:
       - testcompress4.bmp
       - testcompress8.bmp
       - trans.bmp
+
+  - folder: images/dds
+    files:
+      - Alpha8.dds
+      - DDS_a1r5g5b5.dds
+      - DDS_a2b10g10r10.dds
+      - DDS_a2r10g10b10.dds
+      - DDS_a2w10v10u10.dds
+      - DDS_a4l4.dds
+      - DDS_a4r4g4b4.dds
+      - DDS_a8.dds
+      - DDS_a8b8g8r8.dds
+      - DDS_a8l8.dds
+      - DDS_a8p8.dds
+      - DDS_a8r3g3b2.dds
+      - DDS_a8r8g8b8.dds
+      - DDS_a16b16g16r16.dds
+      - DDS_a16b16g16r16f.dds
+      - DDS_a32b32g32r32f.dds
+      - DDS_cxv8u8.dds
+      - DDS_d16_lockable.dds
+      - DDS_d32f_lockable.dds
+      - DDS_dxt1.dds
+      - DDS_dxt2.dds
+      - DDS_dxt3.dds
+      - DDS_dxt4.dds
+      - DDS_dxt5.dds
+      - DDS_g8r8_g8b8.dds
+      - DDS_g16r16.dds
+      - DDS_g16r16f.dds
+      - DDS_g32r32f.dds
+      - DDS_l6v5u5.dds
+      - DDS_l8.dds
+      - DDS_l16.dds
+      - DDS_p8.dds
+      - DDS_q8w8v8u8.dds
+      - DDS_q16w16v16u16.dds
+      - DDS_r3g3b2.dds
+      - DDS_r5g6b5.dds
+      - DDS_r8g8_b8g8.dds
+      - DDS_r8g8b8.dds
+      - DDS_r16f.dds
+      - DDS_r32f.dds
+      - DDS_uyvy.dds
+      - DDS_v8u8.dds
+      - DDS_v16u16.dds
+      - DDS_x1r5g5b5.dds
+      - DDS_x4r4g4b4.dds
+      - DDS_x8b8g8r8.dds
+      - DDS_x8l8v8u8.dds
+      - DDS_yuy2.dds
+      - EnvCubicSpecA.dds
+      - field_128_cube.dds
+
+
+

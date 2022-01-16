@@ -1,4 +1,4 @@
-# STATUS: 70%
+# STATUS: 80% - most samples maps fully
 #
 # IMPORTANT: This implements the more common Windows bitmap format. 
 # The OS/2 variants is IGNORED (OS22XBITMAPHEADER etc should be implemented in a separate file).
