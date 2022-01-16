@@ -1,8 +1,8 @@
-# STATUS: 50% (overlaps optional palette on image data area. need ELSE and single-line-multi-IF syntax to fix)
-
-# - HI: allow complex "if" expression with multiple checks. allow "ELSE" block (needed for proper mapping of palette)
+# STATUS: 60% - all samples map fully
 
 # - HI: map image palette (need sample!)
+#      overlaps optional palette on image data area
+
 # - HI: NEED custom type "rgb" (for palette)
 
 references:
@@ -52,17 +52,13 @@ structs:
     u16 Vertical resolution: ??
     u8[54] Reserved: ??
 
-    # TODO need "else" in order to not overlap palette on image data area
     u8[FILE_SIZE - self.offset] Image data: ??
 
-    # TEST WITH: ..\formats\samples\image\pcx\rgb8_with_palette.pcx
-    # XXX syntax:    if in(self.Version, (3,4,5)) && in(xxx)      XXXX add built-in in() function
-    if self.Version in (3,4,5):  # TODO multiple IF in one line
+    if self.Version in (3,4,5):
       if self.Bits per pixel in (8):
         if self.Color planes in (1):
           u8[FILE_SIZE - 769:1] Palette marker: "0c"
-          # XXX 256 "rgb" (u8 r,g,b) pairs. NEED custom type "rgb"
-          u8[FILE_SIZE - 768:768] Palette: ??
+          u8[FILE_SIZE - 768:768] Palette: ??               # XXX 256 "rgb" (u8 r,g,b) pairs. NEED custom type "rgb"
 
 layout:
   - header Header
