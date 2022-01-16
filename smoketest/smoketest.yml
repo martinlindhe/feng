@@ -166,3 +166,11 @@ input:
       - icon_24bit_01.ico
       - icon_embedded_png.ico
       - icon_two_resources.ico
+
+  - folder: images/jpeg
+    files:
+      - greet02.jpg
+      - jpeg_001.jpg
+      - jpeg_002.jpg
+      - jpeg_003_exif_fujifilm-finepix40i.jpg
+      - jpeg-134byte.jpg

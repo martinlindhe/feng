@@ -1,10 +1,8 @@
-# STATUS: 10%
-
-# - HI: need "sum" built-in to sum all int values of input array
-
+# STATUS: 30%
 
 # - HI: figure out how to decode image data stream (between SOI and EOI markers)
 # - HI: file is a stream of packets with different signature. parse until EOF
+# - MID: use custom types
 
 references:
   - https://en.wikipedia.org/wiki/JPEG
@@ -25,7 +23,7 @@ constants:
   u8[2] M_APP1: ff e1
   u8[2] M_COMM: ff fe
   u8[2] M_DQT:  ff db
-  u8[2] M_DHT:  ff c4   # TODO: type requires a built-in function to sum all bytes in a variable value
+  u8[2] M_DHT:  ff c4
   u8[2] M_SOS:  ff da
   u8[2] M_SOF0: ff c0
   u8[2] M_SOF2: ff c2
@@ -53,7 +51,7 @@ structs:
 
   segment:
     u8[2] Signature: ??
-    u16 Length: ??  # length of segment excluding APP0 marker
+    u16 Length: ??  # length of segment excluding signature
 
     if self.Signature in (M_APP0):
       label: "APP0"
@@ -73,8 +71,8 @@ structs:
         u16 Ydensity: ??
         u8 Xthumbnail: ??
         u8 Ythumbnail: ??
-        if Xthumbnail != 0 && Ythumbnail != 0: # XXX ?! if form ...
-          rgb8[Xthumbnail * Ythumbnail * 3] Thumbnail data: ?? # XXX 8 bit per channel rgb: R, G, B bytes
+        #if Xthumbnail != 0 && Ythumbnail != 0: # XXX ?! if form ...
+        #  rgb8[Xthumbnail * Ythumbnail * 3] Thumbnail data: ?? # XXX 8 bit per channel rgb: R, G, B bytes
 
       if self.Identifier in (JFXX_APP0):
         u8 Thumbnail format:
@@ -110,20 +108,8 @@ structs:
     if self.Signature in (M_DHT):
       label: "DHT"
       u8 htInfo: ??
-      u8[16] Length: ??
-    #  # XXX LEN is the sum of all byte values in self.Length ... ?!?!? XXX will need another built-in function
-    #  #struct Huffmann_Table {
-    #  #  ubyte htInfo;
-    #  #  ubyte length[16];
-    #  #  local int sumLen = 0;
-    #  #  local int i = 0;
-    #  #  for(i;i<16;i++) {
-    #  #    sumLen += length[i];
-    #  #  }
-    #  #  ubyte HTV[sumLen];
-    #  #}
-      #u8[sum("self.Length")] HTV: ??  # XXX Size not constant
-      u8[1] HTV: ??  # XXX Size not constant
+      u8[16] htLength: ??
+      u8[self.Length - 2 - 1 - 16] HTV: ??
 
     if self.Signature in (M_SOS):
       label: "SOS"
@@ -163,18 +149,4 @@ structs:
 
 layout:
   - header Header
-
-  # XXX for jpeg_001.jpg
-  - segment[] Segment # APP0            XXX SEG NAMING !!!!
-  #- segment COMMENT
-  #- segment DQT_0
-  #- segment DQT_1
-  #- segment SOFx
-  #- segment DHT_0
-  #- segment DHT_1
-  #- segment SOS     # XXX SOS holds image data after that segment, all data is between SOI and EOI markers
-
-
-
-  # XXX slices
-  #- segment[] Segment
+  - segment[] Segment

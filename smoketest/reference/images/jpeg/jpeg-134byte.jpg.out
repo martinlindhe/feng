@@ -1,0 +1,52 @@
+Header
+  [000000] SOI marker                     u8[2]                               ff d8               
+
+Segment_0 APP0
+  [000002] Signature                      u8[2]                               ff e0               
+  [000004] Length                         u16 be        16                    00 10               
+  [000006] Identifier                     ascii[5]      JFIF                  4a 46 49 46 00      
+  [00000b] Major version                  u8            1                     01                  
+  [00000c] Minor version                  u8            1                     01                  
+  [00000d] Density units                  u8            1                     01                  
+           - Pixels per inch              eq            1
+  [00000e] Xdensity                       u16 be        72                    00 48               
+  [000010] Ydensity                       u16 be        72                    00 48               
+  [000012] Xthumbnail                     u8            0                     00                  
+  [000013] Ythumbnail                     u8            0                     00                  
+
+Segment_1 DQT
+  [000014] Signature                      u8[2]                               ff db               
+  [000016] Length                         u16 be        67                    00 43               
+  [000018] QuanFlag                       u8            0                     00                  
+           - Pq                           bit           0
+           - Tq                           bit           0
+  [000019] qTable                         u8[64]                              ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ...
+
+Segment_2 SOF2
+  [000059] Signature                      u8[2]                               ff c2               
+  [00005b] Length                         u16 be        11                    00 0b               
+  [00005d] Precision                      u8            8                     08                  
+  [00005e] Image height                   u16 be        1                     00 01               
+  [000060] Image width                    u16 be        1                     00 01               
+  [000062] nr_comp                        u8            1                     01                  
+  [000063] COMPS data                     u8[3]                               01 11 00            
+
+Segment_3 DHT
+  [000066] Signature                      u8[2]                               ff c4               
+  [000068] Length                         u16 be        20                    00 14               
+  [00006a] htInfo                         u8            16                    10                  
+  [00006b] htLength                       u8[16]                              01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [00007b] HTV                            u8[1]                               00                  
+
+Segment_4 SOS
+  [00007c] Signature                      u8[2]                               ff da               
+  [00007e] Length                         u16 be        8                     00 08               
+  [000080] nr_comp                        u8            1                     01                  
+  [000081] COMPSOS data                   u8[2]                               01 00               
+  [000083] Ss                             u8            1                     01                  
+  [000084] Se                             u8            63                    3f                  
+  [000085] Flag                           u8            16                    10                  
+           - Ah                           bit           1
+           - Al                           bit           0
+
+EOF
