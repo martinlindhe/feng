@@ -15,18 +15,18 @@ constants:
 
 structs:
   header:
-    ascii[2] Signature: ??
+    ascii[2] Endian marker: ??
 
-    if self.Signature in (BIG_ENDIAN_MAGIC):
+    if self.Endian marker in (BIG_ENDIAN_MAGIC):
       endian: big
-    if self.Signature in (LITTLE_ENDIAN_MAGIC):
+    if self.Endian marker in (LITTLE_ENDIAN_MAGIC):
       endian: little
 
     # invalidate file not matching signature
-    if self.Signature notin (BIG_ENDIAN_MAGIC, LITTLE_ENDIAN_MAGIC):
+    if self.Endian marker notin (BIG_ENDIAN_MAGIC, LITTLE_ENDIAN_MAGIC):
       data: invalid
 
-    u16 Arbitrary number: 00 2a # XXX for big endian "00 2a", for little endian "2a 00" (should decode the same due to endian directive above. TODO VERIFY)
+    u16 Signature: 00 2a # should decode the same due to endian directive above
 
     # XXX rest
 

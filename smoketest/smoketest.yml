@@ -187,3 +187,44 @@ input:
       - PCX_psp.pcx
       - rgb8_with_palette.pcx
       - rgb24.pcx
+
+  - folder: images/png
+    files:
+      - png_001.png
+      - png_002.png
+      - png_003_gimp.png
+      - png_004_greyscale.png
+      - png_005_with_PLTE.png
+
+  - folder: images/psd
+    files:
+      - BevelButtonRound.psd
+      - cmyk.psd
+      - logo.psd
+      - logo_alpha.psd
+      - logo_layers.psd
+      - logo_noCompatible.psd
+      - logo_noLayers.psd
+      - PSD_gimp.psd
+      - PSD_ps.psd
+      - PullDownButton_ArrowsOnly_Cropped_Regular.psd
+      - rgb8.psd
+      - rgb8alpha.psd
+      - rgb24.psd
+      - rgb24alpha.psd
+      - rgb24alpha2.psd
+      - rgb24layers.psd
+      - simple_b_bh10_0.psd
+      - simple_b_bh25_0.psd
+
+  - folder: images/tga
+    files:
+      # NOTE: many more samples exists
+      - 1d.tga
+      - circle24.tga
+      - grey.tga
+
+  - folder: images/tiff
+    files:
+      - big_endian_action_copy.tiff
+      - little_endian_tiff_001.tiff

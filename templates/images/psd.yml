@@ -2,7 +2,6 @@
 
 references:
   - https://en.wikipedia.org/wiki/Adobe_Photoshop#File_format
-  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_psd.go
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/PSD.tcl
 
 kind: image

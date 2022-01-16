@@ -1,16 +1,15 @@
-# STATUS: 70% (all test files parse fully)
+# STATUS: 80% - all samples parse fully
 
 # - MID: PLTE chunk want custom type "rgb"
 # - MID: decode "vpAg" chunk (need docs)
 # - MID: decode utf8 text in iTXt
-# - LOW: crc32 data type
+# - LOW: calculate crc32
 
 references:
   - https://en.wikipedia.org/wiki/Portable_Network_Graphics
   - http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
   - https://www.sweetscape.com/010editor/repository/files/PNG.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/PNG.tcl
-  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_png.go
 
 kind: image
 extensions: [.png]

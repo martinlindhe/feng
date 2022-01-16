@@ -1,0 +1,5 @@
+Header
+  [000000] Signature                      ascii[2]      II                    49 49               
+  [000002] Arbitrary number               u16 le        42                    00 2a               
+
+0x0232 (562) unmapped bytes

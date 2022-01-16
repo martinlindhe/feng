@@ -6,7 +6,6 @@ references:
   - http://www.paulbourke.net/dataformats/tga/
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/TGA.tcl
   - https://www.sweetscape.com/010editor/repository/files/TGA.bt
-  - https://github.com/martinlindhe/formats/blob/master/parse/image/img_tga.go
 
 kind: image
 extensions: [.tga]
