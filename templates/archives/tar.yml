@@ -1,6 +1,6 @@
 # STATUS: 1%
 
-# - LO: octal ascii parsing?
+# - LOW: octal ascii parsing?
 
 # NOTE: this is the extended "ustar" (unix standard tar) format, not the older "tar"
 # NOTE: endian-neutral format
@@ -12,6 +12,7 @@ references:
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/TAR.tcl
 
 kind: archive
+name: Tar Archive
 extensions: [.tar]
 mime: application/x-tar
 

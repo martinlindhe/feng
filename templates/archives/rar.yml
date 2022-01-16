@@ -1,5 +1,6 @@
 # STATUS: 60% - parses many samples
 
+# - HI: declare some in-lined structs as custom data types
 # - MID: if MHD_PASSWORD is set, rest of file is scrambled, so stop decoding
 # - LOW: calculate crc
 
@@ -9,6 +10,7 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/RAR.bt
 
 kind: archive
+name: Rar Archive
 extensions: [.rar, .r00, .r01]
 mime: application/vnd.rar
 endian: little

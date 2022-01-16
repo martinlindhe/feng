@@ -15,6 +15,7 @@ references:
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/GZIP.tcl
 
 kind: archive
+name: Gzip Archive
 extensions: [.gz, .tgz]
 mime: application/gzip
 endian: little

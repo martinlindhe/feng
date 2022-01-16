@@ -1,8 +1,7 @@
-# STATUS: 2%
-# - LOW: dos time+date format fields
-# - LOW: header checksum algorithm
+# STATUS: 5%
 
-# - LO: match on 'ascii' type
+# - LOW: dos time+date does not seem to be exactly right
+# - LOW: header checksum algorithm
 
 references:
   - https://web.archive.org/web/20080724142842/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/Notes.html
@@ -11,7 +10,8 @@ references:
   - https://github.com/kaitai-io/kaitai_struct_formats/blob/master/archive/lzh.ksy
 
 kind: archive
-extensions: [.lzh, .lha]
+name: LHA Archive
+extensions: [.lha, .lzh]
 mime: application/x-lzh-compressed
 endian: little
 
@@ -30,10 +30,10 @@ structs:
       eq c'6': LZW, 32K sliding window. Static Huffman
       eq c'7': LZW, 64K sliding window. Static Huffman
       default: invalid
-    ascii Signature: c'-'
+    ascii Signature: "2d"  # -
     u32 Compressed size: ??
-    u32 Uncompressed size: ??
-    dosdate File modified date: ??
+    u32 Original size: ??
+    dosdate File modified date: ??    # XXX should maybe be 32-bit dos_datetime
     dostime File modified time: ??
 
 
@@ -52,7 +52,7 @@ structs:
 
 
     # LEVEL 2 header:
-    u8 Signature: "20"
+    ascii Signature: "20" # space
     u8 Header Level: "02" # must be 02 for "level 2 header"   XXX 02 for "level 3 header"
     u16 Uncompressed CRC16: ??    # XXX ALSO LV3 header
     u8 OS ID:                     # XXX ALSO LV3 header

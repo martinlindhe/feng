@@ -57,9 +57,10 @@ func main() {
 			}
 			continue
 		}
-
-		fmt.Printf("Parsed %s as %s\n\n", args.Filename, tpl)
-		fmt.Print(fl.Present(args.HideRaw))
-		break
+		if len(fl.Structs) > 0 {
+			fmt.Printf("Parsed %s as %s\n\n", args.Filename, tpl)
+			fmt.Print(fl.Present(args.HideRaw))
+			break
+		}
 	}
 }

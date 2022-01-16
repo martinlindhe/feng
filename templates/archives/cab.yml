@@ -1,6 +1,6 @@
 # STATUS: 25%
 
-# - HI: fix CFDATA area tagging
+# - HI: fix CFDATA area tagging (custom types)
 
 # SAMPLE: need with "Header.Flags.Reserve present" set
 # SAMPLE: need with "self.cbCFHeader" > 0
@@ -13,6 +13,7 @@ references:
   - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_cab.go
 
 kind: archive
+name: Microsoft Cabinet Archive
 extensions: [.cab]
 mime: application/vnd.ms-cab-compressed
 endian: little

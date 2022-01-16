@@ -68,6 +68,11 @@ func main() {
 				continue
 			}
 
+			if len(fl.Structs) == 0 {
+				fmt.Println("MapReader failure, skipping")
+				continue
+			}
+
 			fmt.Printf("Parsed %s as %s\n\n", entry.In, tpl)
 
 			data := fl.Present(false)

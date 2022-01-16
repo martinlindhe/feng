@@ -130,8 +130,14 @@ https://davidkoloski.me/blog/rkyv-is-faster-than/
 
 http://fileformats.archiveteam.org/wiki/File_Formats
 https://www.fileformat.info/
-
 https://github.com/kaitai-io/kaitai_struct_formats
+
+
+# GAME MODDING RESOURCES
+https://moddingwiki.shikadi.net/wiki/Main_Page      - DOS Game Modding Wiki
+http://wiki.xentax.com/index.php/Game_File_Format_Central
+https://zenhax.com/
+https://www.vg-resource.com/
 
 
 # SAMPLES

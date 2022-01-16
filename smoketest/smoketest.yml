@@ -17,9 +17,9 @@ input:
       - gzip_002.gz
       - gzip_003.gz
 
-  - folder: archives/lzh
+  - folder: archives/lha
     files:
-      - lzh_001_tiny.lzh
+      - lha_001_tiny.lzh
 
   - folder: archives/rar
     files:
@@ -61,3 +61,30 @@ input:
       - zip_009_password.zip
       - zip_010_compression_implode.zip
       - zip_011_trailing_bytes.zip
+
+  - folder: windows/regf
+    files:
+      - regf_001_settings.dat
+
+  - folder: images/bmp
+    files:
+      - bmp_win_v2-001.bmp
+      - bmp_win_v3-001.bmp
+      - bmp_win_v3-002.bmp
+      - bmp_win_v3-003_win31_thatch.bmp
+      - bmp_win_v3-004_win95_black_thatch.bmp
+      - bmp_win_v4-001.bmp
+      - bmp_win_v5-001.bmp
+      - test1.bmp
+      - test4.bmp
+      - test8.bmp
+      - test8os2.bmp
+      - test16.bmp
+      - test24.bmp
+      - test32.bmp
+      - test32bf.bmp      # 010 also fails to map the last trailing bytes
+      - test32bfv4.bmp
+      - test32v5.bmp
+      - testcompress4.bmp
+      - testcompress8.bmp
+      - trans.bmp

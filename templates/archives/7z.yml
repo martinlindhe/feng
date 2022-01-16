@@ -1,5 +1,8 @@
 # STATUS: 1%
-# - LO: ArchiveVersion version: ?? # XXX custom struct define!
+
+# - HIGH: ArchiveVersion version: ?? # XXX custom types define!
+#         will be very good for readable templates
+#         will allow for impl. of built in advanced types like VersionMajorMinor16 (u8,u8)
 
 references:
   - https://en.wikipedia.org/wiki/7z
@@ -7,15 +10,17 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/7ZIP.bt       # very rough
 
 kind: archive
+name: 7z Archive
 extensions: [.7z]
 mime: application/x-7z-compressed
 endian: little
 
 types:
   # XXX impl!!!
-  ArchiveVersion:       # XXX or standard type "version16" byte 0=major, byte 1=minor
+  ArchiveVersion:       # XXX this should become a built-in standard type "version16" byte 0=major, byte 1=minor
     u8 Major: ??        # 0.3 and 0.4 is seen in 2021
     u8 Minor: ??
+    format: "{0}.{1}"    # XXX impl presentation formatting string
 
   # XXX impl!!!
   StartHeader:

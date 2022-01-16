@@ -1,5 +1,9 @@
 # STATUS: 10%
+
+# HI: rewrite for slice parsing! (need custom types)
+
 # TODO: need to get absolute value of hive_bin_header.Cell size. we must evaluate all expressions and add an abs() function
+# - LOW: calculate checksums
 
 references:
   - https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc
@@ -41,7 +45,7 @@ structs:
     u32 Clustering factor: ??
     utf16[32] File name: ??
     u8[396] Reserved: ??
-    u32 Checksum: ?? # XXX xor-32 of the previous 508 bytes
+    u32 Checksum: ??          # xor-32 of the previous 508 bytes
     u8[3576] Reserved: ??
     u32 Boot type: ??
     u32 Boot recover: ??
