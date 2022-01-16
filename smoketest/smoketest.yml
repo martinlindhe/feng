@@ -142,5 +142,21 @@ input:
       - EnvCubicSpecA.dds
       - field_128_cube.dds
 
-
+  - folder: images/gif
+    files:
+      - problematic_extensions_acu100_1.gif
+      - gif_87a_001.gif
+      - gif_87a_002_apples.gif
+      - gif_89a_001.gif
+      - gif_89a_002_anim.gif
+      - gif_89a_003_anim.gif
+      - gif_89a_004_fish.gif
+      - gif_89a_005_with_application.gif
+      - gif_89a_006_win95_attlogo.gif
+      - necco.gif
+      - newtons_cradle_animation_book_2.gif
+      - rgb1.gif
+      - rgb4.gif
+      - rgb6.gif
+      - rgb8.gif
 

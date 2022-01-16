@@ -1,9 +1,9 @@
-# STATUS: 5%
+# STATUS: 20%
 
-# - HI: "data_sub_block[] Image data: ??" with custom type and "data: eos" marker to end slice stream
+# - MAX: "data_sub_block[] Image data: ??" with custom type and "data: eos" marker to end slice stream
+#     needed to fully parse gif format
+
 # - MID: need to use custom "rgb" type as defined
-
-# - DONE(CONFIRM!!!): section[] slice syntax (untested on GIF)
 
 references:
   - https://www.w3.org/Graphics/GIF/spec-gif89a.txt
@@ -20,7 +20,7 @@ endian: little
 constants:
   u8 BLOCK_IMAGE:     "2c"
   u8 BLOCK_EXTENSION: "21"
-  #u8 BLOCK_TRAILER:   "3b"
+  u8 BLOCK_TRAILER:   "3b"
 
   #u8 EXT_PLAIN_TEXT:      "01"
   u8 EXT_GRAPHIC_CONTROL: "f9"
@@ -64,8 +64,9 @@ structs:
 
   section:
     u8 Block type: ??
-    # XXX FINISH BLOCK_EXTENSION
+  
     if self.Block type in (BLOCK_EXTENSION):
+      label: BLOCK_EXTENSION
       u8 Extension type: ??
       if self.Extension type in (EXT_GRAPHIC_CONTROL):
         u8 Size: "04"                       # NOTE: should always be 04
@@ -79,6 +80,7 @@ structs:
         u8 Block terminator: "00"
 
     if self.Block type in (BLOCK_IMAGE):
+      label: BLOCK_IMAGE
       u16 Left position: ??
       u16 Top position: ??
       u16 Image width: ??
@@ -94,10 +96,14 @@ structs:
       u8 LZWMinimumCodeSize: ??   # XXX meaning?
 
       # XXX series of data blocks. last block is one with Size==0
-      #data_sub_block[] Image data: ??
+      # needed to parse gif_87a_002_apples.gif
+      u8 Data size: ??
+      u8[self.Data size] Data: ??
+      u8 BlockTerminator: "00"
 
+    if self.Block type in (BLOCK_TRAILER):
+      label: BLOCK_TRAILER
 
 layout:
   - header Header
-  - section Section   # XXX
-  #- section[] Section   # XXX slice of sections
+  - section[] Section
