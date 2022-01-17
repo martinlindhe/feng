@@ -228,3 +228,9 @@ input:
     files:
       - big_endian_action_copy.tiff
       - little_endian_tiff_001.tiff
+
+  - folder: games/pc/everquest_pfs
+    files:
+      - butcher2_chr.s3d
+      - chardok_2_obj.s3d
+      - guildhalldoor.eqg
