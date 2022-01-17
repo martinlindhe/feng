@@ -1,31 +1,31 @@
 Header
-  [000000] SOI marker                     u8[2]                               ff d8               
+  [000000] SOI marker                     u8[2]                                  ff d8
 
 Segment_0 APP1
-  [000002] Signature                      u8[2]                               ff e1               
-  [000004] Length                         u16 be        9773                  26 2d               
-  [000006] EXIF                           ascii[6]      Exif                  45 78 69 66 00 00   
-  [00000c] Align                          ascii[2]      MM                    4d 4d               
-  [00000e] tagMark                        u16 be        42                    00 2a               
-  [000010] offsetFirstIFD                 u32 be        8                     00 00 00 08         
+  [000002] Signature                      u8[2]                                  ff e1
+  [000004] Length                         u16 be           9773                  26 2d
+  [000006] EXIF                           ascii[6]         Exif                  45 78 69 66 00 00
+  [00000c] Align                          ascii[2]         MM                    4d 4d
+  [00000e] tagMark                        u16 be           42                    00 2a
+  [000010] offsetFirstIFD                 u32 be           8                     00 00 00 08
 
 Segment_1
-  [000014] Signature                      u8[2]                               00 0b               
-  [000016] Length                         u16 be        271                   01 0f               
-  [000018] Data                           u8[269]                             00 02 00 00 00 09 00 00 00 92 01 10 00 02 00 00 00 0b 00 00 00 9c 01 12 00 03 00 00 00 01 00 01 ...
+  [000014] Signature                      u8[2]                                  00 0b
+  [000016] Length                         u16 be           271                   01 0f
+  [000018] Data                           u8[269]                                00 02 00 00 00 09 00 00 00 92 01 10 00 02 00 00 00 0b 00 00 00 9c 01 12 00 03 00 00 00 01 00 01 ...
 
 Segment_2
-  [000125] Signature                      u8[2]                               00 00               
-  [000127] Length                         u16 be        256                   01 00               
-  [000129] Data                           u8[254]                             c8 00 00 90 00 00 07 00 00 00 04 30 32 31 30 90 03 00 02 00 00 00 14 00 00 02 58 90 04 00 02 00 ...
+  [000125] Signature                      u8[2]                                  00 00
+  [000127] Length                         u16 be           256                   01 00
+  [000129] Data                           u8[254]                                c8 00 00 90 00 00 07 00 00 00 04 30 32 31 30 90 03 00 02 00 00 00 14 00 00 02 58 90 04 00 02 00 ...
 
 Segment_3
-  [000227] Signature                      u8[2]                               c0 a2               
-  [000229] Length                         u16 be        4096                  10 00               
-  [00022b] Data                           u8[4094]                            03 00 00 00 01 00 03 00 00 a2 17 00 03 00 00 00 01 00 02 00 00 a3 00 00 07 00 00 00 01 03 00 00 ...
+  [000227] Signature                      u8[2]                                  c0 a2
+  [000229] Length                         u16 be           4096                  10 00
+  [00022b] Data                           u8[4094]                               03 00 00 00 01 00 03 00 00 a2 17 00 03 00 00 00 01 00 02 00 00 a3 00 00 07 00 00 00 01 03 00 00 ...
 
 Segment_4
-  [001229] Signature                      u8[2]                               ed df               
-  [00122b] Length                         u16 be        44402                 ad 72               
+  [001229] Signature                      u8[2]                                  ed df
+  [00122b] Length                         u16 be           44402                 ad 72
 
 0x9682 (38530) unmapped bytes

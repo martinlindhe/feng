@@ -1,52 +1,52 @@
 Chunk_0 ZIPFILERECORD
-  [000000] Signature                      ascii[2]      PK                    50 4b               
-  [000002] Type                           u8[2]                               03 04               
-  [000004] Version needed to extract      u16 le        20                    00 14               
-  [000006] Flags                          u16 le        0                     00 00               
-  [000008] Compression                    u16 le        8                     00 08               
+  [000000] Signature                      ascii[2]         PK                    50 4b
+  [000002] Type                           u8[2]                                  03 04
+  [000004] Version needed to extract      u16 le           20                    00 14
+  [000006] Flags                          u16 le           0                     00 00
+  [000008] Compression                    u16 le           8                     00 08
            - Deflated                     eq            8
-  [00000a] Modification time              dostime le    16:12:26              81 8d               
-  [00000c] Modification date              dosdate le    2014-04-02            44 82               
-  [00000e] CRC32 of uncompressed data     u32 le        3242484790            c1 44 64 36         
-  [000012] Compressed size                u32 le        7                     00 00 00 07         
-  [000016] Uncompressed size              u32 le        5                     00 00 00 05         
-  [00001a] File name length               u16 le        8                     00 08               
-  [00001c] Extra field length             u16 le        0                     00 00               
-  [00001e] File name                      ascii[8]      file.txt              66 69 6c 65 2e 74 78 74
-  [000026] Data                           u8[7]                               f3 70 f5 f1 f1 07 00
+  [00000a] Modification time              dostime le       16:12:26              81 8d
+  [00000c] Modification date              dosdate le       2014-04-02            44 82
+  [00000e] CRC32 of uncompressed data     u32 le           3242484790            c1 44 64 36
+  [000012] Compressed size                u32 le           7                     00 00 00 07
+  [000016] Uncompressed size              u32 le           5                     00 00 00 05
+  [00001a] File name length               u16 le           8                     00 08
+  [00001c] Extra field length             u16 le           0                     00 00
+  [00001e] File name                      ascii[8]         file.txt              66 69 6c 65 2e 74 78 74
+  [000026] Data                           u8[7]                                  f3 70 f5 f1 f1 07 00
 
 Chunk_1 ZIPDIRENTRY
-  [00002d] Signature                      ascii[2]      PK                    50 4b               
-  [00002f] Type                           u8[2]                               01 02               
-  [000031] Version made by                u16 le        31                    00 1f               
-  [000033] Version needed to extract      u16 le        20                    00 14               
-  [000035] Flags                          u16 le        0                     00 00               
-  [000037] Compression                    u16 le        8                     00 08               
+  [00002d] Signature                      ascii[2]         PK                    50 4b
+  [00002f] Type                           u8[2]                                  01 02
+  [000031] Version made by                u16 le           31                    00 1f
+  [000033] Version needed to extract      u16 le           20                    00 14
+  [000035] Flags                          u16 le           0                     00 00
+  [000037] Compression                    u16 le           8                     00 08
            - Deflated                     eq            8
-  [000039] Modification time              dostime le    16:12:26              81 8d               
-  [00003b] Modification date              dosdate le    2014-04-02            44 82               
-  [00003d] CRC32 of uncompressed data     u32 le        3242484790            c1 44 64 36         
-  [000041] Compressed size                u32 le        7                     00 00 00 07         
-  [000045] Uncompressed size              u32 le        5                     00 00 00 05         
-  [000049] File name length               u16 le        8                     00 08               
-  [00004b] Extra field length             u16 le        36                    00 24               
-  [00004d] Comment length                 u16 le        0                     00 00               
-  [00004f] Disk number start              u16 le        0                     00 00               
-  [000051] Internal attributes            u16 le        0                     00 00               
-  [000053] External attributes            u32 le        32                    00 00 00 20         
-  [000057] Header offset                  u32 le        0                     00 00 00 00         
-  [00005b] File name                      ascii[8]      file.txt              66 69 6c 65 2e 74 78 74
-  [000063] Extra field                    u8[36]                              0a 00 20 00 00 00 00 00 01 00 18 00 9d 45 ff 92 7d 4e cf 01 53 c3 40 90 7d 4e cf 01 53 c3 40 90 ...
+  [000039] Modification time              dostime le       16:12:26              81 8d
+  [00003b] Modification date              dosdate le       2014-04-02            44 82
+  [00003d] CRC32 of uncompressed data     u32 le           3242484790            c1 44 64 36
+  [000041] Compressed size                u32 le           7                     00 00 00 07
+  [000045] Uncompressed size              u32 le           5                     00 00 00 05
+  [000049] File name length               u16 le           8                     00 08
+  [00004b] Extra field length             u16 le           36                    00 24
+  [00004d] Comment length                 u16 le           0                     00 00
+  [00004f] Disk number start              u16 le           0                     00 00
+  [000051] Internal attributes            u16 le           0                     00 00
+  [000053] External attributes            u32 le           32                    00 00 00 20
+  [000057] Header offset                  u32 le           0                     00 00 00 00
+  [00005b] File name                      ascii[8]         file.txt              66 69 6c 65 2e 74 78 74
+  [000063] Extra field                    u8[36]                                 0a 00 20 00 00 00 00 00 01 00 18 00 9d 45 ff 92 7d 4e cf 01 53 c3 40 90 7d 4e cf 01 53 c3 40 90 ...
 
 Chunk_2 ZIPENDLOCATOR
-  [000087] Signature                      ascii[2]      PK                    50 4b               
-  [000089] Type                           u8[2]                               05 06               
-  [00008b] Disk number                    u16 le        0                     00 00               
-  [00008d] Start Disk Number              u16 le        0                     00 00               
-  [00008f] Entries on disk                u16 le        1                     00 01               
-  [000091] Entries in directory           u16 le        1                     00 01               
-  [000093] Directory size                 u32 le        90                    00 00 00 5a         
-  [000097] Directory offset               u32 le        45                    00 00 00 2d         
-  [00009b] Comment length                 u16 le        0                     00 00               
+  [000087] Signature                      ascii[2]         PK                    50 4b
+  [000089] Type                           u8[2]                                  05 06
+  [00008b] Disk number                    u16 le           0                     00 00
+  [00008d] Start Disk Number              u16 le           0                     00 00
+  [00008f] Entries on disk                u16 le           1                     00 01
+  [000091] Entries in directory           u16 le           1                     00 01
+  [000093] Directory size                 u32 le           90                    00 00 00 5a
+  [000097] Directory offset               u32 le           45                    00 00 00 2d
+  [00009b] Comment length                 u16 le           0                     00 00
 
 EOF

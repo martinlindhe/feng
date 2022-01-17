@@ -1,11 +1,11 @@
 Header
-  [000000] ID length                      u8            0                     00                  
-  [000001] Color map                      u8            0                     00                  
+  [000000] ID length                      u8               0                     00
+  [000001] Color map                      u8               0                     00
            - No color map                 eq            0
-  [000002] Image type                     u8            10                    0a                  
+  [000002] Image type                     u8               10                    0a
            - Type                         bit           2
            - RLE                          bit           1
-  [000003] Color map specification        u8[5]                               00 00 00 00 00      
-  [000008] Image specification            u8[10]                              00 00 00 00 80 00 80 00 18 00
+  [000003] Color map specification        u8[5]                                  00 00 00 00 00
+  [000008] Image specification            u8[10]                                 00 00 00 00 80 00 80 00 18 00
 
 0x3588 (13704) unmapped bytes

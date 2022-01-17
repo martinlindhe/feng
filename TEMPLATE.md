@@ -37,6 +37,9 @@
     dostime             16-bit MS-DOS timestamp, in UTC
 
 
+    comp:zlib[self.Size]  mark area as zlib compressed data
+
+
 # arrays
 
     u32[4]

@@ -1,15 +1,15 @@
 Header
-  [000000] Signature                      u8[6]                               fd 37 7a 58 5a 00   
-  [000006] Stream flags                   u16 be        4                     00 04               
+  [000000] Signature                      u8[6]                                  fd 37 7a 58 5a 00
+  [000006] Stream flags                   u16 be           4                     00 04
            - CRC64                        eq            4
-  [000008] CRC32                          u32 be        3872830534            e6 d6 b4 46         
-  [00000c] Block header size              u8            2                     02                  
-  [00000d] Block flags                    u8            0                     00                  
+  [000008] CRC32                          u32 be           3872830534            e6 d6 b4 46
+  [00000c] Block header size              u8               2                     02
+  [00000d] Block flags                    u8               0                     00
            - Number of filters            bit           0
            - Reserved                     bit           0
            - Compressed Size field present bit           0
            - Uncompressed Size field present bit           0
-  [00000e] CRC32                          u32 be        553720832             21 01 1c 00         
-  [000012] Compressed data                u8[2]                               00 00               
+  [00000e] CRC32                          u32 be           553720832             21 01 1c 00
+  [000012] Compressed data                u8[2]                                  00 00
 
 0x002c (44) unmapped bytes

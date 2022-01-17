@@ -1,18 +1,18 @@
 ICONDIR
-  [000000] Reserved                       u16 le        0                     00 00               
-  [000002] Type                           u16 le        1                     00 01               
+  [000000] Reserved                       u16 le           0                     00 00
+  [000002] Type                           u16 le           1                     00 01
            - Icon                         eq            1
-  [000004] Resources                      u16 le        1                     00 01               
+  [000004] Resources                      u16 le           1                     00 01
 
 ICONDIRENTRY_0
-  [000006] Width                          u8            0                     00                  
-  [000007] Height                         u8            0                     00                  
-  [000008] Palette colors                 u8            0                     00                  
-  [000009] Reserved                       u8            0                     00                  
-  [00000a] Color planes                   u16 le        1                     00 01               
-  [00000c] Bits per pixel                 u16 le        32                    00 20               
-  [00000e] Data size                      u32 le        30961                 00 00 78 f1         
-  [000012] Data offset                    u32 le        22                    00 00 00 16         
-  [000016] Image data                     u8[30961]                           89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 00 00 00 01 00 08 06 00 00 00 5c 72 a8 ...
+  [000006] Width                          u8               0                     00
+  [000007] Height                         u8               0                     00
+  [000008] Palette colors                 u8               0                     00
+  [000009] Reserved                       u8               0                     00
+  [00000a] Color planes                   u16 le           1                     00 01
+  [00000c] Bits per pixel                 u16 le           32                    00 20
+  [00000e] Data size                      u32 le           30961                 00 00 78 f1
+  [000012] Data offset                    u32 le           22                    00 00 00 16
+  [000016] Image data                     u8[30961]                              89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 00 00 00 01 00 08 06 00 00 00 5c 72 a8 ...
 
 EOF

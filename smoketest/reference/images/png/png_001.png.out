@@ -1,41 +1,41 @@
 Header
-  [000000] Signature                      u8[8]                               89 50 4e 47 0d 0a 1a 0a
+  [000000] Signature                      u8[8]                                  89 50 4e 47 0d 0a 1a 0a
 
 IHDR
-  [000008] Length                         u32 be        13                    00 00 00 0d         
-  [00000c] Type                           ascii[4]      IHDR                  49 48 44 52         
-  [000010] Width                          u32 be        800                   00 00 03 20         
-  [000014] Height                         u32 be        600                   00 00 02 58         
-  [000018] Bit depth                      u8            8                     08                  
+  [000008] Length                         u32 be           13                    00 00 00 0d
+  [00000c] Type                           ascii[4]         IHDR                  49 48 44 52
+  [000010] Width                          u32 be           800                   00 00 03 20
+  [000014] Height                         u32 be           600                   00 00 02 58
+  [000018] Bit depth                      u8               8                     08
            - 8 bpp                        eq            8
-  [000019] Color type                     u8            6                     06                  
+  [000019] Color type                     u8               6                     06
            - RGBA                         eq            6
-  [00001a] Compression method             u8            0                     00                  
+  [00001a] Compression method             u8               0                     00
            - deflate                      eq            0
-  [00001b] Filter method                  u8            0                     00                  
+  [00001b] Filter method                  u8               0                     00
            - none+sub+up+average+paeth    eq            0
-  [00001c] Interlace method               u8            0                     00                  
+  [00001c] Interlace method               u8               0                     00
            - no interlace                 eq            0
-  [00001d] Checksum                       u32 be        2591457904            9a 76 82 70         
+  [00001d] Checksum                       u32 be           2591457904            9a 76 82 70
 
 Chunk_0
-  [000021] Length                         u32 be        4                     00 00 00 04         
-  [000025] Type                           ascii[4]      sBIT                  73 42 49 54         
-  [000029] Significant bits red           u8            8                     08                  
-  [00002a] Significant bits green         u8            8                     08                  
-  [00002b] Significant bits blue          u8            8                     08                  
-  [00002c] Significant bits alpha         u8            8                     08                  
-  [00002d] Checksum                       u32 be        2080924808            7c 08 64 88         
+  [000021] Length                         u32 be           4                     00 00 00 04
+  [000025] Type                           ascii[4]         sBIT                  73 42 49 54
+  [000029] Significant bits red           u8               8                     08
+  [00002a] Significant bits green         u8               8                     08
+  [00002b] Significant bits blue          u8               8                     08
+  [00002c] Significant bits alpha         u8               8                     08
+  [00002d] Checksum                       u32 be           2080924808            7c 08 64 88
 
 Chunk_1
-  [000031] Length                         u32 be        3311                  00 00 0c ef         
-  [000035] Type                           ascii[4]      IDAT                  49 44 41 54         
-  [000039] Image data                     u8[3311]                            78 9c ed dd c1 6e 82 40 14 40 d1 c1 f0 ff bf 4c 57 a6 a6 b1 94 94 e9 b5 91 73 36 2e 98 a0 db 9b ...
-  [000d28] Checksum                       u32 be        1865616817            6f 33 0d b1         
+  [000031] Length                         u32 be           3311                  00 00 0c ef
+  [000035] Type                           ascii[4]         IDAT                  49 44 41 54
+  [000039] Image data                     u8[3311]                               78 9c ed dd c1 6e 82 40 14 40 d1 c1 f0 ff bf 4c 57 a6 a6 b1 94 94 e9 b5 91 73 36 2e 98 a0 db 9b ...
+  [000d28] Checksum                       u32 be           1865616817            6f 33 0d b1
 
 Chunk_2
-  [000d2c] Length                         u32 be        0                     00 00 00 00         
-  [000d30] Type                           ascii[4]      IEND                  49 45 4e 44         
-  [000d34] Checksum                       u32 be        2923585666            ae 42 60 82         
+  [000d2c] Length                         u32 be           0                     00 00 00 00
+  [000d30] Type                           ascii[4]         IEND                  49 45 4e 44
+  [000d34] Checksum                       u32 be           2923585666            ae 42 60 82
 
 EOF

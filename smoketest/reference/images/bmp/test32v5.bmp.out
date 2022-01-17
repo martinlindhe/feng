@@ -1,44 +1,44 @@
 FILEHEADER BITMAPFILEHEADER
-  [000000] Signature                      ascii[2]      BM                    42 4d               
-  [000002] File size                      u32 le        174858                00 02 ab 0a         
-  [000006] Reserved                       u32 le        0                     00 00 00 00         
-  [00000a] Bitmap offset                  u32 le        138                   00 00 00 8a         
+  [000000] Signature                      ascii[2]         BM                    42 4d
+  [000002] File size                      u32 le           174858                00 02 ab 0a
+  [000006] Reserved                       u32 le           0                     00 00 00 00
+  [00000a] Bitmap offset                  u32 le           138                   00 00 00 8a
 
 DIBHEADER BITMAPINFOHEADER
-  [00000e] Header size                    u32 le        124                   00 00 00 7c         
+  [00000e] Header size                    u32 le           124                   00 00 00 7c
            - V5 (Windows 98/NT 5.0)       eq            124
-  [000012] Width                          i32 le        373                   00 00 01 75         
-  [000016] Height                         i32 le        156                   00 00 00 9c         
-  [00001a] Color planes                   u16 le        1                     00 01               
-  [00001c] BitsPerPixel                   u16 le        24                    00 18               
-  [00001e] CompressionMethod              u32 le        0                     00 00 00 00         
+  [000012] Width                          i32 le           373                   00 00 01 75
+  [000016] Height                         i32 le           156                   00 00 00 9c
+  [00001a] Color planes                   u16 le           1                     00 01
+  [00001c] BitsPerPixel                   u16 le           24                    00 18
+  [00001e] CompressionMethod              u32 le           0                     00 00 00 00
            - BI_RGB (none)                eq            0
-  [000022] ImageDataSize                  u32 le        174720                00 02 aa 80         
-  [000026] Horizontal resolution          i32 le        2925                  00 00 0b 6d         
-  [00002a] Vertical resolution            i32 le        2925                  00 00 0b 6d         
-  [00002e] Used colors                    u32 le        0                     00 00 00 00         
-  [000032] Important colors               u32 le        0                     00 00 00 00         
-  [000036] Red mask                       u32 le        16711680              00 ff 00 00         
-  [00003a] Green mask                     u32 le        65280                 00 00 ff 00         
-  [00003e] Blue mask                      u32 le        255                   00 00 00 ff         
-  [000042] Alpha mask                     u32 le        4278190080            ff 00 00 00         
-  [000046] Color space type               u32 le        1                     00 00 00 01         
-  [00004a] Red X                          u32 le        0                     00 00 00 00         
-  [00004e] Red Y                          u32 le        0                     00 00 00 00         
-  [000052] Red Z                          u32 le        1                     00 00 00 01         
-  [000056] Green X                        u32 le        0                     00 00 00 00         
-  [00005a] Green Y                        u32 le        0                     00 00 00 00         
-  [00005e] Green Z                        u32 le        1                     00 00 00 01         
-  [000062] Blue X                         u32 le        0                     00 00 00 00         
-  [000066] Blue Y                         u32 le        0                     00 00 00 00         
-  [00006a] Blue Z                         u32 le        1                     00 00 00 01         
-  [00006e] Gamma Red                      u32 le        0                     00 00 00 00         
-  [000072] Gamma Green                    u32 le        0                     00 00 00 00         
-  [000076] Gamma Blue                     u32 le        0                     00 00 00 00         
-  [00007a] bV5Intent                      u32 le        8                     00 00 00 08         
-  [00007e] bV5ProfileData                 u32 le        0                     00 00 00 00         
-  [000082] bV5ProfileSize                 u32 le        0                     00 00 00 00         
-  [000086] bV5Reserved                    u32 le        0                     00 00 00 00         
-  [00008a] Image data                     u8[174720]                          7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 ...
+  [000022] ImageDataSize                  u32 le           174720                00 02 aa 80
+  [000026] Horizontal resolution          i32 le           2925                  00 00 0b 6d
+  [00002a] Vertical resolution            i32 le           2925                  00 00 0b 6d
+  [00002e] Used colors                    u32 le           0                     00 00 00 00
+  [000032] Important colors               u32 le           0                     00 00 00 00
+  [000036] Red mask                       u32 le           16711680              00 ff 00 00
+  [00003a] Green mask                     u32 le           65280                 00 00 ff 00
+  [00003e] Blue mask                      u32 le           255                   00 00 00 ff
+  [000042] Alpha mask                     u32 le           4278190080            ff 00 00 00
+  [000046] Color space type               u32 le           1                     00 00 00 01
+  [00004a] Red X                          u32 le           0                     00 00 00 00
+  [00004e] Red Y                          u32 le           0                     00 00 00 00
+  [000052] Red Z                          u32 le           1                     00 00 00 01
+  [000056] Green X                        u32 le           0                     00 00 00 00
+  [00005a] Green Y                        u32 le           0                     00 00 00 00
+  [00005e] Green Z                        u32 le           1                     00 00 00 01
+  [000062] Blue X                         u32 le           0                     00 00 00 00
+  [000066] Blue Y                         u32 le           0                     00 00 00 00
+  [00006a] Blue Z                         u32 le           1                     00 00 00 01
+  [00006e] Gamma Red                      u32 le           0                     00 00 00 00
+  [000072] Gamma Green                    u32 le           0                     00 00 00 00
+  [000076] Gamma Blue                     u32 le           0                     00 00 00 00
+  [00007a] bV5Intent                      u32 le           8                     00 00 00 08
+  [00007e] bV5ProfileData                 u32 le           0                     00 00 00 00
+  [000082] bV5ProfileSize                 u32 le           0                     00 00 00 00
+  [000086] bV5Reserved                    u32 le           0                     00 00 00 00
+  [00008a] Image data                     u8[174720]                             7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 2c 7c 48 ...
 
 EOF

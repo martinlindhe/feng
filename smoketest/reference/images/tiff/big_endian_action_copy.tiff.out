@@ -1,5 +1,5 @@
 Header
-  [000000] Endian marker                  ascii[2]      MM                    4d 4d               
-  [000002] Signature                      u16 be        42                    00 2a               
+  [000000] Endian marker                  ascii[2]         MM                    4d 4d
+  [000002] Signature                      u16 be           42                    00 2a
 
 0x2296 (8854) unmapped bytes

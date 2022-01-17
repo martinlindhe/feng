@@ -1,85 +1,85 @@
 Header
-  [000000] Signature 1                    ascii[4]      GIF8                  47 49 46 38         
-  [000004] Version                        ascii         9                     39                  
+  [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
+  [000004] Version                        ascii            9                     39
            - GIF89a                       eq            57
-  [000005] Signature 2                    u8            97                    61                  
-  [000006] Logical screen width           u16 le        85                    00 55               
-  [000008] Logical screen height          u16 le        31                    00 1f               
-  [00000a] ScreenDescriptor               u8            244                   f4                  
+  [000005] Signature 2                    u8               97                    61
+  [000006] Logical screen width           u16 le           85                    00 55
+  [000008] Logical screen height          u16 le           31                    00 1f
+  [00000a] ScreenDescriptor               u8               244                   f4
            - GlobalColorTableSize         bit           4
            - Sort flag                    bit           0
            - Color resolution             bit           7
            - GlobalColorTablePresent      bit           1
-  [00000b] Background color               u8            0                     00                  
-  [00000c] Aspect ratio                   u8            0                     00                  
-  [00000d] Global Color Table             u8[96]                              ff fa f1 fa f1 e7 f7 eb de ff ee d3 fd e5 cd f7 de c7 eb db d1 f1 d5 bd df d0 c1 f6 c8 b4 e0 c7 ...
+  [00000b] Background color               u8               0                     00
+  [00000c] Aspect ratio                   u8               0                     00
+  [00000d] Global Color Table             u8[96]                                 ff fa f1 fa f1 e7 f7 eb de ff ee d3 fd e5 cd f7 de c7 eb db d1 f1 d5 bd df d0 c1 f6 c8 b4 e0 c7 ...
 
 Section_0 BLOCK_EXTENSION
-  [00006d] Block type                     u8            33                    21                  
-  [00006e] Extension type                 u8            255                   ff                  
+  [00006d] Block type                     u8               33                    21
+  [00006e] Extension type                 u8               255                   ff
 
 Section_1
-  [00006f] Block type                     u8            11                    0b                  
+  [00006f] Block type                     u8               11                    0b
 
 Section_2
-  [000070] Block type                     u8            78                    4e                  
+  [000070] Block type                     u8               78                    4e
 
 Section_3
-  [000071] Block type                     u8            69                    45                  
+  [000071] Block type                     u8               69                    45
 
 Section_4
-  [000072] Block type                     u8            84                    54                  
+  [000072] Block type                     u8               84                    54
 
 Section_5
-  [000073] Block type                     u8            83                    53                  
+  [000073] Block type                     u8               83                    53
 
 Section_6
-  [000074] Block type                     u8            67                    43                  
+  [000074] Block type                     u8               67                    43
 
 Section_7
-  [000075] Block type                     u8            65                    41                  
+  [000075] Block type                     u8               65                    41
 
 Section_8
-  [000076] Block type                     u8            80                    50                  
+  [000076] Block type                     u8               80                    50
 
 Section_9
-  [000077] Block type                     u8            69                    45                  
+  [000077] Block type                     u8               69                    45
 
 Section_10
-  [000078] Block type                     u8            50                    32                  
+  [000078] Block type                     u8               50                    32
 
 Section_11
-  [000079] Block type                     u8            46                    2e                  
+  [000079] Block type                     u8               46                    2e
 
 Section_12
-  [00007a] Block type                     u8            48                    30                  
+  [00007a] Block type                     u8               48                    30
 
 Section_13
-  [00007b] Block type                     u8            3                     03                  
+  [00007b] Block type                     u8               3                     03
 
 Section_14
-  [00007c] Block type                     u8            1                     01                  
+  [00007c] Block type                     u8               1                     01
 
 Section_15
-  [00007d] Block type                     u8            0                     00                  
+  [00007d] Block type                     u8               0                     00
 
 Section_16
-  [00007e] Block type                     u8            0                     00                  
+  [00007e] Block type                     u8               0                     00
 
 Section_17
-  [00007f] Block type                     u8            0                     00                  
+  [00007f] Block type                     u8               0                     00
 
 Section_18 BLOCK_EXTENSION
-  [000080] Block type                     u8            33                    21                  
-  [000081] Extension type                 u8            249                   f9                  
-  [000082] Size                           u8            4                     04                  
-  [000083] Flags                          u8            5                     05                  
+  [000080] Block type                     u8               33                    21
+  [000081] Extension type                 u8               249                   f9
+  [000082] Size                           u8               4                     04
+  [000083] Flags                          u8               5                     05
            - Transparent color            bit           1
            - User input                   bit           0
            - Disposal method              bit           1
            - Reserved                     bit           0
-  [000084] Delay time                     u16 le        100                   00 64               
-  [000086] Transparent color index        u8            31                    1f                  
-  [000087] Block terminator               u8            0                     00                  
+  [000084] Delay time                     u16 le           100                   00 64
+  [000086] Transparent color index        u8               31                    1f
+  [000087] Block terminator               u8               0                     00
 
 0x0904 (2308) unmapped bytes

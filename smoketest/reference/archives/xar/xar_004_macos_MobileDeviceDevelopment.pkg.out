@@ -1,10 +1,10 @@
 Header
-  [000000] Signature                      ascii[4]      xar!                  78 61 72 21         
-  [000004] Header size                    u16 be        28                    00 1c               
-  [000006] Version                        u16 be        1                     00 01               
-  [000008] Compressed TOC length          u64 be        3151                  00 00 00 00 00 00 0c 4f
-  [000010] Uncompressed TOC length        u64 be        6947                  00 00 00 00 00 00 1b 23
-  [000018] Checksum algorithm             u32 be        1                     00 00 00 01         
+  [000000] Signature                      ascii[4]         xar!                  78 61 72 21
+  [000004] Header size                    u16 be           28                    00 1c
+  [000006] Version                        u16 be           1                     00 01
+  [000008] Compressed TOC length          u64 be           3151                  00 00 00 00 00 00 0c 4f
+  [000010] Uncompressed TOC length        u64 be           6947                  00 00 00 00 00 00 1b 23
+  [000018] Checksum algorithm             u32 be           1                     00 00 00 01
            - SHA1                         eq            1
 
 0x14d63 (85347) unmapped bytes

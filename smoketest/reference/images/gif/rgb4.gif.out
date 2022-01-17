@@ -1,30 +1,30 @@
 Header
-  [000000] Signature 1                    ascii[4]      GIF8                  47 49 46 38         
-  [000004] Version                        ascii         9                     39                  
+  [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
+  [000004] Version                        ascii            9                     39
            - GIF89a                       eq            57
-  [000005] Signature 2                    u8            97                    61                  
-  [000006] Logical screen width           u16 le        199                   00 c7               
-  [000008] Logical screen height          u16 le        199                   00 c7               
-  [00000a] ScreenDescriptor               u8            179                   b3                  
+  [000005] Signature 2                    u8               97                    61
+  [000006] Logical screen width           u16 le           199                   00 c7
+  [000008] Logical screen height          u16 le           199                   00 c7
+  [00000a] ScreenDescriptor               u8               179                   b3
            - GlobalColorTableSize         bit           3
            - Sort flag                    bit           0
            - Color resolution             bit           3
            - GlobalColorTablePresent      bit           1
-  [00000b] Background color               u8            0                     00                  
-  [00000c] Aspect ratio                   u8            0                     00                  
-  [00000d] Global Color Table             u8[48]                              5e 5e 03 de dd 01 20 20 02 00 af 00 85 85 03 af ae 01 a3 00 00 bf bf bf 00 00 ae 00 4a 00 3d 3d ...
+  [00000b] Background color               u8               0                     00
+  [00000c] Aspect ratio                   u8               0                     00
+  [00000d] Global Color Table             u8[48]                                 5e 5e 03 de dd 01 20 20 02 00 af 00 85 85 03 af ae 01 a3 00 00 bf bf bf 00 00 ae 00 4a 00 3d 3d ...
 
 Section_0 BLOCK_EXTENSION
-  [00003d] Block type                     u8            33                    21                  
-  [00003e] Extension type                 u8            249                   f9                  
-  [00003f] Size                           u8            4                     04                  
-  [000040] Flags                          u8            0                     00                  
+  [00003d] Block type                     u8               33                    21
+  [00003e] Extension type                 u8               249                   f9
+  [00003f] Size                           u8               4                     04
+  [000040] Flags                          u8               0                     00
            - Transparent color            bit           0
            - User input                   bit           0
            - Disposal method              bit           0
            - Reserved                     bit           0
-  [000041] Delay time                     u16 le        0                     00 00               
-  [000043] Transparent color index        u8            0                     00                  
-  [000044] Block terminator               u8            0                     00                  
+  [000041] Delay time                     u16 le           0                     00 00
+  [000043] Transparent color index        u8               0                     00
+  [000044] Block terminator               u8               0                     00
 
 0x0d8c (3468) unmapped bytes

@@ -79,7 +79,7 @@ input:
       - test4.bmp
       - test8.bmp
       - test8os2.bmp
-      - test16.bmp
+      - test16.bmp  # XXX 010 also give some template error on this
       - test24.bmp
       - test32.bmp
       - test32bf.bmp      # 010 also fails to map the last trailing bytes

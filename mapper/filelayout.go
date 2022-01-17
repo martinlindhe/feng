@@ -96,7 +96,7 @@ func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 
 	res := ""
 	if hideRaw {
-		res = fmt.Sprintf("  [%06x] %-30s %-13s %-21s\n",
+		res = fmt.Sprintf("  [%06x] %-30s %-16s %-21s\n",
 			field.Offset, field.Format.Label, kind, fieldValue)
 	} else {
 		hexValue := ""
@@ -105,8 +105,9 @@ func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 		} else {
 			hexValue = fmt.Sprintf("% 02x ...", field.Value[0:maxHexDisplayLength])
 		}
-		res = fmt.Sprintf("  [%06x] %-30s %-13s %-21s %-20s\n",
+		res = fmt.Sprintf("  [%06x] %-30s %-16s %-21s %-20s",
 			field.Offset, field.Format.Label, kind, fieldValue, hexValue)
+		res = strings.TrimRight(res, " ") + "\n"
 	}
 
 	for _, child := range field.MatchedPatterns {

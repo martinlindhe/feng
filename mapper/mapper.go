@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math"
+	"os"
 	"regexp"
 
 	"github.com/martinlindhe/feng/template"
@@ -108,6 +109,44 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	return &fileLayout, nil
 }
 
+func MapFileToTemplate(filename string) (*FileLayout, error) {
+	templates, err := template.GetAllFilenames("./templates/")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, tpl := range templates {
+		templateData, err := ioutil.ReadFile(tpl)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ds, err := template.UnmarshalTemplateIntoDataStructure(templateData, tpl)
+		if err != nil {
+			return nil, err
+		}
+
+		r, err := os.Open(filename)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fl, err := MapReader(r, ds)
+		if err != nil {
+			// template don't match, try another
+			if _, ok := err.(EvaluateError); ok {
+				log.Println(tpl, ":", err)
+			}
+			continue
+		}
+		if len(fl.Structs) > 0 {
+			fmt.Printf("Parsed %s as %s\n\n", filename, tpl)
+			return fl, nil
+		}
+	}
+
+	return nil, fmt.Errorf("no match")
+}
+
 func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG {
@@ -191,7 +230,8 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"ascii", "utf16",
-			"time_t_32", "filetime", "dostime", "dosdate":
+			"time_t_32", "filetime", "dostime", "dosdate",
+			"comp:zlib":
 			// internal data types
 			if es.Field.Range != "" {
 				var err error

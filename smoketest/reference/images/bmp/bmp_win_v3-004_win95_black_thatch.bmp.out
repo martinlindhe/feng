@@ -1,24 +1,24 @@
 FILEHEADER BITMAPFILEHEADER
-  [000000] Signature                      ascii[2]      BM                    42 4d               
-  [000002] File size                      u32 le        182                   00 00 00 b6         
-  [000006] Reserved                       u32 le        0                     00 00 00 00         
-  [00000a] Bitmap offset                  u32 le        62                    00 00 00 3e         
+  [000000] Signature                      ascii[2]         BM                    42 4d
+  [000002] File size                      u32 le           182                   00 00 00 b6
+  [000006] Reserved                       u32 le           0                     00 00 00 00
+  [00000a] Bitmap offset                  u32 le           62                    00 00 00 3e
 
 DIBHEADER BITMAPINFOHEADER
-  [00000e] Header size                    u32 le        40                    00 00 00 28         
+  [00000e] Header size                    u32 le           40                    00 00 00 28
            - V3 (Windows 3.x)             eq            40
-  [000012] Width                          i32 le        31                    00 00 00 1f         
-  [000016] Height                         i32 le        30                    00 00 00 1e         
-  [00001a] Color planes                   u16 le        1                     00 01               
-  [00001c] BitsPerPixel                   u16 le        1                     00 01               
-  [00001e] CompressionMethod              u32 le        0                     00 00 00 00         
+  [000012] Width                          i32 le           31                    00 00 00 1f
+  [000016] Height                         i32 le           30                    00 00 00 1e
+  [00001a] Color planes                   u16 le           1                     00 01
+  [00001c] BitsPerPixel                   u16 le           1                     00 01
+  [00001e] CompressionMethod              u32 le           0                     00 00 00 00
            - BI_RGB (none)                eq            0
-  [000022] ImageDataSize                  u32 le        120                   00 00 00 78         
-  [000026] Horizontal resolution          i32 le        2835                  00 00 0b 13         
-  [00002a] Vertical resolution            i32 le        2835                  00 00 0b 13         
-  [00002e] Used colors                    u32 le        2                     00 00 00 02         
-  [000032] Important colors               u32 le        2                     00 00 00 02         
-  [000036] BGRQUAD                        u32[2] le                           00 00 00 00 00 80 80 80
-  [00003e] Image data                     u8[120]                             00 00 00 00 92 49 00 00 92 48 ff fc 92 48 00 00 92 49 00 00 92 48 ff fc 92 48 00 00 92 49 00 00 ...
+  [000022] ImageDataSize                  u32 le           120                   00 00 00 78
+  [000026] Horizontal resolution          i32 le           2835                  00 00 0b 13
+  [00002a] Vertical resolution            i32 le           2835                  00 00 0b 13
+  [00002e] Used colors                    u32 le           2                     00 00 00 02
+  [000032] Important colors               u32 le           2                     00 00 00 02
+  [000036] BGRQUAD                        u32[2] le                              00 00 00 00 00 80 80 80
+  [00003e] Image data                     u8[120]                                00 00 00 00 92 49 00 00 92 48 ff fc 92 48 00 00 92 49 00 00 92 48 ff fc 92 48 00 00 92 49 00 00 ...
 
 EOF

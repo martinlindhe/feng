@@ -626,6 +626,7 @@ layout:
 						{Offset: 0x1, Length: 0x1, Value: []uint8{0x80}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x2, Length: 0x1, Value: []uint8{0x81}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
+					Index: 0,
 				},
 
 				{
@@ -634,6 +635,7 @@ layout:
 						{Offset: 0x3, Length: 0x1, Value: []uint8{0x90}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x4, Length: 0x1, Value: []uint8{0x91}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
+					Index: 1,
 				},
 			},
 			offset: 0x5, size: 0x5}, fl)

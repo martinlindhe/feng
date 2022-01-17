@@ -1,4 +1,4 @@
-# STATUS: 1%
+# STATUS: 10%
 
 # - HI: file name data, seems to be a zlib compressed block ?
 #
@@ -35,25 +35,14 @@ structs:
     offset: self.FileOffset
     u32 Compressed size: ??
     u32 Expanded size: ??
-    u8[self.Compressed size] Compressed data: ?? # XXX zlib compressed!
+    comp:zlib[self.Compressed size] Data: ??
 
     if self.CRC in (DIRENTRY):
       label: DIRENTRY
-      # directory entry
-      # XXX what to do with self.FileOffset data for DIRENTRY entries?
-      #u32 EntryLen: ??
-      #u32 FilenameLen: ?? # XXX possibly ignored?
-      #asciiz Filename: ?? # NOTE: known samples wont parse fully unless self.FilenameLen is ignored
 
     if self.CRC notin (DIRENTRY): # XXX implement else
       label: FILEENTRY
 
-      #offset: restore     # restore to previous value. XXX needed?
-
 layout:
   - header Header
   - entry[Header.Count] Entry
-#  - entry[] Entry
-
-#  - entry Entry1
- # - entry Entry2
