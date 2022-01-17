@@ -1,0 +1,59 @@
+# STATUS: 1%
+
+# - HI: file name data, seems to be a zlib compressed block ?
+#
+# - MID: extract tool, that dumps all marked data areas to files
+#       could augment with file naming hints from template?
+#       in the case of everquest pfs, all fields is zlib compressed too!
+
+references:
+  - https://github.com/martinlindhe/eqformat_pfs
+  - https://github.com/alimalkhalifa/VisualEQ/blob/master/src/server/loaders/s3d.js
+
+kind: archive
+name: Everquest PFS Archive
+extensions: [.s3d, .eqg, .pfs, .pak]
+endian: little
+
+constants:
+  u8[4] DIRENTRY: 61 58 0A C9
+  
+structs:
+  header:
+    u32 BaseOffset: ??
+    ascii[4] Signature: c'PFS '
+
+    offset: self.BaseOffset
+    u32 Count: ??
+
+  entry:
+    offset: Header.BaseOffset + 4 + (self.index * 12)
+    u32 CRC: ??
+    u32 FileOffset: ??
+    u32 Expanded size: ??
+
+    offset: self.FileOffset
+    u32 Compressed size: ??
+    u32 Expanded size: ??
+    u8[self.Compressed size] Compressed data: ?? # XXX zlib compressed!
+
+    if self.CRC in (DIRENTRY):
+      label: DIRENTRY
+      # directory entry
+      # XXX what to do with self.FileOffset data for DIRENTRY entries?
+      #u32 EntryLen: ??
+      #u32 FilenameLen: ?? # XXX possibly ignored?
+      #asciiz Filename: ?? # NOTE: known samples wont parse fully unless self.FilenameLen is ignored
+
+    if self.CRC notin (DIRENTRY): # XXX implement else
+      label: FILEENTRY
+
+      #offset: restore     # restore to previous value. XXX needed?
+
+layout:
+  - header Header
+  - entry[Header.Count] Entry
+#  - entry[] Entry
+
+#  - entry Entry1
+ # - entry Entry2

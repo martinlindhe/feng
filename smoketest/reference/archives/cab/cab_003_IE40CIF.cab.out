@@ -20,12 +20,12 @@ Header
   [000027] cbCFData                       u8            0                     00                  
   [000028] abReserve                      u8[6144]                            00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
 
-CFFOLDER[0]
+CFFOLDER_0
   [001828] Offset of first CFDATA block   u32 le        6217                  00 00 18 49         
   [00182c] CFDATA blocks                  u16 le        2                     00 02               
   [00182e] Compression type               u16 le        1                     00 01               
 
-CFFILE[0]
+CFFILE_0
   [001830] uncompressed size              u32 le        43734                 00 00 aa d6         
   [001834] uncompressed offset in folder  u32 le        0                     00 00 00 00         
   [001838] index in CFFOLDER              u16 le        0                     00 00               

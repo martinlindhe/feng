@@ -58,18 +58,21 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 			baseLabel := df.Label
 			for i := uint64(0); i < math.MaxUint64; i++ {
+				df.Index = int(i)
 				df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
 					if err == io.EOF {
 						break
 					}
 					// do not propagate error, so that trailing data after slices will not count as parse error
+					if err != nil {
+						log.Println("error (ignored):", err)
+					}
 					return &fileLayout, nil
 				}
 				df.Label = baseLabel
 			}
 			continue
-
 		}
 		if df.Range != "" {
 			kind, val, err := fileLayout.GetValue(df.Range, &df)
@@ -84,7 +87,8 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 			baseLabel := df.Label
 			for i := uint64(0); i < parsedRange; i++ {
-				df.Label = fmt.Sprintf("%s[%d]", baseLabel, i)
+				df.Index = int(i)
+				df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
 					return &fileLayout, err
 				}
@@ -136,18 +140,48 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		log.Printf("expandChildren: working with struct %s", df.Label)
 	}
 
+	// track iterator index while parsing
+	fs.Index = df.Index
+
 	for _, es := range expressions {
-		var field Field
 		switch es.Field.Kind {
 		case "label":
 			// "label: APP0". augment node with extra info
 			fs.decoration = es.Pattern.Value
+
 		case "endian":
 			// special form
 			fl.endian = es.Pattern.Value
 			if DEBUG {
 				fmt.Printf("endian changed to '%s'\n", fl.endian)
 			}
+
+		case "offset":
+			// set/restore current offset
+			/*
+				if es.Pattern.Value == "restore" {
+					log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, fl.previousOffset)
+					fl.offset = fl.previousOffset
+					return nil
+				}
+			*/
+
+			var err error
+			fl.offsetChanges++
+			if fl.offsetChanges > 50 {
+				return fmt.Errorf("too many offset changes from template")
+			}
+			fl.previousOffset = fl.offset
+			fl.offset, err = fl.GetInt(es.Pattern.Value, df)
+			log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", fl.previousOffset, fl.offset, es.Pattern.Value)
+			if err != nil {
+				return err
+			}
+			_, err = r.Seek(int64(fl.offset), io.SeekStart)
+			if err != nil {
+				return err
+			}
+
 		case "data":
 			// the template directive "data:invalid" marks the data stream invalid
 			if es.Pattern.Value != "invalid" {
@@ -221,8 +255,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			if err != nil {
 				return err
 			}
-
-			field = Field{Offset: fl.offset, Length: totalLength, Value: val, Format: es.Field, Endian: fl.endian, MatchedPatterns: matchPatterns}
+			field := Field{Offset: fl.offset, Length: totalLength, Value: val, Format: es.Field, Endian: fl.endian, MatchedPatterns: matchPatterns}
 			fs.Fields = append(fs.Fields, field)
 			if fl.IsAbsoluteAddress(&es.Field) {
 				fl.offset = prevOffset
@@ -241,7 +274,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				return err
 			}
 
-			field = Field{Offset: fl.offset, Length: uint64(len(val)), Value: val, Format: es.Field, Endian: fl.endian}
+			field := Field{Offset: fl.offset, Length: uint64(len(val)), Value: val, Format: es.Field, Endian: fl.endian}
 			fs.Fields = append(fs.Fields, field)
 			fl.offset += field.Length
 

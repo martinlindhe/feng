@@ -3,6 +3,7 @@ package mapper
 import (
 	"fmt"
 	"log"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -21,6 +22,12 @@ type FileLayout struct {
 	// current offset
 	offset uint64
 
+	// previous offset (restore it with "offset: restore")
+	previousOffset uint64
+
+	// counts how many times the offset was changed in order to stop recursion
+	offsetChanges uint64
+
 	// total size of data (FILE_SIZE)
 	size uint64
 
@@ -37,6 +44,9 @@ type Struct struct {
 	decoration string
 
 	Fields []Field
+
+	// slice-based counter index, 0-based
+	Index int
 }
 
 type Field struct {
@@ -54,6 +64,10 @@ type Field struct {
 
 	// matched patterns
 	MatchedPatterns []value.MatchedPattern
+}
+
+func (field *Field) Present() string {
+	return field.Format.Present(field.Value)
 }
 
 var (
@@ -78,7 +92,7 @@ func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 		}
 	}
 
-	fieldValue := value.Present(field.Format, field.Value)
+	fieldValue := field.Present()
 
 	res := ""
 	if hideRaw {
@@ -150,11 +164,84 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 }
 
 // finds the first field named `structName`.`fieldName`
+func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
+
+	if df != nil {
+		s = strings.ReplaceAll(s, "self.", df.Label+".")
+	}
+
+	if DEBUG {
+		log.Printf("GetInt: searching for '%s'", s)
+	}
+
+	n, err := fl.EvaluateExpression(s)
+	if err != nil {
+		// XXX this is critical error and template must be fixed
+		log.Println("GetInt FAILURE:", err)
+		os.Exit(1)
+	}
+	if DEBUG {
+		log.Printf("GetInt: %s => %d", s, n)
+	}
+	return n, err
+
+	/*
+
+
+
+
+		parts := strings.SplitN(s, ".", 3)
+		if len(parts) < 2 {
+			return 0, fmt.Errorf("GetInt: unexpected format '%s'", s)
+		}
+		structName := parts[0]
+		fieldName := parts[1]
+		childName := ""
+		if len(parts) > 2 {
+			childName = parts[2]
+		}
+
+		str, err := fl.GetStruct(structName)
+		if err != nil {
+			return 0, err
+		}
+
+		for _, field := range str.Fields {
+			if DEBUG {
+				log.Printf("GetInt: want %s, got %s", fieldName, field.Format.Label)
+			}
+			if field.Format.Label == fieldName {
+				if field.Format.IsSimpleUnit() && childName == "" {
+					return value.AsUint64(field.Format.Kind, field.Value), nil
+				}
+
+				switch childName {
+				case "offset":
+					return field.Offset, nil
+				case "len":
+					return field.Length, nil
+				case "index":
+					return field.index, nil
+				}
+
+				for _, child := range field.MatchedPatterns {
+					if child.Label == childName {
+						return child.Value, nil
+					}
+				}
+			}
+		}
+
+		return 0, fmt.Errorf("GetInt: '%s' not found", s)
+	*/
+}
+
+// finds the first field named `structName`.`fieldName`
 // returns: kind, bytes, error
 func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, error) {
 
 	if df != nil {
-		s = strings.Replace(s, "self.", df.Label+".", 1)
+		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
 	if DEBUG {
@@ -215,7 +302,7 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 func (fl *FileLayout) GetOffset(query string, df *value.DataField) (int, error) {
 
 	if df != nil {
-		query = strings.Replace(query, "self.", df.Label+".", 1)
+		query = strings.ReplaceAll(query, "self.", df.Label+".")
 	}
 
 	if DEBUG {
@@ -251,7 +338,7 @@ func (fl *FileLayout) GetOffset(query string, df *value.DataField) (int, error) 
 func (fl *FileLayout) GetLength(s string, df *value.DataField) (int, error) {
 
 	if df != nil {
-		s = strings.Replace(s, "self.", df.Label+".", 1)
+		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
 	if DEBUG {
@@ -297,7 +384,7 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 			}
 		} else {
 			old := df.Range
-			df.Range = strings.Replace(df.Range, "self.", df.Range+".", 1)
+			df.Range = strings.ReplaceAll(df.Range, "self.", df.Range+".")
 			if df.Range != old {
 				log.Fatalf("%s => %s", old, df.Range)
 			}

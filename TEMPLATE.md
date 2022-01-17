@@ -6,6 +6,8 @@
 
     label: "APP0"       set label decoration for the current struct
 
+    offset: self.BaseOffset       set offset to evaluated data field
+
 
 # pre-defined values
 
@@ -13,6 +15,8 @@
 
     field.offset        field offset
     field.len           field length
+
+    self.index        slice-based iteration index, 0-based
 
 
 # constants

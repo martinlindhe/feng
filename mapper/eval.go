@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/maja42/goval"
-	"github.com/martinlindhe/feng/value"
 )
 
 type EvaluateError struct {
@@ -35,18 +34,22 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 				}
 				mapped[field.Format.Label] = children
 			} else {
-				value := value.Present(field.Format, field.Value)
+				value := field.Present()
 				if i, err := strconv.ParseInt(value, 10, 64); err == nil {
 					mapped[field.Format.Label] = int(i)
 				} else {
 					mapped[field.Format.Label] = value
 				}
 			}
+			//mapped[field.Format.Label+".offset"] = field.Offset
+			//mapped[field.Format.Label+".len"] = field.Length
 		}
+		mapped["index"] = layout.Index
 		variables[layout.Label] = mapped
 	}
 	if DEBUG {
-		log.Printf("variables: %#v", variables)
+		//log.Printf("variables: %#v", variables)
+		//spew.Dump(variables)
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)

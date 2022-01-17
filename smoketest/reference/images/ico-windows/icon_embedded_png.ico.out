@@ -4,7 +4,7 @@ ICONDIR
            - Icon                         eq            1
   [000004] Resources                      u16 le        1                     00 01               
 
-ICONDIRENTRY[0]
+ICONDIRENTRY_0
   [000006] Width                          u8            0                     00                  
   [000007] Height                         u8            0                     00                  
   [000008] Palette colors                 u8            0                     00                  

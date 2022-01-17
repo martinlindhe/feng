@@ -16,12 +16,12 @@ Header
   [000020] Set ID                         u16 le        16261                 3f 85               
   [000022] Cabinet number                 u16 le        0                     00 00               
 
-CFFOLDER[0]
+CFFOLDER_0
   [000024] Offset of first CFDATA block   u32 le        659                   00 00 02 93         
   [000028] CFDATA blocks                  u16 le        25                    00 19               
   [00002a] Compression type               u16 le        1                     00 01               
 
-CFFILE[0]
+CFFILE_0
   [00002c] uncompressed size              u32 le        32682                 00 00 7f aa         
   [000030] uncompressed offset in folder  u32 le        0                     00 00 00 00         
   [000034] index in CFFOLDER              u16 le        0                     00 00               
@@ -30,7 +30,7 @@ CFFILE[0]
   [00003a] Attributes                     u16 le        32                    00 20               
   [00003c] Name                           asciiz        DOSX.EXE              44 4f 53 58 2e 45 58 45 00
 
-CFFILE[1]
+CFFILE_1
   [000045] uncompressed size              u32 le        264016                00 04 07 50         
   [000049] uncompressed offset in folder  u32 le        32682                 00 00 7f aa         
   [00004d] index in CFFOLDER              u16 le        0                     00 00               
@@ -39,7 +39,7 @@ CFFILE[1]
   [000053] Attributes                     u16 le        32                    00 20               
   [000055] Name                           asciiz        USER.EXE              55 53 45 52 2e 45 58 45 00
 
-CFFILE[2]
+CFFILE_2
   [00005e] uncompressed size              u32 le        149456                00 02 47 d0         
   [000062] uncompressed offset in folder  u32 le        296698                00 04 86 fa         
   [000066] index in CFFOLDER              u16 le        0                     00 00               
@@ -48,7 +48,7 @@ CFFILE[2]
   [00006c] Attributes                     u16 le        32                    00 20               
   [00006e] Name                           asciiz        GDI.EXE               47 44 49 2e 45 58 45 00
 
-CFFILE[3]
+CFFILE_3
   [000076] uncompressed size              u32 le        75490                 00 01 26 e2         
   [00007a] uncompressed offset in folder  u32 le        446154                00 06 ce ca         
   [00007e] index in CFFOLDER              u16 le        0                     00 00               
@@ -57,7 +57,7 @@ CFFILE[3]
   [000084] Attributes                     u16 le        32                    00 20               
   [000086] Name                           asciiz        KRNL386.EXE           4b 52 4e 4c 33 38 36 2e 45 58 45 00
 
-CFFILE[4]
+CFFILE_4
   [000092] uncompressed size              u32 le        9936                  00 00 26 d0         
   [000096] uncompressed offset in folder  u32 le        521644                00 07 f5 ac         
   [00009a] index in CFFOLDER              u16 le        0                     00 00               
@@ -66,7 +66,7 @@ CFFILE[4]
   [0000a0] Attributes                     u16 le        32                    00 20               
   [0000a2] Name                           asciiz        LZEXPAND.DLL          4c 5a 45 58 50 41 4e 44 2e 44 4c 4c 00
 
-CFFILE[5]
+CFFILE_5
   [0000af] uncompressed size              u32 le        1300                  00 00 05 14         
   [0000b3] uncompressed offset in folder  u32 le        531580                00 08 1c 7c         
   [0000b7] index in CFFOLDER              u16 le        0                     00 00               
@@ -75,7 +75,7 @@ CFFILE[5]
   [0000bd] Attributes                     u16 le        32                    00 20               
   [0000bf] Name                           asciiz        MINIKBD.DLL           4d 49 4e 49 4b 42 44 2e 44 4c 4c 00
 
-CFFILE[6]
+CFFILE_6
   [0000cb] uncompressed size              u32 le        12800                 00 00 32 00         
   [0000cf] uncompressed offset in folder  u32 le        532880                00 08 21 90         
   [0000d3] index in CFFOLDER              u16 le        0                     00 00               
@@ -84,7 +84,7 @@ CFFILE[6]
   [0000d9] Attributes                     u16 le        32                    00 20               
   [0000db] Name                           asciiz        WIN87EM.DLL           57 49 4e 38 37 45 4d 2e 44 4c 4c 00
 
-CFFILE[7]
+CFFILE_7
   [0000e7] uncompressed size              u32 le        9008                  00 00 23 30         
   [0000eb] uncompressed offset in folder  u32 le        545680                00 08 53 90         
   [0000ef] index in CFFOLDER              u16 le        0                     00 00               
@@ -93,7 +93,7 @@ CFFILE[7]
   [0000f5] Attributes                     u16 le        32                    00 20               
   [0000f7] Name                           asciiz        VER.DLL               56 45 52 2e 44 4c 4c 00
 
-CFFILE[8]
+CFFILE_8
   [0000ff] uncompressed size              u32 le        9280                  00 00 24 40         
   [000103] uncompressed offset in folder  u32 le        554688                00 08 76 c0         
   [000107] index in CFFOLDER              u16 le        0                     00 00               
@@ -102,7 +102,7 @@ CFFILE[8]
   [00010d] Attributes                     u16 le        32                    00 20               
   [00010f] Name                           asciiz        COMM.DRV              43 4f 4d 4d 2e 44 52 56 00
 
-CFFILE[9]
+CFFILE_9
   [000118] uncompressed size              u32 le        7568                  00 00 1d 90         
   [00011c] uncompressed offset in folder  u32 le        563968                00 08 9b 00         
   [000120] index in CFFOLDER              u16 le        0                     00 00               
@@ -111,7 +111,7 @@ CFFILE[9]
   [000126] Attributes                     u16 le        32                    00 20               
   [000128] Name                           asciiz        KEYBOARD.DRV          4b 45 59 42 4f 41 52 44 2e 44 52 56 00
 
-CFFILE[10]
+CFFILE_10
   [000135] uncompressed size              u32 le        12928                 00 00 32 80         
   [000139] uncompressed offset in folder  u32 le        571536                00 08 b8 90         
   [00013d] index in CFFOLDER              u16 le        0                     00 00               
@@ -120,7 +120,7 @@ CFFILE[10]
   [000143] Attributes                     u16 le        32                    00 20               
   [000145] Name                           asciiz        LMOUSE31.DRV          4c 4d 4f 55 53 45 33 31 2e 44 52 56 00
 
-CFFILE[11]
+CFFILE_11
   [000152] uncompressed size              u32 le        10672                 00 00 29 b0         
   [000156] uncompressed offset in folder  u32 le        584464                00 08 eb 10         
   [00015a] index in CFFOLDER              u16 le        0                     00 00               
@@ -129,7 +129,7 @@ CFFILE[11]
   [000160] Attributes                     u16 le        32                    00 20               
   [000162] Name                           asciiz        MSMOUS31.DRV          4d 53 4d 4f 55 53 33 31 2e 44 52 56 00
 
-CFFILE[12]
+CFFILE_12
   [00016f] uncompressed size              u32 le        416                   00 00 01 a0         
   [000173] uncompressed offset in folder  u32 le        595136                00 09 14 c0         
   [000177] index in CFFOLDER              u16 le        0                     00 00               
@@ -138,7 +138,7 @@ CFFILE[12]
   [00017d] Attributes                     u16 le        32                    00 20               
   [00017f] Name                           asciiz        NOMOUSE.DRV           4e 4f 4d 4f 55 53 45 2e 44 52 56 00
 
-CFFILE[13]
+CFFILE_13
   [00018b] uncompressed size              u32 le        2304                  00 00 09 00         
   [00018f] uncompressed offset in folder  u32 le        595552                00 09 16 60         
   [000193] index in CFFOLDER              u16 le        0                     00 00               
@@ -147,7 +147,7 @@ CFFILE[13]
   [000199] Attributes                     u16 le        32                    00 20               
   [00019b] Name                           asciiz        SYSTEM.DRV            53 59 53 54 45 4d 2e 44 52 56 00
 
-CFFILE[14]
+CFFILE_14
   [0001a6] uncompressed size              u32 le        73200                 00 01 1d f0         
   [0001aa] uncompressed offset in folder  u32 le        597856                00 09 1f 60         
   [0001ae] index in CFFOLDER              u16 le        0                     00 00               
@@ -156,7 +156,7 @@ CFFILE[14]
   [0001b4] Attributes                     u16 le        32                    00 20               
   [0001b6] Name                           asciiz        VGA.DRV               56 47 41 2e 44 52 56 00
 
-CFFILE[15]
+CFFILE_15
   [0001be] uncompressed size              u32 le        3440                  00 00 0d 70         
   [0001c2] uncompressed offset in folder  u32 le        671056                00 0a 3d 50         
   [0001c6] index in CFFOLDER              u16 le        0                     00 00               
@@ -165,7 +165,7 @@ CFFILE[15]
   [0001cc] Attributes                     u16 le        32                    00 20               
   [0001ce] Name                           asciiz        SOUND.DRV             53 4f 55 4e 44 2e 44 52 56 00
 
-CFFILE[16]
+CFFILE_16
   [0001d8] uncompressed size              u32 le        57936                 00 00 e2 50         
   [0001dc] uncompressed offset in folder  u32 le        674496                00 0a 4a c0         
   [0001e0] index in CFFOLDER              u16 le        0                     00 00               
@@ -174,7 +174,7 @@ CFFILE[16]
   [0001e6] Attributes                     u16 le        32                    00 20               
   [0001e8] Name                           asciiz        SERIFE.FON            53 45 52 49 46 45 2e 46 4f 4e 00
 
-CFFILE[17]
+CFFILE_17
   [0001f3] uncompressed size              u32 le        64544                 00 00 fc 20         
   [0001f7] uncompressed offset in folder  u32 le        732432                00 0b 2d 10         
   [0001fb] index in CFFOLDER              u16 le        0                     00 00               
@@ -183,7 +183,7 @@ CFFILE[17]
   [000201] Attributes                     u16 le        32                    00 20               
   [000203] Name                           asciiz        SSERIFE.FON           53 53 45 52 49 46 45 2e 46 4f 4e 00
 
-CFFILE[18]
+CFFILE_18
   [00020f] uncompressed size              u32 le        5360                  00 00 14 f0         
   [000213] uncompressed offset in folder  u32 le        796976                00 0c 29 30         
   [000217] index in CFFOLDER              u16 le        0                     00 00               
@@ -192,7 +192,7 @@ CFFILE[18]
   [00021d] Attributes                     u16 le        32                    00 20               
   [00021f] Name                           asciiz        VGAFIX.FON            56 47 41 46 49 58 2e 46 4f 4e 00
 
-CFFILE[19]
+CFFILE_19
   [00022a] uncompressed size              u32 le        5168                  00 00 14 30         
   [00022e] uncompressed offset in folder  u32 le        802336                00 0c 3e 20         
   [000232] index in CFFOLDER              u16 le        0                     00 00               
@@ -201,7 +201,7 @@ CFFILE[19]
   [000238] Attributes                     u16 le        32                    00 20               
   [00023a] Name                           asciiz        VGAOEM.FON            56 47 41 4f 45 4d 2e 46 4f 4e 00
 
-CFFILE[20]
+CFFILE_20
   [000245] uncompressed size              u32 le        7280                  00 00 1c 70         
   [000249] uncompressed offset in folder  u32 le        807504                00 0c 52 50         
   [00024d] index in CFFOLDER              u16 le        0                     00 00               
@@ -210,7 +210,7 @@ CFFILE[20]
   [000253] Attributes                     u16 le        32                    00 20               
   [000255] Name                           asciiz        VGASYS.FON            56 47 41 53 59 53 2e 46 4f 4e 00
 
-CFFILE[21]
+CFFILE_21
   [000260] uncompressed size              u32 le        358                   00 00 01 66         
   [000264] uncompressed offset in folder  u32 le        814784                00 0c 6e c0         
   [000268] index in CFFOLDER              u16 le        0                     00 00               
@@ -219,7 +219,7 @@ CFFILE[21]
   [00026e] Attributes                     u16 le        32                    00 20               
   [000270] Name                           asciiz        SYSTEM.INI            53 59 53 54 45 4d 2e 49 4e 49 00
 
-CFFILE[22]
+CFFILE_22
   [00027b] uncompressed size              u32 le        165                   00 00 00 a5         
   [00027f] uncompressed offset in folder  u32 le        815142                00 0c 70 26         
   [000283] index in CFFOLDER              u16 le        0                     00 00               

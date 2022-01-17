@@ -232,6 +232,9 @@ type DataField struct {
 
 	// field label
 	Label string
+
+	// XXX
+	Index int
 }
 
 // A match for values of a fileField.
@@ -338,7 +341,7 @@ func AsInt64(kind string, b []byte) int64 {
 	return 0
 }
 
-func Present(format DataField, b []byte) string {
+func (format DataField) Present(b []byte) string {
 	switch format.Kind {
 	case "u8", "u16", "u32", "u64":
 		if format.Slice || format.Range != "" {

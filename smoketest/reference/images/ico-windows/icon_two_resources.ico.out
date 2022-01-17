@@ -4,7 +4,7 @@ ICONDIR
            - Icon                         eq            1
   [000004] Resources                      u16 le        2                     00 02               
 
-ICONDIRENTRY[0]
+ICONDIRENTRY_0
   [000006] Width                          u8            16                    10                  
   [000007] Height                         u8            16                    10                  
   [000008] Palette colors                 u8            16                    10                  
@@ -15,7 +15,7 @@ ICONDIRENTRY[0]
   [000012] Data offset                    u32 le        38                    00 00 00 26         
   [000026] Image data                     u8[296]                             28 00 00 00 10 00 00 00 20 00 00 00 01 00 04 00 00 00 00 00 c0 00 00 00 00 00 00 00 00 00 00 00 ...
 
-ICONDIRENTRY[1]
+ICONDIRENTRY_1
   [000016] Width                          u8            32                    20                  
   [000017] Height                         u8            32                    20                  
   [000018] Palette colors                 u8            16                    10                  
