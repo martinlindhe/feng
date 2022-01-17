@@ -217,12 +217,12 @@ input:
       - simple_b_bh10_0.psd
       - simple_b_bh25_0.psd
 
-  - folder: images/tga
-    files:
-      # NOTE: many more samples exists
-      - 1d.tga
-      - circle24.tga
-      - grey.tga
+#  - folder: images/tga
+#    files:
+#      # NOTE: many more samples exists
+#      - 1d.tga
+#      - circle24.tga
+#      - grey.tga
 
   - folder: images/tiff
     files:

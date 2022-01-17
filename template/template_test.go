@@ -2,24 +2,34 @@ package template
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io/fs"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 
+	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/value"
 )
 
 // evaluate all templates, validate some fields
 func TestEvaluateAllTemplates(t *testing.T) {
 
-	templates, err := GetAllFilenames("../templates/")
-	assert.Equal(t, nil, err)
+	fs.WalkDir(feng.Templates, ".", func(path string, d fs.DirEntry, err2 error) error {
+		// cannot happen
+		if err2 != nil {
+			panic(err2)
+		}
+		if d.IsDir() {
+			return nil
+		}
 
-	for _, path := range templates {
+		if filepath.Ext(path) != ".yml" {
+			return nil
+		}
 
-		templateData, err := ioutil.ReadFile(path)
+		templateData, err := fs.ReadFile(feng.Templates, path)
 		assert.Equal(t, nil, err)
 
 		fmt.Println("processing", path)
@@ -40,7 +50,8 @@ func TestEvaluateAllTemplates(t *testing.T) {
 
 		_, err = UnmarshalTemplateIntoDataStructure(templateData, path)
 		assert.Equal(t, nil, err)
-	}
+		return nil
+	})
 }
 
 func TestEvaluateTemplateConstants(t *testing.T) {

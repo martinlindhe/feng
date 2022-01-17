@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"math/bits"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/martinlindhe/feng/value"
@@ -291,27 +289,4 @@ func (t *Template) evaluateLayout() ([]value.DataField, error) {
 	}
 
 	return res, nil
-}
-
-func GetAllFilenames(templatesRoot string) ([]string, error) {
-	templates := []string{}
-	err := filepath.Walk(templatesRoot, func(fp string, fi os.FileInfo, err error) error {
-		if err != nil {
-			log.Println(err)
-			return nil
-		}
-		if fi.IsDir() {
-			return nil
-		}
-		matched, err := filepath.Match("*.yml", fi.Name())
-		if err != nil {
-			fmt.Println(err)
-			return err
-		}
-		if matched {
-			templates = append(templates, fp)
-		}
-		return nil
-	})
-	return templates, err
 }

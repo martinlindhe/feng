@@ -171,6 +171,8 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
+	s = strings.Replace(s, "FILE_SIZE", fmt.Sprintf("%d", fl.size), 1)
+
 	if DEBUG {
 		log.Printf("GetInt: searching for '%s'", s)
 	}

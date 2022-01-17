@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/alecthomas/kong"
+	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/mapper"
 	"github.com/martinlindhe/feng/smoketest"
 	"github.com/martinlindhe/feng/template"
@@ -22,11 +24,6 @@ func main() {
 	_ = kong.Parse(&args,
 		kong.Name("feng"),
 		kong.Description("A binary template reader and data presenter."))
-
-	templates, err := template.GetAllFilenames("../templates/")
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	data, err := ioutil.ReadFile(args.Filename)
 	if err != nil {
@@ -44,8 +41,20 @@ func main() {
 	}
 
 	for _, entry := range smoketests.GenerateFilenames() {
-		for _, tpl := range templates {
-			templateData, err := ioutil.ReadFile(tpl)
+		fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err2 error) error {
+			// cannot happen
+			if err != nil {
+				panic(err)
+			}
+			if d.IsDir() {
+				return nil
+			}
+
+			if filepath.Ext(tpl) != ".yml" {
+				return nil
+			}
+
+			templateData, err := fs.ReadFile(feng.Templates, tpl)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -65,12 +74,12 @@ func main() {
 				if _, ok := err.(mapper.EvaluateError); ok {
 					log.Println(tpl, ":", err)
 				}
-				continue
+				return nil
 			}
 
 			if len(fl.Structs) == 0 {
 				fmt.Println("MapReader failure, skipping")
-				continue
+				return nil
 			}
 
 			fmt.Printf("Parsed %s as %s\n\n", entry.In, tpl)
@@ -89,8 +98,8 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			break
-		}
+			return nil
+		})
 	}
 
 }

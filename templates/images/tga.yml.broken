@@ -1,4 +1,7 @@
 # STATUS: 2%
+#
+# - BROKEN: too lose matching, collides with windows-icon
+
 # - SAMPLE: need samples with image ID field
 
 references:

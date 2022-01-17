@@ -5,12 +5,15 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"math"
 	"os"
+	"path/filepath"
 	"regexp"
 
+	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
 )
@@ -109,20 +112,29 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	return &fileLayout, nil
 }
 
-func MapFileToTemplate(filename string) (*FileLayout, error) {
-	templates, err := template.GetAllFilenames("./templates/")
-	if err != nil {
-		log.Fatal(err)
-	}
+func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 
-	for _, tpl := range templates {
-		templateData, err := ioutil.ReadFile(tpl)
+	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
+		// cannot happen
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
-		ds, err := template.UnmarshalTemplateIntoDataStructure(templateData, tpl)
+		if d.IsDir() {
+			return nil
+		}
+
+		if filepath.Ext(tpl) != ".yml" {
+			return nil
+		}
+
+		b, err := fs.ReadFile(feng.Templates, tpl)
 		if err != nil {
-			return nil, err
+			return err // or panic or ignore
+		}
+
+		ds, err := template.UnmarshalTemplateIntoDataStructure(b, tpl)
+		if err != nil {
+			return err
 		}
 
 		r, err := os.Open(filename)
@@ -130,21 +142,25 @@ func MapFileToTemplate(filename string) (*FileLayout, error) {
 			log.Fatal(err)
 		}
 
-		fl, err := MapReader(r, ds)
+		fl, err = MapReader(r, ds)
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(EvaluateError); ok {
 				log.Println(tpl, ":", err)
 			}
-			continue
+			return nil
 		}
 		if len(fl.Structs) > 0 {
 			fmt.Printf("Parsed %s as %s\n\n", filename, tpl)
-			return fl, nil
+			return fmt.Errorf("break walk")
 		}
-	}
+		return nil
+	})
 
-	return nil, fmt.Errorf("no match")
+	if fl == nil {
+		return nil, fmt.Errorf("no match")
+	}
+	return fl, nil
 }
 
 func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
