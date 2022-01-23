@@ -39,7 +39,7 @@ func TestEvaluateAllTemplates(t *testing.T) {
 		assert.Equal(t, nil, err)
 
 		switch tpl.Kind {
-		case "image", "archive", "system":
+		case "image", "archive", "system", "executable":
 		default:
 			t.Errorf("unknown kind: %s", tpl.Kind)
 		}
