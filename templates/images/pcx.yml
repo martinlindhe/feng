@@ -1,7 +1,4 @@
-# STATUS: 60% - all samples map fully
-
-# - HI: map image palette (rgb8_with_palette.pcx)
-#      must use goval to evaluate if-expressions!
+# STATUS: 70% - all samples map fully
 
 # - LOW: need custom type "rgb" (for palette)
 
@@ -29,7 +26,7 @@ structs:
       eq 00: None
       eq 01: RLE
       default: invalid
-    u8 Bits per pixel:
+    u8 BitsPerPixel:
       eq 01: 1bpp (monochrome)
       eq 02: 2bpp (4 colors)
       eq 04: 4bpp (16 colors, EGA)
@@ -43,7 +40,7 @@ structs:
     u16 Vertical resolution in DPI: ??
     u8[48] EGA palette: ??
     u8 Reserved: ??
-    u8 Color planes: ??
+    u8 ColorPlanes: ??
     u16 Bytes per line: ??
     u16 Palette mode:
       eq 0001: Monochrome or color
@@ -53,20 +50,13 @@ structs:
     u16 Vertical resolution: ??
     u8[54] Reserved: ??
 
-    # XXX fix with a if-poke ?      if peek(FILE_SIZE - 769) == "0c":       XXX need goval evaluation, all of it does!
-
-    # XXX size gets too big if there is a palette ... should remove 769 then
-    u8[FILE_SIZE - self.offset] Image data: ??
-
-
-    # works but since we cant poke around we cant use it
-    if self.Version in (3,4,5):
-      if self.Bits per pixel in (8):
-        if self.Color planes in (1):
-          #u8[FILE_SIZE - self.offset - 769] Image data: ??
-          offset: FILE_SIZE - 769
-          u8 Palette marker: "0c"
-          u8[256 * 3] Palette: ??   # XXX custom rgb type
+    if self.Version in {3, 4, 5} && self.BitsPerPixel == 8 && self.ColorPlanes == 1:
+      u8[FILE_SIZE - self.offset - 769] Image data: ??
+      offset: FILE_SIZE - 769
+      u8 Palette marker: "0c"
+      u8[256 * 3] Palette: ??   # XXX custom rgb type
+    else:
+      u8[FILE_SIZE - self.offset] Image data: ??
 
 layout:
   - header Header

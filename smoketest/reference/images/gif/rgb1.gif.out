@@ -1,28 +1,29 @@
 Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
-  [000004] Version                        ascii            9                     39
-           - GIF89a                       eq            57
-  [000005] Signature 2                    u8               97                    61
+  [000004] Version                        u16 le           24889                 61 39
+           - GIF89a                       eq               24889
   [000006] Logical screen width           u16 le           199                   00 c7
   [000008] Logical screen height          u16 le           199                   00 c7
   [00000a] ScreenDescriptor               u8               128                   80
-           - GlobalColorTableSize         bit           0
-           - Sort flag                    bit           0
-           - Color resolution             bit           0
-           - GlobalColorTablePresent      bit           1
+           - GlobalColorTableSize         bit              0
+           - Sort                         bit              0
+           - ColorResolution              bit              0
+           - GlobalColorTablePresent      bit              1
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global Color Table             u8[6]                                  00 00 ff ff 00 00
 
 Section_0 BLOCK_EXTENSION
-  [000013] Block type                     u8               33                    21
-  [000014] Extension type                 u8               249                   f9
+  [000013] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [000014] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [000015] Size                           u8               4                     04
   [000016] Flags                          u8               0                     00
-           - Transparent color            bit           0
-           - User input                   bit           0
-           - Disposal method              bit           0
-           - Reserved                     bit           0
+           - Transparent color            bit              0
+           - User input                   bit              0
+           - Disposal method              bit              0
+           - Reserved                     bit              0
   [000017] Delay time                     u16 le           0                     00 00
   [000019] Transparent color index        u8               0                     00
   [00001a] Block terminator               u8               0                     00

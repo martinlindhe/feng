@@ -39,8 +39,8 @@ structs:
     u32 File size: ??
     u32 Header size: 00 00 00 70 # only allowed size is 0x70 ??
 
-    u32 Endian marker: ??
-    if self.Endian marker in (REVERSE_ENDIAN_CONSTANT):
+    u32 EndianMarker: ??
+    if self.EndianMarker == REVERSE_ENDIAN_CONSTANT:
       endian: big       # XXX need sample to study rest of header
 
     u32 Link size: ??   # XXX size of the link section, or 0 if this file isn't statically linked

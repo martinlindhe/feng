@@ -1,10 +1,11 @@
 Chunk_0 ZIPFILERECORD
   [000000] Signature                      ascii[2]         PK                    50 4b
-  [000002] Type                           u8[2]                                  03 04
+  [000002] Type                           u16 le           1027                  04 03
+           - ZIPFILERECORD                eq               1027
   [000004] Version needed to extract      u16 le           10                    00 0a
   [000006] Flags                          u16 le           0                     00 00
   [000008] Compression                    u16 le           6                     00 06
-           - Imploded                     eq            6
+           - Imploded                     eq               6
   [00000a] Modification time              dostime le       17:51:08              8e 64
   [00000c] Modification date              dosdate le       1993-05-22            1a b6
   [00000e] CRC32 of uncompressed data     u32 le           1585981413            5e 88 27 e5
@@ -17,11 +18,12 @@ Chunk_0 ZIPFILERECORD
 
 Chunk_1 ZIPFILERECORD
   [000515] Signature                      ascii[2]         PK                    50 4b
-  [000517] Type                           u8[2]                                  03 04
+  [000517] Type                           u16 le           1027                  04 03
+           - ZIPFILERECORD                eq               1027
   [000519] Version needed to extract      u16 le           10                    00 0a
   [00051b] Flags                          u16 le           6                     00 06
   [00051d] Compression                    u16 le           6                     00 06
-           - Imploded                     eq            6
+           - Imploded                     eq               6
   [00051f] Modification time              dostime le       20:53:08              a6 a4
   [000521] Modification date              dosdate le       1993-05-22            1a b6
   [000523] CRC32 of uncompressed data     u32 le           2472810439            93 64 17 c7
@@ -34,11 +36,12 @@ Chunk_1 ZIPFILERECORD
 
 Chunk_2 ZIPFILERECORD
   [0018c7] Signature                      ascii[2]         PK                    50 4b
-  [0018c9] Type                           u8[2]                                  03 04
+  [0018c9] Type                           u16 le           1027                  04 03
+           - ZIPFILERECORD                eq               1027
   [0018cb] Version needed to extract      u16 le           10                    00 0a
   [0018cd] Flags                          u16 le           0                     00 00
   [0018cf] Compression                    u16 le           6                     00 06
-           - Imploded                     eq            6
+           - Imploded                     eq               6
   [0018d1] Modification time              dostime le       20:55:08              a6 e4
   [0018d3] Modification date              dosdate le       1993-05-22            1a b6
   [0018d5] CRC32 of uncompressed data     u32 le           682160515             28 a8 f1 83
@@ -51,12 +54,13 @@ Chunk_2 ZIPFILERECORD
 
 Chunk_3 ZIPDIRENTRY
   [001a69] Signature                      ascii[2]         PK                    50 4b
-  [001a6b] Type                           u8[2]                                  01 02
+  [001a6b] Type                           u16 le           513                   02 01
+           - ZIPDIRENTRY                  eq               513
   [001a6d] Version made by                u16 le           11                    00 0b
   [001a6f] Version needed to extract      u16 le           10                    00 0a
   [001a71] Flags                          u16 le           0                     00 00
   [001a73] Compression                    u16 le           6                     00 06
-           - Imploded                     eq            6
+           - Imploded                     eq               6
   [001a75] Modification time              dostime le       17:51:08              8e 64
   [001a77] Modification date              dosdate le       1993-05-22            1a b6
   [001a79] CRC32 of uncompressed data     u32 le           1585981413            5e 88 27 e5
@@ -73,12 +77,13 @@ Chunk_3 ZIPDIRENTRY
 
 Chunk_4 ZIPDIRENTRY
   [001aa1] Signature                      ascii[2]         PK                    50 4b
-  [001aa3] Type                           u8[2]                                  01 02
+  [001aa3] Type                           u16 le           513                   02 01
+           - ZIPDIRENTRY                  eq               513
   [001aa5] Version made by                u16 le           11                    00 0b
   [001aa7] Version needed to extract      u16 le           10                    00 0a
   [001aa9] Flags                          u16 le           6                     00 06
   [001aab] Compression                    u16 le           6                     00 06
-           - Imploded                     eq            6
+           - Imploded                     eq               6
   [001aad] Modification time              dostime le       20:53:08              a6 a4
   [001aaf] Modification date              dosdate le       1993-05-22            1a b6
   [001ab1] CRC32 of uncompressed data     u32 le           2472810439            93 64 17 c7
@@ -95,12 +100,13 @@ Chunk_4 ZIPDIRENTRY
 
 Chunk_5 ZIPDIRENTRY
   [001ad9] Signature                      ascii[2]         PK                    50 4b
-  [001adb] Type                           u8[2]                                  01 02
+  [001adb] Type                           u16 le           513                   02 01
+           - ZIPDIRENTRY                  eq               513
   [001add] Version made by                u16 le           11                    00 0b
   [001adf] Version needed to extract      u16 le           10                    00 0a
   [001ae1] Flags                          u16 le           0                     00 00
   [001ae3] Compression                    u16 le           6                     00 06
-           - Imploded                     eq            6
+           - Imploded                     eq               6
   [001ae5] Modification time              dostime le       20:55:08              a6 e4
   [001ae7] Modification date              dosdate le       1993-05-22            1a b6
   [001ae9] CRC32 of uncompressed data     u32 le           682160515             28 a8 f1 83
@@ -117,7 +123,8 @@ Chunk_5 ZIPDIRENTRY
 
 Chunk_6 ZIPENDLOCATOR
   [001b11] Signature                      ascii[2]         PK                    50 4b
-  [001b13] Type                           u8[2]                                  05 06
+  [001b13] Type                           u16 le           1541                  06 05
+           - ZIPENDLOCATOR                eq               1541
   [001b15] Disk number                    u16 le           0                     00 00
   [001b17] Start Disk Number              u16 le           0                     00 00
   [001b19] Entries on disk                u16 le           3                     00 03

@@ -2,24 +2,19 @@ Header
   [000000] SOI marker                     u8[2]                                  ff d8
 
 Segment_0 APP0
-  [000002] Signature                      u8[2]                                  ff e0
+  [000002] Signature                      u16 be           65504                 ff e0
+           - M_APP0                       eq               65504
   [000004] Length                         u16 be           16                    00 10
-  [000006] Identifier                     ascii[5]         JFIF                  4a 46 49 46 00
+  [000006] Identifier                     u32 be           1246120262            4a 46 49 46
+           - JFIF_APP0                    eq               1246120262
+  [00000a] Reserved                       u8               0                     00
   [00000b] Major version                  u8               1                     01
   [00000c] Minor version                  u8               1                     01
   [00000d] Density units                  u8               1                     01
-           - Pixels per inch              eq            1
+           - Pixels per inch              eq               1
   [00000e] Xdensity                       u16 be           96                    00 60
   [000010] Ydensity                       u16 be           96                    00 60
   [000012] Xthumbnail                     u8               0                     00
   [000013] Ythumbnail                     u8               0                     00
 
-Segment_1 APP1
-  [000014] Signature                      u8[2]                                  ff e1
-  [000016] Length                         u16 be           22                    00 16
-  [000018] EXIF                           ascii[6]         Exif                  45 78 69 66 00 00
-  [00001e] Align                          ascii[2]         II                    49 49
-  [000020] tagMark                        u16 be           10752                 2a 00
-  [000022] offsetFirstIFD                 u32 be           134217728             08 00 00 00
-
-0x0755 (1877) unmapped bytes
+0x0767 (1895) unmapped bytes

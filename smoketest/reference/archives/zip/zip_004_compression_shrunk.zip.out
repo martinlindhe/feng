@@ -1,10 +1,11 @@
 Chunk_0 ZIPFILERECORD
   [000000] Signature                      ascii[2]         PK                    50 4b
-  [000002] Type                           u8[2]                                  03 04
+  [000002] Type                           u16 le           1027                  04 03
+           - ZIPFILERECORD                eq               1027
   [000004] Version needed to extract      u16 le           10                    00 0a
   [000006] Flags                          u16 le           0                     00 00
   [000008] Compression                    u16 le           1                     00 01
-           - Shrunk                       eq            1
+           - Shrunk                       eq               1
   [00000a] Modification time              dostime le       22:05:44              b0 b6
   [00000c] Modification date              dosdate le       1987-11-15            0f 6f
   [00000e] CRC32 of uncompressed data     u32 le           2294192059            88 be 97 bb
@@ -17,12 +18,13 @@ Chunk_0 ZIPFILERECORD
 
 Chunk_1 ZIPDIRENTRY
   [001f86] Signature                      ascii[2]         PK                    50 4b
-  [001f88] Type                           u8[2]                                  01 02
+  [001f88] Type                           u16 le           513                   02 01
+           - ZIPDIRENTRY                  eq               513
   [001f8a] Version made by                u16 le           11                    00 0b
   [001f8c] Version needed to extract      u16 le           10                    00 0a
   [001f8e] Flags                          u16 le           0                     00 00
   [001f90] Compression                    u16 le           1                     00 01
-           - Shrunk                       eq            1
+           - Shrunk                       eq               1
   [001f92] Modification time              dostime le       22:05:44              b0 b6
   [001f94] Modification date              dosdate le       1987-11-15            0f 6f
   [001f96] CRC32 of uncompressed data     u32 le           2294192059            88 be 97 bb
@@ -39,7 +41,8 @@ Chunk_1 ZIPDIRENTRY
 
 Chunk_2 ZIPENDLOCATOR
   [001fc0] Signature                      ascii[2]         PK                    50 4b
-  [001fc2] Type                           u8[2]                                  05 06
+  [001fc2] Type                           u16 le           1541                  06 05
+           - ZIPENDLOCATOR                eq               1541
   [001fc4] Disk number                    u16 le           0                     00 00
   [001fc6] Start Disk Number              u16 le           0                     00 00
   [001fc8] Entries on disk                u16 le           1                     00 01

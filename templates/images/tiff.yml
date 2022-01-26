@@ -8,22 +8,21 @@ references:
 kind: image
 extensions: [.tiff, .tif]
 mime: image/tiff
-
-constants:
-  ascii[2] BIG_ENDIAN_MAGIC:    c'MM'
-  ascii[2] LITTLE_ENDIAN_MAGIC: c'II'
+endian: little
 
 structs:
   header:
-    ascii[2] Endian marker: ??
+    u16 EndianMarker:
+      eq c'MM': BIG_ENDIAN
+      eq c'II': LITTLE_ENDIAN
 
-    if self.Endian marker in (BIG_ENDIAN_MAGIC):
+    if self.EndianMarker == BIG_ENDIAN:
       endian: big
-    if self.Endian marker in (LITTLE_ENDIAN_MAGIC):
+    if self.EndianMarker == LITTLE_ENDIAN:
       endian: little
 
     # invalidate file not matching signature
-    if self.Endian marker notin (BIG_ENDIAN_MAGIC, LITTLE_ENDIAN_MAGIC):
+    if !self.EndianMarker in {BIG_ENDIAN, LITTLE_ENDIAN}:
       data: invalid
 
     u16 Signature: 00 2a # should decode the same due to endian directive above

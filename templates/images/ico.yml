@@ -18,8 +18,8 @@ structs:
   icon_dir:
     u16 Reserved: 00 00
     u16 Type:
-      eq 0001: Icon
-      eq 0002: Cursor
+      eq 0001: TYPE_ICON
+      eq 0002: TYPE_CURSOR
       default: invalid
     u16 Resources: ??             # number of image resources in file
 
@@ -29,17 +29,18 @@ structs:
     u8 Palette colors: ??         # 0 = doesn't use palette
     u8 Reserved: ??
 
-    if ICONDIR.Type.Icon:
+    if ICONDIR.Type == TYPE_ICON:
       u16 Color planes: ??
       u16 Bits per pixel: ??
-    if ICONDIR.Type.Cursor:
+
+    if ICONDIR.Type == TYPE_CURSOR:
       u16 Horizontal hotspot: ??
       u16 Vertical hotspot: ??
 
     u32 Data size: ??
     u32 Data offset: ??
 
-    # TODO: the "image data" area contains a DIB header and data, or a PNG - could be parsed recursively?
+    # TODO: the "image data" area contains a DIB header and data, or a PNG - could be parsed recursively? or just mark for extraction
     u8[self.Data offset:self.Data size] Image data: ??
 
 layout:

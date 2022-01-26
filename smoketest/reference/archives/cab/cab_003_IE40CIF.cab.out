@@ -10,9 +10,9 @@ Header
   [00001a] cFolders                       u16 le           1                     00 01
   [00001c] cFiles                         u16 le           1                     00 01
   [00001e] Flags                          u16 le           4                     00 04
-           - Prev cabinet                 bit           0
-           - Next cabinet                 bit           0
-           - Reserve present              bit           1
+           - PrevCabinet                  bit              0
+           - NextCabinet                  bit              0
+           - ReservePresent               bit              1
   [000020] Set ID                         u16 le           658                   02 92
   [000022] Cabinet number                 u16 le           0                     00 00
   [000024] cbCFHeader                     u16 le           6144                  18 00
@@ -21,17 +21,22 @@ Header
   [000028] abReserve                      u8[6144]                               00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
 
 CFFOLDER_0
-  [001828] Offset of first CFDATA block   u32 le           6217                  00 00 18 49
-  [00182c] CFDATA blocks                  u16 le           2                     00 02
-  [00182e] Compression type               u16 le           1                     00 01
+  [001828] CFDATA_Offset                  u32 le           6217                  00 00 18 49
+  [00182c] DataBlocks                     u16 le           2                     00 02
+  [00182e] Compression                    u16 le           1                     00 01
+           - MSZIP                        eq               1
+  [001849] csum                           u32 le           2179292623            81 e5 5d cf
+  [00184d] DataLen                        u16 le           5863                  16 e7
+  [00184f] cbUncomp                       u16 le           32768                 80 00
+  [001851] Data                           u8[5863]                               43 4b ec 9d 5b 73 db b8 92 80 df 53 95 ff e0 ca 1e bf 6c 51 09 6e bc 4d 95 1f 28 8a 4a 9c 48 b2 ...
 
 CFFILE_0
-  [001830] uncompressed size              u32 le           43734                 00 00 aa d6
-  [001834] uncompressed offset in folder  u32 le           0                     00 00 00 00
-  [001838] index in CFFOLDER              u16 le           0                     00 00
+  [001830] Uncompressed size              u32 le           43734                 00 00 aa d6
+  [001834] Uncompressed offset in folder  u32 le           0                     00 00 00 00
+  [001838] Index in CFFOLDER              u16 le           0                     00 00
   [00183a] Date                           dosdate le       1998-08-17            25 11
   [00183c] Time                           dostime le       17:54:04              8e c2
   [00183e] Attributes                     u16 le           32                    00 20
   [001840] Name                           asciiz           ie40.cif              69 65 34 30 2e 63 69 66 00
 
-0x1f7a (8058) unmapped bytes
+0x088b (2187) unmapped bytes

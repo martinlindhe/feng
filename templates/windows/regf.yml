@@ -16,10 +16,7 @@ extensions: [.dat] # has no standard extension
 endian: little
 
 constants:
-  ascii[2] SIG_NK: c'nk'   # Key Node
-  ascii[2] SIG_SK: c'sk'   # Key Security
-  ascii[2] SIG_VK: c'vk'   # Key Value
-  ascii[2] SIG_LF: c'lf'   # Fast Leaf
+
 
 types:
   # XXX impl!!!
@@ -58,14 +55,19 @@ structs:
     filetime Timestamp: ??
     u32 Spare: ??
 
-
-  
-  nk_cell:
+  cell:
     i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
-    ascii[2] Cell signature: ??
+    u16 CellSignature:
+      eq c'kn': SIG_NK   # Key Node
+      eq c'ks': SIG_SK   # Key Security
+      eq c'kv': SIG_VK   # Key Value
+      eq c'fl': SIG_LF   # Fast Leaf
+#      default: invalid # XXX
+
+    label: self.CellSignature # XXX impl
 
     # KEY NODE
-    if self.Cell signature in (SIG_NK):
+    if self.CellSignature == SIG_NK:
       u16 Flags:
         bit 00_01: KEY_VOLATILE
         bit 00_02: KEY_HIVE_EXIT
@@ -102,11 +104,7 @@ structs:
       ascii[self.KeyLength] Key: ??
       u8[abs(self.CellSize) - 0x50 - self.KeyLength] Padding: ??
 
-  sk_cell:
-    i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
-    ascii[2] Cell signature: ??
-
-    if self.Cell signature in (SIG_SK):
+    if self.CellSignature == SIG_SK:
       u16 Reserved: ??
       i32 Flink: ??
       i32 Blink: ??
@@ -115,11 +113,7 @@ structs:
       u8[self.DescriptorLength] Descriptor: ??      # XXX decode DESCRIPTOR ... see https://www.sweetscape.com/010editor/repository/files/RegistryHive.bt
       u8[abs(self.CellSize) - 0x18 - self.DescriptorLength] Padding: ??
 
-  vk_cell:
-    i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
-    ascii[2] Cell signature: ??
-
-    if self.Cell signature in (SIG_VK):
+    if self.CellSignature == SIG_VK:
       u16 Name length: ??
       i32 Data length: ??
       i32 Data offset: ??
@@ -127,11 +121,7 @@ structs:
       u16 Flags: ??
       u16 Spare: ??
 
-  lf_list:
-    i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
-    ascii[2] Cell signature: ??
-
-    if self.Cell signature in (SIG_LF):
+    if self.CellSignature == SIG_LF:
       i16 NumberOfOffsets: ??
       u8[8 * self.NumberOfOffsets] Offset: ?? # XXX decode "int offset, char[4] HASH" (8 bytes per entry)
 
@@ -139,12 +129,6 @@ layout:
   - base_block FILE HEADER
   - hive_bin HBINRECORD
   # XXX listed as winxp SAM atm...
-  - nk_cell CELL_NK0
-  - sk_cell CELL_SK0
-  - nk_cell CELL_NK1
-  - sk_cell CELL_SK1
-  - lf_list LIST_LF0
-  - nk_cell CELL_NK2
-  - vk_cell CELL_VK0
+  - cell[] Cell
 
   #- hive_bin[] HBINRECORD     # XXX slice

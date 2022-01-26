@@ -1,0 +1,85 @@
+# STATUS: 10%
+# format used on XBox 360
+
+references:
+  - https://free60project.github.io/wiki/XEX/
+  - XBOX 360 Forensics - A Digital Forensics Guide to Examining Artifacts (2011)
+
+software:
+  - https://digiex.net/threads/xextool-6-3-download.9523/
+
+kind: xxx
+name: 
+extensions: [.xex]
+endian: big
+
+structs:
+  header:
+    ascii[4] Signature: c'XEX2'
+    u32 Flags:
+      bit b0000000_0000000_0000000_00000001: Title module
+      bit b0000000_0000000_0000000_00000010: Exports to title
+      bit b0000000_0000000_0000000_00000100: System debugger
+      bit b0000000_0000000_0000000_00001000: DLL module
+      bit b0000000_0000000_0000000_00010000: Module patch
+      bit b0000000_0000000_0000000_00100000: Patch full
+      bit b0000000_0000000_0000000_01000000: Patch delta
+      bit b0000000_0000000_0000000_10000000: User mode
+    u32 PE data offset: ??
+    u32 Reserved: ??
+    u32 Security info offset: ??
+    u32 OptionalHeaderCount: ??
+
+  opt_head:
+    u32 HeaderID:
+      eq 0000_02FF: Resource Info
+      eq 0000_03FF: Base File Format
+      eq 0000_0405: Base Reference
+      eq 0000_05FF: Delta Patch Descriptor
+      eq 0000_80FF: Bounding Path
+      eq 0000_8105: Device ID
+      eq 0001_0001: Original Base Address
+      eq 0001_0100: Entry Point
+      eq 0001_0201: Image Base Address
+      eq 0001_03FF: Import Libraries
+      eq 0001_8002: Checksum Timestamp
+      eq 0001_8102: Enabled For Callcap
+      eq 0001_8200: Enabled For Fastcap
+      eq 0001_83FF: Original PE Name
+      eq 0002_00FF: Static Libraries
+      eq 0002_0104: TLS Info
+      eq 0002_0200: Default Stack Size
+      eq 0002_0301: Default Filesystem Cache Size
+      eq 0002_0401: Default Heap Size
+      eq 0002_8002: Page Heap Size and Flags
+      eq 0003_0000: System Flags
+      eq 0004_0006: Execution ID
+      eq 0004_01FF: Service ID List
+      eq 0004_0201: Title Workspace Size
+      eq 0004_0310: Game Ratings
+      eq 0004_0404: LAN Key
+      eq 0004_05FF: Xbox 360 Logo
+      eq 0004_06FF: Multidisc Media IDs
+      eq 0004_07FF: Alternate Title IDs
+      eq 0004_0801: Additional Title Memory
+      eq 00E1_0402: Exports by Name
+      #default: invalid # XXX
+
+    # If ID & 0xFF == 0x01 then the Header Data field is used to store the headers data,
+    # otherwise it's used to store the data's offset.
+    # if ID & 0xFF == 0xFF then the Header's data will contain its size
+    # if ID & 0xFF == (Anything else) the value of this is the size of the entry
+    # in number of DWORDS (times by 4 to get real size)
+
+    u32 Header data / offset to data: ??
+
+    # XXX BROKEN
+    #if (self.HeaderID & 0xFF) == 1:
+    #  u32 Header data: ??
+    #else:
+ #   if (self.HeaderID & 0xFF) != 1:
+ #     u32 Offset to data: ??
+
+layout:
+  - header Header
+  - opt_head[Header.OptionalHeaderCount] OptHead

@@ -1,6 +1,6 @@
 # STATUS: 10%
 
-# - HI: file name data, seems to be a zlib compressed block ?
+# - HI: file name data is in a zlib-compressed DIRENTRY block
 #
 # - MID: extract tool, that dumps all marked data areas to files
 #       could augment with file naming hints from template?
@@ -16,7 +16,7 @@ extensions: [.s3d, .eqg, .pfs, .pak]
 endian: little
 
 constants:
-  u8[4] DIRENTRY: 61 58 0A C9
+  u32 DIRENTRY: 6158_0AC9
   
 structs:
   header:
@@ -26,7 +26,7 @@ structs:
     offset: self.BaseOffset
     u32 Count: ??
 
-  entry:
+  block:
     offset: Header.BaseOffset + 4 + (self.index * 12)
     u32 CRC: ??
     u32 FileOffset: ??
@@ -35,14 +35,13 @@ structs:
     offset: self.FileOffset
     u32 Compressed size: ??
     u32 Expanded size: ??
-    comp:zlib[self.Compressed size] Data: ??
+    compressed:zlib[self.Compressed size] Data: ??
 
-    if self.CRC in (DIRENTRY):
+    if self.CRC == DIRENTRY:
       label: DIRENTRY
-
-    if self.CRC notin (DIRENTRY): # XXX implement else
+    else:
       label: FILEENTRY
 
 layout:
   - header Header
-  - entry[Header.Count] Entry
+  - block[Header.Count] Block

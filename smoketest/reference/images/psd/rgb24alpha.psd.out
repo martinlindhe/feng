@@ -7,6 +7,6 @@ Header
   [000012] Width                          u32 be           79                    00 00 00 4f
   [000016] Bit depth                      u16 be           8                     00 08
   [000018] Color mode                     u16 be           3                     00 03
-           - RGB                          eq            3
+           - RGB                          eq               3
 
 0x49c9 (18889) unmapped bytes

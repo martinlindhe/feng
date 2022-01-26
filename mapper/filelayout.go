@@ -9,12 +9,16 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
 )
 
 // parsed file data from a template "layout"
 type FileLayout struct {
 	Structs []Struct
+
+	// pointer to its internal yaml representation, so we can access "constants"
+	DS *template.DataStructure
 
 	// current endian ("big", "little")
 	endian string
@@ -71,7 +75,7 @@ func (field *Field) Present() string {
 }
 
 var (
-	variableExpressionRE      = regexp.MustCompile(`([\w .+\-*/()<>"]+)`)
+	variableExpressionRE      = regexp.MustCompile(`([\w .+\-*/()<>"&]+)`)
 	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s\+\-\*\/]+):([\d\s\+\-\*\/]+)`)
 
 	red = color.New(color.FgRed).SprintfFunc()
@@ -111,7 +115,7 @@ func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 	}
 
 	for _, child := range field.MatchedPatterns {
-		res += fmt.Sprintf("           - %-28s %-13s %d\n", child.Label, child.Operation, child.Value)
+		res += fmt.Sprintf("           - %-28s %-16s %d\n", child.Label, child.Operation, child.Value)
 	}
 	return res
 }
@@ -168,14 +172,16 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 
 	if df != nil {
+		s = strings.ReplaceAll(s, "self.offset", fmt.Sprintf("%d", fl.offset))
+
 		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
 	s = strings.Replace(s, "FILE_SIZE", fmt.Sprintf("%d", fl.size), 1)
 
-	if DEBUG {
-		log.Printf("GetInt: searching for '%s'", s)
-	}
+	//if DEBUG {
+	log.Printf("GetInt: searching for '%s'", s)
+	//}
 
 	n, err := fl.EvaluateExpression(s)
 	if err != nil {
@@ -183,9 +189,9 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 		log.Println("GetInt FAILURE:", err)
 		os.Exit(1)
 	}
-	if DEBUG {
-		log.Printf("GetInt: %s => %d", s, n)
-	}
+	//if DEBUG {
+	log.Printf("GetInt: %s => %d", s, n)
+	//}
 	return n, err
 
 	/*

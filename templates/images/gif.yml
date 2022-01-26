@@ -17,16 +17,6 @@ extensions: [.gif]
 mime: image/gif
 endian: little
 
-constants:
-  u8 BLOCK_IMAGE:     "2c"
-  u8 BLOCK_EXTENSION: "21"
-  u8 BLOCK_TRAILER:   "3b"
-
-  #u8 EXT_PLAIN_TEXT:      "01"
-  u8 EXT_GRAPHIC_CONTROL: "f9"
-  #u8 EXT_COMMENT:         "fe"
-  #u8 EXT_APPLICATION:     "ff"
-
 # XXX implement custom types!
 types:
   rgb:
@@ -37,38 +27,45 @@ types:
   data_sub_block:
     u8 Size: ??
     u8[self.Size] Image data: ??
-    if self.Size in (0):
+    if self.Size == 0:
       data: eos  # FIXME TODO - XXX marks end of stream
 
 structs:
   header:
     ascii[4] Signature 1: c'GIF8'
-    ascii Version:
-      eq c'7': GIF87a
-      eq c'9': GIF89a
+    u16 Version:
+      eq 6137: GIF87a
+      eq 6139: GIF89a
       default: invalid
-    u8 Signature 2: c'a'
     u16 Logical screen width: ??
     u16 Logical screen height: ??
     u8 ScreenDescriptor:
       bit b0000_0111: GlobalColorTableSize
-      bit b0000_1000: Sort flag
-      bit b0111_0000: Color resolution
+      bit b0000_1000: Sort
+      bit b0111_0000: ColorResolution
       bit b1000_0000: GlobalColorTablePresent
     u8 Background color: ??
     u8 Aspect ratio: ??
 
-    if self.ScreenDescriptor.GlobalColorTablePresent in (1):
-      u8[3 * (2 << self.ScreenDescriptor.GlobalColorTableSize)] Global Color Table: ??   # FIXME use rgb type
-      #rgb[2 << self.ScreenDescriptor.GlobalColorTableSize] Global Color Table: ??   # XXX rgb struct is 3 bytes. 4 fields = 12 bytes
+    if self.ScreenDescriptor & GlobalColorTablePresent:
+      u8[3 * (2 << (self.ScreenDescriptor & 7))] Global Color Table: ??   # FIXME use rgb type. rgb struct is 3 bytes. 4 fields = 12 bytes
 
   section:
-    u8 Block type: ??
-  
-    if self.Block type in (BLOCK_EXTENSION):
+    u8 BlockType:
+      eq 2c: BLOCK_IMAGE
+      eq 21: BLOCK_EXTENSION
+      eq 3b: BLOCK_TRAILER
+
+    label: self.BlockType # XXX implement
+
+    if self.BlockType == BLOCK_EXTENSION:
       label: BLOCK_EXTENSION
-      u8 Extension type: ??
-      if self.Extension type in (EXT_GRAPHIC_CONTROL):
+      u8 ExtensionType:
+        #eq 01: EXT_PLAIN_TEXT
+        eq f9: EXT_GRAPHIC_CONTROL
+        #eq fe: EXT_COMMENT
+        #eq ff: EXT_APPLICATION
+      if self.ExtensionType == EXT_GRAPHIC_CONTROL:
         u8 Size: "04"                       # NOTE: should always be 04
         u8 Flags:
           bit b0000_0001: Transparent color
@@ -79,7 +76,7 @@ structs:
         u8 Transparent color index: ??
         u8 Block terminator: "00"
 
-    if self.Block type in (BLOCK_IMAGE):
+    if self.BlockType == BLOCK_IMAGE:
       label: BLOCK_IMAGE
       u16 Left position: ??
       u16 Top position: ??
@@ -91,8 +88,8 @@ structs:
         bit b0010_0000: Sort
         bit b0100_0000: Interlace
         bit b1000_0000: LocalColorTablePresent
-      if self.ImageDescriptor.LocalColorTablePresent:
-        u8[3 * (2 << (self.ImageDescriptor.LocalColorTableSize))] Local color table: ?? # XXX RGB type !!!!!!
+      if self.ImageDescriptor & LocalColorTablePresent:
+        u8[3 * (2 << (self.ImageDescriptor & 7))] Local color table: ?? # XXX RGB type !!!!!!
       u8 LZWMinimumCodeSize: ??   # XXX meaning?
 
       # XXX series of data blocks. last block is one with Size==0
@@ -101,7 +98,7 @@ structs:
       u8[self.Data size] Data: ??
       u8 BlockTerminator: "00"
 
-    if self.Block type in (BLOCK_TRAILER):
+    if self.BlockType == BLOCK_TRAILER:
       label: BLOCK_TRAILER
 
 layout:

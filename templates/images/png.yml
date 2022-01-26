@@ -16,24 +16,6 @@ extensions: [.png]
 mime: image/png
 endian: big
 
-constants:
-  ascii[4] IDAT: c'IDAT'
-  ascii[4] PLTE: c'PLTE'
-  ascii[4] IEND: c'IEND'
-  ascii[4] sBIT: c'sBIT'
-  ascii[4] sRGB: c'sRGB'
-  ascii[4] pHYs: c'pHYs'
-  ascii[4] tEXt: c'tEXt'
-  ascii[4] zTXt: c'zTXt'
-  ascii[4] iTXt: c'iTXt'
-  ascii[4] iCCP: c'iCCP'
-  ascii[4] tIME: c'tIME'
-  ascii[4] bKGD: c'bKGD'
-  ascii[4] cHRM: c'cHRM'
-  ascii[4] gAMA: c'gAMA'
-
-  ascii[4] iDOT: c'iDOT'                  # non-registered chunk used by Apple
-
 types:
   rgb:
     u8 Red: ??
@@ -55,12 +37,12 @@ structs:
       eq 04: 4 bpp
       eq 08: 8 bpp
       eq 10: 16 bpp
-    u8 Color type:
-      eq 00: grayscale
-      eq 02: RGB
-      eq 03: palette
-      eq 04: grayscale+alpha
-      eq 06: RGBA
+    u8 ColorType:
+      eq 00: COLOR_GRAYSCALE
+      eq 02: COLOR_RGB
+      eq 03: COLOR_PALETTE
+      eq 04: COLOR_GRAY_ALPHA
+      eq 06: COLOR_RGBA
     u8 Compression method:
       eq 00: deflate                        # NOTE: the concatenation of the contents of all the IDAT chunks makes up a zlib datastream
     u8 Filter method:
@@ -72,57 +54,74 @@ structs:
 
   chunk:
     u32 Length: ??                          # length of chunk data (excluding Length and Type fields)
-    ascii[4] Type: ??
+    u32 Type:     # XXX allow to patternmatch on ascii[4] for pretty presentation
+      eq c'IDAT': IDAT
+      eq c'PLTE': PLTE
+      eq c'IEND': IEND
+      eq c'sBIT': sBIT
+      eq c'sRGB': sRGB
+      eq c'pHYs': pHYs
+      eq c'tEXt': tEXt
+      eq c'zTXt': zTXt
+      eq c'iTXt': iTXt
+      eq c'iCCP': iCCP
+      eq c'tIME': tIME
+      eq c'bKGD': bKGD
+      eq c'cHRM': cHRM
+      eq c'gAMA': gAMA
+      eq c'iDOT': iDOT                # non-registered chunk used by Apple
 
-    if self.Type in (IDAT):
+    label: self.Type   # XXX todo evaluate
+
+    if self.Type == IDAT:
       u8[self.Length] Image data: ??
 
-    if self.Type in (PLTE):
+    if self.Type == PLTE:
       #rgb[self.Length / 3] Palette: ??      # XXX chunk Length 768 = 256 palette values (R, G, B)   need to use custom type "rgb"
       u8[self.Length] Palette: ??
 
-    if self.Type in (sBIT):
-      if IHDR.Color type in (0): # grayscale
+    if self.Type == sBIT:
+      if IHDR.ColorType == COLOR_GRAYSCALE:
         u8 Significant bits grayscale: ??
-      if IHDR.Color type in (2,3): # RGB or palette
+      if IHDR.ColorType in {COLOR_RGB, COLOR_PALETTE}:
         u8 Significant bits red: ??
         u8 Significant bits green: ??
         u8 Significant bits blue: ??
-      if IHDR.Color type in (4):  # grayscale+alpha
+      if IHDR.ColorType == COLOR_GRAY_ALPHA:
         u8 Significant bits grayscale: ??
         u8 Significant bits alpha: ??
-      if IHDR.Color type in (6):  # RGBA
+      if IHDR.ColorType == COLOR_RGBA:
         u8 Significant bits red: ??
         u8 Significant bits green: ??
         u8 Significant bits blue: ??
         u8 Significant bits alpha: ??
 
-    if self.Type in (sRGB):
+    if self.Type == sRGB:
       u8 Rendering intent:
         eq 00: Perceptual
         eq 01: Relative colorimetric
         eq 02: Saturation
         eq 03: Absolute colorimetric
 
-    if self.Type in (pHYs):
+    if self.Type == pHYs:
       u32 Pixels per unit, X axis: ??
       u32 Pixels per unit, Y axis: ??
       u8 Unit specifier:
         eq 00: Unknown
         eq 01: Meter
 
-    if self.Type in (tEXt):
+    if self.Type == tEXt:
       asciiz Keyword: ??
       ascii[self.Length - len("self.Keyword")] Text: ??
 
-    if self.Type in (zTXt):
+    if self.Type == zTXt:
       asciiz Keyword: ??
       u8 Compression method:
         eq 00: Deflate
         default: invalid
       u8[self.Length - (self.offset - offset("self.Keyword"))] Compressed text: ??            # XXX mark as deflate for decompression
 
-    if self.Type in (iTXt):
+    if self.Type == iTXt:
       asciiz Keyword: ??
       u8 Compression flag:
         eq 00: Uncompressed
@@ -134,14 +133,14 @@ structs:
       asciiz Translated keyword: ??
       ascii[self.Length - (self.offset - offset("self.Keyword"))] Text: ?? # XXX is UTF-8 encoded, not ascii !!!
 
-    if self.Type in (iCCP):
+    if self.Type == iCCP:
       asciiz ProfileName: ??
       u8 Compression method:
         eq 00: Deflate
         default: invalid
       u8[self.Length - (self.offset - offset("self.ProfileName"))] Compressed profile: ??   # XXX mark as deflate for decompression
 
-    if self.Type in (tIME):
+    if self.Type == tIME:
       # time in UTC
       u16 Year: ??
       u8 Month: ??
@@ -150,19 +149,19 @@ structs:
       u8 Minute: ??
       u8 Second: ??
 
-    if self.Type in (bKGD):
-      if IHDR.Color type in(3):             # indexed
+    if self.Type == bKGD:
+      if IHDR.ColorType == COLOR_PALETTE:
         u8 Palette index: ??
 
-      if IHDR.Color type in (0,4):          # grayscale or grayscale+alpha
+      if IHDR.ColorType in {COLOR_GRAYSCALE, COLOR_GRAY_ALPHA}:
         u16 Gray: ??
 
-      if IHDR.Color type in (2,6):          # RGB or RGBA
+      if IHDR.ColorType in {COLOR_RGB, COLOR_RGBA}:
         u16 Red: ??
         u16 Green: ??
         u16 Blue: ??
 
-    if self.Type in (cHRM):
+    if self.Type == cHRM:
       u32 White Point x: ??
       u32 White Point y: ??
       u32 Red x: ??
@@ -172,10 +171,10 @@ structs:
       u32 Blue x: ??
       u32 Blue y: ??
 
-    if self.Type in (gAMA):
+    if self.Type == gAMA:
       u32 Gamma: ??
 
-    if self.Type in (iDOT):
+    if self.Type == iDOT:
       # NOTE: based on guesses from https://www.hackerfactor.com/blog/index.php?/archives/895-Connecting-the-iDOTs.html
       u32 Height divisor: ??
       u32 Unknown: ??                       # always 0 ?
@@ -186,7 +185,7 @@ structs:
       u32 IDAT restart offset: ??
 
     # UNKNOWN CHUNK TYPE
-    if self.Type notin (IDAT, PLTE, sBIT, sRGB, pHYs, tEXt, zTXt, iTXt, iCCP, tIME, bKGD, cHRM, gAMA, iDOT):
+    if !self.Type in {IDAT, PLTE, sBIT, sRGB, pHYs, tEXt, zTXt, iTXt, iCCP, tIME, bKGD, cHRM, gAMA, iDOT}:
       u8[self.Length] Chunk data: ??
 
     #crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field

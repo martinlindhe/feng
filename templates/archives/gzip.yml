@@ -29,7 +29,7 @@ structs:
       eq 02: Packed
       eq 03: LZH:ed
       eq 08: Deflate
-    u8 Header flags:
+    u8 HeaderFlags:
       bit b0000_0001: FLAG_TEXT       # File is ASCII text
       bit b0000_0010: FLAG_CRC16      # Header checksum present
       bit b0000_0100: FLAG_EXTRA      # Extra fields present
@@ -57,20 +57,20 @@ structs:
       eq ff: Unknown OS
 
     # TODO NEED sample with FLAG_CRC16:
-    if self.Header flags.FLAG_CRC16:
+    if self.HeaderFlags & FLAG_CRC16:
       u16 Header checksum: ??       # XXX mark data type as crc16 over range... crc16[0000:000a]  ?
       # crc16[0000:000a] Header checksum: ??
 
     # TODO NEED sample with FLAG_EXTRA:
-    if self.Header flags.FLAG_EXTRA:            # XXX format: u16 length + byte[len] data
+    if self.HeaderFlags & FLAG_EXTRA:            # XXX format: u16 length + byte[len] data
       u16 Extra Length: ??
       u8[self.Extra Length] Data: ??
 
-    if self.Header flags.FLAG_NAME:
+    if self.HeaderFlags & FLAG_NAME:
       asciiz Filename: ??
 
     # TODO NEED sample with FLAG_COMMENT
-    if self.Header flags.FLAG_COMMENT:
+    if self.HeaderFlags & FLAG_COMMENT:
       asciiz Comment: ??
 
     # XXX if deflate, mark data as such

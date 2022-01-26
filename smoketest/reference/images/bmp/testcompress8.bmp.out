@@ -5,20 +5,19 @@ FILEHEADER BITMAPFILEHEADER
   [00000a] Bitmap offset                  u32 le           1078                  00 00 04 36
 
 DIBHEADER BITMAPINFOHEADER
-  [00000e] Header size                    u32 le           40                    00 00 00 28
-           - V3 (Windows 3.x)             eq            40
+  [00000e] HeaderSize                     u32 le           40                    00 00 00 28
+           - V3                           eq               40
   [000012] Width                          i32 le           127                   00 00 00 7f
   [000016] Height                         i32 le           64                    00 00 00 40
   [00001a] Color planes                   u16 le           1                     00 01
   [00001c] BitsPerPixel                   u16 le           8                     00 08
   [00001e] CompressionMethod              u32 le           1                     00 00 00 01
-           - BI_RLE8                      eq            1
+           - BI_RLE8                      eq               1
   [000022] ImageDataSize                  u32 le           742                   00 00 02 e6
   [000026] Horizontal resolution          i32 le           0                     00 00 00 00
   [00002a] Vertical resolution            i32 le           0                     00 00 00 00
   [00002e] Used colors                    u32 le           0                     00 00 00 00
   [000032] Important colors               u32 le           0                     00 00 00 00
-  [000036] BGRQUAD                        u32[256] le                            00 00 00 00 00 04 04 04 00 08 08 08 00 0c 0c 0c 00 10 10 10 00 14 14 14 00 18 18 18 00 1c 1c 1c ...
-  [000436] RLE compressed image data      u8[742]                                20 40 20 bf 20 c0 1f 3f 00 00 20 41 20 be 20 c1 1f 3e 00 00 20 42 20 bd 20 c2 1f 3d 00 00 20 43 ...
+  [000036] Compressed image data          u8[742]                                00 00 00 00 04 04 04 00 08 08 08 00 0c 0c 0c 00 10 10 10 00 14 14 14 00 18 18 18 00 1c 1c 1c 00 ...
 
-EOF
+0x0400 (1024) unmapped bytes

@@ -6,7 +6,9 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/maja42/goval"
+	"github.com/martinlindhe/feng/value"
 )
 
 type EvaluateError struct {
@@ -18,7 +20,7 @@ func (e EvaluateError) Error() string {
 	return e.input + ": " + e.msg
 }
 
-func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
+func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 
 	eval := goval.NewEvaluator()
 
@@ -26,30 +28,29 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 	for _, layout := range fl.Structs {
 		mapped := make(map[string]interface{})
 		for _, field := range layout.Fields {
-
-			if len(field.MatchedPatterns) > 0 {
-				children := make(map[string]interface{})
-				for _, child := range field.MatchedPatterns {
-					children[child.Label] = int(child.Value)
-				}
-				mapped[field.Format.Label] = children
+			val := field.Present()
+			if i, err := strconv.ParseInt(val, 10, 64); err == nil {
+				mapped[field.Format.Label] = int(i)
 			} else {
-				value := field.Present()
-				if i, err := strconv.ParseInt(value, 10, 64); err == nil {
-					mapped[field.Format.Label] = int(i)
-				} else {
-					mapped[field.Format.Label] = value
-				}
+				mapped[field.Format.Label] = val
 			}
+
+			//mapped[field.Format.Label+".value"] = value.AsUint64(field.Format.Kind, field.Value)
 			//mapped[field.Format.Label+".offset"] = field.Offset
 			//mapped[field.Format.Label+".len"] = field.Length
 		}
 		mapped["index"] = layout.Index
 		variables[layout.Label] = mapped
 	}
+
+	// add constants as variables
+	for _, constant := range fl.DS.Constants {
+		variables[constant.Field.Label] = int(value.AsUint64(constant.Field.Kind, constant.Value))
+	}
+
 	if DEBUG {
 		//log.Printf("variables: %#v", variables)
-		//spew.Dump(variables)
+		spew.Dump(variables)
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)
@@ -96,17 +97,24 @@ func (fl *FileLayout) EvaluateExpression(s string) (uint64, error) {
 		return nil, fmt.Errorf("expected string, got %T", args[0])
 	}
 
-	result, err := eval.Evaluate(s, variables, functions)
+	result, err := eval.Evaluate(in, variables, functions)
 	if err != nil {
-		return 0, EvaluateError{input: s, msg: err.Error()}
+		return 0, EvaluateError{input: in, msg: err.Error()}
 	}
 
 	switch v := result.(type) {
 	case int:
 		if DEBUG {
-			log.Printf("EvaluateExpression: %s => %d", s, v)
+			log.Printf("EvaluateExpression: %s => %d", in, v)
 		}
 		return uint64(v), nil
+
+	case bool:
+		if v {
+			return 1, nil
+		} else {
+			return 0, nil
+		}
 	}
 	return 0, fmt.Errorf("unhandled result type %T", result)
 }

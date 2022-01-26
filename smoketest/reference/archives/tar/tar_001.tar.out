@@ -7,7 +7,7 @@ Header
   [000088] Modification time (unix time, OCTAL) ascii[12]        14020143052           31 34 30 32 30 31 34 33 30 35 32 20
   [000094] Checksum                       ascii[8]         010577                30 31 30 35 37 37 00 20
   [00009c] File type                      u8               48                    30
-           - Normal file                  eq            48
+           - Normal file                  eq               48
   [00009d] Name of linked file            ascii[100]                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
   [000101] Signature                      ascii[6]         ustar                 75 73 74 61 72 00
   [000107] Version                        ascii[2]         00                    30 30

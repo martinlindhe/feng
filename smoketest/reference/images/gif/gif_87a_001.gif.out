@@ -1,37 +1,38 @@
 Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
-  [000004] Version                        ascii            7                     37
-           - GIF87a                       eq            55
-  [000005] Signature 2                    u8               97                    61
+  [000004] Version                        u16 le           24887                 61 37
+           - GIF87a                       eq               24887
   [000006] Logical screen width           u16 le           2                     00 02
   [000008] Logical screen height          u16 le           2                     00 02
   [00000a] ScreenDescriptor               u8               161                   a1
-           - GlobalColorTableSize         bit           1
-           - Sort flag                    bit           0
-           - Color resolution             bit           2
-           - GlobalColorTablePresent      bit           1
+           - GlobalColorTableSize         bit              1
+           - Sort                         bit              0
+           - ColorResolution              bit              2
+           - GlobalColorTablePresent      bit              1
   [00000b] Background color               u8               4                     04
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global Color Table             u8[12]                                 00 00 a1 aa 00 2c 00 7f 03 67 67 1a
 
 Section_0 BLOCK_IMAGE
-  [000019] Block type                     u8               44                    2c
+  [000019] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [00001a] Left position                  u16 le           0                     00 00
   [00001c] Top position                   u16 le           0                     00 00
   [00001e] Image width                    u16 le           2                     00 02
   [000020] Image height                   u16 le           2                     00 02
   [000022] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [000023] LZWMinimumCodeSize             u8               2                     02
   [000024] Data size                      u8               3                     03
   [000025] Data                           u8[3]                                  0c 34 05
   [000028] BlockTerminator                u8               0                     00
 
 Section_1 BLOCK_TRAILER
-  [000029] Block type                     u8               59                    3b
+  [000029] BlockType                      u8               59                    3b
+           - BLOCK_TRAILER                eq               59
 
 EOF

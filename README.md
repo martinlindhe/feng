@@ -9,7 +9,7 @@ STATUS: private draft work
 - universal binary format template language (WIP)
 - command line print-out of binary file structure (WIP)
 - TODO: auto validate file checksums
-- TODO: extract data from file
+- TODO: extract data from file (currently only zlib streams is supported)
 - TODO: binwalk-type of program
 
 
@@ -104,6 +104,10 @@ quickbms - TODO evaluate
 
 hex fiend templates
     https://github.com/HexFiend/HexFiend/tree/master/templates
+
+
+malcat - has some form of binary templates
+    https://malcat.fr/
 
 
 http://www.nyangau.org/be/be.htm - TODO evaluate

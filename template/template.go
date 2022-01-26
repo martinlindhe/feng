@@ -49,6 +49,52 @@ type EvaluatedConstant struct {
 	Value []byte
 }
 
+func findStructConstants(c *yaml.MapItem) ([]EvaluatedConstant, error) {
+	res := []EvaluatedConstant{}
+
+	for _, v := range c.Value.([]yaml.MapItem) {
+		switch v.Value.(type) {
+		case []yaml.MapItem:
+
+			field, err := value.ParseDataField(v.Key.(string))
+			if err != nil {
+				return nil, err
+			}
+
+			if field.IsPatternableUnit() {
+				if t, ok := v.Value.([]yaml.MapItem); ok {
+					for _, sub := range t {
+						m, err := ParseMatchPattern(sub)
+						if err != nil {
+							log.Println("error (ignoring1):", err)
+							continue
+						}
+						if m.Operation == "eq" || m.Operation == "bit" {
+							data, err := value.ParseDataString(m.Pattern)
+							if err != nil {
+								log.Println("error (ignoring2):", err)
+								continue
+							}
+							df := value.DataField{Label: m.Label, Kind: field.Kind}
+							//log.Println(m.Label, ":", data, "=", value.AsUint64(df.Kind, data))
+
+							res = append(res, EvaluatedConstant{df, data})
+						}
+					}
+				}
+			} else {
+				children, err := findStructConstants(&v)
+				if err != nil {
+					panic(err)
+				}
+
+				res = append(res, children...)
+			}
+		}
+	}
+	return res, nil
+}
+
 func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
 	res := []EvaluatedConstant{}
 	for _, c := range t.Constants {
@@ -61,6 +107,17 @@ func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
 			return nil, err
 		}
 		res = append(res, EvaluatedConstant{key, val})
+	}
+
+	// add all fields with eq subkey pattern matches as constants
+	for _, section := range t.Structs {
+
+		constants, err := findStructConstants(&section)
+		res = append(res, constants...)
+		if err != nil {
+			panic(err)
+		}
+
 	}
 
 	return res, nil
@@ -248,32 +305,41 @@ func parseMatchPatterns(mi []yaml.MapItem) ([]MatchPattern, error) {
 	res := []MatchPattern{}
 
 	for _, item := range mi {
-		p := MatchPattern{}
-
-		key := strings.TrimSpace(item.Key.(string))
-		value := strings.TrimSpace(item.Value.(string))
-
-		parts := strings.SplitN(key, " ", 2)
-		if len(parts) <= 0 || len(parts) > 2 {
-			return nil, fmt.Errorf("unexpected match pattern: '%s'", key)
+		p, err := ParseMatchPattern(item)
+		if err != nil {
+			log.Fatal(err)
 		}
-
-		switch parts[0] {
-		case "eq", "bit", "default":
-			p.Operation = parts[0]
-			if len(parts) >= 2 {
-				p.Pattern = parts[1]
-			}
-			p.Label = value
-
-		default:
-			log.Fatalf("evaluateMatchPatterns: unrecognized form '%s': %s", parts[0], key)
-		}
-
-		res = append(res, p)
+		res = append(res, *p)
 	}
 
 	return res, nil
+}
+
+// parses a key-value pattern field such as "eq 025f: TYPE_ONE"
+func ParseMatchPattern(item yaml.MapItem) (*MatchPattern, error) {
+
+	p := MatchPattern{}
+
+	key := strings.TrimSpace(item.Key.(string))
+	value := strings.TrimSpace(item.Value.(string))
+
+	parts := strings.SplitN(key, " ", 2)
+	if len(parts) <= 0 || len(parts) > 2 {
+		return nil, fmt.Errorf("unexpected match pattern: '%s'", key)
+	}
+
+	switch parts[0] {
+	case "eq", "bit", "default":
+		p.Operation = parts[0]
+		if len(parts) >= 2 {
+			p.Pattern = parts[1]
+		}
+		p.Label = value
+
+	default:
+		log.Fatalf("evaluateMatchPatterns: unrecognized form '%s': %s", parts[0], key)
+	}
+	return &p, nil
 }
 
 func (t *Template) evaluateLayout() ([]value.DataField, error) {

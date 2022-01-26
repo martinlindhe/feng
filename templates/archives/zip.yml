@@ -16,19 +16,17 @@ extensions: [.zip]
 mime: application/zip
 endian: little
 
-constants:
-  u8[2] ZIPDIRENTRY:    01 02
-  u8[2] ZIPFILERECORD:  03 04
-  u8[2] ZIPENDLOCATOR:  05 06
-  u8[2] ZIPDATADESCR:   07 08
-  #u8[2] ZIPDIGITALSIG:  05 05
-
 structs:
   chunk:
     ascii[2] Signature: c'PK'
-    u8[2] Type: ??
+    u16 Type:
+      eq 0201: ZIPDIRENTRY
+      eq 0403: ZIPFILERECORD
+      eq 0605: ZIPENDLOCATOR
+      eq 0807: ZIPDATADESCR
+      #eq 0505: ZIPDIGITALSIG
 
-    if self.Type in (ZIPFILERECORD):
+    if self.Type == ZIPFILERECORD:
       label: ZIPFILERECORD
       u16 Version needed to extract: ??
       u16 Flags: ??
@@ -49,7 +47,7 @@ structs:
       u8[self.Extra field length] Extra field: ??
       u8[self.Compressed size] Data: ??
 
-    if self.Type in (ZIPDIRENTRY):
+    if self.Type == ZIPDIRENTRY:
       label: ZIPDIRENTRY
       u16 Version made by: ??
       u16 Version needed to extract: ??
@@ -76,13 +74,13 @@ structs:
       u8[self.Extra field length] Extra field: ??
       ascii[self.Comment length] Comment: ??
 
-    if self.Type in (ZIPDATADESCR):
+    if self.Type == ZIPDATADESCR:
       label: ZIPDATADESCR
       u32 CRC: ??
       u32 Compressed size: ??
       u32 Uncompressed size: ??
 
-    if self.Type in (ZIPENDLOCATOR):
+    if self.Type == ZIPENDLOCATOR:
       label: ZIPENDLOCATOR
       u16 Disk number: ??
       u16 Start Disk Number: ??

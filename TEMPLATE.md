@@ -24,6 +24,10 @@
     ascii[2] BIG:    c'MM'
     ascii[2] LITTLE: c'II'
 
+    u16 RES_STRING_POOL_TYPE: 00 01
+
+Constants is always expressed in network byte order
+
 
 # data types
 
@@ -37,7 +41,12 @@
     dostime             16-bit MS-DOS timestamp, in UTC
 
 
-    comp:zlib[self.Size]  mark area as zlib compressed data
+    compressed:zlib[self.Size]  mark area as zlib compressed data
+
+    u16 Type:
+      eq 0000: TYPE_NULL            these types will evaluate as constants
+      eq 0001: TYPE_STRING_POOL
+      default: invalid
 
 
 # arrays
@@ -58,22 +67,31 @@
     u8[FILE_SIZE-self.offset] Extra: ??         tags the remaining bytes
 
 
-# if-blocks
+# if-statements
 
-    if self.Signature in (BIG):
+NOTE: variables used in if-statements cannot contain spaces
+
+    if self.Signature == BIG:   # where big is a constant or a eq pattern type value
       ...
 
-    if self.Signature in (LITTLE):
+    if self.Signature == 5:
       ...
 
-    if self.Signature notin (BIG, LITTLE):
-      ...
+    # example from bmp.yml
+    u32 HeaderSize:
+      eq 0000_000c: V2   # V2 automatically becomes a constant
+      eq 0000_0028: V3
+      eq 0000_006c: V4
+      eq 0000_007c: V5
+      default: invalid
 
-    u8 Bit field:
-      bit b1000_0000: High bit
+    if self.HeaderSize in {V3, V4, V5}:
+      i32 Width: ??
 
-    if self.Bit field.High bit in (1):   # true if bitfield value is exactly 1
-      ...
 
-    if self.Bit field.High bit:          # true if bitfield value is non-zero
-      ...
+    # example from cab.yml
+    u16 Flags:
+      bit b00000000_00000100: ReservePresent  # ReservePresent automatically becomes a constant
+
+    if self.Flags & ReservePresent:
+      u16 cbCFHeader: ??  # size of per-cabinet reserved area

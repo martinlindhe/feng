@@ -47,7 +47,7 @@ func main() {
 
 			for _, field := range layout.Fields {
 				switch field.Format.Kind {
-				case "comp:zlib":
+				case "compressed:zlib":
 					log.Printf("%s.%s %s: extracting zlib stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					reader, err := zlib.NewReader(bytes.NewReader(field.Value))

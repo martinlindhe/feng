@@ -7,26 +7,28 @@ IHDR
   [000010] Width                          u32 be           150                   00 00 00 96
   [000014] Height                         u32 be           200                   00 00 00 c8
   [000018] Bit depth                      u8               8                     08
-           - 8 bpp                        eq            8
-  [000019] Color type                     u8               3                     03
-           - palette                      eq            3
+           - 8 bpp                        eq               8
+  [000019] ColorType                      u8               3                     03
+           - COLOR_PALETTE                eq               3
   [00001a] Compression method             u8               0                     00
-           - deflate                      eq            0
+           - deflate                      eq               0
   [00001b] Filter method                  u8               0                     00
-           - none+sub+up+average+paeth    eq            0
+           - none+sub+up+average+paeth    eq               0
   [00001c] Interlace method               u8               0                     00
-           - no interlace                 eq            0
+           - no interlace                 eq               0
   [00001d] Checksum                       u32 be           1029433431            3d 5b e8 57
 
-Chunk_0
+Chunk_0 self.Type
   [000021] Length                         u32 be           4                     00 00 00 04
-  [000025] Type                           ascii[4]         gAMA                  67 41 4d 41
+  [000025] Type                           u32 be           1732332865            67 41 4d 41
+           - gAMA                         eq               1732332865
   [000029] Gamma                          u32 be           55531                 00 00 d8 eb
   [00002d] Checksum                       u32 be           4112258218            f5 1c 14 aa
 
-Chunk_1
+Chunk_1 self.Type
   [000031] Length                         u32 be           32                    00 00 00 20
-  [000035] Type                           ascii[4]         cHRM                  63 48 52 4d
+  [000035] Type                           u32 be           1665684045            63 48 52 4d
+           - cHRM                         eq               1665684045
   [000039] White Point x                  u32 be           34570                 00 00 87 0a
   [00003d] White Point y                  u32 be           35850                 00 00 8c 0a
   [000041] Red x                          u32 be           62998                 00 00 f6 16
@@ -37,21 +39,24 @@ Chunk_1
   [000055] Blue y                         u32 be           7501                  00 00 1d 4d
   [000059] Checksum                       u32 be           1619704104            60 8a b9 28
 
-Chunk_2
+Chunk_2 self.Type
   [00005d] Length                         u32 be           768                   00 00 03 00
-  [000061] Type                           ascii[4]         PLTE                  50 4c 54 45
+  [000061] Type                           u32 be           1347179589            50 4c 54 45
+           - PLTE                         eq               1347179589
   [000065] Palette                        u8[768]                                00 00 00 01 01 01 02 02 02 03 03 03 04 04 04 05 05 05 06 06 06 07 07 07 08 08 08 09 09 09 0a 0a ...
   [000365] Checksum                       u32 be           3803209085            e2 b0 5d 7d
 
-Chunk_3
+Chunk_3 self.Type
   [000369] Length                         u32 be           28445                 00 00 6f 1d
-  [00036d] Type                           ascii[4]         IDAT                  49 44 41 54
+  [00036d] Type                           u32 be           1229209940            49 44 41 54
+           - IDAT                         eq               1229209940
   [000371] Image data                     u8[28445]                              78 5e 55 fd 05 5c db d9 d6 36 0c a7 c5 dd dd dd dd dd dd 35 21 09 71 37 20 09 04 97 40 20 81 20 ...
   [00728e] Checksum                       u32 be           2397905799            8e ed 23 87
 
-Chunk_4
+Chunk_4 self.Type
   [007292] Length                         u32 be           0                     00 00 00 00
-  [007296] Type                           ascii[4]         IEND                  49 45 4e 44
+  [007296] Type                           u32 be           1229278788            49 45 4e 44
+           - IEND                         eq               1229278788
   [00729a] Checksum                       u32 be           2923585666            ae 42 60 82
 
 EOF

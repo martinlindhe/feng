@@ -3,84 +3,84 @@ Header
   [000004] Signature                      ascii[4]         PFS                   50 46 53 20
   [0068a1] Count                          u32 le           10                    00 00 00 0a
 
-Entry_0 FILEENTRY
+Block_0 FILEENTRY
   [0068a5] CRC                            u32 le           1222748710            48 e1 aa 26
   [0068a9] FileOffset                     u32 le           19419                 00 00 4b db
   [0068ad] Expanded size                  u32 le           5174                  00 00 14 36
   [004bdb] Compressed size                u32 le           4540                  00 00 11 bc
   [004bdf] Expanded size                  u32 le           5174                  00 00 14 36
-  [004be3] Data                           comp:zlib[4540]                        78 9c 9d 57 0b 54 53 c7 ba fe 7d 62 55 ac 20 51 aa 52 a8 80 a0 c5 17 12 d4 f2 28 3e 8a 47 11 54 ...
+  [004be3] Data                           compressed:zlib[4540]                       78 9c 9d 57 0b 54 53 c7 ba fe 7d 62 55 ac 20 51 aa 52 a8 80 a0 c5 17 12 d4 f2 28 3e 8a 47 11 54 ...
 
-Entry_1 FILEENTRY
+Block_1 FILEENTRY
   [0068b1] CRC                            u32 le           1614669302            60 3d e5 f6
   [0068b5] FileOffset                     u32 le           3788                  00 00 0e cc
   [0068b9] Expanded size                  u32 le           2102                  00 00 08 36
   [000ecc] Compressed size                u32 le           1900                  00 00 07 6c
   [000ed0] Expanded size                  u32 le           2102                  00 00 08 36
-  [000ed4] Data                           comp:zlib[1900]                        78 9c 35 54 0d 58 93 d7 15 7e 43 7e 08 3f 2a a0 12 d4 28 82 01 15 a3 20 82 a8 e8 80 29 2a 7f 0b ...
+  [000ed4] Data                           compressed:zlib[1900]                       78 9c 35 54 0d 58 93 d7 15 7e 43 7e 08 3f 2a a0 12 d4 28 82 01 15 a3 20 82 a8 e8 80 29 2a 7f 0b ...
 
-Entry_2 DIRENTRY
+Block_2 DIRENTRY
   [0068bd] CRC                            u32 le           1633159881            61 58 0a c9
   [0068c1] FileOffset                     u32 le           26681                 00 00 68 39
   [0068c5] Expanded size                  u32 le           142                   00 00 00 8e
   [006839] Compressed size                u32 le           96                    00 00 00 60
   [00683d] Expanded size                  u32 le           142                   00 00 00 8e
-  [006841] Data                           comp:zlib[96]                          78 9c 4d cb 5d 0a 80 20 10 46 d1 79 cc a8 a0 8d 08 b9 a1 f0 67 c2 48 33 d4 70 fb d9 04 d2 c3 c0 ...
+  [006841] Data                           compressed:zlib[96]                       78 9c 4d cb 5d 0a 80 20 10 46 d1 79 cc a8 a0 8d 08 b9 a1 f0 67 c2 48 33 d4 70 fb d9 04 d2 c3 c0 ...
 
-Entry_3 FILEENTRY
+Block_3 FILEENTRY
   [0068c9] CRC                            u32 le           1687634607            64 97 42 af
   [0068cd] FileOffset                     u32 le           12                    00 00 00 0c
   [0068d1] Expanded size                  u32 le           5174                  00 00 14 36
   [00000c] Compressed size                u32 le           3768                  00 00 0e b8
   [000010] Expanded size                  u32 le           5174                  00 00 14 36
-  [000014] Data                           comp:zlib[3768]                        78 9c 9d 57 7d 70 1b c7 75 bf f4 4b 70 3d b6 69 4b 94 20 5a 14 49 b3 e4 08 51 a7 2e 6d 49 11 5c ...
+  [000014] Data                           compressed:zlib[3768]                       78 9c 9d 57 7d 70 1b c7 75 bf f4 4b 70 3d b6 69 4b 94 20 5a 14 49 b3 e4 08 51 a7 2e 6d 49 11 5c ...
 
-Entry_4 FILEENTRY
+Block_4 FILEENTRY
   [0068d5] CRC                            u32 le           1873500504            6f ab 59 58
   [0068d9] FileOffset                     u32 le           23967                 00 00 5d 9f
   [0068dd] Expanded size                  u32 le           5964                  00 00 17 4c
   [005d9f] Compressed size                u32 le           2706                  00 00 0a 92
   [005da3] Expanded size                  u32 le           5964                  00 00 17 4c
-  [005da7] Data                           comp:zlib[2706]                        78 9c c5 58 7b 5c 94 55 1a 7e bf e1 22 0e 63 e6 0d f1 86 94 a2 5c 5c 2a d3 02 bc 80 57 c6 d4 d6 ...
+  [005da7] Data                           compressed:zlib[2706]                       78 9c c5 58 7b 5c 94 55 1a 7e bf e1 22 0e 63 e6 0d f1 86 94 a2 5c 5c 2a d3 02 bc 80 57 c6 d4 d6 ...
 
-Entry_5 FILEENTRY
+Block_5 FILEENTRY
   [0068e1] CRC                            u32 le           1948202640            74 1f 36 90
   [0068e5] FileOffset                     u32 le           5696                  00 00 16 40
   [0068e9] Expanded size                  u32 le           2102                  00 00 08 36
   [001640] Compressed size                u32 le           1868                  00 00 07 4c
   [001644] Expanded size                  u32 le           2102                  00 00 08 36
-  [001648] Data                           comp:zlib[1868]                        78 9c 35 54 09 3c 14 f8 1e ff cd 61 c6 d1 a1 22 57 18 47 34 23 96 d8 49 89 0c 2d 46 4d ec c8 31 ...
+  [001648] Data                           compressed:zlib[1868]                       78 9c 35 54 09 3c 14 f8 1e ff cd 61 c6 d1 a1 22 57 18 47 34 23 96 d8 49 89 0c 2d 46 4d ec c8 31 ...
 
-Entry_6 FILEENTRY
+Block_6 FILEENTRY
   [0068ed] CRC                            u32 le           2290793777            88 8a bd 31
   [0068f1] FileOffset                     u32 le           15193                 00 00 3b 59
   [0068f5] Expanded size                  u32 le           5174                  00 00 14 36
   [003b59] Compressed size                u32 le           4218                  00 00 10 7a
   [003b5d] Expanded size                  u32 le           5174                  00 00 14 36
-  [003b61] Data                           comp:zlib[4218]                        78 9c 45 57 0d 70 db f6 75 47 76 4d 2d 3b 69 a2 38 b1 c3 44 ae 17 a6 cb b5 ea 25 25 40 7c 90 94 ...
+  [003b61] Data                           compressed:zlib[4218]                       78 9c 45 57 0d 70 db f6 75 47 76 4d 2d 3b 69 a2 38 b1 c3 44 ae 17 a6 cb b5 ea 25 25 40 7c 90 94 ...
 
-Entry_7 FILEENTRY
+Block_7 FILEENTRY
   [0068f9] CRC                            u32 le           2634741396            9d 0a f6 94
   [0068fd] FileOffset                     u32 le           7572                  00 00 1d 94
   [006901] Expanded size                  u32 le           2102                  00 00 08 36
   [001d94] Compressed size                u32 le           1878                  00 00 07 56
   [001d98] Expanded size                  u32 le           2102                  00 00 08 36
-  [001d9c] Data                           comp:zlib[1878]                        78 9c 35 53 09 54 93 67 16 7d 3f 21 24 10 94 7d 0f 81 20 24 10 50 f6 ad 14 50 91 45 0c 24 84 b2 ...
+  [001d9c] Data                           compressed:zlib[1878]                       78 9c 35 53 09 54 93 67 16 7d 3f 21 24 10 94 7d 0f 81 20 24 10 50 f6 ad 14 50 91 45 0c 24 84 b2 ...
 
-Entry_8 FILEENTRY
+Block_8 FILEENTRY
   [006905] CRC                            u32 le           3329587416            c6 75 78 d8
   [006909] FileOffset                     u32 le           11356                 00 00 2c 5c
   [00690d] Expanded size                  u32 le           5174                  00 00 14 36
   [002c5c] Compressed size                u32 le           3829                  00 00 0e f5
   [002c60] Expanded size                  u32 le           5174                  00 00 14 36
-  [002c64] Data                           comp:zlib[3829]                        78 9c a5 97 fd 73 db 46 7a c7 37 67 7b ca 5c 7a 33 2a a9 49 75 e7 c8 8c 1c 17 b5 ec d8 94 22 0a ...
+  [002c64] Data                           compressed:zlib[3829]                       78 9c a5 97 fd 73 db 46 7a c7 37 67 7b ca 5c 7a 33 2a a9 49 75 e7 c8 8c 1c 17 b5 ec d8 94 22 0a ...
 
-Entry_9 FILEENTRY
+Block_9 FILEENTRY
   [006911] CRC                            u32 le           3590404290            d6 01 38 c2
   [006915] FileOffset                     u32 le           9458                  00 00 24 f2
   [006919] Expanded size                  u32 le           2102                  00 00 08 36
   [0024f2] Compressed size                u32 le           1890                  00 00 07 62
   [0024f6] Expanded size                  u32 le           2102                  00 00 08 36
-  [0024fa] Data                           comp:zlib[1890]                        78 9c 35 54 0b 34 dc 67 16 bf ff 31 e6 8d 21 c4 8c 37 35 46 bc 1f 15 22 f1 4c ca 88 d7 20 c8 a4 ...
+  [0024fa] Data                           compressed:zlib[1890]                       78 9c 35 54 0b 34 dc 67 16 bf ff 31 e6 8d 21 c4 8c 37 35 46 bc 1f 15 22 f1 4c ca 88 d7 20 c8 a4 ...
 
 0x000d (13) unmapped bytes

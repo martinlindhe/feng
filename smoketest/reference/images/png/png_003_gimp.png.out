@@ -7,38 +7,41 @@ IHDR
   [000010] Width                          u32 be           1                     00 00 00 01
   [000014] Height                         u32 be           1                     00 00 00 01
   [000018] Bit depth                      u8               8                     08
-           - 8 bpp                        eq            8
-  [000019] Color type                     u8               2                     02
-           - RGB                          eq            2
+           - 8 bpp                        eq               8
+  [000019] ColorType                      u8               2                     02
+           - COLOR_RGB                    eq               2
   [00001a] Compression method             u8               0                     00
-           - deflate                      eq            0
+           - deflate                      eq               0
   [00001b] Filter method                  u8               0                     00
-           - none+sub+up+average+paeth    eq            0
+           - none+sub+up+average+paeth    eq               0
   [00001c] Interlace method               u8               0                     00
-           - no interlace                 eq            0
+           - no interlace                 eq               0
   [00001d] Checksum                       u32 be           2423739358            90 77 53 de
 
-Chunk_0
+Chunk_0 self.Type
   [000021] Length                         u32 be           389                   00 00 01 85
-  [000025] Type                           ascii[4]         iCCP                  69 43 43 50
+  [000025] Type                           u32 be           1766015824            69 43 43 50
+           - iCCP                         eq               1766015824
   [000029] ProfileName                    asciiz           ICC profile           49 43 43 20 70 72 6f 66 69 6c 65 00
   [000035] Compression method             u8               0                     00
-           - Deflate                      eq            0
+           - Deflate                      eq               0
   [000036] Compressed profile             u8[376]                                28 91 7d 91 3d 48 c3 40 1c c5 5f 53 c5 0f 2a 82 56 10 11 c9 50 9d 2c 88 8a 38 4a 15 8b 60 a1 b4 ...
   [0001ae] Checksum                       u32 be           2358576981            8c 95 07 55
 
-Chunk_1
+Chunk_1 self.Type
   [0001b2] Length                         u32 be           9                     00 00 00 09
-  [0001b6] Type                           ascii[4]         pHYs                  70 48 59 73
+  [0001b6] Type                           u32 be           1883789683            70 48 59 73
+           - pHYs                         eq               1883789683
   [0001ba] Pixels per unit, X axis        u32 be           11811                 00 00 2e 23
   [0001be] Pixels per unit, Y axis        u32 be           11811                 00 00 2e 23
   [0001c2] Unit specifier                 u8               1                     01
-           - Meter                        eq            1
+           - Meter                        eq               1
   [0001c3] Checksum                       u32 be           2024095606            78 a5 3f 76
 
-Chunk_2
+Chunk_2 self.Type
   [0001c7] Length                         u32 be           7                     00 00 00 07
-  [0001cb] Type                           ascii[4]         tIME                  74 49 4d 45
+  [0001cb] Type                           u32 be           1950960965            74 49 4d 45
+           - tIME                         eq               1950960965
   [0001cf] Year                           u16 be           2021                  07 e5
   [0001d1] Month                          u8               3                     03
   [0001d2] Day                            u8               30                    1e
@@ -47,22 +50,25 @@ Chunk_2
   [0001d5] Second                         u8               54                    36
   [0001d6] Checksum                       u32 be           2095129379            7c e1 23 23
 
-Chunk_3
+Chunk_3 self.Type
   [0001da] Length                         u32 be           25                    00 00 00 19
-  [0001de] Type                           ascii[4]         tEXt                  74 45 58 74
+  [0001de] Type                           u32 be           1950701684            74 45 58 74
+           - tEXt                         eq               1950701684
   [0001e2] Keyword                        asciiz           Comment               43 6f 6d 6d 65 6e 74 00
   [0001ea] Text                           ascii[17]        Created with GIMP     43 72 65 61 74 65 64 20 77 69 74 68 20 47 49 4d 50
   [0001fb] Checksum                       u32 be           1468075543            57 81 0e 17
 
-Chunk_4
+Chunk_4 self.Type
   [0001ff] Length                         u32 be           12                    00 00 00 0c
-  [000203] Type                           ascii[4]         IDAT                  49 44 41 54
+  [000203] Type                           u32 be           1229209940            49 44 41 54
+           - IDAT                         eq               1229209940
   [000207] Image data                     u8[12]                                 08 d7 63 b8 c9 c9 09 00 02 aa 00 ec
   [000213] Checksum                       u32 be           1870780893            6f 81 d9 dd
 
-Chunk_5
+Chunk_5 self.Type
   [000217] Length                         u32 be           0                     00 00 00 00
-  [00021b] Type                           ascii[4]         IEND                  49 45 4e 44
+  [00021b] Type                           u32 be           1229278788            49 45 4e 44
+           - IEND                         eq               1229278788
   [00021f] Checksum                       u32 be           2923585666            ae 42 60 82
 
 EOF

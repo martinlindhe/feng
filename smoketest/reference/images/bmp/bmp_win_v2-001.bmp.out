@@ -5,8 +5,8 @@ FILEHEADER BITMAPFILEHEADER
   [00000a] Bitmap offset                  u32 le           794                   00 00 03 1a
 
 DIBHEADER BITMAPINFOHEADER
-  [00000e] Header size                    u32 le           12                    00 00 00 0c
-           - V2 (Windows 2.x)             eq            12
+  [00000e] HeaderSize                     u32 le           12                    00 00 00 0c
+           - V2                           eq               12
   [000012] Width                          i16 le           127                   00 7f
   [000014] Height                         i16 le           64                    00 40
   [000016] Color planes                   u16 le           1                     00 01

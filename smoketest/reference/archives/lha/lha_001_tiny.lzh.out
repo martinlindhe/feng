@@ -3,7 +3,7 @@ Header
   [000001] Checksum                       u8               0                     00
   [000002] Signature                      ascii[3]         -lh                   2d 6c 68
   [000005] Compression method             ascii            0                     30
-           - None                         eq            48
+           - None                         eq               48
   [000006] Signature                      ascii            -                     2d
   [000007] Compressed size                u32 le           6                     00 00 00 06
   [00000b] Original size                  u32 le           6                     00 00 00 06
@@ -13,7 +13,7 @@ Header
   [000014] Header Level                   u8               2                     02
   [000015] Uncompressed CRC16             u16 le           23092                 5a 34
   [000017] OS ID                          u8               85                    55
-           - UNIX                         eq            85
+           - UNIX                         eq               85
   [000018] Size of next extended header   u16 le           5                     00 05
   [00001a] Uncompressed CRC16             u16 le           14336                 38 00
 

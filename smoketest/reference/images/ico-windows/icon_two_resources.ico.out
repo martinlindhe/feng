@@ -1,7 +1,7 @@
 ICONDIR
   [000000] Reserved                       u16 le           0                     00 00
   [000002] Type                           u16 le           1                     00 01
-           - Icon                         eq            1
+           - TYPE_ICON                    eq               1
   [000004] Resources                      u16 le           2                     00 02
 
 ICONDIRENTRY_0

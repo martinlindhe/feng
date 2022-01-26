@@ -2,7 +2,7 @@
 
 # STATUS: 5%
 
-# HIGH TODO: ResStringPool_string[self.stringCount] strData: ??          # XXX for this to work, need custom types
+# HIGH TODO: custom type ResStringPool_string[self.stringCount] strData: ??     # XXX for this to work, need custom types
 
 references:
   - https://www.sweetscape.com/010editor/repository/files/AndroidResource.bt
@@ -17,11 +17,6 @@ name: Android Resource
 extensions: [.arsc, .xml]
 endian: little
 
-constants:
-  # XXX should not need constants for if-statements
-  u16 RES_STRING_POOL_TYPE: 00 01
-  u16 RES_TABLE_TYPE:       00 02
-
 types:
   # XXX IMPLEMENT
   ResStringPool_string:
@@ -32,33 +27,36 @@ types:
 structs:
   chunk:
     u16 Type:
-      eq 0000: RES_NULL_TYPE
-      eq 0001: RES_STRING_POOL_TYPE
-      eq 0002: RES_TABLE_TYPE
-      eq 0003: RES_XML_TYPE
-      # Chunk types in RES_XML_TYPE
-      eq 0100: RES_XML_START_NAMESPACE_TYPE
-      eq 0101: RES_XML_END_NAMESPACE_TYPE
-      eq 0102: RES_XML_START_ELEMENT_TYPE
-      eq 0103: RES_XML_END_ELEMENT_TYPE
-      eq 0104: RES_XML_CDATA_TYPE
-      eq 017f: RES_XML_LAST_CHUNK_TYPE
-      eq 0180: RES_XML_RESOURCE_MAP_TYPE
-      # Chunk types in RES_TABLE_TYPE
-      eq 0200: RES_TABLE_PACKAGE_TYPE
-      eq 0201: RES_TABLE_TYPE_TYPE
-      eq 0202: RES_TABLE_TYPE_SPEC_TYPE
-      eq 0203: RES_TABLE_LIBRARY_TYPE
+      eq 0000: TYPE_NULL
+      eq 0001: TYPE_STRING_POOL
+      eq 0002: TYPE_TABLE
+      eq 0003: TYPE_XML
+      # Chunk types in TYPE_XML
+      eq 0100: TYPE_XML_START_NAMESPACE
+      eq 0101: TYPE_XML_END_NAMESPACE
+      eq 0102: TYPE_XML_START_ELEMENT
+      eq 0103: TYPE_XML_END_ELEMENT
+      eq 0104: TYPE_XML_CDATA
+      eq 017f: TYPE_XML_LAST_CHUNK
+      eq 0180: TYPE_XML_RESOURCE_MAP
+      # Chunk types in TYPE_TABLE
+      eq 0200: TYPE_TABLE_PACKAGE
+      eq 0201: TYPE_TABLE_TYPE
+      eq 0202: TYPE_TABLE_TYPE_SPEC
+      eq 0203: TYPE_TABLE_LIBRARY
       default: invalid
     u16 Header size: ??
     u32 Size: ??
 
-    if self.Type in (RES_TABLE_TYPE):
-      label: RES_TABLE
+    if self.Type == TYPE_XML:
+      label: XML
+
+    if self.Type == TYPE_TABLE:
+      label: TABLE
       u32 Package count: ??
 
-    if self.Type in (RES_STRING_POOL_TYPE):
-      label: RES_STRING_POOL
+    if self.Type == TYPE_STRING_POOL:
+      label: STRING_POOL
       u32 stringCount: ?? # Number of strings in this pool
       u32 styleCount: ?? # Number of style span arrays in the pool
       u32 flags: ??

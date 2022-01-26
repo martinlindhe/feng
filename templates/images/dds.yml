@@ -40,7 +40,7 @@ structs:
     u32 MipMapCount: ??
     u32[11] Reserved1: ??
 
-    if self.Flags.DDSD_PIXELFORMAT:
+    if self.Flags &DDSD_PIXELFORMAT:
       # XXX this is type DDS_PIXELFORMAT:
       u32 Pixel format size: ??           # XXX always 32 bytes?
       u32 Pixel format flags:

@@ -1,315 +1,340 @@
 Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
-  [000004] Version                        ascii            9                     39
-           - GIF89a                       eq            57
-  [000005] Signature 2                    u8               97                    61
+  [000004] Version                        u16 le           24889                 61 39
+           - GIF89a                       eq               24889
   [000006] Logical screen width           u16 le           16                    00 10
   [000008] Logical screen height          u16 le           16                    00 10
   [00000a] ScreenDescriptor               u8               162                   a2
-           - GlobalColorTableSize         bit           2
-           - Sort flag                    bit           0
-           - Color resolution             bit           2
-           - GlobalColorTablePresent      bit           1
+           - GlobalColorTableSize         bit              2
+           - Sort                         bit              0
+           - ColorResolution              bit              2
+           - GlobalColorTablePresent      bit              1
   [00000b] Background color               u8               7                     07
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global Color Table             u8[24]                                 c9 c1 b1 d4 93 24 c4 b4 93 bf a6 75 bf 8f 36 ba 97 56 c3 c1 bd ff ff ff
 
 Section_0 BLOCK_EXTENSION
-  [000025] Block type                     u8               33                    21
-  [000026] Extension type                 u8               255                   ff
+  [000025] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [000026] ExtensionType                  u8               255                   ff
 
-Section_1
-  [000027] Block type                     u8               11                    0b
+Section_1 self.BlockType
+  [000027] BlockType                      u8               11                    0b
 
-Section_2
-  [000028] Block type                     u8               78                    4e
+Section_2 self.BlockType
+  [000028] BlockType                      u8               78                    4e
 
-Section_3
-  [000029] Block type                     u8               69                    45
+Section_3 self.BlockType
+  [000029] BlockType                      u8               69                    45
 
-Section_4
-  [00002a] Block type                     u8               84                    54
+Section_4 self.BlockType
+  [00002a] BlockType                      u8               84                    54
 
-Section_5
-  [00002b] Block type                     u8               83                    53
+Section_5 self.BlockType
+  [00002b] BlockType                      u8               83                    53
 
-Section_6
-  [00002c] Block type                     u8               67                    43
+Section_6 self.BlockType
+  [00002c] BlockType                      u8               67                    43
 
-Section_7
-  [00002d] Block type                     u8               65                    41
+Section_7 self.BlockType
+  [00002d] BlockType                      u8               65                    41
 
-Section_8
-  [00002e] Block type                     u8               80                    50
+Section_8 self.BlockType
+  [00002e] BlockType                      u8               80                    50
 
-Section_9
-  [00002f] Block type                     u8               69                    45
+Section_9 self.BlockType
+  [00002f] BlockType                      u8               69                    45
 
-Section_10
-  [000030] Block type                     u8               50                    32
+Section_10 self.BlockType
+  [000030] BlockType                      u8               50                    32
 
-Section_11
-  [000031] Block type                     u8               46                    2e
+Section_11 self.BlockType
+  [000031] BlockType                      u8               46                    2e
 
-Section_12
-  [000032] Block type                     u8               48                    30
+Section_12 self.BlockType
+  [000032] BlockType                      u8               48                    30
 
-Section_13
-  [000033] Block type                     u8               3                     03
+Section_13 self.BlockType
+  [000033] BlockType                      u8               3                     03
 
-Section_14
-  [000034] Block type                     u8               1                     01
+Section_14 self.BlockType
+  [000034] BlockType                      u8               1                     01
 
-Section_15
-  [000035] Block type                     u8               0                     00
+Section_15 self.BlockType
+  [000035] BlockType                      u8               0                     00
 
-Section_16
-  [000036] Block type                     u8               0                     00
+Section_16 self.BlockType
+  [000036] BlockType                      u8               0                     00
 
-Section_17
-  [000037] Block type                     u8               0                     00
+Section_17 self.BlockType
+  [000037] BlockType                      u8               0                     00
 
 Section_18 BLOCK_EXTENSION
-  [000038] Block type                     u8               33                    21
-  [000039] Extension type                 u8               249                   f9
+  [000038] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [000039] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [00003a] Size                           u8               4                     04
   [00003b] Flags                          u8               5                     05
-           - Transparent color            bit           1
-           - User input                   bit           0
-           - Disposal method              bit           1
-           - Reserved                     bit           0
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
   [00003c] Delay time                     u16 le           0                     00 00
   [00003e] Transparent color index        u8               7                     07
   [00003f] Block terminator               u8               0                     00
 
 Section_19 BLOCK_IMAGE
-  [000040] Block type                     u8               44                    2c
+  [000040] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [000041] Left position                  u16 le           0                     00 00
   [000043] Top position                   u16 le           0                     00 00
   [000045] Image width                    u16 le           16                    00 10
   [000047] Image height                   u16 le           16                    00 10
   [000049] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [00004a] LZWMinimumCodeSize             u8               3                     03
   [00004b] Data size                      u8               67                    43
   [00004c] Data                           u8[67]                                 78 ba 47 c4 90 39 17 57 08 6d 9e 52 e0 bd d9 c6 75 d6 c7 8c 64 19 71 8c 61 54 cb 30 1c ae 0b cb ...
   [00008f] BlockTerminator                u8               0                     00
 
 Section_20 BLOCK_EXTENSION
-  [000090] Block type                     u8               33                    21
-  [000091] Extension type                 u8               249                   f9
+  [000090] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [000091] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [000092] Size                           u8               4                     04
   [000093] Flags                          u8               5                     05
-           - Transparent color            bit           1
-           - User input                   bit           0
-           - Disposal method              bit           1
-           - Reserved                     bit           0
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
   [000094] Delay time                     u16 le           0                     00 00
   [000096] Transparent color index        u8               7                     07
   [000097] Block terminator               u8               0                     00
 
 Section_21 BLOCK_IMAGE
-  [000098] Block type                     u8               44                    2c
+  [000098] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [000099] Left position                  u16 le           2                     00 02
   [00009b] Top position                   u16 le           0                     00 00
   [00009d] Image width                    u16 le           14                    00 0e
   [00009f] Image height                   u16 le           16                    00 10
   [0000a1] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [0000a2] LZWMinimumCodeSize             u8               3                     03
   [0000a3] Data size                      u8               62                    3e
   [0000a4] Data                           u8[62]                                 78 aa 11 fb af 35 a8 8c 39 d2 11 b2 ac c5 da c6 1d de b5 88 23 69 3e 1b e5 1e 45 f1 2e 71 3c c3 ...
   [0000e2] BlockTerminator                u8               0                     00
 
 Section_22 BLOCK_EXTENSION
-  [0000e3] Block type                     u8               33                    21
-  [0000e4] Extension type                 u8               249                   f9
+  [0000e3] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [0000e4] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [0000e5] Size                           u8               4                     04
   [0000e6] Flags                          u8               5                     05
-           - Transparent color            bit           1
-           - User input                   bit           0
-           - Disposal method              bit           1
-           - Reserved                     bit           0
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
   [0000e7] Delay time                     u16 le           0                     00 00
   [0000e9] Transparent color index        u8               7                     07
   [0000ea] Block terminator               u8               0                     00
 
 Section_23 BLOCK_IMAGE
-  [0000eb] Block type                     u8               44                    2c
+  [0000eb] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [0000ec] Left position                  u16 le           0                     00 00
   [0000ee] Top position                   u16 le           0                     00 00
   [0000f0] Image width                    u16 le           16                    00 10
   [0000f2] Image height                   u16 le           16                    00 10
   [0000f4] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [0000f5] LZWMinimumCodeSize             u8               3                     03
   [0000f6] Data size                      u8               62                    3e
   [0000f7] Data                           u8[62]                                 78 ba 67 c6 90 39 17 e3 7c 21 d4 45 73 de 8c a7 81 cb b7 00 00 49 10 07 8a 6e eb ea a6 55 cc be ...
   [000135] BlockTerminator                u8               0                     00
 
 Section_24 BLOCK_EXTENSION
-  [000136] Block type                     u8               33                    21
-  [000137] Extension type                 u8               249                   f9
+  [000136] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [000137] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [000138] Size                           u8               4                     04
   [000139] Flags                          u8               5                     05
-           - Transparent color            bit           1
-           - User input                   bit           0
-           - Disposal method              bit           1
-           - Reserved                     bit           0
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
   [00013a] Delay time                     u16 le           0                     00 00
   [00013c] Transparent color index        u8               7                     07
   [00013d] Block terminator               u8               0                     00
 
 Section_25 BLOCK_IMAGE
-  [00013e] Block type                     u8               44                    2c
+  [00013e] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [00013f] Left position                  u16 le           0                     00 00
   [000141] Top position                   u16 le           2                     00 02
   [000143] Image width                    u16 le           16                    00 10
   [000145] Image height                   u16 le           14                    00 0e
   [000147] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [000148] LZWMinimumCodeSize             u8               3                     03
   [000149] Data size                      u8               62                    3e
   [00014a] Data                           u8[62]                                 78 0a a0 7e c6 bc c3 d8 8b f1 d5 e6 b0 d4 dc f5 29 82 30 4d 41 70 94 e5 a9 a4 29 6b ba b0 da ba ...
   [000188] BlockTerminator                u8               0                     00
 
 Section_26 BLOCK_EXTENSION
-  [000189] Block type                     u8               33                    21
-  [00018a] Extension type                 u8               249                   f9
+  [000189] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [00018a] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [00018b] Size                           u8               4                     04
   [00018c] Flags                          u8               5                     05
-           - Transparent color            bit           1
-           - User input                   bit           0
-           - Disposal method              bit           1
-           - Reserved                     bit           0
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
   [00018d] Delay time                     u16 le           0                     00 00
   [00018f] Transparent color index        u8               7                     07
   [000190] Block terminator               u8               0                     00
 
 Section_27 BLOCK_IMAGE
-  [000191] Block type                     u8               44                    2c
+  [000191] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [000192] Left position                  u16 le           0                     00 00
   [000194] Top position                   u16 le           0                     00 00
   [000196] Image width                    u16 le           16                    00 10
   [000198] Image height                   u16 le           16                    00 10
   [00019a] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [00019b] LZWMinimumCodeSize             u8               3                     03
   [00019c] Data size                      u8               62                    3e
   [00019d] Data                           u8[62]                                 78 ba 07 c0 90 39 17 97 10 6d d6 73 6f de 5c 07 32 de 78 0c c3 68 18 27 9a 56 eb ea be 51 cc a2 ...
   [0001db] BlockTerminator                u8               0                     00
 
 Section_28 BLOCK_EXTENSION
-  [0001dc] Block type                     u8               33                    21
-  [0001dd] Extension type                 u8               249                   f9
+  [0001dc] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [0001dd] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [0001de] Size                           u8               4                     04
   [0001df] Flags                          u8               5                     05
-           - Transparent color            bit           1
-           - User input                   bit           0
-           - Disposal method              bit           1
-           - Reserved                     bit           0
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
   [0001e0] Delay time                     u16 le           0                     00 00
   [0001e2] Transparent color index        u8               7                     07
   [0001e3] Block terminator               u8               0                     00
 
 Section_29 BLOCK_IMAGE
-  [0001e4] Block type                     u8               44                    2c
+  [0001e4] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [0001e5] Left position                  u16 le           0                     00 00
   [0001e7] Top position                   u16 le           0                     00 00
   [0001e9] Image width                    u16 le           14                    00 0e
   [0001eb] Image height                   u16 le           16                    00 10
   [0001ed] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [0001ee] LZWMinimumCodeSize             u8               3                     03
   [0001ef] Data size                      u8               60                    3c
   [0001f0] Data                           u8[60]                                 78 ba 27 c2 50 39 17 cf 18 6d 1e 00 d6 bd d9 c6 75 d6 c7 8c 64 19 71 4a 51 54 8c eb c2 ad 4c d7 ...
   [00022c] BlockTerminator                u8               0                     00
 
 Section_30 BLOCK_EXTENSION
-  [00022d] Block type                     u8               33                    21
-  [00022e] Extension type                 u8               249                   f9
+  [00022d] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [00022e] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [00022f] Size                           u8               4                     04
   [000230] Flags                          u8               5                     05
-           - Transparent color            bit           1
-           - User input                   bit           0
-           - Disposal method              bit           1
-           - Reserved                     bit           0
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
   [000231] Delay time                     u16 le           0                     00 00
   [000233] Transparent color index        u8               7                     07
   [000234] Block terminator               u8               0                     00
 
 Section_31 BLOCK_IMAGE
-  [000235] Block type                     u8               44                    2c
+  [000235] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [000236] Left position                  u16 le           0                     00 00
   [000238] Top position                   u16 le           0                     00 00
   [00023a] Image width                    u16 le           16                    00 10
   [00023c] Image height                   u16 le           16                    00 10
   [00023e] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [00023f] LZWMinimumCodeSize             u8               3                     03
   [000240] Data size                      u8               62                    3e
   [000241] Data                           u8[62]                                 78 ba 37 c3 90 39 17 57 29 6d 1e 21 e0 bd d9 c6 75 d6 c7 8c 64 19 71 0c 41 54 0b 00 1c ae 0b cb ...
   [00027f] BlockTerminator                u8               0                     00
 
 Section_32 BLOCK_EXTENSION
-  [000280] Block type                     u8               33                    21
-  [000281] Extension type                 u8               249                   f9
+  [000280] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [000281] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
   [000282] Size                           u8               4                     04
   [000283] Flags                          u8               5                     05
-           - Transparent color            bit           1
-           - User input                   bit           0
-           - Disposal method              bit           1
-           - Reserved                     bit           0
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
   [000284] Delay time                     u16 le           0                     00 00
   [000286] Transparent color index        u8               7                     07
   [000287] Block terminator               u8               0                     00
 
 Section_33 BLOCK_IMAGE
-  [000288] Block type                     u8               44                    2c
+  [000288] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
   [000289] Left position                  u16 le           0                     00 00
   [00028b] Top position                   u16 le           0                     00 00
   [00028d] Image width                    u16 le           16                    00 10
   [00028f] Image height                   u16 le           14                    00 0e
   [000291] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit           0
-           - Reserved                     bit           0
-           - Sort                         bit           0
-           - Interlace                    bit           0
-           - LocalColorTablePresent       bit           0
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
   [000292] LZWMinimumCodeSize             u8               3                     03
   [000293] Data size                      u8               59                    3b
   [000294] Data                           u8[59]                                 78 ba 57 c5 90 39 17 17 21 6d 9e 31 e0 bd d9 c6 75 d6 c7 8c 64 19 71 4c 10 54 8b 20 1c ae 0b cb ...
   [0002cf] BlockTerminator                u8               0                     00
 
 Section_34 BLOCK_TRAILER
-  [0002d0] Block type                     u8               59                    3b
+  [0002d0] BlockType                      u8               59                    3b
+           - BLOCK_TRAILER                eq               59
 
 EOF

@@ -45,8 +45,10 @@ structs:
       eq 7b: END #ENDARC_HEAD
       #default: invalid
 
-    if self.Type in (ARCHIVE):
-      label: ARCHIVE
+    label: self.Type # XXXX
+
+    if self.Type == ARCHIVE:
+      #label: ARCHIVE
       u16 ARCHIVE_FLAGS:
         bit 0001: ARCHIVE_VOLUME
         bit 0002: ARCHIVE_COMMENT_PRESENT
@@ -62,7 +64,7 @@ structs:
       u16 Header size: ??
       u16 HighPosAv: ??
       u32 PosAv: ??
-      if self.ARCHIVE_FLAGS.ARCHIVE_COMMENT_PRESENT:
+      if self.ARCHIVE_FLAGS & ARCHIVE_COMMENT_PRESENT:
         # XXX struct MainComment
         u16 Head CRC: ??
         u8 Head Type:
@@ -71,8 +73,8 @@ structs:
         u16 Head size: ??
         #XXX more, see problem_archive_comment.rar
 
-    if self.Type in (FILE_OR_DIR):
-      label: FILE_OR_DIR
+    if self.Type == FILE_OR_DIR:
+      #label: FILE_OR_DIR
       u16 HEAD_FLAGS:
         bit 0001: FROM_PREV_VOLUME # LHD_SPLIT_BEFORE
         bit 0002: TO_NEXT_VOLUME   # LHD_SPLIT_AFTER
@@ -124,8 +126,8 @@ structs:
 
       u8[self.Compressed size] Data: ??
 
-    if self.Type in (SUBBLOCK):
-      label: SUBBLOCK
+    if self.Type == SUBBLOCK:
+      #label: SUBBLOCK
       u16 Main header flags:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
@@ -141,8 +143,8 @@ structs:
       u8[self.HeaderSize - (self.offset - offset("self.CRC"))] Reserved: ??
       u8[self.Data size] Data: ??
 
-    if self.Type in (END):
-      label: END
+    if self.Type == END:
+      #label: END
       u16 Common block flags:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT

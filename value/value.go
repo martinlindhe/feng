@@ -5,16 +5,17 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"regexp"
 	"strconv"
 	"strings"
 	"syscall"
 	"time"
-	"unicode/utf16"
-	"unicode/utf8"
 
 	"github.com/fatih/color"
+	"golang.org/x/text/encoding/unicode"
+	"golang.org/x/text/transform"
 )
 
 const (
@@ -29,12 +30,12 @@ var (
 )
 
 // parses a "structs" data value (used by structs parser)
-func ParseDataPattern(s string) (DataPattern, error) {
+func ParseDataPattern(in string) (DataPattern, error) {
 	dp := DataPattern{}
-	if s == "??" {
+	if in == "??" {
 		return dp, nil
 	}
-	value, err := ParseDataString(s)
+	value, err := ParseDataString(in)
 	dp.Pattern = value
 	dp.Known = true
 	return dp, err
@@ -52,31 +53,31 @@ type DataPattern struct {
 }
 
 // parses a textual representation of data into a byte array
-func ParseDataString(s string) ([]byte, error) {
+func ParseDataString(in string) ([]byte, error) {
 
 	var err error
 	prev := ""
 	for {
-		prev = s
-		s, err = replaceNextASCIITag(s)
+		prev = in
+		in, err = replaceNextASCIITag(in)
 		if err != nil {
 			return nil, err
 		}
-		s, err = replaceNextBitTag(s)
+		in, err = replaceNextBitTag(in)
 		if err != nil {
 			return nil, err
 		}
 
-		if s == prev {
+		if in == prev {
 			break
 		}
 	}
 
-	s = strings.ReplaceAll(s, " ", "")
-	s = strings.ReplaceAll(s, "_", "")
-	res, err := hex.DecodeString(s)
+	in = strings.ReplaceAll(in, " ", "")
+	in = strings.ReplaceAll(in, "_", "")
+	res, err := hex.DecodeString(in)
 	if err != nil {
-		return nil, fmt.Errorf("hex decode '%s' failed: %v", s, err)
+		return nil, fmt.Errorf("hex decode '%s' failed: %v", in, err)
 	}
 	return res, nil
 }
@@ -186,14 +187,14 @@ func asciiToHexString(s string) (string, error) {
 	return res, nil
 }
 
-func ParseDataField(s string) (DataField, error) {
+func ParseDataField(in string) (DataField, error) {
 
 	df := DataField{}
 
-	p1 := strings.Index(s, "[")
-	p2 := strings.Index(s, "]")
+	p1 := strings.Index(in, "[")
+	p2 := strings.Index(in, "]")
 	if p2 < p1 {
-		return df, fmt.Errorf("invalid range syntax '%s'", s)
+		return df, fmt.Errorf("invalid range syntax '%s'", in)
 	}
 
 	// slice format: kind[] label
@@ -201,19 +202,19 @@ func ParseDataField(s string) (DataField, error) {
 		df.Slice = true
 	}
 
-	space := strings.Index(s, " ")
+	space := strings.Index(in, " ")
 	if space == -1 {
 		// single token like "endian"
-		df.Kind = s
+		df.Kind = in
 	} else if p1 >= 0 {
 		// ranged format: kind[range] label
-		df.Kind = strings.TrimSpace(s[0:p1])
-		df.Range = strings.TrimSpace(s[p1+1 : p2])
-		df.Label = strings.TrimSpace(s[p2+1:])
+		df.Kind = strings.TrimSpace(in[0:p1])
+		df.Range = strings.TrimSpace(in[p1+1 : p2])
+		df.Label = strings.TrimSpace(in[p2+1:])
 	} else {
 		// non-ranged format: kind label
-		df.Kind = strings.TrimSpace(s[0:space])
-		df.Label = strings.TrimSpace(s[space+1:])
+		df.Kind = strings.TrimSpace(in[0:space])
+		df.Label = strings.TrimSpace(in[space+1:])
 	}
 
 	return df, nil
@@ -233,7 +234,7 @@ type DataField struct {
 	// field label
 	Label string
 
-	// XXX
+	// tracks the index of this DataField in it's parent array
 	Index int
 }
 
@@ -255,7 +256,8 @@ func (df *DataField) SingleUnitSize() uint64 {
 
 func SingleUnitSize(kind string) uint64 {
 	switch kind {
-	case "u8", "i8", "ascii", "asciiz", "comp:zlib":
+	case "u8", "i8", "ascii", "asciiz",
+		"compressed:zlib":
 		return 1
 	case "u16", "i16", "utf16",
 		"dostime", "dosdate":
@@ -343,7 +345,7 @@ func AsInt64(kind string, b []byte) int64 {
 
 func (format DataField) Present(b []byte) string {
 	switch format.Kind {
-	case "comp:zlib":
+	case "compressed:zlib":
 		return ""
 	case "u8", "u16", "u32", "u64":
 		if format.Slice || format.Range != "" {
@@ -357,7 +359,7 @@ func (format DataField) Present(b []byte) string {
 		return fmt.Sprintf("%d", AsInt64(format.Kind, b))
 
 	case "ascii", "asciiz":
-		v, _ := asciiZString(b, len(b))
+		v, _ := AsciiZString(b, len(b))
 		return v
 
 	case "utf16":
@@ -401,27 +403,24 @@ var (
 )
 
 func utf16String(b []byte) string {
-	if len(b)%2 != 0 {
-		log.Fatal("unexpected utf16 length", len(b))
+
+	// Make an tranformer that converts MS-Win default to UTF8
+	win16be := unicode.UTF16(unicode.BigEndian, unicode.IgnoreBOM)
+
+	// Make a transformer that is like win16be, but abides by BOM
+	utf16bom := unicode.BOMOverride(win16be.NewDecoder())
+
+	unicodeReader := transform.NewReader(bytes.NewReader(b), utf16bom)
+
+	decoded, err := ioutil.ReadAll(unicodeReader)
+	if err != nil {
+		panic(err)
 	}
-
-	u16s := make([]uint16, 1)
-	ret := &bytes.Buffer{}
-	b8buf := make([]byte, 4)
-
-	lb := len(b)
-	for i := 0; i < lb; i += 2 {
-		u16s[0] = uint16(b[i+1]) + (uint16(b[i]) << 8)
-		r := utf16.Decode(u16s)
-		n := utf8.EncodeRune(b8buf, r[0])
-		ret.Write(b8buf[:n])
-	}
-
-	return ret.String()
+	return string(decoded)
 }
 
 // returns decoded string and length in bytes
-func asciiZString(b []byte, maxLength int) (string, uint64) {
+func AsciiZString(b []byte, maxLength int) (string, uint64) {
 	length := uint64(0)
 	decoded := ""
 	for _, v := range b {

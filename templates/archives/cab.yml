@@ -1,16 +1,12 @@
-# STATUS: 25%
+# STATUS: 40%
 
 # - HI: fix CFDATA area tagging (custom types)
 
-# SAMPLE: need with "Header.Flags.Reserve present" set
-# SAMPLE: need with "self.cbCFHeader" > 0
-# SAMPLE: need with "self.Flags.Prev cabinet" set
-# SAMPLE: need with "self.Flags.Next cabinet" set
-
 references:
   - https://en.wikipedia.org/wiki/Cabinet_(file_format)
+  - https://msdn.microsoft.com/en-us/library/bb267310.aspx
   - https://www.sweetscape.com/010editor/repository/files/CAB.bt
-  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_cab.go
+  - https://github.com/google/go-cabfile
 
 kind: archive
 name: Microsoft Cabinet Archive
@@ -22,9 +18,9 @@ types:
   CFDATA:
     # XXX
     u32 csum: ??
-    u16 cbData: ??
+    u16 DataLen: ??
     u16 cbUncomp: ??
-    ascii[16] ab: ??
+    u8[self.DataLen] Data: ??
 
 structs:
   header:
@@ -34,51 +30,63 @@ structs:
     u32 Reserved 2: 00 00 00 00
     u32 CFFILE offset: ??
     u32 Reserved 3: 00 00 00 00
-    u8 Minor version: ??
-    u8 Major version: ??
+    u8  Minor version: ??
+    u8  Major version: ??
     u16 cFolders: ??
     u16 cFiles: ??
     u16 Flags:
-      bit b00000000_00000001: Prev cabinet
-      bit b00000000_00000010: Next cabinet
-      bit b00000000_00000100: Reserve present
+      bit b00000000_00000001: PrevCabinet
+      bit b00000000_00000010: NextCabinet
+      bit b00000000_00000100: ReservePresent
     u16 Set ID: ??
     u16 Cabinet number: ??
 
-    if self.Flags.Reserve present:
-      u16 cbCFHeader: ??  # size of per-cabinet reserved area
-      u8 cbCFFolder: ??   # size of per-folder reserved area
-      u8 cbCFData: ??     # size of per-datablock reserved area
-      u8[self.cbCFHeader] abReserve: ??  # per-cabinet reserved area
+    if self.Flags & ReservePresent:
+      u16 cbCFHeader: ??
+      u8  cbCFFolder: ??
+      u8  cbCFData: ??
+      u8[self.cbCFHeader] abReserve: ??
 
-    if self.Flags.Prev cabinet:
-      u8[1] szCabinetPrev: ??  # XXX length? name of previous cabinet file
-      u8[1] szDiskPrev: ??     # XXX length? name of previous disk
+    if self.Flags & PrevCabinet:
+      asciiz Prev cab file: ??
+      asciiz Prev disk: ??
 
-    if self.Flags.Next cabinet:
-      u8[1] szCabinetNext: ??  # XXX length? name of next cabinet file
-      u8[1] szDiskNext: ??     # XXX length? name of next disk
+    if self.Flags & NextCabinet:
+      asciiz Next cab file: ??
+      asciiz Next disk: ??
 
   CFFOLDER:
-    u32 Offset of first CFDATA block: ??
-    u16 CFDATA blocks: ??
-    u16 Compression type: ?? # XXX map meaning
+    u32 CFDATA_Offset: ??
+    u16 DataBlocks: ??
+    u16 Compression: 
+      eq 0000: none
+      eq 0001: MSZIP
+      eq 0002: Quantum
+      eq 0003: LZX
+      default: invalid
+
+    offset: self.CFDATA_Offset
 
     # XXX tag up CFDATA areas
 
+##    CFDATA[self.DataBlocks] CFDATA: ?? # XXX custom type
+    u32 csum: ??
+    u16 DataLen: ??
+    u16 cbUncomp: ??
+    u8[self.DataLen] Data: ??
+
+    offset: restore
 
   CFFILE:
-    u32 uncompressed size: ??
-    u32 uncompressed offset in folder: ??
-    u16 index in CFFOLDER: ??
+    u32 Uncompressed size: ??
+    u32 Uncompressed offset in folder: ??
+    u16 Index in CFFOLDER: ??
     dosdate Date: ??
     dostime Time: ??
     u16 Attributes: ?? # XXX format?
-
     asciiz Name: ??
-  
+
 layout:
   - header Header
   - CFFOLDER[Header.cFolders] CFFOLDER
   - CFFILE[Header.cFiles] CFFILE
-#  - CFDATA CFDATA

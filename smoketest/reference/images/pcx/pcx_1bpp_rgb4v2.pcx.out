@@ -1,11 +1,11 @@
 Header
   [000000] Signature                      u8               10                    0a
   [000001] Version                        u8               2                     02
-           - PC Paintbrush 2.8 + modifiable EGA palette eq            2
+           - PC Paintbrush 2.8 + modifiable EGA palette eq               2
   [000002] Encoding                       u8               1                     01
-           - RLE                          eq            1
-  [000003] Bits per pixel                 u8               1                     01
-           - 1bpp (monochrome)            eq            1
+           - RLE                          eq               1
+  [000003] BitsPerPixel                   u8               1                     01
+           - 1bpp (monochrome)            eq               1
   [000004] Minimum X position             u16 le           0                     00 00
   [000006] Minimum Y position             u16 le           0                     00 00
   [000008] Maximum X position             u16 le           198                   00 c6
@@ -14,10 +14,10 @@ Header
   [00000e] Vertical resolution in DPI     u16 le           72                    00 48
   [000010] EGA palette                    u8[48]                                 00 00 00 80 00 00 00 80 00 80 80 00 00 00 80 80 00 80 00 80 80 c0 c0 c0 80 80 80 ff 00 00 00 ff ...
   [000040] Reserved                       u8               0                     00
-  [000041] Color planes                   u8               4                     04
+  [000041] ColorPlanes                    u8               4                     04
   [000042] Bytes per line                 u16 le           26                    00 1a
   [000044] Palette mode                   u16 le           1                     00 01
-           - Monochrome or color          eq            1
+           - Monochrome or color          eq               1
   [000046] Horizontal resolution          u16 le           0                     00 00
   [000048] Vertical resolution            u16 le           0                     00 00
   [00004a] Reserved                       u8[54]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...

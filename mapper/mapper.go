@@ -11,7 +11,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
-	"regexp"
+	"strings"
 
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
@@ -20,10 +20,6 @@ import (
 
 const (
 	DEBUG = false
-)
-
-var (
-	ifMatchExpressionRE = regexp.MustCompile(`([\w .]+) (in|notin) \(([\w, ]+)\)`)
 )
 
 func init() {
@@ -38,7 +34,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		ext = ds.Extensions[0]
 	}
 
-	fileLayout := FileLayout{BaseName: ds.BaseName, endian: ds.Endian, Extension: ext}
+	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: ds.Endian, Extension: ext}
 
 	// read all data to get the total length
 	b, _ := ioutil.ReadAll(r)
@@ -114,7 +110,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 
-	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
+	fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
 		if err != nil {
 			panic(err)
@@ -146,13 +142,13 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(EvaluateError); ok {
-				log.Println(tpl, ":", err)
+				log.Println(red(tpl + ": " + err.Error()))
 			}
 			return nil
 		}
 		if len(fl.Structs) > 0 {
 			fmt.Printf("Parsed %s as %s\n\n", filename, tpl)
-			return fmt.Errorf("break walk")
+			return fmt.Errorf("break WalkDir")
 		}
 		return nil
 	})
@@ -177,7 +173,7 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 	err := fl.expandChildren(r, fs, df, ds, expressions)
 	if err != nil {
 		// remove the added struct in case of error
-		log.Printf("removing struct '%s.%s' due to error: %v", fl.BaseName, fs.Label, err)
+		log.Print(red("removing struct '%s.%s' due to error: %v", fl.BaseName, fs.Label, err))
 		fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
 	}
 
@@ -198,10 +194,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 	// track iterator index while parsing
 	fs.Index = df.Index
 
+	lastIf := ""
+
 	for _, es := range expressions {
 		switch es.Field.Kind {
 		case "label":
 			// "label: APP0". augment node with extra info
+
+			// XXX eval expression such as "self.Type", get evaluated match???
 			fs.decoration = es.Pattern.Value
 
 		case "endian":
@@ -213,13 +213,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 		case "offset":
 			// set/restore current offset
-			/*
-				if es.Pattern.Value == "restore" {
-					log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, fl.previousOffset)
-					fl.offset = fl.previousOffset
-					return nil
-				}
-			*/
+
+			if es.Pattern.Value == "restore" {
+				log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, fl.previousOffset)
+				fl.offset = fl.previousOffset
+				_, err := r.Seek(int64(fl.offset), io.SeekStart)
+				return err
+			}
 
 			var err error
 			fl.offsetChanges++
@@ -227,7 +227,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				return fmt.Errorf("too many offset changes from template")
 			}
 			fl.previousOffset = fl.offset
-			fl.offset, err = fl.GetInt(es.Pattern.Value, df)
+			fl.offset, err = fl.GetInt(es.Pattern.Value, df) // XXX eval with goval!!!
 			log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", fl.previousOffset, fl.offset, es.Pattern.Value)
 			if err != nil {
 				return err
@@ -247,7 +247,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"ascii", "utf16",
 			"time_t_32", "filetime", "dostime", "dosdate",
-			"comp:zlib":
+			"compressed:zlib":
 			// internal data types
 			if es.Field.Range != "" {
 				var err error
@@ -335,86 +335,41 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			fl.offset += field.Length
 
 		case "if":
-			matches := ifMatchExpressionRE.FindStringSubmatch(es.Field.Label)
-			if len(matches) > 0 {
+			q := es.Field.Label
+			q = strings.ReplaceAll(q, "self.", df.Label+".")
 
-				key := matches[1]
-				operation := matches[2] // "in" or "notin"
-				pattern := matches[3]
+			// workaround for yaml limitation of not allowing [] in keys:
+			q = strings.ReplaceAll(q, "{", "[")
+			q = strings.ReplaceAll(q, "}", "]")
 
-				switch operation {
-				case "in", "notin":
-					if DEBUG {
-						log.Printf("-- matching IF key=%s, operation=%s, pattern=%s", key, operation, pattern)
-					}
-
-					kind, val, err := fl.GetValue(key, df)
-					if err != nil {
-						return err
-					}
-
-					if DEBUG {
-						log.Printf("if-match: %s %02x", kind, val)
-					}
-
-					patternValues, err := ds.ParsePattern(pattern, kind)
-					if err != nil {
-						log.Fatal(err)
-					}
-					matched := false
-					for _, patternVal := range patternValues {
-						if bytes.Equal(val, patternVal) {
-							// op "in": if match in any of values, count as true
-							// op "notin": if match in NONE of values, count as true
-							matched = true
-						}
-					}
-					perform := false
-					if (operation == "in" && matched) || (operation == "notin" && !matched) {
-						perform = true
-					}
-					if DEBUG {
-						log.Printf("if-match: '%v' %s %v matched:%v, result:%v", val, operation, patternValues, matched, perform)
-					}
-					if perform {
-						err := fl.expandChildren(r, fs, df, ds, es.Children)
-						if err != nil {
-							return err
-						}
-					}
-
-				default:
-					log.Fatalf("unhandled if-match operation '%s'", operation)
+			a, err := fl.EvaluateExpression(q)
+			if err != nil {
+				return err
+			}
+			lastIf = q
+			//log.Println("EVAL EXPRESSION", q, ":", a)
+			if a != 0 {
+				err := fl.expandChildren(r, fs, df, ds, es.Children)
+				if err != nil {
+					return err
 				}
-			} else {
-				key := es.Field.Label
+			}
 
-				if DEBUG {
-					log.Printf("-- matching IF NOTZERO key=%s", key)
-				}
-
-				//xxx expand
-
-				_, val, err := fl.GetValue(key, df)
-				if err == nil {
-					matched := false
-					for _, b := range val {
-						if b != 0 {
-							matched = true
-						}
-					}
-
-					if matched {
-						err := fl.expandChildren(r, fs, df, ds, es.Children)
-						if err != nil {
-							return err
-						}
-					}
+		case "else":
+			log.Println("ELSE: evaluating", lastIf)
+			a, err := fl.EvaluateExpression(lastIf)
+			if err != nil {
+				return err
+			}
+			if a == 0 {
+				err := fl.expandChildren(r, fs, df, ds, es.Children)
+				if err != nil {
+					return err
 				}
 			}
 
 		default:
-			// XXX find custom struct with given name
+			// find custom struct with given name
 			customStruct, err := fl.GetStruct(es.Field.Kind)
 			if err != nil {
 				return fmt.Errorf("error fetching struct '%s': %v", es.Field.Kind, err)
