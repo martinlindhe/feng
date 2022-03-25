@@ -1,6 +1,8 @@
 # STATUS: 30%
 
-# - HI: figure out how to decode image data stream (between SOI and EOI markers)
+# - MAX: figure out how to decode image data stream (between SOI and EOI markers)
+#     - need a way to specify unknown length of data until marker bytes is seen
+#
 # - HI: file is a stream of packets with different signature. parse until EOF
 # - MID: use custom types
 

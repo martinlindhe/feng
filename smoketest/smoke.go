@@ -19,14 +19,14 @@ type InOutPair struct {
 	Out string
 }
 
-func (sty *SmoketestsYaml) GenerateFilenames() (res []InOutPair) {
+func (sty *SmoketestsYaml) GenerateFilenames(baseRoot string) (res []InOutPair) {
+	baseAbs, _ := filepath.Abs(baseRoot)
+	root := filepath.Join(baseAbs, sty.Root)
 
 	for _, smoke := range sty.Input {
-
 		for _, file := range smoke.Files {
-
-			filename := filepath.Join(sty.Root, smoke.Folder, file)
-			outfile := filepath.Join("./reference", smoke.Folder, file+".out")
+			filename := filepath.Join(root, smoke.Folder, file)
+			outfile := filepath.Join("./smoketest/reference", smoke.Folder, file+".out")
 			pair := InOutPair{
 				In:  filename,
 				Out: outfile,

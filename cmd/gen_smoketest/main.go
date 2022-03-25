@@ -40,7 +40,7 @@ func main() {
 		panic(err)
 	}
 
-	for _, entry := range smoketests.GenerateFilenames() {
+	for _, entry := range smoketests.GenerateFilenames(filepath.Dir(args.Filename)) {
 		fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err2 error) error {
 			// cannot happen
 			if err != nil {
@@ -72,7 +72,13 @@ func main() {
 			if err != nil {
 				// template don't match, try another
 				if _, ok := err.(mapper.EvaluateError); ok {
-					log.Println(tpl, ":", err)
+					log.Fatal(tpl, " failed to evaluate:", err)
+				}
+
+				log.Println("MapReader returned err:", err)
+
+				if _, ok := err.(template.ValidationError); ok {
+					return nil
 				}
 				return nil
 			}

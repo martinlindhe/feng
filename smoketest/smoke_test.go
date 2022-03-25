@@ -3,6 +3,7 @@ package smoketest
 import (
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"testing"
 
 	"github.com/martinlindhe/feng/mapper"
@@ -10,13 +11,14 @@ import (
 )
 
 func TestCompareWithReferenceParses(t *testing.T) {
-	data, err := ioutil.ReadFile("./smoketest.yml")
+	smoketestFile := "./smoketest.yml"
+	data, err := ioutil.ReadFile(smoketestFile)
 	assert.Nil(t, err)
 
 	smoketests, err := UnmarshalData(data)
 	assert.Nil(t, err)
 
-	for _, entry := range smoketests.GenerateFilenames() {
+	for _, entry := range smoketests.GenerateFilenames(filepath.Dir(smoketestFile)) {
 
 		fl, err := mapper.MapFileToTemplate(entry.In)
 		assert.Nil(t, err, entry.In)

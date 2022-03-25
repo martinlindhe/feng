@@ -1,0 +1,39 @@
+# STATUS: 5%
+# format used on PS3/PSVita for application packages / updates
+
+references:
+  - https://www.psdevwiki.com/ps3/PKG_files
+
+kind: xxx
+name:  Sony PS3 PKG file
+extensions: [.pkg]
+endian: big
+
+structs:
+  header:
+    u8[4] Signature: 7f c'PKG'
+    u16 PkgRevision:
+      eq 8000: finalized (retail)
+      eq 0000: non-finalized (debug)
+    u16 PkgType:
+      eq 0001: PS3
+      eq 0002: PSP/PSVita
+      default: invalid
+    u32 pkg_metadata_offset: ??
+    u32 pkg_metadata_count: ??
+    u32 pkg_metadata_size: ??
+    u32 item_count: ??
+    u64 total_size: ??
+    u64 data_offset: ??
+    u64 data_size: ??
+    u8[36] contentid: ??
+    u8[12] padding: ??
+    u8[16] digest: ??
+    u8[16] pkg_data_riv: ??
+    u8[16] header_cmac_hash: ??
+    u8[40] header_npdrm_signature: ??
+    u8[8] header_sha1_hash: ??
+
+layout:
+  - header Header
+

@@ -1,0 +1,45 @@
+# STATUS: 5%
+# format used by Nintendo eShop on the Switch
+#
+# NSP files are encrypted using master keys and rightsId keys
+#
+# - HIGH: extract data blocks
+# - HIGH: map extract file names to string table data
+
+references:
+  - https://github.com/SciresM/hactool/blob/master/pfs0.h
+
+# XXX find existing tool that extracts files ! (NSZ ???)
+software:
+  - https://github.com/SciresM/hactool
+  - https://github.com/jakcron/nstool
+
+
+kind: xxx
+name: Nintendo Submission Package
+extensions: [.nsp]
+endian: little
+
+structs:
+  header: # XXX pfs0_header_t
+    ascii[4] Signature: c'PFS0'   # PFS = PartitionFS
+    u32 num_files: ??
+    u32 StringTableSize: ??
+    u32 Reserved: ??
+  
+  file_entry:
+    u64 Offset: ??
+    u64 Size: ??
+    u32 string_table_offset: ??
+    u32 Reserved: ??
+    offset: 16 + (Header.num_files * 24) + Header.StringTableSize + self.Offset
+    u8[self.Size] Data: ??
+    offset: restore
+  
+  string_table:
+    ascii[Header.StringTableSize] String table: ??
+
+layout:
+  - header Header
+  - file_entry[Header.num_files] File
+  - string_table StringTable    # XXX holds num_files asciiz filenames for the file_entry:s

@@ -145,7 +145,14 @@ https://zenhax.com/
 https://www.vg-resource.com/
 
 https://www.gildor.org/smf/index.php/board,3.0.html - UE viewer forums (unreal engine extractor)
+https://www.hackromtools.info/ - Pokemon modding
+https://psxtools.de/forum/
 
+
+
+http://richwhitehouse.com/index.php?content=inc_projects.php&showproject=91 - Noesis is a tool for previewing and converting between hundreds of model, image, and animation formats.
+    https://github.com/RoadTrain/noesis-plugins
+    https://github.com/RoadTrain/noesis-plugins-official
 
 # SAMPLES
 

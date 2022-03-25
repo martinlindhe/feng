@@ -1,3 +1,4 @@
+templates/archives/cab.yml
 Header
   [000000] Signature                      ascii[4]         MSCF                  4d 53 43 46
   [000004] Reserved 1                     u32 le           0                     00 00 00 00

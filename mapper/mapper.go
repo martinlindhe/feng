@@ -41,13 +41,17 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	fileLayout.size = uint64(len(b))
 	rr := bytes.NewReader(b)
 
+	//if DEBUG {
+	log.Printf("mapping ds '%s'", ds.BaseName)
+	//}
+
 	for _, df := range ds.Layout {
 		es, err := ds.FindStructure(&df)
 		if err != nil {
 			log.Fatal(err)
 		}
 		if DEBUG {
-			log.Printf("mapping struct '%s' (kind %s) to %+v\n", df.Label, df.Kind, es)
+			log.Printf("mapping struct '%s' (kind %s) to %+v", df.Label, df.Kind, es)
 		}
 
 		if df.Slice {
@@ -64,11 +68,19 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 					if err == io.EOF {
 						break
 					}
-					// do not propagate error, so that trailing data after slices will not count as parse error
-					if err != nil {
-						log.Println("error (ignored):", err)
-					}
-					return &fileLayout, nil
+					/*
+						// do not propagate error, so that trailing data after slices will not count as parse error
+						if err != nil {
+							if _, ok := err.(template.ValidationError); ok {
+								log.Println("invalidating file due to no matching pattern", err)
+								//return &fileLayout, nil
+								break
+							}
+							// XXX must respect "TYPE IS NOT VALID" error
+							log.Printf("error (ignored): %#v   ", err)
+						}
+					*/
+					return &fileLayout, err
 				}
 				df.Label = baseLabel
 			}
@@ -172,16 +184,20 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 
 	err := fl.expandChildren(r, fs, df, ds, expressions)
 	if err != nil {
+		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
+			//log.Printf("error: unexpected eof at %s %s in %s. %d structs",
+			//	df.Kind, df.Label, ds.BaseName, len(fl.Structs))
+			if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
+				return fmt.Errorf("eof and no structs mapped")
+			}
+			return nil
+		}
+		return err
+
 		// remove the added struct in case of error
 		log.Print(red("removing struct '%s.%s' due to error: %v", fl.BaseName, fs.Label, err))
 		fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
 	}
-
-	if errors.Is(err, io.ErrUnexpectedEOF) {
-		log.Printf("error: unexpected eof at %s %s", df.Kind, df.Label)
-		return nil
-	}
-
 	return err
 }
 

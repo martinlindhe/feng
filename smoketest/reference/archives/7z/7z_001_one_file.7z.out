@@ -1,12 +1,6 @@
-Signature Header
-  [000000] Signature                      u8[6]                                  37 7a bc af 27 1c
-  [000006] Major version                  u8               0                     00
-  [000007] Minor version                  u8               3                     03
-  [000008] Start Header CRC               u32 le           1349732298            50 73 47 ca
+templates/archives/tar.yml
+Header
+  [000000] Filename                       ascii[100]       7z..'.                37 7a bc af 27 1c 00 03 ca 47 73 50 09 00 00 00 00 00 00 00 4a 00 00 00 00 00 00 00 6f ca 20 9e ...
+  [000064] File mode                      ascii[8]         ........              c5 a2 be ce 01 15 06 01
 
-Start Header
-  [00000c] NextHeaderOffset               u64 le           9                     00 00 00 00 00 00 00 09
-  [000014] NextHeaderSize                 u64 le           74                    00 00 00 00 00 00 00 4a
-  [00001c] Next Header CRC                u32 le           2652949103            9e 20 ca 6f
-
-0x0053 (83) unmapped bytes
+0x0007 (7) unmapped bytes

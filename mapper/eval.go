@@ -11,6 +11,7 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
+// an expression failed to evaluate
 type EvaluateError struct {
 	input string
 	msg   string

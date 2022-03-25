@@ -11,8 +11,8 @@
 references:
   - https://en.wikipedia.org/wiki/BMP_file_format
   - https://www.fileformat.info/format/bmp/egff.htm
-  - https://github.com/synalysis/Grammars/blob/master/bitmap.grammar
-  - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/BMP.tcl
+  - incomplete https://github.com/synalysis/Grammars/blob/master/bitmap.grammar
+  - incomplete https://github.com/HexFiend/HexFiend/blob/master/templates/Images/BMP.tcl
   - https://www.sweetscape.com/010editor/repository/files/BMP.bt
 
 kind: image
@@ -130,8 +130,9 @@ structs:
         u8[3 * (1 << self.BitsPerPixel)] Color palette: ??  # XXX need bgr data type, in "u8 B,G,R" format
         u8[self.Height * ( ((self.BitsPerPixel * self.Width + 31) / 32) * 4 )] Image data: ??
 
+# XXX  bmp_win_v3-001.bmp does not contain this but !?!?!1111 has bpp32 and V3 hdr....
     # V3, color table  ... XXX also used in V4 and V5 ???
-    if self.HeaderSize == V3 && self.BitsPerPixel in {16, 24, 32}:
+    if self.HeaderSize == V3 && self.BitsPerPixel == 16: # XXX only for 16 bpp ??????
       if self.UsedColors != 0:
         u32[self.UsedColors] BGRQUAD: ??       # XXX BGRQUAD data type
       if self.UsedColors == 0:               # XXX ELSE-statement
@@ -140,18 +141,19 @@ structs:
     # V3-V5 image data
     if self.HeaderSize in {V3, V4, V5}:
 
-      u8[self.ImageDataSize] Image data: ?? # XXX rle compression
+      #XXX 
+      #u8[self.ImageDataSize] Image data: ?? # XXX rle compression
 
-    #  if self.CompressionMethod != 0:
+      if self.CompressionMethod != 0:
         # COMPRESSED image data
-   #     u8[self.ImageDataSize] Compressed image data: ?? # XXX rle compression
-   #   if self.CompressionMethod == 0:  # XXX ELSE
+        u8[self.ImageDataSize] Compressed image data: ?? # XXX rle compression
+      if self.CompressionMethod == 0:  # XXX ELSE
         # UNCOMPRESSED image data
 
         # XXX this calc goes wrong on bmp_win_v3-001.bmp and more ???
-        #u8[self.Height * ( ((self.BitsPerPixel * self.Width + 31) / 32) * 4 )] Image data: ??
+        u8[self.Height * ( ((self.BitsPerPixel * self.Width + 31) / 32) * 4 )] Image data: ??
 
-    #    u8[1] Image data: ?? 
+      #  u8[1] Image data: ??
 
 layout:
   - file_header FILEHEADER

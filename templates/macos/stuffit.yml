@@ -1,0 +1,59 @@
+# STATUS: 1%
+# format used in older MacOS
+
+
+# TODO The CRC-16 algorithm used is the CCITT one with polynomial 0x1021 and no pre- or post-conditioning.
+
+references:
+  - https://apple2.org.za/gswv/a2zine/GS.WorldView/Resources/The.MacShrinkIt.Project/ARCHIVES.TXT
+  - https://github.com/MacPaw/XADMaster/wiki/StuffItFormat
+  - http://justsolve.archiveteam.org/wiki/StuffIt
+
+software:
+  - unpacker (the unarchiver for macOS) "brew install unar"
+
+kind: archive
+name:  StuffIt archive
+extensions: [.sit]
+mime: application/x-stuffit
+endian: big
+
+# TODO: Some .SIT files start with a 128-byte MacBinary header. (so SIT header starts at 0x80), see https://github.com/MacPaw/XADMaster/wiki/MacBinarySpecs
+
+structs:
+  header:
+    ascii[4] Signature: c'SIT!'
+    u16 FileCount: ??
+    u32 ArchiveSize: ?? # ;length of entire archive incl hdr
+    ascii[4] Signature2: c'rLau'
+    u8 Version:
+      eq 01: v1.5 and earlier
+      eq 02: v1.6 to 4.5
+      default: invalid
+    u8[7] Unknown: ??
+
+  file_header:
+    u8 rsrc fork compression method: ?? # XXX
+    u8 data fork compression method: ?? # XXX
+    u8 FileNameLength: ??
+    ascii[self.FileNameLength] File name: ??
+#    ascii[63] File name: ??
+    u8[63 - self.FileNameLength] File name padding: ??
+
+    ascii[4] Mac OS File type: ??   # XXX eg "PICT"
+    u32 File creator: ??
+    u16 Finder flags: ??
+    u32 Creation time: ?? # Creation date in classic Mac OS format (seconds since 1904)
+    u32 Modification time: ?? # Modification date in classic Mac OS format (seconds since 1904)
+    u32 uncompressed resource fork length: ??
+    u32 uncompressed data fork length: ??
+    u32 compressed resource fork length: ??
+    u32 compressed data fork length: ??
+    u16 resource fork CRC-16: ??
+    u16 data fork CRC-16: ??
+    u8[6] Unknown: ??
+    u16 CRC-16 of file header: ??
+
+layout:
+  - header Header
+  - file_header FileHeader # XXX multiple, nested

@@ -1,0 +1,50 @@
+# STATUS: 10%
+
+# - HI: file name data is in a zlib-compressed DIRENTRY block
+#
+# - MID: extract tool, that dumps all marked data areas to files
+#       could augment with file naming hints from template?
+#       in the case of everquest pfs, all fields is zlib compressed too!
+
+references:
+  - https://github.com/martinlindhe/eqformat_pfs
+  - https://github.com/alimalkhalifa/VisualEQ/blob/master/src/server/loaders/s3d.js
+
+notes:
+  - format is used in Windows and MacOS version of Everquest
+
+kind: archive
+name: Everquest PFS Archive
+extensions: [.s3d, .eqg, .pfs, .pak]
+endian: little
+
+constants:
+  u32 DIRENTRY: 6158_0AC9
+  
+structs:
+  header:
+    u32 BaseOffset: ??
+    ascii[4] Signature: c'PFS '
+
+    offset: self.BaseOffset
+    u32 Count: ??
+
+  block:
+    offset: Header.BaseOffset + 4 + (self.index * 12)
+    u32 CRC: ??
+    u32 FileOffset: ??
+    u32 Expanded size: ??
+
+    offset: self.FileOffset
+    u32 Compressed size: ??
+    u32 Expanded size: ??
+    compressed:zlib[self.Compressed size] Data: ??
+
+    if self.CRC == DIRENTRY:
+      label: DIRENTRY
+    else:
+      label: FILEENTRY
+
+layout:
+  - header Header
+  - block[Header.Count] Block

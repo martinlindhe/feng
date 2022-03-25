@@ -1,0 +1,57 @@
+# STATUS: 10%
+#
+# - HI: for extraction to work we need to dump data from a different file + offset + size
+# - HI TODO impl custom types:    file[Entry.Files] File: ??
+
+used-in:
+  - ps2-Indigo Prophecy (2005)
+  - xbox-Indigo Prophecy (2005)
+  - pc-Indigo Prophecy Remastered (2015)
+  - pc-Detroit Become Human (NOT USED)
+
+tested-status:
+  - TODO Heavy Rain (PS3-2010, PS4-2016, Windows-2019)
+  - TODO Beyond - Two Souls (PS3-2013, PS4-2015, Windows-2019)
+
+references:
+  - http://aluigi.altervista.org/bms/quanticdream.bms
+  - https://forum.xentax.com/viewtopic.php?f=16&t=19586
+
+kind: archive # XXX
+name: Quantic Dream TabIdMem
+extensions: [.idm]
+endian: little # XXX same endian on ps2,xbox,pc for Indigo Prophecy
+
+structs:
+  header:
+    ascii[20] Signature: c'QUANTICDREAMTABIDMEM'
+    u32 Unknown: ??
+    u32 Entries: ??
+
+  entry: # XXX folders?
+    u32 Dummy1: ??        # 00 00 08 2e
+    u32 Files: ??
+    u32 InfoOffset: ??
+
+    # TODO: DataOffset and DatNum forms the file and offset where data block exists, how to mark it for auto extraction
+
+    # TODO impl custom types:    file[Entry.Files] File: ??
+
+  file:
+    offset: 20 + Entry.InfoOffset
+    # XXX N files in slice, need custom type!!?!?!
+    # --- FILE ---
+    u32 Dummy2: ??        # 00 00 00 01
+    u32 DataOffset: ??
+    u32 DataSize: ??
+    u8 DatNum: ??
+    u8[3] Unknown: ??     # 2a ce 02
+    offset: restore
+
+layout:
+  - header Header
+  - entry Entry
+  - file[Entry.Files] File
+  - entry Entry2
+  - file[Entry.Files] File2
+  # XXX

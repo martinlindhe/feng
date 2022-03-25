@@ -1,0 +1,85 @@
+# STATUS: 10%
+#
+# format used on PS4 for application packages / updates
+
+references:
+  - https://www.psdevwiki.com/ps4/Package_Files
+
+software:
+  - https://sites.google.com/site/theleecherman/ps4pkgviewer
+  - https://github.com/pearlxcore/PS4-PKG-Tool
+
+kind: xxx
+name:  Sony PS4 PKG file
+extensions: [.pkg]
+endian: big
+
+structs:
+  header:
+    u8[4] Signature: 7f c'CNT'
+    u32 pkg_type: ??
+    u32 pkg_0x008: ??
+    u32 pkg_file_count: ??
+    u32 pkg_entry_count: ??
+    u16 pkg_sc_entry_count: ??
+    u16 pkg_entry_count_2: ??
+    u32 pkg_table_offset: ??
+    u32 pkg_entry_data_size: ??
+    u64 pkg_body_offset: ??
+    u64 pkg_body_size: ??
+    u64 pkg_content_offset: ??
+    u64 pkg_content_size: ??
+
+    # 0x40
+    ascii[36] content_id: ??
+    u8[12] Padding: ??
+
+    # 0x70
+    u32 pkg_drm_type: ??
+    u32 pkg_content_type: ??
+    u32 pkg_content_flags: ??
+    u32 pkg_promote_size: ??
+    u32 pkg_version_date: ??
+    u32 pkg_version_hash: ??
+
+    u32 pkg_0x088: ??
+    u32 pkg_0x08C: ??
+    u32 pkg_0x090: ??
+    u32 pkg_0x094: ??
+    u32 pkg_iro_tag: ??
+    u32 pkg_drm_type_version: ??
+
+    u8[96] Padding: ??
+
+    # 0x100
+    u8[32] digest_entries1: ??     # sha256 hashes
+    u8[32] digest_entries2: ??
+    u8[32] digest_table_digest: ??
+    u8[32] digest_body_digest: ??
+    u8[640] Padding: ??
+
+    # 0x400
+    u32 Unknown: ??
+    u32 pfs_image_count: ??
+    u64 pfs_image_flags: ??
+    u64 pfs_image_offset: ??
+    u64 pfs_image_size: ??
+    u64 mount_image_offset: ??
+    u64 mount_image_size: ??
+    u64 pkg_size: ??
+    u32 pfs_signed_size: ??
+    u32 pfs_cache_size: ??
+
+    # 0x440
+    u8[32] pfs_image_digest: ??
+    u8[32] pfs_signed_digest: ??
+    u64 pfs_split_size_nth_0: ??
+    u64 pfs_split_size_nth_1: ??
+    u8[2896] Padding: ??
+
+    # 0xFE0
+    u8[32] pkg_digest: ??
+
+layout:
+  - header Header
+

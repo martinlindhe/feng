@@ -204,9 +204,18 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 	}
 	if invalidIfNoMatch && len(res) == 0 {
 		// if we don't find any patterns, return error
-		return nil, fmt.Errorf("value %08x (%d) for %s is not valid", actual, actual, es.Field.Label)
+		return nil, ValidationError{fmt.Sprintf("value %08x (%d) for %s is not valid", actual, actual, es.Field.Label)}
 	}
 	return res, nil
+}
+
+// the input file failed to match a required marker
+type ValidationError struct {
+	Message string
+}
+
+func (r ValidationError) Error() string {
+	return r.Message
 }
 
 func (t *Template) evaluateStructs() ([]evaluatedStruct, error) {

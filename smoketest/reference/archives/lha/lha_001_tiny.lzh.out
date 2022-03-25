@@ -1,3 +1,4 @@
+templates/archives/lha.yml
 Header
   [000000] Header size                    u8               52                    34
   [000001] Checksum                       u8               0                     00

@@ -1,0 +1,29 @@
+# STATUS: 10%
+#
+# Embeds a ELF file with some extra metadata for PS4
+
+references:
+  - https://www.psdevwiki.com/ps4/SELF_File_Format
+
+kind: executable
+name:  Sony PS4 Signed ELF file (?)
+extensions: [.prx, .sprx]
+endian: little
+
+structs:
+  header:
+    u8[4] Signature: 4F 15 3D 1D
+    u32 Unknown: ??     # Always 00 01 01 12 
+    u8 Content type: ?? # XXX  	1 on Self, 4 on PUP Entry 
+    u8 Program type: ?? # XXX
+    u16 Padding: ??
+    u16 Header size: ??
+    u16 Signature size: ??
+    u32 Size of SELF: ??
+    u32 Padding: ??
+    u16 Number of segments: ??   # 	1 Kernel, 2 SL and Modules, 4 Kernel ELFs, 6 .selfs, 2 .sdll, 6 .sprx, 6 ShellCore, 6 eboot.bin, 2 sexe
+    u16 Unknown: ?? # XXX always 0x0022
+    u32 Padding: ??
+
+layout:
+  - header Header

@@ -121,6 +121,7 @@ func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 }
 
 func (fl *FileLayout) Present(hideRaw bool) (res string) {
+	res = "# " + fl.BaseName + "\n"
 	for _, layout := range fl.Structs {
 		heading := layout.Label
 		if layout.decoration != "" {

@@ -1,0 +1,53 @@
+# STATUS: 5%
+
+# MAX: try look at older games first, and look at older versions
+
+# XXX seems to be used in Beyond: Two Souls: https://forum.xentax.com/viewtopic.php?t=10890
+# XXX seems to be used in Heavy Rain: https://forum.xentax.com/viewtopic.php?t=4995
+
+tested-status:
+  - TODO Indigo Prophecy (XBox-2005) !!! NOTE xbox has idx, while ps2 and PC has just idm
+  - TODO Heavy Rain (PS3-2010, PS4-2016, Windows-2019)
+  - TODO Beyond - Two Souls (PS3-2013, PS4-2015, Windows-2019)
+  - XXX Fahrenheit - Indigo Prophecy Remastered (Windows-2015, macOS-2015, PS4-2016). NOTE Ps4 just embeds a PS2 ISO+emu
+  - TODO Detroit - Become Human (PS4-2018, Windows-2019)
+
+references:
+  - http://aluigi.altervista.org/bms/quanticdream.bms
+  - https://forum.xentax.com/viewtopic.php?f=16&t=19586
+
+kind: archive # XXX
+name: Quantic Dream TabIndex
+extensions: [.idx, .dep, .dat, .d01]
+endian: big
+
+# XXX this format seems to have QUANTICDREAMTABINDEX header but different layout depending on file extension
+# TODO we can implement a VARSET command similar to bms "get EXT extension", "if EXT=='idx'" and evaluate a magic constant for file extension as string
+
+
+# CURRENT FILE DEFINITION IS USED TO MAP THE FORMAT AS USED IN Detroit: Become Human PC version
+structs:
+  # XXX THIS HEADER FORMAT SPECIFICALLY MATCHES BigFile_PC.idx (dbh)
+  header:
+    ascii[20] Signature: c'QUANTICDREAMTABINDEX'
+    u32 Version:              # XXX V11 used in Beyond Two Souls ???
+      eq 00000012: V12        # used in Detroit: Become Human PC
+    u32 Unknown: ??           # XXX     00 B0 18 5F  in BigFile_PC.idx (dbh)    "00 B0 38 5F" on PS4 version???
+    u8[24 * 3 + 1] UnknownZEP: ?? # XXX c"ZEP" repeated 24 times + 0 terminator in BigFile_PC.idx (dbh)
+
+    u32 FileCount: ??
+
+  file:
+    u32 Unkown1: ??   # 00 00 4a 39
+    u32 Unkown2: ??   # 00 00 00 01
+    u32 Unkown3: ??
+    u32 Offset: ??
+    u32 Size: ??
+    u32 ZSize: ??
+    u32 DatNum: ??    # XXX 0 means .dat file, 1 = .d01 etc
+
+layout:
+  - header Header
+  #- file[Header.FileCount] File
+  - file File1
+#  - file File2
