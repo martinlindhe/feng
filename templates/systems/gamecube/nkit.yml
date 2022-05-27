@@ -1,0 +1,25 @@
+# STATUS: 5%
+
+# used for Gamecube and Wii iso compression
+
+references:
+  - https://wiki.gbatemp.net/wiki/NKit/NKitFormat
+
+kind: xxx
+name:  Nintendo Gamecube or Wii compressed iso
+extensions: [.nkit.iso]
+endian: little # XXX
+
+structs:
+  header:
+    u8[512] Unknown: ?? # XXX skip 0x200 bytes
+    ascii[4] Magic: c'NKIT'
+    ascii[4] Version: c' v01'
+    u32 Original CRC32: ??    # Source image original CRC32
+    u32 Compressed CRC32: ??
+    u32 Original size: ??     # Source image length
+    u32 Forced Junk ID: ??    # Forced Junk ID (When Disc ID differs - rare - GameCube only)
+    u32 Update partition CRC32: ?? # Wii Update partition CRC32 if removed when converting
+
+layout:
+  - header Header
