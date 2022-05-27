@@ -1,0 +1,31 @@
+# STATUS: 5%
+
+# TODO: some false matches. Gamecube DOL format incorrectly matches ICO template. Maybe solve by having to match by extension?
+
+references:
+  - http://hitmen.c02.at/files/yagcd/yagcd/chap14.html
+
+kind: xxx
+name:  Nintendo Gamecube Executable
+extensions: [.dol]
+endian: big
+
+structs:
+  header:
+    # 28 bytes, 4 each ...
+    u32[7] Text[0..6] sections File Positions: ??     # XXX disasm listing: group data by u32:s....
+    u32[11] Data[0..10] sections File Positions: ??
+    u32[7] Text[0..6] sections Mem Address: ??
+    u32[11] Data[0..10] sections Mem Address: ??
+    u32[7] Text[0..6] sections Sizes: ??
+    u32[11] Data[0..10] sections Sizes: ??
+
+    u32 BSS Mem address: ??
+    u32 BSS Size: ??
+    u32 Entry Point: ??
+    u8[0x1c] Unused: ??
+
+    # 0x0100: Start of sections data (body)
+
+layout:
+  - header Header

@@ -1,0 +1,31 @@
+# STATUS: 20%
+
+# This file is the little image that is displayed in the cube menu when inserting a disc into the gamecube, when in menu mode.
+
+references:
+  - http://hitmen.c02.at/files/yagcd/yagcd/chap14.html
+
+kind: xxx
+name:  Nintendo Gamecube BNR (Banner file)
+extensions: [.bnr]
+endian: big
+
+structs:
+  header:
+    ascii[3] Magic: c'BNR'
+    ascii Region:
+      eq c'1': US/JP
+      eq c'2': EU
+    u8[0x1c] Reserved: ??
+
+    u8[0x1800] Graphical Data: ?? #  (Pixel-format is RGB5A1)
+
+    # Text is all stored in either SHIFT-JIS or ASCII, depending on the region of the Game
+    ascii[0x20] Game name: ??
+    ascii[0x20] Company/developer: ??
+    ascii[0x40] Full game title: ??
+    ascii[0x40] Company/Developer Full name, or description: ??
+    ascii[0x80] Game Description: ??
+
+layout:
+  - header Header

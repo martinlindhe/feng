@@ -3,6 +3,7 @@
 # - LOW: map "image data" area: BITMAPINFOHEADER and then IMAGEDATA 
 #   this is an embedded DIB bitmap... OR, an embedded PNG. so able to refer to a separate template might be helpful?
 #     - or just allow to tag and extract opaque "PNG" data, and allow processing on the resulting extracted file (XXX could work with a binwalk like clone too to find the PNG header...)
+# TODO: some false matches. for example Gamecube DOL format incorrectly matches this ICO template. Maybe solve by having to match by extension?
 
 references:
   - https://en.wikipedia.org/wiki/ICO_(file_format)

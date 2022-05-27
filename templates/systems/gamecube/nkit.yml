@@ -8,11 +8,12 @@ references:
 kind: xxx
 name:  Nintendo Gamecube or Wii compressed iso
 extensions: [.nkit.iso]
-endian: little # XXX
+endian: big
 
 structs:
   header:
-    u8[512] Unknown: ?? # XXX skip 0x200 bytes
+    #offset: 512   # XXX allow this syntax to offset parsing by 512 bytes...  or "offset: 0x200" ... !!!
+    u8[512] Unknown: ?? # XXX skip 0x200 bytes, HACK to work around lack of "offset: 512" syntax.
     ascii[4] Magic: c'NKIT'
     ascii[4] Version: c' v01'
     u32 Original CRC32: ??    # Source image original CRC32
