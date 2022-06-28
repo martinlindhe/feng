@@ -1,10 +1,8 @@
-# STATUS: 10%
+# STATUS: 30%
 
 # - HI: file name data is in a zlib-compressed DIRENTRY block
 #
-# - MID: extract tool, that dumps all marked data areas to files
-#       could augment with file naming hints from template?
-#       in the case of everquest pfs, all fields is zlib compressed too!
+# - MID: use file name data when extracting files
 
 references:
   - https://github.com/martinlindhe/eqformat_pfs

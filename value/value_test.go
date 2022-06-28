@@ -66,6 +66,7 @@ func TestParseDataField(t *testing.T) {
 		{"u16 Width", DataField{Kind: "u16", Range: "", Label: "Width"}},
 		{"u8[5] Label", DataField{Kind: "u8", Range: "5", Label: "Label"}},
 		{"endian big", DataField{Kind: "endian", Range: "", Label: "big"}},
+		{"offset self.offset+4", DataField{Kind: "offset", Range: "", Label: "self.offset+4"}},
 		{"Seg[self.offset+4] My label", DataField{Kind: "Seg", Range: "self.offset+4", Label: "My label"}},
 	}
 	for _, h := range test {

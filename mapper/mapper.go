@@ -41,11 +41,25 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	fileLayout.size = uint64(len(b))
 	rr := bytes.NewReader(b)
 
-	//if DEBUG {
-	log.Printf("mapping ds '%s'", ds.BaseName)
-	//}
+	if DEBUG {
+		log.Printf("mapping ds '%s'", ds.BaseName)
+	}
 
 	for _, df := range ds.Layout {
+		if df.Kind == "offset" {
+			// evaluate label in top-level layout (used by ps4_cnt)
+			v, err := fileLayout.EvaluateExpression(df.Label)
+			if err != nil {
+				panic(err)
+			}
+			fileLayout.offset = v
+			_, err = rr.Seek(int64(v), io.SeekStart)
+			if err != nil {
+				log.Fatal(err)
+			}
+			continue
+		}
+
 		es, err := ds.FindStructure(&df)
 		if err != nil {
 			log.Fatal(err)
@@ -66,6 +80,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 				df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
 					if err == io.EOF {
+						log.Println("reached EOF")
 						break
 					}
 					/*
@@ -87,12 +102,11 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			continue
 		}
 		if df.Range != "" {
-			kind, val, err := fileLayout.GetValue(df.Range, &df)
+			parsedRange, err := fileLayout.EvaluateExpression(df.Range)
 			if err != nil {
-				return nil, err
+				panic(err)
 			}
 
-			parsedRange := value.AsUint64(kind, val)
 			if DEBUG {
 				log.Printf("appending ranged %s[%d]", df.Kind, parsedRange)
 			}
@@ -263,7 +277,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"ascii", "utf16",
 			"time_t_32", "filetime", "dostime", "dosdate",
-			"compressed:zlib":
+			"compressed:zlib", "raw:u8":
 			// internal data types
 			if es.Field.Range != "" {
 				var err error

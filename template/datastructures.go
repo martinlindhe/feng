@@ -51,6 +51,7 @@ func UnmarshalTemplateIntoDataStructure(b []byte, basename string) (*DataStructu
 }
 
 func NewDataStructureFrom(template *Template, basename string) (*DataStructure, error) {
+	log.Println("NewDataStructureFrom", basename)
 	constants, err := template.evaluateConstants()
 	if err != nil {
 		return nil, err

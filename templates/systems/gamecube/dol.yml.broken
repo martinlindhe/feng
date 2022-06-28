@@ -1,6 +1,6 @@
 # STATUS: 5%
 
-# TODO: some false matches. Gamecube DOL format incorrectly matches ICO template. Maybe solve by having to match by extension?
+# TODO: many false matches. Gamecube DOL format incorrectly matches ICO template. Maybe solve by having to match by extension?
 
 references:
   - http://hitmen.c02.at/files/yagcd/yagcd/chap14.html

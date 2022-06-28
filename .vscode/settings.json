@@ -11,6 +11,7 @@
         "bitmapfileheader",
         "bitmapinfoheader",
         "bitmapv",
+        "bitmask",
         "bootsector",
         "CFDATA",
         "CFFILE",

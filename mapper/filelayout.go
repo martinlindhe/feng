@@ -180,9 +180,9 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 
 	s = strings.Replace(s, "FILE_SIZE", fmt.Sprintf("%d", fl.size), 1)
 
-	//if DEBUG {
-	log.Printf("GetInt: searching for '%s'", s)
-	//}
+	if DEBUG {
+		log.Printf("GetInt: searching for '%s'", s)
+	}
 
 	n, err := fl.EvaluateExpression(s)
 	if err != nil {
@@ -190,9 +190,9 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 		log.Println("GetInt FAILURE:", err)
 		os.Exit(1)
 	}
-	//if DEBUG {
-	log.Printf("GetInt: %s => %d", s, n)
-	//}
+	if DEBUG {
+		log.Printf("GetInt: %s => %d", s, n)
+	}
 	return n, err
 
 	/*

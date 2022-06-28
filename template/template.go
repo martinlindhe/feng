@@ -357,6 +357,7 @@ func (t *Template) evaluateLayout() ([]value.DataField, error) {
 
 	for _, s := range t.Layout {
 		key, err := value.ParseDataField(s)
+		log.Println(s, key)
 		if err != nil {
 			return nil, err
 		}

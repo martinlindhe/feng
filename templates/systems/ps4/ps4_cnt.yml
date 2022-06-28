@@ -1,6 +1,8 @@
-# STATUS: 10%
+# STATUS: 30%
 #
-# format used on PS4 for application packages / updates
+# format used on PS4/PS5 for application packages / updates
+#
+# TODO: use filenames from data_entry with file_type 02 on output files
 
 references:
   - https://www.psdevwiki.com/ps4/Package_Files
@@ -8,25 +10,28 @@ references:
 software:
   - https://sites.google.com/site/theleecherman/ps4pkgviewer
   - https://github.com/pearlxcore/PS4-PKG-Tool
+  - https://github.com/SKFU/ps5tools/blob/main/cnt.py
 
 kind: xxx
-name:  Sony PS4 PKG file
+name:  Sony PS4/PS5 PKG file
 extensions: [.pkg]
 endian: big
 
 structs:
-  header:
+  cnt_header:
     u8[4] Signature: 7f c'CNT'
     u32 pkg_type: ??
     u32 pkg_0x008: ??
     u32 pkg_file_count: ??
-    u32 pkg_entry_count: ??
+    u32 pkg_entry_count: ??       # XXX "file_count". extract this many entries PS5.
+    
     u16 pkg_sc_entry_count: ??
     u16 pkg_entry_count_2: ??
-    u32 pkg_table_offset: ??
+  
+    u32 pkg_table_offset: ??      # XXX "toc_offset"
     u32 pkg_entry_data_size: ??
-    u64 pkg_body_offset: ??
-    u64 pkg_body_size: ??
+    u64 pkg_body_offset: ??       # XXX "offset_1"
+    u64 pkg_body_size: ??         # XXX "data_size"
     u64 pkg_content_offset: ??
     u64 pkg_content_size: ??
 
@@ -80,6 +85,34 @@ structs:
     # 0xFE0
     u8[32] pkg_digest: ??
 
-layout:
-  - header Header
+  toc_header:
+    u32 version: ??
+    u32 unknown1: ??
+    u32 unknown2: ??
+    u32 unknown3: ??
+    u32 eof_offset: ??
+    u32 toc_size: ??
+    u32 unknown4: ??
+    u32 unknown5: ??
 
+  data_entry:
+    u16 padding1: ??      # always 0 ?
+    u8 file_type:
+      eq 02: Filenames  # data block with file names for data entries where filename_offset != 0. TODO make use of
+    u8 flags: ??              # maybe flags?
+    u32 filename_offset: ??
+    u64 padding2: ??      # always 0 ?
+    u32 data_offset: ??
+    u32 data_size: ??
+    u64 padding3: ??      # always 0 ?
+    offset: self.data_offset
+    raw:u8[self.data_size] Data: ?? # XXX use special type for easy extraction
+    offset: restore
+
+layout:
+  - cnt_header CNTHeader
+
+  - offset CNTHeader.pkg_table_offset
+  - toc_header TOCHeader
+
+  - data_entry[CNTHeader.pkg_entry_count - 1] DataEntry

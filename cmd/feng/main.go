@@ -43,7 +43,7 @@ func main() {
 		}
 
 		for _, layout := range fl.Structs {
-			log.Println("---", layout.Label)
+			log.Println("--- extracting", layout.Label)
 
 			for _, field := range layout.Fields {
 				switch field.Format.Kind {
@@ -66,6 +66,22 @@ func main() {
 					log.Printf("extracted %d bytes to %s", b.Len(), filename)
 
 					err = ioutil.WriteFile(filename, b.Bytes(), 0644)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+				case "raw:u8":
+					// XXX if length, use it
+					if len(field.Value) <= 1 {
+						continue
+					}
+					log.Printf("%s.%s %s: extracting raw data stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+
+					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_raw_%08x", field.Offset))
+
+					log.Printf("extracted %d bytes to %s", len(field.Value), filename)
+
+					err = ioutil.WriteFile(filename, field.Value, 0644)
 					if err != nil {
 						log.Fatal(err)
 					}

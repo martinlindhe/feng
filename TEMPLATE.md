@@ -41,7 +41,8 @@ Constants is always expressed in network byte order
     dostime             16-bit MS-DOS timestamp, in UTC
 
 
-    compressed:zlib[self.Size]  mark area as zlib compressed data
+    raw:u8[size]                mark area as file data (for extraction feature)
+    compressed:zlib[self.Size]  mark area as zlib compressed data (for extraction feature)
 
     u16 Type:
       eq 0000: TYPE_NULL            these types will evaluate as constants
