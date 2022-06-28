@@ -1,0 +1,47 @@
+# STATUS: 50%
+#
+# SFO (System File Object)
+#
+# file format used on PSP, PSVITA, PS3, PS5 and probably PS4.
+
+references:
+  - https://www.psdevwiki.com/ps4/Param.sfo#Internal_Structure
+
+software:
+  - https://github.com/wargio/vitatool/
+
+kind: xxx
+name: Sony PSVita/PS3/PS4/PS5 System File Object
+extensions: [.sfo]
+endian: little  # XXX at least ps5 version is little endian
+
+structs:
+  header:
+    u8[4] Signature: 00 c'PSF'
+    u32 Version: ??
+    u32 keyTableOffset: ??    # Key table start offset
+    u32 dataTableOffset: ??   # Data table start offset
+    u32 indexTableEntries: ?? # Number of entries in index table
+
+  sfo_n:
+    u16 keyOffset: ??   # Key table offset
+    u16 param_fmt:      # type of data
+      eq 0204: unknown SEEN ON PS5
+      eq 0400: utf8 special mode WANT SAMPLE
+      eq 0402: character string WANT SAMPLE
+      eq 0404: u32
+    u32 paramLen: ??
+    u32 paramMaxLen: ??
+    u32 dataOffset: ??
+
+    offset: Header.keyTableOffset + self.keyOffset
+    asciiz Key: ??
+    offset: restore
+
+    offset: Header.dataTableOffset + self.dataOffset
+    ascii[self.paramMaxLen] Data table: ??
+    offset: restore
+
+layout:
+  - header Header
+  - sfo_n[Header.indexTableEntries] SFO
