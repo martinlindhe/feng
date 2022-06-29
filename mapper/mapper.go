@@ -132,6 +132,11 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		}
 
 		if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
+
+			if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
+				// accept eof errors as valid parse for otherwise valid mapping
+				return &fileLayout, nil
+			}
 			//if DEBUG {
 			feng.Yellow("%s errors out: %s\n", ds.BaseName, err.Error())
 			//}
