@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/fatih/color"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
 )
@@ -77,8 +76,6 @@ func (field *Field) Present() string {
 var (
 	variableExpressionRE      = regexp.MustCompile(`([\w .+\-*/()<>"&]+)`)
 	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s\+\-\*\/]+):([\d\s\+\-\*\/]+)`)
-
-	red = color.New(color.FgRed).SprintfFunc()
 )
 
 const (

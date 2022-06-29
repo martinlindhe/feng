@@ -71,7 +71,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		if df.Slice {
 			// like ranged layout but keep reading until EOF
 			if DEBUG {
-				log.Printf("appending sliced %s[]", df.Kind)
+				log.Printf("appending sliced %s[] %s", df.Kind, df.Label)
 			}
 
 			baseLabel := df.Label
@@ -124,9 +124,9 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 		}
 
 		if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
-			if DEBUG {
-				log.Println("errors out:", err)
-			}
+			//if DEBUG {
+			feng.Yellow("errors out: %s\n", err.Error())
+			//}
 			return &fileLayout, err
 		}
 	}
@@ -168,7 +168,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(EvaluateError); ok {
-				log.Println(red(tpl + ": " + err.Error()))
+				feng.Red("%s: %s\n", tpl, err.Error())
 			}
 			return nil
 		}
@@ -209,8 +209,8 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 		return err
 
 		// remove the added struct in case of error
-		log.Print(red("removing struct '%s.%s' due to error: %v", fl.BaseName, fs.Label, err))
-		fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
+		//feng.Red("removing struct '%s.%s' due to error: %v", fl.BaseName, fs.Label, err)
+		//fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
 	}
 	return err
 }
@@ -227,6 +227,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 	lastIf := ""
 
 	for _, es := range expressions {
+		if DEBUG {
+			log.Printf("expandChildren: working with %s %s: %v", es.Field.Kind, es.Field.Label, es)
+		}
 		switch es.Field.Kind {
 		case "label":
 			// "label: APP0". augment node with extra info
@@ -279,7 +282,8 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"ascii", "utf16",
 			"time_t_32", "filetime", "dostime", "dosdate",
-			"compressed:zlib", "raw:u8":
+			"compressed:zlib",
+			"raw:u8":
 			// internal data types
 			if es.Field.Range != "" {
 				var err error
@@ -320,9 +324,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			}
 			if err != nil {
 				if errors.Is(err, io.ErrUnexpectedEOF) {
-					if DEBUG {
-						log.Printf("error: [%08x] failed reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
-					}
+					//if DEBUG {
+					feng.Red("error: [%08x] failed reading %d bytes for '%s.%s' %s: %02x (err:%v)\n", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
+					//}
 					continue
 				}
 				return err
@@ -404,7 +408,8 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			// find custom struct with given name
 			customStruct, err := fl.GetStruct(es.Field.Kind)
 			if err != nil {
-				return fmt.Errorf("error fetching struct '%s': %v", es.Field.Kind, err)
+				// this error is always critical. it means the parsed template is not working
+				log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
 			}
 
 			log.Printf("%#v", customStruct)

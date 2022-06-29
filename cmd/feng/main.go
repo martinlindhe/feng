@@ -61,7 +61,7 @@ func main() {
 						log.Fatal(err)
 					}
 
-					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_zlib_%08x", field.Offset))
+					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
 
 					log.Printf("extracted %d bytes to %s", b.Len(), filename)
 
@@ -77,7 +77,7 @@ func main() {
 					}
 					log.Printf("%s.%s %s: extracting raw data stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
-					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_raw_%08x", field.Offset))
+					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
 
 					log.Printf("extracted %d bytes to %s", len(field.Value), filename)
 

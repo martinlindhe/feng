@@ -96,3 +96,15 @@ NOTE: variables used in if-statements cannot contain spaces
 
     if self.Flags & ReservePresent:
       u16 cbCFHeader: ??  # size of per-cabinet reserved area
+
+
+# loops (TODO)
+
+TODO consider lz4, where there is N data blocks and the last one has DataSize == 0.
+
+    u32 DataSize:
+      bit b0111_1111_11111111_11111111_11111111: DataSize
+      bit b1000_0000_00000000_00000000_00000000: Uncompressed
+    u8[self.DataSize.DataSize] Data: ??
+
+How to parse this?

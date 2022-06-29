@@ -1,0 +1,51 @@
+# STATUS: 25%
+#
+# UnityFS asset bundle
+#
+# Used in Unity3D since version 5
+#
+# - HI: compressed:lz4 cant extract (no lz4 header) with ../feng-samples/games/unity/unityfs/sakurawarsfactory_f4c5d39bff55b30dfa4e1ae53402c210.ab
+
+references:
+  - https://github.com/SeriousCache/UABE/blob/edc33b430f58acfd5501535731a22edfc7440ec9/AssetsTools/AssetBundleFileFormat.cpp
+  - https://github.com/Perfare/AssetStudio/blob/b70b5196e3c9fdcc9845b553a044974bb44f0964/AssetStudio/BundleFile.cs#L230
+  - https://imbushuo.net/blog/archives/505
+
+software:
+  - https://github.com/SeriousCache/UABE
+  - https://github.com/Perfare/AssetStudio
+
+kind: system
+name: UnityFS
+extensions: [.ab, .assetbundle]
+endian: big
+
+structs:
+  header:
+    ascii[8] Signature: c'UnityFS' 00
+    u32 Version: ??                   # only seen version 6
+    asciiz MinimumPlayerVersion: ??   # 5.x.x
+    asciiz FileEngineVersion: ??      # 2018.4.30f1
+    u64 totalSize: ??
+    u32 compressedSize: ??
+    u32 uncompressedSize: ??
+    u32 flags:
+      bit b00000000_00000000_00000000_0011_1111: compression # 0=none, 1=LZMA, 2=LZ4, 3=LZ4HC, 4=Lzham
+      bit b00000000_00000000_00000000_0100_0000: directory info
+      bit b00000000_00000000_00000000_1000_0000: BlocksInfoAtTheEnd
+    if self.Version >= 7:
+      u8[16] padding: ??
+
+    #if ((m_Header.flags & ArchiveFlags.BlocksInfoAtTheEnd) != 0) {
+    #  var position = reader.Position;
+    #  reader.Position = reader.BaseStream.Length - m_Header.compressedBlocksInfoSize;
+    #  blocksInfoBytes = reader.ReadBytes((int)m_Header.compressedBlocksInfoSize);
+    #  reader.Position = position;
+    #}else { //0x40 BlocksAndDirectoryInfoCombined
+  
+    # XXX contains a lz4 frame data. does not have lz4 header and no crc
+    #compressed:lz4[self.compressedSize] Compressed data: ??
+    raw:u8[self.compressedSize] Compressed data: ??
+
+layout:
+  - header Header

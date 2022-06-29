@@ -257,7 +257,8 @@ func (df *DataField) SingleUnitSize() uint64 {
 func SingleUnitSize(kind string) uint64 {
 	switch kind {
 	case "u8", "i8", "ascii", "asciiz",
-		"compressed:zlib", "raw:u8":
+		"compressed:zlib",
+		"raw:u8":
 		return 1
 	case "u16", "i16", "utf16",
 		"dostime", "dosdate":

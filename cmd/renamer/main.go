@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/fs"
 	"io/ioutil"
 	"log"
@@ -10,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/alecthomas/kong"
-	"github.com/fatih/color"
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/mapper"
 	"github.com/martinlindhe/feng/template"
@@ -21,12 +19,6 @@ var args struct {
 	Fix     bool   `help:"Rename incorrect extensions."`
 	Verbose bool   `help:"Be more verbose."`
 }
-
-var (
-	red    = color.New(color.FgRed).SprintfFunc()
-	green  = color.New(color.FgGreen).SprintfFunc()
-	yellow = color.New(color.FgYellow).SprintfFunc()
-)
 
 func main() {
 
@@ -80,12 +72,12 @@ func main() {
 		ext := filepath.Ext(tpl)
 		if len(extensions) == 1 && ext == extensions[0] {
 			if args.Verbose {
-				fmt.Println(green("OK %s: %v", tpl, extensions))
+				feng.Green("OK %s: %v\n", tpl, extensions)
 			}
 		} else if len(extensions) == 1 {
 			if args.Fix {
 				newName := strings.TrimSuffix(tpl, filepath.Ext(tpl)) + extensions[0]
-				fmt.Println(red("RENAMING %s => %s", tpl, newName))
+				feng.Red("RENAMING %s => %s\n", tpl, newName)
 				oldName, err := filepath.Abs(tpl)
 				if err != nil {
 					log.Fatal(err)
@@ -98,13 +90,13 @@ func main() {
 					log.Fatal(err)
 				}
 			} else {
-				fmt.Println(red("WRONG EXT %s: %s", tpl, extensions[0]))
+				feng.Red("WRONG EXT %s: %s\n", tpl, extensions[0])
 			}
 
 		} else if len(extensions) == 0 {
-			fmt.Println(yellow("NO MATCH %s", tpl))
+			feng.Yellow("NO MATCH %s\n", tpl)
 		} else {
-			fmt.Println(red("MULTI MATCH %s: %v", tpl, extensions))
+			feng.Red("MULTI MATCH %s: %v\n", tpl, extensions)
 		}
 
 		return nil

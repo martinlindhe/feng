@@ -1,0 +1,62 @@
+# STATUS: 50%
+#
+# - HI: parse all N data blocks (need a LOOP construct?)
+
+references:
+  - https://en.wikipedia.org/wiki/LZ4_(compression_algorithm)
+  - https://github.com/lz4/lz4/blob/dev/doc/lz4_Frame_format.md
+  - https://www.sweetscape.com/010editor/repository/files/LZ4.bt
+
+kind: archive
+name: LZ4 Archive
+extensions: [.lz4]
+mime: application/x-lz4
+endian: little
+
+structs:
+  header: # XXX frame header
+    u32 Signature:
+      eq 184D2204: Magic number
+      # TODO handle legacy format with magic 184C2102. NEED SAMPLE.
+      # XXX TODO handle 184D2A50 "skippable frame"
+      default: invalid
+    u8 flags:
+      bit b0000_0001: PresetDictionary
+      bit b0000_0010: Reserved
+      bit b0000_0100: ContentChecksum
+      bit b0000_1000: ContentSize
+      bit b0001_0000: BlockChecksum
+      bit b0010_0000: BlockIndependence
+      bit b1100_0000: Version
+
+    u8 blockDescriptor:
+      bit b0000_1111: Reserved
+      bit b0111_0000: BlockMaximumSize
+      bit b1000_0000: Reserved
+
+    if self.flags & ContentSize:  # SAMPLE: file1-content-size.lz4
+      u64 ContentSize: ??
+
+    # TODO need sample
+    #if (Flags.FlagData.PresetDictionary > 0)
+    #    UINT32 DictionaryID;    
+    
+    u8 HeaderChecksum: ??     # XXX checksum type?
+
+    # now comes N data blocks with a NULL one as terminator. XXX how to terminate parsing
+    u32 DataSize:
+      bit b0111_1111_11111111_11111111_11111111: DataSize
+      bit b1000_0000_00000000_00000000_00000000: Uncompressed
+    u8[self.DataSize.DataSize] Data: ??
+    if self.flags & BlockChecksum:
+      u32 BlockChecksum: ??
+
+    u32 DataSize2:
+      bit b0111_1111_11111111_11111111_11111111: DataSize
+      bit b1000_0000_00000000_00000000_00000000: Uncompressed
+    u8[self.DataSize2.DataSize] Data: ??
+    if self.flags & ContentChecksum:
+      u32 ContentChecksum: ??
+
+layout:
+  - header Header
