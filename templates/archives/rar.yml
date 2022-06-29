@@ -10,8 +10,8 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/RAR.bt
 
 kind: archive
-name: Rar Archive
-extensions: [.rar, .r00, .r01]
+name: RAR Archive
+extensions: [.rar, .r00, .r01, .r02]
 mime: application/vnd.rar
 endian: little
 
@@ -45,7 +45,7 @@ structs:
       eq 7b: END #ENDARC_HEAD
       #default: invalid
 
-    label: self.Type # XXXX
+    label: self.Type # XXX
 
     if self.Type == ARCHIVE:
       #label: ARCHIVE
@@ -123,7 +123,6 @@ structs:
       # struct FileHeadBlock END :::
 
       u8[self.HeaderSize - (self.offset - offset("self.CRC"))] Reserved: ??
-
       u8[self.Compressed size] Data: ??
 
     if self.Type == SUBBLOCK:
@@ -148,7 +147,8 @@ structs:
       u16 Common block flags:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
-      u16 Header size: ??
+      u16 HeaderSize: ??
+      parse: stop
 
 layout:
   - header Header

@@ -1,0 +1,16 @@
+# STATUS: 1%
+
+references:
+  - xxx
+
+kind: executable
+name: Windows Portable executable
+extensions: [.exe]
+endian: little
+
+structs:
+  header:
+    ascii[2] Signature: c'MZ'
+
+layout:
+  - header Header

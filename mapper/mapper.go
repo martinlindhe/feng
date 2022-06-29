@@ -79,6 +79,10 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 				df.Index = int(i)
 				df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
+					if errors.Is(err, ParseStopError) {
+						log.Println("reached ParseStop")
+						break
+					}
 					if err == io.EOF {
 						log.Println("reached EOF")
 						break
@@ -215,6 +219,10 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 	return err
 }
 
+var (
+	ParseStopError = errors.New("manual parse stop")
+)
+
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG {
@@ -228,7 +236,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 	for _, es := range expressions {
 		if DEBUG {
-			log.Printf("expandChildren: working with %s %s: %v", es.Field.Kind, es.Field.Label, es)
+			log.Printf("expandChildren: working with field %s %s: %v", es.Field.Kind, es.Field.Label, es)
 		}
 		switch es.Field.Kind {
 		case "label":
@@ -236,6 +244,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 			// XXX eval expression such as "self.Type", get evaluated match???
 			fs.decoration = es.Pattern.Value
+
+		case "parse":
+			// break parser
+			if es.Pattern.Value != "stop" {
+				log.Fatalf("invalid parse value '%s'", es.Pattern.Value)
+			}
+			//log.Println("-- PARSE STOP --")
+			return ParseStopError
 
 		case "endian":
 			// special form
@@ -383,8 +399,10 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				return err
 			}
 			lastIf = q
-			//log.Println("EVAL EXPRESSION", q, ":", a)
 			if a != 0 {
+				if DEBUG {
+					log.Println("IF EVALUATED TRUE: q=", q, ", a=", a)
+				}
 				err := fl.expandChildren(r, fs, df, ds, es.Children)
 				if err != nil {
 					return err
@@ -392,12 +410,15 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			}
 
 		case "else":
-			log.Println("ELSE: evaluating", lastIf)
+			if DEBUG {
+				log.Println("ELSE: evaluating", lastIf)
+			}
 			a, err := fl.EvaluateExpression(lastIf)
 			if err != nil {
 				return err
 			}
 			if a == 0 {
+				log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
 				err := fl.expandChildren(r, fs, df, ds, es.Children)
 				if err != nil {
 					return err

@@ -8,6 +8,8 @@
 
     offset: self.BaseOffset       set offset to evaluated data field
 
+    parse: end          stops parsing. useful for custom end-of-stream conditions (used by archives/rar)
+
 
 # pre-defined values
 

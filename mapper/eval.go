@@ -6,7 +6,6 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/maja42/goval"
 	"github.com/martinlindhe/feng/value"
 )
@@ -51,7 +50,6 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 
 	if DEBUG {
 		//log.Printf("variables: %#v", variables)
-		spew.Dump(variables)
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)
