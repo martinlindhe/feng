@@ -14,7 +14,7 @@ const (
 	DEBUG = false
 )
 
-// Template represents a templates/*.yml file
+// Template represents the structure of a templates/*.yml file
 type Template struct {
 	// list of url references for file format
 	References []string
@@ -34,6 +34,12 @@ type Template struct {
 	// endianness (big, little), can be overridden in a struct declaration
 	Endian string
 
+	// if template lacks magic bytes
+	NoMagic bool `yaml:"no_magic"`
+
+	// magic id:s
+	Magic []Magic
+
 	// constants
 	Constants []yaml.MapItem
 
@@ -47,6 +53,32 @@ type Template struct {
 type EvaluatedConstant struct {
 	Field value.DataField
 	Value []byte
+}
+
+func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
+	res := []EvaluatedConstant{}
+	for _, c := range t.Constants {
+		key, err := value.ParseDataField(c.Key.(string))
+		if err != nil {
+			return nil, err
+		}
+		val, err := value.ParseHexString(c.Value.(string))
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, EvaluatedConstant{key, val})
+	}
+
+	// add all fields with eq subkey pattern matches as constants
+	for _, section := range t.Structs {
+		constants, err := findStructConstants(&section)
+		if err != nil {
+			panic(err)
+		}
+		res = append(res, constants...)
+	}
+
+	return res, nil
 }
 
 func findStructConstants(c *yaml.MapItem) ([]EvaluatedConstant, error) {
@@ -70,7 +102,7 @@ func findStructConstants(c *yaml.MapItem) ([]EvaluatedConstant, error) {
 							continue
 						}
 						if m.Operation == "eq" || m.Operation == "bit" {
-							data, err := value.ParseDataString(m.Pattern)
+							data, err := value.ParseHexString(m.Pattern)
 							if err != nil {
 								log.Println("error (ignoring2):", err)
 								continue
@@ -92,34 +124,6 @@ func findStructConstants(c *yaml.MapItem) ([]EvaluatedConstant, error) {
 			}
 		}
 	}
-	return res, nil
-}
-
-func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
-	res := []EvaluatedConstant{}
-	for _, c := range t.Constants {
-		key, err := value.ParseDataField(c.Key.(string))
-		if err != nil {
-			return nil, err
-		}
-		val, err := value.ParseDataString(c.Value.(string))
-		if err != nil {
-			return nil, err
-		}
-		res = append(res, EvaluatedConstant{key, val})
-	}
-
-	// add all fields with eq subkey pattern matches as constants
-	for _, section := range t.Structs {
-
-		constants, err := findStructConstants(&section)
-		res = append(res, constants...)
-		if err != nil {
-			panic(err)
-		}
-
-	}
-
 	return res, nil
 }
 
@@ -162,7 +166,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 
 		switch mp.Operation {
 		case "bit":
-			bitmaskSlice, err := value.ParseDataString(mp.Pattern)
+			bitmaskSlice, err := value.ParseHexString(mp.Pattern)
 			if err != nil {
 				return nil, err
 			}
@@ -178,7 +182,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 			res = append(res, value.MatchedPattern{Label: mp.Label, Operation: mp.Operation, Value: val})
 
 		case "eq":
-			patternData, err := value.ParseDataString(mp.Pattern)
+			patternData, err := value.ParseHexString(mp.Pattern)
 			if err != nil {
 				return nil, err
 			}
@@ -221,14 +225,12 @@ func (r ValidationError) Error() string {
 func (t *Template) evaluateStructs() ([]evaluatedStruct, error) {
 	res := []evaluatedStruct{}
 	for _, c := range t.Structs {
-
 		es, err := parseStruct(&c)
 		if err != nil {
 			return nil, err
 		}
 		res = append(res, es)
 	}
-
 	return res, nil
 }
 
@@ -365,4 +367,40 @@ func (t *Template) evaluateLayout() ([]value.DataField, error) {
 	}
 
 	return res, nil
+}
+
+type Magic struct {
+	Offset HexStringU64
+	Match  HexString
+}
+type HexString []byte
+
+// Implements the Unmarshaler interface of the yaml pkg.
+func (e *HexString) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var s string
+	if err := unmarshal(&s); err == nil {
+		v, err := value.ParseHexString(s)
+		if err != nil {
+			return err
+		}
+		*e = HexString(v)
+		return err
+	}
+	return nil
+}
+
+type HexStringU64 uint64
+
+// Implements the Unmarshaler interface of the yaml pkg.
+func (e *HexStringU64) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var s string
+	if err := unmarshal(&s); err == nil {
+		v, err := value.ParseHexStringToUint64(s)
+		if err != nil {
+			return err
+		}
+		*e = HexStringU64(v)
+		return err
+	}
+	return nil
 }

@@ -17,6 +17,8 @@ name: Android Resource
 extensions: [.arsc, .xml]
 endian: little
 
+no_magic: true  # XXX: this format has no header
+
 types:
   # XXX IMPLEMENT
   ResStringPool_string:

@@ -17,6 +17,10 @@ kind: image
 extensions: [.jpg, .jpeg]
 mime: image/jpeg
 
+magic:
+  - offset: 0000
+    match: ff d8
+
 types:
   # XXX MAKE USE OF
   COMPS:

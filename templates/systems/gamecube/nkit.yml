@@ -10,6 +10,10 @@ name:  Nintendo Gamecube or Wii compressed iso
 extensions: [.nkit.iso]
 endian: big
 
+magic:
+  - offset: 0200
+    match: c'NKIT'
+
 structs:
   header:
     #offset: 512   # XXX allow this syntax to offset parsing by 512 bytes...  or "offset: 0x200" ... !!!

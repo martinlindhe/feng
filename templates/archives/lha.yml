@@ -18,6 +18,10 @@ extensions: [.lha, .lzh]
 mime: application/x-lzh-compressed
 endian: little
 
+magic:
+  - offset: 0002
+    match: c'-lh'
+
 structs:
   header:
     u8 Header size: ??          # seen 0x34

@@ -3,7 +3,6 @@ package mapper
 import (
 	"fmt"
 	"log"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -191,8 +190,7 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 	n, err := fl.EvaluateExpression(s)
 	if err != nil {
 		// XXX this is critical error and template must be fixed
-		log.Println("GetInt FAILURE:", err)
-		os.Exit(1)
+		log.Fatal("GetInt FAILURE:", err)
 	}
 	if DEBUG {
 		log.Printf("GetInt: %s => %d", s, n)

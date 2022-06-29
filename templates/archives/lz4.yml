@@ -13,6 +13,10 @@ extensions: [.lz4]
 mime: application/x-lz4
 endian: little
 
+magic:
+  - offset: 0000
+    match: 184D2204 # XXX
+
 structs:
   header: # XXX frame header
     u32 Signature:

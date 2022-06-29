@@ -16,6 +16,10 @@ extensions: [.png]
 mime: image/png
 endian: big
 
+magic:
+  - offset: 0000
+    match: 89 c'PNG' 0d 0a 1a 0a
+
 types:
   rgb:
     u8 Red: ??

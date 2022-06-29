@@ -1,0 +1,662 @@
+# templates/images/gif.yml
+Header
+  [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
+  [000004] Version                        u16 le           24889                 61 39
+           - GIF89a                       eq               24889
+  [000006] Logical screen width           u16 le           218                   00 da
+  [000008] Logical screen height          u16 le           218                   00 da
+  [00000a] ScreenDescriptor               u8               196                   c4
+           - GlobalColorTableSize         bit              4
+           - Sort                         bit              0
+           - ColorResolution              bit              4
+           - GlobalColorTablePresent      bit              1
+  [00000b] Background color               u8               0                     00
+  [00000c] Aspect ratio                   u8               0                     00
+  [00000d] Global Color Table             u8[96]                                 70 60 7f 7e 70 6f 80 6f 59 83 73 60 84 76 68 84 76 75 86 76 5b 88 77 63 8a 7c 64 8a 7d 6b 8d 81 ...
+
+Section_0 BLOCK_EXTENSION
+  [00006d] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [00006e] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
+  [00006f] Size                           u8               4                     04
+  [000070] Flags                          u8               4                     04
+           - Transparent color            bit              0
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
+  [000071] Delay time                     u16 le           0                     00 00
+  [000073] Transparent color index        u8               0                     00
+  [000074] Block terminator               u8               0                     00
+
+Section_1 BLOCK_EXTENSION
+  [000075] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [000076] ExtensionType                  u8               255                   ff
+
+Section_2 Section_2.BlockType
+  [000077] BlockType                      u8               252                   fc
+
+Section_3 Section_3.BlockType
+  [000078] BlockType                      u8               73                    49
+
+Section_4 Section_4.BlockType
+  [000079] BlockType                      u8               67                    43
+
+Section_5 Section_5.BlockType
+  [00007a] BlockType                      u8               67                    43
+
+Section_6 Section_6.BlockType
+  [00007b] BlockType                      u8               82                    52
+
+Section_7 Section_7.BlockType
+  [00007c] BlockType                      u8               71                    47
+
+Section_8 Section_8.BlockType
+  [00007d] BlockType                      u8               66                    42
+
+Section_9 Section_9.BlockType
+  [00007e] BlockType                      u8               71                    47
+
+Section_10 Section_10.BlockType
+  [00007f] BlockType                      u8               49                    31
+
+Section_11 Section_11.BlockType
+  [000080] BlockType                      u8               48                    30
+
+Section_12 Section_12.BlockType
+  [000081] BlockType                      u8               49                    31
+
+Section_13 Section_13.BlockType
+  [000082] BlockType                      u8               50                    32
+
+Section_14 Section_14.BlockType
+  [000083] BlockType                      u8               0                     00
+
+Section_15 Section_15.BlockType
+  [000084] BlockType                      u8               0                     00
+
+Section_16 Section_16.BlockType
+  [000085] BlockType                      u8               5                     05
+
+Section_17 Section_17.BlockType
+  [000086] BlockType                      u8               40                    28
+
+Section_18 Section_18.BlockType
+  [000087] BlockType                      u8               97                    61
+
+Section_19 Section_19.BlockType
+  [000088] BlockType                      u8               112                   70
+
+Section_20 Section_20.BlockType
+  [000089] BlockType                      u8               112                   70
+
+Section_21 Section_21.BlockType
+  [00008a] BlockType                      u8               108                   6c
+
+Section_22 Section_22.BlockType
+  [00008b] BlockType                      u8               2                     02
+
+Section_23 Section_23.BlockType
+  [00008c] BlockType                      u8               32                    20
+
+Section_24 Section_24.BlockType
+  [00008d] BlockType                      u8               0                     00
+
+Section_25 Section_25.BlockType
+  [00008e] BlockType                      u8               0                     00
+
+Section_26 Section_26.BlockType
+  [00008f] BlockType                      u8               109                   6d
+
+Section_27 Section_27.BlockType
+  [000090] BlockType                      u8               110                   6e
+
+Section_28 Section_28.BlockType
+  [000091] BlockType                      u8               116                   74
+
+Section_29 Section_29.BlockType
+  [000092] BlockType                      u8               114                   72
+
+Section_30 Section_30.BlockType
+  [000093] BlockType                      u8               82                    52
+
+Section_31 Section_31.BlockType
+  [000094] BlockType                      u8               71                    47
+
+Section_32 Section_32.BlockType
+  [000095] BlockType                      u8               66                    42
+
+Section_33 Section_33.BlockType
+  [000096] BlockType                      u8               32                    20
+
+Section_34 Section_34.BlockType
+  [000097] BlockType                      u8               88                    58
+
+Section_35 Section_35.BlockType
+  [000098] BlockType                      u8               89                    59
+
+Section_36 Section_36.BlockType
+  [000099] BlockType                      u8               90                    5a
+
+Section_37 Section_37.BlockType
+  [00009a] BlockType                      u8               32                    20
+
+Section_38 Section_38.BlockType
+  [00009b] BlockType                      u8               7                     07
+
+Section_39 Section_39.BlockType
+  [00009c] BlockType                      u8               210                   d2
+
+Section_40 Section_40.BlockType
+  [00009d] BlockType                      u8               0                     00
+
+Section_41 Section_41.BlockType
+  [00009e] BlockType                      u8               5                     05
+
+Section_42 Section_42.BlockType
+  [00009f] BlockType                      u8               0                     00
+
+Section_43 Section_43.BlockType
+  [0000a0] BlockType                      u8               13                    0d
+
+Section_44 Section_44.BlockType
+  [0000a1] BlockType                      u8               0                     00
+
+Section_45 Section_45.BlockType
+  [0000a2] BlockType                      u8               12                    0c
+
+Section_46 Section_46.BlockType
+  [0000a3] BlockType                      u8               0                     00
+
+Section_47 Section_47.BlockType
+  [0000a4] BlockType                      u8               0                     00
+
+Section_48 Section_48.BlockType
+  [0000a5] BlockType                      u8               0                     00
+
+Section_49 Section_49.BlockType
+  [0000a6] BlockType                      u8               0                     00
+
+Section_50 Section_50.BlockType
+  [0000a7] BlockType                      u8               97                    61
+
+Section_51 Section_51.BlockType
+  [0000a8] BlockType                      u8               99                    63
+
+Section_52 Section_52.BlockType
+  [0000a9] BlockType                      u8               115                   73
+
+Section_53 Section_53.BlockType
+  [0000aa] BlockType                      u8               112                   70
+
+Section_54 Section_54.BlockType
+  [0000ab] BlockType                      u8               65                    41
+
+Section_55 Section_55.BlockType
+  [0000ac] BlockType                      u8               80                    50
+
+Section_56 Section_56.BlockType
+  [0000ad] BlockType                      u8               80                    50
+
+Section_57 Section_57.BlockType
+  [0000ae] BlockType                      u8               76                    4c
+
+Section_58 Section_58.BlockType
+  [0000af] BlockType                      u8               0                     00
+
+Section_59 Section_59.BlockType
+  [0000b0] BlockType                      u8               0                     00
+
+Section_60 Section_60.BlockType
+  [0000b1] BlockType                      u8               0                     00
+
+Section_61 Section_61.BlockType
+  [0000b2] BlockType                      u8               0                     00
+
+Section_62 Section_62.BlockType
+  [0000b3] BlockType                      u8               97                    61
+
+Section_63 Section_63.BlockType
+  [0000b4] BlockType                      u8               112                   70
+
+Section_64 Section_64.BlockType
+  [0000b5] BlockType                      u8               112                   70
+
+Section_65 Section_65.BlockType
+  [0000b6] BlockType                      u8               108                   6c
+
+Section_66 Section_66.BlockType
+  [0000b7] BlockType                      u8               0                     00
+
+Section_67 Section_67.BlockType
+  [0000b8] BlockType                      u8               0                     00
+
+Section_68 Section_68.BlockType
+  [0000b9] BlockType                      u8               0                     00
+
+Section_69 Section_69.BlockType
+  [0000ba] BlockType                      u8               0                     00
+
+Section_70 Section_70.BlockType
+  [0000bb] BlockType                      u8               0                     00
+
+Section_71 Section_71.BlockType
+  [0000bc] BlockType                      u8               0                     00
+
+Section_72 Section_72.BlockType
+  [0000bd] BlockType                      u8               0                     00
+
+Section_73 Section_73.BlockType
+  [0000be] BlockType                      u8               0                     00
+
+Section_74 Section_74.BlockType
+  [0000bf] BlockType                      u8               0                     00
+
+Section_75 Section_75.BlockType
+  [0000c0] BlockType                      u8               0                     00
+
+Section_76 Section_76.BlockType
+  [0000c1] BlockType                      u8               0                     00
+
+Section_77 Section_77.BlockType
+  [0000c2] BlockType                      u8               0                     00
+
+Section_78 Section_78.BlockType
+  [0000c3] BlockType                      u8               0                     00
+
+Section_79 Section_79.BlockType
+  [0000c4] BlockType                      u8               0                     00
+
+Section_80 Section_80.BlockType
+  [0000c5] BlockType                      u8               0                     00
+
+Section_81 Section_81.BlockType
+  [0000c6] BlockType                      u8               0                     00
+
+Section_82 Section_82.BlockType
+  [0000c7] BlockType                      u8               0                     00
+
+Section_83 Section_83.BlockType
+  [0000c8] BlockType                      u8               0                     00
+
+Section_84 Section_84.BlockType
+  [0000c9] BlockType                      u8               246                   f6
+
+Section_85 Section_85.BlockType
+  [0000ca] BlockType                      u8               214                   d6
+
+Section_86 Section_86.BlockType
+  [0000cb] BlockType                      u8               0                     00
+
+Section_87 Section_87.BlockType
+  [0000cc] BlockType                      u8               1                     01
+
+Section_88 Section_88.BlockType
+  [0000cd] BlockType                      u8               0                     00
+
+Section_89 Section_89.BlockType
+  [0000ce] BlockType                      u8               0                     00
+
+Section_90 Section_90.BlockType
+  [0000cf] BlockType                      u8               0                     00
+
+Section_91 Section_91.BlockType
+  [0000d0] BlockType                      u8               0                     00
+
+Section_92 Section_92.BlockType
+  [0000d1] BlockType                      u8               211                   d3
+
+Section_93 Section_93.BlockType
+  [0000d2] BlockType                      u8               45                    2d
+
+Section_94 Section_94.BlockType
+  [0000d3] BlockType                      u8               97                    61
+
+Section_95 Section_95.BlockType
+  [0000d4] BlockType                      u8               112                   70
+
+Section_96 Section_96.BlockType
+  [0000d5] BlockType                      u8               112                   70
+
+Section_97 Section_97.BlockType
+  [0000d6] BlockType                      u8               108                   6c
+
+Section_98 Section_98.BlockType
+  [0000d7] BlockType                      u8               0                     00
+
+Section_99 Section_99.BlockType
+  [0000d8] BlockType                      u8               0                     00
+
+Section_100 Section_100.BlockType
+  [0000d9] BlockType                      u8               0                     00
+
+Section_101 Section_101.BlockType
+  [0000da] BlockType                      u8               0                     00
+
+Section_102 Section_102.BlockType
+  [0000db] BlockType                      u8               0                     00
+
+Section_103 Section_103.BlockType
+  [0000dc] BlockType                      u8               0                     00
+
+Section_104 Section_104.BlockType
+  [0000dd] BlockType                      u8               0                     00
+
+Section_105 Section_105.BlockType
+  [0000de] BlockType                      u8               0                     00
+
+Section_106 Section_106.BlockType
+  [0000df] BlockType                      u8               0                     00
+
+Section_107 Section_107.BlockType
+  [0000e0] BlockType                      u8               0                     00
+
+Section_108 Section_108.BlockType
+  [0000e1] BlockType                      u8               0                     00
+
+Section_109 Section_109.BlockType
+  [0000e2] BlockType                      u8               0                     00
+
+Section_110 Section_110.BlockType
+  [0000e3] BlockType                      u8               0                     00
+
+Section_111 Section_111.BlockType
+  [0000e4] BlockType                      u8               0                     00
+
+Section_112 Section_112.BlockType
+  [0000e5] BlockType                      u8               0                     00
+
+Section_113 Section_113.BlockType
+  [0000e6] BlockType                      u8               0                     00
+
+Section_114 Section_114.BlockType
+  [0000e7] BlockType                      u8               0                     00
+
+Section_115 Section_115.BlockType
+  [0000e8] BlockType                      u8               0                     00
+
+Section_116 Section_116.BlockType
+  [0000e9] BlockType                      u8               0                     00
+
+Section_117 Section_117.BlockType
+  [0000ea] BlockType                      u8               0                     00
+
+Section_118 Section_118.BlockType
+  [0000eb] BlockType                      u8               0                     00
+
+Section_119 Section_119.BlockType
+  [0000ec] BlockType                      u8               0                     00
+
+Section_120 Section_120.BlockType
+  [0000ed] BlockType                      u8               0                     00
+
+Section_121 Section_121.BlockType
+  [0000ee] BlockType                      u8               0                     00
+
+Section_122 Section_122.BlockType
+  [0000ef] BlockType                      u8               0                     00
+
+Section_123 Section_123.BlockType
+  [0000f0] BlockType                      u8               0                     00
+
+Section_124 Section_124.BlockType
+  [0000f1] BlockType                      u8               0                     00
+
+Section_125 Section_125.BlockType
+  [0000f2] BlockType                      u8               0                     00
+
+Section_126 Section_126.BlockType
+  [0000f3] BlockType                      u8               0                     00
+
+Section_127 Section_127.BlockType
+  [0000f4] BlockType                      u8               0                     00
+
+Section_128 Section_128.BlockType
+  [0000f5] BlockType                      u8               0                     00
+
+Section_129 Section_129.BlockType
+  [0000f6] BlockType                      u8               0                     00
+
+Section_130 Section_130.BlockType
+  [0000f7] BlockType                      u8               0                     00
+
+Section_131 Section_131.BlockType
+  [0000f8] BlockType                      u8               0                     00
+
+Section_132 Section_132.BlockType
+  [0000f9] BlockType                      u8               0                     00
+
+Section_133 Section_133.BlockType
+  [0000fa] BlockType                      u8               0                     00
+
+Section_134 Section_134.BlockType
+  [0000fb] BlockType                      u8               0                     00
+
+Section_135 Section_135.BlockType
+  [0000fc] BlockType                      u8               0                     00
+
+Section_136 Section_136.BlockType
+  [0000fd] BlockType                      u8               0                     00
+
+Section_137 Section_137.BlockType
+  [0000fe] BlockType                      u8               0                     00
+
+Section_138 Section_138.BlockType
+  [0000ff] BlockType                      u8               0                     00
+
+Section_139 Section_139.BlockType
+  [000100] BlockType                      u8               0                     00
+
+Section_140 Section_140.BlockType
+  [000101] BlockType                      u8               0                     00
+
+Section_141 Section_141.BlockType
+  [000102] BlockType                      u8               0                     00
+
+Section_142 Section_142.BlockType
+  [000103] BlockType                      u8               0                     00
+
+Section_143 Section_143.BlockType
+  [000104] BlockType                      u8               0                     00
+
+Section_144 Section_144.BlockType
+  [000105] BlockType                      u8               0                     00
+
+Section_145 Section_145.BlockType
+  [000106] BlockType                      u8               13                    0d
+
+Section_146 Section_146.BlockType
+  [000107] BlockType                      u8               114                   72
+
+Section_147 Section_147.BlockType
+  [000108] BlockType                      u8               88                    58
+
+Section_148 Section_148.BlockType
+  [000109] BlockType                      u8               89                    59
+
+Section_149 Section_149.BlockType
+  [00010a] BlockType                      u8               90                    5a
+
+Section_150 Section_150.BlockType
+  [00010b] BlockType                      u8               0                     00
+
+Section_151 Section_151.BlockType
+  [00010c] BlockType                      u8               0                     00
+
+Section_152 Section_152.BlockType
+  [00010d] BlockType                      u8               1                     01
+
+Section_153 Section_153.BlockType
+  [00010e] BlockType                      u8               32                    20
+
+Section_154 Section_154.BlockType
+  [00010f] BlockType                      u8               0                     00
+
+Section_155 Section_155.BlockType
+  [000110] BlockType                      u8               0                     00
+
+Section_156 Section_156.BlockType
+  [000111] BlockType                      u8               0                     00
+
+Section_157 Section_157.BlockType
+  [000112] BlockType                      u8               20                    14
+
+Section_158 Section_158.BlockType
+  [000113] BlockType                      u8               103                   67
+
+Section_159 Section_159.BlockType
+  [000114] BlockType                      u8               88                    58
+
+Section_160 Section_160.BlockType
+  [000115] BlockType                      u8               89                    59
+
+Section_161 Section_161.BlockType
+  [000116] BlockType                      u8               90                    5a
+
+Section_162 Section_162.BlockType
+  [000117] BlockType                      u8               0                     00
+
+Section_163 Section_163.BlockType
+  [000118] BlockType                      u8               0                     00
+
+Section_164 Section_164.BlockType
+  [000119] BlockType                      u8               1                     01
+
+Section_165 Section_165.BlockType
+  [00011a] BlockType                      u8               52                    34
+
+Section_166 Section_166.BlockType
+  [00011b] BlockType                      u8               0                     00
+
+Section_167 Section_167.BlockType
+  [00011c] BlockType                      u8               0                     00
+
+Section_168 Section_168.BlockType
+  [00011d] BlockType                      u8               0                     00
+
+Section_169 Section_169.BlockType
+  [00011e] BlockType                      u8               20                    14
+
+Section_170 Section_170.BlockType
+  [00011f] BlockType                      u8               98                    62
+
+Section_171 Section_171.BlockType
+  [000120] BlockType                      u8               88                    58
+
+Section_172 Section_172.BlockType
+  [000121] BlockType                      u8               89                    59
+
+Section_173 Section_173.BlockType
+  [000122] BlockType                      u8               90                    5a
+
+Section_174 Section_174.BlockType
+  [000123] BlockType                      u8               0                     00
+
+Section_175 Section_175.BlockType
+  [000124] BlockType                      u8               0                     00
+
+Section_176 Section_176.BlockType
+  [000125] BlockType                      u8               1                     01
+
+Section_177 Section_177.BlockType
+  [000126] BlockType                      u8               72                    48
+
+Section_178 Section_178.BlockType
+  [000127] BlockType                      u8               0                     00
+
+Section_179 Section_179.BlockType
+  [000128] BlockType                      u8               0                     00
+
+Section_180 Section_180.BlockType
+  [000129] BlockType                      u8               0                     00
+
+Section_181 Section_181.BlockType
+  [00012a] BlockType                      u8               20                    14
+
+Section_182 Section_182.BlockType
+  [00012b] BlockType                      u8               119                   77
+
+Section_183 Section_183.BlockType
+  [00012c] BlockType                      u8               116                   74
+
+Section_184 Section_184.BlockType
+  [00012d] BlockType                      u8               112                   70
+
+Section_185 Section_185.BlockType
+  [00012e] BlockType                      u8               116                   74
+
+Section_186 Section_186.BlockType
+  [00012f] BlockType                      u8               0                     00
+
+Section_187 Section_187.BlockType
+  [000130] BlockType                      u8               0                     00
+
+Section_188 Section_188.BlockType
+  [000131] BlockType                      u8               1                     01
+
+Section_189 Section_189.BlockType
+  [000132] BlockType                      u8               92                    5c
+
+Section_190 Section_190.BlockType
+  [000133] BlockType                      u8               0                     00
+
+Section_191 Section_191.BlockType
+  [000134] BlockType                      u8               0                     00
+
+Section_192 Section_192.BlockType
+  [000135] BlockType                      u8               0                     00
+
+Section_193 Section_193.BlockType
+  [000136] BlockType                      u8               20                    14
+
+Section_194 Section_194.BlockType
+  [000137] BlockType                      u8               99                    63
+
+Section_195 Section_195.BlockType
+  [000138] BlockType                      u8               104                   68
+
+Section_196 Section_196.BlockType
+  [000139] BlockType                      u8               97                    61
+
+Section_197 Section_197.BlockType
+  [00013a] BlockType                      u8               100                   64
+
+Section_198 Section_198.BlockType
+  [00013b] BlockType                      u8               0                     00
+
+Section_199 Section_199.BlockType
+  [00013c] BlockType                      u8               0                     00
+
+Section_200 Section_200.BlockType
+  [00013d] BlockType                      u8               1                     01
+
+Section_201 Section_201.BlockType
+  [00013e] BlockType                      u8               112                   70
+
+Section_202 Section_202.BlockType
+  [00013f] BlockType                      u8               0                     00
+
+Section_203 Section_203.BlockType
+  [000140] BlockType                      u8               0                     00
+
+Section_204 Section_204.BlockType
+  [000141] BlockType                      u8               0                     00
+
+Section_205 BLOCK_IMAGE
+  [000142] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
+  [000143] Left position                  u16 le           21618                 54 72
+  [000145] Top position                   u16 le           17234                 43 52
+  [000147] Image width                    u16 le           0                     00 00
+  [000149] Image height                   u16 le           39937                 9c 01
+  [00014b] ImageDescriptor                u8               0                     00
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
+  [00014c] LZWMinimumCodeSize             u8               0                     00
+  [00014d] Data size                      u8               0                     00
+
+0x5917 (22807) unmapped bytes

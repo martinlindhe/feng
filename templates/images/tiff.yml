@@ -10,6 +10,12 @@ extensions: [.tiff, .tif]
 mime: image/tiff
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'MM'
+  - offset: 0000
+    match: c'II'
+
 structs:
   header:
     u16 EndianMarker:

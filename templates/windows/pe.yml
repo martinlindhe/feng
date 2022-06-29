@@ -8,6 +8,10 @@ name: Windows Portable executable
 extensions: [.exe]
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'MZ'
+
 structs:
   header:
     ascii[2] Signature: c'MZ'

@@ -1,0 +1,35 @@
+# templates/images/gif.yml
+Header
+  [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
+  [000004] Version                        u16 le           24887                 61 37
+           - GIF87a                       eq               24887
+  [000006] Logical screen width           u16 le           100                   00 64
+  [000008] Logical screen height          u16 le           75                    00 4b
+  [00000a] ScreenDescriptor               u8               240                   f0
+           - GlobalColorTableSize         bit              0
+           - Sort                         bit              0
+           - ColorResolution              bit              7
+           - GlobalColorTablePresent      bit              1
+  [00000b] Background color               u8               0                     00
+  [00000c] Aspect ratio                   u8               0                     00
+  [00000d] Global Color Table             u8[6]                                  00 00 ff 00 ff ff
+
+Section_0 BLOCK_IMAGE
+  [000013] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
+  [000014] Left position                  u16 le           0                     00 00
+  [000016] Top position                   u16 le           0                     00 00
+  [000018] Image width                    u16 le           100                   00 64
+  [00001a] Image height                   u16 le           75                    00 4b
+  [00001c] ImageDescriptor                u8               199                   c7
+           - LocalColorTableSize          bit              7
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              1
+           - LocalColorTablePresent       bit              1
+  [00001d] Local color table              u8[768]                                00 02 00 01 18 00 16 06 00 17 15 01 02 26 01 09 23 10 04 36 01 18 28 02 15 3a 04 16 34 11 26 03 ...
+  [00031d] LZWMinimumCodeSize             u8               8                     08
+  [00031e] Data size                      u8               255                   ff
+  [00031f] Data                           u8[255]                                00 03 00 08 40 80 20 81 83 06 08 18 58 c8 70 a1 42 03 13 26 5c d8 70 41 4c 19 36 70 06 a9 79 83 ...
+
+0x1417 (5143) unmapped bytes

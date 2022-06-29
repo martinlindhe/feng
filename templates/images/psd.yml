@@ -9,6 +9,10 @@ extensions: [.psd]
 mime: image/vnd.adobe.photoshop
 endian: big
 
+magic:
+  - offset: 0000
+    match: c'8BPS'
+
 structs:
   header:
     ascii[4] Signature: c'8BPS'

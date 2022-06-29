@@ -17,6 +17,10 @@ extensions: [.gif]
 mime: image/gif
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'GIF8'
+
 # XXX implement custom types!
 types:
   rgb:

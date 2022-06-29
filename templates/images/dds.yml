@@ -17,6 +17,10 @@ extensions: [.dds]
 mime: image/vnd-ms.dds
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'DDS '
+
 structs:
   header:
     ascii[4] Signature: c'DDS '

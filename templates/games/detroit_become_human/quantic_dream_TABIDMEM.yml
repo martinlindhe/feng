@@ -22,6 +22,10 @@ name: Quantic Dream TabIdMem
 extensions: [.idm]
 endian: little # XXX same endian on ps2,xbox,pc for Indigo Prophecy
 
+magic:
+  - offset: 0000
+    match: c'QUANTICDREAMTABIDMEM'
+
 structs:
   header:
     ascii[20] Signature: c'QUANTICDREAMTABIDMEM'

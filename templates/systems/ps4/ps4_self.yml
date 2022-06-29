@@ -10,6 +10,10 @@ name:  Sony PS4 Signed ELF file (?)
 extensions: [.prx, .sprx]
 endian: little
 
+magic:
+  - offset: 0000
+    match: 4F 15 3D 1D
+
 structs:
   header:
     u8[4] Signature: 4F 15 3D 1D

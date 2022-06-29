@@ -17,6 +17,10 @@ name:  Sony PS4/PS5 PKG file
 extensions: [.pkg]
 endian: big
 
+magic:
+  - offset: 0000
+    match: 7f c'CNT'
+
 structs:
   cnt_header:
     u8[4] Signature: 7f c'CNT'

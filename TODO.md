@@ -39,3 +39,17 @@ LOW-future-features: crc32 type (7z, gzip)
 - MID: template directive for "SAMPLE PLEASE!"
 - MID: allow to append text to current section label with special directive
 - MID: offer special template %INDEX% to decorate label!
+
+
+# PERFORMANCE
+
+parsing JPEG is very slow. use greet02.jpg for benchmark (3.2s exec time for a 4.2 kb file on my dev machine). BENCHMARK and investigate!
+
+
+
+# MATCHING
+
+
+first match on magic file numbers. if no match, try the formats without those in classic full format sense...
+
+

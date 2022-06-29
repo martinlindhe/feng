@@ -15,6 +15,10 @@ name: Sony PSVita/PS3/PS4/PS5 System File Object
 extensions: [.sfo]
 endian: little  # XXX at least ps5 version is little endian
 
+magic:
+  - offset: 0000
+    match: 00 c'PSF'
+
 structs:
   header:
     u8[4] Signature: 00 c'PSF'

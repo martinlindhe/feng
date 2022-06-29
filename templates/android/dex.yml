@@ -26,6 +26,10 @@ name: Dalvik EXecutable
 extensions: [.dex, .odex]
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'dex' 0a
+
 constants:
   ascii[2] ENDIAN_CONSTANT:         12 34 56 78     # little endian (default)
   ascii[2] REVERSE_ENDIAN_CONSTANT: 78 56 34 12     # big endian

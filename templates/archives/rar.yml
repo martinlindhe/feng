@@ -15,6 +15,10 @@ extensions: [.rar, .r00, .r01, .r02]
 mime: application/vnd.rar
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'Rar!' 1a
+
 constants:
   u8 ARCHIVE:     "73"
   u8 FILE_OR_DIR: "74"

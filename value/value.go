@@ -35,7 +35,7 @@ func ParseDataPattern(in string) (DataPattern, error) {
 	if in == "??" {
 		return dp, nil
 	}
-	value, err := ParseDataString(in)
+	value, err := ParseHexString(in)
 	dp.Pattern = value
 	dp.Known = true
 	return dp, err
@@ -52,8 +52,16 @@ type DataPattern struct {
 	Value string
 }
 
+func ParseHexStringToUint64(in string) (uint64, error) {
+	b, err := ParseHexString(in)
+	if err != nil {
+		return 0, err
+	}
+	return AsUint64Raw(b), nil
+}
+
 // parses a textual representation of data into a byte array
-func ParseDataString(in string) ([]byte, error) {
+func ParseHexString(in string) ([]byte, error) {
 
 	var err error
 	prev := ""
@@ -323,6 +331,26 @@ func AsUint64(kind string, b []byte) uint64 {
 	}
 	log.Fatalf("AsUint64 unhandled kind %s", kind)
 	return 0
+}
+
+// decodes value in network byte order (big) to unsigned integer
+func AsUint64Raw(b []byte) uint64 {
+	if DEBUG {
+		log.Printf("AsUint6Raw converting [%02x]", b)
+	}
+	if len(b) == 1 {
+		return uint64(b[0])
+	}
+	if len(b) <= 2 {
+		return uint64(binary.BigEndian.Uint16(b))
+	}
+	if len(b) <= 4 {
+		return uint64(binary.BigEndian.Uint32(b))
+	}
+	if len(b) <= 8 {
+		return binary.BigEndian.Uint64(b)
+	}
+	panic("eep")
 }
 
 // decodes value in network byte order (big) to signed integer

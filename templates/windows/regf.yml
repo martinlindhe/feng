@@ -15,6 +15,10 @@ name: Windows NT Registry File
 extensions: [.dat] # has no standard extension
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'regf'
+
 types:
   # XXX impl!!!
   version:

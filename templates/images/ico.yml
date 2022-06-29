@@ -15,6 +15,8 @@ extensions: [.ico, .cur]
 mime: image/x-icon
 endian: little
 
+no_magic: true  # this format has no header
+
 structs:
   icon_dir:
     u16 Reserved: 00 00

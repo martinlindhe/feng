@@ -1,0 +1,34 @@
+# templates/images/gif.yml
+Header
+  [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
+  [000004] Version                        u16 le           24887                 61 37
+           - GIF87a                       eq               24887
+  [000006] Logical screen width           u16 le           79                    00 4f
+  [000008] Logical screen height          u16 le           79                    00 4f
+  [00000a] ScreenDescriptor               u8               247                   f7
+           - GlobalColorTableSize         bit              7
+           - Sort                         bit              0
+           - ColorResolution              bit              7
+           - GlobalColorTablePresent      bit              1
+  [00000b] Background color               u8               0                     00
+  [00000c] Aspect ratio                   u8               0                     00
+  [00000d] Global Color Table             u8[768]                                04 02 05 04 83 04 88 02 04 04 44 04 84 84 04 c4 c3 04 64 66 fc 44 44 04 04 02 88 47 02 04 5c 62 ...
+
+Section_0 BLOCK_IMAGE
+  [00030d] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
+  [00030e] Left position                  u16 le           0                     00 00
+  [000310] Top position                   u16 le           0                     00 00
+  [000312] Image width                    u16 le           79                    00 4f
+  [000314] Image height                   u16 le           79                    00 4f
+  [000316] ImageDescriptor                u8               0                     00
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
+  [000317] LZWMinimumCodeSize             u8               8                     08
+  [000318] Data size                      u8               255                   ff
+  [000319] Data                           u8[255]                                00 3d dc 18 48 b0 a0 c1 83 08 13 0e 1c c5 e2 9c c3 87 10 23 4a 9c 48 f1 1c a1 3a 88 32 6a dc c8 ...
+
+0x06c2 (1730) unmapped bytes

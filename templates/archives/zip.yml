@@ -16,6 +16,10 @@ extensions: [.zip]
 mime: application/zip
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'PK'
+
 structs:
   chunk:
     ascii[2] Signature: c'PK'

@@ -17,6 +17,10 @@ name: Tar (ustar) Archive
 extensions: [.tar]
 mime: application/x-tar
 
+magic:
+  - offset: 0101
+    match: c'ustar' 00
+
 structs:
   # XXX each file object start with 512 byte header then untouched data rounded up to a multiple of 512 bytes (zero pad)
   # XXX The end of an archive is marked by at least two consecutive zero-filled records.
@@ -43,10 +47,11 @@ structs:
       eq c'g': Global extended header with meta data (POSIX.1-2001)
       eq c'x': Extended header with meta data for the next file in the archive (POSIX.1-2001)
       # A-Z: Vendor specific extensions (POSIX.1-1988)
+      default: invalid
     ascii[100] Name of linked file: ??
 
     # start of ustar header
-    ascii[6] Signature: c'ustar' 00  # XXX since no match for signature, parse gets aborted but file accepted. should be hard FAIL. example ../feng-samples/archives/zip/zip_001.zip matches tar.yml
+    ascii[6] Signature: c'ustar' 00
     ascii[2] Version: c'00'
     ascii[32] Owner name: ??
     ascii[32] Group name: ??

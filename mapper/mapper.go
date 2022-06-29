@@ -147,9 +147,20 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	return &fileLayout, nil
 }
 
+var (
+	mapFileMatchedError = errors.New("matched file")
+)
+
 func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 
-	fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+
+	r := bytes.NewReader(data)
+
+	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
 		if err != nil {
 			panic(err)
@@ -162,20 +173,40 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 			return nil
 		}
 
-		b, err := fs.ReadFile(feng.Templates, tpl)
+		rawTemplate, err := fs.ReadFile(feng.Templates, tpl)
 		if err != nil {
 			return err // or panic or ignore
 		}
-
-		ds, err := template.UnmarshalTemplateIntoDataStructure(b, tpl)
+		log.Println(tpl)
+		ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, tpl)
 		if err != nil {
 			return err
 		}
 
-		r, err := os.Open(filename)
-		if err != nil {
-			log.Fatal(err)
+		if ds.NoMagic {
+			log.Println("skip no_magic template", tpl)
+			return nil
 		}
+
+		// skip if no magic bytes matches
+		found := false
+		for _, m := range ds.Magic {
+			_, err = r.Seek(int64(m.Offset), io.SeekStart)
+			if err != nil {
+				return err
+			}
+			b := make([]byte, len(m.Match))
+			_, _ = r.Read(b)
+			if bytes.Equal(m.Match, b) {
+				found = true
+			}
+		}
+		if !found {
+			feng.Red("%s magic bytes don't match\n", tpl)
+			return nil
+		}
+
+		r.Reset(data)
 
 		fl, err = MapReader(r, ds)
 		if err != nil {
@@ -187,10 +218,16 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		}
 		if len(fl.Structs) > 0 {
 			log.Printf("Parsed %s as %s", filename, tpl)
-			return fmt.Errorf("break WalkDir")
+			return mapFileMatchedError
 		}
 		return nil
 	})
+	if errors.Is(err, mapFileMatchedError) {
+		return fl, nil
+	}
+	if err != nil {
+		return fl, err
+	}
 
 	if fl == nil {
 		return nil, fmt.Errorf("no match")

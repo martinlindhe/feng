@@ -20,6 +20,10 @@ extensions: [.gz, .tgz]
 mime: application/gzip
 endian: little
 
+magic:
+  - offset: 0000
+    match: 1f 8b
+
 structs:
   header:
     u8[2] Signature: 1f 8b

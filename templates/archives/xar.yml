@@ -14,6 +14,10 @@ extensions: [.xar,.pkg,.xip]
 mime: application/x-xar
 endian: big
 
+magic:
+  - offset: 0000
+    match: c'xar!'
+
 structs:
   header:
     ascii[4] Signature: c'xar!'

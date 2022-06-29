@@ -1,8 +1,9 @@
 # STATUS: 1%
 # format used in older MacOS
 
-
 # TODO The CRC-16 algorithm used is the CCITT one with polynomial 0x1021 and no pre- or post-conditioning.
+
+# TODO: Some .SIT files start with a 128-byte MacBinary header. (so SIT header starts at 0x80), see https://github.com/MacPaw/XADMaster/wiki/MacBinarySpecs
 
 references:
   - https://apple2.org.za/gswv/a2zine/GS.WorldView/Resources/The.MacShrinkIt.Project/ARCHIVES.TXT
@@ -18,7 +19,9 @@ extensions: [.sit]
 mime: application/x-stuffit
 endian: big
 
-# TODO: Some .SIT files start with a 128-byte MacBinary header. (so SIT header starts at 0x80), see https://github.com/MacPaw/XADMaster/wiki/MacBinarySpecs
+magic:
+  - offset: 0000
+    match: c'SIT!'
 
 structs:
   header:

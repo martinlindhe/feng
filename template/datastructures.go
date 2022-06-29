@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// structure of a ./templates/ yaml file
+// structure of a evaluated ./templates/ yaml file. see Template for the raw structure corresponding to the yaml file
 type DataStructure struct {
 
 	// evaluated constants
@@ -21,8 +21,13 @@ type DataStructure struct {
 
 	Layout []value.DataField
 
+	Magic []Magic
+
 	// endian
 	Endian string
+
+	// if template lacks magic bytes
+	NoMagic bool
 
 	// extensions
 	Extensions []string
@@ -58,20 +63,21 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 	if err != nil {
 		return nil, err
 	}
-
 	structs, err := template.evaluateStructs()
 	if err != nil {
 		return nil, err
 	}
-
 	layout, err := template.evaluateLayout()
 	if err != nil {
 		return nil, err
 	}
+
 	return &DataStructure{
 		Constants:  constants,
 		structs:    structs,
 		Layout:     layout,
+		Magic:      template.Magic,
+		NoMagic:    template.NoMagic,
 		Endian:     template.Endian,
 		Extensions: template.Extensions,
 		BaseName:   basename,

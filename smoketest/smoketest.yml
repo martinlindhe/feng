@@ -60,7 +60,7 @@ input:
       - zip_008_comments.zip
       - zip_009_password.zip
       - zip_010_compression_implode.zip
-      #- zip_011_trailing_bytes.zip     # XXX broken
+      - zip_011_trailing_bytes.zip
 
   - folder: games/everquest_pfs
     files:
@@ -81,7 +81,7 @@ input:
       - test4.bmp
       - test8.bmp
       - test8os2.bmp
-      #- test16.bmp        # 010 gives template error (maybe because 16bpp and no color table)
+      - test16.bmp        # 010 gives template error (maybe because 16bpp and no color table)
       - test24.bmp
       - test32.bmp
       - test32bf.bmp      # 010 also fails to map the last trailing bytes
@@ -144,34 +144,34 @@ input:
       - EnvCubicSpecA.dds
       - field_128_cube.dds
 
-#  - folder: images/gif    # XXX broken match with tar
-#    files:
-#      - problematic_extensions_acu100_1.gif
-#      - gif_87a_001.gif
-#      - gif_87a_002_apples.gif
-#      - gif_89a_001.gif
-#      - gif_89a_002_anim.gif
-#      - gif_89a_003_anim.gif
-#      - gif_89a_004_fish.gif
-#      - gif_89a_005_with_application.gif
-#      - gif_89a_006_win95_attlogo.gif
-#      - necco.gif
-#      - newtons_cradle_animation_book_2.gif
-#      - rgb1.gif
-#      - rgb4.gif
-#      - rgb6.gif
-#      - rgb8.gif
-
-  - folder: images/ico-windows
+  - folder: images/gif
     files:
-      - cursor_win2k_cross.cur
-      - icon_24bit_01.ico
-      - icon_embedded_png.ico
-      - icon_two_resources.ico
+      - problematic_extensions_acu100_1.gif
+      - gif_87a_001.gif
+      - gif_87a_002_apples.gif
+      - gif_89a_001.gif
+      - gif_89a_002_anim.gif
+      - gif_89a_003_anim.gif
+      - gif_89a_004_fish.gif
+      - gif_89a_005_with_application.gif
+      - gif_89a_006_win95_attlogo.gif
+      - necco.gif
+      - newtons_cradle_animation_book_2.gif
+      - rgb1.gif
+      - rgb4.gif
+      - rgb6.gif
+      - rgb8.gif
 
-#  - folder: images/jpeg  # XXX broken match with tar
+#  - folder: images/ico-windows     # ico lacks file magic
 #    files:
-#      - greet02.jpg   # XXX seems to be mis-parsed
+#      - cursor_win2k_cross.cur
+#      - icon_24bit_01.ico
+#      - icon_embedded_png.ico
+#      - icon_two_resources.ico
+
+  - folder: images/jpeg  # XXX broken match with tar
+    files:
+      - greet02.jpg   # XXX seems to be mis-parsed. 3+ seconds parsing !!! 
 #      - jpeg_001.jpg
 #      - jpeg_002.jpg
 #      - jpeg_003_exif_fujifilm-finepix40i.jpg
@@ -219,9 +219,8 @@ input:
       - simple_b_bh10_0.psd
       - simple_b_bh25_0.psd
 
-#  - folder: images/tga     # XXX broken matches
+#  - folder: images/tga      # tga lacks file magic
 #    files:
-#      # NOTE: many more samples exists
 #      - 1d.tga
 #      - circle24.tga
 #      - grey.tga

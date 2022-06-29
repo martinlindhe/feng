@@ -1,0 +1,23 @@
+# templates/images/bmp.yml
+FILEHEADER BITMAPFILEHEADER
+  [000000] Signature                      ascii[2]         BM                    42 4d
+  [000002] File size                      u32 le           16438                 00 00 40 36
+  [000006] Reserved                       u32 le           0                     00 00 00 00
+  [00000a] Bitmap offset                  u32 le           54                    00 00 00 36
+
+DIBHEADER BITMAPINFOHEADER
+  [00000e] HeaderSize                     u32 le           40                    00 00 00 28
+           - V3                           eq               40
+  [000012] Width                          i32 le           127                   00 00 00 7f
+  [000016] Height                         i32 le           64                    00 00 00 40
+  [00001a] Color planes                   u16 le           1                     00 01
+  [00001c] BitsPerPixel                   u16 le           16                    00 10
+  [00001e] CompressionMethod              u32 le           0                     00 00 00 00
+           - BI_RGB (none)                eq               0
+  [000022] ImageDataSize                  u32 le           16384                 00 00 40 00
+  [000026] Horizontal resolution          i32 le           0                     00 00 00 00
+  [00002a] Vertical resolution            i32 le           0                     00 00 00 00
+  [00002e] UsedColors                     u32 le           0                     00 00 00 00
+  [000032] Important colors               u32 le           0                     00 00 00 00
+
+0x4000 (16384) unmapped bytes

@@ -15,6 +15,10 @@ extensions: [.7z]
 mime: application/x-7z-compressed
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'7z' bc af 27 1c
+
 types:
   # XXX impl!!!
   ArchiveVersion:       # XXX this should become a built-in standard type "version16" byte 0=major, byte 1=minor

@@ -14,6 +14,10 @@ extensions: [.cab]
 mime: application/vnd.ms-cab-compressed
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'MSCF'
+
 types:
   CFDATA:
     # XXX

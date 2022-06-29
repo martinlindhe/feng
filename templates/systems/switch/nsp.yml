@@ -14,11 +14,14 @@ software:
   - https://github.com/SciresM/hactool
   - https://github.com/jakcron/nstool
 
-
 kind: system
 name: Nintendo Submission Package
 extensions: [.nsp]
 endian: little
+
+magic:
+  - offset: 0000
+    match: c'PFS0'
 
 structs:
   header: # XXX pfs0_header_t

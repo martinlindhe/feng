@@ -21,6 +21,10 @@ name: Quantic Dream TabIndex
 extensions: [.idx, .dep, .dat, .d01]
 endian: big
 
+magic:
+  - offset: 0000
+    match: c'QUANTICDREAMTABINDEX'
+
 # XXX this format seems to have QUANTICDREAMTABINDEX header but different layout depending on file extension
 # TODO we can implement a VARSET command similar to bms "get EXT extension", "if EXT=='idx'" and evaluate a magic constant for file extension as string
 

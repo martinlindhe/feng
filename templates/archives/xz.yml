@@ -10,6 +10,10 @@ extensions: [.xz]
 mime: application/x-xz
 endian: big # XXX
 
+magic:
+  - offset: 0000
+    match: FD c'7zXZ' 00
+
 structs:
   header:
     # stream header. valid xz contains 1 or more streams with header+data

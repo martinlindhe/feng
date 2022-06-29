@@ -9,6 +9,10 @@ name: Sony PS3 PKG file
 extensions: [.pkg]
 endian: big
 
+magic:
+  - offset: 0000
+    match: 7f c'PKG'
+
 structs:
   header:
     u8[4] Signature: 7f c'PKG'

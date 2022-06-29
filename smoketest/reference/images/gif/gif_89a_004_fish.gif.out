@@ -1,0 +1,54 @@
+# templates/images/gif.yml
+Header
+  [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
+  [000004] Version                        u16 le           24889                 61 39
+           - GIF89a                       eq               24889
+  [000006] Logical screen width           u16 le           53                    00 35
+  [000008] Logical screen height          u16 le           38                    00 26
+  [00000a] ScreenDescriptor               u8               242                   f2
+           - GlobalColorTableSize         bit              2
+           - Sort                         bit              0
+           - ColorResolution              bit              7
+           - GlobalColorTablePresent      bit              1
+  [00000b] Background color               u8               4                     04
+  [00000c] Aspect ratio                   u8               0                     00
+  [00000d] Global Color Table             u8[24]                                 ff ff ff 00 b5 ff 08 21 4a 00 00 00 c0 c0 c0 00 00 00 00 00 00 00 00 00
+
+Section_0 BLOCK_EXTENSION
+  [000025] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq               33
+  [000026] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq               249
+  [000027] Size                           u8               4                     04
+  [000028] Flags                          u8               5                     05
+           - Transparent color            bit              1
+           - User input                   bit              0
+           - Disposal method              bit              1
+           - Reserved                     bit              0
+  [000029] Delay time                     u16 le           0                     00 00
+  [00002b] Transparent color index        u8               4                     04
+  [00002c] Block terminator               u8               0                     00
+
+Section_1 BLOCK_IMAGE
+  [00002d] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq               44
+  [00002e] Left position                  u16 le           0                     00 00
+  [000030] Top position                   u16 le           0                     00 00
+  [000032] Image width                    u16 le           53                    00 35
+  [000034] Image height                   u16 le           38                    00 26
+  [000036] ImageDescriptor                u8               0                     00
+           - LocalColorTableSize          bit              0
+           - Reserved                     bit              0
+           - Sort                         bit              0
+           - Interlace                    bit              0
+           - LocalColorTablePresent       bit              0
+  [000037] LZWMinimumCodeSize             u8               3                     03
+  [000038] Data size                      u8               248                   f8
+  [000039] Data                           u8[248]                                48 ba dc fe 30 ca 49 ab bd 75 0c cc fb 08 5b 27 52 1f 38 9e 90 16 98 68 ab 08 25 eb 9e f0 ba 6a ...
+  [000131] BlockTerminator                u8               0                     00
+
+Section_2 BLOCK_TRAILER
+  [000132] BlockType                      u8               59                    3b
+           - BLOCK_TRAILER                eq               59
+
+EOF

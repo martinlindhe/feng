@@ -21,6 +21,10 @@ extensions: [.bmp]
 mime: image/bmp
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'BM'
+
 types:
   # used in V2 palette
   bgr:

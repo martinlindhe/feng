@@ -23,7 +23,7 @@ func TestParseDataPattern(t *testing.T) {
 	}
 
 	for _, h := range test {
-		res, err := ParseDataString(h.in)
+		res, err := ParseHexString(h.in)
 		assert.Equal(t, nil, err)
 		assert.Equal(t, h.out, res)
 	}

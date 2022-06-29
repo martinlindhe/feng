@@ -13,6 +13,10 @@ name: XBox 360 XEX file
 extensions: [.xex]
 endian: big
 
+magic:
+  - offset: 0000
+    match: c'XEX2'
+
 structs:
   header:
     ascii[4] Signature: c'XEX2'

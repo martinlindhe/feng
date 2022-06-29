@@ -20,6 +20,10 @@ name: UnityFS
 extensions: [.ab, .assetbundle]
 endian: big
 
+magic:
+  - offset: 0000
+    match: c'UnityFS' 00
+
 structs:
   header:
     ascii[8] Signature: c'UnityFS' 00

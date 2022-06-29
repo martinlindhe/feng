@@ -15,6 +15,10 @@ name:  Dreamcast disc bootsector
 extensions: [.bin]
 endian: little
 
+magic:
+  - offset: 0000
+    match: c'SEGA SEGAKATANA '
+
 structs:
   header:
     ascii[16] HardwareID: c'SEGA SEGAKATANA '

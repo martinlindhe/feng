@@ -15,6 +15,11 @@ name: Nintendo 64 ROM
 extensions: [.bin, .n64, .v64, .z64]
 endian: big
 
+magic:
+  - offset: 0000
+    match: 80371240 # XXX in hex bytes form
+  #  - 37804012 # XXX in hex bytes form
+
 structs:
   header:
     u32 Endianness:
