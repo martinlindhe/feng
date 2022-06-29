@@ -207,12 +207,16 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 	err := fl.expandChildren(r, fs, df, ds, expressions)
 	if err != nil {
 		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
+			//if DEBUG {
+			feng.Red("expandStruct error: [%08x] failed reading data for '%s' (err:%v)\n", fl.offset, df.Label, err)
+			//}
+
 			//log.Printf("error: unexpected eof at %s %s in %s. %d structs",
 			//	df.Kind, df.Label, ds.BaseName, len(fl.Structs))
 			if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
 				return fmt.Errorf("eof and no structs mapped")
 			}
-			return nil
+			return err
 		}
 		return err
 
@@ -341,12 +345,6 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				log.Printf("[%08x] reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
 			}
 			if err != nil {
-				if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
-					//if DEBUG {
-					feng.Red("error: [%08x] failed reading %d bytes for '%s.%s' %s: %02x (err:%v)\n", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
-					//}
-					continue
-				}
 				return err
 			}
 
