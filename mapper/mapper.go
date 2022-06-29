@@ -173,7 +173,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 			return nil
 		}
 		if len(fl.Structs) > 0 {
-			fmt.Printf("Parsed %s as %s\n\n", filename, tpl)
+			log.Printf("Parsed %s as %s", filename, tpl)
 			return fmt.Errorf("break WalkDir")
 		}
 		return nil

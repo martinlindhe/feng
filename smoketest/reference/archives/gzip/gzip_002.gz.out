@@ -1,4 +1,4 @@
-templates/archives/gzip.yml
+# templates/archives/gzip.yml
 Header
   [000000] Signature                      u8[2]                                  1f 8b
   [000002] Compression method             u8               8                     08

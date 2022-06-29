@@ -27,24 +27,26 @@ func main() {
 
 	data, err := ioutil.ReadFile(args.Filename)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	err = os.RemoveAll("../smoketest/reference")
+	referenceRoot := "../smoketest/reference"
+
+	err = os.RemoveAll(referenceRoot)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	smoketests, err := smoketest.UnmarshalData(data)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	for _, entry := range smoketests.GenerateFilenames(filepath.Dir(args.Filename)) {
 		fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err2 error) error {
 			// cannot happen
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
 			if d.IsDir() {
 				return nil
@@ -53,6 +55,8 @@ func main() {
 			if filepath.Ext(tpl) != ".yml" {
 				return nil
 			}
+
+			feng.Yellow("Parsing %s ...\n", entry.In)
 
 			templateData, err := fs.ReadFile(feng.Templates, tpl)
 			if err != nil {
@@ -88,21 +92,21 @@ func main() {
 				return nil
 			}
 
-			fmt.Printf("Parsed %s as %s\n\n", entry.In, tpl)
+			feng.Green("Parsed %s as %s\n\n", entry.In, tpl)
 
 			data := fl.Present(false)
 
-			path := filepath.Dir(entry.Out)
-
-			fmt.Println("MKDIR", path)
+			filename := filepath.Dir(filepath.Join(referenceRoot, entry.Out))
+			path := filepath.Dir(filename)
+			//fmt.Println("MKDIR", path)
 			err = os.MkdirAll(path, os.ModePerm)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			err = ioutil.WriteFile(entry.Out, []byte(data), 0644)
+			err = ioutil.WriteFile(filename, []byte(data), 0644)
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
 			return nil
 		})

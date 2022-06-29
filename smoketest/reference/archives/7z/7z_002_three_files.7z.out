@@ -1,12 +1,13 @@
-templates/archives/tar.yml
-Header
-  [000000] Filename                       ascii[100]       7z..'.                37 7a bc af 27 1c 00 04 23 65 3d 30 8c 00 00 00 00 00 00 00 21 00 00 00 00 00 00 00 15 bd ba 7a ...
-  [000064] File mode                      ascii[8]         .w.<..n.              f5 77 1d 3c b0 be 6e 10
-  [00006c] Owner ID                       ascii[8]         ..4.`...              eb 83 34 11 60 fc 8f cc
-  [000074] Group ID                       ascii[8]         ..Ne..Hu              f4 a5 4e 65 ff 2e 48 75
-  [00007c] File size in bytes (OCTAL)     ascii[12]        ..&.....U..\          a3 8f 26 d2 15 0d 17 bd 55 db f0 5c
-  [000088] Modification time (unix time, OCTAL) ascii[12]        0U...a{.= ..          30 55 a0 dc a9 61 7b 06 3d 20 bb cc
-  [000094] Checksum                       ascii[8]         ./8.....              da 2f 38 cd d7 17 8b d3
-  [00009c] File type                      u8               145                   91
+# templates/archives/7z.yml
+Signature Header
+  [000000] Signature                      u8[6]                                  37 7a bc af 27 1c
+  [000006] Major version                  u8               0                     00
+  [000007] Minor version                  u8               4                     04
+  [000008] Start Header CRC               u32 le           809329955             30 3d 65 23
 
-0x0030 (48) unmapped bytes
+Start Header
+  [00000c] NextHeaderOffset               u64 le           140                   00 00 00 00 00 00 00 8c
+  [000014] NextHeaderSize                 u64 le           33                    00 00 00 00 00 00 00 21
+  [00001c] Next Header CRC                u32 le           2059058453            7a ba bd 15
+
+0x00ad (173) unmapped bytes

@@ -3,6 +3,7 @@ package smoketest
 import (
 	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -18,20 +19,40 @@ func TestCompareWithReferenceParses(t *testing.T) {
 	smoketests, err := UnmarshalData(data)
 	assert.Nil(t, err)
 
-	for _, entry := range smoketests.GenerateFilenames(filepath.Dir(smoketestFile)) {
+	filenames := smoketests.GenerateFilenames(filepath.Dir(smoketestFile))
+	log.Println(len(filenames))
 
+	for idx, entry := range filenames {
+		assert.NotEqual(t, "", entry.In)
 		fl, err := mapper.MapFileToTemplate(entry.In)
 		assert.Nil(t, err, entry.In)
 
-		//fmt.Printf("Parsed %s as %s\n\n", entry.In, tpl)
+		//log.Printf("Parsed %s with template %v", entry.In, fl.BaseName)
+		if !fileOrDirExists(entry.Out) {
+			continue
+		}
 
 		data := fl.Present(false)
-
 		expected, err := ioutil.ReadFile(entry.Out)
 		if err != nil {
-			log.Fatal(err)
+			//		log.Fatal(err)
+			assert.FailNow(t, err.Error())
+			continue
 		}
+
 		assert.Equal(t, string(expected), data, entry.In)
-		break
+		//break
+		if idx >= 9 { // XXX if >= 9, hang forever. also missing .out files here...
+			break
+		}
 	}
+
+}
+
+// reports whether the named file or directory exists.
+func fileOrDirExists(path string) bool {
+	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
+		return false
+	}
+	return true
 }

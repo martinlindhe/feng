@@ -1,4 +1,4 @@
-root: ../feng-samples
+root: ../../feng-samples
 input:
   - folder: archives/7z
     files:
@@ -8,7 +8,7 @@ input:
   - folder: archives/cab
     files:
       - cab_001_win95_mini.cab
-      - cab_002_3_files.cab
+      - cab_002_3_files.cab # XXX is not checked!?!
       - cab_003_IE40CIF.cab
 
   - folder: archives/gzip

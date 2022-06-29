@@ -1,8 +1,6 @@
 # STATUS: 30%
 
-# - HI: file name data is in a zlib-compressed DIRENTRY block
-#
-# - MID: use file name data when extracting files
+# - HI: use file name data when extracting files (is in a zlib-compressed DIRENTRY block)
 
 references:
   - https://github.com/martinlindhe/eqformat_pfs

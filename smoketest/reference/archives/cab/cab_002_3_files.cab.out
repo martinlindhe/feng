@@ -1,6 +1,48 @@
-templates/archives/tar.yml
+# templates/archives/cab.yml
 Header
-  [000000] Filename                       ascii[100]       MSCF                  4d 53 43 46 00 00 00 00 6e 00 00 00 00 00 00 00 2c 00 00 00 00 00 00 00 03 01 01 00 02 00 00 00 ...
-  [000064] File mode                      ascii[8]         j.hej he              6a 0a 68 65 6a 20 68 65
+  [000000] Signature                      ascii[4]         MSCF                  4d 53 43 46
+  [000004] Reserved 1                     u32 le           0                     00 00 00 00
+  [000008] File size                      u32 le           110                   00 00 00 6e
+  [00000c] Reserved 2                     u32 le           0                     00 00 00 00
+  [000010] CFFILE offset                  u32 le           44                    00 00 00 2c
+  [000014] Reserved 3                     u32 le           0                     00 00 00 00
+  [000018] Minor version                  u8               3                     03
+  [000019] Major version                  u8               1                     01
+  [00001a] cFolders                       u16 le           1                     00 01
+  [00001c] cFiles                         u16 le           2                     00 02
+  [00001e] Flags                          u16 le           0                     00 00
+           - PrevCabinet                  bit              0
+           - NextCabinet                  bit              0
+           - ReservePresent               bit              0
+  [000020] Set ID                         u16 le           1234                  04 d2
+  [000022] Cabinet number                 u16 le           0                     00 00
 
-0x0002 (2) unmapped bytes
+CFFOLDER_0
+  [000024] CFDATA_Offset                  u32 le           86                    00 00 00 56
+  [000028] DataBlocks                     u16 le           1                     00 01
+  [00002a] Compression                    u16 le           0                     00 00
+           - none                         eq               0
+  [000056] csum                           u32 le           1048592               00 10 00 10
+  [00005a] DataLen                        u16 le           16                    00 10
+  [00005c] cbUncomp                       u16 le           16                    00 10
+  [00005e] Data                           u8[16]                                 68 65 6a 20 68 65 6a 0a 68 65 6a 20 68 65 6a 0a
+
+CFFILE_0
+  [00002c] Uncompressed size              u32 le           8                     00 00 00 08
+  [000030] Uncompressed offset in folder  u32 le           0                     00 00 00 00
+  [000034] Index in CFFOLDER              u16 le           0                     00 00
+  [000036] Date                           dosdate le       2016-04-10            48 8a
+  [000038] Time                           dostime le       16:24:50              83 19
+  [00003a] Attributes                     u16 le           32                    00 20
+  [00003c] Name                           asciiz           fil1                  66 69 6c 31 00
+
+CFFILE_1
+  [000041] Uncompressed size              u32 le           8                     00 00 00 08
+  [000045] Uncompressed offset in folder  u32 le           8                     00 00 00 08
+  [000049] Index in CFFOLDER              u16 le           0                     00 00
+  [00004b] Date                           dosdate le       2016-04-10            48 8a
+  [00004d] Time                           dostime le       16:24:48              83 18
+  [00004f] Attributes                     u16 le           32                    00 20
+  [000051] Name                           asciiz           fil3                  66 69 6c 33 00
+
+EOF
