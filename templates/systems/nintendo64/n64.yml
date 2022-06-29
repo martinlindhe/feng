@@ -1,0 +1,66 @@
+# STATUS: 10%
+#
+# HI: support byte-swapped data layout (bytes ABCD is stored as BACD). see http://n64dev.org/romformats.html
+# MID: support little endian. need sample
+
+references:
+  - http://en64.shoutwiki.com/wiki/ROM#Cartridge_ROM_Header
+  - https://github.com/mroach/rom64/blob/master/rom_info.md
+
+software:
+  - https://github.com/mroach/rom64
+
+kind: executable
+name: Nintendo 64 ROM
+extensions: [.bin, .n64, .v64, .z64]
+endian: big
+
+structs:
+  header:
+    u32 Endianness:
+      eq 80371240: Big  # Native byte order (.z64)
+      eq 37804012: Byte-swapped (XXX PARSE PROPERLY)  # .v64
+      default: invalid
+    u32 Clock rate override: ??
+    u32 Program counter: ??
+    u32 Release address: ??
+    u32 CRC1: ??      # XXX
+    u32 CRC2: ??      # XXX
+    u64 Reserved: ??
+    ascii[20] Image name: ??
+    u32 Reserved: ??
+    u8 Rom type:
+      eq c'N': Cartridge
+      eq c'D': 64DD disk
+      eq c'C': Cartridge for expandable game
+      eq c'E': 64DD expansion
+      eq c'Z': Aleck64 cartridge
+    ascii[2] Software ID: ??
+    ascii Region:
+      eq c'7': Beta
+      eq c'A': Japan + US
+      eq c'B': Brazil
+      eq c'C': China
+      eq c'D': Germany
+      eq c'E': US
+      eq c'F': France
+      eq c'G': Gateway 64 (NTSC)
+      eq c'H': Netherlands
+      eq c'I': Italy
+      eq c'J': Japan
+      eq c'K': South Korea
+      eq c'L': Gateway 64 (PAL)
+      eq c'N': Canada
+      eq c'P': PAL
+      eq c'S': Spain
+      eq c'U': Australia
+      eq c'W': Scandinavia
+      eq c'X': PAL (Uncommon)
+      eq c'Y': PAL (Uncommon)
+    ascii[2] Cartridge ID: ??
+    ascii Country Code: ?? # XXX
+    u8 Version: ??
+    u8[4032] Boot code: ??
+
+layout:
+  - header Header
