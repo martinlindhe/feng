@@ -4,7 +4,7 @@
 references:
   - https://www.psdevwiki.com/ps3/Certified_File#Header
 
-kind: xxx
+kind: system
 name: Sony SCE file
 extensions: [.dat, .bin, .ppu.self]
 endian: big # XXX  It is important to notice that PS3 uses big-endian whilst PSVita uses little-endian. 

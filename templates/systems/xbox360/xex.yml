@@ -8,8 +8,8 @@ references:
 software:
   - https://digiex.net/threads/xextool-6-3-download.9523/
 
-kind: xxx
-name: 
+kind: system
+name: XBox 360 XEX file
 extensions: [.xex]
 endian: big
 

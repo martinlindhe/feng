@@ -5,7 +5,7 @@
 references:
   - https://wiki.gbatemp.net/wiki/NKit/NKitFormat
 
-kind: xxx
+kind: system
 name:  Nintendo Gamecube or Wii compressed iso
 extensions: [.nkit.iso]
 endian: big

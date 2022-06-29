@@ -10,7 +10,7 @@ references:
   - https://dreamcast.wiki/IP.BIN
   - https://mc.pp.se/dc/ip0000.bin.html
 
-kind: xxx
+kind: system
 name:  Dreamcast disc bootsector
 extensions: [.bin]
 endian: little

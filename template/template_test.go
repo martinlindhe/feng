@@ -41,7 +41,7 @@ func TestEvaluateAllTemplates(t *testing.T) {
 		switch tpl.Kind {
 		case "image", "archive", "system", "executable":
 		default:
-			t.Errorf("unknown kind: %s", tpl.Kind)
+			t.Errorf("unknown kind '%s' in template %s", tpl.Kind, tpl.Name)
 		}
 
 		if len(tpl.Extensions) == 0 {

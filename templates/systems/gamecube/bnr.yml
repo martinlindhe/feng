@@ -5,7 +5,7 @@
 references:
   - http://hitmen.c02.at/files/yagcd/yagcd/chap14.html
 
-kind: xxx
+kind: system
 name:  Nintendo Gamecube BNR (Banner file)
 extensions: [.bnr]
 endian: big

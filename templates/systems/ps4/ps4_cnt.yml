@@ -12,7 +12,7 @@ software:
   - https://github.com/pearlxcore/PS4-PKG-Tool
   - https://github.com/SKFU/ps5tools/blob/main/cnt.py
 
-kind: xxx
+kind: system
 name:  Sony PS4/PS5 PKG file
 extensions: [.pkg]
 endian: big

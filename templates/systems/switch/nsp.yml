@@ -15,7 +15,7 @@ software:
   - https://github.com/jakcron/nstool
 
 
-kind: xxx
+kind: system
 name: Nintendo Submission Package
 extensions: [.nsp]
 endian: little

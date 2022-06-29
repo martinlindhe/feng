@@ -4,7 +4,7 @@
 references:
   - https://www.psdevwiki.com/ps3/PKG_files
 
-kind: xxx
+kind: system
 name: Sony PS3 PKG file
 extensions: [.pkg]
 endian: big

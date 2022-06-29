@@ -10,7 +10,7 @@ references:
 software:
   - https://github.com/wargio/vitatool/
 
-kind: xxx
+kind: system
 name: Sony PSVita/PS3/PS4/PS5 System File Object
 extensions: [.sfo]
 endian: little  # XXX at least ps5 version is little endian

@@ -5,7 +5,7 @@
 references:
   - https://www.psdevwiki.com/ps4/SELF_File_Format
 
-kind: executable
+kind: system
 name:  Sony PS4 Signed ELF file (?)
 extensions: [.prx, .sprx]
 endian: little
