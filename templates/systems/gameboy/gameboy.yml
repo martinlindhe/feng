@@ -9,7 +9,7 @@ references:
 kind: executable
 name: Nintendo Gameboy/Gameboy Color ROM
 extensions: [.gb, .gbc]
-endian: little # XXX
+endian: little
 
 structs:
   header:
