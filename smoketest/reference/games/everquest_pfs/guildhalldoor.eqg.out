@@ -1,0 +1,23 @@
+# templates/games/everquest/everquest_pfs.yml
+Header
+  [000000] BaseOffset                     u32 le           6017                  00 00 17 81
+  [000004] Signature                      ascii[4]         PFS                   50 46 53 20
+  [001781] Count                          u32 le           2                     00 00 00 02
+
+Block_0 DIRENTRY
+  [001785] CRC                            u32 le           1633159881            61 58 0a c9
+  [001789] FileOffset                     u32 le           5969                  00 00 17 51
+  [00178d] Expanded size                  u32 le           34                    00 00 00 22
+  [001751] Compressed size                u32 le           40                    00 00 00 28
+  [001755] Expanded size                  u32 le           34                    00 00 00 22
+  [001759] Data                           compressed:zlib[40]                       78 9c 63 64 60 60 90 02 e2 fc a4 ac f8 f4 d2 cc 9c 94 f8 94 fc fc a2 f8 e2 f2 cc 92 e4 0c bd dc ...
+
+Block_1 FILEENTRY
+  [001791] CRC                            u32 le           2543794309            97 9f 38 85
+  [001795] FileOffset                     u32 le           12                    00 00 00 0c
+  [001799] Expanded size                  u32 le           15173                 00 00 3b 45
+  [00000c] Compressed size                u32 le           3806                  00 00 0e de
+  [000010] Expanded size                  u32 le           8192                  00 00 20 00
+  [000014] Data                           compressed:zlib[3806]                       78 9c 8d 99 0b 58 4c e9 ff c0 a7 1b 51 88 b6 14 52 a8 28 95 e9 a2 26 35 ef 7b 1c a9 74 23 8b 72 ...
+
+0x0863 (2147) unmapped bytes

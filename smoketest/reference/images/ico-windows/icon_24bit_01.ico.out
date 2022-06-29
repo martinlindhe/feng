@@ -1,0 +1,19 @@
+# templates/images/ico.yml
+ICONDIR
+  [000000] Reserved                       u16 le           0                     00 00
+  [000002] Type                           u16 le           1                     00 01
+           - TYPE_ICON                    eq               1
+  [000004] Resources                      u16 le           1                     00 01
+
+ICONDIRENTRY_0
+  [000006] Width                          u8               16                    10
+  [000007] Height                         u8               16                    10
+  [000008] Palette colors                 u8               0                     00
+  [000009] Reserved                       u8               0                     00
+  [00000a] Color planes                   u16 le           1                     00 01
+  [00000c] Bits per pixel                 u16 le           24                    00 18
+  [00000e] Data size                      u32 le           872                   00 00 03 68
+  [000012] Data offset                    u32 le           22                    00 00 00 16
+  [000016] Image data                     u8[872]                                28 00 00 00 10 00 00 00 20 00 00 00 00 00 18 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+
+EOF

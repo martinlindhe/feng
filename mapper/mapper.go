@@ -22,6 +22,10 @@ const (
 	DEBUG = false
 )
 
+var (
+	ParseStopError = errors.New("manual parse stop")
+)
+
 func init() {
 	log.SetFlags(log.Lshortfile)
 }
@@ -129,7 +133,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 		if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
 			//if DEBUG {
-			feng.Yellow("errors out: %s\n", err.Error())
+			feng.Yellow("%s errors out: %s\n", ds.BaseName, err.Error())
 			//}
 			return &fileLayout, err
 		}
@@ -219,10 +223,6 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 	return err
 }
 
-var (
-	ParseStopError = errors.New("manual parse stop")
-)
-
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG {
@@ -241,9 +241,11 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		switch es.Field.Kind {
 		case "label":
 			// "label: APP0". augment node with extra info
-
-			// XXX eval expression such as "self.Type", get evaluated match???
-			fs.decoration = es.Pattern.Value
+			var err error
+			fs.decoration, err = fl.MatchedValue(es.Pattern.Value, df)
+			if err != nil {
+				panic(err)
+			}
 
 		case "parse":
 			// break parser
@@ -339,7 +341,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				log.Printf("[%08x] reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
 			}
 			if err != nil {
-				if errors.Is(err, io.ErrUnexpectedEOF) {
+				if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
 					//if DEBUG {
 					feng.Red("error: [%08x] failed reading %d bytes for '%s.%s' %s: %02x (err:%v)\n", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
 					//}

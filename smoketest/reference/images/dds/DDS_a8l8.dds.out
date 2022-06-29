@@ -1,0 +1,41 @@
+# templates/images/dds.yml
+DDS_HEADER
+  [000000] Signature                      ascii[4]         DDS                   44 44 53 20
+  [000004] Size                           u32 le           124                   00 00 00 7c
+  [000008] Flags                          u32 le           4103                  00 00 10 07
+           - DDSD_CAPS                    bit              1
+           - DDSD_HEIGHT                  bit              1
+           - DDSD_WIDTH                   bit              1
+           - DDSD_PITCH                   bit              0
+           - DDSD_PIXELFORMAT             bit              1
+           - DDSD_MIPMAPCOUNT             bit              0
+           - DDSD_LINEARSIZE              bit              0
+           - DDSD_DEPTH                   bit              0
+  [00000c] Height                         u32 le           286                   00 00 01 1e
+  [000010] Width                          u32 le           200                   00 00 00 c8
+  [000014] PitchOrLinearSize              u32 le           0                     00 00 00 00
+  [000018] Depth                          u32 le           0                     00 00 00 00
+  [00001c] MipMapCount                    u32 le           0                     00 00 00 00
+  [000020] Reserved1                      u32[11] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [00004c] Pixel format size              u32 le           32                    00 00 00 20
+  [000050] Pixel format flags             u32 le           131073                00 02 00 01
+           - DDPF_ALPHAPIXELS             bit              1
+           - DDPF_ALPHA                   bit              0
+           - DDPF_FOURCC                  bit              0
+           - DDPF_RGB                     bit              0
+           - DDPF_YUV                     bit              0
+           - DDPF_LUMINANCE               bit              1
+  [000054] Pixel format FourCC            ascii[4]                               00 00 00 00
+  [000058] Pixel format GBBitCount        u32 le           16                    00 00 00 10
+  [00005c] Pixel format RBitMask          u32 le           255                   00 00 00 ff
+  [000060] Pixel format GBitMask          u32 le           0                     00 00 00 00
+  [000064] Pixel format BBitMask          u32 le           0                     00 00 00 00
+  [000068] Pixel format ABitMask          u32 le           65280                 00 00 ff 00
+  [00006c] Caps                           u32 le           4098                  00 00 10 02
+  [000070] Caps2                          u32 le           0                     00 00 00 00
+  [000074] Caps3                          u32 le           0                     00 00 00 00
+  [000078] Caps4                          u32 le           0                     00 00 00 00
+  [00007c] Reserved2                      u32 le           0                     00 00 00 00
+  [000080] Image data                     u8[114400]                             1a ff 1a ff 1a ff 1a ff 1c ff 1b ff 1c ff 1b ff 1c ff 1e ff 1e ff 1e ff 20 ff 1e ff 1f ff 1f ff ...
+
+EOF

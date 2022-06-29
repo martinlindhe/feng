@@ -23,9 +23,9 @@ constants:
 
 structs:
   header:
-    u16 CRC:   c'a' c'R'
+    u8[2] CRC: c'Ra'
     u8 Type:
-      eq 72: MARKER
+      eq c'r': MARKER
       default: invalid
     u16 Flags: 1a c'!' 
     u16 Header size: ?? # seen "00 07", "01 07" (v5)
@@ -44,11 +44,9 @@ structs:
       eq 7a: SUBBLOCK # NEWSUB_HEAD
       eq 7b: END #ENDARC_HEAD
       #default: invalid
-
-    label: self.Type # XXX
+    label: self.Type
 
     if self.Type == ARCHIVE:
-      #label: ARCHIVE
       u16 ARCHIVE_FLAGS:
         bit 0001: ARCHIVE_VOLUME
         bit 0002: ARCHIVE_COMMENT_PRESENT
@@ -74,7 +72,6 @@ structs:
         #XXX more, see problem_archive_comment.rar
 
     if self.Type == FILE_OR_DIR:
-      #label: FILE_OR_DIR
       u16 HEAD_FLAGS:
         bit 0001: FROM_PREV_VOLUME # LHD_SPLIT_BEFORE
         bit 0002: TO_NEXT_VOLUME   # LHD_SPLIT_AFTER
@@ -126,7 +123,6 @@ structs:
       u8[self.Compressed size] Data: ??
 
     if self.Type == SUBBLOCK:
-      #label: SUBBLOCK
       u16 Main header flags:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
@@ -143,7 +139,6 @@ structs:
       u8[self.Data size] Data: ??
 
     if self.Type == END:
-      #label: END
       u16 Common block flags:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT

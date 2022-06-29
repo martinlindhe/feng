@@ -1,0 +1,29 @@
+# templates/images/pcx.yml
+Header
+  [000000] Signature                      u8               10                    0a
+  [000001] Version                        u8               5                     05
+           - PC Paintbrush 3.0, including 24-bit images eq               5
+  [000002] Encoding                       u8               1                     01
+           - RLE                          eq               1
+  [000003] BitsPerPixel                   u8               8                     08
+           - 8bpp (256 colors, VGA)       eq               8
+  [000004] Minimum X position             u16 le           0                     00 00
+  [000006] Minimum Y position             u16 le           0                     00 00
+  [000008] Maximum X position             u16 le           78                    00 4e
+  [00000a] Maximum Y position             u16 le           78                    00 4e
+  [00000c] Horizontal resolution in DPI   u16 le           72                    00 48
+  [00000e] Vertical resolution in DPI     u16 le           72                    00 48
+  [000010] EGA palette                    u8[48]                                 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ...
+  [000040] Reserved                       u8               0                     00
+  [000041] ColorPlanes                    u8               1                     01
+  [000042] Bytes per line                 u16 le           80                    00 50
+  [000044] Palette mode                   u16 le           1                     00 01
+           - Monochrome or color          eq               1
+  [000046] Horizontal resolution          u16 le           0                     00 00
+  [000048] Vertical resolution            u16 le           0                     00 00
+  [00004a] Reserved                       u8[54]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000080] Image data                     u8[1949]                               e8 92 e7 1d c1 ff e8 92 e7 1d c1 ff e8 92 e7 1d c1 ff e8 92 e7 1d c1 ff e8 92 e7 1d c1 ff e8 92 ...
+  [00081d] Palette marker                 u8               12                    0c
+  [00081e] Palette                        u8[768]                                00 00 00 00 00 10 00 00 21 00 00 29 00 00 42 00 00 63 00 00 6b 00 00 84 00 00 94 00 00 a5 00 00 ...
+
+EOF

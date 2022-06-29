@@ -1,8 +1,9 @@
-# STATUS: 1%
+# STATUS: 10%
+#
+# For the extended "ustar" (unix standard tar) format, not the older "tar"
 
 # - LOW: octal ascii parsing?
 
-# NOTE: this is the extended "ustar" (unix standard tar) format, not the older "tar"
 # NOTE: endian-neutral format
 # NOTE: format only uses byte streams and numbers encoded as octal ascii in them
 # TODO: could specify 2 details on a data field: meaning (uint32,crc32), encoding (ascii+octal)
@@ -12,7 +13,7 @@ references:
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/TAR.tcl
 
 kind: archive
-name: Tar Archive
+name: Tar (ustar) Archive
 extensions: [.tar]
 mime: application/x-tar
 
@@ -26,9 +27,9 @@ structs:
     ascii[8] Owner ID: ??      # XXX octal ascii number
     ascii[8] Group ID: ??      # XXX octal ascii number
     ascii[12] File size in bytes (OCTAL): ?? # XXX octal ascii number, like "00000000002 "
-    ascii[12] Modification time (unix time, OCTAL): ?? # XXX octal ascii number, like "14020143052 "
+    ascii[12] Modification time (OCTAL): ?? # XXX (unix time) octal ascii number, like "14020143052 "
     # special tar checksum format: The checksum is calculated by taking the sum of the unsigned byte values of the header record with the eight checksum bytes taken to be ASCII spaces (decimal value 32). It is stored as a six digit octal number with leading zeroes followed by a NUL and then a space
-    ascii[8] Checksum: ??      # XXX octal ascii ??? like "010577"
+    ascii[8] Checksum (OCTAL): ??      # XXX octal ascii ??? like "010577"
     u8 File type:
       # NOTE: only 0,1,2 is valid for classic tar, the rest is ustar only
       eq c'0': Normal file
@@ -45,7 +46,7 @@ structs:
     ascii[100] Name of linked file: ??
 
     # start of ustar header
-    ascii[6] Signature: c'ustar' 00
+    ascii[6] Signature: c'ustar' 00  # XXX since no match for signature, parse gets aborted but file accepted. should be hard FAIL. example ../feng-samples/archives/zip/zip_001.zip matches tar.yml
     ascii[2] Version: c'00'
     ascii[32] Owner name: ??
     ascii[32] Group name: ??

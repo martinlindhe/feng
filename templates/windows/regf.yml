@@ -15,9 +15,6 @@ name: Windows NT Registry File
 extensions: [.dat] # has no standard extension
 endian: little
 
-constants:
-
-
 types:
   # XXX impl!!!
   version:
@@ -58,13 +55,14 @@ structs:
   cell:
     i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
     u16 CellSignature:
-      eq c'kn': SIG_NK   # Key Node
-      eq c'ks': SIG_SK   # Key Security
-      eq c'kv': SIG_VK   # Key Value
-      eq c'fl': SIG_LF   # Fast Leaf
+      eq 0000: SIG_END    # XXX uncofirmed. seem to be last entry in feng-samples/windows/regf/regf_001_settings.dat
+      eq c'kn': SIG_NK    # Key Node
+      eq c'ks': SIG_SK    # Key Security
+      eq c'kv': SIG_VK    # Key Value
+      eq c'fl': SIG_LF    # Fast Leaf
 #      default: invalid # XXX
 
-    label: self.CellSignature # XXX impl
+    label: self.CellSignature
 
     # KEY NODE
     if self.CellSignature == SIG_NK:
@@ -114,21 +112,24 @@ structs:
       u8[abs(self.CellSize) - 0x18 - self.DescriptorLength] Padding: ??
 
     if self.CellSignature == SIG_VK:
-      u16 Name length: ??
-      i32 Data length: ??
-      i32 Data offset: ??
+      u16 NameLength: ??
+      i32 DataLength: ??
+      i32 DataOffset: ??
       i32 Type: ??
       u16 Flags: ??
       u16 Spare: ??
+      u8[abs(self.CellSize) - 0x18 - self.NameLength] Padding: ??
 
     if self.CellSignature == SIG_LF:
       i16 NumberOfOffsets: ??
-      u8[8 * self.NumberOfOffsets] Offset: ?? # XXX decode "int offset, char[4] HASH" (8 bytes per entry)
+      u8[8 * self.NumberOfOffsets] Offset: ?? # XXX decode to custom struct: "int offset, char[4] HASH" (8 bytes per entry)
+      u8[abs(self.CellSize) - 8 - (8 * self.NumberOfOffsets)] Padding: ??
+
+    if self.CellSignature == SIG_END:
+      # XXX uncofirmed. seem to be last entry in feng-samples/windows/regf/regf_001_settings.dat
+      u8[self.CellSize - 6] Padding: ??
 
 layout:
   - base_block FILE HEADER
   - hive_bin HBINRECORD
-  # XXX listed as winxp SAM atm...
   - cell[] Cell
-
-  #- hive_bin[] HBINRECORD     # XXX slice

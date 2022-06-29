@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
 )
@@ -120,6 +121,12 @@ func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
 func (fl *FileLayout) Present(hideRaw bool) (res string) {
 	res = "# " + fl.BaseName + "\n"
 	for _, layout := range fl.Structs {
+		if len(layout.Fields) == 0 {
+			if DEBUG {
+				feng.Yellow("skip empty struct '%s'\n", layout.Label)
+			}
+			continue
+		}
 		heading := layout.Label
 		if layout.decoration != "" {
 			heading += " " + layout.decoration
@@ -157,7 +164,7 @@ func (fl *FileLayout) MappedBytes() uint64 {
 func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 	for _, str := range fl.Structs {
 		if DEBUG {
-			log.Printf("GetStruct: want %s, got %s", name, str.Label)
+			//log.Printf("GetStruct: want %s, got %s", name, str.Label)
 		}
 		if str.Label == name {
 			return &str, nil
@@ -241,6 +248,44 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 
 		return 0, fmt.Errorf("GetInt: '%s' not found", s)
 	*/
+}
+
+// returns the pattern matched value of field named `structName`.`fieldName`
+func (fl *FileLayout) MatchedValue(s string, df *value.DataField) (string, error) {
+
+	if df != nil {
+		s = strings.ReplaceAll(s, "self.", df.Label+".")
+	}
+
+	if DEBUG {
+		log.Printf("MatchedValue: searching for '%s'", s)
+	}
+
+	parts := strings.SplitN(s, ".", 3)
+	if len(parts) < 2 {
+		//feng.Red("MatchedValue: unexpected format '%s'", s)
+		return s, nil
+	}
+	structName := parts[0]
+	fieldName := parts[1]
+
+	str, err := fl.GetStruct(structName)
+	if err != nil {
+		return "", err
+	}
+
+	for _, field := range str.Fields {
+		if DEBUG {
+			log.Printf("MatchedValue: want %s, got %s", fieldName, field.Format.Label)
+		}
+		if field.Format.Label == fieldName {
+			for _, child := range field.MatchedPatterns {
+				return child.Label, nil
+			}
+		}
+	}
+
+	return s, nil // "", fmt.Errorf("MatchedValue: '%s' not found", s)
 }
 
 // finds the first field named `structName`.`fieldName`

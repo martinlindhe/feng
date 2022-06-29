@@ -26,7 +26,7 @@ func (sty *SmoketestsYaml) GenerateFilenames(baseRoot string) (res []InOutPair) 
 	for _, smoke := range sty.Input {
 		for _, file := range smoke.Files {
 			filename := filepath.Join(root, smoke.Folder, file)
-			outfile := filepath.Join("./reference", smoke.Folder, file+".out")
+			outfile := filepath.Join(smoke.Folder, file+".out")
 			pair := InOutPair{
 				In:  filename,
 				Out: outfile,

@@ -405,7 +405,7 @@ var (
 
 func utf16String(b []byte) string {
 
-	// Make an tranformer that converts MS-Win default to UTF8
+	// Make an transformer that converts MS-Win default to UTF8
 	win16be := unicode.UTF16(unicode.BigEndian, unicode.IgnoreBOM)
 
 	// Make a transformer that is like win16be, but abides by BOM

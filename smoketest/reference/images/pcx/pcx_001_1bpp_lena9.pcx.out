@@ -1,0 +1,27 @@
+# templates/images/pcx.yml
+Header
+  [000000] Signature                      u8               10                    0a
+  [000001] Version                        u8               5                     05
+           - PC Paintbrush 3.0, including 24-bit images eq               5
+  [000002] Encoding                       u8               1                     01
+           - RLE                          eq               1
+  [000003] BitsPerPixel                   u8               1                     01
+           - 1bpp (monochrome)            eq               1
+  [000004] Minimum X position             u16 le           0                     00 00
+  [000006] Minimum Y position             u16 le           0                     00 00
+  [000008] Maximum X position             u16 le           511                   01 ff
+  [00000a] Maximum Y position             u16 le           511                   01 ff
+  [00000c] Horizontal resolution in DPI   u16 le           512                   02 00
+  [00000e] Vertical resolution in DPI     u16 le           512                   02 00
+  [000010] EGA palette                    u8[48]                                 bf ac 74 91 32 5a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000040] Reserved                       u8               0                     00
+  [000041] ColorPlanes                    u8               1                     01
+  [000042] Bytes per line                 u16 le           64                    00 40
+  [000044] Palette mode                   u16 le           1                     00 01
+           - Monochrome or color          eq               1
+  [000046] Horizontal resolution          u16 le           0                     00 00
+  [000048] Vertical resolution            u16 le           0                     00 00
+  [00004a] Reserved                       u8[54]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000080] Image data                     u8[21609]                              c7 00 07 c7 ff bc 59 03 72 b0 a0 20 c4 00 02 42 40 08 00 0c 07 21 c1 c8 69 95 bb c2 ff c1 f8 cb ...
+
+EOF

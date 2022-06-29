@@ -1,0 +1,13 @@
+# templates/images/psd.yml
+Header
+  [000000] Signature                      ascii[4]         8BPS                  38 42 50 53
+  [000004] Version                        u16 be           1                     00 01
+  [000006] Reserved                       u8[6]                                  00 00 00 00 00 00
+  [00000c] Channels                       u16 be           4                     00 04
+  [00000e] Height                         u32 be           128                   00 00 00 80
+  [000012] Width                          u32 be           128                   00 00 00 80
+  [000016] Bit depth                      u16 be           8                     00 08
+  [000018] Color mode                     u16 be           3                     00 03
+           - RGB                          eq               3
+
+0xf703 (63235) unmapped bytes
