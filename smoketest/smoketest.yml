@@ -44,24 +44,23 @@ input:
       - xar_003_3_files.xar
       - xar_004_macos_MobileDeviceDevelopment.pkg
 
-  #- folder: archives/xz
-  #  files:
-  #    - xz_001.xz # XXX mismatched with tar due to broken matching?
+  - folder: archives/xz
+    files:
+      - xz_001.xz
 
-  #- folder: archives/zip  # XXX broken
-  #  files:
-  #    - zip_001.zip
-  #    - zip_002.zip
-  #    - zip_003_by_winrar420.zip
-  #    - zip_004_compression_shrunk.zip
-  #    - zip_005_by_winzip18.zip
-  #    - zip_006_by_winzip18.zipx
-  #    - zip_007_encrypted.zip
-  #    - zip_008_comments.zip
-  #    - zip_009_password.zip
-  #    - zip_010_compression_implode.zip
-  #    - zip_011_trailing_bytes.zip
-
+  - folder: archives/zip
+    files:
+      - zip_001.zip
+      - zip_002.zip
+      - zip_003_by_winrar420.zip
+      - zip_004_compression_shrunk.zip
+      - zip_005_by_winzip18.zip
+      - zip_006_by_winzip18.zipx
+      - zip_007_encrypted.zip
+      - zip_008_comments.zip
+      - zip_009_password.zip
+      - zip_010_compression_implode.zip
+      #- zip_011_trailing_bytes.zip     # XXX broken
 
   - folder: games/everquest_pfs
     files:
@@ -72,17 +71,17 @@ input:
   - folder: images/bmp
     files:
       - bmp_win_v2-001.bmp
-      #- bmp_win_v3-001.bmp     XXX broken match tar
-      #- bmp_win_v3-002.bmp     XXX broken match tar
+      - bmp_win_v3-001.bmp
+      - bmp_win_v3-002.bmp
       - bmp_win_v3-003_win31_thatch.bmp
-      #- bmp_win_v3-004_win95_black_thatch.bmp    XXX broken match tar
+      - bmp_win_v3-004_win95_black_thatch.bmp
       - bmp_win_v4-001.bmp
       - bmp_win_v5-001.bmp
       - test1.bmp
       - test4.bmp
       - test8.bmp
       - test8os2.bmp
-      - test16.bmp        # 010 gives template error (maybe because 16bpp and no color table)
+      #- test16.bmp        # 010 gives template error (maybe because 16bpp and no color table)
       - test24.bmp
       - test32.bmp
       - test32bf.bmp      # 010 also fails to map the last trailing bytes
@@ -172,7 +171,7 @@ input:
 
 #  - folder: images/jpeg  # XXX broken match with tar
 #    files:
-#      - greet02.jpg
+#      - greet02.jpg   # XXX seems to be mis-parsed
 #      - jpeg_001.jpg
 #      - jpeg_002.jpg
 #      - jpeg_003_exif_fujifilm-finepix40i.jpg
@@ -184,20 +183,20 @@ input:
       - pcx_1bpp_rgb1.pcx
       - pcx_1bpp_rgb4.pcx
       - pcx_1bpp_rgb4v2.pcx
-      #- pcx_002_vga.pcx      # XXX broken match with tar
+      - pcx_002_vga.pcx
       - PCX_gimp.pcx
       - PCX_ps.pcx
       - PCX_psp.pcx
       - rgb8_with_palette.pcx
       - rgb24.pcx
 
-#  - folder: images/png    # XXX broken match with tar
-#    files:
-#      - png_001.png
-#      - png_002.png
-#      - png_003_gimp.png
-#      - png_004_greyscale.png
-#      - png_005_with_PLTE.png
+  - folder: images/png
+    files:
+      - png_001.png
+      - png_002.png
+      - png_003_gimp.png
+      - png_004_greyscale.png
+      - png_005_with_PLTE.png
 
   - folder: images/psd
     files:
@@ -220,7 +219,7 @@ input:
       - simple_b_bh10_0.psd
       - simple_b_bh25_0.psd
 
-#  - folder: images/tga
+#  - folder: images/tga     # XXX broken matches
 #    files:
 #      # NOTE: many more samples exists
 #      - 1d.tga

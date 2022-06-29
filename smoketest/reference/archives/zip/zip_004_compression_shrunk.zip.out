@@ -1,0 +1,55 @@
+# templates/archives/zip.yml
+Chunk_0 ZIPFILERECORD
+  [000000] Signature                      ascii[2]         PK                    50 4b
+  [000002] Type                           u16 le           1027                  04 03
+           - ZIPFILERECORD                eq               1027
+  [000004] Version needed to extract      u16 le           10                    00 0a
+  [000006] Flags                          u16 le           0                     00 00
+  [000008] Compression                    u16 le           1                     00 01
+           - Shrunk                       eq               1
+  [00000a] Modification time              dostime le       22:05:44              b0 b6
+  [00000c] Modification date              dosdate le       1987-11-15            0f 6f
+  [00000e] CRC32 of uncompressed data     u32 le           2294192059            88 be 97 bb
+  [000012] Compressed size                u32 le           8028                  00 00 1f 5c
+  [000016] Uncompressed size              u32 le           13824                 00 00 36 00
+  [00001a] File name length               u16 le           12                    00 0c
+  [00001c] Extra field length             u16 le           0                     00 00
+  [00001e] File name                      ascii[12]        BREAKOUT.ACC          42 52 45 41 4b 4f 55 54 2e 41 43 43
+  [00002a] Data                           u8[8028]                               60 34 00 00 50 c2 d9 40 01 06 06 2a 70 a7 10 c2 c0 87 10 01 b8 e0 33 70 05 37 27 b9 06 06 00 21 ...
+
+Chunk_1 ZIPDIRENTRY
+  [001f86] Signature                      ascii[2]         PK                    50 4b
+  [001f88] Type                           u16 le           513                   02 01
+           - ZIPDIRENTRY                  eq               513
+  [001f8a] Version made by                u16 le           11                    00 0b
+  [001f8c] Version needed to extract      u16 le           10                    00 0a
+  [001f8e] Flags                          u16 le           0                     00 00
+  [001f90] Compression                    u16 le           1                     00 01
+           - Shrunk                       eq               1
+  [001f92] Modification time              dostime le       22:05:44              b0 b6
+  [001f94] Modification date              dosdate le       1987-11-15            0f 6f
+  [001f96] CRC32 of uncompressed data     u32 le           2294192059            88 be 97 bb
+  [001f9a] Compressed size                u32 le           8028                  00 00 1f 5c
+  [001f9e] Uncompressed size              u32 le           13824                 00 00 36 00
+  [001fa2] File name length               u16 le           12                    00 0c
+  [001fa4] Extra field length             u16 le           0                     00 00
+  [001fa6] Comment length                 u16 le           0                     00 00
+  [001fa8] Disk number start              u16 le           0                     00 00
+  [001faa] Internal attributes            u16 le           0                     00 00
+  [001fac] External attributes            u32 le           32                    00 00 00 20
+  [001fb0] Header offset                  u32 le           0                     00 00 00 00
+  [001fb4] File name                      ascii[12]        BREAKOUT.ACC          42 52 45 41 4b 4f 55 54 2e 41 43 43
+
+Chunk_2 ZIPENDLOCATOR
+  [001fc0] Signature                      ascii[2]         PK                    50 4b
+  [001fc2] Type                           u16 le           1541                  06 05
+           - ZIPENDLOCATOR                eq               1541
+  [001fc4] Disk number                    u16 le           0                     00 00
+  [001fc6] Start Disk Number              u16 le           0                     00 00
+  [001fc8] Entries on disk                u16 le           1                     00 01
+  [001fca] Entries in directory           u16 le           1                     00 01
+  [001fcc] Directory size                 u32 le           58                    00 00 00 3a
+  [001fd0] Directory offset               u32 le           8070                  00 00 1f 86
+  [001fd4] Comment length                 u16 le           0                     00 00
+
+EOF
