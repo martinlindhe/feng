@@ -147,7 +147,6 @@ structs:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
       u16 HeaderSize: ??
-      parse: stop
 
 layout:
   - header Header
