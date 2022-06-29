@@ -9,6 +9,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
+	"runtime/pprof"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng/mapper"
@@ -19,6 +21,8 @@ var args struct {
 	ExtractDir string `help:"Extract files to this directory."`
 	Verbose    bool   `short:"v" help:"Be more verbose."`
 	HideRaw    bool   `help:"Hide raw values"`
+	CPUProfile string `name:"cpu-profile" help:"Create CPU profile"`
+	MemProfile string `name:"mem-profile" help:"Create memory profile"`
 }
 
 func main() {
@@ -29,6 +33,18 @@ func main() {
 
 	if args.Verbose {
 		//template.DEBUG = true
+	}
+
+	if args.CPUProfile != "" {
+		f, err := os.Create(args.CPUProfile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+		if err := pprof.StartCPUProfile(f); err != nil {
+			log.Fatal("could not start CPU profile: ", err)
+		}
+		defer pprof.StopCPUProfile()
 	}
 
 	fl, err := mapper.MapFileToTemplate(args.Filename)
@@ -94,5 +110,17 @@ func main() {
 
 	} else {
 		fmt.Print(fl.Present(args.HideRaw))
+	}
+
+	if args.MemProfile != "" {
+		f, err := os.Create(args.MemProfile)
+		if err != nil {
+			log.Fatal("could not create memory profile: ", err)
+		}
+		defer f.Close()
+		runtime.GC() // get up-to-date statistics
+		if err := pprof.WriteHeapProfile(f); err != nil {
+			log.Fatal("could not write memory profile: ", err)
+		}
 	}
 }
