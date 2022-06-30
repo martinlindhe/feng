@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	DEBUG = false
+	DEBUG = true
 
 	// TODO: make IN_UTC configurable from cli
 	IN_UTC = true

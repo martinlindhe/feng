@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	DEBUG = false
+	DEBUG = true
 )
 
 var (
@@ -217,9 +217,10 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(EvaluateError); ok {
-				feng.Red("%s: %s\n", tpl, err.Error())
+				feng.Red("MapReader EvaluateError: %s: %s\n", tpl, err.Error())
+			} else {
+				return nil
 			}
-			return nil
 		}
 		if len(fl.Structs) > 0 {
 			log.Printf("Parsed %s as %s", filename, tpl)
@@ -298,11 +299,11 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			return ParseStopError
 
 		case "endian":
-			// special form
+			// change endian
 			fl.endian = es.Pattern.Value
-			if DEBUG {
-				fmt.Printf("endian changed to '%s'\n", fl.endian)
-			}
+			//if DEBUG {
+			feng.Yellow("endian set to '%s' at %06x\n", fl.endian, fl.offset)
+			//}
 
 		case "offset":
 			// set/restore current offset
@@ -319,6 +320,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			var err error
 			fl.offsetChanges++
 			if fl.offsetChanges > 50 {
+				panic("debug recursion: too many offset changes from template")
 				return fmt.Errorf("too many offset changes from template")
 			}
 			fl.previousOffset = fl.offset
@@ -345,15 +347,6 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			"compressed:zlib",
 			"raw:u8":
 			// internal data types
-			/*
-				expandedRange := ""
-				if es.Field.Range != "" {
-					expandedRange, err := fl.ExpandVariables(es.Field.Range, df)
-					if err != nil {
-						return err
-					}
-				}
-			*/
 			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", df.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 			if totalLength == 0 {
@@ -365,6 +358,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 			prevOffset := fl.offset
 			if fl.IsAbsoluteAddress(&es.Field) {
+				panic("deprecate absolute offset addressing mode")
 				// if range = start:len, first move to given offset
 				rangeStart, _, err := fl.GetAbsoluteAddressRange(&es.Field)
 				if err != nil {
@@ -403,9 +397,16 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			if err != nil {
 				return err
 			}
-			field := Field{Offset: fl.offset, Length: totalLength, Value: val, Format: es.Field, Endian: fl.endian, MatchedPatterns: matchPatterns}
-			fs.Fields = append(fs.Fields, field)
+
+			fs.Fields = append(fs.Fields, Field{
+				Offset:          fl.offset,
+				Length:          totalLength,
+				Value:           val,
+				Format:          es.Field,
+				Endian:          fl.endian,
+				MatchedPatterns: matchPatterns})
 			if fl.IsAbsoluteAddress(&es.Field) {
+				panic("deprecate absolute offset addressing mode")
 				fl.offset = prevOffset
 				log.Printf("--- RESTORING FILE POSITION TO ABSOLUTE OFFSET %08x", fl.offset)
 				_, err := r.Seek(int64(fl.offset), io.SeekStart)
@@ -413,7 +414,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 					return err
 				}
 			} else {
-				fl.offset += field.Length
+				fl.offset += totalLength
 			}
 
 		case "asciiz":
@@ -421,10 +422,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			if err != nil {
 				return err
 			}
-
-			field := Field{Offset: fl.offset, Length: uint64(len(val)), Value: val, Format: es.Field, Endian: fl.endian}
-			fs.Fields = append(fs.Fields, field)
-			fl.offset += field.Length
+			len := uint64(len(val))
+			fs.Fields = append(fs.Fields, Field{
+				Offset: fl.offset,
+				Length: len,
+				Value:  val,
+				Format: es.Field,
+				Endian: fl.endian})
+			fl.offset += len
 
 		case "if":
 			q := es.Field.Label
@@ -439,13 +444,15 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				return err
 			}
 			lastIf = q
-			if DEBUG {
-				if a != 0 {
-					log.Println("IF EVALUATED TRUE: q=", q, ", a=", a)
-				} else {
-					log.Println("IF EVALUATED FALSE: q=", q, ", a=", a)
-				}
+			//if DEBUG {
+
+			if a != 0 {
+				log.Println("IF EVALUATED TRUE: q=", q, ", a=", a)
+			} else {
+				log.Println("IF EVALUATED FALSE: q=", q, ", a=", a)
 			}
+
+			//}
 			if a != 0 {
 				err := fl.expandChildren(r, fs, df, ds, es.Children)
 				if err != nil {
@@ -461,13 +468,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			if err != nil {
 				return err
 			}
-			if DEBUG {
-				if a == 0 {
-					log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
-				} else {
-					log.Println("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
-				}
+			//if DEBUG {
+			if a == 0 {
+				log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
+			} else {
+				log.Println("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
 			}
+			//}
 			if a == 0 {
 				err := fl.expandChildren(r, fs, df, ds, es.Children)
 				if err != nil {

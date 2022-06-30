@@ -13,6 +13,8 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
+var DEBUG_EVAL = true
+
 // an expression failed to evaluate
 type EvaluateError struct {
 	input string
@@ -39,32 +41,26 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 	for _, layout := range fl.Structs {
 		mapped := make(map[string]interface{})
 		for _, field := range layout.Fields {
-			val := uint64(0)
 			if !field.Format.Slice && field.Format.Range == "" {
 				switch field.Format.Kind {
 				case "u8", "u16", "u32", "u64":
-					val = value.AsUint64Raw(field.Value)
+					mapped[field.Format.Label] = int(value.AsUint64Raw(field.Value))
 				case "i8":
-					val = uint64(int8(value.AsUint64Raw(field.Value)))
+					mapped[field.Format.Label] = int(uint64(int8(value.AsUint64Raw(field.Value))))
 				case "i16":
-					val = uint64(int16(value.AsUint64Raw(field.Value)))
+					mapped[field.Format.Label] = int(uint64(int16(value.AsUint64Raw(field.Value))))
 				case "i32":
-					val = uint64(int32(value.AsUint64Raw(field.Value)))
+					mapped[field.Format.Label] = int(uint64(int32(value.AsUint64Raw(field.Value))))
 				case "i64":
-					val = uint64(int64(value.AsUint64Raw(field.Value)))
-
+					mapped[field.Format.Label] = int(uint64(int64(value.AsUint64Raw(field.Value))))
 				default:
-					i, err := strconv.ParseInt(field.Present(), 10, 64)
-					if err == nil {
-						val = uint64(i)
-					}
+					mapped[field.Format.Label] = field.Present()
 				}
 			}
 
-			if DEBUG {
-				//log.Printf("mapped variable %s to %v => %d", field.Format.Label, field.Value, int(val))
+			if DEBUG_EVAL {
+				//log.Printf("mapped variable %s to %v => %v", field.Format.Label, field.Value, mapped[field.Format.Label])
 			}
-			mapped[field.Format.Label] = int(val)
 		}
 		mapped["index"] = int(layout.Index)
 		variables[layout.Label] = mapped
@@ -120,8 +116,8 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 		return nil, fmt.Errorf("expected string, got %T", args[0])
 	}
 
-	if DEBUG {
-		feng.Yellow("--- EVALUATING --- %s\n", in)
+	if DEBUG_EVAL {
+		feng.Yellow("--- EVALUATING --- %s at %06x\n", in, fl.offset)
 		spew.Dump(variables)
 		feng.Yellow("---\n")
 	}
@@ -133,7 +129,7 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 
 	switch v := result.(type) {
 	case int:
-		if DEBUG {
+		if DEBUG_EVAL {
 			log.Printf("EvaluateExpression: %s => %d", in, v)
 		}
 		return uint64(v), nil

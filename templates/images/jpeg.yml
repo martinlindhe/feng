@@ -55,7 +55,7 @@ structs:
 
     u16 Length: ??  # length of segment excluding signature
 
-    label: self.Signature # XXX impl evaluation of Signature eq field to string
+    label: self.Signature
 
     if self.Signature == M_APP0:
       label: "APP0"
@@ -93,11 +93,13 @@ structs:
       label: "APP1"
       ascii[6] EXIF: c'Exif' 00 00 # XXX
       ascii[2] Align: ??
-      if self.Align in (c'II'):
+      if self.Align == "II":
+        #  XXX FIXME: seems endianness isnt switched for subsequent fields. they say "u16 be" still ... ???
         endian: little      # XXX what is big endian marker?
       u16 tagMark: ??
       u32 offsetFirstIFD: ?? # XXX
       # XXX WHAT FOLLOWS IS A LIST OF SECTIONS ...
+      # XXX TODO FINISH
 
     if self.Signature == M_COMM:
       label: "COMM"

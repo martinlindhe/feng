@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	DEBUG = false
+	DEBUG = true
 )
 
 // Template represents the structure of a templates/*.yml file

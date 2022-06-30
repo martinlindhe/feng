@@ -21,7 +21,7 @@ type DataStructure struct {
 
 	Magic []Magic
 
-	// endian
+	// default endian
 	Endian string
 
 	// if template lacks magic bytes
