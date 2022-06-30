@@ -188,13 +188,13 @@ input:
 #      - icon_embedded_png.ico
 #      - icon_two_resources.ico
 
-  - folder: images/jpeg  # XXX broken match with tar
+  - folder: images/jpeg
     files:
-      - greet02.jpg   # XXX seems to be mis-parsed. 3+ seconds parsing !!! 
-#      - jpeg_001.jpg
-#      - jpeg_002.jpg
-#      - jpeg_003_exif_fujifilm-finepix40i.jpg
-#      - jpeg-134byte.jpg
+      #- APP1_align_II_little_endian.jpg    # XXX dont parse correctly
+      #- APP1_align_MM.jpg                  # XXX dont parse correctly
+      - greet02.jpg
+      - jpeg_001.jpg
+      - jpeg-134byte.jpg
 
   - folder: images/pcx
     files:
@@ -264,7 +264,7 @@ input:
 
   - folder: systems/nintendo64
     files:
-      - Rampage_2_PLUS4_USA-CZN.v64
+      #- Rampage_2_PLUS4_USA-CZN.v64   # XXX broken
       - intro.z64
 
   - folder: systems/nintendo-ds

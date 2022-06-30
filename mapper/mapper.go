@@ -341,6 +341,40 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			}
 			return fmt.Errorf("file invalidated by template")
 
+		case "until":
+			// syntax: "until: u8 scanData ff d9"
+			// creates a variable named scanData with all data up until terminating hex string
+
+			parts := strings.SplitN(es.Pattern.Value, " ", 3)
+			if len(parts) != 3 {
+				panic("invalid input: " + es.Pattern.Value)
+			}
+
+			if parts[0] != "u8" {
+				panic(fmt.Sprintf("until directive don't support type '%s'", parts[0]))
+			}
+
+			needle, err := value.ParseHexString(parts[2])
+			if err != nil {
+				panic(err)
+			}
+
+			val, err := readBytesUntilMarker(r, needle)
+			if err != nil {
+				return err
+			}
+			len := uint64(len(val))
+			es.Field.Kind = "u8"
+			es.Field.Range = fmt.Sprintf("%d", len)
+			es.Field.Label = parts[1]
+			fs.Fields = append(fs.Fields, Field{
+				Offset: fl.offset,
+				Length: len,
+				Value:  val,
+				Format: es.Field,
+				Endian: fl.endian})
+			fl.offset += len
+
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"ascii", "utf16",
 			"time_t_32", "filetime", "dostime", "dosdate",
@@ -532,6 +566,28 @@ func readBytesUntilZero(r io.Reader) ([]byte, error) {
 		if b[0] == 0x00 {
 			break
 		}
+	}
+	return res, nil
+}
+
+// reads bytes from reader until the marker byte sequence is found. returned data excludes the marker
+// NOTE: only looks for marker on every N bytes, where N is the length of marker
+func readBytesUntilMarker(r *bytes.Reader, mark []byte) ([]byte, error) {
+
+	b := make([]byte, len(mark))
+
+	res := []byte{}
+
+	for {
+		if _, err := io.ReadFull(r, b); err != nil {
+			return nil, err
+		}
+		if bytes.Equal(b, mark) {
+			// rewind N bytes
+			r.Seek(int64(-len(mark)), io.SeekCurrent)
+			break
+		}
+		res = append(res, b...)
 	}
 	return res, nil
 }

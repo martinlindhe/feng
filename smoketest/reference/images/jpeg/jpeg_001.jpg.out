@@ -1,0 +1,88 @@
+# templates/images/jpeg.yml
+Header
+  [000000] SOI marker                     u8[2]                                  ff d8
+
+Segment_0 M_APP0
+  [000002] Signature                      u16 be           65504                 ff e0
+           - M_APP0                       eq               65504
+  [000004] Length                         u16 be           16                    00 10
+  [000006] Identifier                     u32 be           1246120262            4a 46 49 46
+           - JFIF_APP0                    eq               1246120262
+  [00000a] Reserved                       u8               0                     00
+  [00000b] Major version                  u8               1                     01
+  [00000c] Minor version                  u8               1                     01
+  [00000d] Density units                  u8               1                     01
+           - Pixels per inch              eq               1
+  [00000e] Xdensity                       u16 be           72                    00 48
+  [000010] Ydensity                       u16 be           72                    00 48
+  [000012] Xthumbnail                     u8               0                     00
+  [000013] Ythumbnail                     u8               0                     00
+
+Segment_1 M_COMM
+  [000014] Signature                      u16 be           65534                 ff fe
+           - M_COMM                       eq               65534
+  [000016] Length                         u16 be           13                    00 0d
+  [000018] Comment                        ascii[11]        hello world           68 65 6c 6c 6f 20 77 6f 72 6c 64
+
+Segment_2 M_DQT
+  [000023] Signature                      u16 be           65499                 ff db
+           - M_DQT                        eq               65499
+  [000025] Length                         u16 be           67                    00 43
+  [000027] QuanFlag                       u8               0                     00
+           - Pq                           bit              0
+           - Tq                           bit              0
+  [000028] qTable                         u8[64]                                 03 02 02 03 02 02 03 03 03 03 04 03 03 04 05 08 05 05 04 04 05 0a 07 07 06 08 0c 0a 0c 0c 0b 0a ...
+
+Segment_3 M_DQT
+  [000068] Signature                      u16 be           65499                 ff db
+           - M_DQT                        eq               65499
+  [00006a] Length                         u16 be           67                    00 43
+  [00006c] QuanFlag                       u8               1                     01
+           - Pq                           bit              0
+           - Tq                           bit              1
+  [00006d] qTable                         u8[64]                                 03 04 04 05 04 05 09 05 05 09 14 0d 0b 0d 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 ...
+
+Segment_4 M_SOF2
+  [0000ad] Signature                      u16 be           65474                 ff c2
+           - M_SOF2                       eq               65474
+  [0000af] Length                         u16 be           17                    00 11
+  [0000b1] Precision                      u8               8                     08
+  [0000b2] Image height                   u16 be           600                   02 58
+  [0000b4] Image width                    u16 be           800                   03 20
+  [0000b6] nr_comp                        u8               3                     03
+  [0000b7] COMPS data                     u8[9]                                  01 11 00 02 11 01 03 11 01
+
+Segment_5 M_DHT
+  [0000c0] Signature                      u16 be           65476                 ff c4
+           - M_DHT                        eq               65476
+  [0000c2] Length                         u16 be           27                    00 1b
+  [0000c4] htInfo                         u8               0                     00
+  [0000c5] htLength                       u8[16]                                 01 00 01 05 01 00 00 00 00 00 00 00 00 00 00 00
+  [0000d5] HTV                            u8[8]                                  00 06 01 03 04 05 08 07
+
+Segment_6 M_DHT
+  [0000dd] Signature                      u16 be           65476                 ff c4
+           - M_DHT                        eq               65476
+  [0000df] Length                         u16 be           20                    00 14
+  [0000e1] htInfo                         u8               1                     01
+  [0000e2] htLength                       u8[16]                                 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [0000f2] HTV                            u8[1]                                  00
+
+Segment_7 M_SOS
+  [0000f3] Signature                      u16 be           65498                 ff da
+           - M_SOS                        eq               65498
+  [0000f5] Length                         u16 be           12                    00 0c
+  [0000f7] nr_comp                        u8               3                     03
+  [0000f8] COMPSOS data                   u8[6]                                  01 00 02 10 03 10
+  [0000fe] Ss                             u8               0                     00
+  [0000ff] Se                             u8               0                     00
+  [000100] Flag                           u8               1                     01
+           - Ah                           bit              0
+           - Al                           bit              1
+  [000101] scanData                       u8[6292]                               a0 3d c0 ba 65 92 a0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+
+Segment_8 M_EOI
+  [001995] Signature                      u16 be           65497                 ff d9
+           - M_EOI                        eq               65497
+
+EOF

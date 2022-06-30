@@ -52,6 +52,13 @@ Constants is always expressed in network byte order
       default: invalid
 
 
+# pattern matching data types
+
+  until: u8 scanData ff d9            maps all bytes to scanData until marker is seen
+
+used by images/jpeg
+
+
 # arrays
 
     u32[4]

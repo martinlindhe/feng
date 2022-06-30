@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	DEBUG = true
+	DEBUG = false
 )
 
 // Template represents the structure of a templates/*.yml file
@@ -275,7 +275,7 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 
 		case string:
 			switch field.Kind {
-			case "endian", "data", "label", "offset", "parse":
+			case "endian", "data", "label", "offset", "parse", "until":
 				pattern := value.DataPattern{Known: true, Value: val}
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 
