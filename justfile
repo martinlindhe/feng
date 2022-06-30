@@ -1,2 +1,2 @@
-gen_smoketest:
-	go run cmd/gen_smoketest/main.go ./smoketest/smoketest.yml
+smoketest:
+	go run cmd/smoketester/main.go ./smoketest/smoketest.yml

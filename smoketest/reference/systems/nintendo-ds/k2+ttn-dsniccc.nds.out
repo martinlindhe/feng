@@ -1,0 +1,58 @@
+# templates/systems/nintendo-ds/nds.yml
+Header
+  [000000] Game Title                     ascii[12]        HOMEBREW              48 4f 4d 45 42 52 45 57 00 00 00 00
+  [00000c] Game code                      ascii[4]         ####                  23 23 23 23
+  [000010] Maker code                     ascii[2]                               00 00
+  [000012] Unit code                      u8               2                     02
+           - DSi                          bit              0
+  [000013] Encryption seed                u8               0                     00
+  [000014] Device capacity                u8               6                     06
+  [000015] Reserved                       u8[7]                                  00 00 00 00 00 00 00
+  [00001c] Reserved                       u8               1                     01
+  [00001d] NDS region                     u8               0                     00
+           - Normal                       eq               0
+  [00001e] ROM version                    u8               0                     00
+  [00001f] Autostart                      u8               0                     00
+  [000020] ARM9 rom_offset                u32 le           16384                 00 00 40 00
+  [000024] ARM9 entry_address             u32 le           33556480              02 00 08 00
+  [000028] ARM9 ram_address               u32 le           33554432              02 00 00 00
+  [00002c] ARM9 size                      u32 le           162620                00 02 7b 3c
+  [000030] ARM7 rom_offset                u32 le           179200                00 02 bc 00
+  [000034] ARM7 entry_address             u32 le           37224448              02 38 00 00
+  [000038] ARM7 ram_address               u32 le           37224448              02 38 00 00
+  [00003c] ARM7 size                      u32 le           50732                 00 00 c6 2c
+  [000040] File Name Table offset         u32 le           230400                00 03 84 00
+  [000044] File Name Table size           u32 le           944                   00 00 03 b0
+  [000048] File Allocation Table offset   u32 le           231424                00 03 88 00
+  [00004c] File Allocation Table size     u32 le           408                   00 00 01 98
+  [000050] File ARM9 overlay_offset       u32 le           0                     00 00 00 00
+  [000054] File ARM9 overlay_size         u32 le           0                     00 00 00 00
+  [000058] File ARM7 overlay_offset       u32 le           0                     00 00 00 00
+  [00005c] File ARM7 overlay_size         u32 le           0                     00 00 00 00
+  [000060] Port 40001A4h setting for normal commands u32 le           5791744               00 58 60 00
+  [000064] Port 40001A4h setting for KEY1 commands u32 le           1575160               00 18 08 f8
+  [000068] Icon/Title offset              u32 le           231936                00 03 8a 00
+  [00006c] Secure area checksum           u16 le           24909                 61 4d
+  [00006e] Secure Area Delay              u16 le           1310                  05 1e
+  [000070] ARM9 Auto Load List Hook RAM Address u32 le           0                     00 00 00 00
+  [000074] ARM7 Auto Load List Hook RAM Address u32 le           0                     00 00 00 00
+  [000078] Secure Area Disable            u64 le           0                     00 00 00 00 00 00 00 00
+  [000080] Total Used ROM size            u32 le           4914192               00 4a fc 10
+  [000084] ROM Header Size                u32 le           16384                 00 00 40 00
+  [000088] Unknown                        u32 le           315576                00 04 d0 b8
+  [00008c] Reserved                       u64 le           6192543976916292      00 16 00 16 00 00 05 44
+  [000094] NAND end of ROM area           u16 le           0                     00 00
+  [000096] NAND start of RW area          u16 le           0                     00 00
+  [000098] Reserved                       u8[24]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [0000b0] Reserved                       u8[16]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [0000c0] Nintendo Logo                  u8[156]                                24 ff ae 51 69 9a a2 21 3d 84 82 0a 84 e4 09 ad 11 24 8b 98 c0 81 7f 21 a3 52 be 19 93 09 ce 20 ...
+  [00015c] Nintendo Logo Checksum         u16 le           53078                 cf 56
+  [00015e] Header Checksum                u16 le           2792                  0a e8
+  [000160] Debug rom_offset               u32 le           0                     00 00 00 00
+  [000164] Debug size                     u32 le           0                     00 00 00 00
+  [000168] Debug ram_address              u32 le           0                     00 00 00 00
+  [00016c] Reserved                       u32 le           0                     00 00 00 00
+  [000170] Reserved                       u8[144]                                00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 81 85 89 8d 80 84 88 8c 90 94 98 9c 80 84 88 8c ...
+  [000200] Reserved                       u8[3584]                               00 00 00 00 00 00 00 00 40 08 00 00 00 00 01 00 00 12 4b 00 00 00 00 00 84 d0 04 00 2c 05 00 00 ...
+
+0x4b0200 (4915712) unmapped bytes

@@ -21,6 +21,15 @@ input:
     files:
       - lha_001_tiny.lzh
 
+  - folder: archives/lz4
+    files:
+      - file1-block-checksum.lz4
+      - file1-content-size.lz4
+      - file1-no-frame-crc.lz4
+      - lz4-file1-uncompressed.lz4
+      - lz4-file1-uncompressed-alt.lz4
+      - lz4-file2-compressed.lz4
+
   - folder: archives/rar
     files:
       - rar_001_linux.rar
@@ -62,11 +71,21 @@ input:
       - zip_010_compression_implode.zip
       - zip_011_trailing_bytes.zip
 
+  #- folder: archives/zlib # XXX no magic bytes
+  #  files:
+  #    - layout12.xml.zlib
+  #    - layout36.xml.zlib
+  #    - layout95.xml.zlib
+
   - folder: games/everquest_pfs
     files:
       - butcher2_chr.s3d
       - chardok_2_obj.s3d
       - guildhalldoor.eqg
+
+  - folder: games/unity_unityfs
+    files:
+      - sample1.ab
 
   - folder: images/bmp
     files:
@@ -229,6 +248,60 @@ input:
     files:
       - big_endian_action_copy.tiff
       - little_endian_tiff_001.tiff
+
+  - folder: macos/stuffit
+    files:
+      - Darkwood_2.5.sit
+      #- macbinary_header_fixer.sit # XXX no match, has some mac os meta-data header ?
+
+  - folder: systems/gameboy
+    files:
+      - mrdig.gbc
+
+  - folder: systems/gameboy-advance
+    files:
+      - shadow-invitro.gba
+
+  - folder: systems/nintendo64
+    files:
+      - Rampage_2_PLUS4_USA-CZN.v64
+      - intro.z64
+
+  - folder: systems/nintendo-ds
+    files:
+      # XXX find smaller samples
+      - k2+ttn-dsniccc.nds
+
+  - folder: systems/ps3/sce
+    files:
+      - ps3_eboot.bin
+
+  - folder: systems/ps4/ps4_pkg
+    files:
+      # XXX find smaller samples
+      - EP4183-CUSA00126_00-AIV00000000000EU.pkg
+
+  - folder: systems/ps4/ps4_self
+    files:
+      - libSceFios2.prx
+      - right.sprx
+
+  - folder: systems/ps5/ps5_pkg
+    files:
+      # XXX find smaller samples
+      - EP2566-PPSA03001_00-WUGUAN0000000001-DP.pkg
+
+  - folder: systems/ps5/ps5_psf
+    files:
+      - EP4183-CUSA00126_00-AIV00000000000EU.pkg.stream_raw_00003a30.psf
+
+  - folder: systems/xbox360/xex
+    files:
+      - natalsu.xex
+
+  - folder: windows/pe
+    files:
+      - EDXOR165.exe
 
   - folder: windows/regf
     files:

@@ -1,0 +1,141 @@
+# templates/systems/ps4/ps4_cnt.yml
+CNTHeader
+  [000000] Signature                      u8[4]                                  7f 43 4e 54
+  [000004] pkg_type                       u32 be           2197946369            83 02 00 01
+  [000008] pkg_0x008                      u32 be           2147483648            80 00 00 00
+  [00000c] pkg_file_count                 u32 be           12                    00 00 00 0c
+  [000010] pkg_entry_count                u32 be           8                     00 00 00 08
+  [000014] pkg_sc_entry_count             u16 be           6                     00 06
+  [000016] pkg_entry_count_2              u16 be           8                     00 08
+  [000018] pkg_table_offset               u32 be           12256                 00 00 2f e0
+  [00001c] pkg_entry_data_size            u32 be           4576                  00 00 11 e0
+  [000020] pkg_body_offset                u64 be           8192                  00 00 00 00 00 00 20 00
+  [000028] pkg_body_size                  u64 be           122880                00 00 00 00 00 01 e0 00
+  [000030] pkg_content_offset             u64 be           15376                 00 00 00 00 00 00 3c 10
+  [000038] pkg_content_size               u64 be           0                     00 00 00 00 00 00 00 00
+  [000040] content_id                     ascii[36]        EP2566-PPSA03001_00-WUGUAN0000000001 45 50 32 35 36 36 2d 50 50 53 41 30 33 30 30 31 5f 30 30 2d 57 55 47 55 41 4e 30 30 30 30 30 30 ...
+  [000064] Padding                        u8[12]                                 00 00 00 00 00 00 00 00 00 00 00 00
+  [000070] pkg_drm_type                   u32 be           0                     00 00 00 00
+  [000074] pkg_content_type               u32 be           35                    00 00 00 23
+  [000078] pkg_content_flags              u32 be           1128529920            43 44 00 00
+  [00007c] pkg_promote_size               u32 be           55902208              03 55 00 00
+  [000080] pkg_version_date               u32 be           539034417             20 21 03 31
+  [000084] pkg_version_hash               u32 be           232699600             0d de b6 d0
+  [000088] pkg_0x088                      u32 be           45864                 00 00 b3 28
+  [00008c] pkg_0x08C                      u32 be           10                    00 00 00 0a
+  [000090] pkg_0x090                      u32 be           111400                00 01 b3 28
+  [000094] pkg_0x094                      u32 be           44869                 00 00 af 45
+  [000098] pkg_iro_tag                    u32 be           0                     00 00 00 00
+  [00009c] pkg_drm_type_version           u32 be           1                     00 00 00 01
+  [0000a0] Padding                        u8[96]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000100] digest_entries1                u8[32]                                 48 9a ef 17 12 fe 25 8f 68 94 d2 33 f9 a7 95 ad aa 6b 8c ca 92 b7 82 aa bf 65 d5 85 2b 94 10 a6
+  [000120] digest_entries2                u8[32]                                 60 b1 f7 69 79 00 2b 00 6f 93 14 03 86 a1 fa c8 e1 e4 b2 00 0e f6 29 0b 11 f2 15 cb 14 83 5d b7
+  [000140] digest_table_digest            u8[32]                                 65 48 61 1b a0 b9 56 48 07 5b 41 08 c5 36 26 f8 00 9b 8d 1d 87 2f 8b b3 be 02 b0 e6 87 ad 45 13
+  [000160] digest_body_digest             u8[32]                                 58 6a 85 9e f2 e7 a7 1c 39 0f 9b 69 d0 77 a8 b1 78 68 e0 e0 8f 54 34 82 3d 4c 59 5c 16 e1 5a c9
+  [000180] Padding                        u8[640]                                00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000400] Unknown                        u32 be           1                     00 00 00 01
+  [000404] pfs_image_count                u32 be           1                     00 00 00 01
+  [000408] pfs_image_flags                u64 be           16140901064496186124  e0 00 00 00 00 05 03 0c
+  [000410] pfs_image_offset               u64 be           0                     00 00 00 00 00 00 00 00
+  [000418] pfs_image_size                 u64 be           0                     00 00 00 00 00 00 00 00
+  [000420] mount_image_offset             u64 be           0                     00 00 00 00 00 00 00 00
+  [000428] mount_image_size               u64 be           4768352               00 00 00 00 00 48 c2 60
+  [000430] pkg_size                       u64 be           4768352               00 00 00 00 00 48 c2 60
+  [000438] pfs_signed_size                u32 be           65536                 00 01 00 00
+  [00043c] pfs_cache_size                 u32 be           0                     00 00 00 00
+  [000440] pfs_image_digest               u8[32]                                 46 41 46 41 01 62 b8 08 d4 04 9c 3f 98 1b 8b 06 28 95 d8 1c 32 56 4d 80 ca 01 33 f3 2b 09 95 f8
+  [000460] pfs_signed_digest              u8[32]                                 e8 0c 42 52 4f c4 a6 9e 2a e0 ef 62 b5 78 dc 6d 6c ab 2f 4b 99 e1 00 88 85 cf 4f 9b 74 85 4a 34
+  [000480] pfs_split_size_nth_0           u64 be           0                     00 00 00 00 00 00 00 00
+  [000488] pfs_split_size_nth_1           u64 be           0                     00 00 00 00 00 00 00 00
+  [000490] Padding                        u8[2896]                               00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 24 31 6e de d0 0f fb 2e dd 20 99 2b 66 27 02 d1 ...
+  [000fe0] pkg_digest                     u8[32]                                 1a 3f 68 65 df a6 3e 7a be e5 d5 17 7e 62 58 3e 60 a8 f7 be 31 12 21 d1 3a 2a 76 6d 01 26 bc f1
+
+TOCHeader
+  [002fe0] version                        u32 be           1                     00 00 00 01
+  [002fe4] unknown1                       u32 be           0                     00 00 00 00
+  [002fe8] unknown2                       u32 be           1073741824            40 00 00 00
+  [002fec] unknown3                       u32 be           0                     00 00 00 00
+  [002ff0] eof_offset                     u32 be           12512                 00 00 30 e0
+  [002ff4] toc_size                       u32 be           256                   00 00 01 00
+  [002ff8] unknown4                       u32 be           0                     00 00 00 00
+  [002ffc] unknown5                       u32 be           0                     00 00 00 00
+
+DataEntry_0
+  [003000] padding1                       u16 be           0                     00 00
+  [003002] file_type                      u8               0                     00
+  [003003] flags                          u8               16                    10
+  [003004] filename_offset                u32 be           0                     00 00 00 00
+  [003008] padding2                       u64 be           6917529027641081856   60 00 00 00 00 00 00 00
+  [003010] data_offset                    u32 be           8192                  00 00 20 00
+  [003014] data_size                      u32 be           2944                  00 00 0b 80
+  [003018] padding3                       u64 be           0                     00 00 00 00 00 00 00 00
+  [002000] Data                           raw:u8[2944]                           68 b4 2c fb 24 30 b4 b2 e3 6d 7c 0f 60 fa 6f c0 02 0b eb 10 69 2d c8 5a 68 4b fe db d9 57 8e 4c ...
+
+DataEntry_1
+  [003020] padding1                       u16 be           0                     00 00
+  [003022] file_type                      u8               0                     00
+  [003023] flags                          u8               128                   80
+  [003024] filename_offset                u32 be           0                     00 00 00 00
+  [003028] padding2                       u64 be           6917529027641081856   60 00 00 00 00 00 00 00
+  [003030] data_offset                    u32 be           11136                 00 00 2b 80
+  [003034] data_size                      u32 be           480                   00 00 01 e0
+  [003038] padding3                       u64 be           0                     00 00 00 00 00 00 00 00
+  [002b80] Data                           raw:u8[480]                            d2 56 01 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3d de ...
+
+DataEntry_2
+  [003040] padding1                       u16 be           0                     00 00
+  [003042] file_type                      u8               0                     00
+  [003043] flags                          u8               192                   c0
+  [003044] filename_offset                u32 be           0                     00 00 00 00
+  [003048] padding2                       u64 be           6917529027641081856   60 00 00 00 00 00 00 00
+  [003050] data_offset                    u32 be           11616                 00 00 2d 60
+  [003054] data_size                      u32 be           640                   00 00 02 80
+  [003058] padding3                       u64 be           0                     00 00 00 00 00 00 00 00
+  [002d60] Data                           raw:u8[640]                            00 10 01 01 00 00 00 01 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 64 13 07 00 00 00 00 00 ...
+
+DataEntry_3
+  [003060] padding1                       u16 be           0                     00 00
+  [003062] file_type                      u8               1                     01
+  [003063] flags                          u8               0                     00
+  [003064] filename_offset                u32 be           0                     00 00 00 00
+  [003068] padding2                       u64 be           6917529027641081856   60 00 00 00 00 00 00 00
+  [003070] data_offset                    u32 be           12256                 00 00 2f e0
+  [003074] data_size                      u32 be           256                   00 00 01 00
+  [003078] padding3                       u64 be           0                     00 00 00 00 00 00 00 00
+  [002fe0] Data                           raw:u8[256]                            00 00 00 01 00 00 00 00 40 00 00 00 00 00 00 00 00 00 30 e0 00 00 01 00 00 00 00 00 00 00 00 00 ...
+
+DataEntry_4
+  [003080] padding1                       u16 be           0                     00 00
+  [003082] file_type                      u8               2                     02
+           - Filenames                    eq               2
+  [003083] flags                          u8               0                     00
+  [003084] filename_offset                u32 be           0                     00 00 00 00
+  [003088] padding2                       u64 be           4611686018427387904   40 00 00 00 00 00 00 00
+  [003090] data_offset                    u32 be           12768                 00 00 31 e0
+  [003094] data_size                      u32 be           29                    00 00 00 1d
+  [003098] padding3                       u64 be           0                     00 00 00 00 00 00 00 00
+  [0031e0] Data                           raw:u8[29]                             00 70 6c 61 79 67 6f 2d 63 68 75 6e 6b 2e 64 61 74 00 70 61 72 61 6d 2e 6a 73 6f 6e 00
+
+DataEntry_5
+  [0030a0] padding1                       u16 be           0                     00 00
+  [0030a2] file_type                      u8               16                    10
+  [0030a3] flags                          u8               1                     01
+  [0030a4] filename_offset                u32 be           1                     00 00 00 01
+  [0030a8] padding2                       u64 be           576460752303423488    08 00 00 00 00 00 00 00
+  [0030b0] data_offset                    u32 be           15376                 00 00 3c 10
+  [0030b4] data_size                      u32 be           416                   00 00 01 a0
+  [0030b8] padding3                       u64 be           0                     00 00 00 00 00 00 00 00
+  [003c10] Data                           raw:u8[416]                            70 6c 67 78 00 10 00 00 01 00 01 00 00 00 01 00 a0 01 00 00 00 00 01 00 00 00 00 00 00 00 85 00 ...
+
+DataEntry_6
+  [0030c0] padding1                       u16 be           0                     00 00
+  [0030c2] file_type                      u8               32                    20
+  [0030c3] flags                          u8               0                     00
+  [0030c4] filename_offset                u32 be           18                    00 00 00 12
+  [0030c8] padding2                       u64 be           0                     00 00 00 00 00 00 00 00
+  [0030d0] data_offset                    u32 be           12800                 00 00 32 00
+  [0030d4] data_size                      u32 be           2576                  00 00 0a 10
+  [0030d8] padding3                       u64 be           0                     00 00 00 00 00 00 00 00
+  [003200] Data                           raw:u8[2576]                           7b 0d 0a 20 20 22 61 64 64 63 6f 6e 74 22 3a 20 7b 0d 0a 20 20 20 20 22 73 65 72 76 69 63 65 49 ...
+
+0x4894b3 (4756659) unmapped bytes

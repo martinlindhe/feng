@@ -1,0 +1,27 @@
+# templates/archives/lz4.yml
+Header
+  [000000] Signature                      u32 le           407708164             18 4d 22 04
+           - Magic number                 eq               407708164
+  [000004] flags                          u8               100                   64
+           - PresetDictionary             bit              0
+           - Reserved                     bit              0
+           - ContentChecksum              bit              1
+           - ContentSize                  bit              0
+           - BlockChecksum                bit              0
+           - BlockIndependence            bit              1
+           - Version                      bit              1
+  [000005] blockDescriptor                u8               64                    40
+           - Reserved                     bit              0
+           - BlockMaximumSize             bit              4
+           - Reserved                     bit              0
+  [000006] HeaderChecksum                 u8               167                   a7
+  [000007] DataSize                       u32 le           2147483654            80 00 00 06
+           - DATA_SIZE                    bit              6
+           - Uncompressed                 bit              1
+  [00000b] Data                           u8[6]                                  6b 75 6b 65 6e 0a
+  [000011] DataSize2                      u32 le           0                     00 00 00 00
+           - DATA_SIZE                    bit              0
+           - Uncompressed                 bit              0
+  [000015] ContentChecksum                u32 le           2882547001            ab d0 2d 39
+
+EOF

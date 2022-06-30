@@ -1,0 +1,16 @@
+# templates/systems/ps4/ps4_self.yml
+Header
+  [000000] Signature                      u8[4]                                  4f 15 3d 1d
+  [000004] Unknown                        u32 le           302055680             12 01 01 00
+  [000008] Content type                   u8               1                     01
+  [000009] Program type                   u8               7                     07
+  [00000a] Padding                        u16 le           0                     00 00
+  [00000c] Header size                    u16 le           928                   03 a0
+  [00000e] Signature size                 u16 le           944                   03 b0
+  [000010] Size of SELF                   u32 le           442448                00 06 c0 50
+  [000014] Padding                        u32 le           0                     00 00 00 00
+  [000018] Number of segments             u16 le           8                     00 08
+  [00001a] Unknown                        u16 le           34                    00 22
+  [00001c] Padding                        u32 le           0                     00 00 00 00
+
+0x6c041 (442433) unmapped bytes

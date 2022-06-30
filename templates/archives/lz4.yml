@@ -15,7 +15,7 @@ endian: little
 
 magic:
   - offset: 0000
-    match: 184D2204 # XXX
+    match: 04 22 4d 18
 
 structs:
   header: # XXX frame header
@@ -49,16 +49,16 @@ structs:
 
     # now comes N data blocks with a NULL one as terminator. XXX how to terminate parsing
     u32 DataSize:
-      bit b0111_1111_11111111_11111111_11111111: DataSize
+      bit b0111_1111_11111111_11111111_11111111: DATA_SIZE
       bit b1000_0000_00000000_00000000_00000000: Uncompressed
-    u8[self.DataSize.DataSize] Data: ??
+    u8[self.DataSize & DATA_SIZE] Data: ??
     if self.flags & BlockChecksum:
       u32 BlockChecksum: ??
 
     u32 DataSize2:
-      bit b0111_1111_11111111_11111111_11111111: DataSize
+      bit b0111_1111_11111111_11111111_11111111: DATA_SIZE
       bit b1000_0000_00000000_00000000_00000000: Uncompressed
-    u8[self.DataSize2.DataSize] Data: ??
+    u8[self.DataSize2 & DATA_SIZE] Data: ??
     if self.flags & ContentChecksum:
       u32 ContentChecksum: ??
 

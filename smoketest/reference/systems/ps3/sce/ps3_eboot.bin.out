@@ -1,0 +1,15 @@
+# templates/systems/ps3/sce.yml
+Header
+  [000000] Signature                      ascii[4]         SCE                   53 43 45 00
+  [000004] Version                        u32 be           2                     00 00 00 02
+           - PS3                          eq               2
+  [000008] Attribute                      u16 be           25                    00 19
+  [00000a] Category                       u16 be           1                     00 01
+           - SELF_SPRX                    eq               1
+  [00000c] Extended header size           u32 be           1040                  00 00 04 10
+  [000010] File offset                    u64 be           2432                  00 00 00 00 00 00 09 80
+  [000018] File size                      u64 be           745544                00 00 00 00 00 0b 60 48
+  [000020] CF file size                   u64 be           3                     00 00 00 00 00 00 00 03
+  [000028] Padding                        u64 be           112                   00 00 00 00 00 00 00 70
+
+0x5b748 (374600) unmapped bytes

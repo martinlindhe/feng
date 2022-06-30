@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	DEBUG = true
+	DEBUG = false
 )
 
 var (
@@ -444,15 +444,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				return err
 			}
 			lastIf = q
-			//if DEBUG {
-
-			if a != 0 {
-				log.Println("IF EVALUATED TRUE: q=", q, ", a=", a)
-			} else {
-				log.Println("IF EVALUATED FALSE: q=", q, ", a=", a)
+			if DEBUG {
+				if a != 0 {
+					log.Println("IF EVALUATED TRUE: q=", q, ", a=", a)
+				} else {
+					log.Println("IF EVALUATED FALSE: q=", q, ", a=", a)
+				}
 			}
-
-			//}
 			if a != 0 {
 				err := fl.expandChildren(r, fs, df, ds, es.Children)
 				if err != nil {
@@ -468,13 +466,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			if err != nil {
 				return err
 			}
-			//if DEBUG {
-			if a == 0 {
-				log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
-			} else {
-				log.Println("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
+			if DEBUG {
+				if a == 0 {
+					log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
+				} else {
+					log.Println("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
+				}
 			}
-			//}
 			if a == 0 {
 				err := fl.expandChildren(r, fs, df, ds, es.Children)
 				if err != nil {

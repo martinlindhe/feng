@@ -1,0 +1,27 @@
+# templates/systems/gameboy/gameboy.yml
+Header
+  [000000] Data                           u8[256]                                c3 50 01 00 50 09 77 00 c3 50 01 00 00 00 00 00 c3 50 01 00 00 00 00 00 c3 50 01 00 00 00 00 00 ...
+  [000100] EntryPoint                     u8[4]                                  00 c3 50 01
+  [000104] Nintendo Logo                  u8[48]                                 ce ed 66 66 cc 0d 00 0b 03 73 00 83 00 0c 00 0d 00 08 11 1f 88 89 00 0e dc cc 6e e6 dd dd d9 99 ...
+  [000134] Title                          ascii[11]        MR DIG                4d 52 20 44 49 47 20 20 20 20 20
+  [00013f] ManufacturerCode               ascii[4]                               20 20 20 20
+  [000143] CGB Flag                       u8               192                   c0
+           - unknown                      bit              64
+           - CGB                          bit              1
+  [000144] New Licensee Code              ascii[2]         ..                    b1 b0
+  [000146] SGB Flag                       u8               0                     00
+           - No SGB functions             eq               0
+  [000147] CartridgeType                  u8               25                    19
+           - MBC5                         eq               25
+  [000148] RomSize                        u8               0                     00
+           - 32 KByte (2 banks)           eq               0
+  [000149] RamSize                        u8               0                     00
+           - 0 (No RAM)                   eq               0
+  [00014a] DestinationCode                u8               1                     01
+           - Non-Japanese                 eq               1
+  [00014b] Old Licensee Code              u8               51                    33
+  [00014c] Mask ROM Version number        u8               0                     00
+  [00014d] Header checksum                u8               198                   c6
+  [00014e] Global checksum                u16 le           35123                 89 33
+
+0x7eb0 (32432) unmapped bytes

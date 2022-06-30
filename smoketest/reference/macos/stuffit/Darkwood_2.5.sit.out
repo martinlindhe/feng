@@ -1,0 +1,31 @@
+# templates/macos/stuffit.yml
+Header
+  [000000] Signature                      ascii[4]         SIT!                  53 49 54 21
+  [000004] FileCount                      u16 be           1                     00 01
+  [000006] ArchiveSize                    u32 be           480440                00 07 54 b8
+  [00000a] Signature2                     ascii[4]         rLau                  72 4c 61 75
+  [00000e] Version                        u8               1                     01
+           - v1.5 and earlier             eq               1
+  [00000f] Unknown                        u8[7]                                  3c 00 00 00 16 b4 ea
+
+FileHeader
+  [000016] rsrc fork compression method   u8               32                    20
+  [000017] data fork compression method   u8               32                    20
+  [000018] FileNameLength                 u8               12                    0c
+  [000019] File name                      ascii[12]        Darkwood 2.5          44 61 72 6b 77 6f 6f 64 20 32 2e 35
+  [000025] File name padding              u8[51]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 bb 4a 00 00 00 82 00 88 00 f7 01 69 00 ...
+  [000058] Mac OS File type               ascii[4]                               00 00 00 00
+  [00005c] File creator                   u32 be           4294967295            ff ff ff ff
+  [000060] Finder flags                   u16 be           448                   01 c0
+  [000062] Creation time                  u32 be           2845469674            a9 9a 6b ea
+  [000066] Modification time              u32 be           2845469693            a9 9a 6b fd
+  [00006a] uncompressed resource fork length u32 be           0                     00 00 00 00
+  [00006e] uncompressed data fork length  u32 be           479970                00 07 52 e2
+  [000072] compressed resource fork length u32 be           0                     00 00 00 00
+  [000076] compressed data fork length    u32 be           480306                00 07 54 32
+  [00007a] resource fork CRC-16           u16 be           0                     00 00
+  [00007c] data fork CRC-16               u16 be           0                     00 00
+  [00007e] Unknown                        u8[6]                                  00 00 00 00 00 00
+  [000084] CRC-16 of file header          u16 be           37661                 93 1d
+
+0x75432 (480306) unmapped bytes
