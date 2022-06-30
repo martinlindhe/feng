@@ -25,6 +25,7 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 	eval := goval.NewEvaluator()
 
 	variables := make(map[string]interface{})
+
 	for _, layout := range fl.Structs {
 		mapped := make(map[string]interface{})
 		for _, field := range layout.Fields {
@@ -34,10 +35,6 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 			} else {
 				mapped[field.Format.Label] = val
 			}
-
-			//mapped[field.Format.Label+".value"] = value.AsUint64(field.Format.Kind, field.Value)
-			//mapped[field.Format.Label+".offset"] = field.Offset
-			//mapped[field.Format.Label+".len"] = field.Length
 		}
 		mapped["index"] = layout.Index
 		variables[layout.Label] = mapped

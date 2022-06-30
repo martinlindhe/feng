@@ -316,21 +316,25 @@ func ReverseBytes(b []byte, unitLength int) []byte {
 
 // decodes value in network byte order (big) to unsigned integer
 func AsUint64(kind string, b []byte) uint64 {
-	if DEBUG {
-		log.Printf("AsUint64 converting [%02x] to %s", b, kind)
-	}
-	switch kind {
-	case "u8", "i8", "ascii":
-		return uint64(b[0])
-	case "u16", "i16", "dosdate", "dostime":
-		return uint64(binary.BigEndian.Uint16(b))
-	case "u32", "i32", "time_t_32":
-		return uint64(binary.BigEndian.Uint32(b))
-	case "u64", "i64":
-		return binary.BigEndian.Uint64(b)
-	}
-	log.Fatalf("AsUint64 unhandled kind %s", kind)
-	return 0
+	/*
+		if DEBUG {
+			log.Printf("AsUint64 converting [%02x] to %s", b, kind)
+		}
+		switch kind {
+		case "u8", "i8", "ascii":
+			return uint64(b[0])
+		case "u16", "i16", "dosdate", "dostime":
+			return uint64(binary.BigEndian.Uint16(b))
+		case "u32", "i32", "time_t_32":
+			return uint64(binary.BigEndian.Uint32(b))
+		case "u64", "i64":
+			return binary.BigEndian.Uint64(b)
+		}
+		log.Fatalf("AsUint64 unhandled kind %s", kind)
+		return 0
+	*/
+
+	return AsUint64Raw(b)
 }
 
 // decodes value in network byte order (big) to unsigned integer
@@ -380,12 +384,12 @@ func (format DataField) Present(b []byte) string {
 		if format.Slice || format.Range != "" {
 			return ""
 		}
-		return fmt.Sprintf("%d", AsUint64(format.Kind, b))
+		return fmt.Sprintf("%d", AsUint64Raw(b))
 	case "i8", "i16", "i32", "i64":
 		if format.Slice || format.Range != "" {
 			return ""
 		}
-		return fmt.Sprintf("%d", AsInt64(format.Kind, b))
+		return fmt.Sprintf("%d", AsUint64Raw(b))
 
 	case "ascii", "asciiz":
 		v, _ := AsciiZString(b, len(b))
@@ -396,7 +400,7 @@ func (format DataField) Present(b []byte) string {
 		return v
 
 	case "time_t_32":
-		v := AsUint64(format.Kind, b)
+		v := AsUint64Raw(b)
 		timestamp := time.Unix(int64(v), 0)
 		if IN_UTC {
 			timestamp = timestamp.UTC()
@@ -415,11 +419,11 @@ func (format DataField) Present(b []byte) string {
 		return timestamp.Format(time.RFC3339)
 
 	case "dostime":
-		v := AsUint64(format.Kind, b)
+		v := AsUint64Raw(b)
 		return asDosTime(uint16(v)).String()
 
 	case "dosdate":
-		v := AsUint64(format.Kind, b)
+		v := AsUint64Raw(b)
 		return asDosDate(uint16(v)).String()
 	}
 
@@ -431,6 +435,7 @@ var (
 	red = color.New(color.FgRed).SprintFunc()
 )
 
+// text encoding used by Windows
 func utf16String(b []byte) string {
 
 	// Make an transformer that converts MS-Win default to UTF8
@@ -445,7 +450,7 @@ func utf16String(b []byte) string {
 	if err != nil {
 		panic(err)
 	}
-	return string(decoded)
+	return strings.TrimRight(string(decoded), "\x00")
 }
 
 // returns decoded string and length in bytes
