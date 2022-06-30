@@ -10,7 +10,7 @@ Chunk_0 ARCHIVE
   [000007] CRC                            u16 le           37071                 90 cf
   [000009] Type                           u8               115                   73
            - ARCHIVE                      eq               115
-  [00000a] ARCHIVE_FLAGS                  u16 le           0                     00 00
+  [00000a] archiveFlags                   u16 le           0                     00 00
            - ARCHIVE_VOLUME               bit              0
            - ARCHIVE_COMMENT_PRESENT      bit              0
            - ARCHIVE_LOCKED               bit              0
@@ -45,7 +45,7 @@ Chunk_1 FILE_OR_DIR
            - OLD_VERSION_IGNORE           bit              0
            - ADD_SIZE_PRESENT             bit              1
   [000019] HeaderSize                     u16 le           37                    00 25
-  [00001b] Compressed size                u32 le           15                    00 00 00 0f
+  [00001b] CompressedSize                 u32 le           15                    00 00 00 0f
   [00001f] Unpacked size                  u32 le           4                     00 00 00 04
   [000023] Host OS                        u8               3                     03
            - Unix                         eq               3
@@ -55,7 +55,7 @@ Chunk_1 FILE_OR_DIR
   [00002c] Version to unpack              u8               29                    1d
   [00002d] Pack method                    u8               51                    33
            - Normal                       eq               51
-  [00002e] Name size                      u16 le           5                     00 05
+  [00002e] NameSize                       u16 le           5                     00 05
   [000030] UnixStyleAttrs                 u32 le           33188                 00 00 81 a4
   [000034] File name                      ascii[5]         filen                 66 69 6c 65 6e
   [000039] Data                           u8[15]                                 08 08 ff 0c bf d4 f4 11 bf c0 35 ff e4 b7 40

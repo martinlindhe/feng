@@ -98,8 +98,8 @@ structs:
 
       # XXX series of data blocks. last block is one with Size==0
       # needed to parse gif_87a_002_apples.gif
-      u8 Data size: ??
-      u8[self.Data size] Data: ??
+      u8 DataSize: ??
+      u8[self.DataSize] Data: ??
       u8 BlockTerminator: "00"
 
     if self.BlockType == BLOCK_TRAILER:

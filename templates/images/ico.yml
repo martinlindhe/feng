@@ -40,11 +40,12 @@ structs:
       u16 Horizontal hotspot: ??
       u16 Vertical hotspot: ??
 
-    u32 Data size: ??
-    u32 Data offset: ??
+    u32 DataSize: ??
+    u32 DataOffset: ??
 
     # TODO: the "image data" area contains a DIB header and data, or a PNG - could be parsed recursively? or just mark for extraction
-    u8[self.Data offset:self.Data size] Image data: ??
+    offset: self.DataOffset
+    u8[self.DataSize] Image data: ??
 
 layout:
   - icon_dir ICONDIR

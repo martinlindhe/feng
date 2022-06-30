@@ -6,7 +6,7 @@ Header
   [000005] Compression method             ascii            0                     30
            - None                         eq               48
   [000006] Signature                      ascii            -                     2d
-  [000007] Compressed size                u32 le           6                     00 00 00 06
+  [000007] CompressedSize                 u32 le           6                     00 00 00 06
   [00000b] Original size                  u32 le           6                     00 00 00 06
   [00000f] File modified date             dosdate le       2004-01-10            2f aa
   [000011] File modified time             dostime le       11:06:06              58 c3

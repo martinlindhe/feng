@@ -10,7 +10,7 @@ Chunk_0 ARCHIVE
   [000007] CRC                            u16 le           37071                 90 cf
   [000009] Type                           u8               115                   73
            - ARCHIVE                      eq               115
-  [00000a] ARCHIVE_FLAGS                  u16 le           0                     00 00
+  [00000a] archiveFlags                   u16 le           0                     00 00
            - ARCHIVE_VOLUME               bit              0
            - ARCHIVE_COMMENT_PRESENT      bit              0
            - ARCHIVE_LOCKED               bit              0
@@ -34,7 +34,7 @@ Chunk_1 SUBBLOCK
            - OLD_VERSION_IGNORE           bit              0
            - ADD_SIZE_PRESENT             bit              1
   [000019] HeaderSize                     u16 le           35                    00 23
-  [00001b] Data size                      u32 le           35                    00 00 00 23
+  [00001b] DataSize                       u32 le           35                    00 00 00 23
   [00001f] Unknown                        u8[15]                                 22 00 00 00 02 32 0e b5 b2 56 4f 83 44 1d 33
   [00002e] SubTypeLen                     u8               3                     03
   [00002f] Unknown                        u8[5]                                  00 01 00 00 00
@@ -60,7 +60,7 @@ Chunk_2 FILE_OR_DIR
            - OLD_VERSION_IGNORE           bit              0
            - ADD_SIZE_PRESENT             bit              1
   [00005f] HeaderSize                     u16 le           80                    00 50
-  [000061] Compressed size                u32 le           12207                 00 00 2f af
+  [000061] CompressedSize                 u32 le           12207                 00 00 2f af
   [000065] Unpacked size                  u32 le           32152                 00 00 7d 98
   [000069] Host OS                        u8               2                     02
            - Win32                        eq               2
@@ -70,7 +70,7 @@ Chunk_2 FILE_OR_DIR
   [000072] Version to unpack              u8               29                    1d
   [000073] Pack method                    u8               53                    35
            - Best                         eq               53
-  [000074] Name size                      u16 le           48                    00 30
+  [000074] NameSize                       u16 le           48                    00 30
   [000076] UnixStyleAttrs                 u32 le           32                    00 00 00 20
   [00007a] File name                      ascii[48]        Microsoft.VisualStudio.Debugger.Runtime.Impl.dll 4d 69 63 72 6f 73 6f 66 74 2e 56 69 73 75 61 6c 53 74 75 64 69 6f 2e 44 65 62 75 67 67 65 72 2e ...
   [0000aa] Data                           u8[12207]                              18 21 d1 14 c8 8d 9d c0 14 02 39 09 20 44 51 80 a0 a2 a0 31 3a 14 a8 a3 00 5a 85 01 48 80 b0 18 ...
@@ -94,7 +94,7 @@ Chunk_3 FILE_OR_DIR
            - OLD_VERSION_IGNORE           bit              0
            - ADD_SIZE_PRESENT             bit              1
   [00305e] HeaderSize                     u16 le           49                    00 31
-  [003060] Compressed size                u32 le           14857                 00 00 3a 09
+  [003060] CompressedSize                 u32 le           14857                 00 00 3a 09
   [003064] Unpacked size                  u32 le           31064                 00 00 79 58
   [003068] Host OS                        u8               2                     02
            - Win32                        eq               2
@@ -104,7 +104,7 @@ Chunk_3 FILE_OR_DIR
   [003071] Version to unpack              u8               29                    1d
   [003072] Pack method                    u8               53                    35
            - Best                         eq               53
-  [003073] Name size                      u16 le           17                    00 11
+  [003073] NameSize                       u16 le           17                    00 11
   [003075] UnixStyleAttrs                 u32 le           32                    00 00 00 20
   [003079] File name                      ascii[17]        vsdiag_regwcf.exe     76 73 64 69 61 67 5f 72 65 67 77 63 66 2e 65 78 65
   [00308a] Data                           u8[14857]                              1c 1e 15 11 08 8d 59 80 12 22 2f 36 1a 93 4a 02 a0 b8 eb c3 5e 1a 14 07 59 a9 48 a2 08 28 eb 8b ...
@@ -128,7 +128,7 @@ Chunk_4 FILE_OR_DIR
            - OLD_VERSION_IGNORE           bit              0
            - ADD_SIZE_PRESENT             bit              1
   [006a98] HeaderSize                     u16 le           45                    00 2d
-  [006a9a] Compressed size                u32 le           5                     00 00 00 05
+  [006a9a] CompressedSize                 u32 le           5                     00 00 00 05
   [006a9e] Unpacked size                  u32 le           5                     00 00 00 05
   [006aa2] Host OS                        u8               2                     02
            - Win32                        eq               2
@@ -138,7 +138,7 @@ Chunk_4 FILE_OR_DIR
   [006aab] Version to unpack              u8               29                    1d
   [006aac] Pack method                    u8               48                    30
            - Store                        eq               48
-  [006aad] Name size                      u16 le           8                     00 08
+  [006aad] NameSize                       u16 le           8                     00 08
   [006aaf] UnixStyleAttrs                 u32 le           32                    00 00 00 20
   [006ab3] File name                      ascii[8]         file.txt              66 69 6c 65 2e 74 78 74
   [006abb] Reserved                       u8[5]                                  00 b0 9d 04 11

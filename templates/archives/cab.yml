@@ -70,15 +70,11 @@ structs:
       default: invalid
 
     offset: self.CFDATA_Offset
-
-    # XXX tag up CFDATA areas
-
-##    CFDATA[self.DataBlocks] CFDATA: ?? # XXX custom type
+    # XXX custom type:
     u32 csum: ??
     u16 DataLen: ??
     u16 cbUncomp: ??
     u8[self.DataLen] Data: ??
-
     offset: restore
 
   CFFILE:

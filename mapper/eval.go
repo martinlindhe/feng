@@ -5,8 +5,11 @@ import (
 	"log"
 	"math"
 	"strconv"
+	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/maja42/goval"
+	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/value"
 )
 
@@ -22,6 +25,13 @@ func (e EvaluateError) Error() string {
 
 func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 
+	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
+
+	// fast path: if "in" looks like decimal number just convert it
+	if v, err := strconv.Atoi(in); err == nil {
+		return uint64(v), nil
+	}
+
 	eval := goval.NewEvaluator()
 
 	variables := make(map[string]interface{})
@@ -29,24 +39,41 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 	for _, layout := range fl.Structs {
 		mapped := make(map[string]interface{})
 		for _, field := range layout.Fields {
-			val := field.Present()
-			if i, err := strconv.ParseInt(val, 10, 64); err == nil {
-				mapped[field.Format.Label] = int(i)
-			} else {
-				mapped[field.Format.Label] = val
+			val := uint64(0)
+			if !field.Format.Slice && field.Format.Range == "" {
+				switch field.Format.Kind {
+				case "u8", "u16", "u32", "u64":
+					val = value.AsUint64Raw(field.Value)
+				case "i8":
+					val = uint64(int8(value.AsUint64Raw(field.Value)))
+				case "i16":
+					val = uint64(int16(value.AsUint64Raw(field.Value)))
+				case "i32":
+					val = uint64(int32(value.AsUint64Raw(field.Value)))
+				case "i64":
+					val = uint64(int64(value.AsUint64Raw(field.Value)))
+
+				default:
+					i, err := strconv.ParseInt(field.Present(), 10, 64)
+					if err == nil {
+						val = uint64(i)
+					}
+				}
 			}
+
+			if DEBUG {
+				//log.Printf("mapped variable %s to %v => %d", field.Format.Label, field.Value, int(val))
+			}
+			mapped[field.Format.Label] = int(val)
 		}
-		mapped["index"] = layout.Index
+		mapped["index"] = int(layout.Index)
 		variables[layout.Label] = mapped
 	}
 
 	// add constants as variables
 	for _, constant := range fl.DS.Constants {
-		variables[constant.Field.Label] = int(value.AsUint64(constant.Field.Kind, constant.Value))
-	}
-
-	if DEBUG {
-		//log.Printf("variables: %#v", variables)
+		//feng.Green("adding constant %s\n", constant.Field.Label)
+		variables[constant.Field.Label] = int(constant.Value)
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)
@@ -93,6 +120,12 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 		return nil, fmt.Errorf("expected string, got %T", args[0])
 	}
 
+	if DEBUG {
+		feng.Yellow("--- EVALUATING --- %s\n", in)
+		spew.Dump(variables)
+		feng.Yellow("---\n")
+	}
+
 	result, err := eval.Evaluate(in, variables, functions)
 	if err != nil {
 		return 0, EvaluateError{input: in, msg: err.Error()}
@@ -112,5 +145,6 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 			return 0, nil
 		}
 	}
+	panic(fmt.Errorf("unhandled result type %T", result))
 	return 0, fmt.Errorf("unhandled result type %T", result)
 }

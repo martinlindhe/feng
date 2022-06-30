@@ -10,10 +10,10 @@ Chunk_0 ZIPFILERECORD
   [00000a] Modification time              dostime le       14:36:02              74 81
   [00000c] Modification date              dosdate le       2013-10-01            43 41
   [00000e] CRC32 of uncompressed data     u32 le           726158494             2b 48 4c 9e
-  [000012] Compressed size                u32 le           106                   00 00 00 6a
+  [000012] CompressedSize                 u32 le           106                   00 00 00 6a
   [000016] Uncompressed size              u32 le           115                   00 00 00 73
-  [00001a] File name length               u16 le           9                     00 09
-  [00001c] Extra field length             u16 le           0                     00 00
+  [00001a] FileNameLength                 u16 le           9                     00 09
+  [00001c] ExtraFieldLength               u16 le           0                     00 00
   [00001e] File name                      ascii[9]         7z_001.7z             37 7a 5f 30 30 31 2e 37 7a
   [000027] Data                           u8[106]                                33 af da b3 5e 5d 86 81 f9 94 7b 71 00 27 03 04 78 41 e9 fc 53 0a f3 18 4c 24 3d fb 22 ee 32 30 ...
 
@@ -28,10 +28,10 @@ Chunk_1 ZIPFILERECORD
   [00009b] Modification time              dostime le       14:36:50              74 99
   [00009d] Modification date              dosdate le       2013-10-01            43 41
   [00009f] CRC32 of uncompressed data     u32 le           2097656349            7d 07 b2 1d
-  [0000a3] Compressed size                u32 le           75                    00 00 00 4b
+  [0000a3] CompressedSize                 u32 le           75                    00 00 00 4b
   [0000a7] Uncompressed size              u32 le           79                    00 00 00 4f
-  [0000ab] File name length               u16 le           11                    00 0b
-  [0000ad] Extra field length             u16 le           0                     00 00
+  [0000ab] FileNameLength                 u16 le           11                    00 0b
+  [0000ad] ExtraFieldLength               u16 le           0                     00 00
   [0000af] File name                      ascii[11]        rar_001.rar           72 61 72 5f 30 30 31 2e 72 61 72
   [0000ba] Data                           u8[75]                                 0b 4a 2c 52 94 62 67 38 3f a1 98 81 81 97 01 02 9e bd 29 51 68 50 65 e0 07 32 59 80 98 99 23 99 ...
 
@@ -46,10 +46,10 @@ Chunk_2 ZIPFILERECORD
   [00010f] Modification time              dostime le       18:16:44              92 16
   [000111] Modification date              dosdate le       2013-09-30            43 3e
   [000113] CRC32 of uncompressed data     u32 le           4152920128            f7 88 88 40
-  [000117] Compressed size                u32 le           96                    00 00 00 60
+  [000117] CompressedSize                 u32 le           96                    00 00 00 60
   [00011b] Uncompressed size              u32 le           161                   00 00 00 a1
-  [00011f] File name length               u16 le           11                    00 0b
-  [000121] Extra field length             u16 le           0                     00 00
+  [00011f] FileNameLength                 u16 le           11                    00 0b
+  [000121] ExtraFieldLength               u16 le           0                     00 00
   [000123] File name                      ascii[11]        zip_001.zip           7a 69 70 5f 30 30 31 2e 7a 69 70
   [00012e] Data                           u8[96]                                 0b f0 66 66 e1 62 00 81 3f 13 ed 9c 25 45 fc 0f b1 03 d9 20 cc c4 20 c3 50 51 11 1a c2 c9 c0 bc ...
 
@@ -67,9 +67,9 @@ Chunk_3 ZIPDIRENTRY
   [00019e] CRC32 of uncompressed data     u32 le           726158494             2b 48 4c 9e
   [0001a2] Compressed size                u32 le           106                   00 00 00 6a
   [0001a6] Uncompressed size              u32 le           115                   00 00 00 73
-  [0001aa] File name length               u16 le           9                     00 09
-  [0001ac] Extra field length             u16 le           0                     00 00
-  [0001ae] Comment length                 u16 le           0                     00 00
+  [0001aa] FileNameLength                 u16 le           9                     00 09
+  [0001ac] ExtraFieldLength               u16 le           0                     00 00
+  [0001ae] CommentLength                  u16 le           0                     00 00
   [0001b0] Disk number start              u16 le           0                     00 00
   [0001b2] Internal attributes            u16 le           0                     00 00
   [0001b4] External attributes            u32 le           2175041568            81 a4 80 20
@@ -90,9 +90,9 @@ Chunk_4 ZIPDIRENTRY
   [0001d5] CRC32 of uncompressed data     u32 le           2097656349            7d 07 b2 1d
   [0001d9] Compressed size                u32 le           75                    00 00 00 4b
   [0001dd] Uncompressed size              u32 le           79                    00 00 00 4f
-  [0001e1] File name length               u16 le           11                    00 0b
-  [0001e3] Extra field length             u16 le           0                     00 00
-  [0001e5] Comment length                 u16 le           0                     00 00
+  [0001e1] FileNameLength                 u16 le           11                    00 0b
+  [0001e3] ExtraFieldLength               u16 le           0                     00 00
+  [0001e5] CommentLength                  u16 le           0                     00 00
   [0001e7] Disk number start              u16 le           0                     00 00
   [0001e9] Internal attributes            u16 le           0                     00 00
   [0001eb] External attributes            u32 le           2175041568            81 a4 80 20
@@ -113,9 +113,9 @@ Chunk_5 ZIPDIRENTRY
   [00020e] CRC32 of uncompressed data     u32 le           4152920128            f7 88 88 40
   [000212] Compressed size                u32 le           96                    00 00 00 60
   [000216] Uncompressed size              u32 le           161                   00 00 00 a1
-  [00021a] File name length               u16 le           11                    00 0b
-  [00021c] Extra field length             u16 le           0                     00 00
-  [00021e] Comment length                 u16 le           0                     00 00
+  [00021a] FileNameLength                 u16 le           11                    00 0b
+  [00021c] ExtraFieldLength               u16 le           0                     00 00
+  [00021e] CommentLength                  u16 le           0                     00 00
   [000220] Disk number start              u16 le           0                     00 00
   [000222] Internal attributes            u16 le           0                     00 00
   [000224] External attributes            u32 le           2175041568            81 a4 80 20
@@ -132,6 +132,6 @@ Chunk_6 ZIPENDLOCATOR
   [000241] Entries in directory           u16 le           3                     00 03
   [000243] Directory size                 u32 le           169                   00 00 00 a9
   [000247] Directory offset               u32 le           398                   00 00 01 8e
-  [00024b] Comment length                 u16 le           0                     00 00
+  [00024b] CommentLength                  u16 le           0                     00 00
 
 EOF

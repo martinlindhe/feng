@@ -3,8 +3,6 @@ package template
 import (
 	"fmt"
 	"log"
-	"strconv"
-	"strings"
 
 	"github.com/martinlindhe/feng/value"
 	"gopkg.in/yaml.v2"
@@ -94,6 +92,7 @@ func (ds *DataStructure) FindStructure(df *value.DataField) (*evaluatedStruct, e
 	return nil, fmt.Errorf("not found in structs: '%s'", df.Kind)
 }
 
+/*
 // parses a comma-separated string of constants and integers
 func (ds *DataStructure) ParsePattern(in, kind string) ([][]byte, error) {
 	res := [][]byte{}
@@ -135,3 +134,4 @@ func (ds *DataStructure) FindConstant(name string) ([]byte, bool) {
 	}
 	return nil, false
 }
+*/

@@ -45,6 +45,11 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	fileLayout.size = uint64(len(b))
 	rr := bytes.NewReader(b)
 
+	fileLayout.DS.Constants = append(fileLayout.DS.Constants, template.EvaluatedConstant{
+		Field: value.DataField{Label: "FILE_SIZE", Kind: "u64"},
+		Value: int64(fileLayout.size),
+	})
+
 	if DEBUG {
 		log.Printf("mapping ds '%s'", ds.BaseName)
 	}
@@ -247,25 +252,16 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 	fs := &fl.Structs[idx]
 
 	err := fl.expandChildren(r, fs, df, ds, expressions)
-	if err != nil {
-		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
-			//if DEBUG {
-			feng.Red("expandStruct error: [%08x] failed reading data for '%s' (err:%v)\n", fl.offset, df.Label, err)
-			//}
+	if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
+		//if DEBUG {
+		feng.Red("expandStruct error: [%08x] failed reading data for '%s' (err:%v)\n", fl.offset, df.Label, err)
+		//}
 
-			//log.Printf("error: unexpected eof at %s %s in %s. %d structs",
-			//	df.Kind, df.Label, ds.BaseName, len(fl.Structs))
-			if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
-				return fmt.Errorf("eof and no structs mapped")
-			}
-			return err
+		if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
+			return fmt.Errorf("eof and no structs mapped")
 		}
-		return err
-
-		// remove the added struct in case of error
-		//feng.Red("removing struct '%s.%s' due to error: %v", fl.BaseName, fs.Label, err)
-		//fl.Structs = append(fl.Structs[:idx], fl.Structs[idx+1:]...)
 	}
+
 	return err
 }
 
@@ -349,14 +345,16 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			"compressed:zlib",
 			"raw:u8":
 			// internal data types
-			if es.Field.Range != "" {
-				var err error
-				es.Field.Range, err = fl.ExpandVariables(es.Field.Range, df)
-				if err != nil {
-					return err
+			/*
+				expandedRange := ""
+				if es.Field.Range != "" {
+					expandedRange, err := fl.ExpandVariables(es.Field.Range, df)
+					if err != nil {
+						return err
+					}
 				}
-			}
-
+			*/
+			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", df.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 			if totalLength == 0 {
 				if DEBUG {
@@ -384,13 +382,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 			val, err := readBytes(r, totalLength, unitLength, fl.endian)
 			if DEBUG {
-				log.Printf("[%08x] reading %d bytes for '%s.%s' %s: %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, fl.PresentType(&es.Field), val, err)
+				log.Printf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, val, err)
 			}
 			if err != nil {
 				return err
 			}
 
-			// if known value, see if value is in file data
+			// if known data pattern, see if it matches file data
 			if es.Pattern.Known {
 				if !bytes.Equal(es.Pattern.Pattern, val) {
 					if DEBUG {
@@ -441,10 +439,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				return err
 			}
 			lastIf = q
-			if a != 0 {
-				if DEBUG {
+			if DEBUG {
+				if a != 0 {
 					log.Println("IF EVALUATED TRUE: q=", q, ", a=", a)
+				} else {
+					log.Println("IF EVALUATED FALSE: q=", q, ", a=", a)
 				}
+			}
+			if a != 0 {
 				err := fl.expandChildren(r, fs, df, ds, es.Children)
 				if err != nil {
 					return err
@@ -459,8 +461,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			if err != nil {
 				return err
 			}
+			if DEBUG {
+				if a == 0 {
+					log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
+				} else {
+					log.Println("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
+				}
+			}
 			if a == 0 {
-				log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
 				err := fl.expandChildren(r, fs, df, ds, es.Children)
 				if err != nil {
 					return err
@@ -487,14 +495,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 // reads bytes from reader and returns them in network byte order (big endian)
 func readBytes(r io.Reader, totalLength, unitLength uint64, endian string) ([]byte, error) {
+	if unitLength > 1 && endian == "" {
+		return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
+	}
 
 	val := make([]byte, totalLength)
 	if _, err := io.ReadFull(r, val); err != nil {
 		return nil, err
-	}
-
-	if unitLength > 1 && endian == "" {
-		return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
 	}
 
 	// convert to network byte order

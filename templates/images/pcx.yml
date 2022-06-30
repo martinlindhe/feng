@@ -55,12 +55,12 @@ structs:
     u8[54] Reserved: ??
 
     if self.Version in {3, 4, 5} && self.BitsPerPixel == 8 && self.ColorPlanes == 1:
-      u8[FILE_SIZE - self.offset - 769] Image data: ??
+      u8[FILE_SIZE - OFFSET - 769] Image data: ??
       offset: FILE_SIZE - 769
       u8 Palette marker: "0c"
       u8[256 * 3] Palette: ??   # XXX custom rgb type
     else:
-      u8[FILE_SIZE - self.offset] Image data: ??
+      u8[FILE_SIZE - OFFSET] Image data: ??
 
 layout:
   - header Header

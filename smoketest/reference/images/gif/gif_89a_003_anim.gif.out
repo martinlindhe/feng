@@ -99,7 +99,7 @@ Section_19 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [00004a] LZWMinimumCodeSize             u8               3                     03
-  [00004b] Data size                      u8               67                    43
+  [00004b] DataSize                       u8               67                    43
   [00004c] Data                           u8[67]                                 78 ba 47 c4 90 39 17 57 08 6d 9e 52 e0 bd d9 c6 75 d6 c7 8c 64 19 71 8c 61 54 cb 30 1c ae 0b cb ...
   [00008f] BlockTerminator                u8               0                     00
 
@@ -132,7 +132,7 @@ Section_21 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [0000a2] LZWMinimumCodeSize             u8               3                     03
-  [0000a3] Data size                      u8               62                    3e
+  [0000a3] DataSize                       u8               62                    3e
   [0000a4] Data                           u8[62]                                 78 aa 11 fb af 35 a8 8c 39 d2 11 b2 ac c5 da c6 1d de b5 88 23 69 3e 1b e5 1e 45 f1 2e 71 3c c3 ...
   [0000e2] BlockTerminator                u8               0                     00
 
@@ -165,7 +165,7 @@ Section_23 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [0000f5] LZWMinimumCodeSize             u8               3                     03
-  [0000f6] Data size                      u8               62                    3e
+  [0000f6] DataSize                       u8               62                    3e
   [0000f7] Data                           u8[62]                                 78 ba 67 c6 90 39 17 e3 7c 21 d4 45 73 de 8c a7 81 cb b7 00 00 49 10 07 8a 6e eb ea a6 55 cc be ...
   [000135] BlockTerminator                u8               0                     00
 
@@ -198,7 +198,7 @@ Section_25 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [000148] LZWMinimumCodeSize             u8               3                     03
-  [000149] Data size                      u8               62                    3e
+  [000149] DataSize                       u8               62                    3e
   [00014a] Data                           u8[62]                                 78 0a a0 7e c6 bc c3 d8 8b f1 d5 e6 b0 d4 dc f5 29 82 30 4d 41 70 94 e5 a9 a4 29 6b ba b0 da ba ...
   [000188] BlockTerminator                u8               0                     00
 
@@ -231,7 +231,7 @@ Section_27 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [00019b] LZWMinimumCodeSize             u8               3                     03
-  [00019c] Data size                      u8               62                    3e
+  [00019c] DataSize                       u8               62                    3e
   [00019d] Data                           u8[62]                                 78 ba 07 c0 90 39 17 97 10 6d d6 73 6f de 5c 07 32 de 78 0c c3 68 18 27 9a 56 eb ea be 51 cc a2 ...
   [0001db] BlockTerminator                u8               0                     00
 
@@ -264,7 +264,7 @@ Section_29 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [0001ee] LZWMinimumCodeSize             u8               3                     03
-  [0001ef] Data size                      u8               60                    3c
+  [0001ef] DataSize                       u8               60                    3c
   [0001f0] Data                           u8[60]                                 78 ba 27 c2 50 39 17 cf 18 6d 1e 00 d6 bd d9 c6 75 d6 c7 8c 64 19 71 4a 51 54 8c eb c2 ad 4c d7 ...
   [00022c] BlockTerminator                u8               0                     00
 
@@ -297,7 +297,7 @@ Section_31 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [00023f] LZWMinimumCodeSize             u8               3                     03
-  [000240] Data size                      u8               62                    3e
+  [000240] DataSize                       u8               62                    3e
   [000241] Data                           u8[62]                                 78 ba 37 c3 90 39 17 57 29 6d 1e 21 e0 bd d9 c6 75 d6 c7 8c 64 19 71 0c 41 54 0b 00 1c ae 0b cb ...
   [00027f] BlockTerminator                u8               0                     00
 
@@ -330,7 +330,7 @@ Section_33 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [000292] LZWMinimumCodeSize             u8               3                     03
-  [000293] Data size                      u8               59                    3b
+  [000293] DataSize                       u8               59                    3b
   [000294] Data                           u8[59]                                 78 ba 57 c5 90 39 17 17 21 6d 9e 31 e0 bd d9 c6 75 d6 c7 8c 64 19 71 4c 10 54 8b 20 1c ae 0b cb ...
   [0002cf] BlockTerminator                u8               0                     00
 

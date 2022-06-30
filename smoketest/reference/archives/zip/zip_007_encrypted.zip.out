@@ -10,10 +10,10 @@ Chunk_0 ZIPFILERECORD
   [00000a] Modification time              dostime le       00:04:24              00 8c
   [00000c] Modification date              dosdate le       2017-03-12            4a 6c
   [00000e] CRC32 of uncompressed data     u32 le           909783072             36 3a 30 20
-  [000012] Compressed size                u32 le           18                    00 00 00 12
+  [000012] CompressedSize                 u32 le           18                    00 00 00 12
   [000016] Uncompressed size              u32 le           6                     00 00 00 06
-  [00001a] File name length               u16 le           11                    00 0b
-  [00001c] Extra field length             u16 le           28                    00 1c
+  [00001a] FileNameLength                 u16 le           11                    00 0b
+  [00001c] ExtraFieldLength               u16 le           28                    00 1c
   [00001e] File name                      ascii[11]        message.txt           6d 65 73 73 61 67 65 2e 74 78 74
   [000029] Extra field                    u8[28]                                 55 54 09 00 03 77 82 c4 58 79 82 c4 58 75 78 0b 00 01 04 f8 01 00 00 04 50 00 00 00
   [000045] Data                           u8[18]                                 23 d7 5f 88 c3 c0 27 1f c0 42 fe 4c 2c 5c 89 89 3c 84
@@ -40,9 +40,9 @@ Chunk_2 ZIPDIRENTRY
   [000077] CRC32 of uncompressed data     u32 le           909783072             36 3a 30 20
   [00007b] Compressed size                u32 le           18                    00 00 00 12
   [00007f] Uncompressed size              u32 le           6                     00 00 00 06
-  [000083] File name length               u16 le           11                    00 0b
-  [000085] Extra field length             u16 le           24                    00 18
-  [000087] Comment length                 u16 le           0                     00 00
+  [000083] FileNameLength                 u16 le           11                    00 0b
+  [000085] ExtraFieldLength               u16 le           24                    00 18
+  [000087] CommentLength                  u16 le           0                     00 00
   [000089] Disk number start              u16 le           0                     00 00
   [00008b] Internal attributes            u16 le           1                     00 01
   [00008d] External attributes            u32 le           2175008768            81 a4 00 00
@@ -60,6 +60,6 @@ Chunk_3 ZIPENDLOCATOR
   [0000c2] Entries in directory           u16 le           1                     00 01
   [0000c4] Directory size                 u32 le           81                    00 00 00 51
   [0000c8] Directory offset               u32 le           103                   00 00 00 67
-  [0000cc] Comment length                 u16 le           0                     00 00
+  [0000cc] CommentLength                  u16 le           0                     00 00
 
 EOF

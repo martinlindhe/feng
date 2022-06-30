@@ -43,13 +43,13 @@ structs:
       dostime Modification time: ??
       dosdate Modification date: ??
       u32 CRC32 of uncompressed data: ??
-      u32 Compressed size: ??
+      u32 CompressedSize: ??
       u32 Uncompressed size: ??
-      u16 File name length: ??
-      u16 Extra field length: ??
-      ascii[self.File name length] File name: ??
-      u8[self.Extra field length] Extra field: ??
-      u8[self.Compressed size] Data: ??
+      u16 FileNameLength: ??
+      u16 ExtraFieldLength: ??
+      ascii[self.FileNameLength] File name: ??
+      u8[self.ExtraFieldLength] Extra field: ??
+      u8[self.CompressedSize] Data: ??
 
     if self.Type == ZIPDIRENTRY:
       label: ZIPDIRENTRY
@@ -67,16 +67,16 @@ structs:
       u32 CRC32 of uncompressed data: ??
       u32 Compressed size: ??
       u32 Uncompressed size: ??
-      u16 File name length: ??
-      u16 Extra field length: ??
-      u16 Comment length: ??
+      u16 FileNameLength: ??
+      u16 ExtraFieldLength: ??
+      u16 CommentLength: ??
       u16 Disk number start: ??
       u16 Internal attributes: ??
       u32 External attributes: ??
       u32 Header offset: ??
-      ascii[self.File name length] File name: ??
-      u8[self.Extra field length] Extra field: ??
-      ascii[self.Comment length] Comment: ??
+      ascii[self.FileNameLength] File name: ??
+      u8[self.ExtraFieldLength] Extra field: ??
+      ascii[self.CommentLength] Comment: ??
 
     if self.Type == ZIPDATADESCR:
       label: ZIPDATADESCR
@@ -92,8 +92,8 @@ structs:
       u16 Entries in directory: ??
       u32 Directory size: ??
       u32 Directory offset: ??
-      u16 Comment length: ??
-      ascii[self.Comment length] Comment: ??
+      u16 CommentLength: ??
+      ascii[self.CommentLength] Comment: ??
 
 layout:
   - chunk[] Chunk

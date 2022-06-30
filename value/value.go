@@ -230,11 +230,14 @@ func ParseDataField(in string) (DataField, error) {
 
 // a parsed data field
 type DataField struct {
-	// u8, ascii etc
+	// data type: u8, ascii etc
 	Kind string
 
 	// ranged value if set. data field is type Kind[Length] or Kind[Start:Length]
 	Range string
+
+	// XXX make this unexported
+	RangeVal int64
 
 	// a slice type if true. data field is type Kind[]
 	Slice bool
@@ -316,51 +319,46 @@ func ReverseBytes(b []byte, unitLength int) []byte {
 
 // decodes value in network byte order (big) to unsigned integer
 func AsUint64(kind string, b []byte) uint64 {
-	/*
-		if DEBUG {
-			log.Printf("AsUint64 converting [%02x] to %s", b, kind)
-		}
-		switch kind {
-		case "u8", "i8", "ascii":
-			return uint64(b[0])
-		case "u16", "i16", "dosdate", "dostime":
-			return uint64(binary.BigEndian.Uint16(b))
-		case "u32", "i32", "time_t_32":
-			return uint64(binary.BigEndian.Uint32(b))
-		case "u64", "i64":
-			return binary.BigEndian.Uint64(b)
-		}
-		log.Fatalf("AsUint64 unhandled kind %s", kind)
-		return 0
-	*/
 
-	return AsUint64Raw(b)
+	if DEBUG {
+		log.Printf("AsUint64 converting [%02x] to %s", b, kind)
+	}
+	switch kind {
+	case "u8", "i8", "ascii":
+		return uint64(b[0])
+	case "u16", "i16", "dosdate", "dostime":
+		return uint64(binary.BigEndian.Uint16(b))
+	case "u32", "i32", "time_t_32":
+		return uint64(binary.BigEndian.Uint32(b))
+	case "u64", "i64":
+		return binary.BigEndian.Uint64(b)
+	}
+	log.Fatalf("AsUint64 unhandled kind %s", kind)
+	return 0
 }
 
 // decodes value in network byte order (big) to unsigned integer
-func AsUint64Raw(b []byte) uint64 {
-	if DEBUG {
-		log.Printf("AsUint6Raw converting [%02x]", b)
-	}
+func AsUint64Raw(b []byte) (v uint64) {
+
 	if len(b) == 1 {
-		return uint64(b[0])
+		v = uint64(b[0])
+	} else if len(b) <= 2 {
+		v = uint64(binary.BigEndian.Uint16(b))
+	} else if len(b) <= 4 {
+		v = uint64(binary.BigEndian.Uint32(b))
+	} else {
+		v = binary.BigEndian.Uint64(b)
 	}
-	if len(b) <= 2 {
-		return uint64(binary.BigEndian.Uint16(b))
+	if DEBUG {
+		//log.Printf("AsUint6Raw converting [%02x] to %d", b, v)
 	}
-	if len(b) <= 4 {
-		return uint64(binary.BigEndian.Uint32(b))
-	}
-	if len(b) <= 8 {
-		return binary.BigEndian.Uint64(b)
-	}
-	panic("eep")
+	return
 }
 
 // decodes value in network byte order (big) to signed integer
 func AsInt64(kind string, b []byte) int64 {
 	if DEBUG {
-		log.Printf("AsInt64 converting [%02x] to %s", b, kind)
+		//log.Printf("AsInt64 converting [%02x] to %s", b, kind)
 	}
 	switch kind {
 	case "i8":
@@ -376,15 +374,18 @@ func AsInt64(kind string, b []byte) int64 {
 	return 0
 }
 
+// presents the value of the data type (format.Kind) in a human-readable form
 func (format DataField) Present(b []byte) string {
 	switch format.Kind {
 	case "compressed:zlib", "raw:u8":
 		return ""
+
 	case "u8", "u16", "u32", "u64":
 		if format.Slice || format.Range != "" {
 			return ""
 		}
 		return fmt.Sprintf("%d", AsUint64Raw(b))
+
 	case "i8", "i16", "i32", "i64":
 		if format.Slice || format.Range != "" {
 			return ""

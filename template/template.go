@@ -52,7 +52,7 @@ type Template struct {
 
 type EvaluatedConstant struct {
 	Field value.DataField
-	Value []byte
+	Value int64
 }
 
 func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
@@ -62,11 +62,11 @@ func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
 		if err != nil {
 			return nil, err
 		}
-		val, err := value.ParseHexString(c.Value.(string))
+		val, err := value.ParseHexStringToUint64(c.Value.(string))
 		if err != nil {
 			return nil, err
 		}
-		res = append(res, EvaluatedConstant{key, val})
+		res = append(res, EvaluatedConstant{key, int64(val)})
 	}
 
 	// add all fields with eq subkey pattern matches as constants
@@ -102,15 +102,14 @@ func findStructConstants(c *yaml.MapItem) ([]EvaluatedConstant, error) {
 							continue
 						}
 						if m.Operation == "eq" || m.Operation == "bit" {
-							data, err := value.ParseHexString(m.Pattern)
+							data, err := value.ParseHexStringToUint64(m.Pattern)
 							if err != nil {
 								log.Println("error (ignoring2):", err)
 								continue
 							}
 							df := value.DataField{Label: m.Label, Kind: field.Kind}
 							//log.Println(m.Label, ":", data, "=", value.AsUint64(df.Kind, data))
-
-							res = append(res, EvaluatedConstant{df, data})
+							res = append(res, EvaluatedConstant{df, int64(data)})
 						}
 					}
 				}

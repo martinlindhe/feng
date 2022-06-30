@@ -82,8 +82,8 @@ const (
 	maxHexDisplayLength = 0x20
 )
 
-// decodes simple value types for presentation
-func (fl *FileLayout) PresentField(field *Field, hideRaw bool) string {
+// renders lines of ascii to present the data field for humans
+func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 	kind := fl.PresentType(&field.Format)
 	if field.Format.SingleUnitSize() > 1 {
 		if field.Endian == "little" {
@@ -132,7 +132,7 @@ func (fl *FileLayout) Present(hideRaw bool) (res string) {
 		}
 		res += heading + "\n"
 		for _, field := range layout.Fields {
-			res += fl.PresentField(&field, hideRaw)
+			res += fl.presentField(&field, hideRaw)
 		}
 		res += "\n"
 	}
@@ -181,8 +181,6 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
-	s = strings.Replace(s, "FILE_SIZE", fmt.Sprintf("%d", fl.size), 1)
-
 	if DEBUG {
 		log.Printf("GetInt: searching for '%s'", s)
 	}
@@ -196,56 +194,6 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 		log.Printf("GetInt: %s => %d", s, n)
 	}
 	return n, err
-
-	/*
-
-
-
-
-		parts := strings.SplitN(s, ".", 3)
-		if len(parts) < 2 {
-			return 0, fmt.Errorf("GetInt: unexpected format '%s'", s)
-		}
-		structName := parts[0]
-		fieldName := parts[1]
-		childName := ""
-		if len(parts) > 2 {
-			childName = parts[2]
-		}
-
-		str, err := fl.GetStruct(structName)
-		if err != nil {
-			return 0, err
-		}
-
-		for _, field := range str.Fields {
-			if DEBUG {
-				log.Printf("GetInt: want %s, got %s", fieldName, field.Format.Label)
-			}
-			if field.Format.Label == fieldName {
-				if field.Format.IsSimpleUnit() && childName == "" {
-					return value.AsUint64(field.Format.Kind, field.Value), nil
-				}
-
-				switch childName {
-				case "offset":
-					return field.Offset, nil
-				case "len":
-					return field.Length, nil
-				case "index":
-					return field.index, nil
-				}
-
-				for _, child := range field.MatchedPatterns {
-					if child.Label == childName {
-						return child.Value, nil
-					}
-				}
-			}
-		}
-
-		return 0, fmt.Errorf("GetInt: '%s' not found", s)
-	*/
 }
 
 // returns the pattern matched value of field named `structName`.`fieldName`
@@ -273,23 +221,22 @@ func (fl *FileLayout) MatchedValue(s string, df *value.DataField) (string, error
 	}
 
 	for _, field := range str.Fields {
-		if DEBUG {
-			log.Printf("MatchedValue: want %s, got %s", fieldName, field.Format.Label)
-		}
 		if field.Format.Label == fieldName {
 			for _, child := range field.MatchedPatterns {
+				if DEBUG {
+					log.Printf("MatchedValue: %s => %s", fieldName, child.Label)
+				}
 				return child.Label, nil
 			}
 		}
 	}
-
-	return s, nil // "", fmt.Errorf("MatchedValue: '%s' not found", s)
+	log.Printf("MatchedValue: '%s' not found", s)
+	return s, nil
 }
 
 // finds the first field named `structName`.`fieldName`
 // returns: kind, bytes, error
 func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, error) {
-
 	if df != nil {
 		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
@@ -428,24 +375,36 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 
 	if df.Range != "" {
 		if fl.IsAbsoluteAddress(df) {
-			_, rangeLength, err = fl.GetAbsoluteAddressRange(df)
-			if err != nil {
-				log.Fatal(err)
-			}
+			panic("TODO: drop range support!!!")
+			/*
+				_, rangeLength, err = fl.GetAbsoluteAddressRange(df)
+				if err != nil {
+					panic(err)
+				}
+			*/
 		} else {
-			old := df.Range
-			df.Range = strings.ReplaceAll(df.Range, "self.", df.Range+".")
-			if df.Range != old {
-				log.Fatalf("%s => %s", old, df.Range)
+
+			if df.RangeVal == 0 {
+				// XXX permanently store and reuse the calculated range length. faster lookup & avoid bug with changing offset value... ?!
+				// XXX FIXME TODO! !!! REFACTOR THIS:
+				// STORES CACHED RESULT OF CALCULATION
+				val, err := fl.EvaluateExpression(df.Range)
+				if err != nil {
+					panic(err)
+				}
+				df.RangeVal = int64(val)
 			}
-			rangeLength, err = fl.EvaluateExpression(df.Range)
+			rangeLength = uint64(df.RangeVal)
+
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
 	}
-	totalLength := unitLength * rangeLength
-
+	totalLength := unitLength * uint64(rangeLength)
+	if DEBUG {
+		log.Printf("GetAddressLengthPair: unitLength %d * rangeLength %d = totalLength %d", unitLength, rangeLength, totalLength)
+	}
 	return unitLength, totalLength
 }
 
@@ -482,6 +441,7 @@ func (fl *FileLayout) PresentType(df *value.DataField) string {
 	if df.Slice {
 		return fmt.Sprintf("%s[]", df.Kind)
 	}
+
 	if df.Range != "" {
 		unitLength, totalLength := fl.GetAddressLengthPair(df)
 		fieldLength := totalLength / unitLength
@@ -494,7 +454,6 @@ func (fl *FileLayout) PresentType(df *value.DataField) string {
 func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, error) {
 
 	s = strings.Replace(s, "self.offset", fmt.Sprintf("%d", fl.offset), 1)
-	s = strings.Replace(s, "FILE_SIZE", fmt.Sprintf("%d", fl.size), 1)
 
 	if DEBUG {
 		log.Printf("ExpandVariables: %s", s)
@@ -542,6 +501,11 @@ func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, err
 		kind, val, err := fl.GetValue(key, df)
 		if err != nil {
 			s, err := fl.EvaluateExpression(key)
+
+			if DEBUG {
+				log.Printf("expandVariable: evaluated expression '%s' to %s == %d", key, kind, s)
+			}
+
 			return fmt.Sprintf("%d", s), err
 		}
 

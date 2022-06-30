@@ -36,9 +36,9 @@ structs:
     u32 Expanded size: ??
 
     offset: self.FileOffset
-    u32 Compressed size: ??
-    u32 Expanded size: ??
-    compressed:zlib[self.Compressed size] Data: ??
+    u32 CompressedSize: ??
+    u32 ExpandedSize: ??
+    compressed:zlib[self.CompressedSize] Data: ??
 
     if self.CRC == DIRENTRY:
       label: DIRENTRY

@@ -78,7 +78,7 @@ structs:
       asciiz Comment: ??
 
     # XXX if deflate, mark data as such
-    u8[FILE_SIZE-self.offset-8] Data: ??
+    u8[FILE_SIZE - OFFSET - 8] Data: ??
 
     #crc32[Data.offset:self.offset] Data checksum: ??         # XXX of compressed or uncompressed data?
     u32 Data checksum: ?? # XXX crc32 type!

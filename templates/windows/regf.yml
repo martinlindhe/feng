@@ -59,7 +59,7 @@ structs:
   cell:
     i32 CellSize: ??   # XXX:  the size is positive if a cell is unallocated or negative if a cell is allocated (use abs() calculations)
     u16 CellSignature:
-      eq 0000: SIG_END    # XXX uncofirmed. seem to be last entry in feng-samples/windows/regf/regf_001_settings.dat
+      eq 0000: SIG_END    # XXX unconfirmed. seem to be last entry in feng-samples/windows/regf/regf_001_settings.dat
       eq c'kn': SIG_NK    # Key Node
       eq c'ks': SIG_SK    # Key Security
       eq c'kv': SIG_VK    # Key Value
@@ -130,7 +130,7 @@ structs:
       u8[abs(self.CellSize) - 8 - (8 * self.NumberOfOffsets)] Padding: ??
 
     if self.CellSignature == SIG_END:
-      # XXX uncofirmed. seem to be last entry in feng-samples/windows/regf/regf_001_settings.dat
+      # XXX unconfirmed. seem to be last entry in feng-samples/windows/regf/regf_001_settings.dat
       u8[self.CellSize - 6] Padding: ??
 
 layout:

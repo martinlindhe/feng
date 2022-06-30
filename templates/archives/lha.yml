@@ -38,7 +38,7 @@ structs:
       eq c'7': LZW, 64K sliding window. Static Huffman
       default: invalid
     ascii Signature: "2d"  # -
-    u32 Compressed size: ??
+    u32 CompressedSize: ??
     u32 Original size: ??
     dosdate File modified date: ??    # XXX should maybe be 32-bit dos_datetime
     dostime File modified time: ??
@@ -89,7 +89,7 @@ structs:
 
     # BODY:
     u16 Uncompressed CRC16: ??
-    #u8[Compressed size] Compressed data: ??
+    #u8[self.CompressedSize] Compressed data: ??
 
 layout:
   - header Header

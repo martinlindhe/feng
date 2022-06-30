@@ -65,8 +65,8 @@ layout:
 	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "2", Label: "I"}, []byte{0x49, 0x0}}, ds.Constants[0])
-	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "3", Label: "X"}, []byte{0x58, 0x58, 0x0}}, ds.Constants[1])
+	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "2", Label: "I"}, 0x49}, ds.Constants[0])
+	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "3", Label: "X"}, 0x5858}, ds.Constants[1])
 }
 
 func TestEvaluateStructsAndLayout(t *testing.T) {

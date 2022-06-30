@@ -64,5 +64,180 @@ Cell_0 SIG_NK
   [00106c] KeyLength                      u16 le           4                     00 04
   [00106e] Class name length              u16 le           0                     00 00
   [001070] Key                            ascii[4]         Test                  54 65 73 74
+  [001074] Padding                        u8[4]                                  00 00 00 00
 
-0x0f8c (3980) unmapped bytes
+Cell_1 SIG_SK
+  [001078] CellSize                       i32 le           4294967152            ff ff ff 70
+  [00107c] CellSignature                  u16 le           27507                 6b 73
+           - SIG_SK                       eq               27507
+  [00107e] Reserved                       u16 le           0                     00 00
+  [001080] Flink                          i32 le           360                   00 00 01 68
+  [001084] Blink                          i32 le           360                   00 00 01 68
+  [001088] Reference count                i32 le           1                     00 00 00 01
+  [00108c] DescriptorLength               i32 le           116                   00 00 00 74
+  [001090] Descriptor                     u8[116]                                01 00 04 94 48 00 00 00 58 00 00 00 00 00 00 00 14 00 00 00 02 00 34 00 02 00 00 00 00 02 18 00 ...
+  [001104] Padding                        u8[4]                                  00 00 00 00
+
+Cell_2 SIG_NK
+  [001108] CellSize                       i32 le           96                    00 00 00 60
+  [00110c] CellSignature                  u16 le           27502                 6b 6e
+           - SIG_NK                       eq               27502
+  [00110e] Flags                          u16 le           32                    00 20
+           - KEY_VOLATILE                 bit              0
+           - KEY_HIVE_EXIT                bit              0
+           - KEY_HIVE_ENTRY               bit              0
+           - KEY_NO_DELETE                bit              0
+           - KEY_SYM_LINK                 bit              0
+           - KEY_COMP_NAME                bit              1
+           - KEY_PREDEF_HANDLE            bit              0
+           - VirtualSource                bit              0
+           - VirtualTarget                bit              0
+           - VirtualStore                 bit              0
+  [001110] Timestamp                      filetime le      2012-05-22T00:00:08Z  01 cd 37 ad d9 be 81 54
+  [001118] Access bits                    u32 le           2                     00 00 00 02
+           - was accessed before registry was initialized bit              0
+           - was accessed after registry was initialized bit              1
+  [00111c] Parent cell offset             u32 le           32                    00 00 00 20
+  [001120] Number of subkeys              i32 le           0                     00 00 00 00
+  [001124] Number of volatile subkeys     i32 le           0                     00 00 00 00
+  [001128] Subkeys list offset            i32 le           4294967295            ff ff ff ff
+  [00112c] Volatile subkeys list offset   i32 le           4294967295            ff ff ff ff
+  [001130] Number of key values           i32 le           0                     00 00 00 00
+  [001134] Key values list offset         i32 le           4294967295            ff ff ff ff
+  [001138] Key security offset            i32 le           360                   00 00 01 68
+  [00113c] Class name offset              i32 le           4294967295            ff ff ff ff
+  [001140] Largest subkey name length     i32 le           0                     00 00 00 00
+  [001144] Largest subkey class name length i32 le           0                     00 00 00 00
+  [001148] Largest value name length      i32 le           0                     00 00 00 00
+  [00114c] Largest value data size        i32 le           0                     00 00 00 00
+  [001150] WorkVar                        i32 le           0                     00 00 00 00
+  [001154] KeyLength                      u16 le           10                    00 0a
+  [001156] Class name length              u16 le           0                     00 00
+  [001158] Key                            ascii[10]        New Key #1            4e 65 77 20 4b 65 79 20 23 31
+  [001162] Padding                        u8[6]                                  00 00 00 00 00 00
+
+Cell_3 SIG_SK
+  [001168] CellSize                       i32 le           4294967152            ff ff ff 70
+  [00116c] CellSignature                  u16 le           27507                 6b 73
+           - SIG_SK                       eq               27507
+  [00116e] Reserved                       u16 le           0                     00 00
+  [001170] Flink                          i32 le           120                   00 00 00 78
+  [001174] Blink                          i32 le           120                   00 00 00 78
+  [001178] Reference count                i32 le           2                     00 00 00 02
+  [00117c] DescriptorLength               i32 le           116                   00 00 00 74
+  [001180] Descriptor                     u8[116]                                01 00 04 84 48 00 00 00 58 00 00 00 00 00 00 00 14 00 00 00 02 00 34 00 02 00 00 00 00 12 18 00 ...
+  [0011f4] Padding                        u8[4]                                  00 00 00 00
+
+Cell_4 SIG_LF
+  [0011f8] CellSize                       i32 le           16                    00 00 00 10
+  [0011fc] CellSignature                  u16 le           26220                 66 6c
+           - SIG_LF                       eq               26220
+  [0011fe] NumberOfOffsets                i16 le           1                     00 01
+  [001200] Offset                         u8[8]                                  08 01 00 00 4e 65 77 20
+
+Cell_5 SIG_NK
+  [001208] CellSize                       i32 le           4294967200            ff ff ff a0
+  [00120c] CellSignature                  u16 le           27502                 6b 6e
+           - SIG_NK                       eq               27502
+  [00120e] Flags                          u16 le           32                    00 20
+           - KEY_VOLATILE                 bit              0
+           - KEY_HIVE_EXIT                bit              0
+           - KEY_HIVE_ENTRY               bit              0
+           - KEY_NO_DELETE                bit              0
+           - KEY_SYM_LINK                 bit              0
+           - KEY_COMP_NAME                bit              1
+           - KEY_PREDEF_HANDLE            bit              0
+           - VirtualSource                bit              0
+           - VirtualTarget                bit              0
+           - VirtualStore                 bit              0
+  [001210] Timestamp                      filetime le      2012-05-22T00:00:05Z  01 cd 37 ad d7 d8 4f 33
+  [001218] Access bits                    u32 le           0                     00 00 00 00
+           - was accessed before registry was initialized bit              0
+           - was accessed after registry was initialized bit              0
+  [00121c] Parent cell offset             u32 le           32                    00 00 00 20
+  [001220] Number of subkeys              i32 le           0                     00 00 00 00
+  [001224] Number of volatile subkeys     i32 le           0                     00 00 00 00
+  [001228] Subkeys list offset            i32 le           4294967295            ff ff ff ff
+  [00122c] Volatile subkeys list offset   i32 le           4294967295            ff ff ff ff
+  [001230] Number of key values           i32 le           0                     00 00 00 00
+  [001234] Key values list offset         i32 le           4294967295            ff ff ff ff
+  [001238] Key security offset            i32 le           360                   00 00 01 68
+  [00123c] Class name offset              i32 le           4294967295            ff ff ff ff
+  [001240] Largest subkey name length     i32 le           0                     00 00 00 00
+  [001244] Largest subkey class name length i32 le           0                     00 00 00 00
+  [001248] Largest value name length      i32 le           0                     00 00 00 00
+  [00124c] Largest value data size        i32 le           0                     00 00 00 00
+  [001250] WorkVar                        i32 le           0                     00 00 00 00
+  [001254] KeyLength                      u16 le           10                    00 0a
+  [001256] Class name length              u16 le           0                     00 00
+  [001258] Key                            ascii[10]        LocalState            4c 6f 63 61 6c 53 74 61 74 65
+  [001262] Padding                        u8[6]                                  00 00 00 00 00 00
+
+Cell_6 SIG_LF
+  [001268] CellSize                       i32 le           40                    00 00 00 28
+  [00126c] CellSignature                  u16 le           26220                 66 6c
+           - SIG_LF                       eq               26220
+  [00126e] NumberOfOffsets                i16 le           1                     00 01
+  [001270] Offset                         u8[8]                                  08 01 00 00 4e 65 77 20
+  [001278] Padding                        u8[24]                                 18 00 00 00 6c 66 02 00 08 02 00 00 4c 6f 63 61 08 01 00 00 4e 65 77 20
+
+Cell_7 SIG_NK
+  [001290] CellSize                       i32 le           4294967200            ff ff ff a0
+  [001294] CellSignature                  u16 le           27502                 6b 6e
+           - SIG_NK                       eq               27502
+  [001296] Flags                          u16 le           32                    00 20
+           - KEY_VOLATILE                 bit              0
+           - KEY_HIVE_EXIT                bit              0
+           - KEY_HIVE_ENTRY               bit              0
+           - KEY_NO_DELETE                bit              0
+           - KEY_SYM_LINK                 bit              0
+           - KEY_COMP_NAME                bit              1
+           - KEY_PREDEF_HANDLE            bit              0
+           - VirtualSource                bit              0
+           - VirtualTarget                bit              0
+           - VirtualStore                 bit              0
+  [001298] Timestamp                      filetime le      2012-05-22T00:00:13Z  01 cd 37 ad dc d6 89 63
+  [0012a0] Access bits                    u32 le           2                     00 00 00 02
+           - was accessed before registry was initialized bit              0
+           - was accessed after registry was initialized bit              1
+  [0012a4] Parent cell offset             u32 le           32                    00 00 00 20
+  [0012a8] Number of subkeys              i32 le           0                     00 00 00 00
+  [0012ac] Number of volatile subkeys     i32 le           0                     00 00 00 00
+  [0012b0] Subkeys list offset            i32 le           4294967295            ff ff ff ff
+  [0012b4] Volatile subkeys list offset   i32 le           4294967295            ff ff ff ff
+  [0012b8] Number of key values           i32 le           0                     00 00 00 00
+  [0012bc] Key values list offset         i32 le           4294967295            ff ff ff ff
+  [0012c0] Key security offset            i32 le           360                   00 00 01 68
+  [0012c4] Class name offset              i32 le           4294967295            ff ff ff ff
+  [0012c8] Largest subkey name length     i32 le           0                     00 00 00 00
+  [0012cc] Largest subkey class name length i32 le           0                     00 00 00 00
+  [0012d0] Largest value name length      i32 le           0                     00 00 00 00
+  [0012d4] Largest value data size        i32 le           0                     00 00 00 00
+  [0012d8] WorkVar                        i32 le           0                     00 00 00 00
+  [0012dc] KeyLength                      u16 le           12                    00 0c
+  [0012de] Class name length              u16 le           0                     00 00
+  [0012e0] Key                            ascii[12]        RoamingState          52 6f 61 6d 69 6e 67 53 74 61 74 65
+  [0012ec] Padding                        u8[4]                                  00 00 00 00
+
+Cell_8 SIG_LF
+  [0012f0] CellSize                       i32 le           24                    00 00 00 18
+  [0012f4] CellSignature                  u16 le           26220                 66 6c
+           - SIG_LF                       eq               26220
+  [0012f6] NumberOfOffsets                i16 le           2                     00 02
+  [0012f8] Offset                         u8[16]                                 08 02 00 00 4c 6f 63 61 08 01 00 00 4e 65 77 20
+
+Cell_9 SIG_LF
+  [001308] CellSize                       i32 le           4294967256            ff ff ff d8
+  [00130c] CellSignature                  u16 le           26220                 66 6c
+           - SIG_LF                       eq               26220
+  [00130e] NumberOfOffsets                i16 le           2                     00 02
+  [001310] Offset                         u8[16]                                 08 02 00 00 4c 6f 63 61 90 02 00 00 52 6f 61 6d
+  [001320] Padding                        u8[16]                                 90 02 00 00 52 6f 61 6d 00 00 00 00 00 00 00 00
+
+Cell_10 SIG_END
+  [001330] CellSize                       i32 le           3280                  00 00 0c d0
+  [001334] CellSignature                  u16 le           0                     00 00
+           - SIG_END                      eq               0
+  [001336] Padding                        u8[3274]                               00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+
+EOF

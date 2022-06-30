@@ -1,6 +1,6 @@
 # STATUS: 1%
 
-# NOTE: data stream usually embedded in a gzip or zlib wrapper
+# NOTE: data stream is usually embedded in a gzip or zlib wrapper
 
 references:
   - https://en.wikipedia.org/wiki/Zlib
@@ -8,9 +8,11 @@ references:
   - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_zlib.go
 
 kind: archive
+name: Zlib compressed data stream
 extensions: [.zlib]
 mime: application/zlib
 endian: little # XXX ???
+no_magic: true
 
 structs:
   header:

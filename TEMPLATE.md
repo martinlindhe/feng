@@ -14,9 +14,9 @@
 # pre-defined values
 
     FILE_SIZE           the file size in bytes
+    OFFSET              current offset
 
-    field.offset        field offset
-    field.len           field length
+    field.len           field length  # XXX BROKEN/UNUSED
 
     self.index        slice-based iteration index, 0-based
 
@@ -57,7 +57,7 @@ Constants is always expressed in network byte order
     u32[4]
     u8[FILE_SIZE-10]
 
-    u8[self.Data offset:self.Data size]         "start:length" offset syntax      used by images/ico.yml
+    u8[self.Data offset:self.Data size]         "start:length" offset syntax      used by images/ico.yml   XXX NO LONGER IN USE. DEPRECATE !!!
 
 
 # slices

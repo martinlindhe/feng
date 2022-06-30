@@ -657,6 +657,6 @@ Section_205 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [00014c] LZWMinimumCodeSize             u8               0                     00
-  [00014d] Data size                      u8               0                     00
+  [00014d] DataSize                       u8               0                     00
 
 0x5917 (22807) unmapped bytes

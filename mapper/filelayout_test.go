@@ -32,7 +32,7 @@ func TestFieldPresent(t *testing.T) {
 		{"  [000000] Signed                         i64 le           -1                    ff ff ff ff ff ff ff ff\n", Field{Length: 0x8, Value: []uint8{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}, Endian: "little", Format: value.DataField{Kind: "i64", Slice: false, Label: "Signed"}}},
 	}
 	for _, h := range test {
-		assert.Equal(t, h.expected, fl.PresentField(&h.field, false))
+		assert.Equal(t, h.expected, fl.presentField(&h.field, false))
 	}
 }
 
@@ -94,11 +94,10 @@ layout:
 	assert.Equal(t, []byte{5}, val)
 
 	// assert that "u8[FILE_SIZE-self.offset]" evaluates to u8[6-4] == u8[2] (all remaining bytes)
-	assert.Equal(t, "  [000004] Extra                          u8[2]                                  bb aa\n", fl.PresentField(&fl.Structs[1].Fields[2], false))
+	assert.Equal(t, "  [000004] Extra                          u8[2]                                  bb aa\n", fl.presentField(&fl.Structs[1].Fields[2], false))
 	_, val, err = fl.GetValue("self.Extra", &ds.Layout[1])
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{0xbb, 0xaa}, val)
-
 }
 
 func TestGetFieldOffset(t *testing.T) {

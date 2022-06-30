@@ -123,7 +123,7 @@ structs:
       u8 Compression method:
         eq 00: Deflate
         default: invalid
-      u8[self.Length - (self.offset - offset("self.Keyword"))] Compressed text: ??            # XXX mark as deflate for decompression
+      u8[self.Length - (OFFSET - offset("self.Keyword"))] Compressed text: ??            # XXX mark as deflate for decompression
 
     if self.Type == iTXt:
       asciiz Keyword: ??
@@ -135,14 +135,14 @@ structs:
         default: invalid
       asciiz Language tag: ??
       asciiz Translated keyword: ??
-      ascii[self.Length - (self.offset - offset("self.Keyword"))] Text: ?? # XXX is UTF-8 encoded, not ascii !!!
+      ascii[self.Length - OFFSET - offset("self.Keyword"))] Text: ?? # XXX is UTF-8 encoded, not ascii !!!
 
     if self.Type == iCCP:
       asciiz ProfileName: ??
       u8 Compression method:
         eq 00: Deflate
         default: invalid
-      u8[self.Length - (self.offset - offset("self.ProfileName"))] Compressed profile: ??   # XXX mark as deflate for decompression
+      u8[self.Length - (OFFSET - offset("self.ProfileName"))] Compressed profile: ??   # XXX mark as deflate for decompression
 
     if self.Type == tIME:
       # time in UTC

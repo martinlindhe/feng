@@ -43,7 +43,7 @@ Section_1 BLOCK_IMAGE
            - Interlace                    bit              0
            - LocalColorTablePresent       bit              0
   [00002b] LZWMinimumCodeSize             u8               2                     02
-  [00002c] Data size                      u8               22                    16
+  [00002c] DataSize                       u8               22                    16
   [00002d] Data                           u8[22]                                 8c 2d 99 87 2a 1c dc 33 a0 02 75 ec 95 fa a8 de 60 8c 04 91 4c 01
   [000043] BlockTerminator                u8               0                     00
 

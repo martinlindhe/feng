@@ -29,7 +29,7 @@ Section_0 BLOCK_IMAGE
            - LocalColorTablePresent       bit              1
   [00001d] Local color table              u8[768]                                00 02 00 01 18 00 16 06 00 17 15 01 02 26 01 09 23 10 04 36 01 18 28 02 15 3a 04 16 34 11 26 03 ...
   [00031d] LZWMinimumCodeSize             u8               8                     08
-  [00031e] Data size                      u8               255                   ff
+  [00031e] DataSize                       u8               255                   ff
   [00031f] Data                           u8[255]                                00 03 00 08 40 80 20 81 83 06 08 18 58 c8 70 a1 42 03 13 26 5c d8 70 41 4c 19 36 70 06 a9 79 83 ...
 
 0x1417 (5143) unmapped bytes

@@ -51,7 +51,7 @@ structs:
     label: self.Type
 
     if self.Type == ARCHIVE:
-      u16 ARCHIVE_FLAGS:
+      u16 archiveFlags:
         bit 0001: ARCHIVE_VOLUME
         bit 0002: ARCHIVE_COMMENT_PRESENT
         bit 0004: ARCHIVE_LOCKED
@@ -66,7 +66,7 @@ structs:
       u16 Header size: ??
       u16 HighPosAv: ??
       u32 PosAv: ??
-      if self.ARCHIVE_FLAGS & ARCHIVE_COMMENT_PRESENT:
+      if self.archiveFlags & ARCHIVE_COMMENT_PRESENT:
         # XXX struct MainComment
         u16 Head CRC: ??
         u8 Head Type:
@@ -97,7 +97,7 @@ structs:
         bit 8000: ADD_SIZE_PRESENT
 
       u16 HeaderSize: ??
-      u32 Compressed size: ??
+      u32 CompressedSize: ??
       # struct FileHeadBlock START :::
       u32 Unpacked size: ??
       u8 Host OS:
@@ -118,20 +118,20 @@ structs:
         eq 33: Normal
         eq 34: Good
         eq 35: Best
-      u16 Name size: ??
+      u16 NameSize: ??
       u32 UnixStyleAttrs: ?? # XXX enum, 010 has mapping
-      ascii[self.Name size] File name: ??
+      ascii[self.NameSize] File name: ??
       # struct FileHeadBlock END :::
 
-      u8[self.HeaderSize - (self.offset - offset("self.CRC"))] Reserved: ??
-      u8[self.Compressed size] Data: ??
+      u8[self.HeaderSize - (OFFSET - offset("self.CRC")) + 111 - 111] Reserved: ??
+      u8[self.CompressedSize] Data: ??
 
     if self.Type == SUBBLOCK:
       u16 Main header flags:
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
       u16 HeaderSize: ??
-      u32 Data size: ??
+      u32 DataSize: ??
       # struct SubBlock START :::
       u8[15] Unknown: ??
       u8 SubTypeLen: ??
@@ -139,8 +139,8 @@ structs:
       ascii[self.SubTypeLen] SubType: ??
       # struct SubBlock END :::
 
-      u8[self.HeaderSize - (self.offset - offset("self.CRC"))] Reserved: ??
-      u8[self.Data size] Data: ??
+      u8[self.HeaderSize - (OFFSET - offset("self.CRC"))] Reserved: ??
+      u8[self.DataSize] Data: ??
 
     if self.Type == END:
       u16 Common block flags:
