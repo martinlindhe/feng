@@ -74,8 +74,7 @@ func (field *Field) Present() string {
 }
 
 var (
-	variableExpressionRE      = regexp.MustCompile(`([\w .+\-*/()<>"&]+)`)
-	absoluteRangeExpressionRE = regexp.MustCompile(`([\d\s\+\-\*\/]+):([\d\s\+\-\*\/]+)`)
+	variableExpressionRE = regexp.MustCompile(`([\w .+\-*/()<>"&]+)`)
 )
 
 const (
@@ -374,31 +373,20 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 	var err error
 
 	if df.Range != "" {
-		if fl.IsAbsoluteAddress(df) {
-			panic("TODO: drop range support!!!")
-			/*
-				_, rangeLength, err = fl.GetAbsoluteAddressRange(df)
-				if err != nil {
-					panic(err)
-				}
-			*/
-		} else {
-
-			if df.RangeVal == 0 {
-				// XXX permanently store and reuse the calculated range length. faster lookup & avoid bug with changing offset value... ?!
-				// XXX FIXME TODO! !!! REFACTOR THIS:
-				// STORES CACHED RESULT OF CALCULATION
-				val, err := fl.EvaluateExpression(df.Range)
-				if err != nil {
-					panic(err)
-				}
-				df.RangeVal = int64(val)
-			}
-			rangeLength = uint64(df.RangeVal)
-
+		if df.RangeVal == 0 {
+			// XXX permanently store and reuse the calculated range length. faster lookup & avoid bug with changing offset value... ?!
+			// XXX FIXME TODO! !!! REFACTOR THIS:
+			// STORES CACHED RESULT OF CALCULATION
+			val, err := fl.EvaluateExpression(df.Range)
 			if err != nil {
-				log.Fatal(err)
+				panic(err)
 			}
+			df.RangeVal = int64(val)
+		}
+		rangeLength = uint64(df.RangeVal)
+
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 	totalLength := unitLength * uint64(rangeLength)
@@ -406,34 +394,6 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 		log.Printf("GetAddressLengthPair: unitLength %d * rangeLength %d = totalLength %d", unitLength, rangeLength, totalLength)
 	}
 	return unitLength, totalLength
-}
-
-// returns offset, length from Range "offset:length" syntax. used by images/ico.yml
-func (fl *FileLayout) GetAbsoluteAddressRange(df *value.DataField) (uint64, uint64, error) {
-
-	if !fl.IsAbsoluteAddress(df) {
-		log.Fatalf("range is not absolute '%s'", df.Range)
-	}
-
-	matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
-	rangeOffset, err := fl.EvaluateExpression(matches[0][1])
-	if err != nil {
-		return 0, 0, err
-	}
-	rangeLength, err := fl.EvaluateExpression(matches[0][2])
-	if err != nil {
-		return 0, 0, err
-	}
-	if DEBUG {
-		log.Printf("GetAbsoluteAddress: evaluated %s to %d:%d", df.Range, rangeOffset, rangeLength)
-	}
-	return rangeOffset, rangeLength, nil
-}
-
-// returns true if Range is of "offset:length" syntax
-func (fl *FileLayout) IsAbsoluteAddress(df *value.DataField) bool {
-	matches := absoluteRangeExpressionRE.FindAllStringSubmatch(df.Range, -1)
-	return len(matches) == 1 && len(matches[0]) == 3
 }
 
 // presents the underlying type as it is known in the template format

@@ -390,24 +390,6 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				continue
 			}
 
-			prevOffset := fl.offset
-			if fl.IsAbsoluteAddress(&es.Field) {
-				panic("deprecate absolute offset addressing mode")
-				// if range = start:len, first move to given offset
-				rangeStart, _, err := fl.GetAbsoluteAddressRange(&es.Field)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				log.Printf("--- SEEKING TO ABSOLUTE OFFSET %08x", rangeStart)
-				_, err = r.Seek(int64(rangeStart), io.SeekStart)
-				if err != nil {
-					return err
-				}
-
-				fl.offset = rangeStart
-			}
-
 			val, err := readBytes(r, totalLength, unitLength, fl.endian)
 			if DEBUG {
 				log.Printf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, val, err)
@@ -439,17 +421,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				Format:          es.Field,
 				Endian:          fl.endian,
 				MatchedPatterns: matchPatterns})
-			if fl.IsAbsoluteAddress(&es.Field) {
-				panic("deprecate absolute offset addressing mode")
-				fl.offset = prevOffset
-				log.Printf("--- RESTORING FILE POSITION TO ABSOLUTE OFFSET %08x", fl.offset)
-				_, err := r.Seek(int64(fl.offset), io.SeekStart)
-				if err != nil {
-					return err
-				}
-			} else {
-				fl.offset += totalLength
-			}
+			fl.offset += totalLength
 
 		case "asciiz":
 			val, err := readBytesUntilZero(r)
