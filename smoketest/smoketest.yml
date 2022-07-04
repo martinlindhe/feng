@@ -295,6 +295,11 @@ input:
     files:
       - EP4183-CUSA00126_00-AIV00000000000EU.pkg.stream_raw_00003a30.psf
 
+  - folder: systems/xbox/xbox_xbe
+    files:
+      # XXX find smaller samples
+      - default.xbe
+
   - folder: systems/xbox360/xex
     files:
       - natalsu.xex

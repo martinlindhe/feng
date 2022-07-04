@@ -1,0 +1,174 @@
+# STATUS: 20%
+# format used on original XBox
+
+references:
+  - https://xboxdevwiki.net/Xbe
+  - https://xbdev.net/fileformats/xbe/NonOfficialXBEFileFormat.pdf
+
+kind: system
+name: XBox XBE file
+extensions: [.xbe]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XBEH'
+
+structs:
+  header:
+    ascii[4] Magic: c'XBEH'
+    u8[256] Digital Signature: ??
+    u32 Base Address: ??
+    u32 Size of Headers: ??
+    u32 Size of Image: ??
+    u32 Size of Image Header: ??
+    u32 TimeDate: ??    # XXX Standard windows format.
+    u32 CertificateAddress: ??
+    u32 NumberOfSections: ??
+    u32 SectionHeaderAddress: ??
+    u32 Initialization Flags:
+      bit b00000000_00000000_00000000_00000001: MountUtilityDrive
+      bit b00000000_00000000_00000000_00000010: FormatUtilityDrive
+      bit b00000000_00000000_00000000_00000100: Limit64Megabytes
+      bit b00000000_00000000_00000000_00001000: DontSetupHarddisk
+    u32 Entry Point: ??
+    u32 TLSAddress: ??
+    u32 PE Stack Commit: ??
+    u32 PE Heap Reserve: ??
+    u32 PE Heap Commit: ??
+    u32 PE Base Address: ??
+    u32 PE Size of Image: ??
+    u32 PE Checksum: ??
+    u32 PE TimeDate: ??
+
+    u32 DebugPathNameAddress: ??
+    offset: self.DebugPathNameAddress - 0x10000
+    asciiz DebugPathName: ??
+    offset: restore
+
+    u32 DebugFileNameAddress: ??
+    offset: self.DebugFileNameAddress - 0x10000
+    asciiz DebugFileName: ??
+    offset: restore
+
+    # XXX need utf16z type (00 00 terminated utf16 string)
+    u32 DebugUnicodeFileNameAddress: ??
+#    offset: self.DebugUnicodeFileNameAddress - 0x10000
+#    utf16z DebugUnicodeFileName: ??
+#    offset: restore
+
+    u32 Kernel Image Thunk Address: ??
+    u32 Non-Kernel Import Directory Address: ??
+    u32 NumberOfLibraryVersions: ??
+    u32 LibraryVersionsAddress: ??
+    u32 KernelLibraryVersionAddress: ??
+    u32 XAPILibraryVersionAddress: ??
+
+    u32 LogoBitmapAddress: ??
+    u32 LogoBitmapSize: ??
+    offset: self.LogoBitmapAddress - 0x10000
+    u8[self.LogoBitmapSize] Logo bitmap: ??
+    offset: restore
+  
+  cert:
+    offset: Header.CertificateAddress - 0x10000
+    u32 Size of Certificate: ??
+    u32 TimeDate: ?? # XX Standard windows format.
+    u32 Title ID: ??
+    utf16[40] Title Name: ??
+    u32[16] Alternate Title IDs: ??
+    u32 Allowed Media:
+      bit b00000000_00000000_00000000_00000001: HARD_DISK
+      bit b00000000_00000000_00000000_00000010: DVD_X2
+      bit b00000000_00000000_00000000_00000100: DVD_CD
+      bit b00000000_00000000_00000000_00001000: CD
+      bit b00000000_00000000_00000000_00010000: DVD_5_RO
+      bit b00000000_00000000_00000000_00100000: DVD_9_RO
+      bit b00000000_00000000_00000000_01000000: DVD_5_RW
+      bit b00000000_00000000_00000000_10000000: DVD_9_RW
+      bit b00000000_00000000_00000001_00000000: DONGLE
+      bit b00000000_00000000_00000010_00000000: BOARD
+      bit b01000000_00000000_00000000_00000000: NONSECURE_HARD_DISK
+      bit b10000000_00000000_00000000_00000000: NONSECURE_MODE
+    u32 Game Region:
+      bit b00000000_00000000_00000000_00000001: North America
+      bit b00000000_00000000_00000000_00000010: Japan
+      bit b00000000_00000000_00000000_00000100: Rest of the world
+      bit b10000000_00000000_00000000_00000000: Manufacturing
+    u32 Game Ratings: ??
+    u32 Disk Number: ??
+    u32 Certificate Version: ??
+    u8[16] LAN Key: ??
+    u8[16] Signature Key: ??
+    u8[16 * 16] Alternate Signature Keys: ??
+
+  section_header:
+    u32 Section Flags:
+      bit b00000000_00000000_00000000_00000001: Writable
+      bit b00000000_00000000_00000000_00000010: Preload
+      bit b00000000_00000000_00000000_00000100: Executable
+      bit b00000000_00000000_00000000_00001000: Inserted File
+      bit b00000000_00000000_00000000_00010000: Head Page Read Only
+      bit b00000000_00000000_00000000_00100000: Tail Page Read Only
+    u32 Virtual Address: ??
+    u32 Virtual Size: ??
+    u32 RawAddress: ??
+    u32 RawSize: ??
+    u32 SectionNameAddress: ??
+
+    offset: self.SectionNameAddress - 0x10000
+    asciiz SectionName: ??
+    label: self.SectionName
+    offset: restore
+
+    u32 Section Name Reference Count: ??
+    u32 Head Shared Page Reference Count Address: ??
+    u32 Tail Shared Page Reference Count Address: ??
+    u8[20] Section Digest: ??
+
+    offset: self.RawAddress
+    u8[self.RawSize] Section data: ??
+    offset: restore
+
+  lib_version:
+    ascii[8] LibraryName: ??
+    label: self.LibraryName
+    u16 Major Version: ??
+    u16 Minor Version: ??
+    u16 Build Version: ??
+    u16 Library Flags:
+      bit b0001_1111_1111_1111: QFEVersion
+      bit b0110_0000_0000_0000: Approved
+      bit b1000_0000_0000_0000: Debug Build
+
+  tls:
+    u32 Data Start Address: ??
+    u32 Data End Address: ??
+    u32 TLS Index Address: ??
+    u32 TLS Callback Address: ??
+    u32 Size of Zero Fill: ??
+    u32 Characteristics: ??  # XXX flags?
+
+
+layout:
+  - header Header
+  - cert Certificate
+
+  - offset Header.SectionHeaderAddress - 0x10000
+  - section_header[Header.NumberOfSections] SectionHeader
+
+  - offset Header.LibraryVersionsAddress - 0x10000
+  - lib_version[Header.NumberOfLibraryVersions] LibraryVersion
+
+  # this should already been included in LibraryVersions
+  #- offset Header.KernelLibraryVersionAddress - 0x10000
+  #- lib_version Kernel Library Version
+
+  # this should already been included in LibraryVersions
+  #- offset Header.XAPILibraryVersionAddress - 0x10000
+  #- lib_version XAPI Library Version
+
+  # TODO verify this is correct somehow
+  #- offset Header.TLSAddress - 0x10000
+  #- tls Thread Local Storage
+

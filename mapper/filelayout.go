@@ -221,6 +221,9 @@ func (fl *FileLayout) MatchedValue(s string, df *value.DataField) (string, error
 
 	for _, field := range str.Fields {
 		if field.Format.Label == fieldName {
+			if len(field.MatchedPatterns) == 0 {
+				return field.Present(), nil
+			}
 			for _, child := range field.MatchedPatterns {
 				if DEBUG {
 					log.Printf("MatchedValue: %s => %s", fieldName, child.Label)

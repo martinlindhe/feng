@@ -319,7 +319,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 			var err error
 			fl.offsetChanges++
-			if fl.offsetChanges > 50 {
+			if fl.offsetChanges > 100 {
 				panic("debug recursion: too many offset changes from template")
 				return fmt.Errorf("too many offset changes from template")
 			}

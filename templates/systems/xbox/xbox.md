@@ -1,5 +1,5 @@
 software:
-  - Extract files from xbox "xiso" image format: https://github.com/XboxDev/extract-xiso
+  - https://github.com/XboxDev/extract-xiso - Extract files from xbox "xiso" image format
 
 resources:
   - https://xboxdevwiki.net/Main_Page

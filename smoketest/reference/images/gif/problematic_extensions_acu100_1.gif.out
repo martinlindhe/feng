@@ -19,55 +19,55 @@ Section_0 BLOCK_EXTENSION
            - BLOCK_EXTENSION              eq               33
   [00001a] ExtensionType                  u8               255                   ff
 
-Section_1 Section_1.BlockType
+Section_1 11
   [00001b] BlockType                      u8               11                    0b
 
-Section_2 Section_2.BlockType
+Section_2 78
   [00001c] BlockType                      u8               78                    4e
 
-Section_3 Section_3.BlockType
+Section_3 69
   [00001d] BlockType                      u8               69                    45
 
-Section_4 Section_4.BlockType
+Section_4 84
   [00001e] BlockType                      u8               84                    54
 
-Section_5 Section_5.BlockType
+Section_5 83
   [00001f] BlockType                      u8               83                    53
 
-Section_6 Section_6.BlockType
+Section_6 67
   [000020] BlockType                      u8               67                    43
 
-Section_7 Section_7.BlockType
+Section_7 65
   [000021] BlockType                      u8               65                    41
 
-Section_8 Section_8.BlockType
+Section_8 80
   [000022] BlockType                      u8               80                    50
 
-Section_9 Section_9.BlockType
+Section_9 69
   [000023] BlockType                      u8               69                    45
 
-Section_10 Section_10.BlockType
+Section_10 50
   [000024] BlockType                      u8               50                    32
 
-Section_11 Section_11.BlockType
+Section_11 46
   [000025] BlockType                      u8               46                    2e
 
-Section_12 Section_12.BlockType
+Section_12 48
   [000026] BlockType                      u8               48                    30
 
-Section_13 Section_13.BlockType
+Section_13 3
   [000027] BlockType                      u8               3                     03
 
-Section_14 Section_14.BlockType
+Section_14 1
   [000028] BlockType                      u8               1                     01
 
-Section_15 Section_15.BlockType
+Section_15 0
   [000029] BlockType                      u8               0                     00
 
-Section_16 Section_16.BlockType
+Section_16 0
   [00002a] BlockType                      u8               0                     00
 
-Section_17 Section_17.BlockType
+Section_17 0
   [00002b] BlockType                      u8               0                     00
 
 Section_18 BLOCK_EXTENSION
