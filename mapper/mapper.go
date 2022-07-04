@@ -437,6 +437,23 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				Endian: fl.endian})
 			fl.offset += len
 
+		case "utf16z":
+			val, err := readBytesUntilMarker(r, []byte{0, 0})
+			if err != nil {
+				return err
+			}
+			// append terminator marker since readBytesUntilMarker() excludes it
+			val = append(val, []byte{0, 0}...)
+
+			len := uint64(len(val))
+			fs.Fields = append(fs.Fields, Field{
+				Offset: fl.offset,
+				Length: len,
+				Value:  val,
+				Format: es.Field,
+				Endian: fl.endian})
+			fl.offset += len
+
 		case "if":
 			q := es.Field.Label
 			q = strings.ReplaceAll(q, "self.", df.Label+".")

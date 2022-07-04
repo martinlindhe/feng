@@ -33,23 +33,39 @@ Constants is always expressed in network byte order
 
 # data types
 
+numeric
+
     u8, u16, u32, u64
+
+
+numeric bit fields
+
+    u16 Type:
+      eq 0000: TYPE_NULL            these types will evaluate as constants
+      eq 0001: TYPE_STRING_POOL
+      default: invalid
+
+
+text
+
     ascii[5]            ascii string
     asciiz              zero terminated ascii string
     utf16[5]            utf16 string    (utf16 le == wchar_t)
+    utf16z              zero terminated utf16 string
+
+
+date / time
+
     time_t_32           32-bit unix timestamp, in UTC
     filetime            64-bit windows timestamp, in UTC
     dosdate             16-bit MS-DOS datestamp, in UTC
     dostime             16-bit MS-DOS timestamp, in UTC
 
 
+data
+
     raw:u8[size]                mark area as file data (for extraction feature)
     compressed:zlib[self.Size]  mark area as zlib compressed data (for extraction feature)
-
-    u16 Type:
-      eq 0000: TYPE_NULL            these types will evaluate as constants
-      eq 0001: TYPE_STRING_POOL
-      default: invalid
 
 
 # pattern matching data types

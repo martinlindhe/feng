@@ -29,6 +29,7 @@ Header
   [000150] DebugFileNameAddress           u32 le           68450                 00 01 0b 62
   [000b62] DebugFileName                  asciiz           MX.exe                4d 58 2e 65 78 65 00
   [000154] DebugUnicodeFileNameAddress    u32 le           68412                 00 01 0b 3c
+  [000b3c] DebugUnicodeFileName           utf16z le        MX.exe                4d 00 58 00 2e 00 65 00 78 00 65 00 00 00
   [000158] Kernel Image Thunk Address     u32 le           1531000982            5b 41 38 96
   [00015c] Non-Kernel Import Directory Address u32 le           0                     00 00 00 00
   [000160] NumberOfLibraryVersions        u32 le           7                     00 00 00 07
@@ -720,4 +721,4 @@ LibraryVersion_6 LIBCMT
            - Approved                     bit              2
            - Debug Build                  bit              0
 
-0x1481f (83999) unmapped bytes
+0x14811 (83985) unmapped bytes

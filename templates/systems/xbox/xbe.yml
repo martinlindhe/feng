@@ -51,11 +51,10 @@ structs:
     asciiz DebugFileName: ??
     offset: restore
 
-    # XXX need utf16z type (00 00 terminated utf16 string)
     u32 DebugUnicodeFileNameAddress: ??
-#    offset: self.DebugUnicodeFileNameAddress - 0x10000
-#    utf16z DebugUnicodeFileName: ??
-#    offset: restore
+    offset: self.DebugUnicodeFileNameAddress - 0x10000
+    utf16z DebugUnicodeFileName: ??
+    offset: restore
 
     u32 Kernel Image Thunk Address: ??
     u32 Non-Kernel Import Directory Address: ??

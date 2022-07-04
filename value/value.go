@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	DEBUG = true
+	DEBUG = false
 
 	// TODO: make IN_UTC configurable from cli
 	IN_UTC = true
@@ -271,7 +271,7 @@ func SingleUnitSize(kind string) uint64 {
 		"compressed:zlib",
 		"raw:u8":
 		return 1
-	case "u16", "i16", "utf16",
+	case "u16", "i16", "utf16", "utf16z",
 		"dostime", "dosdate":
 		return 2
 	case "u32", "i32", "time_t_32":
@@ -397,8 +397,10 @@ func (format DataField) Present(b []byte) string {
 		return v
 
 	case "utf16":
-		v := utf16String(b)
-		return v
+		return utf16String(b)
+
+	case "utf16z":
+		return utf16zString(b)
 
 	case "time_t_32":
 		v := AsUint64Raw(b)
@@ -454,6 +456,34 @@ func utf16String(b []byte) string {
 	return strings.TrimRight(string(decoded), "\x00")
 }
 
+// text encoding used by Windows (00 00-terminated)
+func utf16zString(b []byte) string {
+	end := 0
+	// read 2 bytes until eof or 00
+	for i := 0; i < len(b); i += 2 {
+		v := binary.LittleEndian.Uint16(b[i:])
+		end = i
+		if v == 0 {
+			break
+		}
+	}
+
+	// Make an transformer that converts MS-Win default to UTF8
+	win16le := unicode.UTF16(unicode.LittleEndian, unicode.IgnoreBOM) // XXX used for xbox xbe string decode
+
+	// Make a transformer that is like win16be, but abides by BOM
+	utf16bom := unicode.BOMOverride(win16le.NewDecoder())
+
+	unicodeReader := transform.NewReader(bytes.NewReader(b[0:end]), utf16bom)
+
+	decoded, err := ioutil.ReadAll(unicodeReader)
+	if err != nil {
+		panic(err)
+	}
+	return string(decoded)
+}
+
+// ascii text encoding (00-terminated)
 // returns decoded string and length in bytes
 func AsciiZString(b []byte, maxLength int) (string, uint64) {
 	length := uint64(0)
