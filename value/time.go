@@ -3,6 +3,7 @@ package value
 import "time"
 
 // MS-DOS 16-bit "dos time" value
+// Identical to the Time-part of a 32-Bit Windows Time+Date field
 type DosTime struct {
 	ts time.Time
 }
@@ -20,7 +21,8 @@ func asDosTime(v uint16) DosTime {
 	}
 }
 
-// MS-DOS 16-bit "dos date" value
+// MS-DOS 16-bit "dos date" value.
+// Identical to the Date-part of a 32-Bit Windows Time+Date field
 type DosDate struct {
 	ts time.Time
 }

@@ -1,9 +1,12 @@
-# STATUS: 20%
+# STATUS: 25%
 # format used on original XBox
+#
+# - HI: figure out the offset for the tls block.
+# - MID: calculate entry point offset (some XOR), and mark entry point
 
 references:
-  - https://xboxdevwiki.net/Xbe
   - https://xbdev.net/fileformats/xbe/NonOfficialXBEFileFormat.pdf
+  - https://xboxdevwiki.net/Xbe
 
 kind: system
 name: XBox XBE file
@@ -22,7 +25,8 @@ structs:
     u32 Size of Headers: ??
     u32 Size of Image: ??
     u32 Size of Image Header: ??
-    u32 TimeDate: ??    # XXX Standard windows format.
+    dostime Creation Time: ??  # XXX have a 32-bit windows datetime format for dostime+dosdate field.
+    dosdate Creation Date: ??
     u32 CertificateAddress: ??
     u32 NumberOfSections: ??
     u32 SectionHeaderAddress: ??
@@ -33,13 +37,14 @@ structs:
       bit b00000000_00000000_00000000_00001000: DontSetupHarddisk
     u32 Entry Point: ??
     u32 TLSAddress: ??
-    u32 PE Stack Commit: ??
+    u32 Stack Size: ??
     u32 PE Heap Reserve: ??
     u32 PE Heap Commit: ??
     u32 PE Base Address: ??
     u32 PE Size of Image: ??
     u32 PE Checksum: ??
-    u32 PE TimeDate: ??
+    dostime PE Creation Time: ?? # XXX 32-bit windows datetime format
+    dosdate PE Creation Date: ??
 
     u32 DebugPathNameAddress: ??
     offset: self.DebugPathNameAddress - 0x10000
@@ -65,15 +70,22 @@ structs:
 
     u32 LogoBitmapAddress: ??
     u32 LogoBitmapSize: ??
-    offset: self.LogoBitmapAddress - 0x10000
-    u8[self.LogoBitmapSize] Logo bitmap: ??
-    offset: restore
+
+    # These fields only exists on XBEs built with an XDK version >= 5028
+    u64 Unknown1: ??
+    u32 Unknown2: ??
   
   cert:
     offset: Header.CertificateAddress - 0x10000
     u32 Size of Certificate: ??
-    u32 TimeDate: ?? # XX Standard windows format.
-    u32 Title ID: ??
+    dostime Certificate Time: ?? # XXX 32-bit windows datetime format
+    dosdate Certificate Date: ??
+
+    # NOTE: Title ID appears to be encoded in big endian as opposed to little for the rest of the file
+#    u32 Title ID: ??
+    u16 Title ID: ??
+    ascii[2] Publisher ID: ??
+
     utf16[40] Title Name: ??
     u32[16] Alternate Title IDs: ??
     u32 Allowed Media:
@@ -141,13 +153,17 @@ structs:
       bit b1000_0000_0000_0000: Debug Build
 
   tls:
-    u32 Data Start Address: ??
-    u32 Data End Address: ??
-    u32 TLS Index Address: ??
-    u32 TLS Callback Address: ??
+    u32 Raw Data Start Address: ??
+    u32 Raw Data End Address: ??
+    u32 Index Address: ??
+    u32 Callback Address: ??
     u32 Size of Zero Fill: ??
     u32 Characteristics: ??  # XXX flags?
 
+  logo_bitmap:
+      offset: Header.LogoBitmapAddress - 0x10000
+      u8[Header.LogoBitmapSize] Logo bitmap: ??
+      offset: restore
 
 layout:
   - header Header
@@ -159,6 +175,8 @@ layout:
   - offset Header.LibraryVersionsAddress - 0x10000
   - lib_version[Header.NumberOfLibraryVersions] LibraryVersion
 
+  - logo_bitmap LogoBitmap
+
   # this should already been included in LibraryVersions
   #- offset Header.KernelLibraryVersionAddress - 0x10000
   #- lib_version Kernel Library Version
@@ -168,6 +186,6 @@ layout:
   #- lib_version XAPI Library Version
 
   # TODO verify this is correct somehow
-  #- offset Header.TLSAddress - 0x10000
+  #- offset Header.TLSAddress
   #- tls Thread Local Storage
 
