@@ -1,0 +1,8 @@
+# templates/systems/jvm/class.yml
+Header
+  [000000] Signature                      u8[4]                                  ca fe ba be
+  [000004] Minor version                  u16 be           0                     00 00
+  [000006] Major version                  u16 be           52                    00 34
+  [000008] Constant pool count            u16 be           98                    00 62
+
+0x05fe (1534) unmapped bytes

@@ -282,6 +282,11 @@ input:
     files:
       - shadow-invitro.gba
 
+  - folder: systems/jvm/class
+    files:
+      - java_001_test.class
+      - MOUSETRA.CLA
+
   - folder: systems/nintendo64
     files:
       #- Rampage_2_PLUS4_USA-CZN.v64   # XXX broken

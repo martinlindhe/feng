@@ -1,0 +1,24 @@
+# STATUS: 1%
+
+references:
+  - https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html
+
+kind: system
+name: Java Class
+extensions: [.class, .cla]
+endian: big
+
+magic:
+  - offset: 0000
+    match: CA FE BA BE
+
+structs:
+  header:
+    u8[4] Signature: CA FE BA BE
+    u16 Minor version: ??
+    u16 Major version: ??
+    u16 Constant pool count: ??
+    
+layout:
+  - header Header
+
