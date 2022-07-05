@@ -320,6 +320,20 @@ input:
     files:
       - EP4183-CUSA00126_00-AIV00000000000EU.pkg.stream_raw_00003a30.psf
 
+  - folder: systems/unix/elf
+    files:
+      # XXX reduce amount of samples
+      - bzcat
+      - compressed-32.obj
+      - compressed-64.obj
+      - gcc-386-freebsd-exec
+      - gcc-amd64-linux-exec
+      - gcc-amd64-openbsd-debug-with-rela.obj
+      - hello.linux-ia32
+      - hello.linux-x86_64
+      - rmid-solaris
+      - zdebug-test-gcc484-x86-64.obj
+
   - folder: systems/xbox/xbox_xbe
     files:
       # XXX find smaller samples

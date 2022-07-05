@@ -1,0 +1,32 @@
+# templates/systems/unix/elf.yml
+Header
+  [000000] Signature                      ascii[4]         .ELF                  7f 45 4c 46
+  [000004] Offset                         u32 le           151060737             09 01 01 01
+  [000008] Class                          u8               0                     00
+           - None                         eq               0
+  [000009] Endian                         u8               0                     00
+  [00000a] Header version                 u8               0                     00
+  [00000b] OS ABI                         u8               0                     00
+           - System V                     eq               0
+  [00000c] ABI Version                    u8               0                     00
+  [00000d] Reserved                       u8[7]                                  00 00 00 02 00 03 00
+  [000014] Type                           u16 le           1                     00 01
+           - Relocatable file             eq               1
+  [000016] Machine                        u16 le           0                     00 00
+           - None                         eq               0
+  [000018] Version                        u32 le           134513612             08 04 83 cc
+  [00001c] Entry                          u32 le           52                    00 00 00 34
+  [000020] ProgramHeaderOffset            u32 le           2824                  00 00 0b 08
+  [000024] SectionHeaderOffset            u32 le           0                     00 00 00 00
+  [000028] Flags                          u32 le           2097204               00 20 00 34
+  [00002c] ELF header size                u16 le           5                     00 05
+  [00002e] ProgramHeaderEntrySize         u16 le           40                    00 28
+  [000030] ProgramHeaderCount             u16 le           30                    00 1e
+  [000032] SectionHeaderEntrySize         u16 le           27                    00 1b
+  [000034] SectionHeaderCount             u16 le           6                     00 06
+  [000036] Section header strndx          u16 le           0                     00 00
+
+ProgramHeader
+  [000b08] ProgramHeaderEntry Data        u8[40]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+
+0x160e (5646) unmapped bytes

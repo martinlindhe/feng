@@ -1,0 +1,102 @@
+# STATUS: 10%
+
+references:
+  - https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+
+software:
+  - xxx
+
+kind: system
+name: Executable and Linkable Format
+extensions: [., .axf, .bin, .elf, .o, .out, .prx, .puff, .ko, .mod, .so]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 7f c'ELF'
+
+structs:
+  header:
+    ascii[4] Signature: 7f c'ELF'
+
+    u32 Offset: ??
+
+    u8 Class:
+      eq 00: None
+      eq 01: ELF32
+      eq 02: ELF64
+    u8 Endian:
+      #eq 00: XXX what does 00 mean?
+      eq 01: LSB
+      eq 02: MSB
+    u8 Header version: ??
+    u8 OS ABI:
+      eq 00: System V
+      eq 01: HP-UX
+      eq 02: NetBSD
+      eq 03: Linux
+      eq 06: Solaris
+      eq 07: Aix
+      eq 08: Irix
+      eq 09: FreeBSD
+      eq 0c: OpenBSD
+      eq 0d: OpenVMS
+      eq 0e: NSK OS
+      eq 0f: Aros
+      eq 10: Fenix OS
+      eq 11: Cloud ABI
+
+    u8 ABI Version: ??
+    u8[7] Reserved: ??
+    u16 Type:
+      eq 0000: None
+      eq 0001: Relocatable file
+      eq 0002: Executable file
+      eq 0003: Shared object file
+      eq 0004: Core file
+      eq ff00: ET_LOPROC
+      eq ffff: ET_HIPROC
+
+    u16 Machine:
+      eq 0000: None
+      eq 0001: AT&T WE 32100
+      eq 0002: SPARC
+      eq 0003: Intel 80386
+      eq 0004: Motorola 68000
+      eq 0005: Motorola 88000
+      eq 0007: Intel 80860
+      eq 0008: MIPS
+      eq 0014: PowerPC
+      eq 0028: ARM
+      eq 002a: SuperH
+      eq 0032: IA-64
+      eq 003e: x86-64
+      eq 00b7: AArch64
+
+    u32 Version: ??
+    u32 Entry: ??
+    u32 ProgramHeaderOffset: ??
+    u32 SectionHeaderOffset: ??
+    u32 Flags: ?? # XXX map
+    u16 ELF header size: ??
+    u16 ProgramHeaderEntrySize: ??
+    u16 ProgramHeaderCount: ??
+
+    u16 SectionHeaderEntrySize: ??
+    u16 SectionHeaderCount: ??
+    u16 Section header strndx: ?? # XXX map
+
+  program_header:
+    if Header.ProgramHeaderOffset > 0:
+      offset: Header.ProgramHeaderOffset
+      u8[Header.ProgramHeaderEntrySize] ProgramHeaderEntry Data: ?? # XXX decode
+
+  section_header:
+    if Header.SectionHeaderOffset > 0:
+      offset: Header.SectionHeaderOffset
+      u8[Header.SectionHeaderEntrySize] SectionHeaderEntrySize Data: ?? # XXX decode
+
+layout:
+  - header Header
+  - program_header ProgramHeader
+  - section_header SectionHeader
