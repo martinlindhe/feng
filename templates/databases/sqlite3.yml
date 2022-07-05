@@ -1,0 +1,50 @@
+# STATUS: 5%
+#
+# HI: 32-bit boolean field
+
+references:
+  - https://www.sqlite.org/fileformat2.html
+
+software:
+  - xxx
+
+kind: system
+name: SQLite3 database
+extensions: [.sqlite]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'SQLite format 3' 00
+
+structs:
+  header:
+    ascii[16] Signature: c'SQLite format 3' 00
+    u16 PageSize: ??
+    u8 Write version: ??
+    u8 Read version: ??
+    u8 Unused page space: ?? 
+    u8 Max index embed: ??  # Must be 64
+    u8 Min index embed: ??  # Must be 32
+    u8 Min table embed: ??          # Must be 32
+    u32 Change count: ??
+    u32 Database size: ??       # size in pages
+    u32 Freelist trunk page: ??
+    u32 Freelist page count: ??
+    u32 Schema cookie: ??
+    u32 Schema file format: ??          # XXX mapping, must be 1-4
+    u32 Page cache size: ??
+    u32 Top root page: ??
+    u32 TextEncoding:
+      eq 00000001: UTF-8
+      eq 00000002: UTF-16LE
+      eq 00000003: UTF-16BE
+    u32 User version: ??                  # XXX decode, as used by https://www.sqlite.org/pragma.html#pragma_schema_version
+    u32 Incremental vacuum: ??            # XXX 32-bit boolean field, != 0 is true
+    u32 Application ID: ??
+    u8[20] Reserved: ??
+    u32 Version valid for: ??             # XXX https://www.sqlite.org/fileformat2.html#validfor
+    u32 SQLite version number: ??         # XXX https://www.sqlite.org/c3ref/c_source_id.html
+
+layout:
+  - header Header

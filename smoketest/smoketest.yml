@@ -77,6 +77,10 @@ input:
   #    - layout36.xml.zlib
   #    - layout95.xml.zlib
 
+  - folder: databases/sqlite
+    files:
+      - sol-11-x-86_meta.sqlite
+
   - folder: fonts/ttf
     files:
       - ttf_001.ttf
