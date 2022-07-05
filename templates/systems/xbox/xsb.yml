@@ -1,0 +1,43 @@
+# STATUS: 5%
+# archive format for sound banks, on XBox and maybe on Windows (created by Xbox SDK / DirectX SDK)
+#
+# Used in Counter-Strike (XBox)
+
+references:
+  - http://wiki.xentax.com/index.php/XACT_XWB_XSB_XGS_Audio#XSB
+
+software:
+  - xxx
+
+kind: archive
+name: XBox XSB (sound bank) archive
+extensions: [.xsb]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'SDBK'
+
+structs:
+  header:
+    ascii[4] Signature: c'SDBK'
+    u16 Tool version: ??
+    u16 File format version: ??
+
+    u16 FCS16 checksum: ??
+    u32 last modification date (lo): ??
+    u32 last modification date (hi): ??
+    u8 Platform:
+      eq 00: PC
+      eq 02: XBox
+
+    u16 Number of simple cues: ??
+    u16 Number of complex cues: ??
+    u16 Unknown: ??
+    u16 Total number of cues: ??
+    u8 Number of wavebanks: ??
+    u16 Number of sounds: ??
+    u32 Cue name table size: ??
+
+layout:
+  - header Header

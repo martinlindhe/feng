@@ -315,6 +315,10 @@ input:
     files:
       - saveimage.xbx
 
+  - folder: systems/xbox/xbox_xsb
+    files:
+      - sound.xsb
+
   - folder: systems/xbox360/xex
     files:
       - natalsu.xex

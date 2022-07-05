@@ -1,0 +1,19 @@
+# templates/systems/xbox/xsb.yml
+Header
+  [000000] Signature                      ascii[4]         SDBK                  53 44 42 4b
+  [000004] Tool version                   u16 le           11                    00 0b
+  [000006] File format version            u16 le           63441                 f7 d1
+  [000008] FCS16 checksum                 u16 le           476                   01 dc
+  [00000a] last modification date (lo)    u32 le           42991616              02 90 00 00
+  [00000e] last modification date (hi)    u32 le           40370176              02 68 00 00
+  [000012] Platform                       u8               0                     00
+           - PC                           eq               0
+  [000013] Number of simple cues          u16 le           44032                 ac 00
+  [000015] Number of complex cues         u16 le           2                     00 02
+  [000017] Unknown                        u16 le           0                     00 00
+  [000019] Total number of cues           u16 le           4096                  10 00
+  [00001b] Number of wavebanks            u8               0                     00
+  [00001c] Number of sounds               u16 le           9                     00 09
+  [00001e] Cue name table size            u32 le           12                    00 00 00 0c
+
+0x028a (650) unmapped bytes
