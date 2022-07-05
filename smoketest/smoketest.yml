@@ -85,6 +85,10 @@ input:
     files:
       - sol-11-x-86_meta.sqlite
 
+  - folder: documents/pdf
+    files:
+      - pdf_001.pdf
+
   - folder: fonts/ttf
     files:
       - ttf_001.ttf

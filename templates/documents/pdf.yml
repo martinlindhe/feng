@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+references:
+  - https://en.wikipedia.org/wiki/PDF
+
+kind: document
+name: Portable Document Format
+extensions: [.pdf]
+mime: application/pdf
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'%PDF'
+
+structs:
+  header:
+    u8[4] Signature: c'%PDF'
+    
+layout:
+  - header Header
