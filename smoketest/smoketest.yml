@@ -5,6 +5,10 @@ input:
       - 7z_001_one_file.7z
       - 7z_002_three_files.7z
 
+  - folder: archives/bzip2
+    files:
+      - bzip2_001.bz2
+
   - folder: archives/cab
     files:
       - cab_001_win95_mini.cab

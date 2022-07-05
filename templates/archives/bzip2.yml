@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+references:
+  - https://golang.org/src/compress/bzip2/bzip2.go
+
+kind: archive
+name: Bzip2 Archive
+extensions: [.bz2]
+mime: application/x-bzip2
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BZ'
+
+structs:
+  header:
+    ascii[2] Signature: c'BZ'
+    ascii Encoding:
+      eq c'h': Huffman
+    ascii Compression level:
+      eq c'0': Stored
+      eq c'9': Best
+
+layout:
+  - header Header
+
