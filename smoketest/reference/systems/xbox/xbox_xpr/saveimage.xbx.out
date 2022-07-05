@@ -1,0 +1,8 @@
+# templates/systems/xbox/xpr0.yml
+Header
+  [000000] Signature                      ascii[4]         XPR0                  58 50 52 30
+  [000004] ArchiveSize                    u32 le           4096                  00 00 10 00
+  [000008] FirstFileOffset                u32 le           2048                  00 00 08 00
+  [00000c] Unknown3                       u32 le           262145                00 04 00 01
+
+0x0ff0 (4080) unmapped bytes

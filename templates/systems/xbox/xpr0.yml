@@ -1,0 +1,32 @@
+# STATUS: 5%
+# archive format used on XBox (MX Unleashed)
+#
+# HI allow extraction of content 
+# HI look into XPR1 format http://wiki.xentax.com/index.php/Counterstrike_XBox_XPR
+
+references:
+  - xxx
+
+software:
+  - xxx
+
+kind: system
+name: XBox XPR0 archive
+extensions: [.xpr, .xbx]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XPR0'
+
+structs:
+  header:
+    ascii[4] Signature: c'XPR0'
+    u32 ArchiveSize: ??           # same as file size
+    u32 FirstFileOffset: ??
+
+    #   [00000c] Unknown3                       u32 le           262145                00 04 00 01        ????
+    u32 Unknown3: ??              # XXX in XPR1 this is "Number Of Files".
+
+layout:
+  - header Header

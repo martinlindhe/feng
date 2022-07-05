@@ -1,0 +1,672 @@
+# templates/games/xbox_mx_unleashed/xbox_mx_res.yml
+Header
+  [000000] D                              u32 le           3                     00 00 00 03
+  [000004] FilesTableOffset               u32 le           208                   00 00 00 d0
+  [000008] U1                             u32 le           832                   00 00 03 40
+  [00000c] U2                             u32 le           0                     00 00 00 00
+  [000010] U3                             u32 le           196                   00 00 00 c4
+
+FilesTable
+  [0000d0] Unknown4                       u32 le           40304884              02 67 00 f4
+  [0000d4] Unknown5                       u32 le           1199                  00 00 04 af
+  [0000d8] FilenameCount                  u32 le           94                    00 00 00 5e
+
+FilenameEntry_0
+  [0000dc] DataOffset                     u32 le           3079                  00 00 0c 07
+  [0000e0] FilenameSize                   u32 le           21                    00 00 00 15
+  [0000e4] FileName                       ascii[21]        appstart\audiostr.txt 61 70 70 73 74 61 72 74 5c 61 75 64 69 6f 73 74 72 2e 74 78 74
+  [0000f9] DecompressedSizeMaybe          u32 le           0                     00 00 00 00
+  [000ce7] Data                           u8[1]                                  78
+
+FilenameEntry_1
+  [0000fd] DataOffset                     u32 le           5317                  00 00 14 c5
+  [000101] FilenameSize                   u32 le           18                    00 00 00 12
+  [000105] FileName                       ascii[18]        aud\music\music.pb    61 75 64 5c 6d 75 73 69 63 5c 6d 75 73 69 63 2e 70 62
+  [000117] DecompressedSizeMaybe          u32 le           24576                 00 00 60 00
+  [0015c6] Data                           u8[1]                                  2e
+
+FilenameEntry_2
+  [00011b] DataOffset                     u32 le           1530                  00 00 05 fa
+  [00011f] FilenameSize                   u32 le           14                    00 00 00 0e
+  [000123] FileName                       ascii[14]        rider\gear.dat        72 69 64 65 72 5c 67 65 61 72 2e 64 61 74
+  [000131] DecompressedSizeMaybe          u32 le           49152                 00 00 c0 00
+  [000719] Data                           u8[1]                                  00
+
+FilenameEntry_3
+  [000135] DataOffset                     u32 le           22703                 00 00 58 af
+  [000139] FilenameSize                   u32 le           19                    00 00 00 13
+  [00013d] FileName                       ascii[19]        rider\anim\thq1.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 74 68 71 31 2e 73 75 62
+  [000150] DecompressedSizeMaybe          u32 le           73728                 00 01 20 00
+  [0059e8] Data                           u8[1]                                  4f
+
+FilenameEntry_4
+  [000154] DataOffset                     u32 le           740                   00 00 02 e4
+  [000158] FilenameSize                   u32 le           19                    00 00 00 13
+  [00015c] FileName                       ascii[19]        rider\anim\thq2.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 74 68 71 32 2e 73 75 62
+  [00016f] DecompressedSizeMaybe          u32 le           98304                 00 01 80 00
+  [00043c] Data                           u8[1]                                  64
+
+FilenameEntry_5
+  [000173] DataOffset                     u32 le           730                   00 00 02 da
+  [000177] FilenameSize                   u32 le           23                    00 00 00 17
+  [00017b] FileName                       ascii[23]        rider\anim\rainbow1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 72 61 69 6e 62 6f 77 31 2e 73 75 62
+  [000192] DecompressedSizeMaybe          u32 le           122880                00 01 e0 00
+  [000451] Data                           u8[1]                                  00
+
+FilenameEntry_6
+  [000196] DataOffset                     u32 le           724                   00 00 02 d4
+  [00019a] FilenameSize                   u32 le           23                    00 00 00 17
+  [00019e] FileName                       ascii[23]        rider\anim\rainbow2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 72 61 69 6e 62 6f 77 32 2e 73 75 62
+  [0001b5] DecompressedSizeMaybe          u32 le           147456                00 02 40 00
+  [00046e] Data                           u8[1]                                  75
+
+FilenameEntry_7
+  [0001b9] DataOffset                     u32 le           724                   00 00 02 d4
+  [0001bd] FilenameSize                   u32 le           19                    00 00 00 13
+  [0001c1] FileName                       ascii[19]        rider\anim\tld1.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 74 6c 64 31 2e 73 75 62
+  [0001d4] DecompressedSizeMaybe          u32 le           172032                00 02 a0 00
+  [000491] Data                           u8[1]                                  0a
+
+FilenameEntry_8
+  [0001d8] DataOffset                     u32 le           743                   00 00 02 e7
+  [0001dc] FilenameSize                   u32 le           19                    00 00 00 13
+  [0001e0] FileName                       ascii[19]        rider\anim\tld2.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 74 6c 64 32 2e 73 75 62
+  [0001f3] DecompressedSizeMaybe          u32 le           196608                00 03 00 00
+  [0004c3] Data                           u8[1]                                  61
+
+FilenameEntry_9
+  [0001f7] DataOffset                     u32 le           743                   00 00 02 e7
+  [0001fb] FilenameSize                   u32 le           27                    00 00 00 1b
+  [0001ff] FileName                       ascii[27]        rider\anim\alpinestars1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 6c 70 69 6e 65 73 74 61 72 73 31 2e 73 75 62
+  [00021a] DecompressedSizeMaybe          u32 le           221184                00 03 60 00
+  [0004e2] Data                           u8[1]                                  65
+
+FilenameEntry_10
+  [00021e] DataOffset                     u32 le           769                   00 00 03 01
+  [000222] FilenameSize                   u32 le           27                    00 00 00 1b
+  [000226] FileName                       ascii[27]        rider\anim\alpinestars2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 6c 70 69 6e 65 73 74 61 72 73 32 2e 73 75 62
+  [000241] DecompressedSizeMaybe          u32 le           245760                00 03 c0 00
+  [000523] Data                           u8[1]                                  72
+
+FilenameEntry_11
+  [000245] DataOffset                     u32 le           773                   00 00 03 05
+  [000249] FilenameSize                   u32 le           21                    00 00 00 15
+  [00024d] FileName                       ascii[21]        rider\anim\shift1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 68 69 66 74 31 2e 73 75 62
+  [000262] DecompressedSizeMaybe          u32 le           270336                00 04 20 00
+  [00054e] Data                           u8[1]                                  73
+
+FilenameEntry_12
+  [000266] DataOffset                     u32 le           742                   00 00 02 e6
+  [00026a] FilenameSize                   u32 le           21                    00 00 00 15
+  [00026e] FileName                       ascii[21]        rider\anim\shift2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 68 69 66 74 32 2e 73 75 62
+  [000283] DecompressedSizeMaybe          u32 le           294912                00 04 80 00
+  [000550] Data                           u8[1]                                  62
+
+FilenameEntry_13
+  [000287] DataOffset                     u32 le           742                   00 00 02 e6
+  [00028b] FilenameSize                   u32 le           20                    00 00 00 14
+  [00028f] FileName                       ascii[20]        rider\anim\thor1.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 74 68 6f 72 31 2e 73 75 62
+  [0002a3] DecompressedSizeMaybe          u32 le           319488                00 04 e0 00
+  [000571] Data                           u8[1]                                  2e
+
+FilenameEntry_14
+  [0002a7] DataOffset                     u32 le           740                   00 00 02 e4
+  [0002ab] FilenameSize                   u32 le           20                    00 00 00 14
+  [0002af] FileName                       ascii[20]        rider\anim\thor2.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 74 68 6f 72 32 2e 73 75 62
+  [0002c3] DecompressedSizeMaybe          u32 le           344064                00 05 40 00
+  [00058f] Data                           u8[1]                                  69
+
+FilenameEntry_15
+  [0002c7] DataOffset                     u32 le           740                   00 00 02 e4
+  [0002cb] FilenameSize                   u32 le           22                    00 00 00 16
+  [0002cf] FileName                       ascii[22]        rider\anim\answer1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 6e 73 77 65 72 31 2e 73 75 62
+  [0002e5] DecompressedSizeMaybe          u32 le           368640                00 05 a0 00
+  [0005af] Data                           u8[1]                                  5c
+
+FilenameEntry_16
+  [0002e9] DataOffset                     u32 le           752                   00 00 02 f0
+  [0002ed] FilenameSize                   u32 le           22                    00 00 00 16
+  [0002f1] FileName                       ascii[22]        rider\anim\answer2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 6e 73 77 65 72 32 2e 73 75 62
+  [000307] DecompressedSizeMaybe          u32 le           393216                00 06 00 00
+  [0005dd] Data                           u8[1]                                  75
+
+FilenameEntry_17
+  [00030b] DataOffset                     u32 le           752                   00 00 02 f0
+  [00030f] FilenameSize                   u32 le           21                    00 00 00 15
+  [000313] FileName                       ascii[21]        rider\anim\oneal1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6f 6e 65 61 6c 31 2e 73 75 62
+  [000328] DecompressedSizeMaybe          u32 le           417792                00 06 60 00
+  [0005ff] Data                           u8[1]                                  75
+
+FilenameEntry_18
+  [00032c] DataOffset                     u32 le           750                   00 00 02 ee
+  [000330] FilenameSize                   u32 le           21                    00 00 00 15
+  [000334] FileName                       ascii[21]        rider\anim\oneal2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6f 6e 65 61 6c 32 2e 73 75 62
+  [000349] DecompressedSizeMaybe          u32 le           442368                00 06 c0 00
+  [00061e] Data                           u8[1]                                  32
+
+FilenameEntry_19
+  [00034d] DataOffset                     u32 le           750                   00 00 02 ee
+  [000351] FilenameSize                   u32 le           21                    00 00 00 15
+  [000355] FileName                       ascii[21]        rider\anim\warpt1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 77 61 72 70 74 31 2e 73 75 62
+  [00036a] DecompressedSizeMaybe          u32 le           466944                00 07 20 00
+  [00063f] Data                           u8[1]                                  72
+
+FilenameEntry_20
+  [00036e] DataOffset                     u32 le           755                   00 00 02 f3
+  [000372] FilenameSize                   u32 le           21                    00 00 00 15
+  [000376] FileName                       ascii[21]        rider\anim\warpt2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 77 61 72 70 74 32 2e 73 75 62
+  [00038b] DecompressedSizeMaybe          u32 le           491520                00 07 80 00
+  [000665] Data                           u8[1]                                  75
+
+FilenameEntry_21
+  [00038f] DataOffset                     u32 le           750                   00 00 02 ee
+  [000393] FilenameSize                   u32 le           19                    00 00 00 13
+  [000397] FileName                       ascii[19]        rider\anim\fly1.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 66 6c 79 31 2e 73 75 62
+  [0003aa] DecompressedSizeMaybe          u32 le           516096                00 07 e0 00
+  [000681] Data                           u8[1]                                  73
+
+FilenameEntry_22
+  [0003ae] DataOffset                     u32 le           736                   00 00 02 e0
+  [0003b2] FilenameSize                   u32 le           19                    00 00 00 13
+  [0003b6] FileName                       ascii[19]        rider\anim\fly2.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 66 6c 79 32 2e 73 75 62
+  [0003c9] DecompressedSizeMaybe          u32 le           540672                00 08 40 00
+  [000692] Data                           u8[1]                                  17
+
+FilenameEntry_23
+  [0003cd] DataOffset                     u32 le           747                   00 00 02 eb
+  [0003d1] FilenameSize                   u32 le           21                    00 00 00 15
+  [0003d5] FileName                       ascii[21]        rider\anim\alloy1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 6c 6c 6f 79 31 2e 73 75 62
+  [0003ea] DecompressedSizeMaybe          u32 le           565248                00 08 a0 00
+  [0006bc] Data                           u8[1]                                  65
+
+FilenameEntry_24
+  [0003ee] DataOffset                     u32 le           748                   00 00 02 ec
+  [0003f2] FilenameSize                   u32 le           21                    00 00 00 15
+  [0003f6] FileName                       ascii[21]        rider\anim\alloy2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 6c 6c 6f 79 32 2e 73 75 62
+  [00040b] DecompressedSizeMaybe          u32 le           589824                00 09 00 00
+  [0006de] Data                           u8[1]                                  69
+
+FilenameEntry_25
+  [00040f] DataOffset                     u32 le           749                   00 00 02 ed
+  [000413] FilenameSize                   u32 le           23                    00 00 00 17
+  [000417] FileName                       ascii[23]        rider\anim\acerbis1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 63 65 72 62 69 73 31 2e 73 75 62
+  [00042e] DecompressedSizeMaybe          u32 le           614400                00 09 60 00
+  [000700] Data                           u8[1]                                  00
+
+FilenameEntry_26
+  [000432] DataOffset                     u32 le           750                   00 00 02 ee
+  [000436] FilenameSize                   u32 le           23                    00 00 00 17
+  [00043a] FileName                       ascii[23]        rider\anim\acerbis2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 63 65 72 62 69 73 32 2e 73 75 62
+  [000451] DecompressedSizeMaybe          u32 le           638976                00 09 c0 00
+  [000724] Data                           u8[1]                                  00
+
+FilenameEntry_27
+  [000455] DataOffset                     u32 le           751                   00 00 02 ef
+  [000459] FilenameSize                   u32 le           19                    00 00 00 13
+  [00045d] FileName                       ascii[19]        rider\anim\axo1.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 61 78 6f 31 2e 73 75 62
+  [000470] DecompressedSizeMaybe          u32 le           663552                00 0a 20 00
+  [000748] Data                           u8[1]                                  00
+
+FilenameEntry_28
+  [000474] DataOffset                     u32 le           736                   00 00 02 e0
+  [000478] FilenameSize                   u32 le           19                    00 00 00 13
+  [00047c] FileName                       ascii[19]        rider\anim\axo2.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 61 78 6f 32 2e 73 75 62
+  [00048f] DecompressedSizeMaybe          u32 le           688128                00 0a 80 00
+  [000758] Data                           u8[1]                                  31
+
+FilenameEntry_29
+  [000493] DataOffset                     u32 le           737                   00 00 02 e1
+  [000497] FilenameSize                   u32 le           22                    00 00 00 16
+  [00049b] FileName                       ascii[22]        rider\anim\azonic1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 7a 6f 6e 69 63 31 2e 73 75 62
+  [0004b1] DecompressedSizeMaybe          u32 le           712704                00 0a e0 00
+  [000778] Data                           u8[1]                                  32
+
+FilenameEntry_30
+  [0004b5] DataOffset                     u32 le           750                   00 00 02 ee
+  [0004b9] FilenameSize                   u32 le           22                    00 00 00 16
+  [0004bd] FileName                       ascii[22]        rider\anim\azonic2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 7a 6f 6e 69 63 32 2e 73 75 62
+  [0004d3] DecompressedSizeMaybe          u32 le           737280                00 0b 40 00
+  [0007a7] Data                           u8[1]                                  00
+
+FilenameEntry_31
+  [0004d7] DataOffset                     u32 le           750                   00 00 02 ee
+  [0004db] FilenameSize                   u32 le           20                    00 00 00 14
+  [0004df] FileName                       ascii[20]        rider\anim\skin1.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 73 6b 69 6e 31 2e 73 75 62
+  [0004f3] DecompressedSizeMaybe          u32 le           761856                00 0b a0 00
+  [0007c9] Data                           u8[1]                                  00
+
+FilenameEntry_32
+  [0004f7] DataOffset                     u32 le           741                   00 00 02 e5
+  [0004fb] FilenameSize                   u32 le           20                    00 00 00 14
+  [0004ff] FileName                       ascii[20]        rider\anim\skin2.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 73 6b 69 6e 32 2e 73 75 62
+  [000513] DecompressedSizeMaybe          u32 le           786432                00 0c 00 00
+  [0007e0] Data                           u8[1]                                  6c
+
+FilenameEntry_33
+  [000517] DataOffset                     u32 le           749                   00 00 02 ed
+  [00051b] FilenameSize                   u32 le           19                    00 00 00 13
+  [00051f] FileName                       ascii[19]        rider\anim\fox1.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 66 6f 78 31 2e 73 75 62
+  [000532] DecompressedSizeMaybe          u32 le           811008                00 0c 60 00
+  [000808] Data                           u8[1]                                  73
+
+FilenameEntry_34
+  [000536] DataOffset                     u32 le           737                   00 00 02 e1
+  [00053a] FilenameSize                   u32 le           19                    00 00 00 13
+  [00053e] FileName                       ascii[19]        rider\anim\fox2.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 66 6f 78 32 2e 73 75 62
+  [000551] DecompressedSizeMaybe          u32 le           835584                00 0c c0 00
+  [00081b] Data                           u8[1]                                  72
+
+FilenameEntry_35
+  [000555] DataOffset                     u32 le           739                   00 00 02 e3
+  [000559] FilenameSize                   u32 le           24                    00 00 00 18
+  [00055d] FileName                       ascii[24]        rider\anim\sinisalo1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 69 6e 69 73 61 6c 6f 31 2e 73 75 62
+  [000575] DecompressedSizeMaybe          u32 le           860160                00 0d 20 00
+  [00083c] Data                           u8[1]                                  72
+
+FilenameEntry_36
+  [000579] DataOffset                     u32 le           765                   00 00 02 fd
+  [00057d] FilenameSize                   u32 le           24                    00 00 00 18
+  [000581] FileName                       ascii[24]        rider\anim\sinisalo2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 69 6e 69 73 61 6c 6f 32 2e 73 75 62
+  [000599] DecompressedSizeMaybe          u32 le           884736                00 0d 80 00
+  [00087a] Data                           u8[1]                                  72
+
+FilenameEntry_37
+  [00059d] DataOffset                     u32 le           758                   00 00 02 f6
+  [0005a1] FilenameSize                   u32 le           23                    00 00 00 17
+  [0005a5] FileName                       ascii[23]        rider\anim\parsons1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 70 61 72 73 6f 6e 73 31 2e 73 75 62
+  [0005bc] DecompressedSizeMaybe          u32 le           909312                00 0d e0 00
+  [000897] Data                           u8[1]                                  13
+
+FilenameEntry_38
+  [0005c0] DataOffset                     u32 le           751                   00 00 02 ef
+  [0005c4] FilenameSize                   u32 le           23                    00 00 00 17
+  [0005c8] FileName                       ascii[23]        rider\anim\parsons2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 70 61 72 73 6f 6e 73 32 2e 73 75 62
+  [0005df] DecompressedSizeMaybe          u32 le           933888                00 0e 40 00
+  [0008b3] Data                           u8[1]                                  02
+
+FilenameEntry_39
+  [0005e3] DataOffset                     u32 le           751                   00 00 02 ef
+  [0005e7] FilenameSize                   u32 le           22                    00 00 00 16
+  [0005eb] FileName                       ascii[22]        rider\anim\faisst1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 66 61 69 73 73 74 31 2e 73 75 62
+  [000601] DecompressedSizeMaybe          u32 le           958464                00 0e a0 00
+  [0008d6] Data                           u8[1]                                  00
+
+FilenameEntry_40
+  [000605] DataOffset                     u32 le           762                   00 00 02 fa
+  [000609] FilenameSize                   u32 le           22                    00 00 00 16
+  [00060d] FileName                       ascii[22]        rider\anim\faisst2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 66 61 69 73 73 74 32 2e 73 75 62
+  [000623] DecompressedSizeMaybe          u32 le           983040                00 0f 00 00
+  [000903] Data                           u8[1]                                  5c
+
+FilenameEntry_41
+  [000627] DataOffset                     u32 le           762                   00 00 02 fa
+  [00062b] FilenameSize                   u32 le           22                    00 00 00 16
+  [00062f] FileName                       ascii[22]        rider\anim\renner1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 72 65 6e 6e 65 72 31 2e 73 75 62
+  [000645] DecompressedSizeMaybe          u32 le           1007616               00 0f 60 00
+  [000925] Data                           u8[1]                                  65
+
+FilenameEntry_42
+  [000649] DataOffset                     u32 le           749                   00 00 02 ed
+  [00064d] FilenameSize                   u32 le           22                    00 00 00 16
+  [000651] FileName                       ascii[22]        rider\anim\renner2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 72 65 6e 6e 65 72 32 2e 73 75 62
+  [000667] DecompressedSizeMaybe          u32 le           1032192               00 0f c0 00
+  [00093a] Data                           u8[1]                                  69
+
+FilenameEntry_43
+  [00066b] DataOffset                     u32 le           749                   00 00 02 ed
+  [00066f] FilenameSize                   u32 le           23                    00 00 00 17
+  [000673] FileName                       ascii[23]        rider\anim\jessman1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6a 65 73 73 6d 61 6e 31 2e 73 75 62
+  [00068a] DecompressedSizeMaybe          u32 le           1056768               00 10 20 00
+  [00095c] Data                           u8[1]                                  65
+
+FilenameEntry_44
+  [00068e] DataOffset                     u32 le           748                   00 00 02 ec
+  [000692] FilenameSize                   u32 le           23                    00 00 00 17
+  [000696] FileName                       ascii[23]        rider\anim\jessman2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6a 65 73 73 6d 61 6e 32 2e 73 75 62
+  [0006ad] DecompressedSizeMaybe          u32 le           1081344               00 10 80 00
+  [00097e] Data                           u8[1]                                  72
+
+FilenameEntry_45
+  [0006b1] DataOffset                     u32 le           748                   00 00 02 ec
+  [0006b5] FilenameSize                   u32 le           24                    00 00 00 18
+  [0006b9] FileName                       ascii[24]        rider\anim\langston1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6c 61 6e 67 73 74 6f 6e 31 2e 73 75 62
+  [0006d1] DecompressedSizeMaybe          u32 le           1105920               00 10 e0 00
+  [0009a1] Data                           u8[1]                                  61
+
+FilenameEntry_46
+  [0006d5] DataOffset                     u32 le           747                   00 00 02 eb
+  [0006d9] FilenameSize                   u32 le           24                    00 00 00 18
+  [0006dd] FileName                       ascii[24]        rider\anim\langston2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6c 61 6e 67 73 74 6f 6e 32 2e 73 75 62
+  [0006f5] DecompressedSizeMaybe          u32 le           1130496               00 11 40 00
+  [0009c4] Data                           u8[1]                                  61
+
+FilenameEntry_47
+  [0006f9] DataOffset                     u32 le           747                   00 00 02 eb
+  [0006fd] FilenameSize                   u32 le           24                    00 00 00 18
+  [000701] FileName                       ascii[24]        rider\anim\boniface1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 62 6f 6e 69 66 61 63 65 31 2e 73 75 62
+  [000719] DecompressedSizeMaybe          u32 le           1155072               00 11 a0 00
+  [0009e8] Data                           u8[1]                                  6e
+
+FilenameEntry_48
+  [00071d] DataOffset                     u32 le           735                   00 00 02 df
+  [000721] FilenameSize                   u32 le           24                    00 00 00 18
+  [000725] FileName                       ascii[24]        rider\anim\boniface2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 62 6f 6e 69 66 61 63 65 32 2e 73 75 62
+  [00073d] DecompressedSizeMaybe          u32 le           1179648               00 12 00 00
+  [000a00] Data                           u8[1]                                  00
+
+FilenameEntry_49
+  [000741] DataOffset                     u32 le           735                   00 00 02 df
+  [000745] FilenameSize                   u32 le           20                    00 00 00 14
+  [000749] FileName                       ascii[20]        rider\anim\ward1.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 77 61 72 64 31 2e 73 75 62
+  [00075d] DecompressedSizeMaybe          u32 le           1204224               00 12 60 00
+  [000a24] Data                           u8[1]                                  69
+
+FilenameEntry_50
+  [000761] DataOffset                     u32 le           747                   00 00 02 eb
+  [000765] FilenameSize                   u32 le           20                    00 00 00 14
+  [000769] FileName                       ascii[20]        rider\anim\ward2.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 77 61 72 64 32 2e 73 75 62
+  [00077d] DecompressedSizeMaybe          u32 le           1228800               00 12 c0 00
+  [000a50] Data                           u8[1]                                  73
+
+FilenameEntry_51
+  [000781] DataOffset                     u32 le           747                   00 00 02 eb
+  [000785] FilenameSize                   u32 le           23                    00 00 00 17
+  [000789] FileName                       ascii[23]        rider\anim\roncade1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 72 6f 6e 63 61 64 65 31 2e 73 75 62
+  [0007a0] DecompressedSizeMaybe          u32 le           1253376               00 13 20 00
+  [000a70] Data                           u8[1]                                  6d
+
+FilenameEntry_52
+  [0007a4] DataOffset                     u32 le           748                   00 00 02 ec
+  [0007a8] FilenameSize                   u32 le           23                    00 00 00 17
+  [0007ac] FileName                       ascii[23]        rider\anim\roncade2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 72 6f 6e 63 61 64 65 32 2e 73 75 62
+  [0007c3] DecompressedSizeMaybe          u32 le           1277952               00 13 80 00
+  [000a94] Data                           u8[1]                                  6d
+
+FilenameEntry_53
+  [0007c7] DataOffset                     u32 le           748                   00 00 02 ec
+  [0007cb] FilenameSize                   u32 le           24                    00 00 00 18
+  [0007cf] FileName                       ascii[24]        rider\anim\tortelli1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 74 6f 72 74 65 6c 6c 69 31 2e 73 75 62
+  [0007e7] DecompressedSizeMaybe          u32 le           1302528               00 13 e0 00
+  [000ab7] Data                           u8[1]                                  69
+
+FilenameEntry_54
+  [0007eb] DataOffset                     u32 le           751                   00 00 02 ef
+  [0007ef] FilenameSize                   u32 le           24                    00 00 00 18
+  [0007f3] FileName                       ascii[24]        rider\anim\tortelli2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 74 6f 72 74 65 6c 6c 69 32 2e 73 75 62
+  [00080b] DecompressedSizeMaybe          u32 le           1327104               00 14 40 00
+  [000ade] Data                           u8[1]                                  6e
+
+FilenameEntry_55
+  [00080f] DataOffset                     u32 le           751                   00 00 02 ef
+  [000813] FilenameSize                   u32 le           21                    00 00 00 15
+  [000817] FileName                       ascii[21]        rider\anim\ferry1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 66 65 72 72 79 31 2e 73 75 62
+  [00082c] DecompressedSizeMaybe          u32 le           1351680               00 14 a0 00
+  [000b02] Data                           u8[1]                                  65
+
+FilenameEntry_56
+  [000830] DataOffset                     u32 le           751                   00 00 02 ef
+  [000834] FilenameSize                   u32 le           21                    00 00 00 15
+  [000838] FileName                       ascii[21]        rider\anim\ferry2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 66 65 72 72 79 32 2e 73 75 62
+  [00084d] DecompressedSizeMaybe          u32 le           1376256               00 15 00 00
+  [000b23] Data                           u8[1]                                  6b
+
+FilenameEntry_57
+  [000851] DataOffset                     u32 le           751                   00 00 02 ef
+  [000855] FilenameSize                   u32 le           21                    00 00 00 15
+  [000859] FileName                       ascii[21]        rider\anim\adams1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 64 61 6d 73 31 2e 73 75 62
+  [00086e] DecompressedSizeMaybe          u32 le           1400832               00 15 60 00
+  [000b44] Data                           u8[1]                                  65
+
+FilenameEntry_58
+  [000872] DataOffset                     u32 le           746                   00 00 02 ea
+  [000876] FilenameSize                   u32 le           21                    00 00 00 15
+  [00087a] FileName                       ascii[21]        rider\anim\adams2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 61 64 61 6d 73 32 2e 73 75 62
+  [00088f] DecompressedSizeMaybe          u32 le           1425408               00 15 c0 00
+  [000b60] Data                           u8[1]                                  61
+
+FilenameEntry_59
+  [000893] DataOffset                     u32 le           746                   00 00 02 ea
+  [000897] FilenameSize                   u32 le           19                    00 00 00 13
+  [00089b] FileName                       ascii[19]        rider\anim\wey1.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 77 65 79 31 2e 73 75 62
+  [0008ae] DecompressedSizeMaybe          u32 le           1449984               00 16 20 00
+  [000b81] Data                           u8[1]                                  72
+
+FilenameEntry_60
+  [0008b2] DataOffset                     u32 le           748                   00 00 02 ec
+  [0008b6] FilenameSize                   u32 le           19                    00 00 00 13
+  [0008ba] FileName                       ascii[19]        rider\anim\wey2.sub   72 69 64 65 72 5c 61 6e 69 6d 5c 77 65 79 32 2e 73 75 62
+  [0008cd] DecompressedSizeMaybe          u32 le           1474560               00 16 80 00
+  [000ba2] Data                           u8[1]                                  72
+
+FilenameEntry_61
+  [0008d1] DataOffset                     u32 le           748                   00 00 02 ec
+  [0008d5] FilenameSize                   u32 le           20                    00 00 00 14
+  [0008d9] FileName                       ascii[20]        rider\anim\lusk1.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 6c 75 73 6b 31 2e 73 75 62
+  [0008ed] DecompressedSizeMaybe          u32 le           1499136               00 16 e0 00
+  [000bc1] Data                           u8[1]                                  6b
+
+FilenameEntry_62
+  [0008f1] DataOffset                     u32 le           758                   00 00 02 f6
+  [0008f5] FilenameSize                   u32 le           20                    00 00 00 14
+  [0008f9] FileName                       ascii[20]        rider\anim\lusk2.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 6c 75 73 6b 32 2e 73 75 62
+  [00090d] DecompressedSizeMaybe          u32 le           1523712               00 17 40 00
+  [000beb] Data                           u8[1]                                  80
+
+FilenameEntry_63
+  [000911] DataOffset                     u32 le           758                   00 00 02 f6
+  [000915] FilenameSize                   u32 le           20                    00 00 00 14
+  [000919] FileName                       ascii[20]        rider\anim\reed1.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 72 65 65 64 31 2e 73 75 62
+  [00092d] DecompressedSizeMaybe          u32 le           1548288               00 17 a0 00
+  [000c0b] Data                           u8[1]                                  49
+
+FilenameEntry_64
+  [000931] DataOffset                     u32 le           748                   00 00 02 ec
+  [000935] FilenameSize                   u32 le           20                    00 00 00 14
+  [000939] FileName                       ascii[20]        rider\anim\reed2.sub  72 69 64 65 72 5c 61 6e 69 6d 5c 72 65 65 64 32 2e 73 75 62
+  [00094d] DecompressedSizeMaybe          u32 le           1572864               00 18 00 00
+  [000c21] Data                           u8[1]                                  64
+
+FilenameEntry_65
+  [000951] DataOffset                     u32 le           748                   00 00 02 ec
+  [000955] FilenameSize                   u32 le           21                    00 00 00 15
+  [000959] FileName                       ascii[21]        rider\anim\smith1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 6d 69 74 68 31 2e 73 75 62
+  [00096e] DecompressedSizeMaybe          u32 le           1597440               00 18 60 00
+  [000c41] Data                           u8[1]                                  36
+
+FilenameEntry_66
+  [000972] DataOffset                     u32 le           748                   00 00 02 ec
+  [000976] FilenameSize                   u32 le           21                    00 00 00 15
+  [00097a] FileName                       ascii[21]        rider\anim\smith2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 6d 69 74 68 32 2e 73 75 62
+  [00098f] DecompressedSizeMaybe          u32 le           1622016               00 18 c0 00
+  [000c62] Data                           u8[1]                                  1d
+
+FilenameEntry_67
+  [000993] DataOffset                     u32 le           744                   00 00 02 e8
+  [000997] FilenameSize                   u32 le           23                    00 00 00 17
+  [00099b] FileName                       ascii[23]        rider\anim\larocco1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6c 61 72 6f 63 63 6f 31 2e 73 75 62
+  [0009b2] DecompressedSizeMaybe          u32 le           1646592               00 19 20 00
+  [000c7f] Data                           u8[1]                                  00
+
+FilenameEntry_68
+  [0009b6] DataOffset                     u32 le           751                   00 00 02 ef
+  [0009ba] FilenameSize                   u32 le           23                    00 00 00 17
+  [0009be] FileName                       ascii[23]        rider\anim\larocco2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6c 61 72 6f 63 63 6f 32 2e 73 75 62
+  [0009d5] DecompressedSizeMaybe          u32 le           1671168               00 19 80 00
+  [000ca9] Data                           u8[1]                                  69
+
+FilenameEntry_69
+  [0009d9] DataOffset                     u32 le           751                   00 00 02 ef
+  [0009dd] FilenameSize                   u32 le           21                    00 00 00 15
+  [0009e1] FileName                       ascii[21]        rider\anim\lewis1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6c 65 77 69 73 31 2e 73 75 62
+  [0009f6] DecompressedSizeMaybe          u32 le           1695744               00 19 e0 00
+  [000ccc] Data                           u8[1]                                  00
+
+FilenameEntry_70
+  [0009fa] DataOffset                     u32 le           746                   00 00 02 ea
+  [0009fe] FilenameSize                   u32 le           21                    00 00 00 15
+  [000a02] FileName                       ascii[21]        rider\anim\lewis2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 6c 65 77 69 73 32 2e 73 75 62
+  [000a17] DecompressedSizeMaybe          u32 le           1720320               00 1a 40 00
+  [000ce8] Data                           u8[1]                                  9c
+
+FilenameEntry_71
+  [000a1b] DataOffset                     u32 le           746                   00 00 02 ea
+  [000a1f] FilenameSize                   u32 le           22                    00 00 00 16
+  [000a23] FileName                       ascii[22]        rider\anim\styles1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 74 79 6c 65 73 31 2e 73 75 62
+  [000a39] DecompressedSizeMaybe          u32 le           1744896               00 1a a0 00
+  [000d09] Data                           u8[1]                                  78
+
+FilenameEntry_72
+  [000a3d] DataOffset                     u32 le           746                   00 00 02 ea
+  [000a41] FilenameSize                   u32 le           22                    00 00 00 16
+  [000a45] FileName                       ascii[22]        rider\anim\styles2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 74 79 6c 65 73 32 2e 73 75 62
+  [000a5b] DecompressedSizeMaybe          u32 le           1769472               00 1b 00 00
+  [000d2b] Data                           u8[1]                                  77
+
+FilenameEntry_73
+  [000a5f] DataOffset                     u32 le           746                   00 00 02 ea
+  [000a63] FilenameSize                   u32 le           24                    00 00 00 18
+  [000a67] FileName                       ascii[24]        rider\anim\sellards1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 65 6c 6c 61 72 64 73 31 2e 73 75 62
+  [000a7f] DecompressedSizeMaybe          u32 le           1794048               00 1b 60 00
+  [000d4d] Data                           u8[1]                                  30
+
+FilenameEntry_74
+  [000a83] DataOffset                     u32 le           748                   00 00 02 ec
+  [000a87] FilenameSize                   u32 le           24                    00 00 00 18
+  [000a8b] FileName                       ascii[24]        rider\anim\sellards2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 65 6c 6c 61 72 64 73 32 2e 73 75 62
+  [000aa3] DecompressedSizeMaybe          u32 le           1818624               00 1b c0 00
+  [000d73] Data                           u8[1]                                  1b
+
+FilenameEntry_75
+  [000aa7] DataOffset                     u32 le           748                   00 00 02 ec
+  [000aab] FilenameSize                   u32 le           22                    00 00 00 16
+  [000aaf] FileName                       ascii[22]        rider\anim\hansen1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 68 61 6e 73 65 6e 31 2e 73 75 62
+  [000ac5] DecompressedSizeMaybe          u32 le           1843200               00 1c 20 00
+  [000d97] Data                           u8[1]                                  cb
+
+FilenameEntry_76
+  [000ac9] DataOffset                     u32 le           748                   00 00 02 ec
+  [000acd] FilenameSize                   u32 le           22                    00 00 00 16
+  [000ad1] FileName                       ascii[22]        rider\anim\hansen2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 68 61 6e 73 65 6e 32 2e 73 75 62
+  [000ae7] DecompressedSizeMaybe          u32 le           1867776               00 1c 80 00
+  [000db9] Data                           u8[1]                                  14
+
+FilenameEntry_77
+  [000aeb] DataOffset                     u32 le           748                   00 00 02 ec
+  [000aef] FilenameSize                   u32 le           22                    00 00 00 16
+  [000af3] FileName                       ascii[22]        rider\anim\walker1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 77 61 6c 6b 65 72 31 2e 73 75 62
+  [000b09] DecompressedSizeMaybe          u32 le           1892352               00 1c e0 00
+  [000ddb] Data                           u8[1]                                  2c
+
+FilenameEntry_78
+  [000b0d] DataOffset                     u32 le           748                   00 00 02 ec
+  [000b11] FilenameSize                   u32 le           22                    00 00 00 16
+  [000b15] FileName                       ascii[22]        rider\anim\walker2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 77 61 6c 6b 65 72 32 2e 73 75 62
+  [000b2b] DecompressedSizeMaybe          u32 le           1916928               00 1d 40 00
+  [000dfd] Data                           u8[1]                                  f9
+
+FilenameEntry_79
+  [000b2f] DataOffset                     u32 le           748                   00 00 02 ec
+  [000b33] FilenameSize                   u32 le           23                    00 00 00 17
+  [000b37] FileName                       ascii[23]        rider\anim\preston1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 70 72 65 73 74 6f 6e 31 2e 73 75 62
+  [000b4e] DecompressedSizeMaybe          u32 le           1941504               00 1d a0 00
+  [000e1f] Data                           u8[1]                                  00
+
+FilenameEntry_80
+  [000b52] DataOffset                     u32 le           747                   00 00 02 eb
+  [000b56] FilenameSize                   u32 le           23                    00 00 00 17
+  [000b5a] FileName                       ascii[23]        rider\anim\preston2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 70 72 65 73 74 6f 6e 32 2e 73 75 62
+  [000b71] DecompressedSizeMaybe          u32 le           1966080               00 1e 00 00
+  [000e41] Data                           u8[1]                                  0b
+
+FilenameEntry_81
+  [000b75] DataOffset                     u32 le           747                   00 00 02 eb
+  [000b79] FilenameSize                   u32 le           21                    00 00 00 15
+  [000b7d] FileName                       ascii[21]        rider\anim\sorby1.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 6f 72 62 79 31 2e 73 75 62
+  [000b92] DecompressedSizeMaybe          u32 le           1990656               00 1e 60 00
+  [000e64] Data                           u8[1]                                  30
+
+FilenameEntry_82
+  [000b96] DataOffset                     u32 le           748                   00 00 02 ec
+  [000b9a] FilenameSize                   u32 le           21                    00 00 00 15
+  [000b9e] FileName                       ascii[21]        rider\anim\sorby2.sub 72 69 64 65 72 5c 61 6e 69 6d 5c 73 6f 72 62 79 32 2e 73 75 62
+  [000bb3] DecompressedSizeMaybe          u32 le           2015232               00 1e c0 00
+  [000e86] Data                           u8[1]                                  e5
+
+FilenameEntry_83
+  [000bb7] DataOffset                     u32 le           748                   00 00 02 ec
+  [000bbb] FilenameSize                   u32 le           14                    00 00 00 0e
+  [000bbf] FileName                       ascii[14]        bike\bikes.dat        62 69 6b 65 5c 62 69 6b 65 73 2e 64 61 74
+  [000bcd] DecompressedSizeMaybe          u32 le           2039808               00 1f 20 00
+  [000ea7] Data                           u8[1]                                  e5
+
+FilenameEntry_84
+  [000bd1] DataOffset                     u32 le           7270                  00 00 1c 66
+  [000bd5] FilenameSize                   u32 le           17                    00 00 00 11
+  [000bd9] FileName                       ascii[17]        tracks\tracks.dat     74 72 61 63 6b 73 5c 74 72 61 63 6b 73 2e 64 61 74
+  [000bea] DecompressedSizeMaybe          u32 le           2064384               00 1f 80 00
+  [00283b] Data                           u8[1]                                  d5
+
+FilenameEntry_85
+  [000bee] DataOffset                     u32 le           16535                 00 00 40 97
+  [000bf2] FilenameSize                   u32 le           16                    00 00 00 10
+  [000bf6] FileName                       ascii[16]        rider\riders.dat      72 69 64 65 72 5c 72 69 64 65 72 73 2e 64 61 74
+  [000c06] DecompressedSizeMaybe          u32 le           2088960               00 1f e0 00
+  [004c89] Data                           u8[1]                                  d5
+
+FilenameEntry_86
+  [000c0a] DataOffset                     u32 le           18765                 00 00 49 4d
+  [000c0e] FilenameSize                   u32 le           18                    00 00 00 12
+  [000c12] FileName                       ascii[18]        tracks\leagues.dat    74 72 61 63 6b 73 5c 6c 65 61 67 75 65 73 2e 64 61 74
+  [000c24] DecompressedSizeMaybe          u32 le           2113536               00 20 40 00
+  [00555b] Data                           u8[1]                                  00
+
+FilenameEntry_87
+  [000c28] DataOffset                     u32 le           11590                 00 00 2d 46
+  [000c2c] FilenameSize                   u32 le           12                    00 00 00 0c
+  [000c30] FileName                       ascii[12]        ui\store.dat          75 69 5c 73 74 6f 72 65 2e 64 61 74
+  [000c3c] DecompressedSizeMaybe          u32 le           2138112               00 20 a0 00
+  [003972] Data                           u8[1]                                  db
+
+FilenameEntry_88
+  [000c40] DataOffset                     u32 le           13875                 00 00 36 33
+  [000c44] FilenameSize                   u32 le           21                    00 00 00 15
+  [000c48] FileName                       ascii[21]        rider\anim\stunts.ini 72 69 64 65 72 5c 61 6e 69 6d 5c 73 74 75 6e 74 73 2e 69 6e 69
+  [000c5d] DecompressedSizeMaybe          u32 le           2162688               00 21 00 00
+  [004277] Data                           u8[1]                                  78
+
+FilenameEntry_89
+  [000c61] DataOffset                     u32 le           7676                  00 00 1d fc
+  [000c65] FilenameSize                   u32 le           16                    00 00 00 10
+  [000c69] FileName                       ascii[16]        loc\loc_stbl.txt      6c 6f 63 5c 6c 6f 63 5f 73 74 62 6c 2e 74 78 74
+  [000c79] DecompressedSizeMaybe          u32 le           2187264               00 21 60 00
+  [002a61] Data                           u8[1]                                  ce
+
+FilenameEntry_90
+  [000c7d] DataOffset                     u32 le           46                    00 00 00 2e
+  [000c81] FilenameSize                   u32 le           10                    00 00 00 0a
+  [000c85] FileName                       ascii[10]        loc\ui.loc            6c 6f 63 5c 75 69 2e 6c 6f 63
+  [000c8f] DecompressedSizeMaybe          u32 le           2211840               00 21 c0 00
+  [000caf] Data                           u8[1]                                  c1
+
+FilenameEntry_91
+  [000c93] DataOffset                     u32 le           39063                 00 00 98 97
+  [000c97] FilenameSize                   u32 le           16                    00 00 00 10
+  [000c9b] FileName                       ascii[16]        loc\l_ui_eng.bin      6c 6f 63 5c 6c 5f 75 69 5f 65 6e 67 2e 62 69 6e
+  [000cab] DecompressedSizeMaybe          u32 le           2260992               00 22 80 00
+  [00a52e] Data                           u8[1]                                  8a
+
+FilenameEntry_92
+  [000caf] DataOffset                     u32 le           50881                 00 00 c6 c1
+  [000cb3] FilenameSize                   u32 le           11                    00 00 00 0b
+  [000cb7] FileName                       ascii[11]        loc\trc.loc           6c 6f 63 5c 74 72 63 2e 6c 6f 63
+  [000cc2] DecompressedSizeMaybe          u32 le           2334720               00 23 a0 00
+  [00d374] Data                           u8[1]                                  95
+
+FilenameEntry_93
+  [000cc6] DataOffset                     u32 le           1604                  00 00 06 44
+  [000cca] FilenameSize                   u32 le           17                    00 00 00 11
+  [000cce] FileName                       ascii[17]        loc\l_trc_eng.bin     6c 6f 63 5c 6c 5f 74 72 63 5f 65 6e 67 2e 62 69 6e
+  [000cdf] DecompressedSizeMaybe          u32 le           2359296               00 24 00 00
+  [00130e] Data                           u8[1]                                  24
+
+0x11a10 (72208) unmapped bytes

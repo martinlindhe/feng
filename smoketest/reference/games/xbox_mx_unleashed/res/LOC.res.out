@@ -1,0 +1,56 @@
+# templates/games/xbox_mx_unleashed/xbox_mx_res.yml
+Header
+  [000000] D                              u32 le           3                     00 00 00 03
+  [000004] FilesTableOffset               u32 le           26                    00 00 00 1a
+  [000008] U1                             u32 le           832                   00 00 03 40
+  [00000c] U2                             u32 le           0                     00 00 00 00
+  [000010] U3                             u32 le           14                    00 00 00 0e
+
+FilesTable
+  [00001a] Unknown4                       u32 le           17039563              01 04 00 cb
+  [00001e] Unknown5                       u32 le           258                   00 00 01 02
+  [000022] FilenameCount                  u32 le           6                     00 00 00 06
+
+FilenameEntry_0
+  [000026] DataOffset                     u32 le           158                   00 00 00 9e
+  [00002a] FilenameSize                   u32 le           15                    00 00 00 0f
+  [00002e] FileName                       ascii[15]        tex\fsbegin.dxm       74 65 78 5c 66 73 62 65 67 69 6e 2e 64 78 6d
+  [00003d] DecompressedSizeMaybe          u32 le           0                     00 00 00 00
+  [0000c8] Data                           u8[1]                                  78
+
+FilenameEntry_1
+  [000041] DataOffset                     u32 le           343                   00 00 01 57
+  [000045] FilenameSize                   u32 le           14                    00 00 00 0e
+  [000049] FileName                       ascii[14]        tex\fsfade.dxm        74 65 78 5c 66 73 66 61 64 65 2e 64 78 6d
+  [000057] DecompressedSizeMaybe          u32 le           24576                 00 00 60 00
+  [00019c] Data                           u8[1]                                  18
+
+FilenameEntry_2
+  [00005b] DataOffset                     u32 le           523                   00 00 02 0b
+  [00005f] FilenameSize                   u32 le           15                    00 00 00 0f
+  [000063] FileName                       ascii[15]        tex\fscolor.dxm       74 65 78 5c 66 73 63 6f 6c 6f 72 2e 64 78 6d
+  [000072] DecompressedSizeMaybe          u32 le           49152                 00 00 c0 00
+  [00026a] Data                           u8[1]                                  f1
+
+FilenameEntry_3
+  [000076] DataOffset                     u32 le           525                   00 00 02 0d
+  [00007a] FilenameSize                   u32 le           13                    00 00 00 0d
+  [00007e] FileName                       ascii[13]        tex\fsend.dxm         74 65 78 5c 66 73 65 6e 64 2e 64 78 6d
+  [00008b] DecompressedSizeMaybe          u32 le           73728                 00 01 20 00
+  [000287] Data                           u8[1]                                  00
+
+FilenameEntry_4
+  [00008f] DataOffset                     u32 le           343                   00 00 01 57
+  [000093] FilenameSize                   u32 le           14                    00 00 00 0e
+  [000097] FileName                       ascii[14]        tex\vpfade.dxm        74 65 78 5c 76 70 66 61 64 65 2e 64 78 6d
+  [0000a5] DecompressedSizeMaybe          u32 le           98304                 00 01 80 00
+  [0001ea] Data                           u8[1]                                  5b
+
+FilenameEntry_5
+  [0000a9] DataOffset                     u32 le           523                   00 00 02 0b
+  [0000ad] FilenameSize                   u32 le           15                    00 00 00 0f
+  [0000b1] FileName                       ascii[15]        tex\vpcolor.dxm       74 65 78 5c 76 70 63 6f 6c 6f 72 2e 64 78 6d
+  [0000c0] DecompressedSizeMaybe          u32 le           122880                00 01 e0 00
+  [0002b8] Data                           u8[1]                                  98
+
+0x05af (1455) unmapped bytes

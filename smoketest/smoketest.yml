@@ -87,6 +87,12 @@ input:
     files:
       - sample1.ab
 
+  # TODO finish this format
+  - folder: games/xbox_mx_unleashed/res
+    files:
+      - appstart.res
+      - LOC.res
+
   - folder: images/bmp
     files:
       - bmp_win_v2-001.bmp
@@ -299,6 +305,10 @@ input:
     files:
       # XXX find smaller samples
       - default.xbe
+
+  - folder: systems/xbox/xbox_xpr
+    files:
+      - saveimage.xbx
 
   - folder: systems/xbox360/xex
     files:

@@ -1,0 +1,56 @@
+# STATUS: 1% - DRAFT. mapping is incorrect and incomplete.
+#
+# format used on original XBox
+#
+# used in MX Unleashed (og xbox) .res files
+#
+# - HI: make u32 Filenamesize+ascii[filenamesize] filename a defined datatype with a present mode, so we can extract filename easy
+#
+# - HI: zlib extract! there is zlib streams in file, mark up them and extract them !!!
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=1841
+
+kind: system
+name: XBox RES file
+extensions: [.res]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 03 00 00 00      # XXX is this a magic marker?
+  - offset: 0008
+    match: 40 03 00 00      # XXX is this a magic marker?
+
+structs:
+  header:
+    u32 D: ??               # always 03 00 00 00
+    u32 FilesTableOffset: ??  # FJ
+    u32 U1: ??        # XXX always 00 00 03 40
+    u32 U2: ??        # XXX always 0
+    u32 U3: ??        # XXX
+
+  files_table:
+    offset: Header.FilesTableOffset
+    u32 Unknown4: ??
+    u32 Unknown5: ??
+    u32 FilenameCount: ??
+
+  filename_entry:
+    u32 DataOffset: ?? # XXX Offset of file data start from right after this variable's position 
+    
+    u32 FilenameSize: ??
+    ascii[self.FilenameSize] FileName: ??
+
+    #u16 Unknown6a: ?? # XXX flags ??? values like 8000, c000, 2000
+    u32 DecompressedSizeMaybe: ?? # XXX uncompressed size ???
+
+    offset: self.offset + self.DataOffset - self.FilenameSize - 8 # XXX  unsure for #0 in LOC should be  00002a +   dataoffset 9e  = 0xc8
+    u8[1] Data: ?? # XXX len
+    offset: restore
+
+
+layout:
+  - header Header
+  - files_table FilesTable
+  - filename_entry[FilesTable.FilenameCount] FilenameEntry
