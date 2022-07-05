@@ -1,0 +1,28 @@
+# STATUS: 5%
+# archive format for audio, on XBox and maybe on Windows (created by Xbox SDK / DirectX SDK)
+#
+# Used in Counter-Strike (XBox)
+
+references:
+  - http://wiki.xentax.com/index.php/XACT_XWB_XSB_XGS_Audio#XWB
+
+software:
+  - XWBTool XXX
+
+kind: audio
+name: XBox XWB file
+extensions: [.xwb]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'WBND'
+
+structs:
+  header:
+    ascii[4] Signature: c'WBND'
+    u32 Tool version: ??          # (dwVersion / XACT_CONTENT_VERSION) // e.g. 46 for DirectX SDK (June 2010)
+    u32 File format version: ??   # (dwHeaderVersion)  // e.g. 44
+
+layout:
+  - header Header

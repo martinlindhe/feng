@@ -53,3 +53,17 @@ parsing JPEG is very slow. use greet02.jpg for benchmark (3.2s exec time for a 4
 first match on magic file numbers. if no match, try the formats without those in classic full format sense...
 
 
+
+
+
+### USABILITY + POLISH
+
+for no_magic formats: match on input file extension
+
+feng printout: show complete printout of all hex values in long arrays with an cli option (default to show only 1st)
+
+logging: use something better
+
+fix failing tests
+
+ 

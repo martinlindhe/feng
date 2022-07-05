@@ -317,7 +317,15 @@ input:
 
   - folder: systems/xbox/xbox_xsb
     files:
+      - DVDcs_militia.xsb
+      - DVDde_truth.xsb
       - sound.xsb
+      - soundtrack.xsb
+
+  - folder: systems/xbox/xbox_xwb
+    files:
+      - DVDde_stadium.xwb
+      - UIXDefault.xwb
 
   - folder: systems/xbox360/xex
     files:

@@ -13,7 +13,7 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-var DEBUG_EVAL = true
+var DEBUG_EVAL = false
 
 // an expression failed to evaluate
 type EvaluateError struct {
@@ -117,8 +117,13 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 	}
 
 	if DEBUG_EVAL {
+		// XXX seems Align field is not yet available as variable in eval.go for some reason??!
+		// it should have been added already
 		feng.Yellow("--- EVALUATING --- %s at %06x\n", in, fl.offset)
-		spew.Dump(variables)
+		if in == `Segment_1.Align == "II"` {
+			spew.Dump(variables)
+			//panic("wa")
+		}
 		feng.Yellow("---\n")
 	}
 

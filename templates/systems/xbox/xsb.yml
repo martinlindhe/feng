@@ -2,6 +2,9 @@
 # archive format for sound banks, on XBox and maybe on Windows (created by Xbox SDK / DirectX SDK)
 #
 # Used in Counter-Strike (XBox)
+#
+# HI: decode "last modification date" field correctly
+# HI: decode and extract wavebanks & sounds
 
 references:
   - http://wiki.xentax.com/index.php/XACT_XWB_XSB_XGS_Audio#XSB
@@ -10,7 +13,7 @@ software:
   - xxx
 
 kind: archive
-name: XBox XSB (sound bank) archive
+name: XBox Sound Bank archive
 extensions: [.xsb]
 endian: little
 
@@ -24,9 +27,9 @@ structs:
     u16 Tool version: ??
     u16 File format version: ??
 
-    u16 FCS16 checksum: ??
-    u32 last modification date (lo): ??
-    u32 last modification date (hi): ??
+    u16 Checksum: ??                      # CRC (FCS16 checksum)
+    u32 Last modification date (lo): ??
+    u32 Last modification date (hi): ??
     u8 Platform:
       eq 00: PC
       eq 02: XBox
@@ -37,7 +40,13 @@ structs:
     u16 Total number of cues: ??
     u8 Number of wavebanks: ??
     u16 Number of sounds: ??
-    u32 Cue name table size: ??
+    u32 CueNameTableSize: ??
+
+  name_table:
+    asciiz Name: ??
 
 layout:
   - header Header
+
+  - offset 0x01EC    # XXX is this a fixed offset? need more samples
+  - name_table[Header.CueNameTableSize] NameTable

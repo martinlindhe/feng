@@ -1,0 +1,7 @@
+# templates/systems/xbox/xwb.yml
+Header
+  [000000] Signature                      ascii[4]         WBND                  57 42 4e 44
+  [000004] Tool version                   u32 le           3                     00 00 00 03
+  [000008] File format version            u32 le           40                    00 00 00 28
+
+0x427f4 (272372) unmapped bytes
