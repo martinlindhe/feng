@@ -1,0 +1,672 @@
+# templates/systems/xbox/xbe.yml
+Header
+  [000000] Magic                          ascii[4]         XBEH                  58 42 45 48
+  [000004] Digital Signature              u8[256]                                2d fe eb b6 8f 54 03 3b 09 da 03 da b2 f9 58 10 81 27 b8 21 91 72 54 76 7f 1d 09 f2 fe 84 1b 6c ...
+  [000104] Base Address                   u32 le           65536                 00 01 00 00
+  [000108] Size of Headers                u32 le           8192                  00 00 20 00
+  [00010c] Size of Image                  u32 le           1121376               00 11 1c 60
+  [000110] Size of Image Header           u32 le           388                   00 00 01 84
+  [000114] Creation Time                  dostime le       22:16:58              b2 1d
+  [000116] Creation Date                  dosdate le       2011-09-15            3f 2f
+  [000118] CertificateAddress             u32 le           65924                 00 01 01 84
+  [00011c] NumberOfSections               u32 le           24                    00 00 00 18
+  [000120] SectionHeaderAddress           u32 le           66416                 00 01 03 70
+  [000124] Initialization Flags           u32 le           4                     00 00 00 04
+           - MountUtilityDrive            bit              0
+           - FormatUtilityDrive           bit              0
+           - Limit64Megabytes             bit              1
+           - DontSetupHarddisk            bit              0
+  [000128] Entry Point                    u32 le           2835212455            a8 fd e8 a7
+  [00012c] TLSAddress                     u32 le           78880                 00 01 34 20
+  [000130] Stack Size                     u32 le           65536                 00 01 00 00
+  [000134] PE Heap Reserve                u32 le           1048576               00 10 00 00
+  [000138] PE Heap Commit                 u32 le           4096                  00 00 10 00
+  [00013c] PE Base Address                u32 le           72576                 00 01 1b 80
+  [000140] PE Size of Image               u32 le           784320                00 0b f7 c0
+  [000144] PE Checksum                    u32 le           787952                00 0c 05 f0
+  [000148] PE Creation Time               dostime le       22:16:44              b2 16
+  [00014a] PE Creation Date               dosdate le       2011-09-15            3f 2f
+  [00014c] DebugPathNameAddress           u32 le           68182                 00 01 0a 56
+  [000a56] DebugPathName                  asciiz           d:\xboxfre-aug03\private\ui\dl\dl\obj\i386\Downloader.exe 64 3a 5c 78 62 6f 78 66 72 65 2d 61 75 67 30 33 5c 70 72 69 76 61 74 65 5c 75 69 5c 64 6c 5c 64 ...
+  [000150] DebugFileNameAddress           u32 le           68225                 00 01 0a 81
+  [000a81] DebugFileName                  asciiz           Downloader.exe        44 6f 77 6e 6c 6f 61 64 65 72 2e 65 78 65 00
+  [000154] DebugUnicodeFileNameAddress    u32 le           68152                 00 01 0a 38
+  [000a38] DebugUnicodeFileName           utf16z le        Downloader.exe        44 00 6f 00 77 00 6e 00 6c 00 6f 00 61 00 64 00 65 00 72 00 2e 00 65 00 78 00 65 00 00 00
+  [000158] Kernel Image Thunk Address     u32 le           1533829302            5b 6c 60 b6
+  [00015c] Non-Kernel Import Directory Address u32 le           0                     00 00 00 00
+  [000160] NumberOfLibraryVersions        u32 le           11                    00 00 00 0b
+  [000164] LibraryVersionsAddress         u32 le           67976                 00 01 09 88
+  [000168] KernelLibraryVersionAddress    u32 le           68040                 00 01 09 c8
+  [00016c] XAPILibraryVersionAddress      u32 le           67976                 00 01 09 88
+  [000170] LogoBitmapAddress              u32 le           68240                 00 01 0a 90
+  [000174] LogoBitmapSize                 u32 le           690                   00 00 02 b2
+  [000178] Unknown1                       u64 le           0                     00 00 00 00 00 00 00 00
+  [000180] Unknown2                       u32 le           85236                 00 01 4c f4
+
+Certificate
+  [000184] Size of Certificate            u32 le           492                   00 00 01 ec
+  [000188] Certificate Time               dostime le       17:36:08              8c 84
+  [00018a] Certificate Date               dosdate le       2011-12-25            3f 99
+  [00018c] Title ID                       u16 le           54                    00 36
+  [00018e] Publisher ID                   ascii[2]         SM                    53 4d
+  [000190] Title Name                     utf16[40] le     Downloader            00 44 00 6f 00 77 00 6e 00 6c 00 6f 00 61 00 64 00 65 00 72 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [0001e0] Alternate Title IDs            u32[16] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000220] Allowed Media                  u32 le           2                     00 00 00 02
+           - HARD_DISK                    bit              0
+           - DVD_X2                       bit              1
+           - DVD_CD                       bit              0
+           - CD                           bit              0
+           - DVD_5_RO                     bit              0
+           - DVD_9_RO                     bit              0
+           - DVD_5_RW                     bit              0
+           - DVD_9_RW                     bit              0
+           - DONGLE                       bit              0
+           - BOARD                        bit              0
+           - NONSECURE_HARD_DISK          bit              0
+           - NONSECURE_MODE               bit              0
+  [000224] Game Region                    u32 le           3                     00 00 00 03
+           - North America                bit              1
+           - Japan                        bit              1
+           - Rest of the world            bit              0
+           - Manufacturing                bit              0
+  [000228] Game Ratings                   u32 le           2                     00 00 00 02
+  [00022c] Disk Number                    u32 le           0                     00 00 00 00
+  [000230] Certificate Version            u32 le           1                     00 00 00 01
+  [000234] LAN Key                        u8[16]                                 a0 a7 8d 43 cf 57 b1 48 a3 2b a5 26 e4 a3 b1 ca
+  [000244] Signature Key                  u8[16]                                 fc 96 57 58 ec 7b c1 5e b2 f8 a5 e8 29 34 f3 24
+  [000254] Alternate Signature Keys       u8[256]                                1b 53 56 5a d6 64 f6 1b 87 85 0e 18 81 f7 7c 03 15 d1 39 e0 8f 58 e0 f0 42 07 8a 10 f6 b2 d3 23 ...
+
+SectionHeader_0 .text
+  [000370] Section Flags                  u32 le           22                    00 00 00 16
+           - Writable                     bit              0
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              0
+  [000374] Virtual Address                u32 le           73728                 00 01 20 00
+  [000378] Virtual Size                   u32 le           188972                00 02 e2 2c
+  [00037c] RawAddress                     u32 le           8192                  00 00 20 00
+  [000380] RawSize                        u32 le           188972                00 02 e2 2c
+  [000384] SectionNameAddress             u32 le           67806                 00 01 08 de
+  [0008de] SectionName                    asciiz           .text                 2e 74 65 78 74 00
+  [000388] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [00038c] Head Shared Page Reference Count Address u32 le           67760                 00 01 08 b0
+  [000390] Tail Shared Page Reference Count Address u32 le           67762                 00 01 08 b2
+  [000394] Section Digest                 u8[20]                                 99 d2 f7 ac 04 e7 93 14 42 92 ca 7d a4 6d 8c d4 be 55 f9 93
+  [002000] Section data                   u8[188972]                             42 01 00 80 bb 00 00 80 e2 00 00 80 ca 00 00 80 21 01 00 80 d2 00 00 80 25 00 00 80 cf 00 00 80 ...
+
+SectionHeader_1 D3D
+  [0003a8] Section Flags                  u32 le           7                     00 00 00 07
+           - Writable                     bit              1
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              0
+  [0003ac] Virtual Address                u32 le           262720                00 04 02 40
+  [0003b0] Virtual Size                   u32 le           72912                 00 01 1c d0
+  [0003b4] RawAddress                     u32 le           200704                00 03 10 00
+  [0003b8] RawSize                        u32 le           58396                 00 00 e4 1c
+  [0003bc] SectionNameAddress             u32 le           67812                 00 01 08 e4
+  [0008e4] SectionName                    asciiz           D3D                   44 33 44 00
+  [0003c0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0003c4] Head Shared Page Reference Count Address u32 le           67762                 00 01 08 b2
+  [0003c8] Tail Shared Page Reference Count Address u32 le           67764                 00 01 08 b4
+  [0003cc] Section Digest                 u8[20]                                 28 e9 6d db 7b 0b d0 06 32 d0 aa 11 fa fb af a8 a6 c6 d8 d6
+  [031000] Section data                   u8[58396]                              56 8b 35 60 e6 04 00 85 f6 57 bf 60 e6 04 00 74 35 55 8b 6c 24 10 39 6e 04 75 22 8b 06 89 07 f6 ...
+
+SectionHeader_2 XONLINE
+  [0003e0] Section Flags                  u32 le           38                    00 00 00 26
+           - Writable                     bit              0
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              1
+  [0003e4] Virtual Address                u32 le           335648                00 05 1f 20
+  [0003e8] Virtual Size                   u32 le           111748                00 01 b4 84
+  [0003ec] RawAddress                     u32 le           262144                00 04 00 00
+  [0003f0] RawSize                        u32 le           111748                00 01 b4 84
+  [0003f4] SectionNameAddress             u32 le           67816                 00 01 08 e8
+  [0008e8] SectionName                    asciiz           XONLINE               58 4f 4e 4c 49 4e 45 00
+  [0003f8] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0003fc] Head Shared Page Reference Count Address u32 le           67764                 00 01 08 b4
+  [000400] Tail Shared Page Reference Count Address u32 le           67766                 00 01 08 b6
+  [000404] Section Digest                 u8[20]                                 17 c1 35 f2 c4 43 cb 84 72 2b 90 22 32 30 06 be af 30 1d 66
+  [040000] Section data                   u8[111748]                             8b 0d 60 a3 0b 00 e9 6c 11 00 00 8b 0d 60 a3 0b 00 e9 76 11 00 00 8b 0d 60 a3 0b 00 e9 82 15 00 ...
+
+SectionHeader_3 XNET
+  [000418] Section Flags                  u32 le           22                    00 00 00 16
+           - Writable                     bit              0
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              0
+  [00041c] Virtual Address                u32 le           447424                00 06 d3 c0
+  [000420] Virtual Size                   u32 le           70800                 00 01 14 90
+  [000424] RawAddress                     u32 le           376832                00 05 c0 00
+  [000428] RawSize                        u32 le           70800                 00 01 14 90
+  [00042c] SectionNameAddress             u32 le           67824                 00 01 08 f0
+  [0008f0] SectionName                    asciiz           XNET                  58 4e 45 54 00
+  [000430] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000434] Head Shared Page Reference Count Address u32 le           67766                 00 01 08 b6
+  [000438] Tail Shared Page Reference Count Address u32 le           67768                 00 01 08 b8
+  [00043c] Section Digest                 u8[20]                                 f4 28 9b be 22 0d 66 29 38 ae 4c 2b c8 88 65 66 6c 66 1b 51
+  [05c000] Section data                   u8[70800]                              85 c9 75 07 b8 6d 27 00 00 eb 0f ff 74 24 08 ff 74 24 08 e8 f8 53 00 00 33 c0 c2 08 00 85 c9 75 ...
+
+SectionHeader_4 XACTENG
+  [000450] Section Flags                  u32 le           7                     00 00 00 07
+           - Writable                     bit              1
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              0
+  [000454] Virtual Address                u32 le           518240                00 07 e8 60
+  [000458] Virtual Size                   u32 le           41088                 00 00 a0 80
+  [00045c] RawAddress                     u32 le           450560                00 06 e0 00
+  [000460] RawSize                        u32 le           41004                 00 00 a0 2c
+  [000464] SectionNameAddress             u32 le           67829                 00 01 08 f5
+  [0008f5] SectionName                    asciiz           XACTENG               58 41 43 54 45 4e 47 00
+  [000468] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [00046c] Head Shared Page Reference Count Address u32 le           67768                 00 01 08 b8
+  [000470] Tail Shared Page Reference Count Address u32 le           67770                 00 01 08 ba
+  [000474] Section Digest                 u8[20]                                 29 1c eb 80 29 47 dd a2 22 1a 8b d2 7b f2 a1 57 9d 82 18 52
+  [06e000] Section data                   u8[41004]                              64 0f b6 05 24 00 00 00 84 c0 74 03 33 c0 c3 68 14 86 08 00 ff 15 8c 20 01 00 33 c0 40 c3 56 8b ...
+
+SectionHeader_5 DSOUND
+  [000488] Section Flags                  u32 le           7                     00 00 00 07
+           - Writable                     bit              1
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              0
+  [00048c] Virtual Address                u32 le           559328                00 08 88 e0
+  [000490] Virtual Size                   u32 le           44812                 00 00 af 0c
+  [000494] RawAddress                     u32 le           495616                00 07 90 00
+  [000498] RawSize                        u32 le           44204                 00 00 ac ac
+  [00049c] SectionNameAddress             u32 le           67837                 00 01 08 fd
+  [0008fd] SectionName                    asciiz           DSOUND                44 53 4f 55 4e 44 00
+  [0004a0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0004a4] Head Shared Page Reference Count Address u32 le           67770                 00 01 08 ba
+  [0004a8] Tail Shared Page Reference Count Address u32 le           67772                 00 01 08 bc
+  [0004ac] Section Digest                 u8[20]                                 8b 22 84 d4 67 3c 7d 23 85 6c 9d 69 59 38 16 76 b1 7c 13 0b
+  [079000] Section data                   u8[44204]                              8b 44 24 04 8b 08 3b c8 74 12 8b 50 04 89 51 04 8b 48 04 8b 10 89 11 89 40 04 89 00 c2 04 00 6a ...
+
+SectionHeader_6 WMADEC
+  [0004c0] Section Flags                  u32 le           7                     00 00 00 07
+           - Writable                     bit              1
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              0
+  [0004c4] Virtual Address                u32 le           604160                00 09 38 00
+  [0004c8] Virtual Size                   u32 le           102524                00 01 90 7c
+  [0004cc] RawAddress                     u32 le           540672                00 08 40 00
+  [0004d0] RawSize                        u32 le           102524                00 01 90 7c
+  [0004d4] SectionNameAddress             u32 le           67844                 00 01 09 04
+  [000904] SectionName                    asciiz           WMADEC                57 4d 41 44 45 43 00
+  [0004d8] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0004dc] Head Shared Page Reference Count Address u32 le           67772                 00 01 08 bc
+  [0004e0] Tail Shared Page Reference Count Address u32 le           67774                 00 01 08 be
+  [0004e4] Section Digest                 u8[20]                                 00 0c e2 de 44 ec 23 b4 88 58 81 09 38 4f be a9 86 a6 0a c2
+  [084000] Section data                   u8[102524]                             56 57 8b 7c 24 0c 57 8b f1 ff 15 8c 20 01 00 89 3e 5f 8b c6 5e c2 04 00 83 e8 00 74 39 48 74 30 ...
+
+SectionHeader_7 D3DX
+  [0004f8] Section Flags                  u32 le           7                     00 00 00 07
+           - Writable                     bit              1
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              0
+  [0004fc] Virtual Address                u32 le           706688                00 0a c8 80
+  [000500] Virtual Size                   u32 le           8512                  00 00 21 40
+  [000504] RawAddress                     u32 le           647168                00 09 e0 00
+  [000508] RawSize                        u32 le           8504                  00 00 21 38
+  [00050c] SectionNameAddress             u32 le           67851                 00 01 09 0b
+  [00090b] SectionName                    asciiz           D3DX                  44 33 44 58 00
+  [000510] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000514] Head Shared Page Reference Count Address u32 le           67774                 00 01 08 be
+  [000518] Tail Shared Page Reference Count Address u32 le           67776                 00 01 08 c0
+  [00051c] Section Digest                 u8[20]                                 09 56 23 07 5d 2d 8a 7e d8 93 4a 02 e7 a1 66 4d 6f e3 1c 50
+  [09e000] Section data                   u8[8504]                               30 31 32 33 34 35 36 37 38 39 41 42 43 44 45 46 f0 db 0a 00 b4 db 0a 00 94 db 0a 00 6c db 0a 00 ...
+
+SectionHeader_8 XGRPH
+  [000530] Section Flags                  u32 le           7                     00 00 00 07
+           - Writable                     bit              1
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              0
+  [000534] Virtual Address                u32 le           715200                00 0a e9 c0
+  [000538] Virtual Size                   u32 le           72                    00 00 00 48
+  [00053c] RawAddress                     u32 le           659456                00 0a 10 00
+  [000540] RawSize                        u32 le           68                    00 00 00 44
+  [000544] SectionNameAddress             u32 le           67856                 00 01 09 10
+  [000910] SectionName                    asciiz           XGRPH                 58 47 52 50 48 00
+  [000548] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [00054c] Head Shared Page Reference Count Address u32 le           67776                 00 01 08 c0
+  [000550] Tail Shared Page Reference Count Address u32 le           67776                 00 01 08 c0
+  [000554] Section Digest                 u8[20]                                 ca 31 18 f1 6f 0a f3 98 d5 17 e6 b3 37 35 aa a8 7f b1 4e 65
+  [0a1000] Section data                   u8[68]                                 8b 44 24 04 83 f8 2d 7f 22 83 f8 27 7d 31 85 c0 7c 14 83 f8 07 7e 28 83 f8 0b 74 23 83 f8 18 7e ...
+
+SectionHeader_9 XPP
+  [000568] Section Flags                  u32 le           7                     00 00 00 07
+           - Writable                     bit              1
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              0
+  [00056c] Virtual Address                u32 le           715296                00 0a ea 20
+  [000570] Virtual Size                   u32 le           31240                 00 00 7a 08
+  [000574] RawAddress                     u32 le           663552                00 0a 20 00
+  [000578] RawSize                        u32 le           31240                 00 00 7a 08
+  [00057c] SectionNameAddress             u32 le           67862                 00 01 09 16
+  [000916] SectionName                    asciiz           XPP                   58 50 50 00
+  [000580] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000584] Head Shared Page Reference Count Address u32 le           67776                 00 01 08 c0
+  [000588] Tail Shared Page Reference Count Address u32 le           67778                 00 01 08 c2
+  [00058c] Section Digest                 u8[20]                                 b3 7e ae 34 65 60 60 aa db 92 f3 00 90 2d be e1 37 4b 36 c3
+  [0a2000] Section data                   u8[31240]                              00 00 00 00 4c eb 0a 00 94 eb 0a 00 00 00 00 00 00 00 00 00 a8 ea 0a 00 c0 eb 0a 00 d8 eb 0a 00 ...
+
+SectionHeader_10 .data
+  [0005a0] Section Flags                  u32 le           7                     00 00 00 07
+           - Writable                     bit              1
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              0
+  [0005a4] Virtual Address                u32 le           746560                00 0b 64 40
+  [0005a8] Virtual Size                   u32 le           47972                 00 00 bb 64
+  [0005ac] RawAddress                     u32 le           696320                00 0a a0 00
+  [0005b0] RawSize                        u32 le           14980                 00 00 3a 84
+  [0005b4] SectionNameAddress             u32 le           67866                 00 01 09 1a
+  [00091a] SectionName                    asciiz           .data                 2e 64 61 74 61 00
+  [0005b8] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0005bc] Head Shared Page Reference Count Address u32 le           67778                 00 01 08 c2
+  [0005c0] Tail Shared Page Reference Count Address u32 le           67780                 00 01 08 c4
+  [0005c4] Section Digest                 u8[20]                                 da 69 8c 51 29 90 4f db 0e 85 8b 38 e5 61 04 d6 2d d7 a6 e8
+  [0aa000] Section data                   u8[14980]                              00 00 00 00 b4 49 02 00 2c 2a 02 00 00 00 00 00 00 00 00 00 d6 42 0b 00 49 bb 08 00 54 bb 08 00 ...
+
+SectionHeader_11 XON_RD
+  [0005d8] Section Flags                  u32 le           38                    00 00 00 26
+           - Writable                     bit              0
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              0
+           - Tail Page Read Only          bit              1
+  [0005dc] Virtual Address                u32 le           794560                00 0c 1f c0
+  [0005e0] Virtual Size                   u32 le           6856                  00 00 1a c8
+  [0005e4] RawAddress                     u32 le           712704                00 0a e0 00
+  [0005e8] RawSize                        u32 le           6856                  00 00 1a c8
+  [0005ec] SectionNameAddress             u32 le           67872                 00 01 09 20
+  [000920] SectionName                    asciiz           XON_RD                58 4f 4e 5f 52 44 00
+  [0005f0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0005f4] Head Shared Page Reference Count Address u32 le           67780                 00 01 08 c4
+  [0005f8] Tail Shared Page Reference Count Address u32 le           67782                 00 01 08 c6
+  [0005fc] Section Digest                 u8[20]                                 08 7e 9d 1d 99 37 81 96 7c f5 6d ee a3 71 74 0d f4 b6 23 5a
+  [0ae000] Section data                   u8[6856]                               54 47 53 25 73 25 2e 34 73 2e 58 42 4f 58 4c 49 56 45 2e 43 4f 4d 00 00 41 53 25 73 25 2e 34 73 ...
+
+SectionHeader_12 DOLBY
+  [000610] Section Flags                  u32 le           54                    00 00 00 36
+           - Writable                     bit              0
+           - Preload                      bit              1
+           - Executable                   bit              1
+           - Inserted File                bit              0
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [000614] Virtual Address                u32 le           801440                00 0c 3a a0
+  [000618] Virtual Size                   u32 le           29056                 00 00 71 80
+  [00061c] RawAddress                     u32 le           720896                00 0b 00 00
+  [000620] RawSize                        u32 le           29036                 00 00 71 6c
+  [000624] SectionNameAddress             u32 le           67879                 00 01 09 27
+  [000927] SectionName                    asciiz           DOLBY                 44 4f 4c 42 59 00
+  [000628] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [00062c] Head Shared Page Reference Count Address u32 le           67782                 00 01 08 c6
+  [000630] Tail Shared Page Reference Count Address u32 le           67784                 00 01 08 c8
+  [000634] Section Digest                 u8[20]                                 c8 c9 14 2d cc bd 31 bd ca 9a 2d 94 e0 ac c4 7c 20 48 d6 15
+  [0b0000] Section data                   u8[29036]                              08 0c 05 00 00 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 cc cc cc 00 00 00 00 00 ...
+
+SectionHeader_13 resource
+  [000648] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [00064c] Virtual Address                u32 le           830496                00 0c ac 20
+  [000650] Virtual Size                   u32 le           280576                00 04 48 00
+  [000654] RawAddress                     u32 le           753664                00 0b 80 00
+  [000658] RawSize                        u32 le           280576                00 04 48 00
+  [00065c] SectionNameAddress             u32 le           67885                 00 01 09 2d
+  [00092d] SectionName                    asciiz           resource              72 65 73 6f 75 72 63 65 00
+  [000660] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000664] Head Shared Page Reference Count Address u32 le           67784                 00 01 08 c8
+  [000668] Tail Shared Page Reference Count Address u32 le           67786                 00 01 08 ca
+  [00066c] Section Digest                 u8[20]                                 a0 59 de ff fc f6 7c 87 f9 c6 47 9b f6 6d 47 3c bd 59 82 e1
+  [0b8000] Section data                   u8[280576]                             58 50 52 30 00 48 04 00 00 08 00 00 01 00 04 00 00 00 00 00 00 00 00 00 29 0e 71 07 00 00 00 00 ...
+
+SectionHeader_14 english
+  [000680] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [000684] Virtual Address                u32 le           1111072               00 10 f4 20
+  [000688] Virtual Size                   u32 le           8748                  00 00 22 2c
+  [00068c] RawAddress                     u32 le           1036288               00 0f d0 00
+  [000690] RawSize                        u32 le           8748                  00 00 22 2c
+  [000694] SectionNameAddress             u32 le           67894                 00 01 09 36
+  [000936] SectionName                    asciiz           english               65 6e 67 6c 69 73 68 00
+  [000698] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [00069c] Head Shared Page Reference Count Address u32 le           67786                 00 01 08 ca
+  [0006a0] Tail Shared Page Reference Count Address u32 le           67788                 00 01 08 cc
+  [0006a4] Section Digest                 u8[20]                                 fd 0f a1 65 4c 56 0c a0 6e bc 57 42 79 3b 86 b6 80 09 f6 0a
+  [0fd000] Section data                   u8[8748]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_15 french
+  [0006b8] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [0006bc] Virtual Address                u32 le           1119840               00 11 16 60
+  [0006c0] Virtual Size                   u32 le           9790                  00 00 26 3e
+  [0006c4] RawAddress                     u32 le           1048576               00 10 00 00
+  [0006c8] RawSize                        u32 le           9790                  00 00 26 3e
+  [0006cc] SectionNameAddress             u32 le           67902                 00 01 09 3e
+  [00093e] SectionName                    asciiz           french                66 72 65 6e 63 68 00
+  [0006d0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0006d4] Head Shared Page Reference Count Address u32 le           67788                 00 01 08 cc
+  [0006d8] Tail Shared Page Reference Count Address u32 le           67790                 00 01 08 ce
+  [0006dc] Section Digest                 u8[20]                                 89 6e ee 30 80 79 d7 9c 7c 5b 4d 70 11 6a a5 36 09 6a 33 92
+  [100000] Section data                   u8[9790]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_16 german
+  [0006f0] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [0006f4] Virtual Address                u32 le           1129632               00 11 3c a0
+  [0006f8] Virtual Size                   u32 le           9906                  00 00 26 b2
+  [0006fc] RawAddress                     u32 le           1060864               00 10 30 00
+  [000700] RawSize                        u32 le           9906                  00 00 26 b2
+  [000704] SectionNameAddress             u32 le           67909                 00 01 09 45
+  [000945] SectionName                    asciiz           german                67 65 72 6d 61 6e 00
+  [000708] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [00070c] Head Shared Page Reference Count Address u32 le           67790                 00 01 08 ce
+  [000710] Tail Shared Page Reference Count Address u32 le           67792                 00 01 08 d0
+  [000714] Section Digest                 u8[20]                                 81 b3 24 aa 50 98 d1 5b 27 f1 47 aa c2 be 18 1c c7 50 9a e5
+  [103000] Section data                   u8[9906]                               ff fe 23 00 0d 00 0a 00 23 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_17 japanese
+  [000728] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [00072c] Virtual Address                u32 le           1139552               00 11 63 60
+  [000730] Virtual Size                   u32 le           6386                  00 00 18 f2
+  [000734] RawAddress                     u32 le           1073152               00 10 60 00
+  [000738] RawSize                        u32 le           6386                  00 00 18 f2
+  [00073c] SectionNameAddress             u32 le           67916                 00 01 09 4c
+  [00094c] SectionName                    asciiz           japanese              6a 61 70 61 6e 65 73 65 00
+  [000740] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000744] Head Shared Page Reference Count Address u32 le           67792                 00 01 08 d0
+  [000748] Tail Shared Page Reference Count Address u32 le           67794                 00 01 08 d2
+  [00074c] Section Digest                 u8[20]                                 23 21 17 15 d1 f4 10 27 97 99 0c b4 f5 76 fb 24 5b 14 de 2f
+  [106000] Section data                   u8[6386]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_18 korean
+  [000760] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [000764] Virtual Address                u32 le           1145952               00 11 7c 60
+  [000768] Virtual Size                   u32 le           6344                  00 00 18 c8
+  [00076c] RawAddress                     u32 le           1081344               00 10 80 00
+  [000770] RawSize                        u32 le           6344                  00 00 18 c8
+  [000774] SectionNameAddress             u32 le           67925                 00 01 09 55
+  [000955] SectionName                    asciiz           korean                6b 6f 72 65 61 6e 00
+  [000778] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [00077c] Head Shared Page Reference Count Address u32 le           67794                 00 01 08 d2
+  [000780] Tail Shared Page Reference Count Address u32 le           67796                 00 01 08 d4
+  [000784] Section Digest                 u8[20]                                 41 35 b4 3b d5 4e 7b 3a 94 3f 30 e5 4b 29 b5 8e 97 53 10 6d
+  [108000] Section data                   u8[6344]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_19 spanish
+  [000798] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [00079c] Virtual Address                u32 le           1152320               00 11 95 40
+  [0007a0] Virtual Size                   u32 le           9192                  00 00 23 e8
+  [0007a4] RawAddress                     u32 le           1089536               00 10 a0 00
+  [0007a8] RawSize                        u32 le           9192                  00 00 23 e8
+  [0007ac] SectionNameAddress             u32 le           67932                 00 01 09 5c
+  [00095c] SectionName                    asciiz           spanish               73 70 61 6e 69 73 68 00
+  [0007b0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0007b4] Head Shared Page Reference Count Address u32 le           67796                 00 01 08 d4
+  [0007b8] Tail Shared Page Reference Count Address u32 le           67798                 00 01 08 d6
+  [0007bc] Section Digest                 u8[20]                                 99 bf e0 a6 7d 53 cc 57 ca f9 6d 0f d3 2e 0a 58 a4 4c 1a cb
+  [10a000] Section data                   u8[9192]                               ff fe 23 00 0d 00 0a 00 23 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_20 tchinese
+  [0007d0] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [0007d4] Virtual Address                u32 le           1161536               00 11 b9 40
+  [0007d8] Virtual Size                   u32 le           5284                  00 00 14 a4
+  [0007dc] RawAddress                     u32 le           1101824               00 10 d0 00
+  [0007e0] RawSize                        u32 le           5284                  00 00 14 a4
+  [0007e4] SectionNameAddress             u32 le           67940                 00 01 09 64
+  [000964] SectionName                    asciiz           tchinese              74 63 68 69 6e 65 73 65 00
+  [0007e8] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0007ec] Head Shared Page Reference Count Address u32 le           67798                 00 01 08 d6
+  [0007f0] Tail Shared Page Reference Count Address u32 le           67800                 00 01 08 d8
+  [0007f4] Section Digest                 u8[20]                                 eb dd b8 ba 83 0b a5 27 98 c2 db 9e b3 6b 42 33 09 fd 87 4d
+  [10d000] Section data                   u8[5284]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_21 italian
+  [000808] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [00080c] Virtual Address                u32 le           1166848               00 11 ce 00
+  [000810] Virtual Size                   u32 le           9102                  00 00 23 8e
+  [000814] RawAddress                     u32 le           1110016               00 10 f0 00
+  [000818] RawSize                        u32 le           9102                  00 00 23 8e
+  [00081c] SectionNameAddress             u32 le           67949                 00 01 09 6d
+  [00096d] SectionName                    asciiz           italian               69 74 61 6c 69 61 6e 00
+  [000820] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000824] Head Shared Page Reference Count Address u32 le           67800                 00 01 08 d8
+  [000828] Tail Shared Page Reference Count Address u32 le           67802                 00 01 08 da
+  [00082c] Section Digest                 u8[20]                                 27 12 0d 85 84 e0 c7 c9 5a fe 94 7c 17 b6 d5 c2 e9 f7 46 b1
+  [10f000] Section data                   u8[9102]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_22 portuguese
+  [000840] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [000844] Virtual Address                u32 le           1175968               00 11 f1 a0
+  [000848] Virtual Size                   u32 le           8974                  00 00 23 0e
+  [00084c] RawAddress                     u32 le           1122304               00 11 20 00
+  [000850] RawSize                        u32 le           8974                  00 00 23 0e
+  [000854] SectionNameAddress             u32 le           67957                 00 01 09 75
+  [000975] SectionName                    asciiz           portuguese            70 6f 72 74 75 67 75 65 73 65 00
+  [000858] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [00085c] Head Shared Page Reference Count Address u32 le           67802                 00 01 08 da
+  [000860] Tail Shared Page Reference Count Address u32 le           67804                 00 01 08 dc
+  [000864] Section Digest                 u8[20]                                 58 43 83 b7 8d 3a 14 03 b7 90 ce 3f 6b 1a ae 46 d4 21 ea 3c
+  [112000] Section data                   u8[8974]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+
+SectionHeader_23 .XTLID
+  [000878] Section Flags                  u32 le           56                    00 00 00 38
+           - Writable                     bit              0
+           - Preload                      bit              0
+           - Executable                   bit              0
+           - Inserted File                bit              1
+           - Head Page Read Only          bit              1
+           - Tail Page Read Only          bit              1
+  [00087c] Virtual Address                u32 le           1184960               00 12 14 c0
+  [000880] Virtual Size                   u32 le           1936                  00 00 07 90
+  [000884] RawAddress                     u32 le           1134592               00 11 50 00
+  [000888] RawSize                        u32 le           1936                  00 00 07 90
+  [00088c] SectionNameAddress             u32 le           67968                 00 01 09 80
+  [000980] SectionName                    asciiz           .XTLID                2e 58 54 4c 49 44 00
+  [000890] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000894] Head Shared Page Reference Count Address u32 le           67804                 00 01 08 dc
+  [000898] Tail Shared Page Reference Count Address u32 le           67804                 00 01 08 dc
+  [00089c] Section Digest                 u8[20]                                 f3 a9 1a 36 0a 92 f8 a6 94 d2 2f ef b7 c8 19 8c 1a 71 20 3c
+  [115000] Section data                   u8[1936]                               00 00 00 00 8c 15 00 00 60 00 01 00 56 9e 01 00 21 00 01 00 c0 9e 01 00 13 00 01 00 36 a2 01 00 ...
+
+LibraryVersion_0 XAPILIB
+  [000988] LibraryName                    ascii[8]         XAPILIB               58 41 50 49 4c 49 42 00
+  [000990] Major Version                  u16 le           1                     00 01
+  [000992] Minor Version                  u16 le           0                     00 00
+  [000994] Build Version                  u16 le           5659                  16 1b
+  [000996] Library Flags                  u16 le           16385                 40 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LibraryVersion_1 XSNDTRK
+  [000998] LibraryName                    ascii[8]         XSNDTRK               58 53 4e 44 54 52 4b 00
+  [0009a0] Major Version                  u16 le           1                     00 01
+  [0009a2] Minor Version                  u16 le           0                     00 00
+  [0009a4] Build Version                  u16 le           5659                  16 1b
+  [0009a6] Library Flags                  u16 le           8193                  20 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              1
+           - Debug Build                  bit              0
+
+LibraryVersion_2 DOWNLDR
+  [0009a8] LibraryName                    ascii[8]         DOWNLDR               44 4f 57 4e 4c 44 52 00
+  [0009b0] Major Version                  u16 le           1                     00 01
+  [0009b2] Minor Version                  u16 le           0                     00 00
+  [0009b4] Build Version                  u16 le           5659                  16 1b
+  [0009b6] Library Flags                  u16 le           20481                 50 01
+           - QFEVersion                   bit              4097
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LibraryVersion_3 LIBCMT
+  [0009b8] LibraryName                    ascii[8]         LIBCMT                4c 49 42 43 4d 54 00 00
+  [0009c0] Major Version                  u16 le           1                     00 01
+  [0009c2] Minor Version                  u16 le           0                     00 00
+  [0009c4] Build Version                  u16 le           5659                  16 1b
+  [0009c6] Library Flags                  u16 le           16385                 40 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LibraryVersion_4 XBOXKRNL
+  [0009c8] LibraryName                    ascii[8]         XBOXKRNL              58 42 4f 58 4b 52 4e 4c
+  [0009d0] Major Version                  u16 le           1                     00 01
+  [0009d2] Minor Version                  u16 le           0                     00 00
+  [0009d4] Build Version                  u16 le           5659                  16 1b
+  [0009d6] Library Flags                  u16 le           16385                 40 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LibraryVersion_5 D3D8
+  [0009d8] LibraryName                    ascii[8]         D3D8                  44 33 44 38 00 00 00 00
+  [0009e0] Major Version                  u16 le           1                     00 01
+  [0009e2] Minor Version                  u16 le           0                     00 00
+  [0009e4] Build Version                  u16 le           5659                  16 1b
+  [0009e6] Library Flags                  u16 le           16385                 40 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LibraryVersion_6 XONLINES
+  [0009e8] LibraryName                    ascii[8]         XONLINES              58 4f 4e 4c 49 4e 45 53
+  [0009f0] Major Version                  u16 le           1                     00 01
+  [0009f2] Minor Version                  u16 le           0                     00 00
+  [0009f4] Build Version                  u16 le           5659                  16 1b
+  [0009f6] Library Flags                  u16 le           8193                  20 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              1
+           - Debug Build                  bit              0
+
+LibraryVersion_7 XACTENG
+  [0009f8] LibraryName                    ascii[8]         XACTENG               58 41 43 54 45 4e 47 00
+  [000a00] Major Version                  u16 le           1                     00 01
+  [000a02] Minor Version                  u16 le           0                     00 00
+  [000a04] Build Version                  u16 le           5659                  16 1b
+  [000a06] Library Flags                  u16 le           16385                 40 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LibraryVersion_8 DSOUND
+  [000a08] LibraryName                    ascii[8]         DSOUND                44 53 4f 55 4e 44 00 00
+  [000a10] Major Version                  u16 le           1                     00 01
+  [000a12] Minor Version                  u16 le           0                     00 00
+  [000a14] Build Version                  u16 le           5659                  16 1b
+  [000a16] Library Flags                  u16 le           16385                 40 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LibraryVersion_9 D3DX8
+  [000a18] LibraryName                    ascii[8]         D3DX8                 44 33 44 58 38 00 00 00
+  [000a20] Major Version                  u16 le           1                     00 01
+  [000a22] Minor Version                  u16 le           0                     00 00
+  [000a24] Build Version                  u16 le           5659                  16 1b
+  [000a26] Library Flags                  u16 le           16385                 40 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LibraryVersion_10 XGRAPHC
+  [000a28] LibraryName                    ascii[8]         XGRAPHC               58 47 52 41 50 48 43 00
+  [000a30] Major Version                  u16 le           1                     00 01
+  [000a32] Minor Version                  u16 le           0                     00 00
+  [000a34] Build Version                  u16 le           5659                  16 1b
+  [000a36] Library Flags                  u16 le           16385                 40 01
+           - QFEVersion                   bit              1
+           - Approved                     bit              2
+           - Debug Build                  bit              0
+
+LogoBitmap
+  [000a90] Logo bitmap                    u8[690]                                07 33 ad 03 07 53 ad 03 a9 03 ea 00 03 73 a7 03 32 00 b3 fd 03 05 03 fd d3 43 f9 ea 00 03 e3 f9 ...
+
+0x11480 (70784) unmapped bytes

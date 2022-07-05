@@ -113,6 +113,8 @@ malcat - has some form of binary templates
 http://www.nyangau.org/be/be.htm - TODO evaluate
 
 
+http://wiki.xentax.com/index.php/Category:File_Format - Wiki documentation of many game file formats
+
 
 https://davidkoloski.me/blog/rkyv-is-faster-than/
     TODO evaluate rust relatives mentioned here:

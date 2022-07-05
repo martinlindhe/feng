@@ -1,0 +1,9 @@
+# templates/fonts/ttf.yml
+Header
+  [000000] Magic                          u32 be           65536                 00 01 00 00
+  [000004] NumTables                      u16 be           17                    00 11
+  [000006] SearchRange                    u16 be           256                   01 00
+  [000008] EntrySelector                  u16 be           4                     00 04
+  [00000a] RangeShift                     u16 be           16                    00 10
+
+0x1009c (65692) unmapped bytes

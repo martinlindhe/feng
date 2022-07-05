@@ -77,6 +77,10 @@ input:
   #    - layout36.xml.zlib
   #    - layout95.xml.zlib
 
+  - folder: fonts/ttf
+    files:
+      - ttf_001.ttf
+
   - folder: games/everquest_pfs
     files:
       - butcher2_chr.s3d
@@ -305,6 +309,7 @@ input:
     files:
       # XXX find smaller samples
       - default.xbe
+      - downloader.xbe
 
   - folder: systems/xbox/xbox_xpr
     files:

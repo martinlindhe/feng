@@ -1,0 +1,25 @@
+# STATUS: 1%
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/TTF.bt
+
+kind: font
+name:  TrueType font
+extensions: [.ttf]
+mime: font/ttf
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: 00 01 00 00
+
+structs:
+  header:
+    u32 Magic: 00 01 00 00
+    u16 NumTables: ??
+    u16 SearchRange: ??
+    u16 EntrySelector: ??
+    u16 RangeShift: ??
+
+layout:
+  - header Header
