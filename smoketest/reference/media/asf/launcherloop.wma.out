@@ -1,0 +1,5 @@
+# templates/media/asf.yml
+Header
+  [000000] Signature                      u8[16]                                 30 26 b2 75 8e 66 cf 11 a6 d9 00 aa 00 62 ce 6c
+
+0xb6f51 (749393) unmapped bytes

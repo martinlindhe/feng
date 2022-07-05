@@ -1,0 +1,24 @@
+# STATUS: 1%
+
+references:
+  - https://github.com/martinlindhe/formats/blob/master/parse/av/av_asf.go
+
+software:
+  - ffmpeg
+
+kind: media
+name: Windows Media Audio
+extensions: [.asf, .wma, .wmv]
+mime: xxx     # video/x-ms-wmv, audio/x-ms-wma
+endian: big   # XXX
+
+magic:
+  - offset: 0000
+    match: 30 26 B2 75 8E 66 CF 11 A6 D9 00 AA 00 62 CE 6C
+
+structs:
+  header:
+    u8[16] Signature: 30 26 B2 75 8E 66 CF 11 A6 D9 00 AA 00 62 CE 6C   # asf Object Signature 
+
+layout:
+  - header Header

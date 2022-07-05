@@ -264,6 +264,12 @@ input:
       - Darkwood_2.5.sit
       #- macbinary_header_fixer.sit # XXX no match, has some mac os meta-data header ?
 
+  - folder: media/asf
+    files:
+      - asf_001.wma
+      - asf_002.wmv
+      - launcherloop.wma
+
   - folder: systems/gameboy
     files:
       - mrdig.gbc
