@@ -2,8 +2,8 @@
 Header
   [000000] Signature                      ascii[2]         BZ                    42 5a
   [000002] Encoding                       ascii            h                     68
-           - Huffman                      eq               104
+           - Huffman                      eq               h
   [000003] Compression level              ascii            9                     39
-           - Best                         eq               57
+           - Level 9 (Best)               eq               9
 
 0x0029 (41) unmapped bytes

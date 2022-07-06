@@ -17,10 +17,20 @@ structs:
   header:
     ascii[2] Signature: c'BZ'
     ascii Encoding:
+      # only huffman is known
       eq c'h': Huffman
+      default: invalid
     ascii Compression level:
-      eq c'0': Stored
-      eq c'9': Best
+      eq c'0': Level 0 (Stored)
+      eq c'1': Level 1
+      eq c'2': Level 2
+      eq c'3': Level 3
+      eq c'4': Level 4
+      eq c'5': Level 5
+      eq c'6': Level 6
+      eq c'7': Level 7
+      eq c'8': Level 8
+      eq c'9': Level 9 (Best)
 
 layout:
   - header Header

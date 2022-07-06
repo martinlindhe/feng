@@ -111,7 +111,11 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 	}
 
 	for _, child := range field.MatchedPatterns {
-		res += fmt.Sprintf("           - %-28s %-16s %d\n", child.Label, child.Operation, child.Value)
+		pretty := fmt.Sprintf("%d", child.Value)
+		if child.Parsed != "" {
+			pretty = child.Parsed
+		}
+		res += fmt.Sprintf("           - %-28s %-16s %s\n", child.Label, child.Operation, pretty)
 	}
 	return res
 }

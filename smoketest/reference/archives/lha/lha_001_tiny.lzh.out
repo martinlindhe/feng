@@ -4,7 +4,7 @@ Header
   [000001] Checksum                       u8               0                     00
   [000002] Signature                      ascii[3]         -lh                   2d 6c 68
   [000005] Compression method             ascii            0                     30
-           - None                         eq               48
+           - None                         eq               0
   [000006] Signature                      ascii            -                     2d
   [000007] CompressedSize                 u32 le           6                     00 00 00 06
   [00000b] Original size                  u32 le           6                     00 00 00 06

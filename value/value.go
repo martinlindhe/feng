@@ -259,6 +259,9 @@ type MatchedPattern struct {
 
 	// parsed value of bit field
 	Value uint64
+
+	// parsed value for display
+	Parsed string
 }
 
 func (df *DataField) SingleUnitSize() uint64 {

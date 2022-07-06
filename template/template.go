@@ -178,7 +178,10 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 				log.Printf("--- %s %s: bitmask %02x %08b on value %02x %08b == res %02x %08b",
 					mp.Operation, es.Field.Kind, bitmask, bitmask, actual, actual, val, val)
 			}
-			res = append(res, value.MatchedPattern{Label: mp.Label, Operation: mp.Operation, Value: val})
+			res = append(res, value.MatchedPattern{
+				Label:     mp.Label,
+				Operation: mp.Operation,
+				Value:     val})
 
 		case "eq":
 			patternData, err := value.ParseHexString(mp.Pattern)
@@ -192,7 +195,11 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 				log.Printf("--- %s %s: %08x == %08x is %v (%s)", mp.Operation, es.Field.Kind, actual, pattern, match, mp.Label)
 			}
 			if match {
-				res = append(res, value.MatchedPattern{Label: mp.Label, Operation: mp.Operation, Value: actual})
+				res = append(res, value.MatchedPattern{
+					Label:     mp.Label,
+					Operation: mp.Operation,
+					Value:     actual,
+					Parsed:    es.Field.Present(b)})
 			}
 
 		case "default":
