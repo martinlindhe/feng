@@ -285,11 +285,11 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		switch es.Field.Kind {
 		case "label":
 			// "label: APP0". augment node with extra info
-			var err error
-			fs.decoration, err = fl.MatchedValue(es.Pattern.Value, df)
+			val, err := fl.MatchedValue(es.Pattern.Value, df)
 			if err != nil {
 				panic(err)
 			}
+			fs.decoration = strings.TrimSpace(val)
 
 		case "parse":
 			// break parser

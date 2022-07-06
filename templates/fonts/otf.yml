@@ -1,13 +1,14 @@
-# STATUS: 1%
+# STATUS: 30%
 
 references:
+  - https://docs.microsoft.com/en-us/typography/opentype/spec/
   - https://en.wikipedia.org/wiki/OpenType
 
 kind: font
 name: OpenType font
 extensions: [.otf, .otc]
 mime: font/otf
-endian: big # XXX
+endian: big
 
 magic:
   - offset: 0000
@@ -16,6 +17,23 @@ magic:
 structs:
   header:
     u32 Magic: c'OTTO'
+    u16 NumTables: ??
+    u16 searchRange: ??
+    u16 entrySelector: ??
+    u16 rangeShift: ??
+
+  table_record:
+    ascii[4] Tag: ??
+    label: self.Tag
+
+    u32 Checksum: ??
+    u32 Offset: ??
+    u32 Length: ??
+
+    offset: self.Offset
+    u8[self.Length] Data: ??
+    offset: restore
 
 layout:
   - header Header
+  - table_record[Header.NumTables] TableRecord
