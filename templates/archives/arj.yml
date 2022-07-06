@@ -1,0 +1,62 @@
+# STATUS: 1%
+#
+
+references:
+  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_arj.go
+
+kind: archive
+name: ARJ Archive
+extensions: [.arj]
+endian: little  # XXX
+
+magic:
+  - offset: 0000
+    match: 60 ea
+
+structs:
+  header:
+    u8[2] Signature: 60 ea
+    u16 HeaderSize: ??
+    u8 Size including extra data: ??
+    u8 Archiver version: ??
+    u8 Minimum archiver version: ??
+    u8 Host OS:
+      eq 00: MS-DOS
+      eq 01: PRIMOS
+      eq 02: Unix
+      eq 03: Amiga
+      eq 04: Mac-OS
+      eq 05: OS/2
+      eq 06: Apple GS
+      eq 07: Atari ST
+      eq 08: NEXT
+      eq 09: VAX VMS
+      eq 0a: Win95
+      eq 0b: Win32
+    u8 Flags:
+      bit b0000_0010: garbled
+      bit b0000_0100: ansipage # aka OLD_SECURED_FLAG
+      bit b0000_1000: arjprot
+      bit b0001_0000: pathsym
+      bit b0010_0000: backup
+      bit b0100_0000: secured
+      bit b1000_0000: altname
+    u8 Security version: ??
+    u8 File type: ?? # XXX must equal 2
+    u8 Reserved: ??
+    u32 Creation time: ?? # XXX parse.ArjDateTime
+    u32 Modified time: ?? # XXX parse.ArjDateTime
+    u32 Secured archive size: ??
+    u32 Security envelope offset: ??
+    u16 Filespec position in filename: ??
+    u16 Security envelope size: ??
+    u8 Encryption:
+      eq 00: None
+      eq 01: Old
+      eq 02: New
+      eq 03: Reserved
+      eq 04: 40 bit key GOST
+    u8 Last chapter: ??
+
+layout:
+  - header Header

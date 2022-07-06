@@ -1,0 +1,31 @@
+# templates/archives/arj.yml
+Header
+  [000000] Signature                      u8[2]                                  60 ea
+  [000002] HeaderSize                     u16 le           1248                  04 e0
+  [000004] Size including extra data      u8               30                    1e
+  [000005] Archiver version               u8               6                     06
+  [000006] Minimum archiver version       u8               1                     01
+  [000007] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [000008] Flags                          u8               16                    10
+           - garbled                      bit              0
+           - ansipage                     bit              0
+           - arjprot                      bit              0
+           - pathsym                      bit              1
+           - backup                       bit              0
+           - secured                      bit              0
+           - altname                      bit              0
+  [000009] Security version               u8               0                     00
+  [00000a] File type                      u8               2                     02
+  [00000b] Reserved                       u8               36                    24
+  [00000c] Creation time                  u32 le           451033124             1a e2 38 24
+  [000010] Modified time                  u32 le           451033124             1a e2 38 24
+  [000014] Secured archive size           u32 le           0                     00 00 00 00
+  [000018] Security envelope offset       u32 le           0                     00 00 00 00
+  [00001c] Filespec position in filename  u16 le           21                    00 15
+  [00001e] Security envelope size         u16 le           0                     00 00
+  [000020] Encryption                     u8               0                     00
+           - None                         eq
+  [000021] Last chapter                   u8               0                     00
+
+0x2d98 (11672) unmapped bytes

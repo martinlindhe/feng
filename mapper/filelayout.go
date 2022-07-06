@@ -111,32 +111,35 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 	}
 
 	for _, child := range field.MatchedPatterns {
-		pretty := fmt.Sprintf("%d", child.Value)
-		if child.Operation == "eq" && child.Parsed != "" {
-			pretty = child.Parsed
-		}
-
+		pretty := ""
 		raw := ""
-		switch child.Ones {
-		case 0, 1, 2, 3:
-		case 4, 5, 6, 7, 8:
-			raw = fmt.Sprintf("%02x", child.Value)
-		case 13:
-			raw = fmt.Sprintf("%04x", child.Value)
-		case 24:
-			raw = fmt.Sprintf("%06x", child.Value)
-		case 31, 32:
-			raw = fmt.Sprintf("%08x", child.Value)
-		default:
-			panic(fmt.Sprintf("handle bit count %d", child.Ones))
-		}
+		if child.Operation != "eq" {
+			pretty = fmt.Sprintf("%d", child.Value)
+			if child.Parsed != "" {
+				pretty = child.Parsed
+			}
 
-		// add a space between each hex byte
-		rawParts := []string{}
-		for i := 0; i < len(raw); i += 2 {
-			rawParts = append(rawParts, raw[i:i+2])
+			switch child.Ones {
+			case 0, 1, 2, 3:
+			case 4, 5, 6, 7, 8:
+				raw = fmt.Sprintf("%02x", child.Value)
+			case 13:
+				raw = fmt.Sprintf("%04x", child.Value)
+			case 24:
+				raw = fmt.Sprintf("%06x", child.Value)
+			case 31, 32:
+				raw = fmt.Sprintf("%08x", child.Value)
+			default:
+				panic(fmt.Sprintf("handle bit count %d", child.Ones))
+			}
+
+			// add a space between each hex byte
+			rawParts := []string{}
+			for i := 0; i < len(raw); i += 2 {
+				rawParts = append(rawParts, raw[i:i+2])
+			}
+			raw = strings.Join(rawParts, " ")
 		}
-		raw = strings.Join(rawParts, " ")
 
 		line := fmt.Sprintf("           - %-28s %-16s %-21s %s", child.Label, child.Operation, pretty, raw)
 		res += strings.TrimRight(line, " ") + "\n"
