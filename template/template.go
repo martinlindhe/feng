@@ -289,7 +289,10 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 
 			default:
-				pattern, err := value.ParseDataPattern(val)
+				if val == `GIF87a` {
+					//	panic("1st")
+				}
+				pattern, err := value.ParseDataPattern(val) // XXX evaluate only once
 				if err != nil {
 					log.Printf("%#v", field)
 					log.Fatalf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)

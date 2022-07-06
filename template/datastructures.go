@@ -15,7 +15,7 @@ type DataStructure struct {
 	Constants []EvaluatedConstant
 
 	// evaluated file structs
-	structs []evaluatedStruct
+	EvaluatedStructs []evaluatedStruct
 
 	Layout []value.DataField
 
@@ -71,20 +71,20 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 	}
 
 	return &DataStructure{
-		Constants:  constants,
-		structs:    structs,
-		Layout:     layout,
-		Magic:      template.Magic,
-		NoMagic:    template.NoMagic,
-		Endian:     template.Endian,
-		Extensions: template.Extensions,
-		BaseName:   basename,
+		Constants:        constants,
+		EvaluatedStructs: structs,
+		Layout:           layout,
+		Magic:            template.Magic,
+		NoMagic:          template.NoMagic,
+		Endian:           template.Endian,
+		Extensions:       template.Extensions,
+		BaseName:         basename,
 	}, nil
 }
 
 // looks up layout name from sections
 func (ds *DataStructure) FindStructure(df *value.DataField) (*evaluatedStruct, error) {
-	for _, str := range ds.structs {
+	for _, str := range ds.EvaluatedStructs {
 		if df.Kind == str.Name {
 			return &str, nil
 		}

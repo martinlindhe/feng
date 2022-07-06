@@ -1,6 +1,6 @@
 # templates/images/gif.yml
 Header
-  [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
+  [000000] Signature                      ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
            - GIF89a                       eq
 

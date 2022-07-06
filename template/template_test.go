@@ -97,7 +97,7 @@ layout:
 
 	assert.Equal(t, &DataStructure{
 		Constants: []EvaluatedConstant{},
-		structs: []evaluatedStruct{
+		EvaluatedStructs: []evaluatedStruct{
 			{Name: "header", Expressions: []Expression{
 				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: true, Pattern: []uint8{0xff, 0xd8}, Value: ""}, Children: []Expression{}, MatchPatterns: []MatchPattern{}}},
 			},

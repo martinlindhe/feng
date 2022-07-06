@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/k0kubun/pp/v3"
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
@@ -508,6 +509,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			customStruct, err := fl.GetStruct(es.Field.Kind)
 			if err != nil {
 				// this error is always critical. it means the parsed template is not working
+				pp.Print(fl.DS)
 				log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
 			}
 

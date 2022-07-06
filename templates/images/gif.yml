@@ -28,16 +28,10 @@ types:
     u8 G: ??
     u8 B: ??
 
-  data_sub_block:
-    u8 Size: ??
-    u8[self.Size] Image data: ??
-    if self.Size == 0:
-      data: eos  # FIXME TODO - XXX marks end of stream
-
 structs:
   header:
-    ascii[4] Signature 1: c'GIF8'
-    u16 Version:
+    ascii[4] Signature: c'GIF8'
+    u16 Version: # TODO pattern match on ascii[2], u8[2]
       eq 6137: GIF87a
       eq 6139: GIF89a
       default: invalid
@@ -56,6 +50,14 @@ structs:
     if self.ScreenDescriptor & GlobalColorTablePresent:
       # FIXME use rgb type. rgb struct is 3 bytes. 4 fields = 12 bytes
       u8[3 * (2 << (self.ScreenDescriptor & 7))] Global color table: ??
+
+  # XXX need to be able to evaluate this custom struct from "block" struct. XXX or as a type?
+  data_block:
+    u8 DataSize: ??
+    u8[self.DataSize] Data: ??
+    if self.DataSize == 1:
+      parse: stop       # XXX mark end of slice parsing, not the whole file
+      #data: eos  # FIXME TODO - XXX marks end of stream
 
   block:
     u8 BlockType:
@@ -84,6 +86,9 @@ structs:
         u8 Transparent color index: ??
         u8 Block terminator: "00"
 
+    if self.BlockType == BLOCK_TRAILER:
+      label: Trailer
+
     if self.BlockType == BLOCK_IMAGE:
       label: ImageDescriptor # BLOCK_IMAGE
       u16 Left position: ??
@@ -104,13 +109,15 @@ structs:
       # XXX series of data blocks. last block is one with Size==0
       # needed to parse gif_87a_002_apples.gif
       u8 DataSize: ??
-      u8[self.DataSize] Data: ??
-      u8 BlockTerminator: "00"
 
-    if self.BlockType == BLOCK_TRAILER:
-      label: Trailer
+      u8[self.DataSize] Data: ??
+      u8 BlockTerminator: "00"      # XXX breaks without this line ???
+
+      # XXX TODO IMPLEMENT THIS:
+      #data_block[] DataBlock: ??
 
 layout:
   - header Header
   - logical_screen_descriptor LogicalScreenDescriptor
   - block[] Block
+

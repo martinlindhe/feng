@@ -36,9 +36,16 @@ func ParseDataPattern(in string) (DataPattern, error) {
 		return dp, nil
 	}
 	value, err := ParseHexString(in)
-	dp.Pattern = value
-	dp.Known = true
-	return dp, err
+	if err == nil {
+		dp.Pattern = value
+		dp.Known = true
+	} else {
+		dp.Value = in
+	}
+	if DEBUG {
+		log.Printf("ParseDataPattern: '%s' => '%s'", in, value)
+	}
+	return dp, nil
 }
 
 type DataPattern struct {

@@ -6,6 +6,7 @@ require (
 	github.com/alecthomas/kong v0.5.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/fatih/color v1.13.0
+	github.com/k0kubun/pp/v3 v3.1.0 // indirect
 	github.com/maja42/goval v1.2.1
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/stretchr/testify v1.7.0
