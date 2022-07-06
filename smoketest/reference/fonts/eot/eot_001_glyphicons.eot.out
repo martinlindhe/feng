@@ -1,26 +1,55 @@
 # templates/fonts/eot.yml
 Header
-  [000000] EOT size                       u32 be           2672689152            9f 4e 00 00
-  [000004] Font data size                 u32 be           1095565312            41 4d 00 00
-  [000008] Version                        u32 be           33554944              02 00 02 00
-  [00000c] Flags                          u32 be           67108864              04 00 00 00
-  [000010] Font panose                    u8[10]                                 00 00 05 00 00 00 00 00 00 00
+  [000000] TotalFileSize                  u32 le           20127                 00 00 4e 9f
+  [000004] FontDataSize                   u32 le           19777                 00 00 4d 41
+  [000008] Version                        u32 le           131074                00 02 00 02
+           - 2.2                          eq
+  [00000c] Flags                          u32 le           4                     00 00 00 04
+  [000010] FontPANOSE                     u8[10]                                 00 00 05 00 00 00 00 00 00 00
   [00001a] Charset                        u8               1                     01
+           - Default charset              eq
   [00001b] Italic                         u8               0                     00
-  [00001c] Weight                         u32 be           2415984640            90 01 00 00
-  [000020] Fs type                        u16 be           1024                  04 00
+  [00001c] Weight                         u32 le           400                   00 00 01 90
+  [000020] Fs type                        u16 le           4                     00 04
+           - Usage permissions            bit              4                     04
+           - Reserved1                    bit              0                     00
+           - No subsetting                bit              0
+           - Bitmap embedding only        bit              0
+           - Reserved2                    bit              0                     00
   [000022] Magic                          u8[2]                                  4c 50
-  [000024] Unicode range 1                u32 be           0                     00 00 00 00
-  [000028] unicode range 2                u32 be           2                     00 00 00 02
-  [00002c] Unicode range 3                u32 be           0                     00 00 00 00
-  [000030] Unicode range 4                u32 be           0                     00 00 00 00
-  [000034] Code page range 1              u32 be           16777216              01 00 00 00
-  [000038] Code page range 2              u32 be           0                     00 00 00 00
-  [00003c] Reserved 1                     u32 be           655523628             27 12 7f 2c
-  [000040] Reserved 2                     u32 be           0                     00 00 00 00
-  [000044] Reserved 3                     u32 be           0                     00 00 00 00
-  [000048] Reserved 4                     u32 be           0                     00 00 00 00
-  [00004c] Padding                        u16 be           0                     00 00
-  [00004e] Family name size               u16 be           0                     00 00
+  [000024] Unicode range 1                u32 le           0                     00 00 00 00
+  [000028] Unicode range 2                u32 le           33554432              02 00 00 00
+  [00002c] Unicode range 3                u32 le           0                     00 00 00 00
+  [000030] Unicode range 4                u32 le           0                     00 00 00 00
+  [000034] Code page range 1              u32 le           1                     00 00 00 01
+  [000038] Code page range 2              u32 le           0                     00 00 00 00
+  [00003c] ChecksumAdjustment             u32 le           746525223             2c 7f 12 27
+  [000040] Reserved 1                     u32 le           0                     00 00 00 00
+  [000044] Reserved 2                     u32 le           0                     00 00 00 00
+  [000048] Reserved 3                     u32 le           0                     00 00 00 00
+  [00004c] Reserved 4                     u32 le           0                     00 00 00 00
+  [000050] Padding1                       u16 le           0                     00 00
+  [000052] FamilyNameSize                 u16 le           40                    00 28
+  [000054] FamilyName                     utf16[20] le     GLYPHICONS Halflings  00 47 00 4c 00 59 00 50 00 48 00 49 00 43 00 4f 00 4e 00 53 00 20 00 48 00 61 00 6c 00 66 00 6c ...
+  [00007c] Padding2                       u16 le           0                     00 00
+  [00007e] StyleNameSize                  u16 le           14                    00 0e
+  [000080] StyleName                      utf16[7] le      Regular               00 52 00 65 00 67 00 75 00 6c 00 61 00 72
+  [00008e] Padding3                       u16 le           0                     00 00
+  [000090] VersionNameSize                u16 le           120                   00 78
+  [000092] VersionName                    utf16[60] le     Version 1.009;PS 001.009;hotconv 1.0.70;makeotf.lib2.5.58329 00 56 00 65 00 72 00 73 00 69 00 6f 00 6e 00 20 00 31 00 2e 00 30 00 30 00 39 00 3b 00 50 00 53 ...
+  [00010a] Padding4                       u16 le           0                     00 00
+  [00010c] FullNameSize                   u16 le           56                    00 38
+  [00010e] FullName                       utf16[28] le     GLYPHICONS Halflings Regular 00 47 00 4c 00 59 00 50 00 48 00 49 00 43 00 4f 00 4e 00 53 00 20 00 48 00 61 00 6c 00 66 00 6c ...
+  [000146] Padding5                       u16 le           0                     00 00
+  [000148] RootStringSize                 u16 le           0                     00 00
+  [00014a] RootStringChecksum             u32 le           1346851650            50 47 53 42
+  [00014e] EUDC CodePage                  u32 le           0                     00 00 00 00
+  [000152] Padding6                       u16 le           0                     00 00
+  [000154] SignatureSize                  u16 le           0                     00 00
+  [000156] EUDC flags                     u32 le           0                     00 00 00 00
+  [00015a] EUDC font size                 u32 le           0                     00 00 00 00
 
-0x4e4f (20047) unmapped bytes
+FontData
+  [00015e] Font data                      u8[19777]                              03 00 a9 dc 00 4d 13 00 4d 19 00 46 ee 14 cd e9 8c cf d2 11 d9 a3 28 75 1b ca 8c 3c 01 30 44 e3 ...
+
+EOF

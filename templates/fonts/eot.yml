@@ -1,13 +1,17 @@
-# STATUS: 1%
+# STATUS: 70% - samples map fully
 
 references:
+  - https://www.w3.org/Submission/2008/SUBM-EOT-20080305/
   - https://en.wikipedia.org/wiki/Embedded_OpenType
 
+software:
+  - https://www.w3.org/Tools/eot-utils/
+
 kind: font
-name: Embedded OpenType font
+name: Microsoft Embedded OpenType font
 extensions: [.eot]
-mime: font/otf
-endian: big # XXX
+mime: application/vnd.ms-fontobject
+endian: little
 
 magic:
   - offset: 0022
@@ -15,31 +19,66 @@ magic:
 
 structs:
   header:
-    #u8[2] Magic: 4c 50
-
-    # XXX Version 0x00010000
-    u32 EOT size: ??
-    u32 Font data size: ??
-    u32 Version: ??
+    u32 TotalFileSize: ??
+    u32 FontDataSize: ??
+    u32 Version:
+      eq 0001_0000: "1.0"
+      eq 0002_0001: "2.1"
+      eq 0002_0002: "2.2"
     u32 Flags: ??
-    u8[10] Font panose: ??
-    u8 Charset: ??    # XXX decode
+    u8[10] FontPANOSE: ??
+    u8 Charset:
+      eq 01: Default charset
     u8 Italic: ??
     u32 Weight: ??
-    u16 Fs type: ??
+    u16 Fs type:
+      bit b00000000_00001111: Usage permissions
+      bit b00000000_11110000: Reserved1
+      bit b00000001_00000000: No subsetting
+      bit b00000010_00000000: Bitmap embedding only
+      bit b11111100_00000000: Reserved2
     u8[2] Magic: 4c 50
     u32 Unicode range 1: ??
-    u32 unicode range 2: ??
+    u32 Unicode range 2: ??
     u32 Unicode range 3: ??
     u32 Unicode range 4: ??
     u32 Code page range 1: ??
     u32 Code page range 2: ??
+    u32 ChecksumAdjustment: ??
     u32 Reserved 1: ??
     u32 Reserved 2: ??
     u32 Reserved 3: ??
     u32 Reserved 4: ??
-    u16 Padding: ??
-    u16 Family name size: ??
+    u16 Padding1: ??
+
+    u16 FamilyNameSize: ??
+    utf16[self.FamilyNameSize >> 1] FamilyName: ??
+    u16 Padding2: ??
+
+    u16 StyleNameSize: ??
+    utf16[self.StyleNameSize >> 1] StyleName: ??
+    u16 Padding3: ??
+
+    u16 VersionNameSize: ??
+    utf16[self.VersionNameSize >> 1] VersionName: ??
+    u16 Padding4: ??
+
+    u16 FullNameSize: ??
+    utf16[self.FullNameSize >> 1] FullName: ??
+    u16 Padding5: ??
+
+    u16 RootStringSize: ??
+    u32 RootStringChecksum: ??
+    u32 EUDC CodePage: ??
+    u16 Padding6: ??
+
+    u16 SignatureSize: ??
+    u32 EUDC flags: ??
+    u32 EUDC font size: ??
+
+  font_data:
+    u8[Header.FontDataSize] Font data: ??
 
 layout:
   - header Header
+  - font_data FontData
