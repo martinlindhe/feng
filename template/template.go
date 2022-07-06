@@ -171,6 +171,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 			}
 			bitmask := value.AsUint64(es.Field.Kind, bitmaskSlice)
 			masked := bitmask & actual
+			ones := bits.OnesCount(uint(bitmask))
 			shift := bits.TrailingZeros64(bitmask)
 			val := masked >> shift
 
@@ -181,7 +182,8 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 			res = append(res, value.MatchedPattern{
 				Label:     mp.Label,
 				Operation: mp.Operation,
-				Value:     val})
+				Value:     val,
+				Ones:      ones})
 
 		case "eq":
 			patternData, err := value.ParseHexString(mp.Pattern)

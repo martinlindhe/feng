@@ -7,7 +7,7 @@ Header
   [00000c] Block header size              u8               2                     02
   [00000d] Block flags                    u8               0                     00
            - Number of filters            bit              0
-           - Reserved                     bit              0
+           - Reserved                     bit              0                     00
            - Compressed Size field present bit              0
            - Uncompressed Size field present bit              0
   [00000e] CRC32                          u32 be           553720832             21 01 1c 00

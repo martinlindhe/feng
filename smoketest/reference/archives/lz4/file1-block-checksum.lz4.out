@@ -11,17 +11,17 @@ Header
            - BlockIndependence            bit              1
            - Version                      bit              1
   [000005] blockDescriptor                u8               64                    40
-           - Reserved                     bit              0
+           - Reserved                     bit              0                     00
            - BlockMaximumSize             bit              4
            - Reserved                     bit              0
   [000006] HeaderChecksum                 u8               189                   bd
   [000007] DataSize                       u32 le           2147483654            80 00 00 06
-           - DATA_SIZE                    bit              6
+           - DATA_SIZE                    bit              6                     00 00 00 06
            - Uncompressed                 bit              1
   [00000b] Data                           u8[6]                                  6b 75 6b 65 6e 0a
   [000011] BlockChecksum                  u32 le           2882547001            ab d0 2d 39
   [000015] DataSize2                      u32 le           0                     00 00 00 00
-           - DATA_SIZE                    bit              0
+           - DATA_SIZE                    bit              0                     00 00 00 00
            - Uncompressed                 bit              0
   [000019] ContentChecksum                u32 le           2882547001            ab d0 2d 39
 

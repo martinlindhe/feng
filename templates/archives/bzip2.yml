@@ -1,6 +1,10 @@
 # STATUS: 1%
+#
+# HI: need bit-sized fields in order to correctly parse format
 
 references:
+  - https://en.wikipedia.org/wiki/Bzip2#File_format
+  - https://github.com/dsnet/compress/blob/master/doc/bzip2-format.pdf
   - https://golang.org/src/compress/bzip2/bzip2.go
 
 kind: archive
@@ -32,6 +36,28 @@ structs:
       eq c'8': Level 8
       eq c'9': Level 9 (Best)
 
-layout:
-  - header Header
+  block:
+    u8[6] BlockMagic: 31 41 59 26 53 59
+    u32 Block CRC: ??
 
+    # WHAT FOLLOWS IS A BIT-ALIGNED STREAM:
+    # TODO IMPLEMENT BIT SIZED FIELDS
+    #.randomised:1                   = 0=>normal, 1=>randomised (deprecated)
+    #.origPtr:24                     = starting pointer into BWT for after untransform
+    #.huffman_used_map:16            = bitmap, of ranges of 16 bytes, present/not present
+    #.huffman_used_bitmaps:0..256    = bitmap, of symbols used, present/not present (multiples of 16)
+    #.huffman_groups:3               = 2..6 number of different Huffman tables in use
+    #.selectors_used:15              = number of times that the Huffman tables are swapped (each 50 symbols)
+    #*.selector_list:1..6            = zero-terminated bit runs (0..62) of MTF'ed Huffman table (*selectors_used)
+    #.start_huffman_length:5         = 0..20 starting bit length for Huffman deltas
+    #*.delta_bit_length:1..40        = 0=>next symbol; 1=>alter length
+    #                                                { 1=>decrement length;  0=>increment length } (*(symbols+2)*groups)
+    #.contents:2..∞                  = Huffman encoded data stream until end of block (max. 7372800 bit)
+    #
+    #.eos_magic:48                   = 0x177245385090 (BCD sqrt(pi))
+    #.crc:32                         = checksum for whole stream
+    #.padding:0..7                   = align to whole byte
+
+layout:
+  - header BZipFile
+  - block Block
