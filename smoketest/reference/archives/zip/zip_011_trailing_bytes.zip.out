@@ -2,11 +2,11 @@
 Chunk_0 ZIPFILERECORD
   [000000] Signature                      ascii[2]         PK                    50 4b
   [000002] Type                           u16 le           1027                  04 03
-           - ZIPFILERECORD                eq               1027
+           - ZIPFILERECORD                eq
   [000004] Version needed to extract      u16 le           20                    00 14
   [000006] Flags                          u16 le           0                     00 00
   [000008] Compression                    u16 le           8                     00 08
-           - Deflated                     eq               8
+           - Deflated                     eq
   [00000a] Modification time              dostime le       04:29:42              23 b5
   [00000c] Modification date              dosdate le       1993-06-27            1a db
   [00000e] CRC32 of uncompressed data     u32 le           1573800530            5d ce 4a 52
@@ -20,11 +20,11 @@ Chunk_0 ZIPFILERECORD
 Chunk_1 ZIPFILERECORD
   [00007c] Signature                      ascii[2]         PK                    50 4b
   [00007e] Type                           u16 le           1027                  04 03
-           - ZIPFILERECORD                eq               1027
+           - ZIPFILERECORD                eq
   [000080] Version needed to extract      u16 le           20                    00 14
   [000082] Flags                          u16 le           0                     00 00
   [000084] Compression                    u16 le           8                     00 08
-           - Deflated                     eq               8
+           - Deflated                     eq
   [000086] Modification time              dostime le       04:29:32              23 b0
   [000088] Modification date              dosdate le       1993-06-27            1a db
   [00008a] CRC32 of uncompressed data     u32 le           2918247385            ad f0 eb d9
@@ -38,12 +38,12 @@ Chunk_1 ZIPFILERECORD
 Chunk_2 ZIPDIRENTRY
   [000107] Signature                      ascii[2]         PK                    50 4b
   [000109] Type                           u16 le           513                   02 01
-           - ZIPDIRENTRY                  eq               513
+           - ZIPDIRENTRY                  eq
   [00010b] Version made by                u16 le           1302                  05 16
   [00010d] Version needed to extract      u16 le           20                    00 14
   [00010f] Flags                          u16 le           0                     00 00
   [000111] Compression                    u16 le           8                     00 08
-           - Deflated                     eq               8
+           - Deflated                     eq
   [000113] Modification time              dostime le       04:29:42              23 b5
   [000115] Modification date              dosdate le       1993-06-27            1a db
   [000117] CRC32 of uncompressed data     u32 le           1573800530            5d ce 4a 52
@@ -61,12 +61,12 @@ Chunk_2 ZIPDIRENTRY
 Chunk_3 ZIPDIRENTRY
   [000141] Signature                      ascii[2]         PK                    50 4b
   [000143] Type                           u16 le           513                   02 01
-           - ZIPDIRENTRY                  eq               513
+           - ZIPDIRENTRY                  eq
   [000145] Version made by                u16 le           1302                  05 16
   [000147] Version needed to extract      u16 le           20                    00 14
   [000149] Flags                          u16 le           0                     00 00
   [00014b] Compression                    u16 le           8                     00 08
-           - Deflated                     eq               8
+           - Deflated                     eq
   [00014d] Modification time              dostime le       04:29:32              23 b0
   [00014f] Modification date              dosdate le       1993-06-27            1a db
   [000151] CRC32 of uncompressed data     u32 le           2918247385            ad f0 eb d9
@@ -84,7 +84,7 @@ Chunk_3 ZIPDIRENTRY
 Chunk_4 ZIPENDLOCATOR
   [00017b] Signature                      ascii[2]         PK                    50 4b
   [00017d] Type                           u16 le           1541                  06 05
-           - ZIPENDLOCATOR                eq               1541
+           - ZIPENDLOCATOR                eq
   [00017f] Disk number                    u16 le           0                     00 00
   [000181] Start Disk Number              u16 le           0                     00 00
   [000183] Entries on disk                u16 le           2                     00 02

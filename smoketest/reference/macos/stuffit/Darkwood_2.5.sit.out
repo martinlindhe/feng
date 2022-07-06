@@ -5,7 +5,7 @@ Header
   [000006] ArchiveSize                    u32 be           480440                00 07 54 b8
   [00000a] Signature2                     ascii[4]         rLau                  72 4c 61 75
   [00000e] Version                        u8               1                     01
-           - v1.5 and earlier             eq               1
+           - v1.5 and earlier             eq
   [00000f] Unknown                        u8[7]                                  3c 00 00 00 16 b4 ea
 
 FileHeader

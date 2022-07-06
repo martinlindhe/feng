@@ -10,15 +10,15 @@ Header
            - CGB                          bit              1
   [000144] New Licensee Code              ascii[2]         ..                    b1 b0
   [000146] SGB Flag                       u8               0                     00
-           - No SGB functions             eq               0
+           - No SGB functions             eq
   [000147] CartridgeType                  u8               25                    19
-           - MBC5                         eq               25
+           - MBC5                         eq
   [000148] RomSize                        u8               0                     00
-           - 32 KByte (2 banks)           eq               0
+           - 32 KByte (2 banks)           eq
   [000149] RamSize                        u8               0                     00
-           - 0 (No RAM)                   eq               0
+           - 0 (No RAM)                   eq
   [00014a] DestinationCode                u8               1                     01
-           - Non-Japanese                 eq               1
+           - Non-Japanese                 eq
   [00014b] Old Licensee Code              u8               51                    33
   [00014c] Mask ROM Version number        u8               0                     00
   [00014d] Header checksum                u8               198                   c6

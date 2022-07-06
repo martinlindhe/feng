@@ -17,7 +17,7 @@ Header
   [000030] Page cache size                u32 be           0                     00 00 00 00
   [000034] Top root page                  u32 be           0                     00 00 00 00
   [000038] TextEncoding                   u32 be           1                     00 00 00 01
-           - UTF-8                        eq               1
+           - UTF-8                        eq
   [00003c] User version                   u32 be           0                     00 00 00 00
   [000040] Incremental vacuum             u32 be           0                     00 00 00 00
   [000044] Application ID                 u32 be           0                     00 00 00 00

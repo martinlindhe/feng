@@ -10,7 +10,7 @@ Header
   [000015] Reserved                       u8[7]                                  00 00 00 00 00 00 00
   [00001c] Reserved                       u8               1                     01
   [00001d] NDS region                     u8               0                     00
-           - Normal                       eq               0
+           - Normal                       eq
   [00001e] ROM version                    u8               0                     00
   [00001f] Autostart                      u8               0                     00
   [000020] ARM9 rom_offset                u32 le           16384                 00 00 40 00

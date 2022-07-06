@@ -4,15 +4,15 @@ Header
 
 Segment_0 M_APP0
   [000002] Signature                      u16 be           65504                 ff e0
-           - M_APP0                       eq               65504
+           - M_APP0                       eq
   [000004] Length                         u16 be           16                    00 10
   [000006] Identifier                     u32 be           1246120262            4a 46 49 46
-           - JFIF_APP0                    eq               1246120262
+           - JFIF_APP0                    eq
   [00000a] Reserved                       u8               0                     00
   [00000b] Major version                  u8               1                     01
   [00000c] Minor version                  u8               1                     01
   [00000d] Density units                  u8               0                     00
-           - No units                     eq               0
+           - No units                     eq
   [00000e] Xdensity                       u16 be           1                     00 01
   [000010] Ydensity                       u16 be           1                     00 01
   [000012] Xthumbnail                     u8               0                     00
@@ -20,7 +20,7 @@ Segment_0 M_APP0
 
 Segment_1 M_DQT
   [000014] Signature                      u16 be           65499                 ff db
-           - M_DQT                        eq               65499
+           - M_DQT                        eq
   [000016] Length                         u16 be           67                    00 43
   [000018] QuanFlag                       u8               0                     00
            - Pq                           bit              0                     00
@@ -29,7 +29,7 @@ Segment_1 M_DQT
 
 Segment_2 M_DQT
   [000059] Signature                      u16 be           65499                 ff db
-           - M_DQT                        eq               65499
+           - M_DQT                        eq
   [00005b] Length                         u16 be           67                    00 43
   [00005d] QuanFlag                       u8               1                     01
            - Pq                           bit              0                     00
@@ -38,7 +38,7 @@ Segment_2 M_DQT
 
 Segment_3 M_SOF0
   [00009e] Signature                      u16 be           65472                 ff c0
-           - M_SOF0                       eq               65472
+           - M_SOF0                       eq
   [0000a0] Length                         u16 be           17                    00 11
   [0000a2] Precision                      u8               8                     08
   [0000a3] Image height                   u16 be           112                   00 70
@@ -48,7 +48,7 @@ Segment_3 M_SOF0
 
 Segment_4 M_DHT
   [0000b1] Signature                      u16 be           65476                 ff c4
-           - M_DHT                        eq               65476
+           - M_DHT                        eq
   [0000b3] Length                         u16 be           28                    00 1c
   [0000b5] htInfo                         u8               0                     00
   [0000b6] htLength                       u8[16]                                 00 02 03 01 01 01 01 00 00 00 00 00 00 00 00 00
@@ -56,7 +56,7 @@ Segment_4 M_DHT
 
 Segment_5 M_DHT
   [0000cf] Signature                      u16 be           65476                 ff c4
-           - M_DHT                        eq               65476
+           - M_DHT                        eq
   [0000d1] Length                         u16 be           49                    00 31
   [0000d3] htInfo                         u8               16                    10
   [0000d4] htLength                       u8[16]                                 00 02 02 02 01 04 01 03 03 03 04 02 03 00 00 00
@@ -64,7 +64,7 @@ Segment_5 M_DHT
 
 Segment_6 M_DHT
   [000102] Signature                      u16 be           65476                 ff c4
-           - M_DHT                        eq               65476
+           - M_DHT                        eq
   [000104] Length                         u16 be           26                    00 1a
   [000106] htInfo                         u8               1                     01
   [000107] htLength                       u8[16]                                 00 02 03 01 01 00 00 00 00 00 00 00 00 00 00 00
@@ -72,7 +72,7 @@ Segment_6 M_DHT
 
 Segment_7 M_DHT
   [00011e] Signature                      u16 be           65476                 ff c4
-           - M_DHT                        eq               65476
+           - M_DHT                        eq
   [000120] Length                         u16 be           35                    00 23
   [000122] htInfo                         u8               17                    11
   [000123] htLength                       u8[16]                                 00 02 03 00 02 02 02 02 03 00 00 00 00 00 00 00
@@ -80,7 +80,7 @@ Segment_7 M_DHT
 
 Segment_8 M_SOS
   [000143] Signature                      u16 be           65498                 ff da
-           - M_SOS                        eq               65498
+           - M_SOS                        eq
   [000145] Length                         u16 be           12                    00 0c
   [000147] nr_comp                        u8               3                     03
   [000148] COMPSOS data                   u8[6]                                  01 00 02 11 03 11
@@ -93,6 +93,6 @@ Segment_8 M_SOS
 
 Segment_9 M_EOI
   [0010d7] Signature                      u16 be           65497                 ff d9
-           - M_EOI                        eq               65497
+           - M_EOI                        eq
 
 EOF

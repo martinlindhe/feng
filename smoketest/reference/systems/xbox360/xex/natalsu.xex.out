@@ -17,57 +17,57 @@ Header
 
 OptHead_0
   [000018] HeaderID                       u32 be           1023                  00 00 03 ff
-           - Base File Format             eq               1023
+           - Base File Format             eq
   [00001c] Header data / offset to data   u32 be           596                   00 00 02 54
 
 OptHead_1
   [000020] HeaderID                       u32 be           33023                 00 00 80 ff
-           - Bounding Path                eq               33023
+           - Bounding Path                eq
   [000024] Header data / offset to data   u32 be           632                   00 00 02 78
 
 OptHead_2
   [000028] HeaderID                       u32 be           65792                 00 01 01 00
-           - Entry Point                  eq               65792
+           - Entry Point                  eq
   [00002c] Header data / offset to data   u32 be           2550142632            98 00 16 a8
 
 OptHead_3
   [000030] HeaderID                       u32 be           66049                 00 01 02 01
-           - Image Base Address           eq               66049
+           - Image Base Address           eq
   [000034] Header data / offset to data   u32 be           2550136832            98 00 00 00
 
 OptHead_4
   [000038] HeaderID                       u32 be           66559                 00 01 03 ff
-           - Import Libraries             eq               66559
+           - Import Libraries             eq
   [00003c] Header data / offset to data   u32 be           3760                  00 00 0e b0
 
 OptHead_5
   [000040] HeaderID                       u32 be           98306                 00 01 80 02
-           - Checksum Timestamp           eq               98306
+           - Checksum Timestamp           eq
   [000044] Header data / offset to data   u32 be           664                   00 00 02 98
 
 OptHead_6
   [000048] HeaderID                       u32 be           99327                 00 01 83 ff
-           - Original PE Name             eq               99327
+           - Original PE Name             eq
   [00004c] Header data / offset to data   u32 be           672                   00 00 02 a0
 
 OptHead_7
   [000050] HeaderID                       u32 be           131327                00 02 00 ff
-           - Static Libraries             eq               131327
+           - Static Libraries             eq
   [000054] Header data / offset to data   u32 be           688                   00 00 02 b0
 
 OptHead_8
   [000058] HeaderID                       u32 be           262150                00 04 00 06
-           - Execution ID                 eq               262150
+           - Execution ID                 eq
   [00005c] Header data / offset to data   u32 be           772                   00 00 03 04
 
 OptHead_9
   [000060] HeaderID                       u32 be           263172                00 04 04 04
-           - LAN Key                      eq               263172
+           - LAN Key                      eq
   [000064] Header data / offset to data   u32 be           796                   00 00 03 1c
 
 OptHead_10
   [000068] HeaderID                       u32 be           14746626              00 e1 04 02
-           - Exports by Name              eq               14746626
+           - Exports by Name              eq
   [00006c] Header data / offset to data   u32 be           812                   00 00 03 2c
 
 0x3f90 (16272) unmapped bytes

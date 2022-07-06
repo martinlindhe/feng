@@ -2,9 +2,9 @@
 BZipFile
   [000000] Signature                      ascii[2]         BZ                    42 5a
   [000002] Encoding                       ascii            h                     68
-           - Huffman                      eq               h
+           - Huffman                      eq
   [000003] Compression level              ascii            9                     39
-           - Level 9 (Best)               eq               9
+           - Level 9 (Best)               eq
 
 Block
   [000004] BlockMagic                     u8[6]                                  31 41 59 26 53 59

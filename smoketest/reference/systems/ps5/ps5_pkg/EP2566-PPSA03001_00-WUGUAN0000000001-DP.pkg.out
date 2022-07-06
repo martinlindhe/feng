@@ -107,7 +107,7 @@ DataEntry_3
 DataEntry_4
   [003080] padding1                       u16 be           0                     00 00
   [003082] file_type                      u8               2                     02
-           - Filenames                    eq               2
+           - Filenames                    eq
   [003083] flags                          u8               0                     00
   [003084] filename_offset                u32 be           0                     00 00 00 00
   [003088] padding2                       u64 be           4611686018427387904   40 00 00 00 00 00 00 00

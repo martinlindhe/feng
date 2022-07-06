@@ -3,17 +3,17 @@ Header
   [000000] Signature                      ascii[4]         .ELF                  7f 45 4c 46
   [000004] Offset                         u32 le           65794                 00 01 01 02
   [000008] Class                          u8               0                     00
-           - None                         eq               0
+           - None                         eq
   [000009] Endian                         u8               0                     00
   [00000a] Header version                 u8               0                     00
   [00000b] OS ABI                         u8               0                     00
-           - System V                     eq               0
+           - System V                     eq
   [00000c] ABI Version                    u8               0                     00
   [00000d] Reserved                       u8[7]                                  00 00 00 02 00 3e 00
   [000014] Type                           u16 le           1                     00 01
-           - Relocatable file             eq               1
+           - Relocatable file             eq
   [000016] Machine                        u16 le           0                     00 00
-           - None                         eq               0
+           - None                         eq
   [000018] Version                        u32 le           4195296               00 40 03 e0
   [00001c] Entry                          u32 le           0                     00 00 00 00
   [000020] ProgramHeaderOffset            u32 le           64                    00 00 00 40

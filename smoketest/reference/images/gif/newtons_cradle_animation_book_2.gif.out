@@ -2,7 +2,7 @@
 Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
-           - GIF89a                       eq               24889
+           - GIF89a                       eq
   [000006] Logical screen width           u16 le           480                   01 e0
   [000008] Logical screen height          u16 le           360                   01 68
   [00000a] ScreenDescriptor               u8               247                   f7
@@ -16,7 +16,7 @@ Header
 
 Section_0 BLOCK_EXTENSION
   [00030d] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [00030e] ExtensionType                  u8               255                   ff
 
 Section_1 11
@@ -72,9 +72,9 @@ Section_17 0
 
 Section_18 BLOCK_EXTENSION
   [000320] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [000321] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [000322] Size                           u8               4                     04
   [000323] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -87,7 +87,7 @@ Section_18 BLOCK_EXTENSION
 
 Section_19 BLOCK_IMAGE
   [000328] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [000329] Left position                  u16 le           0                     00 00
   [00032b] Top position                   u16 le           0                     00 00
   [00032d] Image width                    u16 le           480                   01 e0

@@ -1,7 +1,7 @@
 # templates/images/tiff.yml
 Header
   [000000] EndianMarker                   u16 le           18761                 49 49
-           - LITTLE_ENDIAN                eq               18761
+           - LITTLE_ENDIAN                eq
   [000002] Signature                      u16 le           42                    00 2a
 
 0x0232 (562) unmapped bytes

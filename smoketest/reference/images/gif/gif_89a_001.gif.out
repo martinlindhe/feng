@@ -2,7 +2,7 @@
 Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
-           - GIF89a                       eq               24889
+           - GIF89a                       eq
   [000006] Logical screen width           u16 le           10                    00 0a
   [000008] Logical screen height          u16 le           10                    00 0a
   [00000a] ScreenDescriptor               u8               145                   91
@@ -16,9 +16,9 @@ Header
 
 Section_0 BLOCK_EXTENSION
   [000019] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [00001a] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [00001b] Size                           u8               4                     04
   [00001c] Flags                          u8               0                     00
            - Transparent color            bit              0
@@ -31,7 +31,7 @@ Section_0 BLOCK_EXTENSION
 
 Section_1 BLOCK_IMAGE
   [000021] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [000022] Left position                  u16 le           0                     00 00
   [000024] Top position                   u16 le           0                     00 00
   [000026] Image width                    u16 le           10                    00 0a
@@ -49,6 +49,6 @@ Section_1 BLOCK_IMAGE
 
 Section_2 BLOCK_TRAILER
   [000044] BlockType                      u8               59                    3b
-           - BLOCK_TRAILER                eq               59
+           - BLOCK_TRAILER                eq
 
 EOF

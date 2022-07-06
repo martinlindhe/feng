@@ -2,7 +2,7 @@
 Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
-           - GIF89a                       eq               24889
+           - GIF89a                       eq
   [000006] Logical screen width           u16 le           16                    00 10
   [000008] Logical screen height          u16 le           16                    00 10
   [00000a] ScreenDescriptor               u8               162                   a2
@@ -16,7 +16,7 @@ Header
 
 Section_0 BLOCK_EXTENSION
   [000025] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [000026] ExtensionType                  u8               255                   ff
 
 Section_1 11
@@ -72,9 +72,9 @@ Section_17 0
 
 Section_18 BLOCK_EXTENSION
   [000038] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [000039] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [00003a] Size                           u8               4                     04
   [00003b] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -87,7 +87,7 @@ Section_18 BLOCK_EXTENSION
 
 Section_19 BLOCK_IMAGE
   [000040] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [000041] Left position                  u16 le           0                     00 00
   [000043] Top position                   u16 le           0                     00 00
   [000045] Image width                    u16 le           16                    00 10
@@ -105,9 +105,9 @@ Section_19 BLOCK_IMAGE
 
 Section_20 BLOCK_EXTENSION
   [000090] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [000091] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [000092] Size                           u8               4                     04
   [000093] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -120,7 +120,7 @@ Section_20 BLOCK_EXTENSION
 
 Section_21 BLOCK_IMAGE
   [000098] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [000099] Left position                  u16 le           2                     00 02
   [00009b] Top position                   u16 le           0                     00 00
   [00009d] Image width                    u16 le           14                    00 0e
@@ -138,9 +138,9 @@ Section_21 BLOCK_IMAGE
 
 Section_22 BLOCK_EXTENSION
   [0000e3] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [0000e4] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [0000e5] Size                           u8               4                     04
   [0000e6] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -153,7 +153,7 @@ Section_22 BLOCK_EXTENSION
 
 Section_23 BLOCK_IMAGE
   [0000eb] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [0000ec] Left position                  u16 le           0                     00 00
   [0000ee] Top position                   u16 le           0                     00 00
   [0000f0] Image width                    u16 le           16                    00 10
@@ -171,9 +171,9 @@ Section_23 BLOCK_IMAGE
 
 Section_24 BLOCK_EXTENSION
   [000136] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [000137] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [000138] Size                           u8               4                     04
   [000139] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -186,7 +186,7 @@ Section_24 BLOCK_EXTENSION
 
 Section_25 BLOCK_IMAGE
   [00013e] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [00013f] Left position                  u16 le           0                     00 00
   [000141] Top position                   u16 le           2                     00 02
   [000143] Image width                    u16 le           16                    00 10
@@ -204,9 +204,9 @@ Section_25 BLOCK_IMAGE
 
 Section_26 BLOCK_EXTENSION
   [000189] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [00018a] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [00018b] Size                           u8               4                     04
   [00018c] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -219,7 +219,7 @@ Section_26 BLOCK_EXTENSION
 
 Section_27 BLOCK_IMAGE
   [000191] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [000192] Left position                  u16 le           0                     00 00
   [000194] Top position                   u16 le           0                     00 00
   [000196] Image width                    u16 le           16                    00 10
@@ -237,9 +237,9 @@ Section_27 BLOCK_IMAGE
 
 Section_28 BLOCK_EXTENSION
   [0001dc] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [0001dd] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [0001de] Size                           u8               4                     04
   [0001df] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -252,7 +252,7 @@ Section_28 BLOCK_EXTENSION
 
 Section_29 BLOCK_IMAGE
   [0001e4] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [0001e5] Left position                  u16 le           0                     00 00
   [0001e7] Top position                   u16 le           0                     00 00
   [0001e9] Image width                    u16 le           14                    00 0e
@@ -270,9 +270,9 @@ Section_29 BLOCK_IMAGE
 
 Section_30 BLOCK_EXTENSION
   [00022d] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [00022e] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [00022f] Size                           u8               4                     04
   [000230] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -285,7 +285,7 @@ Section_30 BLOCK_EXTENSION
 
 Section_31 BLOCK_IMAGE
   [000235] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [000236] Left position                  u16 le           0                     00 00
   [000238] Top position                   u16 le           0                     00 00
   [00023a] Image width                    u16 le           16                    00 10
@@ -303,9 +303,9 @@ Section_31 BLOCK_IMAGE
 
 Section_32 BLOCK_EXTENSION
   [000280] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [000281] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [000282] Size                           u8               4                     04
   [000283] Flags                          u8               5                     05
            - Transparent color            bit              1
@@ -318,7 +318,7 @@ Section_32 BLOCK_EXTENSION
 
 Section_33 BLOCK_IMAGE
   [000288] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [000289] Left position                  u16 le           0                     00 00
   [00028b] Top position                   u16 le           0                     00 00
   [00028d] Image width                    u16 le           16                    00 10
@@ -336,6 +336,6 @@ Section_33 BLOCK_IMAGE
 
 Section_34 BLOCK_TRAILER
   [0002d0] BlockType                      u8               59                    3b
-           - BLOCK_TRAILER                eq               59
+           - BLOCK_TRAILER                eq
 
 EOF

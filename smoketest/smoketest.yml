@@ -5,6 +5,14 @@ input:
       - 7z_001_one_file.7z
       - 7z_002_three_files.7z
 
+  - folder: archives/arj
+    files:
+      - arj_001_tiny.arj
+      - arj_002_phrack1.arj
+      - arj_003_multi.arj
+      - arj_004_ref_test1.arj
+      - arj_005_ref_test2.arj
+
   - folder: archives/bzip2
     files:
       - bzip2_001.bz2

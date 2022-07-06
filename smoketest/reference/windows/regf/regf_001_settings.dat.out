@@ -7,9 +7,9 @@ FILE HEADER
   [000014] Major version                  u32 le           1                     00 00 00 01
   [000018] Minor version                  u32 le           3                     00 00 00 03
   [00001c] File type                      u32 le           0                     00 00 00 00
-           - Primary file                 eq               0
+           - Primary file                 eq
   [000020] File format                    u32 le           1                     00 00 00 01
-           - Direct memory load           eq               1
+           - Direct memory load           eq
   [000024] Root cell offset               u32 le           32                    00 00 00 20
   [000028] Hive bins data size            u32 le           4096                  00 00 10 00
   [00002c] Clustering factor              u32 le           1                     00 00 00 01
@@ -31,7 +31,7 @@ HBINRECORD
 Cell_0 SIG_NK
   [001020] CellSize                       i32 le           4294967208            ff ff ff a8
   [001024] CellSignature                  u16 le           27502                 6b 6e
-           - SIG_NK                       eq               27502
+           - SIG_NK                       eq
   [001026] Flags                          u16 le           44                    00 2c
            - KEY_VOLATILE                 bit              0
            - KEY_HIVE_EXIT                bit              0
@@ -69,7 +69,7 @@ Cell_0 SIG_NK
 Cell_1 SIG_SK
   [001078] CellSize                       i32 le           4294967152            ff ff ff 70
   [00107c] CellSignature                  u16 le           27507                 6b 73
-           - SIG_SK                       eq               27507
+           - SIG_SK                       eq
   [00107e] Reserved                       u16 le           0                     00 00
   [001080] Flink                          i32 le           360                   00 00 01 68
   [001084] Blink                          i32 le           360                   00 00 01 68
@@ -81,7 +81,7 @@ Cell_1 SIG_SK
 Cell_2 SIG_NK
   [001108] CellSize                       i32 le           96                    00 00 00 60
   [00110c] CellSignature                  u16 le           27502                 6b 6e
-           - SIG_NK                       eq               27502
+           - SIG_NK                       eq
   [00110e] Flags                          u16 le           32                    00 20
            - KEY_VOLATILE                 bit              0
            - KEY_HIVE_EXIT                bit              0
@@ -119,7 +119,7 @@ Cell_2 SIG_NK
 Cell_3 SIG_SK
   [001168] CellSize                       i32 le           4294967152            ff ff ff 70
   [00116c] CellSignature                  u16 le           27507                 6b 73
-           - SIG_SK                       eq               27507
+           - SIG_SK                       eq
   [00116e] Reserved                       u16 le           0                     00 00
   [001170] Flink                          i32 le           120                   00 00 00 78
   [001174] Blink                          i32 le           120                   00 00 00 78
@@ -131,14 +131,14 @@ Cell_3 SIG_SK
 Cell_4 SIG_LF
   [0011f8] CellSize                       i32 le           16                    00 00 00 10
   [0011fc] CellSignature                  u16 le           26220                 66 6c
-           - SIG_LF                       eq               26220
+           - SIG_LF                       eq
   [0011fe] NumberOfOffsets                i16 le           1                     00 01
   [001200] Offset                         u8[8]                                  08 01 00 00 4e 65 77 20
 
 Cell_5 SIG_NK
   [001208] CellSize                       i32 le           4294967200            ff ff ff a0
   [00120c] CellSignature                  u16 le           27502                 6b 6e
-           - SIG_NK                       eq               27502
+           - SIG_NK                       eq
   [00120e] Flags                          u16 le           32                    00 20
            - KEY_VOLATILE                 bit              0
            - KEY_HIVE_EXIT                bit              0
@@ -176,7 +176,7 @@ Cell_5 SIG_NK
 Cell_6 SIG_LF
   [001268] CellSize                       i32 le           40                    00 00 00 28
   [00126c] CellSignature                  u16 le           26220                 66 6c
-           - SIG_LF                       eq               26220
+           - SIG_LF                       eq
   [00126e] NumberOfOffsets                i16 le           1                     00 01
   [001270] Offset                         u8[8]                                  08 01 00 00 4e 65 77 20
   [001278] Padding                        u8[24]                                 18 00 00 00 6c 66 02 00 08 02 00 00 4c 6f 63 61 08 01 00 00 4e 65 77 20
@@ -184,7 +184,7 @@ Cell_6 SIG_LF
 Cell_7 SIG_NK
   [001290] CellSize                       i32 le           4294967200            ff ff ff a0
   [001294] CellSignature                  u16 le           27502                 6b 6e
-           - SIG_NK                       eq               27502
+           - SIG_NK                       eq
   [001296] Flags                          u16 le           32                    00 20
            - KEY_VOLATILE                 bit              0
            - KEY_HIVE_EXIT                bit              0
@@ -222,14 +222,14 @@ Cell_7 SIG_NK
 Cell_8 SIG_LF
   [0012f0] CellSize                       i32 le           24                    00 00 00 18
   [0012f4] CellSignature                  u16 le           26220                 66 6c
-           - SIG_LF                       eq               26220
+           - SIG_LF                       eq
   [0012f6] NumberOfOffsets                i16 le           2                     00 02
   [0012f8] Offset                         u8[16]                                 08 02 00 00 4c 6f 63 61 08 01 00 00 4e 65 77 20
 
 Cell_9 SIG_LF
   [001308] CellSize                       i32 le           4294967256            ff ff ff d8
   [00130c] CellSignature                  u16 le           26220                 66 6c
-           - SIG_LF                       eq               26220
+           - SIG_LF                       eq
   [00130e] NumberOfOffsets                i16 le           2                     00 02
   [001310] Offset                         u8[16]                                 08 02 00 00 4c 6f 63 61 90 02 00 00 52 6f 61 6d
   [001320] Padding                        u8[16]                                 90 02 00 00 52 6f 61 6d 00 00 00 00 00 00 00 00
@@ -237,7 +237,7 @@ Cell_9 SIG_LF
 Cell_10 SIG_END
   [001330] CellSize                       i32 le           3280                  00 00 0c d0
   [001334] CellSignature                  u16 le           0                     00 00
-           - SIG_END                      eq               0
+           - SIG_END                      eq
   [001336] Padding                        u8[3274]                               00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
 
 EOF

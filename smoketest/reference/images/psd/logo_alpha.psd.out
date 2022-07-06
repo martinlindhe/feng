@@ -8,6 +8,6 @@ Header
   [000012] Width                          u32 be           400                   00 00 01 90
   [000016] Bit depth                      u16 be           8                     00 08
   [000018] Color mode                     u16 be           4                     00 04
-           - CMYK                         eq               4
+           - CMYK                         eq
 
 0x12313 (74515) unmapped bytes

@@ -2,11 +2,11 @@
 Header
   [000000] Signature                      u8               10                    0a
   [000001] Version                        u8               5                     05
-           - PC Paintbrush 3.0, including 24-bit images eq               5
+           - PC Paintbrush 3.0, including 24-bit images eq
   [000002] Encoding                       u8               1                     01
-           - RLE                          eq               1
+           - RLE                          eq
   [000003] BitsPerPixel                   u8               8                     08
-           - 8bpp (256 colors, VGA)       eq               8
+           - 8bpp (256 colors, VGA)       eq
   [000004] Minimum X position             u16 le           0                     00 00
   [000006] Minimum Y position             u16 le           0                     00 00
   [000008] Maximum X position             u16 le           199                   00 c7
@@ -18,7 +18,7 @@ Header
   [000041] ColorPlanes                    u8               3                     03
   [000042] Bytes per line                 u16 le           200                   00 c8
   [000044] Palette mode                   u16 le           1                     00 01
-           - Monochrome or color          eq               1
+           - Monochrome or color          eq
   [000046] Horizontal resolution          u16 le           0                     00 00
   [000048] Vertical resolution            u16 le           0                     00 00
   [00004a] Reserved                       u8[54]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...

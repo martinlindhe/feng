@@ -6,6 +6,6 @@ Header
   [000008] Compressed TOC length          u64 be           576                   00 00 00 00 00 00 02 40
   [000010] Uncompressed TOC length        u64 be           1776                  00 00 00 00 00 00 06 f0
   [000018] Checksum algorithm             u32 be           1                     00 00 00 01
-           - SHA1                         eq               1
+           - SHA1                         eq
 
 0x1254 (4692) unmapped bytes

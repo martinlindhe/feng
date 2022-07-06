@@ -21,7 +21,7 @@ CFFOLDER_0
   [000024] CFDATA_Offset                  u32 le           659                   00 00 02 93
   [000028] DataBlocks                     u16 le           25                    00 19
   [00002a] Compression                    u16 le           1                     00 01
-           - MSZIP                        eq               1
+           - MSZIP                        eq
   [000293] csum                           u32 le           527739804             1f 74 ab 9c
   [000297] DataLen                        u16 le           22694                 58 a6
   [000299] cbUncomp                       u16 le           32768                 80 00

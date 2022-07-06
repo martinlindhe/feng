@@ -2,14 +2,14 @@
 Header
   [000000] CRC                            u8[2]                                  52 61
   [000002] Type                           u8               114                   72
-           - MARKER                       eq               114
+           - MARKER                       eq
   [000003] Flags                          u16 le           6689                  1a 21
   [000005] Header size                    u16 le           7                     00 07
 
 Chunk_0 ARCHIVE
   [000007] CRC                            u16 le           37071                 90 cf
   [000009] Type                           u8               115                   73
-           - ARCHIVE                      eq               115
+           - ARCHIVE                      eq
   [00000a] archiveFlags                   u16 le           0                     00 00
            - ARCHIVE_VOLUME               bit              0
            - ARCHIVE_COMMENT_PRESENT      bit              0
@@ -29,7 +29,7 @@ Chunk_0 ARCHIVE
 Chunk_1 FILE_OR_DIR
   [000014] CRC                            u16 le           55476                 d8 b4
   [000016] Type                           u8               116                   74
-           - FILE_OR_DIR                  eq               116
+           - FILE_OR_DIR                  eq
   [000017] HEAD_FLAGS                     u16 le           36896                 90 20
            - FROM_PREV_VOLUME             bit              0
            - TO_NEXT_VOLUME               bit              0
@@ -48,13 +48,13 @@ Chunk_1 FILE_OR_DIR
   [00001b] CompressedSize                 u32 le           5                     00 00 00 05
   [00001f] Unpacked size                  u32 le           5                     00 00 00 05
   [000023] Host OS                        u8               2                     02
-           - Win32                        eq               2
+           - Win32                        eq
   [000024] CRC32                          u32 le           3242484790            c1 44 64 36
   [000028] Time                           dostime le       16:12:26              81 8d
   [00002a] Date                           dosdate le       2014-04-02            44 82
   [00002c] Version to unpack              u8               29                    1d
   [00002d] Pack method                    u8               48                    30
-           - Store                        eq               48
+           - Store                        eq
   [00002e] NameSize                       u16 le           8                     00 08
   [000030] UnixStyleAttrs                 u32 le           32                    00 00 00 20
   [000034] File name                      ascii[8]         file.txt              66 69 6c 65 2e 74 78 74
@@ -64,7 +64,7 @@ Chunk_1 FILE_OR_DIR
 Chunk_2 END
   [000046] CRC                            u16 le           15812                 3d c4
   [000048] Type                           u8               123                   7b
-           - END                          eq               123
+           - END                          eq
   [000049] Common block flags             u16 le           16384                 40 00
            - OLD_VERSION_IGNORE           bit              1
            - ADD_SIZE_PRESENT             bit              0

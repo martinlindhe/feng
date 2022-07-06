@@ -1,7 +1,7 @@
 # templates/archives/lz4.yml
 Header
   [000000] Signature                      u32 le           407708164             18 4d 22 04
-           - Magic number                 eq               407708164
+           - Magic number                 eq
   [000004] flags                          u8               116                   74
            - PresetDictionary             bit              0
            - Reserved                     bit              0

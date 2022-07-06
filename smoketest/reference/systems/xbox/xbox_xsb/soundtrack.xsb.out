@@ -7,7 +7,7 @@ Header
   [00000a] Last modification date (lo)    u32 le           10485760              00 a0 00 00
   [00000e] Last modification date (hi)    u32 le           7864320               00 78 00 00
   [000012] Platform                       u8               0                     00
-           - PC                           eq               0
+           - PC                           eq
   [000013] Number of simple cues          u16 le           40960                 a0 00
   [000015] Number of complex cues         u16 le           0                     00 00
   [000017] Unknown                        u16 le           0                     00 00

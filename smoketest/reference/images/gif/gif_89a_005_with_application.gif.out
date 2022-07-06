@@ -2,7 +2,7 @@
 Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
-           - GIF89a                       eq               24889
+           - GIF89a                       eq
   [000006] Logical screen width           u16 le           218                   00 da
   [000008] Logical screen height          u16 le           218                   00 da
   [00000a] ScreenDescriptor               u8               196                   c4
@@ -16,9 +16,9 @@ Header
 
 Section_0 BLOCK_EXTENSION
   [00006d] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [00006e] ExtensionType                  u8               249                   f9
-           - EXT_GRAPHIC_CONTROL          eq               249
+           - EXT_GRAPHIC_CONTROL          eq
   [00006f] Size                           u8               4                     04
   [000070] Flags                          u8               4                     04
            - Transparent color            bit              0
@@ -31,7 +31,7 @@ Section_0 BLOCK_EXTENSION
 
 Section_1 BLOCK_EXTENSION
   [000075] BlockType                      u8               33                    21
-           - BLOCK_EXTENSION              eq               33
+           - BLOCK_EXTENSION              eq
   [000076] ExtensionType                  u8               255                   ff
 
 Section_2 252
@@ -645,7 +645,7 @@ Section_204 0
 
 Section_205 BLOCK_IMAGE
   [000142] BlockType                      u8               44                    2c
-           - BLOCK_IMAGE                  eq               44
+           - BLOCK_IMAGE                  eq
   [000143] Left position                  u16 le           21618                 54 72
   [000145] Top position                   u16 le           17234                 43 52
   [000147] Image width                    u16 le           0                     00 00
