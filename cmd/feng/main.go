@@ -19,8 +19,9 @@ import (
 var args struct {
 	Filename   string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
 	ExtractDir string `help:"Extract files to this directory."`
-	Verbose    bool   `short:"v" help:"Be more verbose."`
+	//Verbose    bool   `short:"v" help:"Be more verbose."`
 	HideRaw    bool   `help:"Hide raw values"`
+	Brief      bool   `help:"Brief file information"`
 	CPUProfile string `name:"cpu-profile" help:"Create CPU profile"`
 	MemProfile string `name:"mem-profile" help:"Create memory profile"`
 }
@@ -31,9 +32,11 @@ func main() {
 		kong.Name("feng"),
 		kong.Description("A binary template reader and data presenter."))
 
-	if args.Verbose {
-		//template.DEBUG = true
-	}
+	/*
+		if args.Verbose {
+			panic("TODO implement better logging")
+		}
+	*/
 
 	if args.CPUProfile != "" {
 		f, err := os.Create(args.CPUProfile)
@@ -87,7 +90,6 @@ func main() {
 					}
 
 				case "raw:u8":
-					// XXX if length, use it
 					if len(field.Value) <= 1 {
 						continue
 					}
@@ -109,7 +111,13 @@ func main() {
 		}
 
 	} else {
-		fmt.Print(fl.Present(args.HideRaw))
+		if args.Brief {
+			// TODO: if brief, only do magic match + if no match do attempted fuzzy match.
+			//       don't evaluate full struct (fast mode for scanning many files)
+			fmt.Println(args.Filename+":", fl.BaseName)
+		} else {
+			fmt.Print(fl.Present(args.HideRaw))
+		}
 	}
 
 	if args.MemProfile != "" {
