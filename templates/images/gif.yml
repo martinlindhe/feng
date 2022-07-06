@@ -24,9 +24,9 @@ magic:
 # XXX implement custom types!
 types:
   rgb:
-    u8 Red: ??
-    u8 Green: ??
-    u8 Blue: ??
+    u8 R: ??
+    u8 G: ??
+    u8 B: ??
 
   data_sub_block:
     u8 Size: ??
@@ -41,6 +41,8 @@ structs:
       eq 6137: GIF87a
       eq 6139: GIF89a
       default: invalid
+
+  logical_screen_descriptor:
     u16 Logical screen width: ??
     u16 Logical screen height: ??
     u8 ScreenDescriptor:
@@ -52,9 +54,10 @@ structs:
     u8 Aspect ratio: ??
 
     if self.ScreenDescriptor & GlobalColorTablePresent:
-      u8[3 * (2 << (self.ScreenDescriptor & 7))] Global Color Table: ??   # FIXME use rgb type. rgb struct is 3 bytes. 4 fields = 12 bytes
+      # FIXME use rgb type. rgb struct is 3 bytes. 4 fields = 12 bytes
+      u8[3 * (2 << (self.ScreenDescriptor & 7))] Global color table: ??
 
-  section:
+  block:
     u8 BlockType:
       eq 2c: BLOCK_IMAGE
       eq 21: BLOCK_EXTENSION
@@ -70,6 +73,7 @@ structs:
         #eq fe: EXT_COMMENT
         #eq ff: EXT_APPLICATION
       if self.ExtensionType == EXT_GRAPHIC_CONTROL:
+        label: GraphicControlExtension
         u8 Size: "04"                       # NOTE: should always be 04
         u8 Flags:
           bit b0000_0001: Transparent color
@@ -81,7 +85,7 @@ structs:
         u8 Block terminator: "00"
 
     if self.BlockType == BLOCK_IMAGE:
-      label: BLOCK_IMAGE
+      label: ImageDescriptor # BLOCK_IMAGE
       u16 Left position: ??
       u16 Top position: ??
       u16 Image width: ??
@@ -93,7 +97,8 @@ structs:
         bit b0100_0000: Interlace
         bit b1000_0000: LocalColorTablePresent
       if self.ImageDescriptor & LocalColorTablePresent:
-        u8[3 * (2 << (self.ImageDescriptor & 7))] Local color table: ?? # XXX RGB type !!!!!!
+        # XXX RGB type
+        u8[3 * (2 << (self.ImageDescriptor & 7))] Local color table: ??
       u8 LZWMinimumCodeSize: ??   # XXX meaning?
 
       # XXX series of data blocks. last block is one with Size==0
@@ -103,8 +108,9 @@ structs:
       u8 BlockTerminator: "00"
 
     if self.BlockType == BLOCK_TRAILER:
-      label: BLOCK_TRAILER
+      label: Trailer
 
 layout:
   - header Header
-  - section[] Section
+  - logical_screen_descriptor LogicalScreenDescriptor
+  - block[] Block

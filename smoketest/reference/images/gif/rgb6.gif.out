@@ -3,6 +3,8 @@ Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
            - GIF89a                       eq
+
+LogicalScreenDescriptor
   [000006] Logical screen width           u16 le           199                   00 c7
   [000008] Logical screen height          u16 le           199                   00 c7
   [00000a] ScreenDescriptor               u8               213                   d5
@@ -12,9 +14,9 @@ Header
            - GlobalColorTablePresent      bit              1
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
-  [00000d] Global Color Table             u8[192]                                77 77 01 a6 a7 01 67 67 01 bf bf bf 0f 0e 01 c7 c7 01 57 57 01 47 47 01 37 36 01 d6 d6 01 9c 9c ...
+  [00000d] Global color table             u8[192]                                77 77 01 a6 a7 01 67 67 01 bf bf bf 0f 0e 01 c7 c7 01 57 57 01 47 47 01 37 36 01 d6 d6 01 9c 9c ...
 
-Section_0 BLOCK_EXTENSION
+Block_0 GraphicControlExtension
   [0000cd] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [0000ce] ExtensionType                  u8               249                   f9
@@ -29,7 +31,7 @@ Section_0 BLOCK_EXTENSION
   [0000d3] Transparent color index        u8               0                     00
   [0000d4] Block terminator               u8               0                     00
 
-Section_1 BLOCK_IMAGE
+Block_1 ImageDescriptor
   [0000d5] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [0000d6] Left position                  u16 le           0                     00 00

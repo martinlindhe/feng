@@ -3,6 +3,8 @@ Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
            - GIF89a                       eq
+
+LogicalScreenDescriptor
   [000006] Logical screen width           u16 le           50                    00 32
   [000008] Logical screen height          u16 le           50                    00 32
   [00000a] ScreenDescriptor               u8               112                   70
@@ -13,121 +15,121 @@ Header
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
 
-Section_0 BLOCK_EXTENSION
+Block_0 BLOCK_EXTENSION
   [00000d] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [00000e] ExtensionType                  u8               254                   fe
 
-Section_1 3
+Block_1 3
   [00000f] BlockType                      u8               3                     03
 
-Section_2 71
+Block_2 71
   [000010] BlockType                      u8               71                    47
 
-Section_3 52
+Block_3 52
   [000011] BlockType                      u8               52                    34
 
-Section_4 52
+Block_4 52
   [000012] BlockType                      u8               52                    34
 
-Section_5 0
+Block_5 0
   [000013] BlockType                      u8               0                     00
 
-Section_6 BLOCK_EXTENSION
+Block_6 BLOCK_EXTENSION
   [000014] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000015] ExtensionType                  u8               255                   ff
 
-Section_7 11
+Block_7 11
   [000016] BlockType                      u8               11                    0b
 
-Section_8 78
+Block_8 78
   [000017] BlockType                      u8               78                    4e
 
-Section_9 69
+Block_9 69
   [000018] BlockType                      u8               69                    45
 
-Section_10 84
+Block_10 84
   [000019] BlockType                      u8               84                    54
 
-Section_11 83
+Block_11 83
   [00001a] BlockType                      u8               83                    53
 
-Section_12 67
+Block_12 67
   [00001b] BlockType                      u8               67                    43
 
-Section_13 65
+Block_13 65
   [00001c] BlockType                      u8               65                    41
 
-Section_14 80
+Block_14 80
   [00001d] BlockType                      u8               80                    50
 
-Section_15 69
+Block_15 69
   [00001e] BlockType                      u8               69                    45
 
-Section_16 50
+Block_16 50
   [00001f] BlockType                      u8               50                    32
 
-Section_17 46
+Block_17 46
   [000020] BlockType                      u8               46                    2e
 
-Section_18 48
+Block_18 48
   [000021] BlockType                      u8               48                    30
 
-Section_19 3
+Block_19 3
   [000022] BlockType                      u8               3                     03
 
-Section_20 1
+Block_20 1
   [000023] BlockType                      u8               1                     01
 
-Section_21 0
+Block_21 0
   [000024] BlockType                      u8               0                     00
 
-Section_22 0
+Block_22 0
   [000025] BlockType                      u8               0                     00
 
-Section_23 0
+Block_23 0
   [000026] BlockType                      u8               0                     00
 
-Section_24 BLOCK_EXTENSION
+Block_24 BLOCK_EXTENSION
   [000027] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000028] ExtensionType                  u8               254                   fe
 
-Section_25 9
+Block_25 9
   [000029] BlockType                      u8               9                     09
 
-Section_26 103
+Block_26 103
   [00002a] BlockType                      u8               103                   67
 
-Section_27 105
+Block_27 105
   [00002b] BlockType                      u8               105                   69
 
-Section_28 102
+Block_28 102
   [00002c] BlockType                      u8               102                   66
 
-Section_29 52
+Block_29 52
   [00002d] BlockType                      u8               52                    34
 
-Section_30 106
+Block_30 106
   [00002e] BlockType                      u8               106                   6a
 
-Section_31 49
+Block_31 49
   [00002f] BlockType                      u8               49                    31
 
-Section_32 50
+Block_32 50
   [000030] BlockType                      u8               50                    32
 
-Section_33 49
+Block_33 49
   [000031] BlockType                      u8               49                    31
 
-Section_34 54
+Block_34 54
   [000032] BlockType                      u8               54                    36
 
-Section_35 0
+Block_35 0
   [000033] BlockType                      u8               0                     00
 
-Section_36 BLOCK_EXTENSION
+Block_36 GraphicControlExtension
   [000034] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000035] ExtensionType                  u8               249                   f9
@@ -142,7 +144,7 @@ Section_36 BLOCK_EXTENSION
   [00003a] Transparent color index        u8               127                   7f
   [00003b] Block terminator               u8               0                     00
 
-Section_37 BLOCK_IMAGE
+Block_37 ImageDescriptor
   [00003c] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [00003d] Left position                  u16 le           0                     00 00

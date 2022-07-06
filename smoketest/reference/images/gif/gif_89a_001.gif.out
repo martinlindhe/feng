@@ -3,6 +3,8 @@ Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
            - GIF89a                       eq
+
+LogicalScreenDescriptor
   [000006] Logical screen width           u16 le           10                    00 0a
   [000008] Logical screen height          u16 le           10                    00 0a
   [00000a] ScreenDescriptor               u8               145                   91
@@ -12,9 +14,9 @@ Header
            - GlobalColorTablePresent      bit              1
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
-  [00000d] Global Color Table             u8[12]                                 ff ff ff ff 00 00 00 00 ff 00 00 00
+  [00000d] Global color table             u8[12]                                 ff ff ff ff 00 00 00 00 ff 00 00 00
 
-Section_0 BLOCK_EXTENSION
+Block_0 GraphicControlExtension
   [000019] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [00001a] ExtensionType                  u8               249                   f9
@@ -29,7 +31,7 @@ Section_0 BLOCK_EXTENSION
   [00001f] Transparent color index        u8               0                     00
   [000020] Block terminator               u8               0                     00
 
-Section_1 BLOCK_IMAGE
+Block_1 ImageDescriptor
   [000021] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000022] Left position                  u16 le           0                     00 00
@@ -47,7 +49,7 @@ Section_1 BLOCK_IMAGE
   [00002d] Data                           u8[22]                                 8c 2d 99 87 2a 1c dc 33 a0 02 75 ec 95 fa a8 de 60 8c 04 91 4c 01
   [000043] BlockTerminator                u8               0                     00
 
-Section_2 BLOCK_TRAILER
+Block_2 Trailer
   [000044] BlockType                      u8               59                    3b
            - BLOCK_TRAILER                eq
 

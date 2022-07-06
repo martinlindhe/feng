@@ -3,6 +3,8 @@ Header
   [000000] Signature 1                    ascii[4]         GIF8                  47 49 46 38
   [000004] Version                        u16 le           24889                 61 39
            - GIF89a                       eq
+
+LogicalScreenDescriptor
   [000006] Logical screen width           u16 le           480                   01 e0
   [000008] Logical screen height          u16 le           360                   01 68
   [00000a] ScreenDescriptor               u8               247                   f7
@@ -12,65 +14,65 @@ Header
            - GlobalColorTablePresent      bit              1
   [00000b] Background color               u8               186                   ba
   [00000c] Aspect ratio                   u8               0                     00
-  [00000d] Global Color Table             u8[768]                                0a 0a 0a 82 86 82 c2 c6 c2 a6 a6 a2 46 4a 46 b2 b6 b2 e6 e6 e2 6a 6a 6a de d6 ce 92 96 92 c2 ba ...
+  [00000d] Global color table             u8[768]                                0a 0a 0a 82 86 82 c2 c6 c2 a6 a6 a2 46 4a 46 b2 b6 b2 e6 e6 e2 6a 6a 6a de d6 ce 92 96 92 c2 ba ...
 
-Section_0 BLOCK_EXTENSION
+Block_0 BLOCK_EXTENSION
   [00030d] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [00030e] ExtensionType                  u8               255                   ff
 
-Section_1 11
+Block_1 11
   [00030f] BlockType                      u8               11                    0b
 
-Section_2 78
+Block_2 78
   [000310] BlockType                      u8               78                    4e
 
-Section_3 69
+Block_3 69
   [000311] BlockType                      u8               69                    45
 
-Section_4 84
+Block_4 84
   [000312] BlockType                      u8               84                    54
 
-Section_5 83
+Block_5 83
   [000313] BlockType                      u8               83                    53
 
-Section_6 67
+Block_6 67
   [000314] BlockType                      u8               67                    43
 
-Section_7 65
+Block_7 65
   [000315] BlockType                      u8               65                    41
 
-Section_8 80
+Block_8 80
   [000316] BlockType                      u8               80                    50
 
-Section_9 69
+Block_9 69
   [000317] BlockType                      u8               69                    45
 
-Section_10 50
+Block_10 50
   [000318] BlockType                      u8               50                    32
 
-Section_11 46
+Block_11 46
   [000319] BlockType                      u8               46                    2e
 
-Section_12 48
+Block_12 48
   [00031a] BlockType                      u8               48                    30
 
-Section_13 3
+Block_13 3
   [00031b] BlockType                      u8               3                     03
 
-Section_14 1
+Block_14 1
   [00031c] BlockType                      u8               1                     01
 
-Section_15 0
+Block_15 0
   [00031d] BlockType                      u8               0                     00
 
-Section_16 0
+Block_16 0
   [00031e] BlockType                      u8               0                     00
 
-Section_17 0
+Block_17 0
   [00031f] BlockType                      u8               0                     00
 
-Section_18 BLOCK_EXTENSION
+Block_18 GraphicControlExtension
   [000320] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000321] ExtensionType                  u8               249                   f9
@@ -85,7 +87,7 @@ Section_18 BLOCK_EXTENSION
   [000326] Transparent color index        u8               186                   ba
   [000327] Block terminator               u8               0                     00
 
-Section_19 BLOCK_IMAGE
+Block_19 ImageDescriptor
   [000328] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000329] Left position                  u16 le           0                     00 00
