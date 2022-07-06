@@ -2,19 +2,19 @@
 Header
   [000000] Signature                      u8[2]                                  60 ea
   [000002] HeaderSize                     u16 le           44                    00 2c
-  [000004] Size including extra data      u8               34                    22
+  [000004] SizeWithExtraData              u8               34                    22
   [000005] Archiver version               u8               102                   66
   [000006] Minimum archiver version       u8               1                     01
   [000007] Host OS                        u8               11                    0b
            - Win32                        eq
   [000008] Flags                          u8               16                    10
-           - garbled                      bit              0
-           - ansipage                     bit              0
-           - arjprot                      bit              0
-           - pathsym                      bit              1
-           - backup                       bit              0
-           - secured                      bit              0
-           - altname                      bit              0
+           - Garbled                      bit              0
+           - Ansipage                     bit              0
+           - Arjprot                      bit              0
+           - Pathsym                      bit              1
+           - Backup                       bit              0
+           - Secured                      bit              0
+           - Altname                      bit              0
   [000009] Security version               u8               0                     00
   [00000a] File type                      u8               2                     02
   [00000b] Reserved                       u8               27                    1b
@@ -27,5 +27,46 @@ Header
   [000020] Encryption                     u8               0                     00
            - None                         eq
   [000021] Last chapter                   u8               0                     00
+  [000022] Protection factor              u8               0                     00
+  [000023] Flags (second series)          u8               0                     00
+  [000024] Reserved                       u8[2]                                  00 00
+  [000026] Archive name                   asciiz           test.ARJ              74 65 73 74 2e 41 52 4a 00
+  [00002f] Comment                        asciiz                                 00
+  [000030] CRC32                          u32 le           3878014683            e7 25 ce db
+  [000034] ExtHeaderSize                  u16 le           0                     00 00
 
-0x005c (92) unmapped bytes
+LocalHeader_0
+  [000036] Signature                      u8[2]                                  60 ea
+  [000038] HeaderSize                     u16 le           50                    00 32
+  [00003a] SizeWithExtraData              u8               46                    2e
+  [00003b] Archiver version               u8               102                   66
+  [00003c] Minimum archiver version       u8               1                     01
+  [00003d] Host OS                        u8               11                    0b
+           - Win32                        eq
+  [00003e] Flags                          u8               16                    10
+           - Garbled                      bit              0
+           - Reserved1                    bit              0
+           - Volume                       bit              0
+           - Extfile                      bit              0
+           - Pathsym                      bit              1
+           - Backup                       bit              0
+           - Reserved2                    bit              0
+  [00003f] Compression method             u8               0                     00
+           - Stored                       eq
+  [000040] File type                      u8               0                     00
+           - Binary                       eq
+  [000041] Reserved                       u8               27                    1b
+  [000042] Modified time                  u32 le           781230360             2e 90 a1 18
+  [000046] CompressedSize                 u32 le           8                     00 00 00 08
+  [00004a] Original size                  u32 le           8                     00 00 00 08
+  [00004e] Original file CRC              u32 le           3107898361            b9 3e c3 f9
+  [000052] Filespec position in filename  u16 le           0                     00 00
+  [000054] File access mode               u16 le           32                    00 20
+  [000056] First chapter                  u8               0                     00
+  [000057] Last chapter                   u8               0                     00
+  [000058] FileName                       asciiz                                 00
+  [000059] File comment                   asciiz                                 00
+  [00005a] CRC32                          u32 le           2702704640            a1 18 00 00
+  [00005e] ExtHeaderSize                  u16 le           11920                 2e 90
+
+0x001e (30) unmapped bytes

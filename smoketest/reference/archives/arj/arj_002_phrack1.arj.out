@@ -2,19 +2,19 @@
 Header
   [000000] Signature                      u8[2]                                  60 ea
   [000002] HeaderSize                     u16 le           1248                  04 e0
-  [000004] Size including extra data      u8               30                    1e
+  [000004] SizeWithExtraData              u8               30                    1e
   [000005] Archiver version               u8               6                     06
   [000006] Minimum archiver version       u8               1                     01
   [000007] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [000008] Flags                          u8               16                    10
-           - garbled                      bit              0
-           - ansipage                     bit              0
-           - arjprot                      bit              0
-           - pathsym                      bit              1
-           - backup                       bit              0
-           - secured                      bit              0
-           - altname                      bit              0
+           - Garbled                      bit              0
+           - Ansipage                     bit              0
+           - Arjprot                      bit              0
+           - Pathsym                      bit              1
+           - Backup                       bit              0
+           - Secured                      bit              0
+           - Altname                      bit              0
   [000009] Security version               u8               0                     00
   [00000a] File type                      u8               2                     02
   [00000b] Reserved                       u8               36                    24
@@ -27,5 +27,48 @@ Header
   [000020] Encryption                     u8               0                     00
            - None                         eq
   [000021] Last chapter                   u8               0                     00
+  [000022] Archive name                   asciiz           PHRACK1.ARJ           50 48 52 41 43 4b 31 2e 41 52 4a 00
+  [00002e] Comment                        asciiz           .File:   PHRACK1.ARJ.Desc:   Phrack 1.       20 Miles North of Nowhere BBS    Sysop: Texas Chainsaw Programmer................................................................................................ Origin: 20MNN, Littleton, CO      ......................................................................................................................... (303)932-1195 - 24,000 BPS        ......................................................................................................................... VirtualNet, Internet, FidoNet,    ........................................... MagNet, RushNet, ScriptNet        ......................................................................................................................... 1.2 Gigs Online/CD-ROM - 25 OLGs  ........................................... Registered LORD, OS/2 WARP 3.00   ........................................... Sound, Alt. OS, Games, H/P/A,     ........................................... OS/2, Communications, Utils, MORE!...................................................................................................................................................................................... . 0a 46 69 6c 65 3a 20 20 20 50 48 52 41 43 4b 31 2e 41 52 4a 0a 44 65 73 63 3a 20 20 20 50 68 72 ...
+  [0004e4] CRC32                          u32 le           1428329082            55 22 92 7a
+  [0004e8] ExtHeaderSize                  u16 le           0                     00 00
 
-0x2d98 (11672) unmapped bytes
+LocalHeader_0
+  [0004ea] Signature                      u8[2]                                  60 ea
+  [0004ec] HeaderSize                     u16 le           39                    00 27
+  [0004ee] SizeWithExtraData              u8               30                    1e
+  [0004ef] Archiver version               u8               6                     06
+  [0004f0] Minimum archiver version       u8               1                     01
+  [0004f1] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [0004f2] Flags                          u8               16                    10
+           - Garbled                      bit              0
+           - Reserved1                    bit              0
+           - Volume                       bit              0
+           - Extfile                      bit              0
+           - Pathsym                      bit              1
+           - Backup                       bit              0
+           - Reserved2                    bit              0
+  [0004f3] Compression method             u8               1                     01
+           - Compressed 1a (best)         eq
+  [0004f4] File type                      u8               0                     00
+           - Binary                       eq
+  [0004f5] Reserved                       u8               36                    24
+  [0004f6] Modified time                  u32 le           405021304             18 24 22 78
+  [0004fa] CompressedSize                 u32 le           10395                 00 00 28 9b
+  [0004fe] Original size                  u32 le           29696                 00 00 74 00
+  [000502] Original file CRC              u32 le           4016015907            ef 5f 8a 23
+  [000506] Filespec position in filename  u16 le           0                     00 00
+  [000508] File access mode               u16 le           32                    00 20
+  [00050a] First chapter                  u8               0                     00
+  [00050b] Last chapter                   u8               0                     00
+  [00050c] FileName                       asciiz           PHRACK1               50 48 52 41 43 4b 31 00
+  [000514] File comment                   asciiz                                 00
+  [000515] CRC32                          u32 le           3442446020            cd 2f 8e c4
+  [000519] ExtHeaderSize                  u16 le           0                     00 00
+  [00051b] Compressed data                u8[10395]                              1a d5 83 b6 da c6 e3 91 ff a7 1b dd 00 fa ec 5e ea 49 b2 4a 24 92 49 29 46 de 02 95 95 76 72 d2 ...
+
+LocalHeader_1
+  [002db6] Signature                      u8[2]                                  60 ea
+  [002db8] HeaderSize                     u16 le           0                     00 00
+
+EOF
