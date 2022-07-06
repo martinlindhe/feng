@@ -1,0 +1,26 @@
+# templates/fonts/eot.yml
+Header
+  [000000] EOT size                       u32 be           2672689152            9f 4e 00 00
+  [000004] Font data size                 u32 be           1095565312            41 4d 00 00
+  [000008] Version                        u32 be           33554944              02 00 02 00
+  [00000c] Flags                          u32 be           67108864              04 00 00 00
+  [000010] Font panose                    u8[10]                                 00 00 05 00 00 00 00 00 00 00
+  [00001a] Charset                        u8               1                     01
+  [00001b] Italic                         u8               0                     00
+  [00001c] Weight                         u32 be           2415984640            90 01 00 00
+  [000020] Fs type                        u16 be           1024                  04 00
+  [000022] Magic                          u8[2]                                  4c 50
+  [000024] Unicode range 1                u32 be           0                     00 00 00 00
+  [000028] unicode range 2                u32 be           2                     00 00 00 02
+  [00002c] Unicode range 3                u32 be           0                     00 00 00 00
+  [000030] Unicode range 4                u32 be           0                     00 00 00 00
+  [000034] Code page range 1              u32 be           16777216              01 00 00 00
+  [000038] Code page range 2              u32 be           0                     00 00 00 00
+  [00003c] Reserved 1                     u32 be           655523628             27 12 7f 2c
+  [000040] Reserved 2                     u32 be           0                     00 00 00 00
+  [000044] Reserved 3                     u32 be           0                     00 00 00 00
+  [000048] Reserved 4                     u32 be           0                     00 00 00 00
+  [00004c] Padding                        u16 be           0                     00 00
+  [00004e] Family name size               u16 be           0                     00 00
+
+0x4e4f (20047) unmapped bytes

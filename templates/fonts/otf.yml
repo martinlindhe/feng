@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+references:
+  - https://en.wikipedia.org/wiki/OpenType
+
+kind: font
+name: OpenType font
+extensions: [.otf, .otc]
+mime: font/otf
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'OTTO'
+
+structs:
+  header:
+    u32 Magic: c'OTTO'
+
+layout:
+  - header Header

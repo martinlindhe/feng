@@ -97,9 +97,25 @@ input:
     files:
       - pdf_001.pdf
 
+  - folder: fonts/eot
+    files:
+      - eot_001_glyphicons.eot
+
+  - folder: fonts/otf
+    files:
+      - otf_001.otf
+
   - folder: fonts/ttf
     files:
       - ttf_001.ttf
+
+  - folder: fonts/woff
+    files:
+      - woff_001_glyphicons.woff
+
+  - folder: fonts/woff2
+    files:
+      - woff2_001_glyphicons.woff2
 
   - folder: games/everquest_pfs
     files:

@@ -1,0 +1,45 @@
+# STATUS: 1%
+
+references:
+  - https://en.wikipedia.org/wiki/Embedded_OpenType
+
+kind: font
+name: Embedded OpenType font
+extensions: [.eot]
+mime: font/otf
+endian: big # XXX
+
+magic:
+  - offset: 0022
+    match: 4c 50
+
+structs:
+  header:
+    #u8[2] Magic: 4c 50
+
+    # XXX Version 0x00010000
+    u32 EOT size: ??
+    u32 Font data size: ??
+    u32 Version: ??
+    u32 Flags: ??
+    u8[10] Font panose: ??
+    u8 Charset: ??    # XXX decode
+    u8 Italic: ??
+    u32 Weight: ??
+    u16 Fs type: ??
+    u8[2] Magic: 4c 50
+    u32 Unicode range 1: ??
+    u32 unicode range 2: ??
+    u32 Unicode range 3: ??
+    u32 Unicode range 4: ??
+    u32 Code page range 1: ??
+    u32 Code page range 2: ??
+    u32 Reserved 1: ??
+    u32 Reserved 2: ??
+    u32 Reserved 3: ??
+    u32 Reserved 4: ??
+    u16 Padding: ??
+    u16 Family name size: ??
+
+layout:
+  - header Header

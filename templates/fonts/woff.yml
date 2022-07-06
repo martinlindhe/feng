@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+references:
+  - https://en.wikipedia.org/wiki/Web_Open_Font_Format
+
+kind: font
+name: Woff font
+extensions: [.woff]
+mime: font/otf
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'wOFF'
+
+structs:
+  header:
+    ascii[4] Magic: c'wOFF'
+
+layout:
+  - header Header

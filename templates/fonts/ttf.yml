@@ -4,7 +4,7 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/TTF.bt
 
 kind: font
-name:  TrueType font
+name: TrueType font
 extensions: [.ttf]
 mime: font/ttf
 endian: big # XXX
