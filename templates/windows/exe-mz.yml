@@ -1,11 +1,17 @@
 # STATUS: 1%
 
 references:
+  # general EXE format
   - https://moddingwiki.shikadi.net/wiki/EXE_Format
   - https://www.sweetscape.com/010editor/repository/files/EXE.bt
 
+  # MZ-LE format: Linear Executable (Win VxD:s, and OS/2)
+  - http://fileformats.archiveteam.org/wiki/Linear_Executable
+  - http://wiki.osdev.org/LE
+
 kind: executable
 name: MS-DOS / OS-2 / Windows executable
+mime: application/x-dosexec
 extensions: [.exe, .dll]
 endian: little
 
@@ -30,13 +36,6 @@ structs:
     u16 RelocationTableOffset: ??
     u16 OverlayNumber: ??
 
-    # XXX the following is not in original MS-DOS exe header: but exists in windows exe files?!
-    u64 Reserved: ??
-    u16 OEM id: ??
-    u16 OEM info: ??
-    u16[10] Reserved2[10]: ??
-    u32 NewExeHeaderOffset: ??
-
   relocation_table:
     u16 Offset: ??
     u16 Paragraph: ??
@@ -44,10 +43,9 @@ structs:
   exepack_header:
     # Microsoft EXEPACK check
     # https://moddingwiki.shikadi.net/wiki/Microsoft_EXEPACK
-    offset: (Header.HeaderSizeInParagraphs * 16) + (Header.CS * 16) + Header.IP - 2
-    #ascii[2] ExepackMagic: ??        # XXX show as ascii
-    u16 ExepackMagic: 42 52           # XXX this required match breaks parsing, solve with a "peek" directive ???
-    if self.ExepackMagic == 0x4252:   # XXX TODO expose string variables in script engine and compare with "RB"
+
+    if peek_i16((Header.HeaderSizeInParagraphs * 16) + (Header.CS * 16) + Header.IP - 2) == 0x4252:
+      # XXX TODO expose string variables in script engine and compare with "RB"
       offset: (Header.HeaderSizeInParagraphs * 16) + (Header.CS * 16) + Header.IP - 18
       u16 Real IP: ??
       u16 Real CS: ??
@@ -57,13 +55,13 @@ structs:
       u16 Real SS: ??
       u16 Dest len: ??
       u16 Skip len: ??
+      ascii[2] ExepackMagic: ??
       u8[268] Unpacker code: ?? # XXX unsure of size
       offset: restore
-    offset: restore
 
   pklite_header:
     # https://moddingwiki.shikadi.net/wiki/PKLite
-    if (Header.Reserved & 0xFFFFFFFFFFFF0000) == 0x4554494c4b500000:
+    if peek_i32("001e") == 0x494c4b50: # c'PKLI'
       offset: "0x001c"
       u8 Minor version: ??
       u8 Flags:
@@ -75,7 +73,7 @@ structs:
   
   tlink_header:
     # Borland TLINK
-    if (Header.Reserved & 0xFF00FF) == 0xFB0001:
+    if (peek_i32("001c") & 0x00FF00FF) == 0x00FB0001:
       offset: "0x001c"
       u8[3] Identifier: ??
       u8 Version: ??
@@ -83,7 +81,7 @@ structs:
 
   lzexe_header:
     # TODO: some users change the ID bytes at 0x001c, we can instead detect on decompression block
-    if (Header.Reserved & 0xFFFF) == 0x5A4C:
+    if peek_i16("001c") == 0x5A4C:
       offset: "0x001c"
       ascii[2] Identifier: c'LZ'
       ascii[2] Version:
@@ -94,19 +92,32 @@ structs:
       u32 Real SS:SP: ??
       u16 Compressed load module size: ??
       u16 Increase load module size: ??
-      u16 Uncompressor size: ??
+      u16 Uncompressed size: ??
       u16 Checksum: ??
 
       offset: (Header.HeaderSizeInParagraphs + Header.CS) * 16 + Header.IP
       u8[232] Lzexe uncompressor program: ??
 
+  ne_header:
+    if Header.RelocationTableOffset == 0x40:
+      # new-(NE,LE,LX,W3,PE etc.) executable
+      u16[4] Reserved: ??
+      u16 OEM id: ??
+      u16 OEM info: ??
+      u16[10] Reserved2: ??
+      u32 NewHeaderOffset: ??
+
 layout:
   - dos_header Header
 
-  #- exepack_header ExepackHeader   # XXX cannot detect exepack without breaking the rest without peek directive
+  # Detect some exe packers or linkers
   - pklite_header PKLiteHeader
+  - exepack_header ExepackHeader
   - tlink_header BorlandTLinkHeader
   - lzexe_header LZEXEHeader
 
-  - offset Header.RelocationTableOffset
-  - relocation_table[Header.RelocationItemCount] RelocationTable
+#  - ne_header NEHeader
+
+  # XXX only this code path for unrecognized header ID:s, requires "relocation_table[Header.RelocationItemCount] RelocationTable" syntax in struct field
+#  - offset Header.RelocationTableOffset
+#  - relocation_table[Header.RelocationItemCount] RelocationTable

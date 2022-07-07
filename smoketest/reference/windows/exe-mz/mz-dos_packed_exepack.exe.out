@@ -1,0 +1,30 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           114                   00 72
+  [000004] FileSizeInPages                u16 le           14                    00 0e
+  [000006] RelocationItemCount            u16 le           0                     00 00
+  [000008] HeaderSizeInParagraphs         u16 le           32                    00 20
+  [00000a] MinimumExtraParagraphs         u16 le           333                   01 4d
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           672                   02 a0
+  [000010] InitialSP                      u16 le           128                   00 80
+  [000012] Checksum                       u16 le           0                     00 00
+  [000014] IP                             u16 le           16                    00 10
+  [000016] CS                             u16 le           370                   01 72
+  [000018] RelocationTableOffset          u16 le           30                    00 1e
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+
+ExepackHeader
+  [00191e] Real IP                        u16 le           65535                 ff ff
+  [001920] Real CS                        u16 le           4750                  12 8e
+  [001922] Mem start                      u16 le           0                     00 00
+  [001924] Exepack size                   u16 le           0                     00 00
+  [001926] Real SP                        u16 le           338                   01 52
+  [001928] Real SS                        u16 le           1192                  04 a8
+  [00192a] Dest len                       u16 le           650                   02 8a
+  [00192c] Skip len                       u16 le           650                   02 8a
+  [00192e] ExepackMagic                   ascii[2]         RB                    52 42
+  [001930] Unpacker code                  u8[268]                                8b e8 8c c0 05 10 00 0e 1f a3 04 00 03 06 0c 00 8e c0 8b 0e 06 00 8b f9 4f 8b f7 fd f3 a4 50 b8 ...
+
+0x1938 (6456) unmapped bytes

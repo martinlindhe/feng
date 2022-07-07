@@ -1,0 +1,23 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           330                   01 4a
+  [000004] FileSizeInPages                u16 le           177                   00 b1
+  [000006] RelocationItemCount            u16 le           59                    00 3b
+  [000008] HeaderSizeInParagraphs         u16 le           32                    00 20
+  [00000a] MinimumExtraParagraphs         u16 le           22849                 59 41
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           0                     00 00
+  [000010] InitialSP                      u16 le           0                     00 00
+  [000012] Checksum                       u16 le           0                     00 00
+  [000014] IP                             u16 le           18144                 46 e0
+  [000016] CS                             u16 le           0                     00 00
+  [000018] RelocationTableOffset          u16 le           62                    00 3e
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+
+BorlandTLinkHeader
+  [00001c] Identifier                     u8[3]                                  01 00 fb
+  [00001f] Version                        u8               97                    61
+  [000020] Identifier2                    ascii[2]         jr                    6a 72
+
+0x16128 (90408) unmapped bytes

@@ -14,46 +14,5 @@ Header
   [000016] CS                             u16 le           1827                  07 23
   [000018] RelocationTableOffset          u16 le           32                    00 20
   [00001a] OverlayNumber                  u16 le           0                     00 00
-  [00001c] Reserved                       u64 le           514254821172186076    07 23 00 09 04 00 0b dc
-  [000024] OEM id                         u16 le           1345                  05 41
-  [000026] OEM info                       u16 le           1827                  07 23
-  [000028] Reserved2[10]                  u16[10] le                             11 25 07 23 13 ed 07 23 14 b8 07 23 15 01 07 23 2a de 07 23
-  [00003c] NewExeHeaderOffset             u32 le           119749272             07 23 3a 98
 
-RelocationTable_0
-  [000020] Offset                         u16 le           9                     00 09
-  [000022] Paragraph                      u16 le           1827                  07 23
-
-RelocationTable_1
-  [000024] Offset                         u16 le           1345                  05 41
-  [000026] Paragraph                      u16 le           1827                  07 23
-
-RelocationTable_2
-  [000028] Offset                         u16 le           4389                  11 25
-  [00002a] Paragraph                      u16 le           1827                  07 23
-
-RelocationTable_3
-  [00002c] Offset                         u16 le           5101                  13 ed
-  [00002e] Paragraph                      u16 le           1827                  07 23
-
-RelocationTable_4
-  [000030] Offset                         u16 le           5304                  14 b8
-  [000032] Paragraph                      u16 le           1827                  07 23
-
-RelocationTable_5
-  [000034] Offset                         u16 le           5377                  15 01
-  [000036] Paragraph                      u16 le           1827                  07 23
-
-RelocationTable_6
-  [000038] Offset                         u16 le           10974                 2a de
-  [00003a] Paragraph                      u16 le           1827                  07 23
-
-RelocationTable_7
-  [00003c] Offset                         u16 le           15000                 3a 98
-  [00003e] Paragraph                      u16 le           1827                  07 23
-
-RelocationTable_8
-  [000040] Offset                         u16 le           23711                 5c 9f
-  [000042] Paragraph                      u16 le           1827                  07 23
-
-0xd6b7 (54967) unmapped bytes
+0xd6ff (55039) unmapped bytes

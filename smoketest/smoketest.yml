@@ -491,10 +491,12 @@ input:
 
   - folder: windows/exe-mz
     files:
-      - EDXOR165.exe
-      - mz-dos_borland_header.exe
+      #- EDXOR165.exe
+      - ne-win16_mrmind.exe
+      - ne-win95_mnmtph16.dll
+      - mz-dos_tlink_header.exe
       - mz-dos_multiple_reloc_items.exe
-      #- mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes
+      - mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes
       - mz-dos_packed_lzexe_keen1.exe
       - mz-dos_packed_lzexe_sample.exe
       - mz-dos_packed_pklite.exe

@@ -14,11 +14,6 @@ Header
   [000016] CS                             u16 le           4418                  11 42
   [000018] RelocationTableOffset          u16 le           28                    00 1c
   [00001a] OverlayNumber                  u16 le           0                     00 00
-  [00001c] Reserved                       u64 le           10040212415799974476  8b 55 ff ff 31 39 5a 4c
-  [000024] OEM id                         u16 le           33772                 83 ec
-  [000026] OEM info                       u16 le           1772                  06 ec
-  [000028] Reserved2[10]                  u16[10] le                             56 57 b2 b8 ba 05 00 00 ff 52 50 ff 02 b8 50 00 7a 9a 5c 64
-  [00003c] NewExeHeaderOffset             u32 le           113541903             06 c4 83 0f
 
 LZEXEHeader
   [00001c] Identifier                     ascii[2]         LZ                    4c 5a
@@ -27,8 +22,8 @@ LZEXEHeader
   [000024] Real SS:SP                     u32 le           116163564             06 ec 83 ec
   [000028] Compressed load module size    u16 le           22103                 56 57
   [00002a] Increase load module size      u16 le           45752                 b2 b8
-  [00002c] Uncompressor size              u16 le           47621                 ba 05
+  [00002c] Uncompressed size              u16 le           47621                 ba 05
   [00002e] Checksum                       u16 le           0                     00 00
   [01144e] Lzexe uncompressor program     u8[232]                                06 0e 1f 8b 0e 0c 00 8b f1 4e 89 f7 8c db 03 1e 0a 00 8e c3 fd f3 a4 53 b8 2b 00 50 cb 2e 8b 2e ...
 
-0x11745 (71493) unmapped bytes
+0x11769 (71529) unmapped bytes

@@ -1,6 +1,7 @@
 package mapper
 
 import (
+	"encoding/binary"
 	"fmt"
 	"log"
 	"math"
@@ -74,6 +75,60 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)
+
+	functions["peek_i32"] = func(args ...interface{}) (interface{}, error) {
+		// 1 arg: hex string
+		if len(args) != 1 {
+			return nil, fmt.Errorf("expected exactly 1 argument")
+		}
+		if v, ok := args[0].(string); ok {
+			v, err := value.ParseHexStringToUint64(v)
+			if err != nil {
+				return nil, err
+			}
+			offset := int(v)
+			if offset >= len(fl.rawData) {
+				return 0, fmt.Errorf("out of range %06x", offset)
+			}
+			val := binary.LittleEndian.Uint32(fl.rawData[offset:]) // XXX endianness
+			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
+
+			return int(val), nil
+		}
+		return nil, fmt.Errorf("expected string, got %T", args[0])
+	}
+
+	functions["peek_i16"] = func(args ...interface{}) (interface{}, error) {
+		// 1 arg: hex string
+		if len(args) != 1 {
+			return nil, fmt.Errorf("expected exactly 1 argument")
+		}
+
+		if v, ok := args[0].(string); ok {
+			v, err := value.ParseHexStringToUint64(v)
+			if err != nil {
+				return nil, err
+			}
+			offset := int(v)
+			if offset >= len(fl.rawData) {
+				return 0, fmt.Errorf("out of range %06x", offset)
+			}
+			val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
+			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			return int(val), nil
+		}
+		if offset, ok := args[0].(int); ok {
+			spew.Dump(variables)
+			if offset >= len(fl.rawData) {
+
+				return 0, fmt.Errorf("out of range %06x", offset)
+			}
+			val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
+			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			return int(val), nil
+		}
+		return nil, fmt.Errorf("expected string, got %T", args[0])
+	}
 
 	functions["atoi"] = func(args ...interface{}) (interface{}, error) {
 		// 1 arg: string. return integer value

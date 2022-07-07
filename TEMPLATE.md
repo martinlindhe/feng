@@ -36,6 +36,15 @@ VERSION 0 - DRAFT. JULY 2022
 Constants is always expressed in network byte order
 
 
+# built-in functions
+
+
+abs(-95)       = 95  returns absolute value
+peek_i16(123)  = -1  returns i16 value from offset
+peek_i16("0100")    hex string offset
+peek_i32(123)  = -1  returns i32 value from offset
+
+
 # data types
 
 numeric

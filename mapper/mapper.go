@@ -43,6 +43,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 
 	// read all data to get the total length
 	b, _ := ioutil.ReadAll(r)
+	fileLayout.rawData = b
 	fileLayout.size = uint64(len(b))
 	rr := bytes.NewReader(b)
 
@@ -183,14 +184,14 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		if err != nil {
 			return err // or panic or ignore
 		}
-		log.Println(tpl)
+		//log.Println(tpl)
 		ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, tpl)
 		if err != nil {
 			return err
 		}
 
 		if ds.NoMagic {
-			log.Println("skip no_magic template", tpl)
+			//log.Println("skip no_magic template", tpl)
 			return nil
 		}
 

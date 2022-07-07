@@ -39,6 +39,9 @@ type FileLayout struct {
 
 	// lastpath/filename-without-ext, eg "archives/zip"
 	BaseName string
+
+	// the raw data underlying the structure. used for peek()
+	rawData []byte
 }
 
 // pop last offset from previousOffsets list

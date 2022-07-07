@@ -1,0 +1,18 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           307                   01 33
+  [000004] FileSizeInPages                u16 le           3                     00 03
+  [000006] RelocationItemCount            u16 le           0                     00 00
+  [000008] HeaderSizeInParagraphs         u16 le           32                    00 20
+  [00000a] MinimumExtraParagraphs         u16 le           0                     00 00
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           0                     00 00
+  [000010] InitialSP                      u16 le           0                     00 00
+  [000012] Checksum                       u16 le           20779                 51 2b
+  [000014] IP                             u16 le           16                    00 10
+  [000016] CS                             u16 le           0                     00 00
+  [000018] RelocationTableOffset          u16 le           64                    00 40
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+
+0x4fd4 (20436) unmapped bytes
