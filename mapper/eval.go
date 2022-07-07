@@ -75,6 +75,22 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 
 	functions := make(map[string]goval.ExpressionFunction)
 
+	functions["atoi"] = func(args ...interface{}) (interface{}, error) {
+		// 1 arg: string. return integer value
+		if len(args) != 1 {
+			return nil, fmt.Errorf("expected exactly 1 argument")
+		}
+		v, ok := args[0].(string)
+
+		if ok {
+			res, err := strconv.Atoi(v)
+			if err != nil {
+				return nil, err
+			}
+			return res, nil
+		}
+		return nil, fmt.Errorf("expected string, got %T", args[0])
+	}
 	functions["abs"] = func(args ...interface{}) (interface{}, error) {
 		// 1 arg: integer. return absolute value
 		if len(args) != 1 {

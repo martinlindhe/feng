@@ -1,6 +1,6 @@
-# STATUS: 1%
+# STATUS: 2%
 #
-# MAX: in order to progress format, we need to convert decimal string to a number. XXX Add script function atoi("x")
+# MAX: in order to progress format, we need to access strings in scripting language
 
 references:
   - https://www.sweetscape.com/010editor/repository/files/AR.bt
@@ -28,8 +28,8 @@ structs:
     ascii[10] FileStreamSize: ??
     u8[2] EndMarker: 60 0a
 
-    # XXX data bytes follow in FileStreamSize size... which is in decimal string format.
-    #u8[atoi("self.FileStreamSize")] Data: ??
+    # XXX data bytes follow in FileStreamSize size... TODO the string is not available in scripting eval
+    #u8[atoi(self.FileStreamSize)] Data: ??   # XXX need self.FileStreamSize string value available !!!
 
 layout:
   - header Header

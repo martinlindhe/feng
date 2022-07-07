@@ -1,0 +1,16 @@
+# templates/systems/os2/ftcomp.yml
+Header \OS2\MDOS\iswindow.com
+  [000000] Magic                          u8[4]                                  a5 96 fd ff
+  [000004] MaybeChecksum                  u32 le           2072256752            7b 84 20 f0
+  [000008] Unknown                        u32 le           32                    00 00 00 20
+  [00000c] MaybeReserved                  u32 le           0                     00 00 00 00
+  [000010] MaybeUncompressedSize          u32 le           19                    00 00 00 13
+  [000014] MaybeReserved                  u32 le           0                     00 00 00 00
+  [000018] Signature                      ascii[7]         FTCOMP                46 54 43 4f 4d 50 00
+  [00001f] MaybeFlags                     u16 le           6                     00 06
+  [000021] Unknown                        u16 le           1                     00 01
+  [000023] Unknown                        u32 le           4                     00 00 00 04
+  [000027] FileNameSize                   u16 le           23                    00 17
+  [000029] FileName                       ascii[23]        \OS2\MDOS\iswindow.com 5c 4f 53 32 5c 4d 44 4f 53 5c 69 73 77 69 6e 64 6f 77 2e 63 6f 6d 00
+
+0x0026 (38) unmapped bytes

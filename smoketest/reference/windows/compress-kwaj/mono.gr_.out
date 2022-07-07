@@ -1,0 +1,8 @@
+# templates/windows/compress-kwaj.yml
+Header
+  [000000] Signature                      ascii[4]         KWAJ                  4b 57 41 4a
+  [000004] Unknown                        u32 le           3509055624            d1 27 f0 88
+  [000008] Method                         u16 le           3                     00 03
+           - LZ77 + Huffman               eq
+
+0x011e (286) unmapped bytes

@@ -5,6 +5,10 @@ input:
       - 7z_001_one_file.7z
       - 7z_002_three_files.7z
 
+  - folder: archives/ar
+    files:
+      - python-talloc_2.1.2-0+deb8u1_amd64.deb
+
   - folder: archives/arj
     files:
       - arj_001_tiny.arj
@@ -384,6 +388,12 @@ input:
     files:
       - ps3_eboot.bin
 
+  - folder: systems/os2/ftcomp
+    files:
+      - iswindow.co_
+      - screen01.sy_
+      - SMALLE.FON
+
   - folder: systems/ps4/ps4_pkg
     files:
       # XXX find smaller samples
@@ -442,6 +452,11 @@ input:
   - folder: systems/xbox360/xex
     files:
       - natalsu.xex
+
+  - folder: windows/compress-kwaj
+    files:
+      - 5202.cp_
+      - mono.gr_
 
   - folder: windows/pe
     files:

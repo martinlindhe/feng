@@ -1,0 +1,14 @@
+# templates/archives/ar.yml
+Header
+  [000000] Signature                      ascii[8]         !<arch>.              21 3c 61 72 63 68 3e 0a
+
+File debian-binary
+  [000008] Filename                       ascii[16]        debian-binary         64 65 62 69 61 6e 2d 62 69 6e 61 72 79 20 20 20
+  [000018] Modification time              ascii[12]        1460438548            31 34 36 30 34 33 38 35 34 38 20 20
+  [000024] Owner ID                       ascii[6]         0                     30 20 20 20 20 20
+  [00002a] Group ID                       ascii[6]         0                     30 20 20 20 20 20
+  [000030] File mode                      ascii[8]         100644                31 30 30 36 34 34 20 20
+  [000038] FileStreamSize                 ascii[10]        4                     34 20 20 20 20 20 20 20 20 20
+  [000042] EndMarker                      u8[2]                                  60 0a
+
+0x2860 (10336) unmapped bytes

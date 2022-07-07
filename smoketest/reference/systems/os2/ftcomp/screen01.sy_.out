@@ -1,0 +1,16 @@
+# templates/systems/os2/ftcomp.yml
+Header \OS2\screen01.sys
+  [000000] Magic                          u8[4]                                  a5 96 fd ff
+  [000004] MaybeChecksum                  u32 le           187638028             0b 2f 21 0c
+  [000008] Unknown                        u32 le           32                    00 00 00 20
+  [00000c] MaybeReserved                  u32 le           0                     00 00 00 00
+  [000010] MaybeUncompressedSize          u32 le           10962                 00 00 2a d2
+  [000014] MaybeReserved                  u32 le           0                     00 00 00 00
+  [000018] Signature                      ascii[7]         FTCOMP                46 54 43 4f 4d 50 00
+  [00001f] MaybeFlags                     u16 le           0                     00 00
+  [000021] Unknown                        u16 le           1                     00 01
+  [000023] Unknown                        u32 le           4                     00 00 00 04
+  [000027] FileNameSize                   u16 le           18                    00 12
+  [000029] FileName                       ascii[18]        \OS2\screen01.sys     5c 4f 53 32 5c 73 63 72 65 65 6e 30 31 2e 73 79 73 00
+
+0x1d80 (7552) unmapped bytes

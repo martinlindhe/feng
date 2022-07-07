@@ -1,0 +1,16 @@
+# templates/systems/os2/ftcomp.yml
+Header \OS2\MDOS\WINOS2\SYSTEM\smalle.fon
+  [000000] Magic                          u8[4]                                  a5 96 fd ff
+  [000004] MaybeChecksum                  u32 le           539302553             20 25 1a 99
+  [000008] Unknown                        u32 le           0                     00 00 00 00
+  [00000c] MaybeReserved                  u32 le           0                     00 00 00 00
+  [000010] MaybeUncompressedSize          u32 le           26112                 00 00 66 00
+  [000014] MaybeReserved                  u32 le           0                     00 00 00 00
+  [000018] Signature                      ascii[7]         FTCOMP                46 54 43 4f 4d 50 00
+  [00001f] MaybeFlags                     u16 le           1062                  04 26
+  [000021] Unknown                        u16 le           1                     00 01
+  [000023] Unknown                        u32 le           4                     00 00 00 04
+  [000027] FileNameSize                   u16 le           35                    00 23
+  [000029] FileName                       ascii[35]        \OS2\MDOS\WINOS2\SYSTEM\smalle.fon 5c 4f 53 32 5c 4d 44 4f 53 5c 57 49 4e 4f 53 32 5c 53 59 53 54 45 4d 5c 73 6d 61 6c 6c 65 2e 66 ...
+
+0x1fef (8175) unmapped bytes

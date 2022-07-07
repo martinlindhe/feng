@@ -1,0 +1,33 @@
+# STATUS: 1%
+
+# Compression format used on OS/2
+
+references:
+  - https://en.wikipedia.org/wiki/PDF
+
+kind: archive
+name: OS/2 FTCOMP archive
+endian: little
+
+magic:
+  - offset: 0000
+    match: A5 96 FD FF
+
+structs:
+  header:
+    u8[4] Magic: A5 96 FD FF
+    u32 MaybeChecksum: ??               # XXX checksum ???
+    u32 Unknown: ??                     # 32
+    u32 MaybeReserved: ??               # 0
+    u32 MaybeUncompressedSize: ??       # XXX uncompressed size?
+    u32 MaybeReserved: ??               # 0
+    ascii[7] Signature: c'FTCOMP' 00
+    u16 MaybeFlags: ??                  # XXX flags ??? 
+    u16 Unknown: ??                     # XXX always 1 ?
+    u32 Unknown: ??                     # XXX always 4 ?
+    u16 FileNameSize: ??
+    ascii[self.FileNameSize] FileName: ??
+    label: self.FileName
+
+layout:
+  - header Header
