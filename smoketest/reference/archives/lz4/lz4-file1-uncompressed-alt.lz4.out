@@ -11,7 +11,7 @@ Header
            - BlockIndependence            bit              1
            - Version                      bit              1
   [000005] blockDescriptor                u8               112                   70
-           - Reserved                     bit              0                     00
+           - Reserved                     bit              0                     0
            - BlockMaximumSize             bit              7
            - Reserved                     bit              0
   [000006] HeaderChecksum                 u8               115                   73

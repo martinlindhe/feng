@@ -121,7 +121,9 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 
 			switch child.Ones {
 			case 0, 1, 2, 3:
-			case 4, 5, 6, 7, 8:
+			case 4:
+				raw = fmt.Sprintf("%01x ", child.Value)
+			case 5, 6, 7, 8:
 				raw = fmt.Sprintf("%02x", child.Value)
 			case 13:
 				raw = fmt.Sprintf("%04x", child.Value)

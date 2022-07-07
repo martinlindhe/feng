@@ -66,6 +66,10 @@ input:
       - tar_001.tar
       - tar_002_dir.tar
 
+  - folder: archives/teledisk
+    files:
+      - dos125.td0
+
   - folder: archives/xar
     files:
       - xar_001_one_file.xar
@@ -214,6 +218,11 @@ input:
       - testcompress4.bmp
       - testcompress8.bmp
       - trans.bmp
+
+  - folder: images/bpg
+    files:
+      - 042-bt601.bpg
+      - lena_q36.bpg
 
   - folder: images/dds
     files:
@@ -364,6 +373,10 @@ input:
       - asf_001.wma
       - asf_002.wmv
       - launcherloop.wma
+
+  - folder: network/torrent
+    files:
+      - sample.torrent
 
   - folder: systems/gameboy
     files:

@@ -1,0 +1,37 @@
+# STATUS: 1%
+
+# TODO: need sample with "TD" header
+
+references:
+  - http://www.willsworks.net/file-format/teledisk
+
+kind: archive
+name: Teledisk floppy disk image
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'td'
+
+structs:
+  header:
+    ascii[2] Signature: c'td'       # "td" == advanced compression. "TD" == "normal compression"
+    u8 VolumeSequence: ??           # disk number, first is 0
+    u8 CheckSignature: ??
+    u8 Version: ??
+    u8 Source Density:
+      eq 00: 250K bps
+      eq 01: 300K bps
+      eq 02: 500K bps
+    u8 Drive type:
+      eq 01: 360K
+      eq 02: 1.2M
+      eq 03: 720K
+      eq 04: 1.44M 
+    u8 Track Density: ??
+    u8 DOSMode: ??
+    u8 MediaSurfaces: ??
+    u16 CRC: ??
+
+layout:
+  - header Header

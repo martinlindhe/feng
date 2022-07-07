@@ -22,7 +22,7 @@ structs:
     u32 MaybeUncompressedSize: ??       # XXX uncompressed size?
     u32 MaybeReserved: ??               # 0
     ascii[7] Signature: c'FTCOMP' 00
-    u16 MaybeFlags: ??                  # XXX flags ??? 
+    u16 MaybeFlags: ??                  # XXX flags ???
     u16 Unknown: ??                     # XXX always 1 ?
     u32 Unknown: ??                     # XXX always 4 ?
     u16 FileNameSize: ??

@@ -1,0 +1,16 @@
+# templates/archives/teledisk.yml
+Header
+  [000000] Signature                      ascii[2]         td                    74 64
+  [000002] VolumeSequence                 u8               0                     00
+  [000003] CheckSignature                 u8               54                    36
+  [000004] Version                        u8               21                    15
+  [000005] Source Density                 u8               0                     00
+           - 250K bps                     eq
+  [000006] Drive type                     u8               1                     01
+           - 360K                         eq
+  [000007] Track Density                  u8               129                   81
+  [000008] DOSMode                        u8               0                     00
+  [000009] MediaSurfaces                  u8               2                     02
+  [00000a] CRC                            u16 le           50823                 c6 87
+
+0x15fde (90078) unmapped bytes

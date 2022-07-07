@@ -1,0 +1,20 @@
+# STATUS: 1%
+
+references:
+  - xxx
+
+kind: archive
+name: Virtual Disk image
+extensions: [.vdi]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'<<< Oracle VM VirtualBox Disk Image >>>' 0a
+
+structs:
+  header:
+    ascii[40] Signature: c'<<< Oracle VM VirtualBox Disk Image >>>' 0a
+
+layout:
+  - header Header

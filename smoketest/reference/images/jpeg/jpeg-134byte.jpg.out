@@ -23,8 +23,8 @@ Segment_1 M_DQT
            - M_DQT                        eq
   [000016] Length                         u16 be           67                    00 43
   [000018] QuanFlag                       u8               0                     00
-           - Pq                           bit              0                     00
-           - Tq                           bit              0                     00
+           - Pq                           bit              0                     0
+           - Tq                           bit              0                     0
   [000019] qTable                         u8[64]                                 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ...
 
 Segment_2 M_SOF2
@@ -54,7 +54,7 @@ Segment_4 M_SOS
   [000083] Ss                             u8               1                     01
   [000084] Se                             u8               63                    3f
   [000085] Flag                           u8               16                    10
-           - Ah                           bit              1                     01
-           - Al                           bit              0                     00
+           - Ah                           bit              1                     1
+           - Al                           bit              0                     0
 
 EOF

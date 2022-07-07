@@ -1,0 +1,57 @@
+# STATUS: 1%
+
+# XXX uses data type ue7(32) which is variable-bit:
+# - ue7(n) is an unsigned integer of at most n bits stored on a variable
+#  number of bytes. All the bytes except the last one have a '1' as
+#  their first bit. The unsigned integer is represented as the
+#  concatenation of the remaining 7 bit codewords. Only the shortest
+#  encoding for a given unsigned integer shall be accepted by the
+#  decoder (i.e. the first byte is never 0x80). Example:
+#
+#  Encoded bytes       Unsigned integer value
+#  0x08                8
+#  0x84 0x1e           542
+#  0xac 0xbe 0x17      728855
+
+
+references:
+  - https://bellard.org/bpg/bpg_spec.txt
+  - https://en.wikipedia.org/wiki/Better_Portable_Graphics
+
+kind: image
+name: Better Portable Graphics
+mime: image/bpg
+extensions: [.bpg]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'BPG' FB
+
+structs:
+  heic_file:
+    ascii[4] Signature: c'BPG' FB
+    u8 Flags:
+      bit b0000_1111: bit_depth_minus_8
+      bit b0001_0000: alpha1
+      bit b1110_0000: pixel_format
+    u8 Flags2:
+      bit b1000_0000: animation
+      bit b0100_0000: limited_range
+      bit b0010_0000: alpha2
+      bit b0001_0000: extension_present
+      bit b1110_0000: color_space
+
+    u32 PictureWidth: ??                                  # XXX ue7(32)
+    #u32 PictureHeight: ??                                 # XXX ue7(32)
+    #u32 PictureDataLength: ??                             # XXX ue7(32)
+    #if self.Flags2 == extension_present:
+    #  u32 extensionDataLength: ??                         # XXX ue7(32)
+    #  u8[self.extensionDataLength] extensionData: ??      # XXX decode
+
+  hevc_header:
+    u32 hevc_header_length: ??                            # XXX ue7(32)
+
+layout:
+  - heic_file HeicFile
+  #- hevc_header HevcHeader

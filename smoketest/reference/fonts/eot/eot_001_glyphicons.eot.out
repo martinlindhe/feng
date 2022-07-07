@@ -11,8 +11,8 @@ Header
   [00001b] Italic                         u8               0                     00
   [00001c] Weight                         u32 le           400                   00 00 01 90
   [000020] Fs type                        u16 le           4                     00 04
-           - Usage permissions            bit              4                     04
-           - Reserved1                    bit              0                     00
+           - Usage permissions            bit              4                     4
+           - Reserved1                    bit              0                     0
            - No subsetting                bit              0
            - Bitmap embedding only        bit              0
            - Reserved2                    bit              0                     00

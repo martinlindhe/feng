@@ -1,0 +1,33 @@
+# STATUS: 1%
+
+# TODO parse until the ":" delimiter using "until" directive
+
+references:
+  - xxx
+
+kind: network
+name: Torrent file
+extensions: [.torrent]
+mime: application/x-bittorrent
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'd'   # XXX weak detection
+
+structs:
+  header:
+    ascii DictInitial: c'd'
+
+  kv:
+    ascii keyLength: ?? # XXX in decimal
+    ascii delimiter: c':'
+    ascii[atoi(self.keyLength)] Key: ??
+
+    #ascii[2] valLength: ??        # XXX is val len always 2 char???
+    #ascii delimiter: ?? # c':'
+    #ascii[atoi(self.valLength)] Val: ??      # XXX FIXME cannot access valLength if type is ascii[2]
+
+layout:
+  - header Header
+  - kv KeyVal

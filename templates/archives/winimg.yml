@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+references:
+  - xxx
+
+kind: archive
+name: WinImg floppy disk image
+extensions: [.img]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: EB 58 90 c'WINIMAGE'
+
+structs:
+  header:
+    u8[3] Signature1: EB 58 90
+    ascii[8] Signature2: c'WINIMAGE'
+
+layout:
+  - header Header
