@@ -92,7 +92,7 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 		}
 	}
 
-	fieldValue := field.Present()
+	fieldValue := strings.TrimRight(field.Present(), " ")
 
 	res := ""
 	if hideRaw {

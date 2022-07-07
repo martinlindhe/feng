@@ -123,6 +123,7 @@
         "testcompress",
         "unar",
         "unarchiver",
+        "Uncompress",
         "unexported",
         "unityfs",
         "ustar",

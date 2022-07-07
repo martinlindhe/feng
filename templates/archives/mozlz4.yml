@@ -1,0 +1,29 @@
+# STATUS: 90%
+
+# A MOZLZ4 file contains Mozilla Firefox user profile data.
+# The mozlz4 format is similar to the .LZ4 archive format but includes a unique file header.
+# It typically stores one or more .JSON files that contain the user profile data in plain
+# text JavaScript Object Notation (JSON) format.
+
+software:
+  - https://github.com/jusw85/mozlz4
+
+kind: archive
+name: mozLz4 archive
+extensions: [.mozlz4]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'mozLz4'
+
+structs:
+  header:
+    ascii[6] Magic: c'mozLz4'
+    u16 Unknown: ??
+    u32 DecompressedSize: ??
+    # TODO use DecompressedSize as argument for compressed:lz4 so we know how much to allocate
+    compressed:lz4[FILE_SIZE - 12] Data: ??
+
+layout:
+  - header Header

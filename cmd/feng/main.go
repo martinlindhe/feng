@@ -14,6 +14,7 @@ import (
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng/mapper"
+	"github.com/pierrec/lz4/v4"
 )
 
 var args struct {
@@ -66,6 +67,25 @@ func main() {
 
 			for _, field := range layout.Fields {
 				switch field.Format.Kind {
+				case "compressed:lz4":
+					log.Printf("%s.%s %s: extracting lz4 stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+
+					expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
+					n, err := lz4.UncompressBlock(field.Value, expanded)
+					if err != nil {
+						panic(err)
+					}
+					expanded = expanded[0:n]
+
+					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
+
+					log.Printf("extracted %d bytes to %s", len(expanded), filename)
+
+					err = ioutil.WriteFile(filename, expanded, 0644)
+					if err != nil {
+						log.Fatal(err)
+					}
+
 				case "compressed:zlib":
 					log.Printf("%s.%s %s: extracting zlib stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 

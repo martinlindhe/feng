@@ -281,6 +281,7 @@ func (df *DataField) SingleUnitSize() uint64 {
 func SingleUnitSize(kind string) uint64 {
 	switch kind {
 	case "u8", "i8", "ascii", "asciiz",
+		"compressed:lz4",
 		"compressed:zlib",
 		"raw:u8":
 		return 1
@@ -390,7 +391,7 @@ func AsInt64(kind string, b []byte) int64 {
 // presents the value of the data type (format.Kind) in a human-readable form
 func (format DataField) Present(b []byte) string {
 	switch format.Kind {
-	case "compressed:zlib", "raw:u8":
+	case "compressed:lz4", "compressed:zlib", "raw:u8":
 		return ""
 
 	case "u8", "u16", "u32", "u64":

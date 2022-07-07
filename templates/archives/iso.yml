@@ -1,0 +1,61 @@
+# STATUS: 5%
+
+# Format used for optical disc images
+#
+# XXX this format has u16 and u32 LE+BE pair of values, use custom structs!
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/ISO.bt
+
+kind: archive
+name: ISO image
+endian: little
+
+magic:
+  - offset: "0x8000"
+    match: 01 c'CD'
+
+structs:
+  volume_descriptor:
+    offset: "0x8000"
+    u8 volumeDescriptorType: ??       # always 01
+    ascii[5] Identifier: ??           # always "CDxxx", usually "CD001"
+    u8 VolumeDescriptorVersion: ??
+    u8 Reserved: ??
+    ascii[32] System ID: ??
+    ascii[32] Volume ID: ??
+    u8[8] Reserved: ??
+
+  volume_root:
+    u32 VolumeSpaceSizeLE: ??
+    endian: big
+    u32 VolumeSpaceSizeBE: ??
+    endian: little
+    u8[32] EscSeq: ??
+
+    u16 VolumeSetSizeLE: ??
+    endian: big
+    u16 VolumeSetSizeBE: ??
+    endian: little
+
+    u16 VolumeSequenceNumberLE: ??
+    endian: big
+    u16 VolumeSequenceNumberBE: ??
+    endian: little
+
+    u16 LogicalBlockSizeLE: ??
+    endian: big
+    u16 LogicalBlockSizeBE: ??
+    endian: little
+
+    u32 PathTableSizeLE: ??
+    endian: big
+    u32 PathTableSizeBE: ??
+    endian: little
+
+    u32 LocationOfPathTable: ??
+    u32 LocationOfOptionalPathTable: ??
+
+layout:
+  - volume_descriptor VolumeDescriptor
+  - volume_root VolumeRoot

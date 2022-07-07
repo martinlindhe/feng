@@ -1,0 +1,8 @@
+# templates/archives/mozlz4.yml
+Header
+  [000000] Magic                          ascii[6]         mozLz4                6d 6f 7a 4c 7a 34
+  [000006] Unknown                        u16 le           48                    00 30
+  [000008] DecompressedSize               u32 le           72110                 00 01 19 ae
+  [00000c] Data                           compressed:lz4[22900]                       f4 51 7b 22 76 65 72 73 69 6f 6e 22 3a 31 2c 22 62 75 69 6c 64 49 44 22 3a 22 32 30 31 36 30 35 ...
+
+EOF

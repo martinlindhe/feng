@@ -67,10 +67,11 @@ date / time
     dostime             16-bit MS-DOS timestamp, in UTC
 
 
-data
+data (for extraction feature)
 
-    raw:u8[size]                mark area as file data (for extraction feature)
-    compressed:zlib[self.Size]  mark area as zlib compressed data (for extraction feature)
+    raw:u8[size]                mark area as file data
+    compressed:zlib[self.Size]  mark area as zlib compressed data
+    compressed:lz4[self.Size]   mark area as lz4-compressed data
 
 
 # pattern matching data types

@@ -406,6 +406,9 @@ type HexStringU64 uint64
 func (e *HexStringU64) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	var s string
 	if err := unmarshal(&s); err == nil {
+		if s[0:2] == "0x" {
+			s = s[2:]
+		}
 		v, err := value.ParseHexStringToUint64(s)
 		if err != nil {
 			return err
