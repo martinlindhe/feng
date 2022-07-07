@@ -1,0 +1,29 @@
+# STATUS: 1%
+#
+# The Server Normal Format (SNF) is an older format for bitmap fonts.
+# The format is X Server and host dependent.
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/TTF.bt
+  - https://en.wikipedia.org/wiki/TrueType
+  - https://developer.apple.com/fonts/TrueType-Reference-Manual/
+  - https://docs.fileformat.com/font/ttf/
+
+software:
+  - Snftobdf is one utility that can generate a BDF file from a SNF file.
+
+kind: font
+name: Server Normal Format font
+extensions: [.pak]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 04 00 00 00
+
+structs:
+  header:
+    u32 Magic: 00 00 00 04   # XXX magic marker can indicate big endian format
+
+layout:
+  - header Header

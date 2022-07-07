@@ -1,0 +1,25 @@
+# STATUS: 1%
+#
+# font wrapper format used on Mac OS X
+
+# MAX: skip resource fork data
+
+references:
+  - https://en.wikipedia.org/wiki/Datafork_TrueType
+
+kind: font
+name: Datafork TrueType
+extensions: [.dfont]
+mime: application/x-dfont
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: 00 00 01 00 00 # XXX just guessing
+
+structs:
+  header:
+    u8[5] Magic: 00 00 01 00 00
+
+layout:
+  - header Header

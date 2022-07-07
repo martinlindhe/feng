@@ -1,0 +1,87 @@
+# STATUS: 25%
+#
+# TODO 16-byte GUID data type. a GUID is $10 bytes, arranged as 1 DWORD, 2 WORDs, and 8 BYTEs.
+#
+# WANT sample with version = 2
+#
+# MAX: i32 does not show signed numbers in presentation
+
+references:
+  - http://www.russotto.net/chm/chmformat.html
+  - http://fileformats.archiveteam.org/wiki/CHM
+
+kind: document
+name: Microsoft Compiled HTML Help
+extensions: [.chm]
+mime: application/vnd.ms-htmlhelp
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'ITSF'
+
+structs:
+  header:
+    ascii[4] Signature: c'ITSF'         # Info-Tech Storage Format
+    u32 Version: ??
+    u32 HeaderSize: ??
+    u32 Unknown: ??
+    u32 Timestamp: ?? # XXX decode
+    u32 Windows Language ID:
+      # https://www.autoitscript.com/autoit3/docs/appendix/OSLangCodes.htm
+      eq 0000_0407: German
+      eq 0000_0409: US English
+    u8[16] GUID 1: ?? # {7C01FD10-7BAA-11D0-9E0C-00A0-C922-E6EC}    # TODO GUID data type
+    u8[16] GUID 2: ?? # {7C01FD11-7BAA-11D0-9E0C-00A0-C922-E6EC}
+
+  header_section_table:
+    u64 Offset: ??
+    u64 Length: ??
+
+  header_v1_extra:
+    if Header.Version == 3:
+      u64 Offset within file of content section 0: ?? # only in v3 files
+
+  header_section:
+    u32 Unknown: ?? # 01FE 
+    u32 Unknown: ?? # 0
+    u64 FileSize: ??
+    u32 Unknown: ??
+    u32 Unknown: ??
+    ascii[4] Section Signature: c'ITSP'
+    u32 Version: ??
+    u32 DirectoryHeaderLength: ??
+    u32 Unknown: ?? # 0a
+    u32 Directory chunk size: ??
+    u32 Density of quickref section: ??
+    u32 Depth of index tree: ??
+    i32 Chunk number of root index chunk, -1 if there is none: ??
+    u32 Chunk number of first PMGL (listing) chunk: ??
+    u32 Chunk number of last PMGL (listing) chunk: ??
+    i32 Unknown: ?? # -1
+    u32 DirectoryChunkCount: ??
+    u32 Windows language ID: ??
+    u8[16] GUID 1: ?? # {5D02926A-212E-11D0-9DF9-00A0C922E6EC}
+    u32 XXX: ?? # $54 (This is the length again)
+    i32 Unknown: ?? # -1
+    i32 Unknown: ?? # -1
+    i32 Unknown: ?? # -1
+
+  listing_chunk:
+    ascii[4] Chunk Signature: c'PMGL'
+    u32 Length of free space and/or quickref area at end of directory chunk: ??
+    u32 Reserved: ??
+    i32 Chunk number of previous listing chunk when reading directory in sequence: ??
+    i32 Chunk number of next listing chunk when reading directory in sequence: ??
+
+    # TODO continue here
+    #0014: Directory listing entries (to quickref area)  Sorted by
+    #      filename; the sort is case-insensitive.
+
+layout:
+  - header Header
+  - header_section_table[2] HeaderSectionTable
+  - header_v1_extra HeaderV1Extra
+  - header_section HeaderSection # XXX naming...
+  - listing_chunk[HeaderSection.DirectoryChunkCount] ListingChunk
+

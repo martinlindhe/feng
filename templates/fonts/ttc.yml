@@ -1,0 +1,54 @@
+# STATUS: 10%
+#
+# TrueType Collection (TTC) is an extension of TrueType format that
+# allows combining multiple fonts into a single file.
+#
+# TODO: need a version 2 sample file in order to support v2 file format
+#
+# MAX: need to use "table" struct in "font_table" struct. # XXX make use of defined struct to fully declare this form
+
+
+references:
+  - https://docs.fileformat.com/font/ttc/
+
+kind: font
+name: TrueType font collection
+extensions: [.ttc]
+mime: xxx
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'ttcf'
+
+structs:
+  header:
+    ascii[4] Magic: c'ttcf'
+    u16 Major version: ??     # XXX if major == 2, extra header fields exists
+    u16 Minor version: ??
+    u32 NumFonts: ??
+
+  font_table:
+    u32 Offset: ??
+    offset: self.Offset
+
+    u16 NumTables: ??
+    u16 SearchRange: ??
+    u16 EntrySelector: ??
+    u16 RangeShift: ??
+    #table[self.NumTables] Table: ??     # XXX make use of defined struct to fully declare this form
+    offset: restore
+
+  table:
+    ascii[4] Tag: ??
+    u32 Checksum: ??
+    u32 Offset: ??
+    u32 Length: ??
+
+#    offset: self.Offset
+#    u8[self.Length] Data: ??
+#    offset: restore
+
+layout:
+  - header Header
+  - font_table[Header.NumFonts] FontTable

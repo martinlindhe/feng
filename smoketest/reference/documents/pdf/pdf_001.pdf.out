@@ -1,5 +1,5 @@
 # templates/documents/pdf.yml
 Header
-  [000000] Signature                      u8[4]                                  25 50 44 46
+  [000000] Signature                      ascii[4]         %PDF                  25 50 44 46
 
 0x431b (17179) unmapped bytes

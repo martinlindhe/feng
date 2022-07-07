@@ -1,0 +1,6 @@
+# templates/fonts/type1.yml
+Header
+  [000000] Unknown1                       u32 be           111114                00 01 b2 0a
+  [000004] Magic                          u32 be           17263                 00 00 43 6f
+
+0x0aaa (2730) unmapped bytes

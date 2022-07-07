@@ -1,0 +1,22 @@
+# STATUS: 1%
+
+references:
+  - https://en.wikipedia.org/wiki/PostScript_fonts
+
+kind: font
+name: Adobe Type1 font
+extensions: [.pfm]
+endian: big # XXX
+
+magic:
+  - offset: 0004
+    match: 00 00 43 6F    # XXX just a guess
+
+structs:
+  header:
+    u32 Unknown1: ??
+    u32 Magic: 00 00 43 6F
+
+
+layout:
+  - header Header

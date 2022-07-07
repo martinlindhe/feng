@@ -12,7 +12,7 @@ kind: font
 name: TrueType font
 extensions: [.ttf]
 mime: font/ttf
-endian: big # XXX
+endian: big
 
 magic:
   - offset: 0000

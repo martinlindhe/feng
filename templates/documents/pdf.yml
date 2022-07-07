@@ -15,7 +15,7 @@ magic:
 
 structs:
   header:
-    u8[4] Signature: c'%PDF'
+    ascii[4] Signature: c'%PDF'
 
 layout:
   - header Header

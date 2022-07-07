@@ -1,0 +1,22 @@
+# templates/fonts/ttc.yml
+Header
+  [000000] Magic                          ascii[4]         ttcf                  74 74 63 66
+  [000004] Major version                  u16 be           1                     00 01
+  [000006] Minor version                  u16 be           0                     00 00
+  [000008] NumFonts                       u32 be           2                     00 00 00 02
+
+FontTable_0
+  [00000c] Offset                         u32 be           20                    00 00 00 14
+  [000014] NumTables                      u16 be           1                     00 01
+  [000016] SearchRange                    u16 be           0                     00 00
+  [000018] EntrySelector                  u16 be           18                    00 12
+  [00001a] RangeShift                     u16 be           256                   01 00
+
+FontTable_1
+  [000010] Offset                         u32 be           320                   00 00 01 40
+  [000140] NumTables                      u16 be           1                     00 01
+  [000142] SearchRange                    u16 be           0                     00 00
+  [000144] EntrySelector                  u16 be           18                    00 12
+  [000146] RangeShift                     u16 be           256                   01 00
+
+0x25c64 (154724) unmapped bytes

@@ -93,6 +93,12 @@ input:
     files:
       - sol-11-x-86_meta.sqlite
 
+  - folder: documents/chm
+    files:
+      - ACCESSIB_18.CHM
+      - FIND.CHM
+      - win2k_brief.chm
+
   - folder: documents/pdf
     files:
       - pdf_001.pdf
@@ -101,13 +107,35 @@ input:
     files:
       - eot_001_glyphicons.eot
 
+  - folder: fonts/dfont
+    files:
+      - CharcoalCY.dfont
+      - GenevaCY.dfont
+
   - folder: fonts/otf
     files:
       - otf_001.otf
 
+  - folder: fonts/pfb
+    files:
+      - cminch.pfb
+      - euex7.pfb
+      - NotoSansShavian-Regular.pfb
+
+  - folder: fonts/ttc
+    files:
+      - v1_mingliu.ttc
+
   - folder: fonts/ttf
     files:
       - ttf_001.ttf
+
+  - folder: fonts/type1
+    files:
+      - c1997_d050000l.pfm
+      - c1997_s050000l.pfm
+      - c1999_c059036l.pfm
+      - c1999_n022004l.pfm
 
   - folder: fonts/woff
     files:
