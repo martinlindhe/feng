@@ -41,5 +41,8 @@ logging: use something better
 
 fix failing tests
 
-rework internals to use golang bitreader by default so we can implement support for bzip2 bit stream?
+yaml format: single bits: "u1" (1 bit), "u24" (24 bits), "u4" (4 bits) data types:
+  - rework internals to use golang bitreader by default so we can implement support for bzip2 bit stream?
+
+yaml format: mark up certain conditions for "want sample please" in a standardized way
 

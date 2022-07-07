@@ -99,9 +99,32 @@ input:
       - FIND.CHM
       - win2k_brief.chm
 
+  - folder: documents/doc
+    files:
+      - doc_001_word_document.doc
+      - doc_002_winword.doc
+      - pps_001_libreoffice.pps
+      - ppt_001_tiny.ppt
+      - ppt_002_small.ppt
+      - xls_001_one.xls
+      - xls_002_two.xls
+
+  - folder: documents/hlp
+    files:
+      - win16_winmine.hlp
+      - win2k_defrag.hlp
+
   - folder: documents/pdf
     files:
       - pdf_001.pdf
+
+  - folder: documents/rtf
+    files:
+      - rtf_001.rtf
+
+  - folder: documents/wri
+    files:
+      - win16_mail.wri
 
   - folder: fonts/eot
     files:

@@ -1,0 +1,42 @@
+# templates/documents/hlp.yml
+Header
+  [000000] Signature                      u8[4]                                  3f 5f 03 00
+  [000004] DirectoryStart                 u32 le           718                   00 00 02 ce
+  [000008] FirstFreeBlock                 u32 le           4294967295            ff ff ff ff
+  [00000c] EntireFileSize                 u32 le           12754                 00 00 31 d2
+
+FileHeader FILEHEADER
+  [0002ce] ReservedSpace                  u32 le           1071                  00 00 04 2f
+  [0002d2] UsedSpace                      u32 le           1062                  00 00 04 26
+  [0002d6] FileFlags                      u8               4                     04
+
+BTreeHeader BTREEHEADER
+  [0002d7] Magic                          u8[2]                                  3b 29
+  [0002d9] Flags                          u16 le           1026                  04 02
+           - Unknown1                     bit              0
+           - Unknown2                     bit              1
+           - Unknown3                     bit              0                     00
+           - Directory                    bit              1
+           - Unknown4                     bit              0                     00
+  [0002db] PageSize                       u16 le           1024                  04 00
+  [0002dd] Structure                      ascii[16]        z4                    7a 34 00 01 0d 01 04 01 00 00 c1 7e 59 ff 44 3a
+  [0002ed] Unknown1                       u16 le           0                     00 00
+  [0002ef] PageSplits                     u16 le           0                     00 00
+  [0002f1] RootPage                       u16 le           0                     00 00
+  [0002f3] Unknown2                       i16 le           65535                 ff ff
+  [0002f5] TotalPages                     u16 le           1                     00 01
+  [0002f7] Levels                         u16 le           1                     00 01
+  [0002f9] TotalBtreeEntries              u32 le           12                    00 00 00 0c
+
+BTreeIndexHeader_0 BTREEINDEXHEADER
+  [0002fd] Unknown                        u16 le           876                   03 6c
+  [0002ff] Entries                        u16 le           12                    00 0c
+  [000301] PreviousPage                   i16 le           65535                 ff ff
+
+BTreeNodeHeader BTREENODEHEADER
+  [000303] Unknown                        u16 le           65535                 ff ff
+  [000305] Entries                        u16 le           17276                 43 7c
+  [000307] PreviousPage                   i16 le           20047                 4e 4f
+  [000309] NextPage                       i16 le           17748                 45 54
+
+0x3185 (12677) unmapped bytes

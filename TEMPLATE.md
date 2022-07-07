@@ -1,3 +1,8 @@
+# feng yaml file format template specification
+
+VERSION 0 - DRAFT. JULY 2022
+
+
 # directives
 
     data: invalid       invalidates the file

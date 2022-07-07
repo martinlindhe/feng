@@ -1,0 +1,18 @@
+# templates/documents/wri.yml
+Header
+  [000000] Signature                      u8[2]                                  31 be
+  [000002] Reserved                       u16 le           0                     00 00
+  [000004] wTool                          u16 le           43776                 ab 00
+  [000006] Reserved                       u32 le           0                     00 00 00 00
+  [00000a] Reserved                       u32 le           0                     00 00 00 00
+  [00000e] fcMac                          u32 le           26278                 00 00 66 a6
+  [000012] pnPara                         u16 le           233                   00 e9
+  [000014] pnFntb                         u16 le           305                   01 31
+  [000016] pnSep                          u16 le           305                   01 31
+  [000018] pnSetb                         u16 le           306                   01 32
+  [00001a] pnPgtb                         u16 le           307                   01 33
+  [00001c] pnFfntb                        u16 le           308                   01 34
+  [00001e] Reserved                       u8[66]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000060] pnMac                          u16 le           309                   01 35
+
+0x9a1e (39454) unmapped bytes

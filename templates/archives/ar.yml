@@ -1,0 +1,36 @@
+# STATUS: 1%
+#
+# MAX: in order to progress format, we need to convert decimal string to a number. XXX Add script function atoi("x")
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/AR.bt
+
+kind: archive
+name: AR archive
+extensions: [.a, .lib, .ar, .deb]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'!<arch>' 0a
+
+structs:
+  header:
+    ascii[8] Signature: c'!<arch>' 0a
+
+  ar_file:
+    ascii[16] Filename: ??
+    label: self.Filename
+    ascii[12] Modification time: ?? # XXX ascii number, unix timestamp
+    ascii[6] Owner ID: ??
+    ascii[6] Group ID: ??
+    ascii[8] File mode: ??
+    ascii[10] FileStreamSize: ??
+    u8[2] EndMarker: 60 0a
+
+    # XXX data bytes follow in FileStreamSize size... which is in decimal string format.
+    #u8[atoi("self.FileStreamSize")] Data: ??
+
+layout:
+  - header Header
+  - ar_file File

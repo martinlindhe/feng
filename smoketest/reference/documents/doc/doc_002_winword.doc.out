@@ -1,0 +1,22 @@
+# templates/documents/doc.yml
+Header
+  [000000] Signature                      u8[8]                                  d0 cf 11 e0 a1 b1 1a e1
+  [000008] GUID                           u8[16]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [000018] Minor version                  u16 le           62                    00 3e
+  [00001a] DLL version                    u16 le           3                     00 03
+  [00001c] Byte order                     u16 le           65534                 ff fe
+  [00001e] sectorShift                    u16 le           9                     00 09
+  [000020] miniSecShift                   u16 le           6                     00 06
+  [000022] Reserved                       u16 le           0                     00 00
+  [000024] Reserved                       u32 le           0                     00 00 00 00
+  [000028] numDirSectors                  u32 le           0                     00 00 00 00
+  [00002c] numFatSectors                  u32 le           1                     00 00 00 01
+  [000030] dirSect1                       u32 le           1                     00 00 00 01
+  [000034] transactSig                    u32 le           0                     00 00 00 00
+  [000038] miniStrMax                     u32 le           4096                  00 00 10 00
+  [00003c] miniFatSect1                   u32 le           2                     00 00 00 02
+  [000040] numMniFatSects                 u32 le           1                     00 00 00 01
+  [000044] difatSect1                     u32 le           4294967294            ff ff ff fe
+  [000048] numDifatSects                  i32 le           0                     00 00 00 00
+
+0x11b4 (4532) unmapped bytes

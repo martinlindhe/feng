@@ -1,0 +1,87 @@
+# STATUS: 25%
+
+references:
+  - https://www.oocities.org/mwinterhoff/helpfile.htm?20227
+  - https://en.wikipedia.org/wiki/WinHelp
+
+software:
+  - https://download.jgsoft.com/helpscribble/helpdc21.zip     VERY useful C code
+
+kind: document
+name: Microsoft Help file
+extensions: [.hlp]
+mime: application/winhlp
+endian: little
+
+magic:
+  - offset: 0000
+    match: 3F 5F 03 00
+
+structs:
+  header:
+    u8[4] Signature: 3F 5F 03 00
+    u32 DirectoryStart: ??
+    u32 FirstFreeBlock: ??
+    u32 EntireFileSize: ??
+
+  file_header:
+    label: FILEHEADER
+    offset: Header.DirectoryStart
+    u32 ReservedSpace: ??
+    u32 UsedSpace: ??
+    u8 FileFlags: ??
+
+  btree_header:
+    label: BTREEHEADER
+    u8[2] Magic: 3B 29
+    u16 Flags:
+      bit b0000_0000_0000_0001: Unknown1
+      bit b0000_0000_0000_0010: Unknown2    # always 1
+      bit b0000_0011_1111_1100: Unknown3
+      bit b0000_0100_0000_0000: Directory
+      bit b1111_1000_0000_0000: Unknown4
+    u16 PageSize: ??          # always 1024 if Flags.Directory is set
+
+    ascii[16] Structure: ??   # string describing format of data          # XXX whole area is not ascii data...
+                              # 'L' = long (indexed)
+                              # 'F' = NUL-terminated string (indexed)
+                              # 'i' = NUL-terminated string (indexed)
+                              # '2' = short
+                              # '4' = long
+                              # 'z' = NUL-terminated string
+                              # '!' = long count value, count/8 * record
+
+    u16 Unknown1: ??          # 0
+    u16 PageSplits: ??
+    u16 RootPage: ??
+    i16 Unknown2: ??          # -1
+    u16 TotalPages: ??
+    u16 Levels: ??
+    u32 TotalBtreeEntries: ??
+
+    # btree data - XXX
+    #u8[self.TotalPages * self.PageSize] B+ tree page data: ?? # XXX map as Page[TotalPages][PageSize] array
+    #u8[FileHeader.ReservedSpace - FileHeader.UsedSpace - 9] Padding: ?? # XXX unverified, need a sample with padding
+
+
+  btree_index_header:
+    label: BTREEINDEXHEADER
+    u16 Unknown: ??
+    u16 Entries: ??
+    i16 PreviousPage: ??
+    # XXX if previous page != -1, move to it
+
+
+  btree_node_header:
+    label: BTREENODEHEADER
+    u16 Unknown: ??
+    u16 Entries: ??
+    i16 PreviousPage: ??
+    i16 NextPage: ??
+
+layout:
+  - header Header
+  - file_header FileHeader
+  - btree_header BTreeHeader
+  - btree_index_header[BTreeHeader.Levels] BTreeIndexHeader
+  - btree_node_header BTreeNodeHeader

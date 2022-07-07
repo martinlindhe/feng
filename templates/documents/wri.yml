@@ -1,0 +1,37 @@
+# STATUS: 5%
+#
+# Text document created by Microsoft Write, a document editor that shipped in early
+# versions of Windows, until 3.1. It was replaced by Microsoft WordPad in Win95.
+
+references:
+  - https://web.archive.org/web/20130831064118/http://msxnet.org/word2rtf/formats/write.txt
+  - http://fileformats.archiveteam.org/wiki/Microsoft_Write
+
+kind: document
+name: Microsoft Write document
+extensions: [.wri]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 31 BE
+
+structs:
+  header:
+    u8[2] Signature: 31 BE      # XXX: 32 BE if file contains OLE objects. NEED sample!
+    u16 Reserved: ??
+    u16 wTool: ??
+    u32 Reserved: ??
+    u32 Reserved: ??
+    u32 fcMac: ??
+    u16 pnPara: ??
+    u16 pnFntb: ??
+    u16 pnSep: ??
+    u16 pnSetb: ??
+    u16 pnPgtb: ??
+    u16 pnFfntb: ??
+    u8[66] Reserved: ??
+    u16 pnMac: ??
+
+layout:
+  - header Header

@@ -40,6 +40,7 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 
 	for _, layout := range fl.Structs {
 		mapped := make(map[string]interface{})
+
 		for _, field := range layout.Fields {
 			if !field.Format.Slice && field.Format.Range == "" {
 				switch field.Format.Kind {
@@ -120,8 +121,9 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 		// XXX seems Align field is not yet available as variable in eval.go for some reason??!
 		// it should have been added already
 		feng.Yellow("--- EVALUATING --- %s at %06x\n", in, fl.offset)
+		spew.Dump(variables)
 		if in == `Segment_1.Align == "II"` {
-			spew.Dump(variables)
+
 			//panic("wa")
 		}
 		feng.Yellow("---\n")

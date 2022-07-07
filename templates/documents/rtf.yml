@@ -1,0 +1,21 @@
+# STATUS: 1%
+#
+# XXX: this is a text format that isn't well suited to be parsed by feng
+
+references:
+  - https://en.wikipedia.org/wiki/Rich_Text_Format
+
+name: Rich Text Format
+extensions: [.rtf]
+mime: text/rtf
+
+magic:
+  - offset: 0000
+    match: c'{\rtf'
+
+structs:
+  header:
+    ascii[5] Signature: c'{\rtf'
+
+layout:
+  - header Header
