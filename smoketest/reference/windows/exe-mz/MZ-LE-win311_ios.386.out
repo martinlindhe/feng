@@ -1,0 +1,76 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           0                     00 00
+  [000004] FileSizeInPages                u16 le           6                     00 06
+  [000006] RelocationItemCount            u16 le           0                     00 00
+  [000008] HeaderSizeInParagraphs         u16 le           4                     00 04
+  [00000a] MinimumExtraParagraphs         u16 le           0                     00 00
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           0                     00 00
+  [000010] InitialSP                      u16 le           184                   00 b8
+  [000012] Checksum                       u16 le           0                     00 00
+  [000014] IP                             u16 le           0                     00 00
+  [000016] CS                             u16 le           0                     00 00
+  [000018] RelocationTableOffset          u16 le           64                    00 40
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+
+NewHeader
+  [00001c] Reserved                       u16[4] le                              00 00 00 00 00 00 00 00
+  [000024] OEM id                         u16 le           0                     00 00
+  [000026] OEM info                       u16 le           0                     00 00
+  [000028] Reserved2                      u16[10] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [00003c] NewHeaderOffset                u32 le           128                   00 00 00 80
+  [000080] NewHeaderID                    u16 le           17740                 45 4c
+
+LEHeader
+  [000082] Byte order                     u8               0                     00
+  [000083] Word order                     u8               0                     00
+  [000084] Executable format level        u32 le           0                     00 00 00 00
+  [000088] CPU type                       u16 le           2                     00 02
+           - Intel 80386+                 eq
+  [00008a] Target OS                      u16 le           4                     00 04
+           - Windows 386                  eq
+  [00008c] Module version                 u32 le           0                     00 00 00 00
+  [000090] Module type flags              u32 le           163840                00 02 80 00
+  [000094] Memory page count              u32 le           7                     00 00 00 07
+  [000098] Initial CS                     u32 le           0                     00 00 00 00
+  [00009c] Initial EIP                    u32 le           0                     00 00 00 00
+  [0000a0] Initial SS                     u32 le           0                     00 00 00 00
+  [0000a4] Initial ESP                    u32 le           0                     00 00 00 00
+  [0000a8] Memory page size               u32 le           4096                  00 00 10 00
+  [0000ac] Bytes on last page             u32 le           182                   00 00 00 b6
+  [0000b0] Fix-up section size            u32 le           2579                  00 00 0a 13
+  [0000b4] Fix-up section checksum        u32 le           0                     00 00 00 00
+  [0000b8] Loader section size            u32 le           141                   00 00 00 8d
+  [0000bc] Loader section checksum        u32 le           0                     00 00 00 00
+  [0000c0] Object table offset            u32 le           196                   00 00 00 c4
+  [0000c4] Object table count             u32 le           4                     00 00 00 04
+  [0000c8] Object page map offset         u32 le           292                   00 00 01 24
+  [0000cc] Object iterate data map offset u32 le           0                     00 00 00 00
+  [0000d0] Resource table offset          u32 le           0                     00 00 00 00
+  [0000d4] Resource table entries         u32 le           0                     00 00 00 00
+  [0000d8] Resident names table offset    u32 le           320                   00 00 01 40
+  [0000dc] Entry table offset             u32 le           327                   00 00 01 47
+  [0000e0] Module directives table offset u32 le           0                     00 00 00 00
+  [0000e4] Module directives entires      u32 le           0                     00 00 00 00
+  [0000e8] Fix-up page table offset       u32 le           337                   00 00 01 51
+  [0000ec] Fix-up record table offset     u32 le           369                   00 00 01 71
+  [0000f0] ImportedModulesNameTableOffset u32 le           2916                  00 00 0b 64
+  [0000f4] ImportedModulesCount           u32 le           0                     00 00 00 00
+  [0000f8] ImportedProcedureNameTableOffset u32 le           2916                  00 00 0b 64
+  [0000fc] Per-page checksum table offset u32 le           0                     00 00 00 00
+  [000100] Data pages offset              u32 le           3072                  00 00 0c 00
+  [000104] Preload page count             u32 le           2                     00 00 00 02
+  [000108] NonResidentNamesTableOffset    u32 le           27830                 00 00 6c b6
+  [00010c] NonResidentNamesTableLength    u32 le           46                    00 00 00 2e
+  [000110] NonResidentNamesTableChecksum  u32 le           0                     00 00 00 00
+  [000114] Automatic data object          u32 le           0                     00 00 00 00
+  [000118] Debug information offset       u32 le           0                     00 00 00 00
+  [00011c] Debug information length       u32 le           0                     00 00 00 00
+  [000120] Preload instance pages number  u32 le           0                     00 00 00 00
+  [000124] Demand instance pages number   u32 le           0                     00 00 00 00
+  [000128] Extra heap allocation          u32 le           0                     00 00 00 00
+  [00012c] Unknown                        u32 le           0                     00 00 00 00
+
+0x6dd0 (28112) unmapped bytes

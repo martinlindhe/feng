@@ -138,7 +138,7 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 				pretty = child.Parsed
 			}
 
-			switch child.Ones {
+			switch child.Size {
 			case 0, 1, 2, 3:
 			case 4:
 				raw = fmt.Sprintf("%01x ", child.Value)
@@ -151,7 +151,7 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 			case 31, 32:
 				raw = fmt.Sprintf("%08x", child.Value)
 			default:
-				panic(fmt.Sprintf("handle bit count %d", child.Ones))
+				panic(fmt.Sprintf("handle bit count %d", child.Size))
 			}
 
 			// add a space between each hex byte
@@ -161,8 +161,13 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 			}
 			raw = strings.Join(rawParts, " ")
 		}
+		op := child.Operation
+		if op == "bit" {
+			// decorate bit range
+			op = fmt.Sprintf("bit %d:%d", child.Index, child.Size)
+		}
 
-		line := fmt.Sprintf("           - %-28s %-16s %-21s %s", child.Label, child.Operation, pretty, raw)
+		line := fmt.Sprintf("           - %-28s %-16s %-21s %s", child.Label, op, pretty, raw)
 		res += strings.TrimRight(line, " ") + "\n"
 	}
 	return res

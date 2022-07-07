@@ -9,6 +9,9 @@ references:
   - http://fileformats.archiveteam.org/wiki/Linear_Executable
   - http://wiki.osdev.org/LE
 
+  # MZ-NE format: 16-bit New Executable (Win16, OS/2)
+  - http://www.program-transformation.org/Transform/NeFormat
+
 kind: executable
 name: MS-DOS / OS-2 / Windows executable
 mime: application/x-dosexec
@@ -98,7 +101,7 @@ structs:
       offset: (Header.HeaderSizeInParagraphs + Header.CS) * 16 + Header.IP
       u8[232] Lzexe uncompressor program: ??
 
-  ne_header:
+  new_header:
     if Header.RelocationTableOffset == 0x40:
       # new-(NE,LE,LX,W3,PE etc.) executable
       u16[4] Reserved: ??
@@ -106,6 +109,129 @@ structs:
       u16 OEM info: ??
       u16[10] Reserved2: ??
       u32 NewHeaderOffset: ??
+      offset: self.NewHeaderOffset
+      u16 NewHeaderID: ?? # XXX ascii "NE", "LE" etc.
+
+  le_header:
+    # Win, OS/2 (mixed 16/32-bit)
+    if Header.RelocationTableOffset == 0x40 && NewHeader.NewHeaderID == 0x454C: # "LE"
+      u8 Byte order: ?? # XXX
+      u8 Word order: ?? # XXX
+      u32 Executable format level: ??
+      u16 CPU type:
+        eq 0001: Intel 80286+
+        eq 0002: Intel 80386+
+        eq 0003: Intel 80486+
+        eq 0004: Intel 80586+
+        eq 0020: Intel i860 (N10) or compatible
+        eq 0021: Intel "N11" or compatible
+        eq 0040: MIPS Mark I (R2000, R3000) or compatible
+        eq 0041: MIPS Mark II (R6000) or compatible
+        eq 0042: MIPS Mark III (R4000) or compatible
+      u16 Target OS:
+        eq 0001: OS/2
+        eq 0002: Windows
+        eq 0003: DOS 4.x
+        eq 0004: Windows 386
+      u32 Module version: ??
+      u32 Module type flags: ??
+      u32 Memory page count: ??
+      u32 Initial CS: ??
+      u32 Initial EIP: ??
+      u32 Initial SS: ??
+      u32 Initial ESP: ??
+      u32 Memory page size: ??
+      u32 Bytes on last page: ??
+      u32 Fix-up section size: ??
+      u32 Fix-up section checksum: ??
+      u32 Loader section size: ??
+      u32 Loader section checksum: ??
+      u32 Object table offset: ?? # XXX decode
+      u32 Object table count: ??
+      u32 Object page map offset: ??
+      u32 Object iterate data map offset: ??
+      u32 Resource table offset: ??
+      u32 Resource table entries: ??
+      u32 Resident names table offset: ??
+      u32 Entry table offset: ??
+      u32 Module directives table offset: ??
+      u32 Module directives entires: ??
+      u32 Fix-up page table offset: ??
+      u32 Fix-up record table offset: ??
+      u32 ImportedModulesNameTableOffset: ??
+      u32 ImportedModulesCount: ??
+      u32 ImportedProcedureNameTableOffset: ??
+      u32 Per-page checksum table offset: ??
+      u32 Data pages offset: ??
+      u32 Preload page count: ??
+      u32 NonResidentNamesTableOffset: ??
+      u32 NonResidentNamesTableLength: ??
+      u32 NonResidentNamesTableChecksum: ??
+      u32 Automatic data object: ??
+      u32 Debug information offset: ??
+      u32 Debug information length: ??
+      u32 Preload instance pages number: ??
+      u32 Demand instance pages number: ??
+      u32 Extra heap allocation: ??
+      u32 Unknown: ??
+
+  ne_header:
+    # Win16, OS/2
+    if Header.RelocationTableOffset == 0x40 && NewHeader.NewHeaderID == 0x454E: # "NE"
+      u16 Linker version: ?? # XXX major+minor version data type
+      u16 EntryTableOffset: ??
+      u16 EntryTableLength: ??
+      u32 File Load CRC: ??
+      u8 Program flags:
+        bit b0000_0011: Dgroup type # XXX 0=none, 1=single shared, 2=multiple, 3=null
+        bit b0000_0100: Global initialization
+        bit b0000_1000: Protected mode only
+        bit b0001_0000: 8086 instructions
+        bit b0010_0000: 80286 instructions
+        bit b0100_0000: 80386 instructions
+        bit b1000_0000: 80x87 instructions
+      u8 App flags:
+        bit b0000_0111: App type # XXX 1=unaware of win api, 2=compatible with win api, 3=uses win api
+        bit b0000_1000: OS/2 family app
+        bit b0001_0000: Reserved
+        bit b0010_0000: Errors in image
+        bit b0100_0000: Non-conforming program
+        bit b1000_0000: DLL or driver
+
+      u16 Auto data segment index: ??
+      u16 Initial local heap size: ??
+      u16 Initial stack size: ??
+      u32 Entry point CS:IP: ?? # XXX type CS:IP
+      u32 Stack pointer SS:SP: ?? # XXX type
+      u16 Segment table entries: ??
+      u16 Module reference entires: ??
+      u16 Nonresident names table size: ??
+      u16 Segment table offset: ??
+      u16 Resource table offset: ??
+      u16 Resident names table offset: ??
+      u16 Module reference table offset: ??
+      u16 Imported names table offset: ??     # XXX or u32 ?
+      u32 Nonresident names table offset: ??
+      u16 Movable entry points in entry table: ??
+      u16 File alignment size shift: ?? # 0 is equivalent to 9 (default 512-byte pages)
+      u16 Resource table entries: ??
+      u8 Target OS:
+        eq 01: OS/2
+        eq 02: Windows
+        eq 03: DOS 4.x
+        eq 04: Windows 386
+        eq 05: Borland Operating System Services (BOSS)
+      u8 Extra flags:
+        bit b0000_0001: Long filename support
+        bit b0000_0010: Win2 protected mode
+        bit b0000_0100: Win2 proportional fonts
+        bit b0000_1000: Fastload area
+        bit b1111_0000: Reserved
+      u16 Offset to fastload: ?? # XXX only used by windows
+      u16 Length of fastload: ?? # XXX only used by windows, offset to segment reference thunks or length of gangload area.
+      u16 Reserved: ??
+      u16 Expected windows version: ?? # XXX Type: parse.MinorMajor16le}, XXX only used by windows
+
 
 layout:
   - dos_header Header
@@ -116,7 +242,10 @@ layout:
   - tlink_header BorlandTLinkHeader
   - lzexe_header LZEXEHeader
 
-#  - ne_header NEHeader
+  - new_header NewHeader
+  - le_header LEHeader
+  - ne_header NEHeader
+
 
   # XXX only this code path for unrecognized header ID:s, requires "relocation_table[Header.RelocationItemCount] RelocationTable" syntax in struct field
 #  - offset Header.RelocationTableOffset

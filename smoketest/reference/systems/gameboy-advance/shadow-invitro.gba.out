@@ -3,10 +3,10 @@ Header
   [000000] Entry point                    u8[4]                                  2e 00 00 ea
   [000004] Nintendo Logo                  u8[152]                                24 ff ae 51 69 9a a2 21 3d 84 82 0a 84 e4 09 ad 11 24 8b 98 c0 81 7f 21 a3 52 be 19 93 09 ce 20 ...
   [00009c] NintendoLogo2                  u8               33                    21
-           - Debugging Enable             bit              0
+           - Debugging Enable             bit 1:2          0
   [00009d] NintendoLogo3                  u8               212                   d4
   [00009e] NintendoLogo4                  u8               248                   f8
-           - Cartridge Key Number MSBs    bit              0
+           - Cartridge Key Number MSBs    bit 0:2          0
   [00009f] NintendoLogo5                  u8               7                     07
   [0000a0] Game title                     ascii[12]                              00 00 00 00 00 00 00 00 00 00 00 00
   [0000ac] Game Code                      ascii[4]                               00 00 00 00

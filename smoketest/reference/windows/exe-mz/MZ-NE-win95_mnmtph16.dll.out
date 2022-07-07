@@ -1,0 +1,76 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           408                   01 98
+  [000004] FileSizeInPages                u16 le           2                     00 02
+  [000006] RelocationItemCount            u16 le           0                     00 00
+  [000008] HeaderSizeInParagraphs         u16 le           4                     00 04
+  [00000a] MinimumExtraParagraphs         u16 le           0                     00 00
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           0                     00 00
+  [000010] InitialSP                      u16 le           184                   00 b8
+  [000012] Checksum                       u16 le           0                     00 00
+  [000014] IP                             u16 le           0                     00 00
+  [000016] CS                             u16 le           0                     00 00
+  [000018] RelocationTableOffset          u16 le           64                    00 40
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+
+NewHeader
+  [00001c] Reserved                       u16[4] le                              00 00 00 00 00 00 00 00
+  [000024] OEM id                         u16 le           0                     00 00
+  [000026] OEM info                       u16 le           0                     00 00
+  [000028] Reserved2                      u16[10] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [00003c] NewHeaderOffset                u32 le           128                   00 00 00 80
+  [000080] NewHeaderID                    u16 le           17742                 45 4e
+
+NEHeader
+  [000082] Linker version                 u16 le           15365                 3c 05
+  [000084] EntryTableOffset               u16 le           275                   01 13
+  [000086] EntryTableLength               u16 le           87                    00 57
+  [000088] File Load CRC                  u32 le           0                     00 00 00 00
+  [00008c] Program flags                  u8               1                     01
+           - Dgroup type                  bit 0:2          1
+           - Global initialization        bit 2:1          0
+           - Protected mode only          bit 3:1          0
+           - 8086 instructions            bit 4:1          0
+           - 80286 instructions           bit 5:1          0
+           - 80386 instructions           bit 6:1          0
+           - 80x87 instructions           bit 7:1          0
+  [00008d] App flags                      u8               131                   83
+           - App type                     bit 0:3          3
+           - OS/2 family app              bit 3:1          0
+           - Reserved                     bit 4:1          0
+           - Errors in image              bit 5:1          0
+           - Non-conforming program       bit 6:1          0
+           - DLL or driver                bit 7:1          1
+  [00008e] Auto data segment index        u16 le           4                     00 04
+  [000090] Initial local heap size        u16 le           0                     00 00
+  [000092] Initial stack size             u16 le           0                     00 00
+  [000094] Entry point CS:IP              u32 le           0                     00 00 00 00
+  [000098] Stack pointer SS:SP            u32 le           0                     00 00 00 00
+  [00009c] Segment table entries          u16 le           4                     00 04
+  [00009e] Module reference entires       u16 le           2                     00 02
+  [0000a0] Nonresident names table size   u16 le           454                   01 c6
+  [0000a2] Segment table offset           u16 le           64                    00 40
+  [0000a4] Resource table offset          u16 le           96                    00 60
+  [0000a6] Resident names table offset    u16 le           120                   00 78
+  [0000a8] Module reference table offset  u16 le           207                   00 cf
+  [0000aa] Imported names table offset    u16 le           211                   00 d3
+  [0000ac] Nonresident names table offset u32 le           490                   00 00 01 ea
+  [0000b0] Movable entry points in entry table u16 le           0                     00 00
+  [0000b2] File alignment size shift      u16 le           4                     00 04
+  [0000b4] Resource table entries         u16 le           0                     00 00
+  [0000b6] Target OS                      u8               2                     02
+           - Windows                      eq
+  [0000b7] Extra flags                    u8               8                     08
+           - Long filename support        bit 0:1          0
+           - Win2 protected mode          bit 1:1          0
+           - Win2 proportional fonts      bit 2:1          0
+           - Fastload area                bit 3:1          1
+           - Reserved                     bit 4:4          0                     0
+  [0000b8] Offset to fastload             u16 le           60                    00 3c
+  [0000ba] Length of fastload             u16 le           64                    00 40
+  [0000bc] Reserved                       u16 le           0                     00 00
+  [0000be] Expected windows version       u16 le           1024                  04 00
+
+0x0970 (2416) unmapped bytes

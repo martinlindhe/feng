@@ -183,7 +183,8 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 				Label:     mp.Label,
 				Operation: mp.Operation,
 				Value:     val,
-				Ones:      ones})
+				Index:     int8(shift),
+				Size:      int8(ones)})
 
 		case "eq":
 			patternData, err := value.ParseHexString(mp.Pattern)

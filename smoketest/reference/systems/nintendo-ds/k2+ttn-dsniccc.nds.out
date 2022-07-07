@@ -4,7 +4,7 @@ Header
   [00000c] Game code                      ascii[4]         ####                  23 23 23 23
   [000010] Maker code                     ascii[2]                               00 00
   [000012] Unit code                      u8               2                     02
-           - DSi                          bit              0
+           - DSi                          bit 64:0         0
   [000013] Encryption seed                u8               0                     00
   [000014] Device capacity                u8               6                     06
   [000015] Reserved                       u8[7]                                  00 00 00 00 00 00 00

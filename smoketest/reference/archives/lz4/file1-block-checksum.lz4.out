@@ -3,26 +3,26 @@ Header
   [000000] Signature                      u32 le           407708164             18 4d 22 04
            - Magic number                 eq
   [000004] flags                          u8               116                   74
-           - PresetDictionary             bit              0
-           - Reserved                     bit              0
-           - ContentChecksum              bit              1
-           - ContentSize                  bit              0
-           - BlockChecksum                bit              1
-           - BlockIndependence            bit              1
-           - Version                      bit              1
+           - PresetDictionary             bit 0:1          0
+           - Reserved                     bit 1:1          0
+           - ContentChecksum              bit 2:1          1
+           - ContentSize                  bit 3:1          0
+           - BlockChecksum                bit 4:1          1
+           - BlockIndependence            bit 5:1          1
+           - Version                      bit 6:2          1
   [000005] blockDescriptor                u8               64                    40
-           - Reserved                     bit              0                     0
-           - BlockMaximumSize             bit              4
-           - Reserved                     bit              0
+           - Reserved                     bit 0:4          0                     0
+           - BlockMaximumSize             bit 4:3          4
+           - Reserved                     bit 7:1          0
   [000006] HeaderChecksum                 u8               189                   bd
   [000007] DataSize                       u32 le           2147483654            80 00 00 06
-           - DATA_SIZE                    bit              6                     00 00 00 06
-           - Uncompressed                 bit              1
+           - DATA_SIZE                    bit 0:31         6                     00 00 00 06
+           - Uncompressed                 bit 31:1         1
   [00000b] Data                           u8[6]                                  6b 75 6b 65 6e 0a
   [000011] BlockChecksum                  u32 le           2882547001            ab d0 2d 39
   [000015] DataSize2                      u32 le           0                     00 00 00 00
-           - DATA_SIZE                    bit              0                     00 00 00 00
-           - Uncompressed                 bit              0
+           - DATA_SIZE                    bit 0:31         0                     00 00 00 00
+           - Uncompressed                 bit 31:1         0
   [000019] ContentChecksum                u32 le           2882547001            ab d0 2d 39
 
 EOF

@@ -8,13 +8,13 @@ Header
   [000007] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [000008] Flags                          u8               16                    10
-           - Garbled                      bit              0
-           - Ansipage                     bit              0
-           - Arjprot                      bit              0
-           - Pathsym                      bit              1
-           - Backup                       bit              0
-           - Secured                      bit              0
-           - Altname                      bit              0
+           - Garbled                      bit 1:1          0
+           - Ansipage                     bit 2:1          0
+           - Arjprot                      bit 3:1          0
+           - Pathsym                      bit 4:1          1
+           - Backup                       bit 5:1          0
+           - Secured                      bit 6:1          0
+           - Altname                      bit 7:1          0
   [000009] Security version               u8               0                     00
   [00000a] File type                      u8               2                     02
   [00000b] Reserved                       u8               148                   94
@@ -44,13 +44,13 @@ LocalHeader_0
   [00003e] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [00003f] Flags                          u8               16                    10
-           - Garbled                      bit              0
-           - Reserved1                    bit              0
-           - Volume                       bit              0
-           - Extfile                      bit              0
-           - Pathsym                      bit              1
-           - Backup                       bit              0
-           - Reserved2                    bit              0
+           - Garbled                      bit 0:1          0
+           - Reserved1                    bit 1:1          0
+           - Volume                       bit 2:1          0
+           - Extfile                      bit 3:1          0
+           - Pathsym                      bit 4:1          1
+           - Backup                       bit 5:1          0
+           - Reserved2                    bit 6:2          0
   [000040] Compression method             u8               0                     00
            - Stored                       eq
   [000041] File type                      u8               0                     00
@@ -79,13 +79,13 @@ LocalHeader_1
   [0000ab] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [0000ac] Flags                          u8               16                    10
-           - Garbled                      bit              0
-           - Reserved1                    bit              0
-           - Volume                       bit              0
-           - Extfile                      bit              0
-           - Pathsym                      bit              1
-           - Backup                       bit              0
-           - Reserved2                    bit              0
+           - Garbled                      bit 0:1          0
+           - Reserved1                    bit 1:1          0
+           - Volume                       bit 2:1          0
+           - Extfile                      bit 3:1          0
+           - Pathsym                      bit 4:1          1
+           - Backup                       bit 5:1          0
+           - Reserved2                    bit 6:2          0
   [0000ad] Compression method             u8               1                     01
            - Compressed 1a (best)         eq
   [0000ae] File type                      u8               0                     00

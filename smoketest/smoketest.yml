@@ -492,8 +492,10 @@ input:
   - folder: windows/exe-mz
     files:
       #- EDXOR165.exe
-      - ne-win16_mrmind.exe
-      - ne-win95_mnmtph16.dll
+      - MZ-LE-win95_afvxd.vxd
+      - MZ-LE-win311_ios.386
+      - MZ-NE-win16_mrmind.exe
+      - MZ-NE-win95_mnmtph16.dll
       - mz-dos_tlink_header.exe
       - mz-dos_multiple_reloc_items.exe
       - mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes

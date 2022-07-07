@@ -13,11 +13,11 @@ FileHeader FILEHEADER
 BTreeHeader BTREEHEADER
   [000184] Magic                          u8[2]                                  3b 29
   [000186] Flags                          u16 le           1026                  04 02
-           - Unknown1                     bit              0
-           - Unknown2                     bit              1
-           - Unknown3                     bit              0                     00
-           - Directory                    bit              1
-           - Unknown4                     bit              0                     00
+           - Unknown1                     bit 0:1          0
+           - Unknown2                     bit 1:1          1
+           - Unknown3                     bit 2:8          0                     00
+           - Directory                    bit 10:1         1
+           - Unknown4                     bit 11:5         0                     00
   [000188] PageSize                       u16 le           1024                  04 00
   [00018a] Structure                      ascii[16]        z4                    7a 34 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   [00019a] Unknown1                       u16 le           0                     00 00

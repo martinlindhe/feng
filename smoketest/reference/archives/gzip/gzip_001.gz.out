@@ -4,11 +4,11 @@ Header
   [000002] Compression method             u8               8                     08
            - Deflate                      eq
   [000003] HeaderFlags                    u8               8                     08
-           - FLAG_TEXT                    bit              0
-           - FLAG_CRC16                   bit              0
-           - FLAG_EXTRA                   bit              0
-           - FLAG_NAME                    bit              1
-           - FLAG_COMMENT                 bit              0
+           - FLAG_TEXT                    bit 0:1          0
+           - FLAG_CRC16                   bit 1:1          0
+           - FLAG_EXTRA                   bit 2:1          0
+           - FLAG_NAME                    bit 3:1          1
+           - FLAG_COMMENT                 bit 4:1          0
   [000004] Modification time              time_t_32 le     2013-10-16T10:09:51Z  52 5e 65 ef
   [000008] Compression flags              u8               0                     00
   [000009] Operating system               u8               3                     03

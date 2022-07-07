@@ -33,20 +33,20 @@ Cell_0 SIG_NK
   [001024] CellSignature                  u16 le           27502                 6b 6e
            - SIG_NK                       eq
   [001026] Flags                          u16 le           44                    00 2c
-           - KEY_VOLATILE                 bit              0
-           - KEY_HIVE_EXIT                bit              0
-           - KEY_HIVE_ENTRY               bit              1
-           - KEY_NO_DELETE                bit              1
-           - KEY_SYM_LINK                 bit              0
-           - KEY_COMP_NAME                bit              1
-           - KEY_PREDEF_HANDLE            bit              0
-           - VirtualSource                bit              0
-           - VirtualTarget                bit              0
-           - VirtualStore                 bit              0
+           - KEY_VOLATILE                 bit 0:1          0
+           - KEY_HIVE_EXIT                bit 1:1          0
+           - KEY_HIVE_ENTRY               bit 2:1          1
+           - KEY_NO_DELETE                bit 3:1          1
+           - KEY_SYM_LINK                 bit 4:1          0
+           - KEY_COMP_NAME                bit 5:1          1
+           - KEY_PREDEF_HANDLE            bit 6:1          0
+           - VirtualSource                bit 7:1          0
+           - VirtualTarget                bit 8:1          0
+           - VirtualStore                 bit 9:1          0
   [001028] Timestamp                      filetime le      2012-05-22T00:00:08Z  01 cd 37 ad d9 be 81 54
   [001030] Access bits                    u32 le           2                     00 00 00 02
-           - was accessed before registry was initialized bit              0
-           - was accessed after registry was initialized bit              1
+           - was accessed before registry was initialized bit 0:1          0
+           - was accessed after registry was initialized bit 1:1          1
   [001034] Parent cell offset             u32 le           2816                  00 00 0b 00
   [001038] Number of subkeys              i32 le           2                     00 00 00 02
   [00103c] Number of volatile subkeys     i32 le           0                     00 00 00 00
@@ -83,20 +83,20 @@ Cell_2 SIG_NK
   [00110c] CellSignature                  u16 le           27502                 6b 6e
            - SIG_NK                       eq
   [00110e] Flags                          u16 le           32                    00 20
-           - KEY_VOLATILE                 bit              0
-           - KEY_HIVE_EXIT                bit              0
-           - KEY_HIVE_ENTRY               bit              0
-           - KEY_NO_DELETE                bit              0
-           - KEY_SYM_LINK                 bit              0
-           - KEY_COMP_NAME                bit              1
-           - KEY_PREDEF_HANDLE            bit              0
-           - VirtualSource                bit              0
-           - VirtualTarget                bit              0
-           - VirtualStore                 bit              0
+           - KEY_VOLATILE                 bit 0:1          0
+           - KEY_HIVE_EXIT                bit 1:1          0
+           - KEY_HIVE_ENTRY               bit 2:1          0
+           - KEY_NO_DELETE                bit 3:1          0
+           - KEY_SYM_LINK                 bit 4:1          0
+           - KEY_COMP_NAME                bit 5:1          1
+           - KEY_PREDEF_HANDLE            bit 6:1          0
+           - VirtualSource                bit 7:1          0
+           - VirtualTarget                bit 8:1          0
+           - VirtualStore                 bit 9:1          0
   [001110] Timestamp                      filetime le      2012-05-22T00:00:08Z  01 cd 37 ad d9 be 81 54
   [001118] Access bits                    u32 le           2                     00 00 00 02
-           - was accessed before registry was initialized bit              0
-           - was accessed after registry was initialized bit              1
+           - was accessed before registry was initialized bit 0:1          0
+           - was accessed after registry was initialized bit 1:1          1
   [00111c] Parent cell offset             u32 le           32                    00 00 00 20
   [001120] Number of subkeys              i32 le           0                     00 00 00 00
   [001124] Number of volatile subkeys     i32 le           0                     00 00 00 00
@@ -140,20 +140,20 @@ Cell_5 SIG_NK
   [00120c] CellSignature                  u16 le           27502                 6b 6e
            - SIG_NK                       eq
   [00120e] Flags                          u16 le           32                    00 20
-           - KEY_VOLATILE                 bit              0
-           - KEY_HIVE_EXIT                bit              0
-           - KEY_HIVE_ENTRY               bit              0
-           - KEY_NO_DELETE                bit              0
-           - KEY_SYM_LINK                 bit              0
-           - KEY_COMP_NAME                bit              1
-           - KEY_PREDEF_HANDLE            bit              0
-           - VirtualSource                bit              0
-           - VirtualTarget                bit              0
-           - VirtualStore                 bit              0
+           - KEY_VOLATILE                 bit 0:1          0
+           - KEY_HIVE_EXIT                bit 1:1          0
+           - KEY_HIVE_ENTRY               bit 2:1          0
+           - KEY_NO_DELETE                bit 3:1          0
+           - KEY_SYM_LINK                 bit 4:1          0
+           - KEY_COMP_NAME                bit 5:1          1
+           - KEY_PREDEF_HANDLE            bit 6:1          0
+           - VirtualSource                bit 7:1          0
+           - VirtualTarget                bit 8:1          0
+           - VirtualStore                 bit 9:1          0
   [001210] Timestamp                      filetime le      2012-05-22T00:00:05Z  01 cd 37 ad d7 d8 4f 33
   [001218] Access bits                    u32 le           0                     00 00 00 00
-           - was accessed before registry was initialized bit              0
-           - was accessed after registry was initialized bit              0
+           - was accessed before registry was initialized bit 0:1          0
+           - was accessed after registry was initialized bit 1:1          0
   [00121c] Parent cell offset             u32 le           32                    00 00 00 20
   [001220] Number of subkeys              i32 le           0                     00 00 00 00
   [001224] Number of volatile subkeys     i32 le           0                     00 00 00 00
@@ -186,20 +186,20 @@ Cell_7 SIG_NK
   [001294] CellSignature                  u16 le           27502                 6b 6e
            - SIG_NK                       eq
   [001296] Flags                          u16 le           32                    00 20
-           - KEY_VOLATILE                 bit              0
-           - KEY_HIVE_EXIT                bit              0
-           - KEY_HIVE_ENTRY               bit              0
-           - KEY_NO_DELETE                bit              0
-           - KEY_SYM_LINK                 bit              0
-           - KEY_COMP_NAME                bit              1
-           - KEY_PREDEF_HANDLE            bit              0
-           - VirtualSource                bit              0
-           - VirtualTarget                bit              0
-           - VirtualStore                 bit              0
+           - KEY_VOLATILE                 bit 0:1          0
+           - KEY_HIVE_EXIT                bit 1:1          0
+           - KEY_HIVE_ENTRY               bit 2:1          0
+           - KEY_NO_DELETE                bit 3:1          0
+           - KEY_SYM_LINK                 bit 4:1          0
+           - KEY_COMP_NAME                bit 5:1          1
+           - KEY_PREDEF_HANDLE            bit 6:1          0
+           - VirtualSource                bit 7:1          0
+           - VirtualTarget                bit 8:1          0
+           - VirtualStore                 bit 9:1          0
   [001298] Timestamp                      filetime le      2012-05-22T00:00:13Z  01 cd 37 ad dc d6 89 63
   [0012a0] Access bits                    u32 le           2                     00 00 00 02
-           - was accessed before registry was initialized bit              0
-           - was accessed after registry was initialized bit              1
+           - was accessed before registry was initialized bit 0:1          0
+           - was accessed after registry was initialized bit 1:1          1
   [0012a4] Parent cell offset             u32 le           32                    00 00 00 20
   [0012a8] Number of subkeys              i32 le           0                     00 00 00 00
   [0012ac] Number of volatile subkeys     i32 le           0                     00 00 00 00

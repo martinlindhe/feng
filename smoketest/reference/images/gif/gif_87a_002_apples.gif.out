@@ -8,10 +8,10 @@ LogicalScreenDescriptor
   [000006] Logical screen width           u16 le           100                   00 64
   [000008] Logical screen height          u16 le           75                    00 4b
   [00000a] ScreenDescriptor               u8               240                   f0
-           - GlobalColorTableSize         bit              0
-           - Sort                         bit              0
-           - ColorResolution              bit              7
-           - GlobalColorTablePresent      bit              1
+           - GlobalColorTableSize         bit 0:3          0
+           - Sort                         bit 3:1          0
+           - ColorResolution              bit 4:3          7
+           - GlobalColorTablePresent      bit 7:1          1
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global color table             u8[6]                                  00 00 ff 00 ff ff
@@ -24,11 +24,11 @@ Block_0 ImageDescriptor
   [000018] Image width                    u16 le           100                   00 64
   [00001a] Image height                   u16 le           75                    00 4b
   [00001c] ImageDescriptor                u8               199                   c7
-           - LocalColorTableSize          bit              7
-           - Reserved                     bit              0
-           - Sort                         bit              0
-           - Interlace                    bit              1
-           - LocalColorTablePresent       bit              1
+           - LocalColorTableSize          bit 0:3          7
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          1
+           - LocalColorTablePresent       bit 7:1          1
   [00001d] Local color table              u8[768]                                00 02 00 01 18 00 16 06 00 17 15 01 02 26 01 09 23 10 04 36 01 18 28 02 15 3a 04 16 34 11 26 03 ...
   [00031d] LZWMinimumCodeSize             u8               8                     08
   [00031e] DataSize                       u8               255                   ff

@@ -270,8 +270,11 @@ type MatchedPattern struct {
 	// parsed value for display
 	Parsed string
 
-	// number of bits in the bit field
-	Ones int
+	// size of bitfield, in bits
+	Size int8
+
+	// index bit
+	Index int8
 }
 
 func (df *DataField) SingleUnitSize() uint64 {

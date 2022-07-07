@@ -6,10 +6,10 @@ Header
   [000008] CRC32                          u32 be           3872830534            e6 d6 b4 46
   [00000c] Block header size              u8               2                     02
   [00000d] Block flags                    u8               0                     00
-           - Number of filters            bit              0
-           - Reserved                     bit              0                     0
-           - Compressed Size field present bit              0
-           - Uncompressed Size field present bit              0
+           - Number of filters            bit 0:2          0
+           - Reserved                     bit 2:4          0                     0
+           - Compressed Size field present bit 6:1          0
+           - Uncompressed Size field present bit 7:1          0
   [00000e] CRC32                          u32 be           553720832             21 01 1c 00
   [000012] Compressed data                u8[2]                                  00 00
 

@@ -11,17 +11,17 @@ Chunk_0 ARCHIVE
   [000009] Type                           u8               115                   73
            - ARCHIVE                      eq
   [00000a] archiveFlags                   u16 le           0                     00 00
-           - ARCHIVE_VOLUME               bit              0
-           - ARCHIVE_COMMENT_PRESENT      bit              0
-           - ARCHIVE_LOCKED               bit              0
-           - ARCHIVE_SOLID                bit              0
-           - NEW_VOLUME_NAMING            bit              0
-           - AV_PRESENT                   bit              0
-           - RECOVERY_PRESENT             bit              0
-           - BLOCK_HEADERS_ENCRYPTED      bit              0
-           - IS_FIRST_VOLUME              bit              0
-           - OLD_VERSION_IGNORE           bit              0
-           - ADD_SIZE_PRESENT             bit              0
+           - ARCHIVE_VOLUME               bit 0:1          0
+           - ARCHIVE_COMMENT_PRESENT      bit 1:1          0
+           - ARCHIVE_LOCKED               bit 2:1          0
+           - ARCHIVE_SOLID                bit 3:1          0
+           - NEW_VOLUME_NAMING            bit 4:1          0
+           - AV_PRESENT                   bit 5:1          0
+           - RECOVERY_PRESENT             bit 6:1          0
+           - BLOCK_HEADERS_ENCRYPTED      bit 7:1          0
+           - IS_FIRST_VOLUME              bit 8:1          0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         0
   [00000c] Header size                    u16 le           13                    00 0d
   [00000e] HighPosAv                      u16 le           0                     00 00
   [000010] PosAv                          u32 le           0                     00 00 00 00
@@ -31,8 +31,8 @@ Chunk_1 SUBBLOCK
   [000016] Type                           u8               122                   7a
            - SUBBLOCK                     eq
   [000017] Main header flags              u16 le           32768                 80 00
-           - OLD_VERSION_IGNORE           bit              0
-           - ADD_SIZE_PRESENT             bit              1
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
   [000019] HeaderSize                     u16 le           35                    00 23
   [00001b] DataSize                       u32 le           38                    00 00 00 26
   [00001f] Unknown                        u8[15]                                 24 00 00 00 02 6d f0 8e e2 00 00 00 00 1d 33
@@ -46,19 +46,19 @@ Chunk_2 FILE_OR_DIR
   [00005f] Type                           u8               116                   74
            - FILE_OR_DIR                  eq
   [000060] HEAD_FLAGS                     u16 le           36896                 90 20
-           - FROM_PREV_VOLUME             bit              0
-           - TO_NEXT_VOLUME               bit              0
-           - PASSWORD_ENCRYPTED           bit              0
-           - FILE_COMMENT_PRESENT         bit              0
-           - SOLID                        bit              0
-           - HIGH_SIZE                    bit              0
-           - HAS_UNICODE_FILENAME         bit              0
-           - ENCRYPTION_SALT              bit              0
-           - IS_OLD_FILE_VERSION          bit              0
-           - EXTENDED_TIME_INFO           bit              1
-           - reserved                     bit              0
-           - OLD_VERSION_IGNORE           bit              0
-           - ADD_SIZE_PRESENT             bit              1
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         1
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
   [000062] HeaderSize                     u16 le           45                    00 2d
   [000064] CompressedSize                 u32 le           5                     00 00 00 05
   [000068] Unpacked size                  u32 le           5                     00 00 00 05
@@ -81,8 +81,8 @@ Chunk_3 END
   [000091] Type                           u8               123                   7b
            - END                          eq
   [000092] Common block flags             u16 le           16384                 40 00
-           - OLD_VERSION_IGNORE           bit              1
-           - ADD_SIZE_PRESENT             bit              0
+           - OLD_VERSION_IGNORE           bit 14:1         1
+           - ADD_SIZE_PRESENT             bit 15:1         0
   [000094] HeaderSize                     u16 le           7                     00 07
 
 EOF

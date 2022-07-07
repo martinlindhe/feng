@@ -8,10 +8,10 @@ LogicalScreenDescriptor
   [000006] Logical screen width           u16 le           2                     00 02
   [000008] Logical screen height          u16 le           2                     00 02
   [00000a] ScreenDescriptor               u8               161                   a1
-           - GlobalColorTableSize         bit              1
-           - Sort                         bit              0
-           - ColorResolution              bit              2
-           - GlobalColorTablePresent      bit              1
+           - GlobalColorTableSize         bit 0:3          1
+           - Sort                         bit 3:1          0
+           - ColorResolution              bit 4:3          2
+           - GlobalColorTablePresent      bit 7:1          1
   [00000b] Background color               u8               4                     04
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global color table             u8[12]                                 00 00 a1 aa 00 2c 00 7f 03 67 67 1a
@@ -24,11 +24,11 @@ Block_0 ImageDescriptor
   [00001e] Image width                    u16 le           2                     00 02
   [000020] Image height                   u16 le           2                     00 02
   [000022] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit              0
-           - Reserved                     bit              0
-           - Sort                         bit              0
-           - Interlace                    bit              0
-           - LocalColorTablePresent       bit              0
+           - LocalColorTableSize          bit 0:3          0
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          0
   [000023] LZWMinimumCodeSize             u8               2                     02
   [000024] DataSize                       u8               3                     03
   [000025] Data                           u8[3]                                  0c 34 05

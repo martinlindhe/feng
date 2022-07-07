@@ -11,9 +11,9 @@ Header
   [00001a] cFolders                       u16 le           1                     00 01
   [00001c] cFiles                         u16 le           1                     00 01
   [00001e] Flags                          u16 le           4                     00 04
-           - PrevCabinet                  bit              0
-           - NextCabinet                  bit              0
-           - ReservePresent               bit              1
+           - PrevCabinet                  bit 0:1          0
+           - NextCabinet                  bit 1:1          0
+           - ReservePresent               bit 2:1          1
   [000020] Set ID                         u16 le           658                   02 92
   [000022] Cabinet number                 u16 le           0                     00 00
   [000024] cbCFHeader                     u16 le           6144                  18 00

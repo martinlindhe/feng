@@ -12,10 +12,10 @@ Header
   [00011c] NumberOfSections               u32 le           29                    00 00 00 1d
   [000120] SectionHeaderAddress           u32 le           66416                 00 01 03 70
   [000124] Initialization Flags           u32 le           1                     00 00 00 01
-           - MountUtilityDrive            bit              1
-           - FormatUtilityDrive           bit              0
-           - Limit64Megabytes             bit              0
-           - DontSetupHarddisk            bit              0
+           - MountUtilityDrive            bit 0:1          1
+           - FormatUtilityDrive           bit 1:1          0
+           - Limit64Megabytes             bit 2:1          0
+           - DontSetupHarddisk            bit 3:1          0
   [000128] Entry Point                    u32 le           2833185201            a8 de f9 b1
   [00012c] TLSAddress                     u32 le           3062392               00 2e ba 78
   [000130] Stack Size                     u32 le           65536                 00 01 00 00
@@ -52,23 +52,23 @@ Certificate
   [000190] Title Name                     utf16[40] le     MX Unleashed          00 4d 00 58 00 20 00 55 00 6e 00 6c 00 65 00 61 00 73 00 68 00 65 00 64 00 00 00 00 00 00 00 00 ...
   [0001e0] Alternate Title IDs            u32[16] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
   [000220] Allowed Media                  u32 le           514                   00 00 02 02
-           - HARD_DISK                    bit              0
-           - DVD_X2                       bit              1
-           - DVD_CD                       bit              0
-           - CD                           bit              0
-           - DVD_5_RO                     bit              0
-           - DVD_9_RO                     bit              0
-           - DVD_5_RW                     bit              0
-           - DVD_9_RW                     bit              0
-           - DONGLE                       bit              0
-           - BOARD                        bit              1
-           - NONSECURE_HARD_DISK          bit              0
-           - NONSECURE_MODE               bit              0
+           - HARD_DISK                    bit 0:1          0
+           - DVD_X2                       bit 1:1          1
+           - DVD_CD                       bit 2:1          0
+           - CD                           bit 3:1          0
+           - DVD_5_RO                     bit 4:1          0
+           - DVD_9_RO                     bit 5:1          0
+           - DVD_5_RW                     bit 6:1          0
+           - DVD_9_RW                     bit 7:1          0
+           - DONGLE                       bit 8:1          0
+           - BOARD                        bit 9:1          1
+           - NONSECURE_HARD_DISK          bit 30:1         0
+           - NONSECURE_MODE               bit 31:1         0
   [000224] Game Region                    u32 le           3                     00 00 00 03
-           - North America                bit              1
-           - Japan                        bit              1
-           - Rest of the world            bit              0
-           - Manufacturing                bit              0
+           - North America                bit 0:1          1
+           - Japan                        bit 1:1          1
+           - Rest of the world            bit 2:1          0
+           - Manufacturing                bit 31:1         0
   [000228] Game Ratings                   u32 le           4                     00 00 00 04
   [00022c] Disk Number                    u32 le           0                     00 00 00 00
   [000230] Certificate Version            u32 le           1                     00 00 00 01
@@ -78,12 +78,12 @@ Certificate
 
 SectionHeader_0 .text
   [000370] Section Flags                  u32 le           22                    00 00 00 16
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          0
   [000374] Virtual Address                u32 le           69632                 00 01 10 00
   [000378] Virtual Size                   u32 le           2349604               00 23 da 24
   [00037c] RawAddress                     u32 le           4096                  00 00 10 00
@@ -98,12 +98,12 @@ SectionHeader_0 .text
 
 SectionHeader_1 D3D
   [0003a8] Section Flags                  u32 le           7                     00 00 00 07
-           - Writable                     bit              1
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          1
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [0003ac] Virtual Address                u32 le           2419264               00 24 ea 40
   [0003b0] Virtual Size                   u32 le           80248                 00 01 39 78
   [0003b4] RawAddress                     u32 le           2355200               00 23 f0 00
@@ -118,12 +118,12 @@ SectionHeader_1 D3D
 
 SectionHeader_2 D3DX
   [0003e0] Section Flags                  u32 le           7                     00 00 00 07
-           - Writable                     bit              1
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          1
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [0003e4] Virtual Address                u32 le           2499520               00 26 23 c0
   [0003e8] Virtual Size                   u32 le           54936                 00 00 d6 98
   [0003ec] RawAddress                     u32 le           2424832               00 25 00 00
@@ -138,12 +138,12 @@ SectionHeader_2 D3DX
 
 SectionHeader_3 XGRPH
   [000418] Section Flags                  u32 le           7                     00 00 00 07
-           - Writable                     bit              1
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          1
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [00041c] Virtual Address                u32 le           2554464               00 26 fa 60
   [000420] Virtual Size                   u32 le           8500                  00 00 21 34
   [000424] RawAddress                     u32 le           2482176               00 25 e0 00
@@ -158,12 +158,12 @@ SectionHeader_3 XGRPH
 
 SectionHeader_4 DSOUND
   [000450] Section Flags                  u32 le           7                     00 00 00 07
-           - Writable                     bit              1
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          1
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [000454] Virtual Address                u32 le           2562976               00 27 1b a0
   [000458] Virtual Size                   u32 le           127964                00 01 f3 dc
   [00045c] RawAddress                     u32 le           2494464               00 26 10 00
@@ -178,12 +178,12 @@ SectionHeader_4 DSOUND
 
 SectionHeader_5 WMADEC
   [000488] Section Flags                  u32 le           7                     00 00 00 07
-           - Writable                     bit              1
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          1
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [00048c] Virtual Address                u32 le           2690944               00 29 0f 80
   [000490] Virtual Size                   u32 le           103724                00 01 95 2c
   [000494] RawAddress                     u32 le           2625536               00 28 10 00
@@ -198,12 +198,12 @@ SectionHeader_5 WMADEC
 
 SectionHeader_6 BINK
   [0004c0] Section Flags                  u32 le           38                    00 00 00 26
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          1
   [0004c4] Virtual Address                u32 le           2794688               00 2a a4 c0
   [0004c8] Virtual Size                   u32 le           54400                 00 00 d4 80
   [0004cc] RawAddress                     u32 le           2732032               00 29 b0 00
@@ -218,12 +218,12 @@ SectionHeader_6 BINK
 
 SectionHeader_7 BINK32
   [0004f8] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [0004fc] Virtual Address                u32 le           2849088               00 2b 79 40
   [000500] Virtual Size                   u32 le           4709                  00 00 12 65
   [000504] RawAddress                     u32 le           2789376               00 2a 90 00
@@ -238,12 +238,12 @@ SectionHeader_7 BINK32
 
 SectionHeader_8 BINK32A
   [000530] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [000534] Virtual Address                u32 le           2853824               00 2b 8b c0
   [000538] Virtual Size                   u32 le           5497                  00 00 15 79
   [00053c] RawAddress                     u32 le           2797568               00 2a b0 00
@@ -258,12 +258,12 @@ SectionHeader_8 BINK32A
 
 SectionHeader_9 BINK16
   [000568] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [00056c] Virtual Address                u32 le           2859328               00 2b a1 40
   [000570] Virtual Size                   u32 le           4892                  00 00 13 1c
   [000574] RawAddress                     u32 le           2805760               00 2a d0 00
@@ -278,12 +278,12 @@ SectionHeader_9 BINK16
 
 SectionHeader_10 BINK4444
   [0005a0] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [0005a4] Virtual Address                u32 le           2864224               00 2b b4 60
   [0005a8] Virtual Size                   u32 le           5536                  00 00 15 a0
   [0005ac] RawAddress                     u32 le           2813952               00 2a f0 00
@@ -298,12 +298,12 @@ SectionHeader_10 BINK4444
 
 SectionHeader_11 BINK5551
   [0005d8] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [0005dc] Virtual Address                u32 le           2869760               00 2b ca 00
   [0005e0] Virtual Size                   u32 le           4404                  00 00 11 34
   [0005e4] RawAddress                     u32 le           2822144               00 2b 10 00
@@ -318,12 +318,12 @@ SectionHeader_11 BINK5551
 
 SectionHeader_12 BINKYUY2
   [000610] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [000614] Virtual Address                u32 le           2874176               00 2b db 40
   [000618] Virtual Size                   u32 le           3244                  00 00 0c ac
   [00061c] RawAddress                     u32 le           2830336               00 2b 30 00
@@ -338,12 +338,12 @@ SectionHeader_12 BINKYUY2
 
 SectionHeader_13 BINKYUY2
   [000648] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [00064c] Virtual Address                u32 le           2877440               00 2b e8 00
   [000650] Virtual Size                   u32 le           156                   00 00 00 9c
   [000654] RawAddress                     u32 le           2834432               00 2b 40 00
@@ -358,12 +358,12 @@ SectionHeader_13 BINKYUY2
 
 SectionHeader_14 BINKYUY2
   [000680] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [000684] Virtual Address                u32 le           2877600               00 2b e8 a0
   [000688] Virtual Size                   u32 le           184                   00 00 00 b8
   [00068c] RawAddress                     u32 le           2838528               00 2b 50 00
@@ -378,12 +378,12 @@ SectionHeader_14 BINKYUY2
 
 SectionHeader_15 BINKYUY2
   [0006b8] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [0006bc] Virtual Address                u32 le           2877792               00 2b e9 60
   [0006c0] Virtual Size                   u32 le           136                   00 00 00 88
   [0006c4] RawAddress                     u32 le           2842624               00 2b 60 00
@@ -398,12 +398,12 @@ SectionHeader_15 BINKYUY2
 
 SectionHeader_16 BINK16MX
   [0006f0] Section Flags                  u32 le           54                    00 00 00 36
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [0006f4] Virtual Address                u32 le           2877952               00 2b ea 00
   [0006f8] Virtual Size                   u32 le           304                   00 00 01 30
   [0006fc] RawAddress                     u32 le           2846720               00 2b 70 00
@@ -418,12 +418,12 @@ SectionHeader_16 BINK16MX
 
 SectionHeader_17 BINK16X2
   [000728] Section Flags                  u32 le           22                    00 00 00 16
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          0
   [00072c] Virtual Address                u32 le           2878272               00 2b eb 40
   [000730] Virtual Size                   u32 le           1368                  00 00 05 58
   [000734] RawAddress                     u32 le           2850816               00 2b 80 00
@@ -438,12 +438,12 @@ SectionHeader_17 BINK16X2
 
 SectionHeader_18 BINK16M
   [000760] Section Flags                  u32 le           6                     00 00 00 06
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [000764] Virtual Address                u32 le           2879648               00 2b f0 a0
   [000768] Virtual Size                   u32 le           504                   00 00 01 f8
   [00076c] RawAddress                     u32 le           2854912               00 2b 90 00
@@ -458,12 +458,12 @@ SectionHeader_18 BINK16M
 
 SectionHeader_19 BINK32MX
   [000798] Section Flags                  u32 le           6                     00 00 00 06
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [00079c] Virtual Address                u32 le           2880160               00 2b f2 a0
   [0007a0] Virtual Size                   u32 le           444                   00 00 01 bc
   [0007a4] RawAddress                     u32 le           2859008               00 2b a0 00
@@ -478,12 +478,12 @@ SectionHeader_19 BINK32MX
 
 SectionHeader_20 BINK32X2
   [0007d0] Section Flags                  u32 le           6                     00 00 00 06
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [0007d4] Virtual Address                u32 le           2880608               00 2b f4 60
   [0007d8] Virtual Size                   u32 le           1420                  00 00 05 8c
   [0007dc] RawAddress                     u32 le           2863104               00 2b b0 00
@@ -498,12 +498,12 @@ SectionHeader_20 BINK32X2
 
 SectionHeader_21 BINK32M
   [000808] Section Flags                  u32 le           6                     00 00 00 06
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [00080c] Virtual Address                u32 le           2882048               00 2b fa 00
   [000810] Virtual Size                   u32 le           332                   00 00 01 4c
   [000814] RawAddress                     u32 le           2867200               00 2b c0 00
@@ -518,12 +518,12 @@ SectionHeader_21 BINK32M
 
 SectionHeader_22 XPP
   [000840] Section Flags                  u32 le           7                     00 00 00 07
-           - Writable                     bit              1
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          1
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [000844] Virtual Address                u32 le           2882400               00 2b fb 60
   [000848] Virtual Size                   u32 le           31916                 00 00 7c ac
   [00084c] RawAddress                     u32 le           2871296               00 2b d0 00
@@ -538,12 +538,12 @@ SectionHeader_22 XPP
 
 SectionHeader_23 .rdata
   [000878] Section Flags                  u32 le           6                     00 00 00 06
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [00087c] Virtual Address                u32 le           2914336               00 2c 78 20
   [000880] Virtual Size                   u32 le           220256                00 03 5c 60
   [000884] RawAddress                     u32 le           2904064               00 2c 50 00
@@ -558,12 +558,12 @@ SectionHeader_23 .rdata
 
 SectionHeader_24 .data
   [0008b0] Section Flags                  u32 le           7                     00 00 00 07
-           - Writable                     bit              1
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          1
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [0008b4] Virtual Address                u32 le           3134592               00 2f d4 80
   [0008b8] Virtual Size                   u32 le           311612                00 04 c1 3c
   [0008bc] RawAddress                     u32 le           3125248               00 2f b0 00
@@ -578,12 +578,12 @@ SectionHeader_24 .data
 
 SectionHeader_25 DOLBY
   [0008e8] Section Flags                  u32 le           6                     00 00 00 06
-           - Writable                     bit              0
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [0008ec] Virtual Address                u32 le           3446208               00 34 95 c0
   [0008f0] Virtual Size                   u32 le           29056                 00 00 71 80
   [0008f4] RawAddress                     u32 le           3178496               00 30 80 00
@@ -598,12 +598,12 @@ SectionHeader_25 DOLBY
 
 SectionHeader_26 BINKDATA
   [000920] Section Flags                  u32 le           7                     00 00 00 07
-           - Writable                     bit              1
-           - Preload                      bit              1
-           - Executable                   bit              1
-           - Inserted File                bit              0
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              0
+           - Writable                     bit 0:1          1
+           - Preload                      bit 1:1          1
+           - Executable                   bit 2:1          1
+           - Inserted File                bit 3:1          0
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          0
   [000924] Virtual Address                u32 le           3475264               00 35 07 40
   [000928] Virtual Size                   u32 le           63036                 00 00 f6 3c
   [00092c] RawAddress                     u32 le           3211264               00 31 00 00
@@ -618,12 +618,12 @@ SectionHeader_26 BINKDATA
 
 SectionHeader_27 $$XTIMAGE
   [000958] Section Flags                  u32 le           40                    00 00 00 28
-           - Writable                     bit              0
-           - Preload                      bit              0
-           - Executable                   bit              0
-           - Inserted File                bit              1
-           - Head Page Read Only          bit              0
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          0
+           - Executable                   bit 2:1          0
+           - Inserted File                bit 3:1          1
+           - Head Page Read Only          bit 4:1          0
+           - Tail Page Read Only          bit 5:1          1
   [00095c] Virtual Address                u32 le           3538304               00 35 fd 80
   [000960] Virtual Size                   u32 le           10240                 00 00 28 00
   [000964] RawAddress                     u32 le           3276800               00 32 00 00
@@ -638,12 +638,12 @@ SectionHeader_27 $$XTIMAGE
 
 SectionHeader_28 .XTLID
   [000990] Section Flags                  u32 le           56                    00 00 00 38
-           - Writable                     bit              0
-           - Preload                      bit              0
-           - Executable                   bit              0
-           - Inserted File                bit              1
-           - Head Page Read Only          bit              1
-           - Tail Page Read Only          bit              1
+           - Writable                     bit 0:1          0
+           - Preload                      bit 1:1          0
+           - Executable                   bit 2:1          0
+           - Inserted File                bit 3:1          1
+           - Head Page Read Only          bit 4:1          1
+           - Tail Page Read Only          bit 5:1          1
   [000994] Virtual Address                u32 le           3548544               00 36 25 80
   [000998] Virtual Size                   u32 le           1728                  00 00 06 c0
   [00099c] RawAddress                     u32 le           3289088               00 32 30 00
@@ -662,9 +662,9 @@ LibraryVersion_0 XAPILIB
   [000ad6] Minor Version                  u16 le           0                     00 00
   [000ad8] Build Version                  u16 le           5558                  15 b6
   [000ada] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit              1                     00 01
-           - Approved                     bit              2
-           - Debug Build                  bit              0
+           - QFEVersion                   bit 0:13         1                     00 01
+           - Approved                     bit 13:2         2
+           - Debug Build                  bit 15:1         0
 
 LibraryVersion_1 D3D8
   [000adc] LibraryName                    ascii[8]         D3D8                  44 33 44 38 00 00 00 00
@@ -672,9 +672,9 @@ LibraryVersion_1 D3D8
   [000ae6] Minor Version                  u16 le           0                     00 00
   [000ae8] Build Version                  u16 le           5558                  15 b6
   [000aea] Library Flags                  u16 le           16388                 40 04
-           - QFEVersion                   bit              4                     00 04
-           - Approved                     bit              2
-           - Debug Build                  bit              0
+           - QFEVersion                   bit 0:13         4                     00 04
+           - Approved                     bit 13:2         2
+           - Debug Build                  bit 15:1         0
 
 LibraryVersion_2 D3DX8
   [000aec] LibraryName                    ascii[8]         D3DX8                 44 33 44 58 38 00 00 00
@@ -682,9 +682,9 @@ LibraryVersion_2 D3DX8
   [000af6] Minor Version                  u16 le           0                     00 00
   [000af8] Build Version                  u16 le           5558                  15 b6
   [000afa] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit              1                     00 01
-           - Approved                     bit              2
-           - Debug Build                  bit              0
+           - QFEVersion                   bit 0:13         1                     00 01
+           - Approved                     bit 13:2         2
+           - Debug Build                  bit 15:1         0
 
 LibraryVersion_3 XGRAPHC
   [000afc] LibraryName                    ascii[8]         XGRAPHC               58 47 52 41 50 48 43 00
@@ -692,9 +692,9 @@ LibraryVersion_3 XGRAPHC
   [000b06] Minor Version                  u16 le           0                     00 00
   [000b08] Build Version                  u16 le           5558                  15 b6
   [000b0a] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit              1                     00 01
-           - Approved                     bit              2
-           - Debug Build                  bit              0
+           - QFEVersion                   bit 0:13         1                     00 01
+           - Approved                     bit 13:2         2
+           - Debug Build                  bit 15:1         0
 
 LibraryVersion_4 DSOUND
   [000b0c] LibraryName                    ascii[8]         DSOUND                44 53 4f 55 4e 44 00 00
@@ -702,9 +702,9 @@ LibraryVersion_4 DSOUND
   [000b16] Minor Version                  u16 le           0                     00 00
   [000b18] Build Version                  u16 le           5558                  15 b6
   [000b1a] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit              1                     00 01
-           - Approved                     bit              2
-           - Debug Build                  bit              0
+           - QFEVersion                   bit 0:13         1                     00 01
+           - Approved                     bit 13:2         2
+           - Debug Build                  bit 15:1         0
 
 LibraryVersion_5 XBOXKRNL
   [000b1c] LibraryName                    ascii[8]         XBOXKRNL              58 42 4f 58 4b 52 4e 4c
@@ -712,9 +712,9 @@ LibraryVersion_5 XBOXKRNL
   [000b26] Minor Version                  u16 le           0                     00 00
   [000b28] Build Version                  u16 le           5558                  15 b6
   [000b2a] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit              1                     00 01
-           - Approved                     bit              2
-           - Debug Build                  bit              0
+           - QFEVersion                   bit 0:13         1                     00 01
+           - Approved                     bit 13:2         2
+           - Debug Build                  bit 15:1         0
 
 LibraryVersion_6 LIBCMT
   [000b2c] LibraryName                    ascii[8]         LIBCMT                4c 49 42 43 4d 54 00 00
@@ -722,9 +722,9 @@ LibraryVersion_6 LIBCMT
   [000b36] Minor Version                  u16 le           0                     00 00
   [000b38] Build Version                  u16 le           5558                  15 b6
   [000b3a] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit              1                     00 01
-           - Approved                     bit              2
-           - Debug Build                  bit              0
+           - QFEVersion                   bit 0:13         1                     00 01
+           - Approved                     bit 13:2         2
+           - Debug Build                  bit 15:1         0
 
 LogoBitmap
   [000b6c] Logo bitmap                    u8[690]                                07 33 ad 03 07 53 ad 03 a9 03 ea 00 03 73 a7 03 32 00 b3 fd 03 05 03 fd d3 43 f9 ea 00 03 e3 f9 ...

@@ -8,10 +8,10 @@ LogicalScreenDescriptor
   [000006] Logical screen width           u16 le           199                   00 c7
   [000008] Logical screen height          u16 le           199                   00 c7
   [00000a] ScreenDescriptor               u8               128                   80
-           - GlobalColorTableSize         bit              0
-           - Sort                         bit              0
-           - ColorResolution              bit              0
-           - GlobalColorTablePresent      bit              1
+           - GlobalColorTableSize         bit 0:3          0
+           - Sort                         bit 3:1          0
+           - ColorResolution              bit 4:3          0
+           - GlobalColorTablePresent      bit 7:1          1
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global color table             u8[6]                                  00 00 ff ff 00 00
@@ -23,10 +23,10 @@ Block_0 GraphicControlExtension
            - EXT_GRAPHIC_CONTROL          eq
   [000015] Size                           u8               4                     04
   [000016] Flags                          u8               0                     00
-           - Transparent color            bit              0
-           - User input                   bit              0
-           - Disposal method              bit              0
-           - Reserved                     bit              0
+           - Transparent color            bit 0:1          0
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
   [000017] Delay time                     u16 le           0                     00 00
   [000019] Transparent color index        u8               0                     00
   [00001a] Block terminator               u8               0                     00
@@ -39,11 +39,11 @@ Block_1 ImageDescriptor
   [000020] Image width                    u16 le           199                   00 c7
   [000022] Image height                   u16 le           199                   00 c7
   [000024] ImageDescriptor                u8               0                     00
-           - LocalColorTableSize          bit              0
-           - Reserved                     bit              0
-           - Sort                         bit              0
-           - Interlace                    bit              0
-           - LocalColorTablePresent       bit              0
+           - LocalColorTableSize          bit 0:3          0
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          0
   [000025] LZWMinimumCodeSize             u8               2                     02
   [000026] DataSize                       u8               255                   ff
   [000027] Data                           u8[255]                                8c 8f a9 cb ed 0f a3 9c b4 da 8b b3 de 1b f8 0f 86 e2 48 96 e6 89 a6 23 c7 b6 ad 0a c7 f2 3c bb ...
