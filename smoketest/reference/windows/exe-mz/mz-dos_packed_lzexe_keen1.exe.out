@@ -1,0 +1,34 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           26                    00 1a
+  [000004] FileSizeInPages                u16 le           101                   00 65
+  [000006] RelocationItemCount            u16 le           0                     00 00
+  [000008] HeaderSizeInParagraphs         u16 le           2                     00 02
+  [00000a] MinimumExtraParagraphs         u16 le           4444                  11 5c
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           6277                  18 85
+  [000010] InitialSP                      u16 le           128                   00 80
+  [000012] Checksum                       u16 le           0                     00 00
+  [000014] IP                             u16 le           14                    00 0e
+  [000016] CS                             u16 le           3176                  0c 68
+  [000018] RelocationTableOffset          u16 le           28                    00 1c
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+  [00001c] Reserved                       u64 le           1565845291972254284   15 ba ff ff 31 39 5a 4c
+  [000024] OEM id                         u16 le           11795                 2e 13
+  [000026] OEM info                       u16 le           5769                  16 89
+  [000028] Reserved2[10]                  u16[10] le                             02 35 30 b4 21 cd 2e 8b ff 02 00 ff 1e 8b 00 2c da 8e 90 a3
+  [00003c] NewExeHeaderOffset             u32 le           2382793728            8e 06 8c 00
+
+LZEXEHeader
+  [00001c] Identifier                     ascii[2]         LZ                    4c 5a
+  [00001e] Version                        ascii[2]         91                    39 31
+  [000020] Real CS:IP                     u32 le           364576767             15 ba ff ff
+  [000024] Real SS:SP                     u32 le           378088979             16 89 2e 13
+  [000028] Compressed load module size    u16 le           565                   02 35
+  [00002a] Increase load module size      u16 le           12468                 30 b4
+  [00002c] Uncompressor size              u16 le           8653                  21 cd
+  [00002e] Checksum                       u16 le           11915                 2e 8b
+  [00c6ae] Lzexe uncompressor program     u8[232]                                06 0e 1f 8b 0e 0c 00 8b f1 4e 89 f7 8c db 03 1e 0a 00 8e c3 fd f3 a4 53 b8 2b 00 50 cb 2e 8b 2e ...
+
+0xc6de (50910) unmapped bytes

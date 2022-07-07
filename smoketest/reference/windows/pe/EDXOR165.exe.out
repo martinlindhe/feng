@@ -1,5 +1,0 @@
-# templates/windows/pe.yml
-Header
-  [000000] Signature                      ascii[2]         MZ                    4d 5a
-
-0x89fe (35326) unmapped bytes

@@ -1,0 +1,20 @@
+# STATUS: 1%
+#
+
+references:
+  - xxx
+
+kind: image
+name: XCursor image
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'Xcur'
+
+structs:
+  header:
+    ascii[4] Magic: c'Xcur'
+
+layout:
+  - header Header

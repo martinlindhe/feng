@@ -1,0 +1,264 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           330                   01 4a
+  [000004] FileSizeInPages                u16 le           177                   00 b1
+  [000006] RelocationItemCount            u16 le           59                    00 3b
+  [000008] HeaderSizeInParagraphs         u16 le           32                    00 20
+  [00000a] MinimumExtraParagraphs         u16 le           22849                 59 41
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           0                     00 00
+  [000010] InitialSP                      u16 le           0                     00 00
+  [000012] Checksum                       u16 le           0                     00 00
+  [000014] IP                             u16 le           18144                 46 e0
+  [000016] CS                             u16 le           0                     00 00
+  [000018] RelocationTableOffset          u16 le           62                    00 3e
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+  [00001c] Reserved                       u64 le           125801235939329       00 00 72 6a 61 fb 00 01
+  [000024] OEM id                         u16 le           0                     00 00
+  [000026] OEM info                       u16 le           0                     00 00
+  [000028] Reserved2[10]                  u16[10] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [00003c] NewExeHeaderOffset             u32 le           1092943872            41 25 00 00
+
+BorlandTLinkHeader
+  [00001c] Identifier                     u8[3]                                  01 00 fb
+  [00001f] Version                        u8               97                    61
+  [000020] Identifier2                    ascii[2]         jr                    6a 72
+
+RelocationTable_0
+  [00003e] Offset                         u16 le           16677                 41 25
+  [000040] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_1
+  [000042] Offset                         u16 le           17269                 43 75
+  [000044] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_2
+  [000046] Offset                         u16 le           17291                 43 8b
+  [000048] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_3
+  [00004a] Offset                         u16 le           17299                 43 93
+  [00004c] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_4
+  [00004e] Offset                         u16 le           17304                 43 98
+  [000050] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_5
+  [000052] Offset                         u16 le           17362                 43 d2
+  [000054] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_6
+  [000056] Offset                         u16 le           17383                 43 e7
+  [000058] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_7
+  [00005a] Offset                         u16 le           17402                 43 fa
+  [00005c] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_8
+  [00005e] Offset                         u16 le           17415                 44 07
+  [000060] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_9
+  [000062] Offset                         u16 le           17441                 44 21
+  [000064] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_10
+  [000066] Offset                         u16 le           38882                 97 e2
+  [000068] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_11
+  [00006a] Offset                         u16 le           38884                 97 e4
+  [00006c] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_12
+  [00006e] Offset                         u16 le           38886                 97 e6
+  [000070] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_13
+  [000072] Offset                         u16 le           38888                 97 e8
+  [000074] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_14
+  [000076] Offset                         u16 le           38890                 97 ea
+  [000078] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_15
+  [00007a] Offset                         u16 le           38892                 97 ec
+  [00007c] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_16
+  [00007e] Offset                         u16 le           38900                 97 f4
+  [000080] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_17
+  [000082] Offset                         u16 le           38904                 97 f8
+  [000084] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_18
+  [000086] Offset                         u16 le           38908                 97 fc
+  [000088] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_19
+  [00008a] Offset                         u16 le           38910                 97 fe
+  [00008c] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_20
+  [00008e] Offset                         u16 le           38912                 98 00
+  [000090] Paragraph                      u16 le           2662                  0a 66
+
+RelocationTable_21
+  [000092] Offset                         u16 le           18146                 46 e2
+  [000094] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_22
+  [000096] Offset                         u16 le           18155                 46 eb
+  [000098] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_23
+  [00009a] Offset                         u16 le           18675                 48 f3
+  [00009c] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_24
+  [00009e] Offset                         u16 le           18698                 49 0a
+  [0000a0] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_25
+  [0000a2] Offset                         u16 le           18717                 49 1d
+  [0000a4] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_26
+  [0000a6] Offset                         u16 le           18772                 49 54
+  [0000a8] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_27
+  [0000aa] Offset                         u16 le           18777                 49 59
+  [0000ac] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_28
+  [0000ae] Offset                         u16 le           18815                 49 7f
+  [0000b0] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_29
+  [0000b2] Offset                         u16 le           18864                 49 b0
+  [0000b4] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_30
+  [0000b6] Offset                         u16 le           18888                 49 c8
+  [0000b8] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_31
+  [0000ba] Offset                         u16 le           18966                 4a 16
+  [0000bc] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_32
+  [0000be] Offset                         u16 le           18987                 4a 2b
+  [0000c0] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_33
+  [0000c2] Offset                         u16 le           19006                 4a 3e
+  [0000c4] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_34
+  [0000c6] Offset                         u16 le           19019                 4a 4b
+  [0000c8] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_35
+  [0000ca] Offset                         u16 le           19045                 4a 65
+  [0000cc] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_36
+  [0000ce] Offset                         u16 le           19246                 4b 2e
+  [0000d0] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_37
+  [0000d2] Offset                         u16 le           19478                 4c 16
+  [0000d4] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_38
+  [0000d6] Offset                         u16 le           19529                 4c 49
+  [0000d8] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_39
+  [0000da] Offset                         u16 le           19534                 4c 4e
+  [0000dc] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_40
+  [0000de] Offset                         u16 le           19617                 4c a1
+  [0000e0] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_41
+  [0000e2] Offset                         u16 le           19623                 4c a7
+  [0000e4] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_42
+  [0000e6] Offset                         u16 le           19711                 4c ff
+  [0000e8] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_43
+  [0000ea] Offset                         u16 le           23403                 5b 6b
+  [0000ec] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_44
+  [0000ee] Offset                         u16 le           23408                 5b 70
+  [0000f0] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_45
+  [0000f2] Offset                         u16 le           23546                 5b fa
+  [0000f4] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_46
+  [0000f6] Offset                         u16 le           28939                 71 0b
+  [0000f8] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_47
+  [0000fa] Offset                         u16 le           29124                 71 c4
+  [0000fc] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_48
+  [0000fe] Offset                         u16 le           29182                 71 fe
+  [000100] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_49
+  [000102] Offset                         u16 le           31478                 7a f6
+  [000104] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_50
+  [000106] Offset                         u16 le           32938                 80 aa
+  [000108] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_51
+  [00010a] Offset                         u16 le           33041                 81 11
+  [00010c] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_52
+  [00010e] Offset                         u16 le           33056                 81 20
+  [000110] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_53
+  [000112] Offset                         u16 le           33110                 81 56
+  [000114] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_54
+  [000116] Offset                         u16 le           33165                 81 8d
+  [000118] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_55
+  [00011a] Offset                         u16 le           33210                 81 ba
+  [00011c] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_56
+  [00011e] Offset                         u16 le           33240                 81 d8
+  [000120] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_57
+  [000122] Offset                         u16 le           33270                 81 f6
+  [000124] Paragraph                      u16 le           0                     00 00
+
+RelocationTable_58
+  [000126] Offset                         u16 le           33351                 82 47
+  [000128] Paragraph                      u16 le           0                     00 00
+
+0x16018 (90136) unmapped bytes

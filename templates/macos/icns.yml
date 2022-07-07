@@ -1,0 +1,70 @@
+# STATUS: 90%
+#
+# macOS/iOS icon collection archive
+#
+# MAX: allow pattern matching for ascii[4] Type
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/ICNS.bt
+
+kind: archive
+name:  Apple icns icon collection
+extensions: [.icns]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'icns'
+
+structs:
+  header:
+    ascii[4] Signature: c'icns'
+    u32 Length: ??
+
+  icon:
+    ascii[4] Type:
+      # XXX impl. matching doesnt work on ascii[4] currently
+      eq c'ICON': 32x32, 1-bit mono icon, OS=1.0
+      eq c'ICN#': 32x32, 1-bit mono icon with 1-bit mask, OS=6.0
+      eq c'icm#': 16x12, 1 bit mono icon with 1-bit mask, OS=6.0
+      eq c'icm4': 16x12, 4 bit icon, OS=7.0
+      eq c'icm8': 16x12, 8 bit icon, OS=7.0
+      eq c'ics#': 16x16, 1-bit mono icon with 1-bit mask, OS=6.0
+      eq c'ics4': 16x16, 4-bit icon, OS=7.0
+      eq c'ics8': 16x16, 8 bit icon, OS=7.0
+      eq c'is32': 16x16, 24-bit RGB icon, OS=8.5
+      eq c's8mk': 16x16, 8-bit mask, OS=8.5
+      eq c'icl4': 32x32, 4-bit icon, OS=7.0
+      eq c'icl8': 32x32, 8-bit icon, OS=7.0
+      eq c'il32': 32x32, 24-bit RGB icon, OS=8.5
+      eq c'l8mk': 32x32, 8-bit mask, OS=8.5
+      eq c'ich#': 48x48, 1-bit mono icon with 1-bit mask, OS=8.5
+      eq c'ich4': 48x48, 4-bit icon, OS=8.5
+      eq c'ich8': 48x48, 8-bit icon, OS=8.5
+      eq c'ih32': 48x48, 24-bit RGB icon, OS=8.5
+      eq c'h8mk': 48x48, 8-bit mask, OS=8.5
+      eq c'it32': 128x128, 24-bit RGB icon, OS=10.0
+      eq c't8mk': 128x128, 8-bit mask, OS=10.0
+      eq c'icp4': 16x16, JPG or PNG or 24-bit RGB icon, OS=10.7
+      eq c'icp5': 32x32, JPG or PNG or 24-bit RGB icon, OS=10.7
+      eq c'icp6': 48x48, JPG or PNG, OS=10.7
+      eq c'ic07': 128x128, JPG or PNG, OS=10.7
+      eq c'ic08': 256x256, JPG or PNG, OS=10.5
+      eq c'ic09': 512x512, JPG or PNG, OS=10.5
+      eq c'ic10': 1024x1024, JPG or PNG (512x512@2x retina in 10.8), OS=10.7
+      eq c'ic11': 32x32, JPG or PNG (16x16@2x retina), OS=10.8
+      eq c'ic12': 64x64, JPG or PNG (32x32@2x retina), OS=10.8
+      eq c'ic13': 256x256, JPG or PNG (128x128@2x retina), OS=10.8
+      eq c'ic14': 512x512, JPG or PNG (256x256@2x retina), OS=10.8
+      eq c'ic04': 16x16, ARGB or JPG or PNG
+      eq c'ic05': 32x32, ARGB or JPG or PNG (16x16@2x retina)
+      eq c'icsb': 18x18, ARGB or JPG or PNG
+      eq c'icsB': 36x36, JPG or PNG (18x18@2x retina)
+      eq c'sb24': 24x24, JPG or PNG
+      eq c'SB24': 48x48, JPG or PNG (24x24@2x retina)
+    u32 Length: ??
+    raw:u8[self.Length - 8] Data: ??
+
+layout:
+  - header Header
+  - icon[] Icon

@@ -309,8 +309,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		case "offset":
 			// set/restore current offset
 			if es.Pattern.Value == "restore" {
-				log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, fl.previousOffset)
-				fl.offset = fl.previousOffset
+				previousOffset := fl.popLastOffset()
+				log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, previousOffset)
+				fl.offset = previousOffset
 				_, err := r.Seek(int64(fl.offset), io.SeekStart)
 				if err != nil {
 					return err
@@ -324,9 +325,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				panic("debug recursion: too many offset changes from template")
 				return fmt.Errorf("too many offset changes from template")
 			}
-			fl.previousOffset = fl.offset
+			previousOffset := fl.pushOffset()
 			fl.offset, err = fl.GetInt(es.Pattern.Value, df)
-			log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", fl.previousOffset, fl.offset, es.Pattern.Value)
+			log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
 			if err != nil {
 				return err
 			}

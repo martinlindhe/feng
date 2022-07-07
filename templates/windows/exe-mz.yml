@@ -1,0 +1,112 @@
+# STATUS: 1%
+
+references:
+  - https://moddingwiki.shikadi.net/wiki/EXE_Format
+  - https://www.sweetscape.com/010editor/repository/files/EXE.bt
+
+kind: executable
+name: MS-DOS / OS-2 / Windows executable
+extensions: [.exe, .dll]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'MZ'
+
+structs:
+  dos_header:
+    ascii[2] Signature: c'MZ'
+    u16 UsedBytesInTheLastPage: ??
+    u16 FileSizeInPages: ??
+    u16 RelocationItemCount: ??
+    u16 HeaderSizeInParagraphs: ??
+    u16 MinimumExtraParagraphs: ??
+    u16 MaximumExtraParagraphs: ??
+    u16 InitialRelativeSS: ??       # XXX DOS 16 bit offset:segment pair datatype
+    u16 InitialSP: ??
+    u16 Checksum: ??
+    u16 IP: ??                      # XXX DOS 16 bit offset:segment pair datatype
+    u16 CS: ??
+    u16 RelocationTableOffset: ??
+    u16 OverlayNumber: ??
+
+    # XXX the following is not in original MS-DOS exe header: but exists in windows exe files?!
+    u64 Reserved: ??
+    u16 OEM id: ??
+    u16 OEM info: ??
+    u16[10] Reserved2[10]: ??
+    u32 NewExeHeaderOffset: ??
+
+  relocation_table:
+    u16 Offset: ??
+    u16 Paragraph: ??
+
+  exepack_header:
+    # Microsoft EXEPACK check
+    # https://moddingwiki.shikadi.net/wiki/Microsoft_EXEPACK
+    offset: (Header.HeaderSizeInParagraphs * 16) + (Header.CS * 16) + Header.IP - 2
+    #ascii[2] ExepackMagic: ??        # XXX show as ascii
+    u16 ExepackMagic: 42 52           # XXX this required match breaks parsing, solve with a "peek" directive ???
+    if self.ExepackMagic == 0x4252:   # XXX TODO expose string variables in script engine and compare with "RB"
+      offset: (Header.HeaderSizeInParagraphs * 16) + (Header.CS * 16) + Header.IP - 18
+      u16 Real IP: ??
+      u16 Real CS: ??
+      u16 Mem start: ??
+      u16 Exepack size: ??
+      u16 Real SP: ??
+      u16 Real SS: ??
+      u16 Dest len: ??
+      u16 Skip len: ??
+      u8[268] Unpacker code: ?? # XXX unsure of size
+      offset: restore
+    offset: restore
+
+  pklite_header:
+    # https://moddingwiki.shikadi.net/wiki/PKLite
+    if (Header.Reserved & 0xFFFFFFFFFFFF0000) == 0x4554494c4b500000:
+      offset: "0x001c"
+      u8 Minor version: ??
+      u8 Flags:
+        bit b0000_1111: Major version
+        bit b0001_0000: Extra compression
+        bit b0010_0000: Multi-segment file
+        bit b1100_0000: Unknown
+      ascii[52] Identifier: ??
+  
+  tlink_header:
+    # Borland TLINK
+    if (Header.Reserved & 0xFF00FF) == 0xFB0001:
+      offset: "0x001c"
+      u8[3] Identifier: ??
+      u8 Version: ??
+      ascii[2] Identifier2: c'jr'
+
+  lzexe_header:
+    # TODO: some users change the ID bytes at 0x001c, we can instead detect on decompression block
+    if (Header.Reserved & 0xFFFF) == 0x5A4C:
+      offset: "0x001c"
+      ascii[2] Identifier: c'LZ'
+      ascii[2] Version:
+        # FIXME: cannot match on ascii[2]
+        eq c'90': "0.9"
+        eq c'91': "0.91"
+      u32 Real CS:IP: ?? # XXX DOS 16 bit offset:segment pair datatype
+      u32 Real SS:SP: ??
+      u16 Compressed load module size: ??
+      u16 Increase load module size: ??
+      u16 Uncompressor size: ??
+      u16 Checksum: ??
+
+      offset: (Header.HeaderSizeInParagraphs + Header.CS) * 16 + Header.IP
+      u8[232] Lzexe uncompressor program: ??
+
+layout:
+  - dos_header Header
+
+  #- exepack_header ExepackHeader   # XXX cannot detect exepack without breaking the rest without peek directive
+  - pklite_header PKLiteHeader
+  - tlink_header BorlandTLinkHeader
+  - lzexe_header LZEXEHeader
+
+  - offset Header.RelocationTableOffset
+  - relocation_table[Header.RelocationItemCount] RelocationTable

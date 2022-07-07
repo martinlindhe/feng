@@ -26,7 +26,7 @@ type FileLayout struct {
 	offset uint64
 
 	// previous offset (restore it with "offset: restore")
-	previousOffset uint64
+	previousOffsets []uint64
 
 	// counts how many times the offset was changed in order to stop recursion
 	offsetChanges uint64
@@ -39,6 +39,22 @@ type FileLayout struct {
 
 	// lastpath/filename-without-ext, eg "archives/zip"
 	BaseName string
+}
+
+// pop last offset from previousOffsets list
+func (fl *FileLayout) popLastOffset() (v uint64) {
+	if len(fl.previousOffsets) == 0 {
+		panic("cannot pop offset, no offsets have been pushed")
+	}
+
+	v, fl.previousOffsets = fl.previousOffsets[len(fl.previousOffsets)-1], fl.previousOffsets[:len(fl.previousOffsets)-1]
+	return
+}
+
+// push current offset to previousOffsets list
+func (fl *FileLayout) pushOffset() uint64 {
+	fl.previousOffsets = append(fl.previousOffsets, fl.offset)
+	return fl.offset
 }
 
 // parsed file data section from a template "struct"

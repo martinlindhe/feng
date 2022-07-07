@@ -4,10 +4,7 @@
 # The format is X Server and host dependent.
 
 references:
-  - https://www.sweetscape.com/010editor/repository/files/TTF.bt
-  - https://en.wikipedia.org/wiki/TrueType
-  - https://developer.apple.com/fonts/TrueType-Reference-Manual/
-  - https://docs.fileformat.com/font/ttf/
+  - xxx
 
 software:
   - Snftobdf is one utility that can generate a BDF file from a SNF file.
@@ -19,7 +16,7 @@ endian: little
 
 magic:
   - offset: 0000
-    match: 04 00 00 00
+    match: 04 00 00 00        # XXX weak magic
 
 structs:
   header:

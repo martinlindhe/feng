@@ -1,0 +1,28 @@
+# templates/databases/sqlite3.yml
+Header
+  [000000] Signature                      ascii[16]        SQLite format 3       53 51 4c 69 74 65 20 66 6f 72 6d 61 74 20 33 00
+  [000010] PageSize                       u16 be           4096                  10 00
+  [000012] Write version                  u8               1                     01
+  [000013] Read version                   u8               1                     01
+  [000014] Unused page space              u8               0                     00
+  [000015] Max index embed                u8               64                    40
+  [000016] Min index embed                u8               32                    20
+  [000017] Min table embed                u8               32                    20
+  [000018] Change count                   u32 be           3                     00 00 00 03
+  [00001c] Database size                  u32 be           2                     00 00 00 02
+  [000020] Freelist trunk page            u32 be           0                     00 00 00 00
+  [000024] Freelist page count            u32 be           0                     00 00 00 00
+  [000028] Schema cookie                  u32 be           1                     00 00 00 01
+  [00002c] Schema file format             u32 be           4                     00 00 00 04
+  [000030] Page cache size                u32 be           0                     00 00 00 00
+  [000034] Top root page                  u32 be           0                     00 00 00 00
+  [000038] TextEncoding                   u32 be           1                     00 00 00 01
+           - UTF-8                        eq
+  [00003c] User version                   u32 be           0                     00 00 00 00
+  [000040] Incremental vacuum             u32 be           0                     00 00 00 00
+  [000044] Application ID                 u32 be           0                     00 00 00 00
+  [000048] Reserved                       u8[20]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [00005c] Version valid for              u32 be           3                     00 00 00 03
+  [000060] SQLite version number          u32 be           3008010               00 2d e6 0a
+
+0x1f9c (8092) unmapped bytes

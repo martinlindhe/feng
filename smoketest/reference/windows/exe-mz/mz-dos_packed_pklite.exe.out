@@ -1,0 +1,36 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           159                   00 9f
+  [000004] FileSizeInPages                u16 le           19                    00 13
+  [000006] RelocationItemCount            u16 le           1                     00 01
+  [000008] HeaderSizeInParagraphs         u16 le           7                     00 07
+  [00000a] MinimumExtraParagraphs         u16 le           2582                  0a 16
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           586                   02 4a
+  [000010] InitialSP                      u16 le           512                   02 00
+  [000012] Checksum                       u16 le           0                     00 00
+  [000014] IP                             u16 le           256                   01 00
+  [000016] CS                             u16 le           65520                 ff f0
+  [000018] RelocationTableOffset          u16 le           82                    00 52
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+  [00001c] Reserved                       u64 le           4995698478690599180   45 54 49 4c 4b 50 01 0c
+  [000024] OEM id                         u16 le           17184                 43 20
+  [000026] OEM info                       u16 le           28783                 70 6f
+  [000028] Reserved2[10]                  u16[10] le                             2e 72 31 20 39 39 2d 30 32 39 50 20 57 4b 52 41 20 45 6e 49
+  [00003c] NewExeHeaderOffset             u32 le           1092628067            41 20 2e 63
+
+PKLiteHeader
+  [00001c] Minor version                  u8               12                    0c
+  [00001d] Flags                          u8               1                     01
+           - Major version                bit              1                     1
+           - Extra compression            bit              0
+           - Multi-segment file           bit              0
+           - Unknown                      bit              0
+  [00001e] Identifier                     ascii[52]        PKLITE Copr. 1990-92 PKWARE Inc. All Rights Reserved 50 4b 4c 49 54 45 20 43 6f 70 72 2e 20 31 39 39 30 2d 39 32 20 50 4b 57 41 52 45 20 49 6e 63 2e ...
+
+RelocationTable_0
+  [000052] Offset                         u16 le           7                     00 07
+  [000054] Paragraph                      u16 le           0                     00 00
+
+0x2425 (9253) unmapped bytes

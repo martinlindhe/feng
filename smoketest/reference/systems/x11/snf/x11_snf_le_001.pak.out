@@ -1,0 +1,5 @@
+# templates/systems/x11/x11snf.yml
+Header
+  [000000] Magic                          u32 le           4                     00 00 00 04
+
+0x0e02 (3586) unmapped bytes

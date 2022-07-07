@@ -1,0 +1,21 @@
+# templates/macos/icns.yml
+Header
+  [000000] Signature                      ascii[4]         icns                  69 63 6e 73
+  [000004] Length                         u32 be           43381                 00 00 a9 75
+
+Icon_0
+  [000008] Type                           ascii[4]         TOC                   54 4f 43 20
+  [00000c] Length                         u32 be           16                    00 00 00 10
+  [000010] Data                           raw:u8[8]                              69 63 30 38 00 00 a9 51
+
+Icon_1
+  [000018] Type                           ascii[4]         ic08                  69 63 30 38
+  [00001c] Length                         u32 be           43345                 00 00 a9 51
+  [000020] Data                           raw:u8[43337]                          89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 00 00 00 01 00 08 06 00 00 00 5c 72 a8 ...
+
+Icon_2
+  [00a969] Type                           ascii[4]         icnV                  69 63 6e 56
+  [00a96d] Length                         u32 be           12                    00 00 00 0c
+  [00a971] Data                           raw:u8[4]                              43 0a 00 00
+
+EOF

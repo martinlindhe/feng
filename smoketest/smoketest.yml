@@ -104,6 +104,7 @@ input:
   - folder: databases/sqlite
     files:
       - sol-11-x-86_meta.sqlite
+      - sqlite3db.sqlite
 
   - folder: documents/chm
     files:
@@ -363,6 +364,10 @@ input:
       - big_endian_action_copy.tiff
       - little_endian_tiff_001.tiff
 
+  - folder: macos/icns
+    files:
+      - workflowicon.icns
+
   - folder: macos/stuffit
     files:
       - Darkwood_2.5.sit
@@ -444,6 +449,15 @@ input:
       - rmid-solaris
       - zdebug-test-gcc484-x86-64.obj
 
+  - folder: systems/x11/snf
+    files:
+      - x11_snf_le_001.pak
+      - x11_snf_le_002.pak
+
+  - folder: systems/x11/xcursor
+    files:
+      - color-picker
+
   - folder: systems/xbox/xbox_xbe
     files:
       # XXX find smaller samples
@@ -475,9 +489,15 @@ input:
       - 5202.cp_
       - mono.gr_
 
-  - folder: windows/pe
+  - folder: windows/exe-mz
     files:
       - EDXOR165.exe
+      - mz-dos_borland_header.exe
+      - mz-dos_multiple_reloc_items.exe
+      #- mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes
+      - mz-dos_packed_lzexe_keen1.exe
+      - mz-dos_packed_lzexe_sample.exe
+      - mz-dos_packed_pklite.exe
 
   - folder: windows/regf
     files:
