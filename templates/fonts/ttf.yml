@@ -1,7 +1,12 @@
-# STATUS: 1%
+# STATUS: 25%
+
+# TODO: decode data blocks
 
 references:
   - https://www.sweetscape.com/010editor/repository/files/TTF.bt
+  - https://en.wikipedia.org/wiki/TrueType
+  - https://developer.apple.com/fonts/TrueType-Reference-Manual/
+  - https://docs.fileformat.com/font/ttf/
 
 kind: font
 name: TrueType font
@@ -21,5 +26,16 @@ structs:
     u16 EntrySelector: ??
     u16 RangeShift: ??
 
+  table:
+    ascii[4] Tag: ??
+    u32 Checksum: ??
+    u32 Offset: ??
+    u32 Length: ??
+
+    offset: self.Offset
+    u8[self.Length] Data: ??
+    offset: restore
+
 layout:
   - header Header
+  - table[Header.NumTables] Table
