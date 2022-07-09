@@ -12,6 +12,9 @@ references:
   # MZ-NE format: 16-bit New Executable (Win16, OS/2)
   - http://www.program-transformation.org/Transform/NeFormat
 
+  # MZ-LX format: Linear eXecutable (OS/2)
+  - http://www.virtualbox.org/svn/kstuff-mirror/trunk/include/k/kLdrFmts/lx.h
+
 kind: executable
 name: MS-DOS / OS-2 / Windows executable
 mime: application/x-dosexec
@@ -179,6 +182,56 @@ structs:
       u32 Extra heap allocation: ??
       u32 Unknown: ??
 
+  lx_header:
+    if Header.RelocationTableOffset == 0x40 && NewHeader.NewHeaderID == 0x584C: # "LX"
+      u8 Border: ??
+      u8 Worder: ??
+      u32 Level: ??
+      u16 CPU: ??
+      u16 OS: ??
+      u32 Version: ?? # XXX parse.MajorMinor32le
+      u32 Mflags: ?? # XXX
+      u32 MPages: ??
+      u32 Start obj: ??
+      u32 EIP: ??
+      u32 Stack obj: ??
+      u32 ESP: ??
+      u32 Page size: ??
+      u32 Page shift: ??
+      u32 Fixup size: ??
+      u32 Fixup sum: ??
+      u32 LDR size: ??
+      u32 LDR sum: ??
+      u32 Obj tab: ??
+      u32 Obj cnt: ??
+      u32 Obj map: ??
+      u32 Iter map: ??
+      u32 Rsrc tab: ??
+      u32 Rsrc cnt: ??
+      u32 Res tab: ?? 
+      u32 Ent tab: ??
+      u32 Dir tab: ??
+      u32 Dir cnt: ??
+      u32 Fpage tab: ??
+      u32 Frec tab: ??
+      u32 Imp mod: ??
+      u32 Imp mod cnt: ??
+      u32 Imp proc: ??
+      u32 Page sum: ??
+      u32 Data page: ??
+      u32 Preload: ??
+      u32 Nres tab: ??
+      u32 Cbnres tab: ??
+      u32 Nres sum: ??
+      u32 Autodata: ??
+      u32 Debug info: ??
+      u32 Debug len: ??
+      u32 Inst preload: ??
+      u32 Inst demand: ??
+      u32 Heap size: ??
+      u32 Stack size: ??
+      u8[20] Reserved: ??
+
   ne_header:
     # Win16, OS/2
     if Header.RelocationTableOffset == 0x40 && NewHeader.NewHeaderID == 0x454E: # "NE"
@@ -315,7 +368,9 @@ layout:
 
   - new_header NewHeader
   - le_header LEHeader
+  - lx_header LXHeader
   - ne_header NEHeader
+
 
   # XXX FINISH IMPL - and all of this under ne_header:
   #- offset offset("NewHeader.NewHeaderID") + NEHeader.ModuleReferenceTableOffset

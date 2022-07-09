@@ -494,6 +494,8 @@ input:
       #- EDXOR165.exe
       - MZ-LE-win95_afvxd.vxd
       - MZ-LE-win311_ios.386
+      - MZ-LX-os2_fpart.exe
+      - MZ-LX-os2_hotscrl.dll
       - MZ-NE-win16_mrmind.exe
       - MZ-NE-win95_mnmtph16.dll
       - mz-dos_tlink_header.exe
