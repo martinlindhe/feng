@@ -47,9 +47,9 @@ structs:
     # Microsoft EXEPACK check
     # https://moddingwiki.shikadi.net/wiki/Microsoft_EXEPACK
 
-    if peek_i16((Header.HeaderSizeInParagraphs * 16) + (Header.CS * 16) + Header.IP - 2) == 0x4252:
+    if peek_i16(((Header.HeaderSizeInParagraphs + Header.CS) * 16) + Header.IP - 2) == 0x4252:
       # XXX TODO expose string variables in script engine and compare with "RB"
-      offset: (Header.HeaderSizeInParagraphs * 16) + (Header.CS * 16) + Header.IP - 18
+      offset: ((Header.HeaderSizeInParagraphs + Header.CS) * 16) + Header.IP - 18
       u16 Real IP: ??
       u16 Real CS: ??
       u16 Mem start: ??
@@ -83,7 +83,7 @@ structs:
       ascii[2] Identifier2: c'jr'
 
   lzexe_header:
-    # TODO: some users change the ID bytes at 0x001c, we can instead detect on decompression block
+    # TODO: some users change the ID bytes at 0x001c, we can instead detect on decompression block. NEED SUCH SAMPLE
     if peek_i16("001c") == 0x5A4C:
       offset: "0x001c"
       ascii[2] Identifier: c'LZ'
@@ -98,7 +98,7 @@ structs:
       u16 Uncompressed size: ??
       u16 Checksum: ??
 
-      offset: (Header.HeaderSizeInParagraphs + Header.CS) * 16 + Header.IP
+      offset: ((Header.HeaderSizeInParagraphs + Header.CS) * 16) + Header.IP
       u8[232] Lzexe uncompressor program: ??
 
   new_header:
@@ -109,6 +109,10 @@ structs:
       u16 OEM info: ??
       u16[10] Reserved2: ??
       u32 NewHeaderOffset: ??
+
+      offset: ((Header.HeaderSizeInParagraphs + Header.CS) * 16) + Header.IP
+      u8[self.NewHeaderOffset - ((Header.HeaderSizeInParagraphs + Header.CS) * 16) + Header.IP] DOS stub program: ??
+
       offset: self.NewHeaderOffset
       u16 NewHeaderID: ?? # XXX ascii "NE", "LE" etc.
 
@@ -152,7 +156,7 @@ structs:
       u32 Object iterate data map offset: ??
       u32 Resource table offset: ??
       u32 Resource table entries: ??
-      u32 Resident names table offset: ??
+      u32 ResidentNamesTableOffset: ??
       u32 Entry table offset: ??
       u32 Module directives table offset: ??
       u32 Module directives entires: ??
@@ -178,7 +182,7 @@ structs:
   ne_header:
     # Win16, OS/2
     if Header.RelocationTableOffset == 0x40 && NewHeader.NewHeaderID == 0x454E: # "NE"
-      u16 Linker version: ?? # XXX major+minor version data type
+      u16 LinkerVersion: ?? # XXX major+minor version data type
       u16 EntryTableOffset: ??
       u16 EntryTableLength: ??
       u32 File Load CRC: ??
@@ -203,18 +207,18 @@ structs:
       u16 Initial stack size: ??
       u32 Entry point CS:IP: ?? # XXX type CS:IP
       u32 Stack pointer SS:SP: ?? # XXX type
-      u16 Segment table entries: ??
-      u16 Module reference entires: ??
+      u16 SegmentTableCount: ??
+      u16 ModuleReferenceCount: ??
       u16 Nonresident names table size: ??
-      u16 Segment table offset: ??
-      u16 Resource table offset: ??
-      u16 Resident names table offset: ??
-      u16 Module reference table offset: ??
-      u16 Imported names table offset: ??     # XXX or u32 ?
-      u32 Nonresident names table offset: ??
+      u16 SegmentTableOffset: ??
+      u16 ResourceTableOffset: ??
+      u16 ResidentNamesTableOffset: ??
+      u16 ModuleReferenceTableOffset: ??
+      u16 ImportedNamesTableOffset: ??
+      u32 NonResidentNamesTableOffset: ??
       u16 Movable entry points in entry table: ??
       u16 File alignment size shift: ?? # 0 is equivalent to 9 (default 512-byte pages)
-      u16 Resource table entries: ??
+      u16 ResourceTableCount: ??      # value is ignored
       u8 Target OS:
         eq 01: OS/2
         eq 02: Windows
@@ -227,11 +231,78 @@ structs:
         bit b0000_0100: Win2 proportional fonts
         bit b0000_1000: Fastload area
         bit b1111_0000: Reserved
-      u16 Offset to fastload: ?? # XXX only used by windows
-      u16 Length of fastload: ?? # XXX only used by windows, offset to segment reference thunks or length of gangload area.
+      u16 FastloadAreaOffset: ??  # only used by Windows
+      u16 FastloadAreaSize: ??  # only used by Windows
       u16 Reserved: ??
-      u16 Expected windows version: ?? # XXX Type: parse.MinorMajor16le}, XXX only used by windows
+      u16 Expected windows version: ?? # XXX Type: parse.MinorMajor16le}, only used by Windows
 
+  ne_module_reference:
+    u16 Module reference: ??
+
+  ne_entry_table:
+    # The entry-table data is organized by bundle, each of which begins with
+    # a 2-byte header. The first byte of the header specifies the number of
+    # entries in the bundle (a value of 00h designates the end of the table).
+    # The second byte specifies whether the corresponding segment is movable
+    # or fixed. If the value in this byte is 0FFh, the segment is movable.
+    # If the value in this byte is 0FEh, the entry does not refer to a segment
+    # but refers, instead, to a constant defined within the module. If the
+    # value in this byte is neither 0FFh nor 0FEh, it is a segment index.
+    u8 items: ??
+    #if self.items == 0:
+    #  break XXX
+    u8 segNumber: ??
+    # XXX TODO need struct-level ability to evaluate more custom structs to continue with this parsing
+
+  ne_segment_table:
+    u16 Offset: ??
+    u16 Length: ??
+    u16 Flags:
+      bit b0000_0000_0000_0001: Type 0=code, 1=data
+      bit b0000_0000_0000_0010: Allocated
+      bit b0000_0000_0000_0100: Loaded
+      bit b0000_0000_0000_1000: Iterated
+      bit b0000_0000_0001_0000: 1=moveable, 0=fixed
+      bit b0000_0000_0010_0000: Shareable
+      bit b0000_0000_0100_0000: 1=preload, 0=loadoncall
+      bit b0000_0000_1000_0000: Execute only/read only
+      bit b0000_0001_0000_0000: Reloc data
+      bit b0000_1110_0000_0000: Reserved
+      bit b0001_0000_0000_0000: Discardable
+      bit b1110_0000_0010_0000: Reserved
+    u16 Min alloc size: ??
+
+  ne_imported_names_table:
+    u8 Reserved: ??
+
+    # XXX THIS REPEATS UNTIL Length == 0 || peek(offset+1) == 0xFF
+    u8 Length: ??
+    ascii[self.Length] Data: ??
+
+  ne_resident_names_table:
+    u8 Length: ??
+    # XXX if Length == 0 then no more entries. this should be a slice that stops parse if Length == 0
+    ascii[self.Length] Data: ??
+    u16 Ord: ??
+
+  ne_nonresident_names_table:
+    u8 Length: ??
+    # XXX if Length == 0 then no more entries. this should be a slice that stops parse if Length == 0
+    ascii[self.Length] Data: ??
+    u16 Ord: ??
+
+  ne_resource_table:
+    #u16 Shift: ??
+
+    # TTYPEINFO
+    u16 Type: ?? # XXX map
+    u16 Count: ??
+    u16 Reserved: ??
+
+    u8[self.Count * 12] TNAMEINFO Data: ?? # XXX parse into custom struct
+
+  fastload_area:
+    u8[NEHeader.FastloadAreaSize] Fastload data: ??
 
 layout:
   - dos_header Header
@@ -245,6 +316,25 @@ layout:
   - new_header NewHeader
   - le_header LEHeader
   - ne_header NEHeader
+
+  # XXX FINISH IMPL - and all of this under ne_header:
+  #- offset offset("NewHeader.NewHeaderID") + NEHeader.ModuleReferenceTableOffset
+  #- ne_module_reference[NEHeader.ModuleReferenceCount] NEModuleReferences
+  #- offset NEHeader.EntryTableOffset
+  #- ne_entry_table NEEntryTable    # XXX a slice until end marker?
+  #- offset offset("NewHeader.NewHeaderID") + NEHeader.SegmentTableOffset
+  #- ne_segment_table[NEHeader.SegmentTableCount] NESegmentTable
+  #- offset offset("NewHeader.NewHeaderID") + NEHeader.ImportedNamesTableOffset
+  #- ne_imported_names_table NEImportedNamesTable # XXX a slice until end marker
+  #- offset offset("NewHeader.NewHeaderID") + NEHeader.ResidentNamesTableOffset
+  #- ne_resident_names_table NEResidentNamesTable # XXX a slice until end marker
+  #- offset NEHeader.NonResidentNamesTableOffset
+  #- ne_nonresident_names_table NENonResidentNamesTable
+  #- offset NEHeader.ResourceTableOffset + 2 # XXX skipping "u16 shift"
+  #- ne_resource_table NEResourceTable # XXX a slice until end marker
+  #- offset NEHeader.FastloadAreaOffset * 16
+  #- fastload_area FastLoadArea
+  # XXX END OF ne_header
 
 
   # XXX only this code path for unrecognized header ID:s, requires "relocation_table[Header.RelocationItemCount] RelocationTable" syntax in struct field

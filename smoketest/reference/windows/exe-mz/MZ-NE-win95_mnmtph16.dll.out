@@ -21,10 +21,11 @@ NewHeader
   [000026] OEM info                       u16 le           0                     00 00
   [000028] Reserved2                      u16[10] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   [00003c] NewHeaderOffset                u32 le           128                   00 00 00 80
+  [000040] DOS stub program               u8[64]                                 0e 1f ba 0e 00 b4 09 cd 21 b8 01 4c cd 21 54 68 69 73 20 70 72 6f 67 72 61 6d 20 72 65 71 75 69 ...
   [000080] NewHeaderID                    u16 le           17742                 45 4e
 
 NEHeader
-  [000082] Linker version                 u16 le           15365                 3c 05
+  [000082] LinkerVersion                  u16 le           15365                 3c 05
   [000084] EntryTableOffset               u16 le           275                   01 13
   [000086] EntryTableLength               u16 le           87                    00 57
   [000088] File Load CRC                  u32 le           0                     00 00 00 00
@@ -48,18 +49,18 @@ NEHeader
   [000092] Initial stack size             u16 le           0                     00 00
   [000094] Entry point CS:IP              u32 le           0                     00 00 00 00
   [000098] Stack pointer SS:SP            u32 le           0                     00 00 00 00
-  [00009c] Segment table entries          u16 le           4                     00 04
-  [00009e] Module reference entires       u16 le           2                     00 02
+  [00009c] SegmentTableCount              u16 le           4                     00 04
+  [00009e] ModuleReferenceCount           u16 le           2                     00 02
   [0000a0] Nonresident names table size   u16 le           454                   01 c6
-  [0000a2] Segment table offset           u16 le           64                    00 40
-  [0000a4] Resource table offset          u16 le           96                    00 60
-  [0000a6] Resident names table offset    u16 le           120                   00 78
-  [0000a8] Module reference table offset  u16 le           207                   00 cf
-  [0000aa] Imported names table offset    u16 le           211                   00 d3
-  [0000ac] Nonresident names table offset u32 le           490                   00 00 01 ea
+  [0000a2] SegmentTableOffset             u16 le           64                    00 40
+  [0000a4] ResourceTableOffset            u16 le           96                    00 60
+  [0000a6] ResidentNamesTableOffset       u16 le           120                   00 78
+  [0000a8] ModuleReferenceTableOffset     u16 le           207                   00 cf
+  [0000aa] ImportedNamesTableOffset       u16 le           211                   00 d3
+  [0000ac] NonResidentNamesTableOffset    u32 le           490                   00 00 01 ea
   [0000b0] Movable entry points in entry table u16 le           0                     00 00
   [0000b2] File alignment size shift      u16 le           4                     00 04
-  [0000b4] Resource table entries         u16 le           0                     00 00
+  [0000b4] ResourceTableCount             u16 le           0                     00 00
   [0000b6] Target OS                      u8               2                     02
            - Windows                      eq
   [0000b7] Extra flags                    u8               8                     08
@@ -68,9 +69,9 @@ NEHeader
            - Win2 proportional fonts      bit 2:1          0
            - Fastload area                bit 3:1          1
            - Reserved                     bit 4:4          0                     0
-  [0000b8] Offset to fastload             u16 le           60                    00 3c
-  [0000ba] Length of fastload             u16 le           64                    00 40
+  [0000b8] FastloadAreaOffset             u16 le           60                    00 3c
+  [0000ba] FastloadAreaSize               u16 le           64                    00 40
   [0000bc] Reserved                       u16 le           0                     00 00
   [0000be] Expected windows version       u16 le           1024                  04 00
 
-0x0970 (2416) unmapped bytes
+0x0930 (2352) unmapped bytes

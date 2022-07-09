@@ -21,6 +21,7 @@ NewHeader
   [000026] OEM info                       u16 le           0                     00 00
   [000028] Reserved2                      u16[10] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
   [00003c] NewHeaderOffset                u32 le           128                   00 00 00 80
+  [000040] DOS stub program               u8[64]                                 0e 1f ba 0e 00 b4 09 cd 21 b8 01 4c cd 21 54 68 69 73 20 70 72 6f 67 72 61 6d 20 63 61 6e 6e 6f ...
   [000080] NewHeaderID                    u16 le           17740                 45 4c
 
 LEHeader
@@ -50,7 +51,7 @@ LEHeader
   [0000cc] Object iterate data map offset u32 le           0                     00 00 00 00
   [0000d0] Resource table offset          u32 le           0                     00 00 00 00
   [0000d4] Resource table entries         u32 le           0                     00 00 00 00
-  [0000d8] Resident names table offset    u32 le           268                   00 00 01 0c
+  [0000d8] ResidentNamesTableOffset       u32 le           268                   00 00 01 0c
   [0000dc] Entry table offset             u32 le           277                   00 00 01 15
   [0000e0] Module directives table offset u32 le           0                     00 00 00 00
   [0000e4] Module directives entires      u32 le           0                     00 00 00 00
@@ -73,4 +74,4 @@ LEHeader
   [000128] Extra heap allocation          u32 le           0                     00 00 00 00
   [00012c] Unknown                        u32 le           0                     00 00 00 00
 
-0x624a (25162) unmapped bytes
+0x620a (25098) unmapped bytes
