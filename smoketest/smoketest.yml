@@ -498,6 +498,10 @@ input:
       - MZ-LX-os2_hotscrl.dll
       - MZ-NE-win16_mrmind.exe
       - MZ-NE-win95_mnmtph16.dll
+      - MZ-PE+win10x64_HxComm.Ipc.Proxies.dll
+      - MZ-PE+win10x64_seqchk10imm.dll
+      - MZ-PE+osx_efi_boot.efi
+      - MZ-PE-win32_pbrush.exe
       - mz-dos_tlink_header.exe
       - mz-dos_multiple_reloc_items.exe
       - mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes

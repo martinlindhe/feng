@@ -1,0 +1,154 @@
+# templates/windows/exe-mz.yml
+Header
+  [000000] Signature                      ascii[2]         MZ                    4d 5a
+  [000002] UsedBytesInTheLastPage         u16 le           144                   00 90
+  [000004] FileSizeInPages                u16 le           3                     00 03
+  [000006] RelocationItemCount            u16 le           0                     00 00
+  [000008] HeaderSizeInParagraphs         u16 le           4                     00 04
+  [00000a] MinimumExtraParagraphs         u16 le           0                     00 00
+  [00000c] MaximumExtraParagraphs         u16 le           65535                 ff ff
+  [00000e] InitialRelativeSS              u16 le           0                     00 00
+  [000010] InitialSP                      u16 le           184                   00 b8
+  [000012] Checksum                       u16 le           0                     00 00
+  [000014] IP                             u16 le           0                     00 00
+  [000016] CS                             u16 le           0                     00 00
+  [000018] RelocationTableOffset          u16 le           64                    00 40
+  [00001a] OverlayNumber                  u16 le           0                     00 00
+
+NewHeader
+  [00001c] Reserved                       u16[4] le                              00 00 00 00 00 00 00 00
+  [000024] OEM id                         u16 le           0                     00 00
+  [000026] OEM info                       u16 le           0                     00 00
+  [000028] Reserved2                      u16[10] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [00003c] NewHeaderOffset                u32 le           256                   00 00 01 00
+  [000040] DOS stub program               u8[192]                                0e 1f ba 0e 00 b4 09 cd 21 b8 01 4c cd 21 54 68 69 73 20 70 72 6f 67 72 61 6d 20 63 61 6e 6e 6f ...
+  [000100] NewHeaderID                    u16 le           17744                 45 50
+
+PEHeader
+  [000102] Identifier                     ascii[2]                               00 00
+  [000104] Machine                        u16 le           34404                 86 64
+           - AMD64                        eq
+  [000106] Sections                       u16 le           7                     00 07
+  [000108] Timestamp                      u32 le           1435852639            55 95 5f 5f
+  [00010c] SymbolTableOffset              u32 le           0                     00 00 00 00
+  [000110] SymbolTableCount               u32 le           0                     00 00 00 00
+  [000114] OptionalHeaderSize             u16 le           240                   00 f0
+  [000116] Characteristics                u16 le           8226                  20 22
+           - relocs stripped              bit 0:1          0
+           - executable                   bit 1:1          1
+           - line nums stripped           bit 2:1          0
+           - local syms stripped          bit 3:1          0
+           - aggressive ws trim           bit 4:1          0
+           - large address aware          bit 5:1          1
+           - reserved                     bit 6:2          0
+           - 32bit                        bit 8:1          0
+           - debug stripped               bit 9:1          0
+           - removable run from swap      bit 10:1         0
+           - net run from swap            bit 11:1         0
+           - file system                  bit 12:1         0
+           - dll                          bit 13:1         1
+           - uniprocessor                 bit 14:1         0
+           - reserved                     bit 15:1         0
+
+PEOptionalHeader
+  [000118] Type                           u16 le           523                   02 0b
+           - PE32+ (64-bit)               eq
+  [00011a] Linker version                 u16 le           14                    00 0e
+  [00011c] CodeSize                       u32 le           4608                  00 00 12 00
+  [000120] Size of initialized data       u32 le           9216                  00 00 24 00
+  [000124] Size of uninitialized data     u32 le           0                     00 00 00 00
+  [000128] Address of entry point         u32 le           8264                  00 00 20 48
+  [00012c] Base of code                   u32 le           4096                  00 00 10 00
+  [000130] Base of data                   u32 le           2147483648            80 00 00 00
+  [000134] Image base                     u32 le           1                     00 00 00 01
+  [000138] Section alignment              u32 le           4096                  00 00 10 00
+  [00013c] File alignment                 u32 le           512                   00 00 02 00
+  [000140] OS version                     u32 le           10                    00 00 00 0a
+  [000144] Image version                  u32 le           0                     00 00 00 00
+  [000148] Subsystem version              u32 le           10                    00 00 00 0a
+  [00014c] Win32 version                  u32 le           0                     00 00 00 00
+  [000150] Size of image                  u32 le           36864                 00 00 90 00
+  [000154] Size of headers                u32 le           1024                  00 00 04 00
+  [000158] Checksum                       u32 le           51666                 00 00 c9 d2
+  [00015c] Subsystem                      u16 le           3                     00 03
+           - Windows console              eq
+  [00015e] DLL characteristics            u16 le           4448                  11 60
+  [000160] Size of stack reserve          u32 le           1048576               00 10 00 00
+  [000164] Size of stack commit           u32 le           0                     00 00 00 00
+  [000168] Size of heap reserve           u32 le           4096                  00 00 10 00
+  [00016c] Size of heap commit            u32 le           0                     00 00 00 00
+  [000170] Loader flags                   u32 le           1048576               00 10 00 00
+  [000174] RVAEntryCount                  u32 le           0                     00 00 00 00
+
+PESection_0
+  [000178] SectionName                    ascii[8]                               00 10 00 00 00 00 00 00
+  [000180] VirtualSize                    u32 le           0                     00 00 00 00
+  [000184] VirtualAddress                 u32 le           16                    00 00 00 10
+  [000188] RawSize                        u32 le           14980                 00 00 3a 84
+  [00018c] RawOffset                      u32 le           125                   00 00 00 7d
+  [000190] reallocations offset           u32 le           15352                 00 00 3b f8
+  [000194] linenumbers offset             u32 le           200                   00 00 00 c8
+  [000198] reallocations count            u16 le           28672                 70 00
+  [00019a] linenumbers count              u16 le           0                     00 00
+  [00019c] Flags                          u32 le           1264                  00 00 04 f0
+           - Reserved                     bit 0:3          0
+           - No padding                   bit 3:1          0
+           - Reserved                     bit 4:1          1
+           - Code                         bit 5:1          1
+           - Initialized data             bit 6:1          1
+           - Uninitialized data           bit 7:1          1
+           - Reserved                     bit 8:1          0
+           - Info                         bit 9:1          0
+           - Reserved                     bit 10:1         1
+           - Remove                       bit 11:1         0
+           - COMDAT data                  bit 12:1         0
+           - Reserved                     bit 13:4         0                     0
+           - Data referenced through the global pointer bit 17:1         0
+           - Reserved                     bit 18:2         0
+           - Align x-bytes                bit 20:4         0                     0
+           - Extended relocations         bit 24:1         0
+           - Discardable                  bit 25:1         0
+           - Cacheable                    bit 26:1         0
+           - Pageable                     bit 27:1         0
+           - Shared                       bit 28:1         0
+           - Executable                   bit 29:1         0
+           - Readable                     bit 30:1         0
+           - Writeable                    bit 31:1         0
+  [00007d] Section data                   u8[14980]                              00 00 00 a0 59 fd f4 e4 38 93 a7 e4 38 93 a7 e4 38 93 a7 50 a4 67 a7 e5 38 93 a7 52 60 92 a6 e6 ...
+
+PESection_1
+  [0001a0] SectionName                    ascii[8]                               00 60 00 00 80 01 00 00
+  [0001a8] VirtualSize                    u32 le           14848                 00 00 3a 00
+  [0001ac] VirtualAddress                 u32 le           6824                  00 00 1a a8
+  [0001b0] RawSize                        u32 le           32768                 00 00 80 00
+  [0001b4] RawOffset                      u32 le           236                   00 00 00 ec
+  [0001b8] reallocations offset           u32 le           4276                  00 00 10 b4
+  [0001bc] linenumbers offset             u32 le           56                    00 00 00 38
+  [0001c0] reallocations count            u16 le           0                     00 00
+  [0001c2] linenumbers count              u16 le           0                     00 00
+  [0001c4] Flags                          u32 le           0                     00 00 00 00
+           - Reserved                     bit 0:3          0
+           - No padding                   bit 3:1          0
+           - Reserved                     bit 4:1          0
+           - Code                         bit 5:1          0
+           - Initialized data             bit 6:1          0
+           - Uninitialized data           bit 7:1          0
+           - Reserved                     bit 8:1          0
+           - Info                         bit 9:1          0
+           - Reserved                     bit 10:1         0
+           - Remove                       bit 11:1         0
+           - COMDAT data                  bit 12:1         0
+           - Reserved                     bit 13:4         0                     0
+           - Data referenced through the global pointer bit 17:1         0
+           - Reserved                     bit 18:2         0
+           - Align x-bytes                bit 20:4         0                     0
+           - Extended relocations         bit 24:1         0
+           - Discardable                  bit 25:1         0
+           - Cacheable                    bit 26:1         0
+           - Pageable                     bit 27:1         0
+           - Shared                       bit 28:1         0
+           - Executable                   bit 29:1         0
+           - Readable                     bit 30:1         0
+           - Writeable                    bit 31:1         0
+
+0x185c (6236) unmapped bytes

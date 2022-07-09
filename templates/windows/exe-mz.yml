@@ -1,7 +1,11 @@
-# STATUS: 1%
+# STATUS: 10%
+#
+# TODO: support W3 (a collection of LE files, only used in WIN386.EXE)
+# TODO: support W4 (a compressed collection of LE files, only used in VMM32.VXD)
 
 references:
   # general EXE format
+  - https://wiki.osdev.org/MZ
   - https://moddingwiki.shikadi.net/wiki/EXE_Format
   - https://www.sweetscape.com/010editor/repository/files/EXE.bt
 
@@ -10,10 +14,16 @@ references:
   - http://wiki.osdev.org/LE
 
   # MZ-NE format: 16-bit New Executable (Win16, OS/2)
+  - https://wiki.osdev.org/NE
   - http://www.program-transformation.org/Transform/NeFormat
 
   # MZ-LX format: Linear eXecutable (OS/2)
   - http://www.virtualbox.org/svn/kstuff-mirror/trunk/include/k/kLdrFmts/lx.h
+
+  # MZ-PE format: Portable Executable COFF (Win32, Win64)
+  - http://wiki.osdev.org/PE
+  - https://en.wikibooks.org/wiki/X86_Disassembly/Windows_Executable_Files
+  - https://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
 
 kind: executable
 name: MS-DOS / OS-2 / Windows executable
@@ -187,8 +197,9 @@ structs:
       u8 Border: ??
       u8 Worder: ??
       u32 Level: ??
-      u16 CPU: ??
-      u16 OS: ??
+      u16 Target CPU: ??
+      u16 Target OS:
+        eq 0001: OS/2
       u32 Version: ?? # XXX parse.MajorMinor32le
       u32 Mflags: ?? # XXX
       u32 MPages: ??
@@ -354,8 +365,182 @@ structs:
 
     u8[self.Count * 12] TNAMEINFO Data: ?? # XXX parse into custom struct
 
-  fastload_area:
+  ne_fastload_area:
     u8[NEHeader.FastloadAreaSize] Fastload data: ??
+
+  pe_header:
+    # Win32, Win64
+    if Header.RelocationTableOffset == 0x40 && NewHeader.NewHeaderID == 0x4550: # "PE"
+      ascii[2] Identifier: ??
+      u16 Machine:
+        eq 014c: Intel 386
+        eq 0162: MIPS R3000
+        eq 0168: MIPS R10000
+        eq 0169: MIPS little endian WCI v2
+        eq 0183: Old Alpha AXP
+        eq 0184: Alpha AXP
+        eq 01a2: Hitachi SH3
+        eq 01a3: Hitachi SH3 DSP
+        eq 01a6: Hitachi SH4
+        eq 01a8: Hitachi SH5
+        eq 01c0: ARM little endian
+        eq 01c2: ARM Thumb
+        eq 01d3: Matsushita AM33
+        eq 01f0: PowerPC little endian
+        eq 01f1: PowerPC with floating point support
+        eq 0200: Intel IA64
+        eq 0266: MIPS16
+        eq 0268: Motorola 68000 series
+        eq 0284: Alpha AXP 64-bit
+        eq 0366: MIPS with FPU
+        eq 0466: MIPS16 with FPU
+        eq 0ebc: EFI Byte Code
+        eq 8664: AMD64
+        eq 9041: Mitsubishi M32R little endian
+        eq c0ee: Clr pure MSIL
+      u16 Sections: ??
+      u32 Timestamp: ?? # XXX parse.DOSDateTime
+      u32 SymbolTableOffset: ??
+      u32 SymbolTableCount: ??
+      u16 OptionalHeaderSize: ??
+      u16 Characteristics:
+        bit b00000000_00000001: relocs stripped
+        bit b00000000_00000010: executable
+        bit b00000000_00000100: line nums stripped
+        bit b00000000_00001000: local syms stripped
+        bit b00000000_00010000: aggressive ws trim
+        bit b00000000_00100000: large address aware
+        bit b00000000_11000000: reserved
+        bit b00000001_00000000: 32bit
+        bit b00000010_00000000: debug stripped
+        bit b00000100_00000000: removable run from swap
+        bit b00001000_00000000: net run from swap
+        bit b00010000_00000000: file system
+        bit b00100000_00000000: dll
+        bit b01000000_00000000: uniprocessor
+        bit b10000000_00000000: reserved
+
+  pe_optional_header:
+    if Header.RelocationTableOffset == 0x40 && NewHeader.NewHeaderID == 0x4550 && PEHeader.OptionalHeaderSize != 0:
+      u16 Type: # XXX map
+        eq 0107: ROM
+        eq 010b: PE32
+        eq 020b: PE32+ (64-bit)
+      u16 Linker version: ?? # XXX  parse.MajorMinor16le
+      u32 CodeSize: ??
+      u32 Size of initialized data: ??
+      u32 Size of uninitialized data: ??
+      u32 Address of entry point: ??
+      u32 Base of code: ??
+      u32 Base of data: ??
+      u32 Image base: ??
+      u32 Section alignment: ??
+      u32 File alignment: ??
+      u32 OS version: ??
+      u32 Image version: ??
+      u32 Subsystem version: ??
+      u32 Win32 version: ??
+      u32 Size of image: ??
+      u32 Size of headers: ??
+      u32 Checksum: ??
+      u16 Subsystem:
+        eq 0001: Native
+        eq 0002: Windows GUI
+        eq 0003: Windows console
+        eq 0005: OS/2 console
+        eq 0007: POSIX
+        eq 0008: Native Windows
+        eq 0009: Windows CE
+        eq 000a: EFI application
+        eq 000b: EFI boot service device
+        eq 000c: EFI runtime driver
+        eq 000d: EFI rom
+        eq 000e: XBox
+        eq 0010: Boot application
+      u16 DLL characteristics: ?? # XXX flag?
+      u32 Size of stack reserve: ??
+      u32 Size of stack commit: ??
+      u32 Size of heap reserve: ??
+      u32 Size of heap commit: ??
+      u32 Loader flags: ?? # XXX flag
+      u32 RVAEntryCount: ??
+
+  pe_rva_entry:
+    if Header.RelocationTableOffset == 0x40 && NewHeader.NewHeaderID == 0x4550 && PEHeader.OptionalHeaderSize != 0:
+      u32 VirtualAddress: ??
+      u32 Size: ??
+      if self.index == 0:
+        label: Export
+      if self.index == 1:
+        label: Import
+      if self.index == 2:
+        label: Resource
+      if self.index == 3:
+        label: Exception
+      if self.index == 4:
+        label: Security
+      if self.index == 5:
+        label: BaseRelocationTable
+      if self.index == 6:
+        label: DebugDirectory
+      if self.index == 7:
+        label: CopyrightOrArchitectureSpecificData
+      if self.index == 8:
+        label: GlobalPtr
+      if self.index == 9:
+        label: TLSDirectory
+      if self.index == 10:
+        label: LoadConfigurationDirectory
+      if self.index == 11:
+        label: BoundImportDirectory
+      if self.index == 12:
+        label: ImportAddressTable
+      if self.index == 13:
+        label: DelayLoadImportDescriptors
+      if self.index == 14:
+        label: COMRuntimedescriptor
+      if self.index == 15:
+        label: Reserved
+
+  pe_section:
+    ascii[8] SectionName: ??
+    label: self.SectionName
+    u32 VirtualSize: ??
+    u32 VirtualAddress: ??
+    u32 RawSize: ??
+    u32 RawOffset: ??
+    u32 reallocations offset: ??
+    u32 linenumbers offset: ??
+    u16 reallocations count: ??
+    u16 linenumbers count: ??
+    u32 Flags:
+      bit b00000000_00000000_00000000_00000111: Reserved
+      bit b00000000_00000000_00000000_00001000: No padding
+      bit b00000000_00000000_00000000_00010000: Reserved
+      bit b00000000_00000000_00000000_00100000: Code
+      bit b00000000_00000000_00000000_01000000: Initialized data
+      bit b00000000_00000000_00000000_10000000: Uninitialized data
+      bit b00000000_00000000_00000001_00000000: Reserved
+      bit b00000000_00000000_00000010_00000000: Info
+      bit b00000000_00000000_00000100_00000000: Reserved
+      bit b00000000_00000000_00001000_00000000: Remove
+      bit b00000000_00000000_00010000_00000000: COMDAT data
+      bit b00000000_00000001_11100000_00000000: Reserved
+      bit b00000000_00000010_00000000_00000000: Data referenced through the global pointer
+      bit b00000000_00001100_00000000_00000000: Reserved
+      bit b00000000_11110000_00000000_00000000: Align x-bytes
+      bit b00000001_00000000_00000000_00000000: Extended relocations
+      bit b00000010_00000000_00000000_00000000: Discardable
+      bit b00000100_00000000_00000000_00000000: Cacheable
+      bit b00001000_00000000_00000000_00000000: Pageable
+      bit b00010000_00000000_00000000_00000000: Shared
+      bit b00100000_00000000_00000000_00000000: Executable
+      bit b01000000_00000000_00000000_00000000: Readable
+      bit b10000000_00000000_00000000_00000000: Writeable
+    offset: self.RawOffset
+    u8[self.RawSize] Section data: ??
+    offset: restore
+
 
 layout:
   - dos_header Header
@@ -370,7 +555,11 @@ layout:
   - le_header LEHeader
   - lx_header LXHeader
   - ne_header NEHeader
+  - pe_header PEHeader
+  - pe_optional_header PEOptionalHeader
+  - pe_rva_entry[PEOptionalHeader.RVAEntryCount] PE_RVAEntry # XXX move under pe_optional_header
 
+  - pe_section[PEHeader.Sections] PESection
 
   # XXX FINISH IMPL - and all of this under ne_header:
   #- offset offset("NewHeader.NewHeaderID") + NEHeader.ModuleReferenceTableOffset
@@ -388,7 +577,7 @@ layout:
   #- offset NEHeader.ResourceTableOffset + 2 # XXX skipping "u16 shift"
   #- ne_resource_table NEResourceTable # XXX a slice until end marker
   #- offset NEHeader.FastloadAreaOffset * 16
-  #- fastload_area FastLoadArea
+  #- ne_fastload_area NEFastLoadArea
   # XXX END OF ne_header
 
 
