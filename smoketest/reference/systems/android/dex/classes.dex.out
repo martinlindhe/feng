@@ -1,0 +1,28 @@
+# templates/systems/android/dex.yml
+Header
+  [000000] Signature                      ascii[4]         dex.                  64 65 78 0a
+  [000004] Version                        ascii[4]         035                   30 33 35 00
+  [000008] Checksum                       u32 le           1520309531            5a 9e 15 1b
+  [00000c] SHA1                           u8[20]                                 eb b8 5a a5 03 7b 06 71 ad 53 ea e2 98 5a d3 c8 da dc 0d 59
+  [000020] File size                      u32 le           30420                 00 00 76 d4
+  [000024] Header size                    u32 le           112                   00 00 00 70
+  [000028] EndianMarker                   u32 le           305419896             12 34 56 78
+  [00002c] Link size                      u32 le           0                     00 00 00 00
+  [000030] Link offset                    u32 le           0                     00 00 00 00
+  [000034] Map offset                     u32 le           30212                 00 00 76 04
+  [000038] String IDs size                u32 le           517                   00 00 02 05
+  [00003c] String IDs offset              u32 le           112                   00 00 00 70
+  [000040] Type IDs size                  u32 le           112                   00 00 00 70
+  [000044] Type IDs offset                u32 le           2180                  00 00 08 84
+  [000048] Proto IDs size                 u32 le           117                   00 00 00 75
+  [00004c] Proto IDs offset               u32 le           2628                  00 00 0a 44
+  [000050] Field IDs size                 u32 le           112                   00 00 00 70
+  [000054] Field IDs offset               u32 le           4032                  00 00 0f c0
+  [000058] Method IDs size                u32 le           292                   00 00 01 24
+  [00005c] Method IDs offset              u32 le           4928                  00 00 13 40
+  [000060] Class defs size                u32 le           31                    00 00 00 1f
+  [000064] Class defs offset              u32 le           7264                  00 00 1c 60
+  [000068] Data size                      u32 le           22164                 00 00 56 94
+  [00006c] Data offset                    u32 le           8256                  00 00 20 40
+
+0x7664 (30308) unmapped bytes

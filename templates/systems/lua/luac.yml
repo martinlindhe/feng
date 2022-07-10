@@ -1,0 +1,119 @@
+# STATUS: 10%
+#
+# XXX: currently only parses Lua 5.2 compiled bytecode
+#
+# MID: want luac 5.3 sample file
+# LO: need big endian sample file
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/Luac.bt
+  - https://gist.github.com/seanjensengrey/e198380afc64f0eb17a47512b48f040f
+
+kind: bytecode
+name: Lua compiled bytecode
+extensions: [.luac]
+
+magic:
+  - offset: 0000
+    match: 1b c'Lua'
+
+structs:
+  header:
+    ascii[4] Magic: 1b c'Lua'
+    u8 Version: # XXX major.minor 4 bits each data type
+      eq 51: "5.1"
+      eq 52: "5.2"
+      eq 53: "5.3"  # XXX want 5.3 sample
+      eq 54: "5.4"
+    u8 Format:
+      eq 00: Official
+    u8 Endian:
+      eq 00: big
+      eq 01: little
+    if self.Endian == 1:
+      endian: little
+    if self.Endian == 0:
+      # XXX want luac 5.2 sample
+      endian: big
+    u8 size_int: ??             # sizeof(int)
+    u8 size_size_t: ??          # sizeof(size_t)
+    u8 size_instruction: ??     # sizeof(Instruction)
+    u8 size_lua_number: ??      # sizeof(lua_Number)
+    u8 lua_num_valid: ??
+    if self.Version == 0x52:
+      u8[6] Luac tail: ??
+
+  proto_header:
+    u32 lineDefined: ??
+    u32 lastLineDefined: ??
+    u8 numParams: ??
+    u8 isVarArg: ??
+    u8 maxStackSize: ??
+
+  code:
+    u32 InstructionCount: ??
+
+  inst:
+    u32 Inst: ?? # XXX disassemble?
+
+  constants:
+    u32 ConstantsCount: ??
+
+  const:
+    u8 DataType: ??
+    u64 StringSize: ??
+    ascii[self.StringSize] Value: ??
+
+  protos:
+    u32 ProtosCount: ??
+
+  #proto:
+    # XXX huge buffer with nested stuff...
+
+  upvaldescs:
+    u32 UpvalCount: ??
+
+  upvaldesc:
+    u8 InStack: ??
+    u8 Index: ??
+
+  src_name:
+    u64 SourceNameLength: ??
+    ascii[self.SourceNameLength] Name: ??
+
+  lines:
+    u32 LineInfoSize: ??
+
+  line:
+    u32 Line: ??
+
+  loc_vars:
+    u32 LocVarsSize: ?? # XXX need non-zero sample luac 5.2
+
+  names:
+    u32 NamesCount: ??
+
+  upvalue_name:
+    u64 NameLength: ??
+    ascii[self.NameLength] Name: ??
+
+layout:
+  - header Header
+  - proto_header ProtoHeader
+  - code Code
+  - inst[Code.InstructionCount] Instruction
+  - constants Constants
+  - const[Constants.ConstantsCount] Const
+  - protos Protos # XXX example2-52.luac has 1 proto, FIXME PARSE IT
+
+  - upvaldescs UpValDescriptions
+  - upvaldesc[UpValDescriptions.UpvalCount] UpvalDesc
+
+  - src_name SourceName
+
+  - lines Lines
+  - line[Lines.LineInfoSize] Line
+
+  - loc_vars LocVars
+  - names UpValueNames
+  - upvalue_name[UpValueNames.NamesCount] UpvalueName

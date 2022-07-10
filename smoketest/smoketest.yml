@@ -383,9 +383,14 @@ input:
     files:
       - sample.torrent
 
+  - folder: systems/android/dex
+    files:
+      - classes.dex
+
   - folder: systems/gameboy
     files:
       - mrdig.gbc
+      - raster.gb
 
   - folder: systems/gameboy-advance
     files:
@@ -395,6 +400,11 @@ input:
     files:
       - java_001_test.class
       - MOUSETRA.CLA
+
+  - folder: systems/lua
+    files:
+      - example1-52.luac
+      #- example2-52.luac     # XXX need to parse nested(?) proto block
 
   - folder: systems/nintendo64
     files:
@@ -501,7 +511,8 @@ input:
       - MZ-PE+win10x64_HxComm.Ipc.Proxies.dll
       - MZ-PE+win10x64_seqchk10imm.dll
       - MZ-PE+osx_efi_boot.efi
-      - MZ-PE-win32_pbrush.exe
+      - MZ-PE32-edxor165.exe
+      - MZ-PE32-win32_pbrush.exe
       - mz-dos_tlink_header.exe
       - mz-dos_multiple_reloc_items.exe
       - mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes

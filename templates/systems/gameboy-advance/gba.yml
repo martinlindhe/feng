@@ -30,7 +30,7 @@ structs:
     ascii[2] Maker Code: ??
     u8 Reserved: "96"
     u8 Main unit code: ??
-    u8 Device type: ??
+    u8 Device type: ?? # XXX bit7=DACS/debug related
     u8[7] Reserved: ??
     u8 Software version: ??
     u8 Header checksum: ??

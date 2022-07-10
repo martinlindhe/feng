@@ -1,0 +1,91 @@
+# templates/systems/lua/luac.yml
+Header
+  [000000] Magic                          ascii[4]         .Lua                  1b 4c 75 61
+  [000004] Version                        u8               82                    52
+           - 5.2                          eq
+  [000005] Format                         u8               0                     00
+           - Official                     eq
+  [000006] Endian                         u8               1                     01
+           - little                       eq
+  [000007] size_int                       u8               4                     04
+  [000008] size_size_t                    u8               8                     08
+  [000009] size_instruction               u8               4                     04
+  [00000a] size_lua_number                u8               8                     08
+  [00000b] lua_num_valid                  u8               0                     00
+  [00000c] Luac tail                      u8[6]                                  19 93 0d 0a 1a 0a
+
+ProtoHeader
+  [000012] lineDefined                    u32 le           0                     00 00 00 00
+  [000016] lastLineDefined                u32 le           0                     00 00 00 00
+  [00001a] numParams                      u8               0                     00
+  [00001b] isVarArg                       u8               1                     01
+  [00001c] maxStackSize                   u8               2                     02
+
+Code
+  [00001d] InstructionCount               u32 le           4                     00 00 00 04
+
+Instruction_0
+  [000021] Inst                           u32 le           4194310               00 40 00 06
+
+Instruction_1
+  [000025] Inst                           u32 le           16449                 00 00 40 41
+
+Instruction_2
+  [000029] Inst                           u32 le           16793629              01 00 40 1d
+
+Instruction_3
+  [00002d] Inst                           u32 le           8388639               00 80 00 1f
+
+Constants
+  [000031] ConstantsCount                 u32 le           2                     00 00 00 02
+
+Const_0
+  [000035] DataType                       u8               4                     04
+  [000036] StringSize                     u64 le           6                     00 00 00 00 00 00 00 06
+  [00003e] Value                          ascii[6]         print                 70 72 69 6e 74 00
+
+Const_1
+  [000044] DataType                       u8               4                     04
+  [000045] StringSize                     u64 le           12                    00 00 00 00 00 00 00 0c
+  [00004d] Value                          ascii[12]        Hello World           48 65 6c 6c 6f 20 57 6f 72 6c 64 00
+
+Protos
+  [000059] ProtosCount                    u32 le           0                     00 00 00 00
+
+UpValDescriptions
+  [00005d] UpvalCount                     u32 le           1                     00 00 00 01
+
+UpvalDesc_0
+  [000061] InStack                        u8               1                     01
+  [000062] Index                          u8               0                     00
+
+SourceName
+  [000063] SourceNameLength               u64 le           14                    00 00 00 00 00 00 00 0e
+  [00006b] Name                           ascii[14]        @example1.lua         40 65 78 61 6d 70 6c 65 31 2e 6c 75 61 00
+
+Lines
+  [000079] LineInfoSize                   u32 le           4                     00 00 00 04
+
+Line_0
+  [00007d] Line                           u32 le           1                     00 00 00 01
+
+Line_1
+  [000081] Line                           u32 le           1                     00 00 00 01
+
+Line_2
+  [000085] Line                           u32 le           1                     00 00 00 01
+
+Line_3
+  [000089] Line                           u32 le           1                     00 00 00 01
+
+LocVars
+  [00008d] LocVarsSize                    u32 le           0                     00 00 00 00
+
+UpValueNames
+  [000091] NamesCount                     u32 le           1                     00 00 00 01
+
+UpvalueName_0
+  [000095] NameLength                     u64 le           5                     00 00 00 00 00 00 00 05
+  [00009d] Name                           ascii[5]         _ENV                  5f 45 4e 56 00
+
+EOF
