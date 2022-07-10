@@ -1,4 +1,4 @@
-# templates/macos/stuffit.yml
+# templates/systems/macos/stuffit.yml
 Header
   [000000] Signature                      ascii[4]         SIT!                  53 49 54 21
   [000004] FileCount                      u16 be           1                     00 01

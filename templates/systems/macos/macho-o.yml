@@ -1,0 +1,75 @@
+# STATUS: 5%
+#
+# TODO: handle the CIGAM byte ordered files (ppc, need samples)
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/MachO.bt
+  - https://github.com/thetlk/Mach-O/tree/master/pymacho
+  # NOTE: on MacOS, there is C headers in /usr/include/mach-o
+
+kind: executable
+name:  Mach-O executable
+extension: [.o, .dylib]
+endian: little
+
+magic:
+  - offset: 0000
+    match: FE ED FA CE  # MH_MAGIC
+  - offset: 0000
+    match: FE ED FA CF  # MH_MAGIC_64
+  - offset: 0000
+    match: CE FA ED FE  # MH_CIGAM
+  - offset: 0000
+    match: CF FA ED FE  # MH_CIGAM_64
+
+  # TODO MACHO_FAT       = 0xCAFEBABE // Universal object file / FAT_MAGIC, need sample
+  # TODO MACHO_FAT_CIGAM = 0xBEBAFECA, need sample
+
+structs:
+  header:
+    u32 Magic:
+      eq FE ED FA CE: MH_MAGIC
+      eq FE ED FA CF: MH_MAGIC_64
+      eq CE FA ED FE: MH_CIGAM
+      eq CF FA ED FE: MH_CIGAM_64
+    
+    u32 CPU type:
+      eq 00000001: vax
+      eq 00000002: romp
+      eq 00000004: ns32032
+      eq 00000005: ns32332
+      eq 00000006: mc680x0
+      eq 00000007: i386
+      eq 00000008: MIPS
+      eq 00000009: ns32532
+      eq 0000000b: HPPA
+      eq 0000000c: ARM
+      eq 0000000d: mc88000
+      eq 0000000e: Sparc
+      eq 0000000f: i860-be
+      eq 00000010: i860-le
+      eq 00000011: rs6000
+      eq 00000012: PowerPC
+      eq 000000ff: veo
+      eq 01000000: ABI64
+      eq 01000007: x86-64
+      eq 01000008: PowerPC64
+    u32 CPU subtype: ?? # XXX
+    u32 File type:
+      eq 00000001: object         # relocatable object file
+      eq 00000002: execute        # demand paged executable file
+      eq 00000003: fixed vm lib   # fixed VM shared library file
+      eq 00000004: core           # core file
+      eq 00000005: preload        # preloaded executable file
+      eq 00000006: dylib          # dynamically bound shared library
+      eq 00000007: dylinker       # dynamic link editor
+      eq 00000008: bundle         # dynamically bound bundle file
+      eq 00000009: dylib stub     # shared library stub for static linking only, no section contents
+      eq 0000000a: dsym           # companion file with only debug sections
+      eq 0000000b: kext bundle    # x86_64 kexts
+    u32 N cmds: ??
+    u32 Size of cmds: ??
+    u32 Flags: ?? # XXX map
+
+layout:
+  - header Header

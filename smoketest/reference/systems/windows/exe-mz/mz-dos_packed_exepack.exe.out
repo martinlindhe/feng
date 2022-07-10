@@ -1,4 +1,4 @@
-# templates/windows/exe-mz.yml
+# templates/systems/windows/exe-mz.yml
 Header
   [000000] Signature                      ascii[2]         MZ                    4d 5a
   [000002] UsedBytesInTheLastPage         u16 le           114                   00 72

@@ -378,6 +378,10 @@ input:
     files:
       - classes.dex
 
+  - folder: systems/flash/flv
+    files:
+      - flash_001.flv
+
   - folder: systems/flash/swf
     files:
       - heart-words.swf

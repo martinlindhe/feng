@@ -1,0 +1,38 @@
+# STATUS: 1%
+
+references:
+  - https://en.wikipedia.org/wiki/Flash_Video#Flash_Video_Structure
+  - https://www.sweetscape.com/010editor/repository/files/FLV.bt
+
+kind: executable
+name: Adobe Flash Video
+mime: video/x-flv
+extensions: [.flv]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'FLV'
+
+structs:
+  header:
+    ascii[3] Magic: c'FLV'
+    u8 Version: ??
+    u8 Flags:
+      bit b0000_0001: has_video
+#      bit b0000_0010: reserved
+      bit b0000_0100: has_audio
+#      bit b1111_1000: reserved
+    u32 HeaderSize: ??
+
+  packet:
+    u32 PrevPacketSize: ??
+    u8 Type: ?? # XXX map
+    # u24 PayloadSize: ??  ##  XXX uint24 data type !!!
+    #u32 Timestamp: ?? # 24 "timestamp lower" + 8 "timestamp upper"
+    #u24 Stream ID: ?? #  XXX uint24 data type !!!
+    # XXX payload data "freeform" XXX, depends on packet type
+
+layout:
+  - header Header
+  - packet Packet # XXX slice of packets until EOF ?

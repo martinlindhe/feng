@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+# TODO mp3 file struct might be encapsulated iwthin an id3 tag
+
+references:
+  - https://en.wikipedia.org/wiki/MP3
+
+software:
+  - ffmpeg
+
+kind: media
+name: MP3
+extensions: [.mp3]
+mime: audio/mpeg
+endian: big   # XXX
+
+magic:
+  - offset: 0000
+    match: c'ID3'
+
+structs:
+  header:
+    ascii[3] Signature: c'ID3'
+
+layout:
+  - header Header

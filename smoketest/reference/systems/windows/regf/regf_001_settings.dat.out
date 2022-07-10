@@ -1,4 +1,4 @@
-# templates/windows/regf.yml
+# templates/systems/windows/regf.yml
 FILE HEADER
   [000000] Signature                      ascii[4]         regf                  72 65 67 66
   [000004] Primary seq number             u32 le           3                     00 00 00 03

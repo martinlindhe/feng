@@ -1,0 +1,14 @@
+# templates/systems/flash/flv.yml
+Header
+  [000000] Magic                          ascii[3]         FLV                   46 4c 56
+  [000003] Version                        u8               1                     01
+  [000004] Flags                          u8               5                     05
+           - has_video                    bit 0:1          1
+           - has_audio                    bit 2:1          1
+  [000005] HeaderSize                     u32 be           9                     00 00 00 09
+
+Packet
+  [000009] PrevPacketSize                 u32 be           0                     00 00 00 00
+  [00000d] Type                           u8               18                    12
+
+0x31ce2 (204002) unmapped bytes

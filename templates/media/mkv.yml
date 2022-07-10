@@ -1,0 +1,26 @@
+# STATUS: 0% NO PROPER MAGIC
+
+references:
+  - https://docs.fileformat.com/video/mkv/
+  - https://www.matroska.org/technical/basics.html
+  - https://en.wikipedia.org/wiki/Matroska
+
+software:
+  - ffmpeg
+
+kind: media
+name: Matroska Multimedia Container
+extensions: [.mkv]
+mime: video/x-matroska
+endian: big   # XXX
+
+magic:
+  - offset: 0000
+    match: 1a 45 df a3 # XXX what is magic sequence? just guessing
+
+structs:
+  header:
+    u8[4] Signature: ??
+
+layout:
+  - header Header

@@ -1,4 +1,4 @@
-# templates/macos/icns.yml
+# templates/systems/macos/icns.yml
 Header
   [000000] Signature                      ascii[4]         icns                  69 63 6e 73
   [000004] Length                         u32 be           43381                 00 00 a9 75
