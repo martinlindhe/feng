@@ -364,15 +364,6 @@ input:
       - big_endian_action_copy.tiff
       - little_endian_tiff_001.tiff
 
-  - folder: macos/icns
-    files:
-      - workflowicon.icns
-
-  - folder: macos/stuffit
-    files:
-      - Darkwood_2.5.sit
-      #- macbinary_header_fixer.sit # XXX no match, has some mac os meta-data header ?
-
   - folder: media/asf
     files:
       - asf_001.wma
@@ -405,6 +396,15 @@ input:
     files:
       - example1-52.luac
       #- example2-52.luac     # XXX need to parse nested(?) proto block
+
+  - folder: systems/macos/icns
+    files:
+      - workflowicon.icns
+
+  - folder: systems/macos/stuffit
+    files:
+      - Darkwood_2.5.sit
+      #- macbinary_header_fixer.sit # XXX no match, has some mac os meta-data header ?
 
   - folder: systems/nintendo64
     files:
@@ -459,6 +459,36 @@ input:
       - rmid-solaris
       - zdebug-test-gcc484-x86-64.obj
 
+  - folder: systems/windows/compress-kwaj
+    files:
+      - 5202.cp_
+      - mono.gr_
+
+  - folder: systems/windows/exe-mz
+    files:
+      #- EDXOR165.exe
+      - MZ-LE-win95_afvxd.vxd
+      - MZ-LE-win311_ios.386
+      - MZ-LX-os2_fpart.exe
+      - MZ-LX-os2_hotscrl.dll
+      - MZ-NE-win16_mrmind.exe
+      - MZ-NE-win95_mnmtph16.dll
+      - MZ-PE+win10x64_HxComm.Ipc.Proxies.dll
+      - MZ-PE+win10x64_seqchk10imm.dll
+      - MZ-PE+osx_efi_boot.efi
+      - MZ-PE32-edxor165.exe
+      - MZ-PE32-win32_pbrush.exe
+      - mz-dos_tlink_header.exe
+      - mz-dos_multiple_reloc_items.exe
+      - mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes
+      - mz-dos_packed_lzexe_keen1.exe
+      - mz-dos_packed_lzexe_sample.exe
+      - mz-dos_packed_pklite.exe
+
+  - folder: systems/windows/regf
+    files:
+      - regf_001_settings.dat
+
   - folder: systems/x11/snf
     files:
       - x11_snf_le_001.pak
@@ -493,34 +523,3 @@ input:
   - folder: systems/xbox360/xex
     files:
       - natalsu.xex
-
-  - folder: windows/compress-kwaj
-    files:
-      - 5202.cp_
-      - mono.gr_
-
-  - folder: windows/exe-mz
-    files:
-      #- EDXOR165.exe
-      - MZ-LE-win95_afvxd.vxd
-      - MZ-LE-win311_ios.386
-      - MZ-LX-os2_fpart.exe
-      - MZ-LX-os2_hotscrl.dll
-      - MZ-NE-win16_mrmind.exe
-      - MZ-NE-win95_mnmtph16.dll
-      - MZ-PE+win10x64_HxComm.Ipc.Proxies.dll
-      - MZ-PE+win10x64_seqchk10imm.dll
-      - MZ-PE+osx_efi_boot.efi
-      - MZ-PE32-edxor165.exe
-      - MZ-PE32-win32_pbrush.exe
-      - mz-dos_tlink_header.exe
-      - mz-dos_multiple_reloc_items.exe
-      - mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes
-      - mz-dos_packed_lzexe_keen1.exe
-      - mz-dos_packed_lzexe_sample.exe
-      - mz-dos_packed_pklite.exe
-
-  - folder: windows/regf
-    files:
-      - regf_001_settings.dat
-
