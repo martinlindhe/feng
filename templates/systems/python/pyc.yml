@@ -1,0 +1,25 @@
+# STATUS: 1%
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/PYC.bt
+
+software:
+  - https://docs.python.org/3/library/dis.html
+
+kind: font
+name: Python compiled bytecode
+extensions: [.pyc, .pyo]
+endian: little
+
+magic:
+  - offset: 0002
+    match: 0D 0A      # XXX weak magic
+
+structs:
+  header:
+    u16 Version: ??
+    ascii[2] Magic: 0D 0A
+    u8[4] Mtime: ?? # XXX 010 says mtime but it looks pretty static?
+
+layout:
+  - header Header

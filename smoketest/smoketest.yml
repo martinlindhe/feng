@@ -378,6 +378,11 @@ input:
     files:
       - classes.dex
 
+  - folder: systems/flash/swf
+    files:
+      - heart-words.swf
+      - tiny.swf
+
   - folder: systems/gameboy
     files:
       - mrdig.gbc
@@ -408,7 +413,7 @@ input:
 
   - folder: systems/nintendo64
     files:
-      #- Rampage_2_PLUS4_USA-CZN.v64   # XXX broken
+      - Rampage_2_PLUS4_USA-CZN.v64   # XXX byte-swapped, need to implement special data processing
       - intro.z64
 
   - folder: systems/nintendo-ds
@@ -416,15 +421,21 @@ input:
       # XXX find smaller samples
       - k2+ttn-dsniccc.nds
 
-  - folder: systems/ps3/sce
-    files:
-      - ps3_eboot.bin
-
   - folder: systems/os2/ftcomp
     files:
       - iswindow.co_
       - screen01.sy_
       - SMALLE.FON
+
+  - folder: systems/python/pyc
+    files:
+      - python_001-27.pyc
+      - python_001-34.pyc
+      - python_001.cpython-310.pyc
+
+  - folder: systems/ps3/sce
+    files:
+      - ps3_eboot.bin
 
   - folder: systems/ps4/ps4_pkg
     files:

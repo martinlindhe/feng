@@ -1,7 +1,7 @@
 # templates/systems/nintendo64/n64.yml
 Header
   [000000] Endianness                     u32 be           2151092800            80 37 12 40
-           - Big                          eq
+           - Native (big-endian)          eq
   [000004] Clock rate override            u32 be           15                    00 00 00 0f
   [000008] Program counter                u32 be           2148532224            80 10 00 00
   [00000c] Release address                u32 be           5188                  00 00 14 44

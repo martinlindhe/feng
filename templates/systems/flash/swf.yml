@@ -1,0 +1,29 @@
+# STATUS: 1%
+#
+# HI: need bitstream parser?
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/SWF.bt
+
+software:
+  - https://github.com/mroach/rom64
+
+kind: executable
+name: Adobe Flash SWF
+extensions: [.swf]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'FWS'
+
+structs:
+  header:
+    ascii[3] Magic: c'FWS'
+    u8 Version: ??
+    u32 FileSize: ??
+
+    # NEXT follows RECT struct that seems to require bit stream parsing
+
+layout:
+  - header Header

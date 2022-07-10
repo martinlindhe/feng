@@ -1,0 +1,7 @@
+# templates/systems/flash/swf.yml
+Header
+  [000000] Magic                          ascii[3]         FWS                   46 57 53
+  [000003] Version                        u8               5                     05
+  [000004] FileSize                       u32 be           1308819456            4e 03 00 00
+
+0x0346 (838) unmapped bytes

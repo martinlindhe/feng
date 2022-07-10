@@ -184,7 +184,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		if err != nil {
 			return err // or panic or ignore
 		}
-		//log.Println(tpl)
+		log.Println(tpl)
 		ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, tpl)
 		if err != nil {
 			return err
@@ -209,7 +209,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 			}
 		}
 		if !found {
-			feng.Red("%s magic bytes don't match\n", tpl)
+			//feng.Red("%s magic bytes don't match\n", tpl)
 			return nil
 		}
 

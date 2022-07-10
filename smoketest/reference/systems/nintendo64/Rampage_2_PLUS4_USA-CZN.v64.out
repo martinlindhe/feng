@@ -1,0 +1,21 @@
+# templates/systems/nintendo64/n64.yml
+Header
+  [000000] Endianness                     u32 be           931151890             37 80 40 12
+           - Byte-swapped (XXX PARSE PROPERLY) eq
+  [000004] Clock rate override            u32 be           3840                  00 00 0f 00
+  [000008] Program counter                u32 be           813758719             30 80 f8 ff
+  [00000c] Release address                u32 be           18708                 00 00 49 14
+  [000010] CRC1                           u32 be           497381460             1d a5 70 54
+  [000014] CRC2                           u32 be           3054607678            b6 11 9d 3e
+  [000018] Reserved                       u64 be           0                     00 00 00 00 00 00 00 00
+  [000020] Image name                     ascii[20]        ARPMGA2E              41 52 50 4d 47 41 32 45 20 20 20 20 20 20 20 20 20 20 20 20
+  [000034] Reserved                       u32 be           0                     00 00 00 00
+  [000038] Rom type                       u8               0                     00
+  [000039] Software ID                    ascii[2]                               00 4e
+  [00003b] Region                         ascii                                  00
+  [00003c] Cartridge ID                   ascii[2]         P2                    50 32
+  [00003e] Country Code                   ascii                                  00
+  [00003f] Version                        u8               69                    45
+  [000040] Boot code                      u8[4032]                               80 40 00 68 80 40 00 48 80 40 00 58 08 3c 70 a4 08 25 00 00 09 8d 0c 00 20 15 ed 00 00 00 00 00 ...
+
+0x1dd5c (122204) unmapped bytes

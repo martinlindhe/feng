@@ -1,7 +1,15 @@
 # STATUS: 10%
 #
-# HI: support byte-swapped data layout (bytes ABCD is stored as BACD). see http://n64dev.org/romformats.html
+# HI: support byte-swapped data layout (bytes ABCD is stored as BADC). see http://n64dev.org/romformats.html
+
 # MID: support little endian. need sample
+
+byteswaps: # XXX DRAFT - TODO IMPLEMENT AND MAKE USE OF
+  badc: # byteswapped. bytes ABCD is stored as BADC
+    - 0: 1
+    - 1: 0
+    - 2: 3
+    - 3: 2
 
 references:
   - http://en64.shoutwiki.com/wiki/ROM#Cartridge_ROM_Header
@@ -17,15 +25,16 @@ endian: big
 
 magic:
   - offset: 0000
-    match: 80371240 # XXX in hex bytes form
-  #  - 37804012 # XXX in hex bytes form
+    match: 80371240     # Native byte order (.z64)
+  - offset: 0000
+    match: 37804012     # byte-swapped (.v64)
 
 structs:
   header:
     u32 Endianness:
-      eq 80371240: Big  # Native byte order (.z64)
+      eq 80371240: Native (big-endian)
       eq 37804012: Byte-swapped (XXX PARSE PROPERLY)  # .v64
-      default: invalid
+      #default: invalid
     u32 Clock rate override: ??
     u32 Program counter: ??
     u32 Release address: ??
