@@ -1,4 +1,4 @@
-# templates/archives/7z.yml
+# templates/archives/7zip.yml
 Signature Header
   [000000] Signature                      u8[6]                                  37 7a bc af 27 1c
   [000006] Major version                  u8               0                     00

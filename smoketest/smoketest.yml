@@ -1,9 +1,9 @@
 root: ../../feng-samples
 input:
-  - folder: archives/7z
+  - folder: archives/7zip
     files:
-      - 7z_001_one_file.7z
-      - 7z_002_three_files.7z
+      - one_file.7z
+      - three_files.7z
 
   - folder: archives/ar
     files:
