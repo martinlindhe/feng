@@ -521,6 +521,7 @@ input:
 
   - folder: systems/xbox/xbox_xpr
     files:
+      - dlcustom.xpr
       - saveimage.xbx
 
   - folder: systems/xbox/xbox_xsb

@@ -22,7 +22,6 @@ structs:
     ascii[6] Magic: c'mozLz4'
     u16 Unknown: ??
     u32 DecompressedSize: ??
-    # TODO use DecompressedSize as argument for compressed:lz4 so we know how much to allocate
     compressed:lz4[FILE_SIZE - 12] Data: ??
 
 layout:

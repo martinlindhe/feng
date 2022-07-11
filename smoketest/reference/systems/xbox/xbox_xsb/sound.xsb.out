@@ -1,9 +1,9 @@
 # templates/systems/xbox/xsb.yml
 Header
   [000000] Signature                      ascii[4]         SDBK                  53 44 42 4b
-  [000004] Tool version                   u16 le           11                    00 0b
-  [000006] File format version            u16 le           63441                 f7 d1
-  [000008] Checksum                       u16 le           476                   01 dc
+  [000004] ToolVersion                    u16 le           11                    00 0b
+  [000006] FileFormatVersion              u16 le           63441                 f7 d1
+  [000008] CRC                            u16 le           476                   01 dc
   [00000a] Last modification date (lo)    u32 le           42991616              02 90 00 00
   [00000e] Last modification date (hi)    u32 le           40370176              02 68 00 00
   [000012] Platform                       u8               0                     00
@@ -12,44 +12,43 @@ Header
   [000015] Number of complex cues         u16 le           2                     00 02
   [000017] Unknown                        u16 le           0                     00 00
   [000019] Total number of cues           u16 le           4096                  10 00
-  [00001b] Number of wavebanks            u8               0                     00
-  [00001c] Number of sounds               u16 le           9                     00 09
-  [00001e] CueNameTableSize               u32 le           12                    00 00 00 0c
+  [00001b] WavebankCount                  u8               0                     00
+  [00001c] SoundCount                     u16 le           9                     00 09
+  [00001e] CueNameTableLength             u32 le           12                    00 00 00 0c
+  [000022] Unknown                        u32 le           1                     00 00 00 01
+  [000026] Unknown                        u16 le           0                     00 00
+  [000028] Name                           ascii[20]        Sound                 53 6f 75 6e 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-NameTable_0
-  [0001ec] Name                           asciiz           SelectButton          53 65 6c 65 63 74 42 75 74 74 6f 6e 00
+Sound_0
+  [00003c] Flags                          u8               236                   ec
+           - Complex                      bit 0:1          0
+           - RPC1                         bit 1:1          0
+           - RPC2                         bit 2:1          1
+           - RPC3                         bit 3:1          1
+           - DSPPreset                    bit 4:1          0
+  [00003d] Category                       u16 le           1                     00 01
+  [00003f] Unknown                        u8               0                     00
+  [000040] Volume                         u16 le           65535                 ff ff
+  [000042] Unknown                        u8               255                   ff
+  [000043] Length                         u16 le           255                   00 ff
+  [000045] trackIndex                     u16 le           1024                  04 00
+  [000047] waveBankIndex                  u8               0                     00
+  [000048] RPC extraLen                   u16 le           65535                 ff ff
 
-NameTable_1
-  [0001f9] Name                           asciiz           MenuItemSelect        4d 65 6e 75 49 74 65 6d 53 65 6c 65 63 74 00
+Sound_1
+  [00004a] Flags                          u8               255                   ff
+           - Complex                      bit 0:1          1
+           - RPC1                         bit 1:1          1
+           - RPC2                         bit 2:1          1
+           - RPC3                         bit 3:1          1
+           - DSPPreset                    bit 4:1          1
+  [00004b] Category                       u16 le           7                     00 07
+  [00004d] Unknown                        u8               0                     00
+  [00004e] Volume                         u16 le           6                     00 06
+  [000050] Unknown                        u8               249                   f9
+  [000051] Length                         u16 le           1                     00 01
+  [000053] numClips                       u8               0                     00
+  [000054] RPC extraLen                   u16 le           65535                 ff ff
+  [000056] DSPNum                         u8               255                   ff
 
-NameTable_2
-  [000208] Name                           asciiz           Error                 45 72 72 6f 72 00
-
-NameTable_3
-  [00020e] Name                           asciiz           DownloadComplete      44 6f 77 6e 6c 6f 61 64 43 6f 6d 70 6c 65 74 65 00
-
-NameTable_4
-  [00021f] Name                           asciiz           CardPut               43 61 72 64 50 75 74 00
-
-NameTable_5
-  [000227] Name                           asciiz           Select22k             53 65 6c 65 63 74 32 32 6b 00
-
-NameTable_6
-  [000231] Name                           asciiz           StopWatchClick        53 74 6f 70 57 61 74 63 68 43 6c 69 63 6b 00
-
-NameTable_7
-  [000240] Name                           asciiz           PressA                50 72 65 73 73 41 00
-
-NameTable_8
-  [000247] Name                           asciiz           PressB                50 72 65 73 73 42 00
-
-NameTable_9
-  [00024e] Name                           asciiz           OldError              4f 6c 64 45 72 72 6f 72 00
-
-NameTable_10
-  [000257] Name                           asciiz           NoScroll              4e 6f 53 63 72 6f 6c 6c 00
-
-NameTable_11
-  [000260] Name                           asciiz           Abort                 41 62 6f 72 74 00
-
-0x0210 (528) unmapped bytes (77.2%)
+0x0255 (597) unmapped bytes (87.3%)

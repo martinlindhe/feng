@@ -1,19 +1,23 @@
-# STATUS: 5%
+# STATUS: 10%
+#
 # archive format for sound banks, on XBox and maybe on Windows (created by Xbox SDK / DirectX SDK)
 #
 # Used in Counter-Strike (XBox)
 #
+# MAX: to progress, we need to evaluate structs in structs
 # HI: decode "last modification date" field correctly
 # HI: decode and extract wavebanks & sounds
 
 references:
+  - https://wiki.multimedia.cx/index.php/XACT
   - http://wiki.xentax.com/index.php/XACT_XWB_XSB_XGS_Audio#XSB
 
 software:
-  - xxx
+  - XNA Game Studio
+  - Xbox Audio Creation Tool (audio programming library and engine released by Microsoft as part of the DirectX SDK)
 
 kind: archive
-name: XBox Sound Bank archive
+name: XACT Sound Bank archive
 extensions: [.xsb]
 endian: little
 
@@ -24,29 +28,81 @@ magic:
 structs:
   header:
     ascii[4] Signature: c'SDBK'
-    u16 Tool version: ??
-    u16 File format version: ??
+    u16 ToolVersion: ??
+    u16 FileFormatVersion: ??
 
-    u16 Checksum: ??                      # CRC (FCS16 checksum)
+    u16 CRC: ??                      # CRC (FCS16 checksum)
     u32 Last modification date (lo): ??
     u32 Last modification date (hi): ??
     u8 Platform:
       eq 00: PC
       eq 02: XBox
-
     u16 Number of simple cues: ??
     u16 Number of complex cues: ??
     u16 Unknown: ??
     u16 Total number of cues: ??
-    u8 Number of wavebanks: ??
-    u16 Number of sounds: ??
-    u32 CueNameTableSize: ??
+    u8 WavebankCount: ??
+    u16 SoundCount: ??
+    u32 CueNameTableLength: ??
+
+    u32 Unknown: ?? # XXX 0
+    u16 Unknown: ?? # XXX 0
+    ascii[20] Name: ??
+
+
+
+    # for FileFormatVersion == 2B ???, see https://wiki.multimedia.cx/index.php/XACT
+    #u32 simpleCuesOffset: ??  #; //0x22
+    #u32 complexCuesOffset: ??  #; //0x26
+    #u32 cueNamesOffset: ??  #; //0x2a
+    #u32 unknOffset: ??  #; //0x2e
+    #u32 variationTablesOffset: ??  #; //0x32
+    #u32 unknOffset2: ??  #; //0x36
+    #u32 waveBankNameTableOffset: ??  #; //0x3a
+    #u32 cueNameHashTableOffset: ??  #; //0x3e    16-bit hashes each
+    #u32 cueNameHashValsOffset: ??  #; //0x42
+    #u32 soundsOffset: ??  #; //0x46
+    #ascii[64] Name: ??
+
+  sound_entry: # XXX guesswork!
+    u8 Flags:
+      bit b0000_0001: Complex
+      bit b0000_0010: RPC1
+      bit b0000_0100: RPC2
+      bit b0000_1000: RPC3
+      bit b0001_0000: DSPPreset
+    u16 Category: ??
+    u8 Unknown: ??
+    u16 Volume: ??
+    u8 Unknown: ??
+    u16 Length: ??
+    if self.Flags & Complex:
+      u8 numClips: ??
+    else:
+      u16 trackIndex: ??
+      u8 waveBankIndex: ??
+    if self.Flags & (RPC1 | RPC2 | RPC3): # XXX bit syntax?
+      u16 RPC extraLen: ??
+      # XXX + rpc table for each flag
+    if self.Flags & DSPPreset:
+      u8 DSPNum: ??
+      u32[self.DSPNum] Unkn: ??
+
+    if self.Flags & Complex:
+      # XXX need to eval custom struct here... "clip"
+      # XXX this is struct "clip":
+      u8 Unkn: ??
+      u32 clipOffset: ??
+      u32 Unkn: ??
+
+    #u8[self.Length] Data: ??
 
   name_table:
-    asciiz Name: ??
+    ascii[64] Name: ??
 
 layout:
   - header Header
 
-  - offset 0x01EC    # XXX is this a fixed offset? need more samples
-  - name_table[Header.CueNameTableSize] NameTable
+  - name_table[Header.WavebankCount] Wavebank
+  - sound_entry[Header.SoundCount] Sound
+

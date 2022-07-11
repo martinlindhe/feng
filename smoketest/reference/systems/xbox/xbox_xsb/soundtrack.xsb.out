@@ -1,9 +1,9 @@
 # templates/systems/xbox/xsb.yml
 Header
   [000000] Signature                      ascii[4]         SDBK                  53 44 42 4b
-  [000004] Tool version                   u16 le           11                    00 0b
-  [000006] File format version            u16 le           43275                 a9 0b
-  [000008] Checksum                       u16 le           96                    00 60
+  [000004] ToolVersion                    u16 le           11                    00 0b
+  [000006] FileFormatVersion              u16 le           43275                 a9 0b
+  [000008] CRC                            u16 le           96                    00 60
   [00000a] Last modification date (lo)    u32 le           10485760              00 a0 00 00
   [00000e] Last modification date (hi)    u32 le           7864320               00 78 00 00
   [000012] Platform                       u8               0                     00
@@ -12,8 +12,27 @@ Header
   [000015] Number of complex cues         u16 le           0                     00 00
   [000017] Unknown                        u16 le           0                     00 00
   [000019] Total number of cues           u16 le           4096                  10 00
-  [00001b] Number of wavebanks            u8               0                     00
-  [00001c] Number of sounds               u16 le           1                     00 01
-  [00001e] CueNameTableSize               u32 le           1                     00 00 00 01
+  [00001b] WavebankCount                  u8               0                     00
+  [00001c] SoundCount                     u16 le           1                     00 01
+  [00001e] CueNameTableLength             u32 le           1                     00 00 00 01
+  [000022] Unknown                        u32 le           1                     00 00 00 01
+  [000026] Unknown                        u16 le           0                     00 00
+  [000028] Name                           ascii[20]        sample                73 61 6d 70 6c 65 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-0x007e (126) unmapped bytes (78.8%)
+Sound_0
+  [00003c] Flags                          u8               112                   70
+           - Complex                      bit 0:1          0
+           - RPC1                         bit 1:1          0
+           - RPC2                         bit 2:1          0
+           - RPC3                         bit 3:1          0
+           - DSPPreset                    bit 4:1          1
+  [00003d] Category                       u16 le           0                     00 00
+  [00003f] Unknown                        u8               0                     00
+  [000040] Volume                         u16 le           65535                 ff ff
+  [000042] Unknown                        u8               255                   ff
+  [000043] Length                         u16 le           255                   00 ff
+  [000045] trackIndex                     u16 le           3072                  0c 00
+  [000047] waveBankIndex                  u8               0                     00
+  [000048] DSPNum                         u8               255                   ff
+
+0x0057 (87) unmapped bytes (54.4%)

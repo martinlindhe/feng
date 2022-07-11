@@ -1,4 +1,7 @@
 # STATUS: 1%
+
+# - MAX: variable length integer type special encoding
+
 # - HI: block syntax
 
 references:
@@ -28,20 +31,18 @@ structs:
     # XXX calculated over Reserved+Stream flags (2 bytes)
     u32 CRC32: ?? # XXX seems header always has a crc32, the Stream flags checksum is used elsewhere ???
 
-
-    # XXX BLOCK HEADER:
-
-    u8 Block header size: ??    # real_header_size = (encoded_header_size + 1) * 4;
-    u8 Block flags:
+  block_header:
+    u8 HeaderSize: ??    # XXX real_header_size = (encoded_header_size + 1) * 4;
+    u8 Flags:
       bit b0000_0011: Number of filters
       bit b0011_1100: Reserved
-      bit b0100_0000: Compressed Size field present
-      bit b1000_0000: Uncompressed Size field present
+      bit b0100_0000: CompressedSizeFieldPresent
+      bit b1000_0000: UncompressedSizeFieldPresent
 
-    #if Block flags[Compressed Size field present]:
+    #if Block flags[CompressedSizeFieldPresent]:
     #  XXX variable-length integer encoding, see decode() in https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/xz-file-format.txt;hb=HEAD
 
-    #if Block flags[Uncompressed Size field present]:
+    #if Block flags[UncompressedSizeFieldPresent]:
     #  XXX variable-length integer encoding, see decode() in https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/xz-file-format.txt;hb=HEAD
 
     # XXX variable number of filter blocks
@@ -66,3 +67,4 @@ structs:
 
 layout:
   - header Header
+  - block_header BlockHeader

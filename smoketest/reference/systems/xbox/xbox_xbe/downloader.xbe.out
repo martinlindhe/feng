@@ -90,11 +90,11 @@ SectionHeader_0 .text
   [000380] RawSize                        u32 le           188972                00 02 e2 2c
   [000384] SectionNameAddress             u32 le           67806                 00 01 08 de
   [0008de] SectionName                    asciiz           .text                 2e 74 65 78 74 00
-  [000388] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000388] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [00038c] Head Shared Page Reference Count Address u32 le           67760                 00 01 08 b0
   [000390] Tail Shared Page Reference Count Address u32 le           67762                 00 01 08 b2
-  [000394] Section Digest                 u8[20]                                 99 d2 f7 ac 04 e7 93 14 42 92 ca 7d a4 6d 8c d4 be 55 f9 93
-  [002000] Section data                   u8[188972]                             42 01 00 80 bb 00 00 80 e2 00 00 80 ca 00 00 80 21 01 00 80 d2 00 00 80 25 00 00 80 cf 00 00 80 ...
+  [000394] SectionDigest                  u8[20]                                 99 d2 f7 ac 04 e7 93 14 42 92 ca 7d a4 6d 8c d4 be 55 f9 93
+  [002000] SectionData                    u8[188972]                             42 01 00 80 bb 00 00 80 e2 00 00 80 ca 00 00 80 21 01 00 80 d2 00 00 80 25 00 00 80 cf 00 00 80 ...
 
 SectionHeader_1 D3D
   [0003a8] Section Flags                  u32 le           7                     00 00 00 07
@@ -110,11 +110,11 @@ SectionHeader_1 D3D
   [0003b8] RawSize                        u32 le           58396                 00 00 e4 1c
   [0003bc] SectionNameAddress             u32 le           67812                 00 01 08 e4
   [0008e4] SectionName                    asciiz           D3D                   44 33 44 00
-  [0003c0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0003c0] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0003c4] Head Shared Page Reference Count Address u32 le           67762                 00 01 08 b2
   [0003c8] Tail Shared Page Reference Count Address u32 le           67764                 00 01 08 b4
-  [0003cc] Section Digest                 u8[20]                                 28 e9 6d db 7b 0b d0 06 32 d0 aa 11 fa fb af a8 a6 c6 d8 d6
-  [031000] Section data                   u8[58396]                              56 8b 35 60 e6 04 00 85 f6 57 bf 60 e6 04 00 74 35 55 8b 6c 24 10 39 6e 04 75 22 8b 06 89 07 f6 ...
+  [0003cc] SectionDigest                  u8[20]                                 28 e9 6d db 7b 0b d0 06 32 d0 aa 11 fa fb af a8 a6 c6 d8 d6
+  [031000] SectionData                    u8[58396]                              56 8b 35 60 e6 04 00 85 f6 57 bf 60 e6 04 00 74 35 55 8b 6c 24 10 39 6e 04 75 22 8b 06 89 07 f6 ...
 
 SectionHeader_2 XONLINE
   [0003e0] Section Flags                  u32 le           38                    00 00 00 26
@@ -130,11 +130,11 @@ SectionHeader_2 XONLINE
   [0003f0] RawSize                        u32 le           111748                00 01 b4 84
   [0003f4] SectionNameAddress             u32 le           67816                 00 01 08 e8
   [0008e8] SectionName                    asciiz           XONLINE               58 4f 4e 4c 49 4e 45 00
-  [0003f8] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0003f8] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0003fc] Head Shared Page Reference Count Address u32 le           67764                 00 01 08 b4
   [000400] Tail Shared Page Reference Count Address u32 le           67766                 00 01 08 b6
-  [000404] Section Digest                 u8[20]                                 17 c1 35 f2 c4 43 cb 84 72 2b 90 22 32 30 06 be af 30 1d 66
-  [040000] Section data                   u8[111748]                             8b 0d 60 a3 0b 00 e9 6c 11 00 00 8b 0d 60 a3 0b 00 e9 76 11 00 00 8b 0d 60 a3 0b 00 e9 82 15 00 ...
+  [000404] SectionDigest                  u8[20]                                 17 c1 35 f2 c4 43 cb 84 72 2b 90 22 32 30 06 be af 30 1d 66
+  [040000] SectionData                    u8[111748]                             8b 0d 60 a3 0b 00 e9 6c 11 00 00 8b 0d 60 a3 0b 00 e9 76 11 00 00 8b 0d 60 a3 0b 00 e9 82 15 00 ...
 
 SectionHeader_3 XNET
   [000418] Section Flags                  u32 le           22                    00 00 00 16
@@ -150,11 +150,11 @@ SectionHeader_3 XNET
   [000428] RawSize                        u32 le           70800                 00 01 14 90
   [00042c] SectionNameAddress             u32 le           67824                 00 01 08 f0
   [0008f0] SectionName                    asciiz           XNET                  58 4e 45 54 00
-  [000430] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000430] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [000434] Head Shared Page Reference Count Address u32 le           67766                 00 01 08 b6
   [000438] Tail Shared Page Reference Count Address u32 le           67768                 00 01 08 b8
-  [00043c] Section Digest                 u8[20]                                 f4 28 9b be 22 0d 66 29 38 ae 4c 2b c8 88 65 66 6c 66 1b 51
-  [05c000] Section data                   u8[70800]                              85 c9 75 07 b8 6d 27 00 00 eb 0f ff 74 24 08 ff 74 24 08 e8 f8 53 00 00 33 c0 c2 08 00 85 c9 75 ...
+  [00043c] SectionDigest                  u8[20]                                 f4 28 9b be 22 0d 66 29 38 ae 4c 2b c8 88 65 66 6c 66 1b 51
+  [05c000] SectionData                    u8[70800]                              85 c9 75 07 b8 6d 27 00 00 eb 0f ff 74 24 08 ff 74 24 08 e8 f8 53 00 00 33 c0 c2 08 00 85 c9 75 ...
 
 SectionHeader_4 XACTENG
   [000450] Section Flags                  u32 le           7                     00 00 00 07
@@ -170,11 +170,11 @@ SectionHeader_4 XACTENG
   [000460] RawSize                        u32 le           41004                 00 00 a0 2c
   [000464] SectionNameAddress             u32 le           67829                 00 01 08 f5
   [0008f5] SectionName                    asciiz           XACTENG               58 41 43 54 45 4e 47 00
-  [000468] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000468] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [00046c] Head Shared Page Reference Count Address u32 le           67768                 00 01 08 b8
   [000470] Tail Shared Page Reference Count Address u32 le           67770                 00 01 08 ba
-  [000474] Section Digest                 u8[20]                                 29 1c eb 80 29 47 dd a2 22 1a 8b d2 7b f2 a1 57 9d 82 18 52
-  [06e000] Section data                   u8[41004]                              64 0f b6 05 24 00 00 00 84 c0 74 03 33 c0 c3 68 14 86 08 00 ff 15 8c 20 01 00 33 c0 40 c3 56 8b ...
+  [000474] SectionDigest                  u8[20]                                 29 1c eb 80 29 47 dd a2 22 1a 8b d2 7b f2 a1 57 9d 82 18 52
+  [06e000] SectionData                    u8[41004]                              64 0f b6 05 24 00 00 00 84 c0 74 03 33 c0 c3 68 14 86 08 00 ff 15 8c 20 01 00 33 c0 40 c3 56 8b ...
 
 SectionHeader_5 DSOUND
   [000488] Section Flags                  u32 le           7                     00 00 00 07
@@ -190,11 +190,11 @@ SectionHeader_5 DSOUND
   [000498] RawSize                        u32 le           44204                 00 00 ac ac
   [00049c] SectionNameAddress             u32 le           67837                 00 01 08 fd
   [0008fd] SectionName                    asciiz           DSOUND                44 53 4f 55 4e 44 00
-  [0004a0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0004a0] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0004a4] Head Shared Page Reference Count Address u32 le           67770                 00 01 08 ba
   [0004a8] Tail Shared Page Reference Count Address u32 le           67772                 00 01 08 bc
-  [0004ac] Section Digest                 u8[20]                                 8b 22 84 d4 67 3c 7d 23 85 6c 9d 69 59 38 16 76 b1 7c 13 0b
-  [079000] Section data                   u8[44204]                              8b 44 24 04 8b 08 3b c8 74 12 8b 50 04 89 51 04 8b 48 04 8b 10 89 11 89 40 04 89 00 c2 04 00 6a ...
+  [0004ac] SectionDigest                  u8[20]                                 8b 22 84 d4 67 3c 7d 23 85 6c 9d 69 59 38 16 76 b1 7c 13 0b
+  [079000] SectionData                    u8[44204]                              8b 44 24 04 8b 08 3b c8 74 12 8b 50 04 89 51 04 8b 48 04 8b 10 89 11 89 40 04 89 00 c2 04 00 6a ...
 
 SectionHeader_6 WMADEC
   [0004c0] Section Flags                  u32 le           7                     00 00 00 07
@@ -210,11 +210,11 @@ SectionHeader_6 WMADEC
   [0004d0] RawSize                        u32 le           102524                00 01 90 7c
   [0004d4] SectionNameAddress             u32 le           67844                 00 01 09 04
   [000904] SectionName                    asciiz           WMADEC                57 4d 41 44 45 43 00
-  [0004d8] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0004d8] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0004dc] Head Shared Page Reference Count Address u32 le           67772                 00 01 08 bc
   [0004e0] Tail Shared Page Reference Count Address u32 le           67774                 00 01 08 be
-  [0004e4] Section Digest                 u8[20]                                 00 0c e2 de 44 ec 23 b4 88 58 81 09 38 4f be a9 86 a6 0a c2
-  [084000] Section data                   u8[102524]                             56 57 8b 7c 24 0c 57 8b f1 ff 15 8c 20 01 00 89 3e 5f 8b c6 5e c2 04 00 83 e8 00 74 39 48 74 30 ...
+  [0004e4] SectionDigest                  u8[20]                                 00 0c e2 de 44 ec 23 b4 88 58 81 09 38 4f be a9 86 a6 0a c2
+  [084000] SectionData                    u8[102524]                             56 57 8b 7c 24 0c 57 8b f1 ff 15 8c 20 01 00 89 3e 5f 8b c6 5e c2 04 00 83 e8 00 74 39 48 74 30 ...
 
 SectionHeader_7 D3DX
   [0004f8] Section Flags                  u32 le           7                     00 00 00 07
@@ -230,11 +230,11 @@ SectionHeader_7 D3DX
   [000508] RawSize                        u32 le           8504                  00 00 21 38
   [00050c] SectionNameAddress             u32 le           67851                 00 01 09 0b
   [00090b] SectionName                    asciiz           D3DX                  44 33 44 58 00
-  [000510] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000510] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [000514] Head Shared Page Reference Count Address u32 le           67774                 00 01 08 be
   [000518] Tail Shared Page Reference Count Address u32 le           67776                 00 01 08 c0
-  [00051c] Section Digest                 u8[20]                                 09 56 23 07 5d 2d 8a 7e d8 93 4a 02 e7 a1 66 4d 6f e3 1c 50
-  [09e000] Section data                   u8[8504]                               30 31 32 33 34 35 36 37 38 39 41 42 43 44 45 46 f0 db 0a 00 b4 db 0a 00 94 db 0a 00 6c db 0a 00 ...
+  [00051c] SectionDigest                  u8[20]                                 09 56 23 07 5d 2d 8a 7e d8 93 4a 02 e7 a1 66 4d 6f e3 1c 50
+  [09e000] SectionData                    u8[8504]                               30 31 32 33 34 35 36 37 38 39 41 42 43 44 45 46 f0 db 0a 00 b4 db 0a 00 94 db 0a 00 6c db 0a 00 ...
 
 SectionHeader_8 XGRPH
   [000530] Section Flags                  u32 le           7                     00 00 00 07
@@ -250,11 +250,11 @@ SectionHeader_8 XGRPH
   [000540] RawSize                        u32 le           68                    00 00 00 44
   [000544] SectionNameAddress             u32 le           67856                 00 01 09 10
   [000910] SectionName                    asciiz           XGRPH                 58 47 52 50 48 00
-  [000548] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000548] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [00054c] Head Shared Page Reference Count Address u32 le           67776                 00 01 08 c0
   [000550] Tail Shared Page Reference Count Address u32 le           67776                 00 01 08 c0
-  [000554] Section Digest                 u8[20]                                 ca 31 18 f1 6f 0a f3 98 d5 17 e6 b3 37 35 aa a8 7f b1 4e 65
-  [0a1000] Section data                   u8[68]                                 8b 44 24 04 83 f8 2d 7f 22 83 f8 27 7d 31 85 c0 7c 14 83 f8 07 7e 28 83 f8 0b 74 23 83 f8 18 7e ...
+  [000554] SectionDigest                  u8[20]                                 ca 31 18 f1 6f 0a f3 98 d5 17 e6 b3 37 35 aa a8 7f b1 4e 65
+  [0a1000] SectionData                    u8[68]                                 8b 44 24 04 83 f8 2d 7f 22 83 f8 27 7d 31 85 c0 7c 14 83 f8 07 7e 28 83 f8 0b 74 23 83 f8 18 7e ...
 
 SectionHeader_9 XPP
   [000568] Section Flags                  u32 le           7                     00 00 00 07
@@ -270,11 +270,11 @@ SectionHeader_9 XPP
   [000578] RawSize                        u32 le           31240                 00 00 7a 08
   [00057c] SectionNameAddress             u32 le           67862                 00 01 09 16
   [000916] SectionName                    asciiz           XPP                   58 50 50 00
-  [000580] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000580] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [000584] Head Shared Page Reference Count Address u32 le           67776                 00 01 08 c0
   [000588] Tail Shared Page Reference Count Address u32 le           67778                 00 01 08 c2
-  [00058c] Section Digest                 u8[20]                                 b3 7e ae 34 65 60 60 aa db 92 f3 00 90 2d be e1 37 4b 36 c3
-  [0a2000] Section data                   u8[31240]                              00 00 00 00 4c eb 0a 00 94 eb 0a 00 00 00 00 00 00 00 00 00 a8 ea 0a 00 c0 eb 0a 00 d8 eb 0a 00 ...
+  [00058c] SectionDigest                  u8[20]                                 b3 7e ae 34 65 60 60 aa db 92 f3 00 90 2d be e1 37 4b 36 c3
+  [0a2000] SectionData                    u8[31240]                              00 00 00 00 4c eb 0a 00 94 eb 0a 00 00 00 00 00 00 00 00 00 a8 ea 0a 00 c0 eb 0a 00 d8 eb 0a 00 ...
 
 SectionHeader_10 .data
   [0005a0] Section Flags                  u32 le           7                     00 00 00 07
@@ -290,11 +290,11 @@ SectionHeader_10 .data
   [0005b0] RawSize                        u32 le           14980                 00 00 3a 84
   [0005b4] SectionNameAddress             u32 le           67866                 00 01 09 1a
   [00091a] SectionName                    asciiz           .data                 2e 64 61 74 61 00
-  [0005b8] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0005b8] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0005bc] Head Shared Page Reference Count Address u32 le           67778                 00 01 08 c2
   [0005c0] Tail Shared Page Reference Count Address u32 le           67780                 00 01 08 c4
-  [0005c4] Section Digest                 u8[20]                                 da 69 8c 51 29 90 4f db 0e 85 8b 38 e5 61 04 d6 2d d7 a6 e8
-  [0aa000] Section data                   u8[14980]                              00 00 00 00 b4 49 02 00 2c 2a 02 00 00 00 00 00 00 00 00 00 d6 42 0b 00 49 bb 08 00 54 bb 08 00 ...
+  [0005c4] SectionDigest                  u8[20]                                 da 69 8c 51 29 90 4f db 0e 85 8b 38 e5 61 04 d6 2d d7 a6 e8
+  [0aa000] SectionData                    u8[14980]                              00 00 00 00 b4 49 02 00 2c 2a 02 00 00 00 00 00 00 00 00 00 d6 42 0b 00 49 bb 08 00 54 bb 08 00 ...
 
 SectionHeader_11 XON_RD
   [0005d8] Section Flags                  u32 le           38                    00 00 00 26
@@ -310,11 +310,11 @@ SectionHeader_11 XON_RD
   [0005e8] RawSize                        u32 le           6856                  00 00 1a c8
   [0005ec] SectionNameAddress             u32 le           67872                 00 01 09 20
   [000920] SectionName                    asciiz           XON_RD                58 4f 4e 5f 52 44 00
-  [0005f0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0005f0] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0005f4] Head Shared Page Reference Count Address u32 le           67780                 00 01 08 c4
   [0005f8] Tail Shared Page Reference Count Address u32 le           67782                 00 01 08 c6
-  [0005fc] Section Digest                 u8[20]                                 08 7e 9d 1d 99 37 81 96 7c f5 6d ee a3 71 74 0d f4 b6 23 5a
-  [0ae000] Section data                   u8[6856]                               54 47 53 25 73 25 2e 34 73 2e 58 42 4f 58 4c 49 56 45 2e 43 4f 4d 00 00 41 53 25 73 25 2e 34 73 ...
+  [0005fc] SectionDigest                  u8[20]                                 08 7e 9d 1d 99 37 81 96 7c f5 6d ee a3 71 74 0d f4 b6 23 5a
+  [0ae000] SectionData                    u8[6856]                               54 47 53 25 73 25 2e 34 73 2e 58 42 4f 58 4c 49 56 45 2e 43 4f 4d 00 00 41 53 25 73 25 2e 34 73 ...
 
 SectionHeader_12 DOLBY
   [000610] Section Flags                  u32 le           54                    00 00 00 36
@@ -330,11 +330,11 @@ SectionHeader_12 DOLBY
   [000620] RawSize                        u32 le           29036                 00 00 71 6c
   [000624] SectionNameAddress             u32 le           67879                 00 01 09 27
   [000927] SectionName                    asciiz           DOLBY                 44 4f 4c 42 59 00
-  [000628] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000628] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [00062c] Head Shared Page Reference Count Address u32 le           67782                 00 01 08 c6
   [000630] Tail Shared Page Reference Count Address u32 le           67784                 00 01 08 c8
-  [000634] Section Digest                 u8[20]                                 c8 c9 14 2d cc bd 31 bd ca 9a 2d 94 e0 ac c4 7c 20 48 d6 15
-  [0b0000] Section data                   u8[29036]                              08 0c 05 00 00 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 cc cc cc 00 00 00 00 00 ...
+  [000634] SectionDigest                  u8[20]                                 c8 c9 14 2d cc bd 31 bd ca 9a 2d 94 e0 ac c4 7c 20 48 d6 15
+  [0b0000] SectionData                    u8[29036]                              08 0c 05 00 00 00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 cc cc cc 00 00 00 00 00 ...
 
 SectionHeader_13 resource
   [000648] Section Flags                  u32 le           56                    00 00 00 38
@@ -350,11 +350,11 @@ SectionHeader_13 resource
   [000658] RawSize                        u32 le           280576                00 04 48 00
   [00065c] SectionNameAddress             u32 le           67885                 00 01 09 2d
   [00092d] SectionName                    asciiz           resource              72 65 73 6f 75 72 63 65 00
-  [000660] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000660] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [000664] Head Shared Page Reference Count Address u32 le           67784                 00 01 08 c8
   [000668] Tail Shared Page Reference Count Address u32 le           67786                 00 01 08 ca
-  [00066c] Section Digest                 u8[20]                                 a0 59 de ff fc f6 7c 87 f9 c6 47 9b f6 6d 47 3c bd 59 82 e1
-  [0b8000] Section data                   u8[280576]                             58 50 52 30 00 48 04 00 00 08 00 00 01 00 04 00 00 00 00 00 00 00 00 00 29 0e 71 07 00 00 00 00 ...
+  [00066c] SectionDigest                  u8[20]                                 a0 59 de ff fc f6 7c 87 f9 c6 47 9b f6 6d 47 3c bd 59 82 e1
+  [0b8000] SectionData                    u8[280576]                             58 50 52 30 00 48 04 00 00 08 00 00 01 00 04 00 00 00 00 00 00 00 00 00 29 0e 71 07 00 00 00 00 ...
 
 SectionHeader_14 english
   [000680] Section Flags                  u32 le           56                    00 00 00 38
@@ -370,11 +370,11 @@ SectionHeader_14 english
   [000690] RawSize                        u32 le           8748                  00 00 22 2c
   [000694] SectionNameAddress             u32 le           67894                 00 01 09 36
   [000936] SectionName                    asciiz           english               65 6e 67 6c 69 73 68 00
-  [000698] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000698] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [00069c] Head Shared Page Reference Count Address u32 le           67786                 00 01 08 ca
   [0006a0] Tail Shared Page Reference Count Address u32 le           67788                 00 01 08 cc
-  [0006a4] Section Digest                 u8[20]                                 fd 0f a1 65 4c 56 0c a0 6e bc 57 42 79 3b 86 b6 80 09 f6 0a
-  [0fd000] Section data                   u8[8748]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [0006a4] SectionDigest                  u8[20]                                 fd 0f a1 65 4c 56 0c a0 6e bc 57 42 79 3b 86 b6 80 09 f6 0a
+  [0fd000] SectionData                    u8[8748]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_15 french
   [0006b8] Section Flags                  u32 le           56                    00 00 00 38
@@ -390,11 +390,11 @@ SectionHeader_15 french
   [0006c8] RawSize                        u32 le           9790                  00 00 26 3e
   [0006cc] SectionNameAddress             u32 le           67902                 00 01 09 3e
   [00093e] SectionName                    asciiz           french                66 72 65 6e 63 68 00
-  [0006d0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0006d0] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0006d4] Head Shared Page Reference Count Address u32 le           67788                 00 01 08 cc
   [0006d8] Tail Shared Page Reference Count Address u32 le           67790                 00 01 08 ce
-  [0006dc] Section Digest                 u8[20]                                 89 6e ee 30 80 79 d7 9c 7c 5b 4d 70 11 6a a5 36 09 6a 33 92
-  [100000] Section data                   u8[9790]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [0006dc] SectionDigest                  u8[20]                                 89 6e ee 30 80 79 d7 9c 7c 5b 4d 70 11 6a a5 36 09 6a 33 92
+  [100000] SectionData                    u8[9790]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_16 german
   [0006f0] Section Flags                  u32 le           56                    00 00 00 38
@@ -410,11 +410,11 @@ SectionHeader_16 german
   [000700] RawSize                        u32 le           9906                  00 00 26 b2
   [000704] SectionNameAddress             u32 le           67909                 00 01 09 45
   [000945] SectionName                    asciiz           german                67 65 72 6d 61 6e 00
-  [000708] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000708] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [00070c] Head Shared Page Reference Count Address u32 le           67790                 00 01 08 ce
   [000710] Tail Shared Page Reference Count Address u32 le           67792                 00 01 08 d0
-  [000714] Section Digest                 u8[20]                                 81 b3 24 aa 50 98 d1 5b 27 f1 47 aa c2 be 18 1c c7 50 9a e5
-  [103000] Section data                   u8[9906]                               ff fe 23 00 0d 00 0a 00 23 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [000714] SectionDigest                  u8[20]                                 81 b3 24 aa 50 98 d1 5b 27 f1 47 aa c2 be 18 1c c7 50 9a e5
+  [103000] SectionData                    u8[9906]                               ff fe 23 00 0d 00 0a 00 23 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_17 japanese
   [000728] Section Flags                  u32 le           56                    00 00 00 38
@@ -430,11 +430,11 @@ SectionHeader_17 japanese
   [000738] RawSize                        u32 le           6386                  00 00 18 f2
   [00073c] SectionNameAddress             u32 le           67916                 00 01 09 4c
   [00094c] SectionName                    asciiz           japanese              6a 61 70 61 6e 65 73 65 00
-  [000740] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000740] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [000744] Head Shared Page Reference Count Address u32 le           67792                 00 01 08 d0
   [000748] Tail Shared Page Reference Count Address u32 le           67794                 00 01 08 d2
-  [00074c] Section Digest                 u8[20]                                 23 21 17 15 d1 f4 10 27 97 99 0c b4 f5 76 fb 24 5b 14 de 2f
-  [106000] Section data                   u8[6386]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [00074c] SectionDigest                  u8[20]                                 23 21 17 15 d1 f4 10 27 97 99 0c b4 f5 76 fb 24 5b 14 de 2f
+  [106000] SectionData                    u8[6386]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_18 korean
   [000760] Section Flags                  u32 le           56                    00 00 00 38
@@ -450,11 +450,11 @@ SectionHeader_18 korean
   [000770] RawSize                        u32 le           6344                  00 00 18 c8
   [000774] SectionNameAddress             u32 le           67925                 00 01 09 55
   [000955] SectionName                    asciiz           korean                6b 6f 72 65 61 6e 00
-  [000778] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000778] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [00077c] Head Shared Page Reference Count Address u32 le           67794                 00 01 08 d2
   [000780] Tail Shared Page Reference Count Address u32 le           67796                 00 01 08 d4
-  [000784] Section Digest                 u8[20]                                 41 35 b4 3b d5 4e 7b 3a 94 3f 30 e5 4b 29 b5 8e 97 53 10 6d
-  [108000] Section data                   u8[6344]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [000784] SectionDigest                  u8[20]                                 41 35 b4 3b d5 4e 7b 3a 94 3f 30 e5 4b 29 b5 8e 97 53 10 6d
+  [108000] SectionData                    u8[6344]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_19 spanish
   [000798] Section Flags                  u32 le           56                    00 00 00 38
@@ -470,11 +470,11 @@ SectionHeader_19 spanish
   [0007a8] RawSize                        u32 le           9192                  00 00 23 e8
   [0007ac] SectionNameAddress             u32 le           67932                 00 01 09 5c
   [00095c] SectionName                    asciiz           spanish               73 70 61 6e 69 73 68 00
-  [0007b0] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0007b0] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0007b4] Head Shared Page Reference Count Address u32 le           67796                 00 01 08 d4
   [0007b8] Tail Shared Page Reference Count Address u32 le           67798                 00 01 08 d6
-  [0007bc] Section Digest                 u8[20]                                 99 bf e0 a6 7d 53 cc 57 ca f9 6d 0f d3 2e 0a 58 a4 4c 1a cb
-  [10a000] Section data                   u8[9192]                               ff fe 23 00 0d 00 0a 00 23 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [0007bc] SectionDigest                  u8[20]                                 99 bf e0 a6 7d 53 cc 57 ca f9 6d 0f d3 2e 0a 58 a4 4c 1a cb
+  [10a000] SectionData                    u8[9192]                               ff fe 23 00 0d 00 0a 00 23 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_20 tchinese
   [0007d0] Section Flags                  u32 le           56                    00 00 00 38
@@ -490,11 +490,11 @@ SectionHeader_20 tchinese
   [0007e0] RawSize                        u32 le           5284                  00 00 14 a4
   [0007e4] SectionNameAddress             u32 le           67940                 00 01 09 64
   [000964] SectionName                    asciiz           tchinese              74 63 68 69 6e 65 73 65 00
-  [0007e8] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [0007e8] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [0007ec] Head Shared Page Reference Count Address u32 le           67798                 00 01 08 d6
   [0007f0] Tail Shared Page Reference Count Address u32 le           67800                 00 01 08 d8
-  [0007f4] Section Digest                 u8[20]                                 eb dd b8 ba 83 0b a5 27 98 c2 db 9e b3 6b 42 33 09 fd 87 4d
-  [10d000] Section data                   u8[5284]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [0007f4] SectionDigest                  u8[20]                                 eb dd b8 ba 83 0b a5 27 98 c2 db 9e b3 6b 42 33 09 fd 87 4d
+  [10d000] SectionData                    u8[5284]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_21 italian
   [000808] Section Flags                  u32 le           56                    00 00 00 38
@@ -510,11 +510,11 @@ SectionHeader_21 italian
   [000818] RawSize                        u32 le           9102                  00 00 23 8e
   [00081c] SectionNameAddress             u32 le           67949                 00 01 09 6d
   [00096d] SectionName                    asciiz           italian               69 74 61 6c 69 61 6e 00
-  [000820] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000820] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [000824] Head Shared Page Reference Count Address u32 le           67800                 00 01 08 d8
   [000828] Tail Shared Page Reference Count Address u32 le           67802                 00 01 08 da
-  [00082c] Section Digest                 u8[20]                                 27 12 0d 85 84 e0 c7 c9 5a fe 94 7c 17 b6 d5 c2 e9 f7 46 b1
-  [10f000] Section data                   u8[9102]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [00082c] SectionDigest                  u8[20]                                 27 12 0d 85 84 e0 c7 c9 5a fe 94 7c 17 b6 d5 c2 e9 f7 46 b1
+  [10f000] SectionData                    u8[9102]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_22 portuguese
   [000840] Section Flags                  u32 le           56                    00 00 00 38
@@ -530,11 +530,11 @@ SectionHeader_22 portuguese
   [000850] RawSize                        u32 le           8974                  00 00 23 0e
   [000854] SectionNameAddress             u32 le           67957                 00 01 09 75
   [000975] SectionName                    asciiz           portuguese            70 6f 72 74 75 67 75 65 73 65 00
-  [000858] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000858] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [00085c] Head Shared Page Reference Count Address u32 le           67802                 00 01 08 da
   [000860] Tail Shared Page Reference Count Address u32 le           67804                 00 01 08 dc
-  [000864] Section Digest                 u8[20]                                 58 43 83 b7 8d 3a 14 03 b7 90 ce 3f 6b 1a ae 46 d4 21 ea 3c
-  [112000] Section data                   u8[8974]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
+  [000864] SectionDigest                  u8[20]                                 58 43 83 b7 8d 3a 14 03 b7 90 ce 3f 6b 1a ae 46 d4 21 ea 3c
+  [112000] SectionData                    u8[8974]                               ff fe 3b 00 0d 00 0a 00 3b 00 20 00 46 00 69 00 6c 00 65 00 20 00 66 00 6f 00 72 00 6d 00 61 00 ...
 
 SectionHeader_23 .XTLID
   [000878] Section Flags                  u32 le           56                    00 00 00 38
@@ -550,11 +550,11 @@ SectionHeader_23 .XTLID
   [000888] RawSize                        u32 le           1936                  00 00 07 90
   [00088c] SectionNameAddress             u32 le           67968                 00 01 09 80
   [000980] SectionName                    asciiz           .XTLID                2e 58 54 4c 49 44 00
-  [000890] Section Name Reference Count   u32 le           0                     00 00 00 00
+  [000890] SectionNameReferenceCount      u32 le           0                     00 00 00 00
   [000894] Head Shared Page Reference Count Address u32 le           67804                 00 01 08 dc
   [000898] Tail Shared Page Reference Count Address u32 le           67804                 00 01 08 dc
-  [00089c] Section Digest                 u8[20]                                 f3 a9 1a 36 0a 92 f8 a6 94 d2 2f ef b7 c8 19 8c 1a 71 20 3c
-  [115000] Section data                   u8[1936]                               00 00 00 00 8c 15 00 00 60 00 01 00 56 9e 01 00 21 00 01 00 c0 9e 01 00 13 00 01 00 36 a2 01 00 ...
+  [00089c] SectionDigest                  u8[20]                                 f3 a9 1a 36 0a 92 f8 a6 94 d2 2f ef b7 c8 19 8c 1a 71 20 3c
+  [115000] SectionData                    u8[1936]                               00 00 00 00 8c 15 00 00 60 00 01 00 56 9e 01 00 21 00 01 00 c0 9e 01 00 13 00 01 00 36 a2 01 00 ...
 
 LibraryVersion_0 XAPILIB
   [000988] LibraryName                    ascii[8]         XAPILIB               58 41 50 49 4c 49 42 00

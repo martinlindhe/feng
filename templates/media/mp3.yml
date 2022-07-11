@@ -1,6 +1,6 @@
 # STATUS: 1%
 
-# TODO mp3 file struct might be encapsulated iwthin an id3 tag
+# TODO mp3 file struct might be encapsulated in a id3 tag
 
 references:
   - https://en.wikipedia.org/wiki/MP3

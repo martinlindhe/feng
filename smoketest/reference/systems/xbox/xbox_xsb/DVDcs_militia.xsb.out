@@ -1,9 +1,9 @@
 # templates/systems/xbox/xsb.yml
 Header
   [000000] Signature                      ascii[4]         SDBK                  53 44 42 4b
-  [000004] Tool version                   u16 le           11                    00 0b
-  [000006] File format version            u16 le           28727                 70 37
-  [000008] Checksum                       u16 le           336                   01 50
+  [000004] ToolVersion                    u16 le           11                    00 0b
+  [000006] FileFormatVersion              u16 le           28727                 70 37
+  [000008] CRC                            u16 le           336                   01 50
   [00000a] Last modification date (lo)    u32 le           48758784              02 e8 00 00
   [00000e] Last modification date (hi)    u32 le           30408704              01 d0 00 00
   [000012] Platform                       u8               0                     00
@@ -12,29 +12,122 @@ Header
   [000015] Number of complex cues         u16 le           4                     00 04
   [000017] Unknown                        u16 le           0                     00 00
   [000019] Total number of cues           u16 le           4096                  10 00
-  [00001b] Number of wavebanks            u8               0                     00
-  [00001c] Number of sounds               u16 le           7                     00 07
-  [00001e] CueNameTableSize               u32 le           7                     00 00 00 07
+  [00001b] WavebankCount                  u8               0                     00
+  [00001c] SoundCount                     u16 le           7                     00 07
+  [00001e] CueNameTableLength             u32 le           7                     00 00 00 07
+  [000022] Unknown                        u32 le           2                     00 00 00 02
+  [000026] Unknown                        u16 le           0                     00 00
+  [000028] Name                           ascii[20]        DVDcs_militia         44 56 44 63 73 5f 6d 69 6c 69 74 69 61 00 00 00 00 00 00 00
 
-NameTable_0
-  [0001ec] Name                           asciiz                                 00
+Sound_0
+  [00003c] Flags                          u8               112                   70
+           - Complex                      bit 0:1          0
+           - RPC1                         bit 1:1          0
+           - RPC2                         bit 2:1          0
+           - RPC3                         bit 3:1          0
+           - DSPPreset                    bit 4:1          1
+  [00003d] Category                       u16 le           1                     00 01
+  [00003f] Unknown                        u8               0                     00
+  [000040] Volume                         u16 le           65535                 ff ff
+  [000042] Unknown                        u8               255                   ff
+  [000043] Length                         u16 le           255                   00 ff
+  [000045] trackIndex                     u16 le           2560                  0a 00
+  [000047] waveBankIndex                  u8               0                     00
+  [000048] DSPNum                         u8               255                   ff
+  [000049] Unkn                           u32[255] le                            00 07 ff ff 7d 00 01 00 ff 00 00 01 00 ff ff ff ff 00 0b 00 00 07 ff ff 8a 00 02 00 ff 00 00 01 ...
 
-NameTable_1
-  [0001ed] Name                           asciiz                                 00
+Sound_1
+  [000445] Flags                          u8               32                    20
+           - Complex                      bit 0:1          0
+           - RPC1                         bit 1:1          0
+           - RPC2                         bit 2:1          0
+           - RPC3                         bit 3:1          0
+           - DSPPreset                    bit 4:1          0
+  [000446] Category                       u16 le           10000                 27 10
+  [000448] Unknown                        u8               10                    0a
+  [000449] Volume                         u16 le           5120                  14 00
+  [00044b] Unknown                        u8               0                     00
+  [00044c] Length                         u16 le           479                   01 df
+  [00044e] trackIndex                     u16 le           0                     00 00
+  [000450] waveBankIndex                  u8               0                     00
 
-NameTable_2
-  [0001ee] Name                           asciiz                                 00
+Sound_2
+  [000451] Flags                          u8               0                     00
+           - Complex                      bit 0:1          0
+           - RPC1                         bit 1:1          0
+           - RPC2                         bit 2:1          0
+           - RPC3                         bit 3:1          0
+           - DSPPreset                    bit 4:1          0
+  [000452] Category                       u16 le           999                   03 e7
+  [000454] Unknown                        u8               224                   e0
+  [000455] Volume                         u16 le           1                     00 01
+  [000457] Unknown                        u8               0                     00
+  [000458] Length                         u16 le           1000                  03 e8
+  [00045a] trackIndex                     u16 le           1999                  07 cf
+  [00045c] waveBankIndex                  u8               225                   e1
 
-NameTable_3
-  [0001ef] Name                           asciiz                                 00
+Sound_3
+  [00045d] Flags                          u8               1                     01
+           - Complex                      bit 0:1          1
+           - RPC1                         bit 1:1          0
+           - RPC2                         bit 2:1          0
+           - RPC3                         bit 3:1          0
+           - DSPPreset                    bit 4:1          0
+  [00045e] Category                       u16 le           0                     00 00
+  [000460] Unknown                        u8               208                   d0
+  [000461] Volume                         u16 le           46855                 b7 07
+  [000463] Unknown                        u8               11                    0b
+  [000464] Length                         u16 le           482                   01 e2
+  [000466] numClips                       u8               0                     00
+  [000467] Unkn                           u8               0                     00
+  [000468] clipOffset                     u32 le           262081464             0f 9f 0b b8
+  [00046c] Unkn                           u32 le           483                   00 00 01 e3
 
-NameTable_4
-  [0001f0] Name                           asciiz                                 00
+Sound_4
+  [000470] Flags                          u8               160                   a0
+           - Complex                      bit 0:1          0
+           - RPC1                         bit 1:1          0
+           - RPC2                         bit 2:1          0
+           - RPC3                         bit 3:1          0
+           - DSPPreset                    bit 4:1          0
+  [000471] Category                       u16 le           34575                 87 0f
+  [000473] Unknown                        u8               19                    13
+  [000474] Volume                         u16 le           484                   01 e4
+  [000476] Unknown                        u8               0                     00
+  [000477] Length                         u16 le           34816                 88 00
+  [000479] trackIndex                     u16 le           28435                 6f 13
+  [00047b] waveBankIndex                  u8               23                    17
 
-NameTable_5
-  [0001f1] Name                           asciiz                                 00
+Sound_5
+  [00047c] Flags                          u8               229                   e5
+           - Complex                      bit 0:1          1
+           - RPC1                         bit 1:1          0
+           - RPC2                         bit 2:1          1
+           - RPC3                         bit 3:1          0
+           - DSPPreset                    bit 4:1          0
+  [00047d] Category                       u16 le           1                     00 01
+  [00047f] Unknown                        u8               0                     00
+  [000480] Volume                         u16 le           6000                  17 70
+  [000482] Unknown                        u8               87                    57
+  [000483] Length                         u16 le           58907                 e6 1b
+  [000485] numClips                       u8               1                     01
+  [000486] RPC extraLen                   u16 le           0                     00 00
+  [000488] Unkn                           u8               88                    58
+  [000489] clipOffset                     u32 le           3877584667            e7 1f 3f 1b
+  [00048d] Unkn                           u32 le           1073741825            40 00 00 01
 
-NameTable_6
-  [0001f2] Name                           asciiz                                 00
+Sound_6
+  [000491] Flags                          u8               31                    1f
+           - Complex                      bit 0:1          1
+           - RPC1                         bit 1:1          1
+           - RPC2                         bit 2:1          1
+           - RPC3                         bit 3:1          1
+           - DSPPreset                    bit 4:1          1
+  [000492] Category                       u16 le           8999                  23 27
+  [000494] Unknown                        u8               232                   e8
+  [000495] Volume                         u16 le           1                     00 01
+  [000497] Unknown                        u8               0                     00
+  [000498] Length                         u16 le           9000                  23 28
+  [00049a] numClips                       u8               16                    10
 
-0x0473 (1139) unmapped bytes (96.5%)
+0x0001 (1) unmapped bytes (0.1%)

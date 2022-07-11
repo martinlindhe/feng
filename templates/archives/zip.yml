@@ -26,9 +26,9 @@ structs:
     u16 Type:
       eq 0201: ZIPDIRENTRY
       eq 0403: ZIPFILERECORD
+      #eq 0505: ZIPDIGITALSIG
       eq 0605: ZIPENDLOCATOR
       eq 0807: ZIPDATADESCR
-      #eq 0505: ZIPDIGITALSIG
 
     if self.Type == ZIPFILERECORD:
       label: ZIPFILERECORD

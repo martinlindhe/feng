@@ -26,7 +26,7 @@ structs:
     u64 Compressed TOC length: ??
     u64 Uncompressed TOC length: ??
     u32 Checksum algorithm:
-      eq 0000_0000: none
+      eq 0000_0000: None
       eq 0000_0001: SHA1
       eq 0000_0002: MD5
       eq 0000_0003: SHA-256

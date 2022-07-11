@@ -7,9 +7,9 @@ software:
   - ffmpeg
 
 kind: media
-name: Windows Media Audio
+name: Windows Media Audio/Video # XXX
 extensions: [.asf, .wma, .wmv]
-mime: xxx     # video/x-ms-wmv, audio/x-ms-wma
+mime: video/x-ms-wmv  # XXX or audio/x-ms-wma
 endian: big   # XXX
 
 magic:

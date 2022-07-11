@@ -1,8 +1,21 @@
 # templates/systems/xbox/xpr0.yml
 Header
-  [000000] Signature                      ascii[4]         XPR0                  58 50 52 30
+  [000000] Signature                      ascii[3]         XPR                   58 50 52
+  [000003] Version                        ascii            0                     30
+           - v0 (XBox OG)                 eq
   [000004] ArchiveSize                    u32 le           4096                  00 00 10 00
   [000008] FirstFileOffset                u32 le           2048                  00 00 08 00
-  [00000c] Unknown3                       u32 le           262145                00 04 00 01
 
-0x0ff0 (4080) unmapped bytes (99.6%)
+FileEntry_0
+  [00000c] Type                           u32 le           262145                00 04 00 01
+           - D3DCOMMON_TYPE_TEXTURE       eq
+  [000010] DataEntryOffset                u32 le           0                     00 00 00 00
+  [000014] Reserved                       u32 le           0                     00 00 00 00
+  [000018] TxType                         u32 le           107023401             06 61 0c 29
+  [00001c] Reserved                       u32 le           0                     00 00 00 00
+
+FileEntry_1
+  [000020] Type                           u32 le           4294967295            ff ff ff ff
+           - EndOfList                    eq
+
+0x0fdc (4060) unmapped bytes (99.1%)

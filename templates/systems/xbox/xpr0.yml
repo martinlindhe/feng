@@ -1,14 +1,25 @@
 # STATUS: 5%
 # archive format used on XBox (MX Unleashed)
 #
-# HI allow extraction of content 
+# MAX calc size of file entry. needs a 2nd loop over parsed file_Entries.
+#  can we script this separate???
+# --- another option is to have a separate extract files function,
+#     that is run accessing the fully parsed data tree.
+
+# HI allow extraction of content
 # HI look into XPR1 format http://wiki.xentax.com/index.php/Counterstrike_XBox_XPR
 
 references:
-  - xxx
+  # XPR0 / XPR1
+  - http://wiki.xentax.com/index.php/Counterstrike_XBox_XPR
+  - https://forum.xentax.com/viewtopic.php?f=16&t=25296&p=184191&hilit=XPR0#p184191
+  - https://github.com/Cxbx-Reloaded/Cxbx-Reloaded/blob/master/src/common/xbe/Xbe.h
+
+  # XPR2 (Xbox 360)
+  - https://aluigi.org/papers/bms/xpr.bms
 
 software:
-  - xxx
+  - XXX maybe we can build a stand-alone xpr2dds converter
 
 kind: system
 name: XBox XPR0 archive
@@ -21,12 +32,40 @@ magic:
 
 structs:
   header:
-    ascii[4] Signature: c'XPR0'
+    ascii[3] Signature: c'XPR'
+    ascii Version:
+      eq c'0': v0 (XBox OG)
+      eq c'1': v1 (XBox OG??)
+      eq c'2': v2 (XBox 360)
     u32 ArchiveSize: ??           # same as file size
     u32 FirstFileOffset: ??
 
-    #   [00000c] Unknown3                       u32 le           262145                00 04 00 01        ????
-    u32 Unknown3: ??              # XXX in XPR1 this is "Number Of Files".
+  file_entry:
+    # XXX Standard D3D texture struct ?
+
+    u32 Type:
+      eq 00040001: D3DCOMMON_TYPE_TEXTURE
+      eq 00800001: D3DCOMMON_TYPE_INDEXBUFFER
+      eq 80000000: D3DCOMMON_TYPE_VERTEXBUFFER
+      eq ffffffff: EndOfList
+
+    if self.Type == EndOfList:
+      parse: stop
+
+    u32 DataEntryOffset: ??
+    u32 Reserved: ?? # 0
+    u32 TxType: ??  # XXX map bits: texture format (dimensions etc)
+    u32 Reserved: ??  # 0
+
+    #if LAST_OFFSET != 0:
+    #  # XXX this will tag data areas to the wrong file entry + miss the last data area
+    #  offset: Header.FirstFileOffset + self.DataEntryOffset
+    #  u8[Header.FirstFileOffset + self.DataEntryOffset - LAST_OFFSET] Data: ??
+    #  offset: restore
+
+    # XXX creates variable LAST_OFFSET with this value.
+    #math: LAST_OFFSET = Header.FirstFileOffset + self.DataEntryOffset
 
 layout:
   - header Header
+  - file_entry[] FileEntry

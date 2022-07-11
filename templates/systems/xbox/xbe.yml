@@ -1,5 +1,7 @@
 # STATUS: 25%
 # format used on original XBox
+
+# - MAX: to progress, need support for embedding struct in struct
 #
 # - HI: figure out the offset for the tls block.
 # - MID: calculate entry point offset (some XOR), and mark entry point
@@ -132,13 +134,13 @@ structs:
     label: self.SectionName
     offset: restore
 
-    u32 Section Name Reference Count: ??
+    u32 SectionNameReferenceCount: ??
     u32 Head Shared Page Reference Count Address: ??
     u32 Tail Shared Page Reference Count Address: ??
-    u8[20] Section Digest: ??
+    u8[20] SectionDigest: ??
 
     offset: self.RawAddress
-    u8[self.RawSize] Section data: ??
+    u8[self.RawSize] SectionData: ??
     offset: restore
 
   lib_version:
@@ -177,6 +179,7 @@ layout:
 
   - logo_bitmap LogoBitmap
 
+  # XXX need support for embedding struct in struct:
   # this should already been included in LibraryVersions
   #- offset Header.KernelLibraryVersionAddress - 0x10000
   #- lib_version Kernel Library Version

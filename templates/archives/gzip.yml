@@ -82,7 +82,6 @@ structs:
       compressed:deflate[FILE_SIZE - OFFSET - 8] Data: ??
     else:
       u8[FILE_SIZE - OFFSET - 8] Data: ??
-    #crc32[Data.offset:self.offset] Data checksum: ??         # XXX of compressed or uncompressed data?
     u32 Data checksum: ?? # XXX crc32 type!
 
     u32 Uncompressed size modulo 2^32: ??

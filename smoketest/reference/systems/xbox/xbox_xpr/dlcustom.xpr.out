@@ -1,0 +1,37 @@
+# templates/systems/xbox/xpr0.yml
+Header
+  [000000] Signature                      ascii[3]         XPR                   58 50 52
+  [000003] Version                        ascii            0                     30
+           - v0 (XBox OG)                 eq
+  [000004] ArchiveSize                    u32 le           1574912               00 18 08 00
+  [000008] FirstFileOffset                u32 le           2048                  00 00 08 00
+
+FileEntry_0
+  [00000c] Type                           u32 le           262145                00 04 00 01
+           - D3DCOMMON_TYPE_TEXTURE       eq
+  [000010] DataEntryOffset                u32 le           0                     00 00 00 00
+  [000014] Reserved                       u32 le           0                     00 00 00 00
+  [000018] TxType                         u32 le           161549865             09 a1 0e 29
+  [00001c] Reserved                       u32 le           0                     00 00 00 00
+
+FileEntry_1
+  [000020] Type                           u32 le           262145                00 04 00 01
+           - D3DCOMMON_TYPE_TEXTURE       eq
+  [000024] DataEntryOffset                u32 le           524288                00 08 00 00
+  [000028] Reserved                       u32 le           0                     00 00 00 00
+  [00002c] TxType                         u32 le           161549865             09 a1 0e 29
+  [000030] Reserved                       u32 le           0                     00 00 00 00
+
+FileEntry_2
+  [000034] Type                           u32 le           262145                00 04 00 01
+           - D3DCOMMON_TYPE_TEXTURE       eq
+  [000038] DataEntryOffset                u32 le           1048576               00 10 00 00
+  [00003c] Reserved                       u32 le           0                     00 00 00 00
+  [000040] TxType                         u32 le           161549865             09 a1 0e 29
+  [000044] Reserved                       u32 le           0                     00 00 00 00
+
+FileEntry_3
+  [000048] Type                           u32 le           4294967295            ff ff ff ff
+           - EndOfList                    eq
+
+0x1807b4 (1574836) unmapped bytes (100.0%)

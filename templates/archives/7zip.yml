@@ -21,7 +21,7 @@ magic:
 
 types:
   # XXX impl!!!
-  ArchiveVersion:       
+  ArchiveVersion:
     u8 Major: ??        # 0.3 and 0.4 is seen in 2021
     u8 Minor: ??
     format: "{0}.{1}"    # XXX impl presentation formatting string
