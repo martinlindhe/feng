@@ -5,12 +5,135 @@ Header
   [000008] Content type                   u8               1                     01
   [000009] Program type                   u8               5                     05
   [00000a] Padding                        u16 le           0                     00 00
-  [00000c] Header size                    u16 le           864                   03 60
-  [00000e] Signature size                 u16 le           944                   03 b0
-  [000010] Size of SELF                   u32 le           16025                 00 00 3e 99
+  [00000c] HeaderSize                     u16 le           864                   03 60
+  [00000e] SignatureSize                  u16 le           944                   03 b0
+  [000010] FileSize                       u32 le           16025                 00 00 3e 99
   [000014] Padding                        u32 le           0                     00 00 00 00
-  [000018] Number of segments             u16 le           8                     00 08
+  [000018] SegmentCount                   u16 le           8                     00 08
   [00001a] Unknown                        u16 le           34                    00 22
   [00001c] Padding                        u32 le           0                     00 00 00 00
 
-0x3e79 (15993) unmapped bytes
+Segment_0
+  [000020] Flags                          u64 le           1114118               00 00 00 00 00 11 00 06
+           - Ordered                      bit 0:1          0
+           - Encrypted                    bit 1:1          1
+           - Signed                       bit 2:1          1
+           - Deflated                     bit 3:1          0
+           - Reserved                     bit 4:7          0                     00
+           - Block segment                bit 11:1         0
+           - Unknown                      bit 12:40        272                   00 00 00 01 10
+           - ID ???                       bit 52:12        0                     00 00
+  [000028] Offset                         u64 le           1808                  00 00 00 00 00 00 07 10
+  [000030] EncryptedCompressedSize        u64 le           32                    00 00 00 00 00 00 00 20
+  [000038] DecryptedDecompressedSize      u64 le           32                    00 00 00 00 00 00 00 20
+  [000710] SegmentData                    raw:u8[32]                             bc e4 b0 7f 5d 36 2b 76 54 10 b7 3c 43 da d8 88 29 c1 fb bb 39 dd 65 34 f5 9e 82 cf 99 0d 74 86
+
+Segment_1
+  [000040] Flags                          u64 le           10246                 00 00 00 00 00 00 28 06
+           - Ordered                      bit 0:1          0
+           - Encrypted                    bit 1:1          1
+           - Signed                       bit 2:1          1
+           - Deflated                     bit 3:1          0
+           - Reserved                     bit 4:7          0                     00
+           - Block segment                bit 11:1         1
+           - Unknown                      bit 12:40        2                     00 00 00 00 02
+           - ID ???                       bit 52:12        0                     00 00
+  [000048] Offset                         u64 le           1840                  00 00 00 00 00 00 07 30
+  [000050] EncryptedCompressedSize        u64 le           12496                 00 00 00 00 00 00 30 d0
+  [000058] DecryptedDecompressedSize      u64 le           12496                 00 00 00 00 00 00 30 d0
+  [000730] SegmentData                    raw:u8[12496]                          d3 ee 78 c2 d1 5a 47 f4 ea d7 20 c3 7e 18 4f 8c 26 e8 6b a6 9a d6 de 1e eb 9c b4 fe 07 ec 08 cc ...
+
+Segment_2
+  [000060] Flags                          u64 le           3211270               00 00 00 00 00 31 00 06
+           - Ordered                      bit 0:1          0
+           - Encrypted                    bit 1:1          1
+           - Signed                       bit 2:1          1
+           - Deflated                     bit 3:1          0
+           - Reserved                     bit 4:7          0                     00
+           - Block segment                bit 11:1         0
+           - Unknown                      bit 12:40        784                   00 00 00 03 10
+           - ID ???                       bit 52:12        0                     00 00
+  [000068] Offset                         u64 le           14336                 00 00 00 00 00 00 38 00
+  [000070] EncryptedCompressedSize        u64 le           32                    00 00 00 00 00 00 00 20
+  [000078] DecryptedDecompressedSize      u64 le           32                    00 00 00 00 00 00 00 20
+  [003800] SegmentData                    raw:u8[32]                             49 ec ee b9 12 5e 7e 74 8a 88 c2 db 23 67 36 8a 92 43 e1 22 48 d3 6e 06 17 68 33 76 b1 e8 67 fd
+
+Segment_3
+  [000080] Flags                          u64 le           1058822               00 00 00 00 00 10 28 06
+           - Ordered                      bit 0:1          0
+           - Encrypted                    bit 1:1          1
+           - Signed                       bit 2:1          1
+           - Deflated                     bit 3:1          0
+           - Reserved                     bit 4:7          0                     00
+           - Block segment                bit 11:1         1
+           - Unknown                      bit 12:40        258                   00 00 00 01 02
+           - ID ???                       bit 52:12        0                     00 00
+  [000088] Offset                         u64 le           14368                 00 00 00 00 00 00 38 20
+  [000090] EncryptedCompressedSize        u64 le           64                    00 00 00 00 00 00 00 40
+  [000098] DecryptedDecompressedSize      u64 le           64                    00 00 00 00 00 00 00 40
+  [003820] SegmentData                    raw:u8[64]                             09 ef 59 ce 7f 1d 1d e4 4f d6 1a 14 78 f6 d5 c7 77 ad c1 c5 39 46 c3 a3 b2 c1 fe 7e 4d 84 89 5c ...
+
+Segment_4
+  [0000a0] Flags                          u64 le           5308422               00 00 00 00 00 51 00 06
+           - Ordered                      bit 0:1          0
+           - Encrypted                    bit 1:1          1
+           - Signed                       bit 2:1          1
+           - Deflated                     bit 3:1          0
+           - Reserved                     bit 4:7          0                     00
+           - Block segment                bit 11:1         0
+           - Unknown                      bit 12:40        1296                  00 00 00 05 10
+           - ID ???                       bit 52:12        0                     00 00
+  [0000a8] Offset                         u64 le           14432                 00 00 00 00 00 00 38 60
+  [0000b0] EncryptedCompressedSize        u64 le           32                    00 00 00 00 00 00 00 20
+  [0000b8] DecryptedDecompressedSize      u64 le           32                    00 00 00 00 00 00 00 20
+  [003860] SegmentData                    raw:u8[32]                             8c 86 44 3f 2b 08 89 ec 08 ee 5f 9e af ec 11 fb ec 40 69 63 d9 56 78 6c 79 f9 6b 74 bc d7 47 fa
+
+Segment_5
+  [0000c0] Flags                          u64 le           5253126               00 00 00 00 00 50 28 06
+           - Ordered                      bit 0:1          0
+           - Encrypted                    bit 1:1          1
+           - Signed                       bit 2:1          1
+           - Deflated                     bit 3:1          0
+           - Reserved                     bit 4:7          0                     00
+           - Block segment                bit 11:1         1
+           - Unknown                      bit 12:40        1282                  00 00 00 05 02
+           - ID ???                       bit 52:12        0                     00 00
+  [0000c8] Offset                         u64 le           14464                 00 00 00 00 00 00 38 80
+  [0000d0] EncryptedCompressedSize        u64 le           1256                  00 00 00 00 00 00 04 e8
+  [0000d8] DecryptedDecompressedSize      u64 le           1256                  00 00 00 00 00 00 04 e8
+  [003880] SegmentData                    raw:u8[1256]                           d6 ca cd e6 e6 88 06 2a 3d 2c 54 2e c6 90 6f c4 ea 09 cd 05 83 13 ec 4c f8 35 36 82 96 6b 23 22 ...
+
+Segment_6
+  [0000e0] Flags                          u64 le           7405574               00 00 00 00 00 71 00 06
+           - Ordered                      bit 0:1          0
+           - Encrypted                    bit 1:1          1
+           - Signed                       bit 2:1          1
+           - Deflated                     bit 3:1          0
+           - Reserved                     bit 4:7          0                     00
+           - Block segment                bit 11:1         0
+           - Unknown                      bit 12:40        1808                  00 00 00 07 10
+           - ID ???                       bit 52:12        0                     00 00
+  [0000e8] Offset                         u64 le           15728                 00 00 00 00 00 00 3d 70
+  [0000f0] EncryptedCompressedSize        u64 le           32                    00 00 00 00 00 00 00 20
+  [0000f8] DecryptedDecompressedSize      u64 le           32                    00 00 00 00 00 00 00 20
+  [003d70] SegmentData                    raw:u8[32]                             4c cd 9f 05 73 b1 18 53 a2 52 89 3f 0c a8 f4 56 3b 68 42 83 37 1c fe d9 96 4b 36 6a b1 83 35 da
+
+Segment_7
+  [000100] Flags                          u64 le           6301702               00 00 00 00 00 60 28 06
+           - Ordered                      bit 0:1          0
+           - Encrypted                    bit 1:1          1
+           - Signed                       bit 2:1          1
+           - Deflated                     bit 3:1          0
+           - Reserved                     bit 4:7          0                     00
+           - Block segment                bit 11:1         1
+           - Unknown                      bit 12:40        1538                  00 00 00 06 02
+           - ID ???                       bit 52:12        0                     00 00
+  [000108] Offset                         u64 le           15760                 00 00 00 00 00 00 3d 90
+  [000110] EncryptedCompressedSize        u64 le           68                    00 00 00 00 00 00 00 44
+  [000118] DecryptedDecompressedSize      u64 le           68                    00 00 00 00 00 00 00 44
+  [003d90] SegmentData                    raw:u8[68]                             5b d3 71 23 1f fc e0 62 71 a7 c6 b8 61 92 9f 68 12 d6 66 d9 e0 83 28 ed b1 a2 60 63 44 d7 d3 b5 ...
+
+ELFHeader
+  [000120] ElfMagic                       ascii[4]         .ELF                  7f 45 4c 46
+
+0x06b9 (1721) unmapped bytes

@@ -35,16 +35,19 @@ structs:
       eq 01: HP-UX
       eq 02: NetBSD
       eq 03: Linux
+      eq 04: GNU Hurd
       eq 06: Solaris
-      eq 07: Aix
-      eq 08: Irix
+      eq 07: AIX
+      eq 08: IRIX
       eq 09: FreeBSD
+      eq 0a: Tru64
+      eq 0b: Novell Modesto
       eq 0c: OpenBSD
       eq 0d: OpenVMS
-      eq 0e: NSK OS
-      eq 0f: Aros
+      eq 0e: NonStop Kernel OS
+      eq 0f: AROS
       eq 10: Fenix OS
-      eq 11: Cloud ABI
+      eq 11: CloudABI
 
     u8 ABI Version: ??
     u8[7] Reserved: ??
@@ -54,6 +57,8 @@ structs:
       eq 0002: Executable file
       eq 0003: Shared object file
       eq 0004: Core file
+      eq fe00: ET_LOOS
+      eq feff: ET_HIOS
       eq ff00: ET_LOPROC
       eq ffff: ET_HIPROC
 
@@ -72,6 +77,7 @@ structs:
       eq 0032: IA-64
       eq 003e: x86-64
       eq 00b7: AArch64
+      eq 00f3: RISC-V
 
     u32 Version: ??
     u32 Entry: ??
@@ -79,7 +85,7 @@ structs:
     u32 SectionHeaderOffset: ??
     u32 Flags: ?? # XXX map
     u16 ELF header size: ??
-    u16 ProgramHeaderEntrySize: ??
+    u16 ProgramHeaderSize: ??
     u16 ProgramHeaderCount: ??
 
     u16 SectionHeaderEntrySize: ??
@@ -89,7 +95,28 @@ structs:
   program_header:
     if Header.ProgramHeaderOffset > 0:
       offset: Header.ProgramHeaderOffset
-      u8[Header.ProgramHeaderEntrySize] ProgramHeaderEntry Data: ?? # XXX decode
+      #u8[Header.ProgramHeaderEntrySize] ProgramHeaderEntry Data: ?? # XXX decode
+      # XXX this is 32-bit format of program header. there exist a 64-bit version! NEED SAMPLES
+      u32 ProgramType:
+        eq 00000000: Unused
+        eq 00000001: Loadable segment
+        eq 00000002: Dynamic linking information
+        eq 00000003: Interpreter information
+        eq 00000004: Auxiliary information
+        eq 00000005: Reserved
+        eq 00000006: Segment containing program header table itself
+        eq 60000000: PT_LOOS
+        eq 6FFFFFFF: PT_HIOS
+        eq 7FFFFFFF: PT_HIPROC
+      #u32 Flags: ?? # XXX map
+      u32 Offset: ??
+      u32 Virtual address: ??
+      u32 Physical address: ??
+      u32 SegmentFileSize: ??
+      u32 SegmentMemorySize: ??
+      u32 Flags: ?? # XXX
+      u32 Align: ??
+      #u8[Header.ProgramHeaderSize - (offset("self.Align") - offset("self.ProgramType"))] Padding: ??   # XXX fix/verify size calc
 
   section_header:
     if Header.SectionHeaderOffset > 0:

@@ -6,7 +6,7 @@ references:
   - https://www.psdevwiki.com/ps4/SELF_File_Format
 
 kind: system
-name:  Sony PS4 Signed ELF file (?)
+name:  Sony PS4 Signed ELF program
 extensions: [.prx, .sprx]
 endian: little
 
@@ -19,15 +19,44 @@ structs:
     u8[4] Signature: 4F 15 3D 1D
     u32 Unknown: ??     # Always 00 01 01 12 
     u8 Content type: ?? # XXX  	1 on Self, 4 on PUP Entry 
-    u8 Program type: ?? # XXX
+    u8 Program type:
+      eq 00: PUP
+      eq 08: NPDRM Application
+      eq 09: PLUGIN
+      eq 0C: Kernel
+      eq 0E: Security Module
+      eq 0F: Secure Kernel
     u16 Padding: ??
-    u16 Header size: ??
-    u16 Signature size: ??
-    u32 Size of SELF: ??
+    u16 HeaderSize: ??
+    u16 SignatureSize: ??
+    u32 FileSize: ??
     u32 Padding: ??
-    u16 Number of segments: ??   # 	1 Kernel, 2 SL and Modules, 4 Kernel ELFs, 6 .selfs, 2 .sdll, 6 .sprx, 6 ShellCore, 6 eboot.bin, 2 sexe
+    u16 SegmentCount: ??   # 	1 Kernel, 2 SL and Modules, 4 Kernel ELFs, 6 .selfs, 2 .sdll, 6 .sprx, 6 ShellCore, 6 eboot.bin, 2 sexe
     u16 Unknown: ?? # XXX always 0x0022
     u32 Padding: ??
 
+  segment:
+    u64 Flags:
+      bit b00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000001: Ordered       # SF_ORDR
+      bit b00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000010: Encrypted     # SF_ENCR
+      bit b00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000100: Signed        # SF_SIGN
+      bit b00000000_00000000_00000000_00000000_00000000_00000000_00000000_00001000: Deflated      # SF_DFLG
+      bit b00000000_00000000_00000000_00000000_00000000_00000000_00000111_11110000: Reserved
+      bit b00000000_00000000_00000000_00000000_00000000_00000000_00001000_00000000: Block segment # SF_BFLG
+      bit b00000000_00001111_11111111_11111111_11111111_11111111_11110000_00000000: Unknown
+      bit b11111111_11110000_00000000_00000000_00000000_00000000_00000000_00000000: ID ???
+    u64 Offset: ??
+    u64 EncryptedCompressedSize: ??
+    u64 DecryptedDecompressedSize: ??
+    offset: self.Offset
+    raw:u8[self.EncryptedCompressedSize] SegmentData: ??
+    offset: restore
+
+  elf_header:
+    # XXX parse embedded elf structure with unix/elf.yml ?
+    ascii[4] ElfMagic: 7f c'ELF'
+
 layout:
   - header Header
+  - segment[Header.SegmentCount] Segment
+  - elf_header ELFHeader

@@ -168,6 +168,7 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 			if err != nil {
 				panic(err)
 			}
+			log.Printf("eval offset('%s') => %06x", s, i)
 			return i, nil
 		}
 		return nil, fmt.Errorf("expected string, got %T", args[0])

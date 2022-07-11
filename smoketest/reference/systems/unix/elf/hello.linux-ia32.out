@@ -20,13 +20,21 @@ Header
   [000024] SectionHeaderOffset            u32 le           0                     00 00 00 00
   [000028] Flags                          u32 le           2097204               00 20 00 34
   [00002c] ELF header size                u16 le           8                     00 08
-  [00002e] ProgramHeaderEntrySize         u16 le           40                    00 28
+  [00002e] ProgramHeaderSize              u16 le           40                    00 28
   [000030] ProgramHeaderCount             u16 le           30                    00 1e
   [000032] SectionHeaderEntrySize         u16 le           27                    00 1b
   [000034] SectionHeaderCount             u16 le           6                     00 06
   [000036] Section header strndx          u16 le           0                     00 00
 
 ProgramHeader
-  [0007f4] ProgramHeaderEntry Data        u8[40]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [0007f4] ProgramType                    u32 le           0                     00 00 00 00
+           - Unused                       eq
+  [0007f8] Offset                         u32 le           0                     00 00 00 00
+  [0007fc] Virtual address                u32 le           0                     00 00 00 00
+  [000800] Physical address               u32 le           0                     00 00 00 00
+  [000804] SegmentFileSize                u32 le           0                     00 00 00 00
+  [000808] SegmentMemorySize              u32 le           0                     00 00 00 00
+  [00080c] Flags                          u32 le           0                     00 00 00 00
+  [000810] Align                          u32 le           0                     00 00 00 00
 
-0x12c4 (4804) unmapped bytes
+0x12cc (4812) unmapped bytes

@@ -20,7 +20,7 @@ Header
   [000024] SectionHeaderOffset            u32 le           0                     00 00 00 00
   [000028] Flags                          u32 le           864                   00 00 03 60
   [00002c] ELF header size                u16 le           0                     00 00
-  [00002e] ProgramHeaderEntrySize         u16 le           0                     00 00
+  [00002e] ProgramHeaderSize              u16 le           0                     00 00
   [000030] ProgramHeaderCount             u16 le           0                     00 00
   [000032] SectionHeaderEntrySize         u16 le           0                     00 00
   [000034] SectionHeaderCount             u16 le           64                    00 40

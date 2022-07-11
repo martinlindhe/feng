@@ -462,7 +462,6 @@ input:
 
   - folder: systems/unix/elf
     files:
-      # XXX reduce amount of samples
       - bzcat
       - compressed-32.obj
       - compressed-64.obj

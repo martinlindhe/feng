@@ -136,6 +136,10 @@ func replaceNextBitTag(s string) (string, error) {
 		x := U64toBytesBigEndian(i, 4)
 		res = fmt.Sprintf("% 02x", x)
 
+	case lm <= 64: // u64
+		x := U64toBytesBigEndian(i, 8)
+		res = fmt.Sprintf("% 02x", x)
+
 	default:
 		log.Fatalf("unhandled bit length %d", lm)
 	}

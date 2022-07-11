@@ -145,12 +145,14 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 				raw = fmt.Sprintf("%01x ", child.Value)
 			case 5, 6, 7, 8:
 				raw = fmt.Sprintf("%02x", child.Value)
-			case 13:
+			case 12, 13:
 				raw = fmt.Sprintf("%04x", child.Value)
-			case 24:
+			case 20, 21, 22, 23, 24:
 				raw = fmt.Sprintf("%06x", child.Value)
 			case 31, 32:
 				raw = fmt.Sprintf("%08x", child.Value)
+			case 40:
+				raw = fmt.Sprintf("%010x", child.Value)
 			default:
 				panic(fmt.Sprintf("handle bit count %d", child.Size))
 			}
