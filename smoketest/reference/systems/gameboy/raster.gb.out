@@ -23,4 +23,4 @@ Header
   [00014d] Header checksum                u8               4                     04
   [00014e] Global checksum                u16 le           3673                  0e 59
 
-0x7eb0 (32432) unmapped bytes
+0x7eb0 (32432) unmapped bytes (99.0%)

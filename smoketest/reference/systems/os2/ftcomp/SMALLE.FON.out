@@ -13,4 +13,4 @@ Header \OS2\MDOS\WINOS2\SYSTEM\smalle.fon
   [000027] FileNameSize                   u16 le           35                    00 23
   [000029] FileName                       ascii[35]        \OS2\MDOS\WINOS2\SYSTEM\smalle.fon 5c 4f 53 32 5c 4d 44 4f 53 5c 57 49 4e 4f 53 32 5c 53 59 53 54 45 4d 5c 73 6d 61 6c 6c 65 2e 66 ...
 
-0x1fef (8175) unmapped bytes
+0x1fef (8175) unmapped bytes (99.1%)

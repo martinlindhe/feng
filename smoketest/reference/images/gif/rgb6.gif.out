@@ -48,4 +48,4 @@ Block_1 ImageDescriptor
   [0000e0] DataSize                       u8               255                   ff
   [0000e1] Data                           u8[255]                                c0 9d 70 48 2c 1a 8f c8 a4 72 c9 6c 3a 9f d0 a8 74 aa fc 59 af d8 ac 76 cb ed 7a bf e0 30 b7 47 ...
 
-0x129c (4764) unmapped bytes
+0x129c (4764) unmapped bytes (90.8%)

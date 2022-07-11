@@ -37,4 +37,4 @@ ProgramHeader
   [000570] Flags                          u32 le           0                     00 00 00 00
   [000574] Align                          u32 le           0                     00 00 00 00
 
-0x0848 (2120) unmapped bytes
+0x0848 (2120) unmapped bytes (96.0%)

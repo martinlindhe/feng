@@ -74,4 +74,4 @@ NEHeader
   [00043c] Reserved                       u16 le           0                     00 00
   [00043e] Expected windows version       u16 le           768                   03 00
 
-0x4d60 (19808) unmapped bytes
+0x4d60 (19808) unmapped bytes (96.8%)

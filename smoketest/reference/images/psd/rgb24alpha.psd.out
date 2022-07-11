@@ -10,4 +10,4 @@ Header
   [000018] Color mode                     u16 be           3                     00 03
            - RGB                          eq
 
-0x49c9 (18889) unmapped bytes
+0x49c9 (18889) unmapped bytes (99.9%)

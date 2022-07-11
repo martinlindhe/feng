@@ -25,4 +25,4 @@ Header
   [000068] Data size                      u32 le           22164                 00 00 56 94
   [00006c] Data offset                    u32 le           8256                  00 00 20 40
 
-0x7664 (30308) unmapped bytes
+0x7664 (30308) unmapped bytes (99.6%)

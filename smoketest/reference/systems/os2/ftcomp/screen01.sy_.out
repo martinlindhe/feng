@@ -13,4 +13,4 @@ Header \OS2\screen01.sys
   [000027] FileNameSize                   u16 le           18                    00 12
   [000029] FileName                       ascii[18]        \OS2\screen01.sys     5c 4f 53 32 5c 73 63 72 65 65 6e 30 31 2e 73 79 73 00
 
-0x1d80 (7552) unmapped bytes
+0x1d80 (7552) unmapped bytes (99.2%)

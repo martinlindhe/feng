@@ -97,4 +97,4 @@ TableRecord_12 post
   [0000d8] Length                         u32 be           32                    00 00 00 20
   [000cb4] Data                           u8[32]                                 00 03 00 00 00 00 00 00 ff b5 00 32 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-0x000b (11) unmapped bytes
+0x000b (11) unmapped bytes (0.0%)

@@ -10,4 +10,4 @@ Start Header
   [000014] NextHeaderSize                 u64 le           74                    00 00 00 00 00 00 00 4a
   [00001c] Next Header CRC                u32 le           2652949103            9e 20 ca 6f
 
-0x0053 (83) unmapped bytes
+0x0053 (83) unmapped bytes (72.2%)

@@ -104,4 +104,4 @@ Block_19 ImageDescriptor
   [000333] DataSize                       u8               255                   ff
   [000334] Data                           u8[255]                                00 6d 09 1c 48 b0 a0 c1 83 08 07 5e 32 b8 b0 a1 2d 87 97 20 3e 8c 18 71 22 c5 8b 18 33 6a dc c8 ...
 
-0x4b41a (308250) unmapped bytes
+0x4b41a (308250) unmapped bytes (99.7%)

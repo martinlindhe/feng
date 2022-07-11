@@ -21,4 +21,4 @@ DIBHEADER BITMAPINFOHEADER
   [000032] Important colors               u32 le           0                     00 00 00 00
   [000036] Image data                     u8[1024]                               ff 40 40 00 40 ff 40 00 00 07 ff c0 01 ff f0 00 7f fc 00 1f ff 00 07 fe 00 0f ff 80 03 ff e0 00 ...
 
-0x0008 (8) unmapped bytes
+0x0008 (8) unmapped bytes (0.7%)

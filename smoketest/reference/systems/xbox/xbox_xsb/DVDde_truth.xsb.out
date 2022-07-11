@@ -16,4 +16,4 @@ Header
   [00001c] Number of sounds               u16 le           0                     00 00
   [00001e] CueNameTableSize               u32 le           1                     00 00 00 01
 
-0x0066 (102) unmapped bytes
+0x0066 (102) unmapped bytes (75.0%)

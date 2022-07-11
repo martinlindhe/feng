@@ -10,4 +10,4 @@ Block
   [000004] BlockMagic                     u8[6]                                  31 41 59 26 53 59
   [00000a] Block CRC                      u32 le           2215666551            84 10 63 77
 
-0x001f (31) unmapped bytes
+0x001f (31) unmapped bytes (68.9%)

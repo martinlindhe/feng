@@ -53,4 +53,4 @@ FilenameEntry_5
   [0000c0] DecompressedSizeMaybe          u32 le           122880                00 01 e0 00
   [0002b8] Data                           u8[1]                                  98
 
-0x05af (1455) unmapped bytes
+0x05af (1455) unmapped bytes (88.1%)

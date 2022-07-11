@@ -151,4 +151,4 @@ PESection_1
            - Readable                     bit 30:1         0
            - Writeable                    bit 31:1         0
 
-0x2444 (9284) unmapped bytes
+0x2444 (9284) unmapped bytes (23.7%)

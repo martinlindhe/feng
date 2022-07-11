@@ -34,4 +34,4 @@ Block_0 ImageDescriptor
   [00031e] DataSize                       u8               255                   ff
   [00031f] Data                           u8[255]                                00 03 00 08 40 80 20 81 83 06 08 18 58 c8 70 a1 42 03 13 26 5c d8 70 41 4c 19 36 70 06 a9 79 83 ...
 
-0x1417 (5143) unmapped bytes
+0x1417 (5143) unmapped bytes (83.0%)

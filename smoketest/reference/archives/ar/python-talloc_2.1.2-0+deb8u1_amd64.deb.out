@@ -11,4 +11,4 @@ File debian-binary
   [000038] FileStreamSize                 ascii[10]        4                     34 20 20 20 20 20 20 20 20 20
   [000042] EndMarker                      u8[2]                                  60 0a
 
-0x2860 (10336) unmapped bytes
+0x2860 (10336) unmapped bytes (99.3%)

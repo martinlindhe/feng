@@ -18,4 +18,4 @@ Header
   [000018] Size of next extended header   u16 le           5                     00 05
   [00001a] Uncompressed CRC16             u16 le           14336                 38 00
 
-0x001f (31) unmapped bytes
+0x001f (31) unmapped bytes (52.5%)

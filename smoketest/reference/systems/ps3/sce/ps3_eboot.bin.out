@@ -12,4 +12,4 @@ Header
   [000020] CF file size                   u64 be           3                     00 00 00 00 00 00 00 03
   [000028] Padding                        u64 be           112                   00 00 00 00 00 00 00 70
 
-0x5b748 (374600) unmapped bytes
+0x5b748 (374600) unmapped bytes (100.0%)

@@ -19,4 +19,4 @@ FontTable_1
   [000144] EntrySelector                  u16 be           18                    00 12
   [000146] RangeShift                     u16 be           256                   01 00
 
-0x25c64 (154724) unmapped bytes
+0x25c64 (154724) unmapped bytes (100.0%)

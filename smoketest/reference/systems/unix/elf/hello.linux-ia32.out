@@ -37,4 +37,4 @@ ProgramHeader
   [00080c] Flags                          u32 le           0                     00 00 00 00
   [000810] Align                          u32 le           0                     00 00 00 00
 
-0x12cc (4812) unmapped bytes
+0x12cc (4812) unmapped bytes (98.2%)

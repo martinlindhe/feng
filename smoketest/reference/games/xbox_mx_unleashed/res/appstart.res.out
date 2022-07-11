@@ -669,4 +669,4 @@ FilenameEntry_93
   [000cdf] DecompressedSizeMaybe          u32 le           2359296               00 24 00 00
   [00130e] Data                           u8[1]                                  24
 
-0x11a10 (72208) unmapped bytes
+0x11a10 (72208) unmapped bytes (95.8%)

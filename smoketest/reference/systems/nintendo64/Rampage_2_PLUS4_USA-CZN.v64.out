@@ -18,4 +18,4 @@ Header
   [00003f] Version                        u8               69                    45
   [000040] Boot code                      u8[4032]                               80 40 00 68 80 40 00 48 80 40 00 58 08 3c 70 a4 08 25 00 00 09 8d 0c 00 20 15 ed 00 00 00 00 00 ...
 
-0x1dd5c (122204) unmapped bytes
+0x1dd5c (122204) unmapped bytes (96.8%)

@@ -13,4 +13,4 @@ Header \OS2\MDOS\iswindow.com
   [000027] FileNameSize                   u16 le           23                    00 17
   [000029] FileName                       ascii[23]        \OS2\MDOS\iswindow.com 5c 4f 53 32 5c 4d 44 4f 53 5c 69 73 77 69 6e 64 6f 77 2e 63 6f 6d 00
 
-0x0026 (38) unmapped bytes
+0x0026 (38) unmapped bytes (37.3%)

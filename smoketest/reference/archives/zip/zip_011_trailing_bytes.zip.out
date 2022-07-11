@@ -94,4 +94,4 @@ Chunk_4 ZIPENDLOCATOR
   [00018f] CommentLength                  u16 le           248                   00 f8
   [000191] Comment                        ascii[248]                                -*- This file supplied by -*-..             === The Restaurant at the End of the Universe BBS ===..                  -*- Supporting Atari 16, 24, and 32 bit -*-..                     === 713-531-6011  -  300-14400 BPS ===.. 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 2d 2a 2d 20 54 68 69 ...
 
-0x0077 (119) unmapped bytes
+0x0077 (119) unmapped bytes (15.5%)

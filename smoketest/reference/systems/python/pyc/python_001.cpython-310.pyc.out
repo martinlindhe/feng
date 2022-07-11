@@ -4,4 +4,4 @@ Header
   [000002] Magic                          ascii[2]         ..                    0d 0a
   [000004] Mtime                          u8[4]                                  00 00 00 00
 
-0x007d (125) unmapped bytes
+0x007d (125) unmapped bytes (94.0%)

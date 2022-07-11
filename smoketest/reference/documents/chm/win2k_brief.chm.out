@@ -53,4 +53,4 @@ ListingChunk_0
   [0000d8] Chunk number of previous listing chunk when reading directory in sequence i32 le           4294967295            ff ff ff ff
   [0000dc] Chunk number of next listing chunk when reading directory in sequence i32 le           4294967295            ff ff ff ff
 
-0x4a1f (18975) unmapped bytes
+0x4a1f (18975) unmapped bytes (98.8%)

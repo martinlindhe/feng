@@ -28,4 +28,4 @@ FileHeader
   [00007e] Unknown                        u8[6]                                  00 00 00 00 00 00
   [000084] CRC-16 of file header          u16 be           37661                 93 1d
 
-0x75432 (480306) unmapped bytes
+0x75432 (480306) unmapped bytes (100.0%)

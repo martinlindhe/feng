@@ -288,4 +288,4 @@ PESection_3 .reloc
            - Writeable                    bit 31:1         0
   [001000] Section data                   u8[512]                                00 10 00 00 14 00 00 00 15 30 5b 30 76 30 90 30 9a 30 a2 30 00 00 00 00 00 00 00 00 00 00 00 00 ...
 
-0x01e8 (488) unmapped bytes
+0x01e8 (488) unmapped bytes (10.6%)

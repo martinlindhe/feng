@@ -74,4 +74,4 @@ LXHeader
   [00012c] Stack size                     u32 le           32768                 00 00 80 00
   [000130] Reserved                       u8[20]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-0x78ec (30956) unmapped bytes
+0x78ec (30956) unmapped bytes (99.0%)

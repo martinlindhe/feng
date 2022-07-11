@@ -70,4 +70,4 @@ OptHead_10
            - Exports by Name              eq
   [00006c] Header data / offset to data   u32 be           812                   00 00 03 2c
 
-0x3f90 (16272) unmapped bytes
+0x3f90 (16272) unmapped bytes (99.3%)

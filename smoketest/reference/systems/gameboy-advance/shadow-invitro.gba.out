@@ -19,4 +19,4 @@ Header
   [0000bd] Header checksum                u8               240                   f0
   [0000be] Reserved                       u8[2]                                  00 00
 
-0x18294 (98964) unmapped bytes
+0x18294 (98964) unmapped bytes (99.8%)

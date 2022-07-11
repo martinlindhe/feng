@@ -74,4 +74,4 @@ LEHeader
   [000128] Extra heap allocation          u32 le           0                     00 00 00 00
   [00012c] Unknown                        u32 le           0                     00 00 00 00
 
-0x6d90 (28048) unmapped bytes
+0x6d90 (28048) unmapped bytes (98.9%)

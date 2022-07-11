@@ -27,4 +27,4 @@ ExepackHeader
   [00192e] ExepackMagic                   ascii[2]         RB                    52 42
   [001930] Unpacker code                  u8[268]                                8b e8 8c c0 05 10 00 0e 1f a3 04 00 03 06 0c 00 8e c0 8b 0e 06 00 8b f9 4f 8b f7 fd f3 a4 50 b8 ...
 
-0x1938 (6456) unmapped bytes
+0x1938 (6456) unmapped bytes (95.4%)

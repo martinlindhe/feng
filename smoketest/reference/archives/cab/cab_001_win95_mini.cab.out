@@ -234,4 +234,4 @@ CFFILE_22
   [000289] Attributes                     u16 le           32                    00 20
   [00028b] Name                           asciiz           WIN.INI               57 49 4e 2e 49 4e 49 00
 
-0x662f0 (418544) unmapped bytes
+0x662f0 (418544) unmapped bytes (94.7%)

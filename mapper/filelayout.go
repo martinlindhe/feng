@@ -199,7 +199,8 @@ func (fl *FileLayout) Present(hideRaw bool) (res string) {
 	mappedBytes := fl.MappedBytes()
 	if mappedBytes < fl.size {
 		unmapped := fl.size - mappedBytes
-		res += fmt.Sprintf("0x%04x (%d) unmapped bytes\n", unmapped, unmapped)
+		unmappedPct := (float64(unmapped) / float64(fl.size)) * 100
+		res += fmt.Sprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
 	} else if mappedBytes > fl.size {
 		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x\n", fl.size, mappedBytes)
 	} else {

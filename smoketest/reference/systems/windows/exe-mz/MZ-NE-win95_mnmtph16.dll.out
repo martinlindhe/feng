@@ -74,4 +74,4 @@ NEHeader
   [0000bc] Reserved                       u16 le           0                     00 00
   [0000be] Expected windows version       u16 le           1024                  04 00
 
-0x0930 (2352) unmapped bytes
+0x0930 (2352) unmapped bytes (92.5%)

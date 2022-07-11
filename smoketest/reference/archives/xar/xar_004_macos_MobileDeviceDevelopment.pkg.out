@@ -8,4 +8,4 @@ Header
   [000018] Checksum algorithm             u32 be           1                     00 00 00 01
            - SHA1                         eq
 
-0x14d63 (85347) unmapped bytes
+0x14d63 (85347) unmapped bytes (100.0%)

@@ -661,4 +661,4 @@ Block_205 ImageDescriptor
   [00014c] LZWMinimumCodeSize             u8               0                     00
   [00014d] DataSize                       u8               0                     00
 
-0x5917 (22807) unmapped bytes
+0x5917 (22807) unmapped bytes (98.6%)

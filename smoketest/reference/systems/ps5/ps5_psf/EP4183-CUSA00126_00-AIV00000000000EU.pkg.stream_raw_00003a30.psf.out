@@ -226,4 +226,4 @@ SFO_21
   [0002c1] Key                            asciiz           VERSION               56 45 52 53 49 4f 4e 00
   [000640] Data table                     ascii[8]         01.00                 30 31 2e 30 30 00 00 00
 
-0x0003 (3) unmapped bytes
+0x0003 (3) unmapped bytes (0.2%)

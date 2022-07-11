@@ -69,4 +69,4 @@ LocalHeader_0
   [000059] CRC32                          u32 le           1930559488            73 12 00 00
   [00005d] ExtHeaderSize                  u16 le           21086                 52 5e
 
-0x001a (26) unmapped bytes
+0x001a (26) unmapped bytes (21.5%)

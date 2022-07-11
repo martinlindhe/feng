@@ -19,4 +19,4 @@ Header
   [000044] difatSect1                     u32 le           4294967294            ff ff ff fe
   [000048] numDifatSects                  i32 le           0                     00 00 00 00
 
-0x15b4 (5556) unmapped bytes
+0x15b4 (5556) unmapped bytes (98.7%)

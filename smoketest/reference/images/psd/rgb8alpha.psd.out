@@ -10,4 +10,4 @@ Header
   [000018] Color mode                     u16 be           2                     00 02
            - Indexed                      eq
 
-0x34ee (13550) unmapped bytes
+0x34ee (13550) unmapped bytes (99.8%)

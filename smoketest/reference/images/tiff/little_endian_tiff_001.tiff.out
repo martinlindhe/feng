@@ -4,4 +4,4 @@ Header
            - LITTLE_ENDIAN                eq
   [000002] Signature                      u16 le           42                    00 2a
 
-0x0232 (562) unmapped bytes
+0x0232 (562) unmapped bytes (99.3%)

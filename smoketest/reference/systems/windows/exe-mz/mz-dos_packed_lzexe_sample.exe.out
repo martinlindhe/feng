@@ -26,4 +26,4 @@ LZEXEHeader
   [00002e] Checksum                       u16 le           0                     00 00
   [01144e] Lzexe uncompressor program     u8[232]                                06 0e 1f 8b 0e 0c 00 8b f1 4e 89 f7 8c db 03 1e 0a 00 8e c3 fd f3 a4 53 b8 2b 00 50 cb 2e 8b 2e ...
 
-0x11769 (71529) unmapped bytes
+0x11769 (71529) unmapped bytes (99.6%)

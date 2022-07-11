@@ -251,4 +251,4 @@ PESection_2 .rsrc
            - Writeable                    bit 31:1         1
   [008600] Section data                   u8[1024]                               00 00 00 00 d2 99 42 30 00 00 00 00 01 00 03 00 90 01 00 80 30 00 00 80 03 00 00 00 d0 00 00 80 ...
 
-0x0090 (144) unmapped bytes
+0x0090 (144) unmapped bytes (0.4%)

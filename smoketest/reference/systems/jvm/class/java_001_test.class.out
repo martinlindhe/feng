@@ -5,4 +5,4 @@ Header
   [000006] Major version                  u16 be           52                    00 34
   [000008] Constant pool count            u16 be           98                    00 62
 
-0x05fe (1534) unmapped bytes
+0x05fe (1534) unmapped bytes (99.4%)

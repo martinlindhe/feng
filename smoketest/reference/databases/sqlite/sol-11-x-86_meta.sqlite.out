@@ -25,4 +25,4 @@ Header
   [00005c] Version valid for              u32 be           15                    00 00 00 0f
   [000060] SQLite version number          u32 be           3031001               00 2e 3f d9
 
-0x4f9c (20380) unmapped bytes
+0x4f9c (20380) unmapped bytes (99.5%)

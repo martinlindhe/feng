@@ -3,4 +3,4 @@ Header
   [000000] Unknown1                       u32 be           114186                00 01 be 0a
   [000004] Magic                          u32 be           17263                 00 00 43 6f
 
-0x0ab6 (2742) unmapped bytes
+0x0ab6 (2742) unmapped bytes (99.7%)

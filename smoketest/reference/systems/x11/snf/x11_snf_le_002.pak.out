@@ -2,4 +2,4 @@
 Header
   [000000] Magic                          u32 le           4                     00 00 00 04
 
-0x23c5 (9157) unmapped bytes
+0x23c5 (9157) unmapped bytes (100.0%)

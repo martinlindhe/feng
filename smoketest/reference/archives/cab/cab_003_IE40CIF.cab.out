@@ -40,4 +40,4 @@ CFFILE_0
   [00183e] Attributes                     u16 le           32                    00 20
   [001840] Name                           asciiz           ie40.cif              69 65 34 30 2e 63 69 66 00
 
-0x088b (2187) unmapped bytes
+0x088b (2187) unmapped bytes (15.3%)

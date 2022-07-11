@@ -162,4 +162,4 @@ Block_37 ImageDescriptor
   [0001c7] DataSize                       u8               255                   ff
   [0001c8] Data                           u8[255]                                80 7f 82 83 84 85 86 87 88 49 88 8b 8c 8d 8c 49 43 8a 8e 93 94 87 49 3e 92 95 93 3c 7f 9c 9d 83 ...
 
-0x057c (1404) unmapped bytes
+0x057c (1404) unmapped bytes (66.4%)

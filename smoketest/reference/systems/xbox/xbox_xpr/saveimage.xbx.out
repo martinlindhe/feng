@@ -5,4 +5,4 @@ Header
   [000008] FirstFileOffset                u32 le           2048                  00 00 08 00
   [00000c] Unknown3                       u32 le           262145                00 04 00 01
 
-0x0ff0 (4080) unmapped bytes
+0x0ff0 (4080) unmapped bytes (99.6%)

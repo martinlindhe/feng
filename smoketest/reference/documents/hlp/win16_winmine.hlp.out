@@ -39,4 +39,4 @@ BTreeNodeHeader BTREENODEHEADER
   [000307] PreviousPage                   i16 le           20047                 4e 4f
   [000309] NextPage                       i16 le           17748                 45 54
 
-0x3185 (12677) unmapped bytes
+0x3185 (12677) unmapped bytes (99.4%)

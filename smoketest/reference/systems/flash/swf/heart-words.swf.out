@@ -4,4 +4,4 @@ Header
   [000003] Version                        u8               8                     08
   [000004] FileSize                       u32 be           655818752             27 17 00 00
 
-0x171f (5919) unmapped bytes
+0x171f (5919) unmapped bytes (99.9%)

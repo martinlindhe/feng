@@ -15,4 +15,4 @@ Header
   [000018] RelocationTableOffset          u16 le           32                    00 20
   [00001a] OverlayNumber                  u16 le           0                     00 00
 
-0xd6ff (55039) unmapped bytes
+0xd6ff (55039) unmapped bytes (99.9%)

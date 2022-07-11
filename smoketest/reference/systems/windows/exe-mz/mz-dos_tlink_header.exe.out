@@ -20,4 +20,4 @@ BorlandTLinkHeader
   [00001f] Version                        u8               97                    61
   [000020] Identifier2                    ascii[2]         jr                    6a 72
 
-0x16128 (90408) unmapped bytes
+0x16128 (90408) unmapped bytes (100.0%)

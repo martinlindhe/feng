@@ -11,4 +11,4 @@ Packet
   [000009] PrevPacketSize                 u32 be           0                     00 00 00 00
   [00000d] Type                           u8               18                    12
 
-0x31ce2 (204002) unmapped bytes
+0x31ce2 (204002) unmapped bytes (100.0%)

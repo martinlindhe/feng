@@ -52,4 +52,4 @@ Block_5 FILEENTRY
   [00386b] ExpandedSize                   u32 le           8192                  00 00 20 00
   [00386f] Data                           compressed:zlib[6274]                       78 9c c5 58 69 54 53 67 b7 46 2a 48 a0 6a 7b bf af 4a 6d d5 94 94 90 40 05 d3 af 4a 4f ad c3 81 ...
 
-0x0b06 (2822) unmapped bytes
+0x0b06 (2822) unmapped bytes (10.9%)

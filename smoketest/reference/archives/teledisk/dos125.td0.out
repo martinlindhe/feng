@@ -13,4 +13,4 @@ Header
   [000009] MediaSurfaces                  u8               2                     02
   [00000a] CRC                            u16 le           50823                 c6 87
 
-0x15fde (90078) unmapped bytes
+0x15fde (90078) unmapped bytes (100.0%)

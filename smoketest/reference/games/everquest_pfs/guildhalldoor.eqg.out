@@ -20,4 +20,4 @@ Block_1 FILEENTRY
   [000010] ExpandedSize                   u32 le           8192                  00 00 20 00
   [000014] Data                           compressed:zlib[3806]                       78 9c 8d 99 0b 58 4c e9 ff c0 a7 1b 51 88 b6 14 52 a8 28 95 e9 a2 26 35 ef 7b 1c a9 74 23 8b 72 ...
 
-0x0863 (2147) unmapped bytes
+0x0863 (2147) unmapped bytes (35.5%)

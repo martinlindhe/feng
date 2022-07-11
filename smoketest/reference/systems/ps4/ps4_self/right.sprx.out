@@ -136,4 +136,4 @@ Segment_7
 ELFHeader
   [000120] ElfMagic                       ascii[4]         .ELF                  7f 45 4c 46
 
-0x06b9 (1721) unmapped bytes
+0x06b9 (1721) unmapped bytes (10.7%)

@@ -26,4 +26,4 @@ Header
   [000034] SectionHeaderCount             u16 le           64                    00 40
   [000036] Section header strndx          u16 le           0                     00 00
 
-0x0c58 (3160) unmapped bytes
+0x0c58 (3160) unmapped bytes (98.3%)

@@ -13,4 +13,4 @@ Header
   [00000e] CRC32                          u32 be           553720832             21 01 1c 00
   [000012] Compressed data                u8[2]                                  00 00
 
-0x002c (44) unmapped bytes
+0x002c (44) unmapped bytes (68.8%)

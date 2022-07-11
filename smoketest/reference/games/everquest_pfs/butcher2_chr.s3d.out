@@ -84,4 +84,4 @@ Block_9 FILEENTRY
   [0024f6] ExpandedSize                   u32 le           2102                  00 00 08 36
   [0024fa] Data                           compressed:zlib[1890]                       78 9c 35 54 0b 34 dc 67 16 bf ff 31 e6 8d 21 c4 8c 37 35 46 bc 1f 15 22 f1 4c ca 88 d7 20 c8 a4 ...
 
-0x000d (13) unmapped bytes
+0x000d (13) unmapped bytes (0.0%)

@@ -20,4 +20,4 @@ DIBHEADER BITMAPINFOHEADER
   [00002e] UsedColors                     u32 le           0                     00 00 00 00
   [000032] Important colors               u32 le           0                     00 00 00 00
 
-0x4000 (16384) unmapped bytes
+0x4000 (16384) unmapped bytes (99.7%)

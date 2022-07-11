@@ -13,4 +13,4 @@ HeicFile
            - color_space                  bit 5:3          0
   [000006] PictureWidth                   u32 le           8650884               00 84 00 84
 
-0x16c2 (5826) unmapped bytes
+0x16c2 (5826) unmapped bytes (99.8%)

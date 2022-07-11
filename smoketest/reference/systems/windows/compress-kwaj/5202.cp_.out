@@ -5,4 +5,4 @@ Header
   [000008] Method                         u16 le           3                     00 03
            - LZ77 + Huffman               eq
 
-0x00fa (250) unmapped bytes
+0x00fa (250) unmapped bytes (96.2%)

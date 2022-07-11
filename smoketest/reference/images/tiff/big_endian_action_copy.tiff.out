@@ -4,4 +4,4 @@ Header
            - BIG_ENDIAN                   eq
   [000002] Signature                      u16 be           42                    00 2a
 
-0x2296 (8854) unmapped bytes
+0x2296 (8854) unmapped bytes (100.0%)
