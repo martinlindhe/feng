@@ -81,6 +81,7 @@ data (for extraction feature)
     raw:u8[size]                mark area as file data
     compressed:zlib[self.Size]  mark area as zlib compressed data
     compressed:lz4[self.Size]   mark area as lz4-compressed data
+    compressed:deflate[self.Size] mark area as DEFLATE compressed data
 
 
 # pattern matching data types

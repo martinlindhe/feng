@@ -135,7 +135,7 @@ structs:
       if self.ExtHeaderSize:
         u8[self.ExtHeaderSize] Ext Header data: ?? # XXX decode
 
-      u8[self.CompressedSize] Compressed data: ??
+      raw:u8[self.CompressedSize] Compressed data: ??
 
 layout:
   - header Header

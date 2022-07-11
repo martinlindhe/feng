@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"compress/flate"
 	"compress/zlib"
 	"fmt"
 	"io"
@@ -93,6 +94,26 @@ func main() {
 					if err != nil {
 						log.Fatal(err)
 					}
+					defer reader.Close()
+
+					var b bytes.Buffer
+					if _, err = io.Copy(&b, reader); err != nil {
+						log.Fatal(err)
+					}
+
+					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
+
+					log.Printf("extracted %d bytes to %s", b.Len(), filename)
+
+					err = ioutil.WriteFile(filename, b.Bytes(), 0644)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+				case "compressed:deflate":
+					log.Printf("%s.%s %s: extracting DEFLATE stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+
+					reader := flate.NewReader(bytes.NewReader(field.Value))
 					defer reader.Close()
 
 					var b bytes.Buffer

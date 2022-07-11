@@ -68,7 +68,7 @@ LocalHeader_0
   [000061] File comment                   asciiz                                 00
   [000062] CRC32                          u32 le           76319660              04 8c 8b ac
   [000066] ExtHeaderSize                  u16 le           0                     00 00
-  [000068] Compressed data                u8[60]                                 73 61 61 73 64 66 61 77 67 20 32 61 77 20 67 7a 64 61 76 20 7a 64 66 7a 78 76 6b 6d 20 c3 a4 6f ...
+  [000068] Compressed data                raw:u8[60]                             73 61 61 73 64 66 61 77 67 20 32 61 77 20 67 7a 64 61 76 20 7a 64 66 7a 78 76 6b 6d 20 c3 a4 6f ...
 
 LocalHeader_1
   [0000a4] Signature                      u8[2]                                  60 ea
@@ -103,7 +103,7 @@ LocalHeader_1
   [0000ce] File comment                   asciiz                                 00
   [0000cf] CRC32                          u32 le           2951839030            af f1 7d 36
   [0000d3] ExtHeaderSize                  u16 le           0                     00 00
-  [0000d5] Compressed data                u8[32]                                 00 18 42 6e 69 cc 28 31 27 f8 9a 84 10 4c c8 dc 50 d5 40 80 88 d5 ca 74 63 8c a2 f0 7d 08 1b e0
+  [0000d5] Compressed data                raw:u8[32]                             00 18 42 6e 69 cc 28 31 27 f8 9a 84 10 4c c8 dc 50 d5 40 80 88 d5 ca 74 63 8c a2 f0 7d 08 1b e0
 
 LocalHeader_2
   [0000f5] Signature                      u8[2]                                  60 ea

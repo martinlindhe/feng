@@ -21,48 +21,61 @@ magic:
 
 types:
   # XXX impl!!!
-  ArchiveVersion:       # XXX this should become a built-in standard type "version16" byte 0=major, byte 1=minor
+  ArchiveVersion:       
     u8 Major: ??        # 0.3 and 0.4 is seen in 2021
     u8 Minor: ??
     format: "{0}.{1}"    # XXX impl presentation formatting string
-
-  # XXX impl!!!
-  StartHeader:
-    u64 NextHeaderOffset: ??
-    u64 NextHeaderSize: ??
-    u32 NextHeaderCRC: ??
 
 structs:
   sig_header:
     # SignatureHeader
     u8[6] Signature: c'7z' bc af 27 1c
 
-    #ArchiveVersion Version: ?? # XXX custom struct define
+    #ArchiveVersion Version: ?? # XXX custom struct define, this should become a built-in standard type "version16" byte 0=major, byte 1=minor
     u8 Major version: ??
     u8 Minor version: ??
 
     # XXX impl crc32
     #crc32[NextHeaderOffset.offset:NextHeaderCRC.offset+4] StartHeaderCRC: ??
-    u32 Start Header CRC: ??
+    u32 StartHeaderCRC: ??
 
   start_header:
-    # StartHeader Next header: ?? # XXX custom struct define
     u64 NextHeaderOffset: ??
     u64 NextHeaderSize: ??
+    u32 NextHeaderCRC: ??    # XXX impl crc32
+    offset: self.offset + self.NextHeaderOffset
 
-    # XXX impl crc32
-    #crc32[self.offset+4+NextHeaderOffset.value:self.offset+4+NextHeaderOffset.value+NextHeaderSize.value] NextHeaderCRC: ??
-    u32 Next Header CRC: ??
-
-    #XXX seek to NextHeaderOffset
-    # [PackedStreams]
-
-    # [PackedStreamsForHeaders]
-    # XXX
-
-    # u8[self.offset + self.NextHeaderOffset:self.NextHeaderSize] Data: ??  # XXX
-
+  header:
+    u8 NID:
+      eq 00: kEnd
+      eq 01: kHeader
+      eq 02: kArchiveProperties
+      eq 03: kAdditionalStreamsInfo
+      eq 04: kMainStreamsInfo
+      eq 05: kFilesInfo
+      eq 06: kPackInfo
+      eq 07: kUnPackInfo
+      eq 08: kSubStreamsInfo
+      eq 09: kSize
+      eq 0A: kCRC
+      eq 0B: kFolder
+      eq 0C: kCodersUnPackSize
+      eq 0D: kNumUnPackStream
+      eq 0E: kEmptyStream
+      eq 0F: kEmptyFile
+      eq 10: kAnti
+      eq 11: kName
+      eq 12: kCTime
+      eq 13: kATime
+      eq 14: kMTime
+      eq 15: kWinAttributes
+      eq 16: kComment
+      eq 17: kEncodedHeader
+      eq 18: kStartPos
+      eq 19: kDummy
 
 layout:
-  - sig_header Signature Header
-  - start_header Start Header
+  - sig_header SignatureHeader
+  - start_header StartHeader
+
+  - header Header

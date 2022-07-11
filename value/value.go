@@ -290,6 +290,7 @@ func SingleUnitSize(kind string) uint64 {
 	case "u8", "i8", "ascii", "asciiz",
 		"compressed:lz4",
 		"compressed:zlib",
+		"compressed:deflate",
 		"raw:u8":
 		return 1
 	case "u16", "i16", "utf16", "utf16z",
@@ -398,7 +399,7 @@ func AsInt64(kind string, b []byte) int64 {
 // presents the value of the data type (format.Kind) in a human-readable form
 func (format DataField) Present(b []byte) string {
 	switch format.Kind {
-	case "compressed:lz4", "compressed:zlib", "raw:u8":
+	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
 		return ""
 
 	case "u8", "u16", "u32", "u64":

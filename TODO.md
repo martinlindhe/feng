@@ -46,3 +46,5 @@ yaml format: single bits: "u1" (1 bit), "u24" (24 bits), "u4" (4 bits) data type
 
 yaml format: mark up certain conditions for "want sample please" in a standardized way
 
+cli flag to print report of unmapped byte areas + hex dump those values
+

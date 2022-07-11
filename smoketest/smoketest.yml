@@ -32,6 +32,7 @@ input:
       - gzip_001.gz
       - gzip_002.gz
       - gzip_003.gz
+      - gzip_004_no_name.gz
 
   - folder: archives/lha
     files:

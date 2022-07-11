@@ -1,13 +1,17 @@
 # templates/archives/7zip.yml
-Signature Header
+SignatureHeader
   [000000] Signature                      u8[6]                                  37 7a bc af 27 1c
   [000006] Major version                  u8               0                     00
   [000007] Minor version                  u8               3                     03
-  [000008] Start Header CRC               u32 le           1349732298            50 73 47 ca
+  [000008] StartHeaderCRC                 u32 le           1349732298            50 73 47 ca
 
-Start Header
+StartHeader
   [00000c] NextHeaderOffset               u64 le           9                     00 00 00 00 00 00 00 09
   [000014] NextHeaderSize                 u64 le           74                    00 00 00 00 00 00 00 4a
-  [00001c] Next Header CRC                u32 le           2652949103            9e 20 ca 6f
+  [00001c] NextHeaderCRC                  u32 le           2652949103            9e 20 ca 6f
 
-0x0053 (83) unmapped bytes (72.2%)
+Header
+  [000029] NID                            u8               1                     01
+           - kHeader                      eq
+
+0x0052 (82) unmapped bytes (71.3%)

@@ -27,7 +27,7 @@ magic:
 structs:
   header:
     u8[2] Signature: 1f 8b
-    u8 Compression method:
+    u8 CompressionMethod:
       eq 00: Stored
       eq 01: Compressed
       eq 02: Packed
@@ -78,8 +78,10 @@ structs:
       asciiz Comment: ??
 
     # XXX if deflate, mark data as such
-    u8[FILE_SIZE - OFFSET - 8] Data: ??
-
+    if self.CompressionMethod == 8:
+      compressed:deflate[FILE_SIZE - OFFSET - 8] Data: ??
+    else:
+      u8[FILE_SIZE - OFFSET - 8] Data: ??
     #crc32[Data.offset:self.offset] Data checksum: ??         # XXX of compressed or uncompressed data?
     u32 Data checksum: ?? # XXX crc32 type!
 

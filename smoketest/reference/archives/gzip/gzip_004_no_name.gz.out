@@ -10,11 +10,12 @@ Header
            - FLAG_NAME                    bit 3:1          0
            - FLAG_COMMENT                 bit 4:1          0
   [000004] Modification time              time_t_32 le     1970-01-01T00:00:00Z  00 00 00 00
-  [000008] Compression flags              u8               0                     00
-  [000009] Operating system               u8               3                     03
-           - Unix                         eq
-  [00000a] Data                           compressed:deflate[28]                       ed c1 01 0d 00 00 00 c2 a0 9a ef 9f c4 1c 6e 40 01 00 00 00 00 00 00 00 00 c0 bf 01
-  [000026] Data checksum                  u32 le           2003351769            77 68 b8 d9
-  [00002a] Uncompressed size modulo 2^32  u32 le           10000                 00 00 27 10
+  [000008] Compression flags              u8               2                     02
+           - max compression (deflate)    eq
+  [000009] Operating system               u8               11                    0b
+           - NTFS filesystem (NT)         eq
+  [00000a] Data                           compressed:deflate[55]                       8b f6 cc 2b 49 2d ca 4b 2d 09 ce c8 2f 2a 49 2e 2d 89 e5 e5 0a 0d f2 b1 cd 28 29 29 b0 d2 d7 cf ...
+  [000041] Data checksum                  u32 le           3244666838            c1 65 af d6
+  [000045] Uncompressed size modulo 2^32  u32 le           54                    00 00 00 36
 
 EOF

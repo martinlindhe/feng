@@ -1,7 +1,7 @@
 # templates/archives/gzip.yml
 Header
   [000000] Signature                      u8[2]                                  1f 8b
-  [000002] Compression method             u8               8                     08
+  [000002] CompressionMethod              u8               8                     08
            - Deflate                      eq
   [000003] HeaderFlags                    u8               8                     08
            - FLAG_TEXT                    bit 0:1          0
@@ -14,7 +14,7 @@ Header
   [000009] Operating system               u8               3                     03
            - Unix                         eq
   [00000a] Filename                       asciiz           fule                  66 75 6c 65 00
-  [00000f] Data                           u8[8]                                  73 0c 70 74 04 23 2e 00
+  [00000f] Data                           compressed:deflate[8]                       73 0c 70 74 04 23 2e 00
   [000017] Data checksum                  u32 le           3361015452            c8 55 06 9c
   [00001b] Uncompressed size modulo 2^32  u32 le           10                    00 00 00 0a
 
