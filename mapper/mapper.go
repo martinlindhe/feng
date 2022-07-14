@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/k0kubun/pp/v3"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
@@ -29,6 +29,103 @@ var (
 
 func init() {
 	log.SetFlags(log.Lshortfile)
+}
+
+func (fl *FileLayout) mapLayout(rr *bytes.Reader, ds *template.DataStructure, df *value.DataField) error {
+
+	if df.Kind == "offset" {
+		// evaluate label in top-level layout (needed by ps3_pkg)
+		v, err := fl.EvaluateExpression(df.Label)
+		if err != nil {
+			panic(err)
+		}
+		fl.offset = v
+		_, err = rr.Seek(int64(v), io.SeekStart)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return nil
+	}
+
+	es, err := ds.FindStructure(df)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if DEBUG {
+		log.Printf("mapping struct '%s' (kind %s) to %+v", df.Label, df.Kind, es)
+	}
+
+	if df.Slice {
+		// like ranged layout but keep reading until EOF
+		if DEBUG {
+			log.Printf("appending sliced %s[] %s", df.Kind, df.Label)
+		}
+
+		baseLabel := df.Label
+		for i := uint64(0); i < math.MaxUint64; i++ {
+			df.Index = int(i)
+			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
+			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
+				if errors.Is(err, ParseStopError) {
+					log.Println("reached ParseStop")
+					break
+				}
+				if err == io.EOF {
+					log.Println("reached EOF")
+					break
+				}
+				/*
+					// do not propagate error, so that trailing data after slices will not count as parse error
+					if err != nil {
+						if _, ok := err.(template.ValidationError); ok {
+							log.Println("invalidating file due to no matching pattern", err)
+							//return &fileLayout, nil
+							break
+						}
+						// XXX must respect "TYPE IS NOT VALID" error
+						log.Printf("error (ignored): %#v   ", err)
+					}
+				*/
+				return err
+			}
+			df.Label = baseLabel
+		}
+		return nil
+	}
+	if df.Range != "" {
+		parsedRange, err := fl.EvaluateExpression(df.Range)
+		if err != nil {
+			panic(err)
+		}
+
+		if DEBUG {
+			log.Printf("appending ranged %s[%d]", df.Kind, parsedRange)
+		}
+
+		baseLabel := df.Label
+		for i := uint64(0); i < parsedRange; i++ {
+			df.Index = int(i)
+			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
+			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
+				return err
+			}
+			df.Label = baseLabel
+		}
+		return nil
+	}
+
+	if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
+
+		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
+			// accept eof errors as valid parse for otherwise valid mapping
+			return nil
+		}
+		//if DEBUG {
+		feng.Yellow("%s errors out: %s\n", ds.BaseName, err.Error())
+		//}
+		return err
+	}
+	return nil
 }
 
 // produces a list of fields with offsets and sizes from input reader based on data structure
@@ -57,97 +154,11 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	}
 
 	for _, df := range ds.Layout {
-		if df.Kind == "offset" {
-			// evaluate label in top-level layout (used by ps4_cnt)
-			v, err := fileLayout.EvaluateExpression(df.Label)
-			if err != nil {
-				panic(err)
-			}
-			fileLayout.offset = v
-			_, err = rr.Seek(int64(v), io.SeekStart)
-			if err != nil {
-				log.Fatal(err)
-			}
-			continue
-		}
-
-		es, err := ds.FindStructure(&df)
+		err := fileLayout.mapLayout(rr, ds, &df)
 		if err != nil {
-			log.Fatal(err)
-		}
-		if DEBUG {
-			log.Printf("mapping struct '%s' (kind %s) to %+v", df.Label, df.Kind, es)
-		}
-
-		if df.Slice {
-			// like ranged layout but keep reading until EOF
-			if DEBUG {
-				log.Printf("appending sliced %s[] %s", df.Kind, df.Label)
-			}
-
-			baseLabel := df.Label
-			for i := uint64(0); i < math.MaxUint64; i++ {
-				df.Index = int(i)
-				df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
-				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
-					if errors.Is(err, ParseStopError) {
-						log.Println("reached ParseStop")
-						break
-					}
-					if err == io.EOF {
-						log.Println("reached EOF")
-						break
-					}
-					/*
-						// do not propagate error, so that trailing data after slices will not count as parse error
-						if err != nil {
-							if _, ok := err.(template.ValidationError); ok {
-								log.Println("invalidating file due to no matching pattern", err)
-								//return &fileLayout, nil
-								break
-							}
-							// XXX must respect "TYPE IS NOT VALID" error
-							log.Printf("error (ignored): %#v   ", err)
-						}
-					*/
-					return &fileLayout, err
-				}
-				df.Label = baseLabel
-			}
-			continue
-		}
-		if df.Range != "" {
-			parsedRange, err := fileLayout.EvaluateExpression(df.Range)
-			if err != nil {
-				panic(err)
-			}
-
-			if DEBUG {
-				log.Printf("appending ranged %s[%d]", df.Kind, parsedRange)
-			}
-
-			baseLabel := df.Label
-			for i := uint64(0); i < parsedRange; i++ {
-				df.Index = int(i)
-				df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
-				if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
-					return &fileLayout, err
-				}
-				df.Label = baseLabel
-			}
-			continue
-		}
-
-		if err := fileLayout.expandStruct(rr, &df, ds, es.Expressions); err != nil {
-
-			if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
-				// accept eof errors as valid parse for otherwise valid mapping
-				return &fileLayout, nil
-			}
-			//if DEBUG {
-			feng.Yellow("%s errors out: %s\n", ds.BaseName, err.Error())
-			//}
-			return &fileLayout, err
+			log.Println(err)
+			//return nil, err
+			return &fileLayout, nil
 		}
 	}
 
@@ -526,8 +537,17 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			// find custom struct with given name
 			customStruct, err := fl.GetStruct(es.Field.Kind)
 			if err != nil {
-				// this error is always critical. it means the parsed template is not working
-				pp.Print(fl.DS)
+				// this error may be critical. it means the parsed template is not working.
+
+				// XXX IF STRUCT NOT FOUND AS EVALUATED, look in template for the name in struct field and use that !!!
+				for _, ev := range fl.DS.EvaluatedStructs {
+					if ev.Name == es.Field.Kind {
+						spew.Dump(ev)
+
+						// XXX hur gjorde vi i top level layout ???
+					}
+				}
+
 				log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
 			}
 

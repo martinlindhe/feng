@@ -90,6 +90,7 @@ structs:
     u8[32] pkg_digest: ??
 
   toc_header:
+    offset: CNTHeader.pkg_table_offset
     u32 version: ??
     u32 unknown1: ??
     u32 unknown2: ??
@@ -116,7 +117,6 @@ structs:
 layout:
   - cnt_header CNTHeader
 
-  - offset CNTHeader.pkg_table_offset
   - toc_header TOCHeader
 
   - data_entry[CNTHeader.pkg_entry_count - 1] DataEntry

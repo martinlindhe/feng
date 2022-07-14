@@ -212,7 +212,27 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 		res += "EOF\n"
 	}
 
+	if cfg.ReportUnmapped {
+		// XXX improve presentation of blocks of unmapped bytes
+		for i := uint64(0); i < fl.size; i++ {
+			if !fl.isMappedByte(i) {
+				res += fmt.Sprintf("  [%06x] %02x\n", i, fl.rawData[i])
+			}
+		}
+	}
+
 	return
+}
+
+func (fl *FileLayout) isMappedByte(offset uint64) bool {
+	for _, layout := range fl.Structs {
+		for _, field := range layout.Fields {
+			if offset >= field.Offset && offset < field.Offset+field.Length {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // return the number of mapped bytes
@@ -235,6 +255,7 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 			return &str, nil
 		}
 	}
+
 	return nil, fmt.Errorf("GetStruct: %s not found", name)
 }
 

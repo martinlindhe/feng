@@ -97,19 +97,29 @@ structs:
         bit b0100_0000: Interlace
         bit b1000_0000: LocalColorTablePresent
       if self.ImageDescriptor & LocalColorTablePresent:
-        # XXX RGB type
+        # XXX RGB8 type
         u8[3 * (2 << (self.ImageDescriptor & 7))] Local color table: ??
+
+      # IMAGEDATA starts, says 010:
       u8 LZWMinimumCodeSize: ??   # XXX meaning?
 
       # XXX series of data blocks. last block is one with Size==0
       # needed to parse gif_87a_002_apples.gif
-      u8 DataSize: ??
-
-      u8[self.DataSize] Data: ??
-      u8 BlockTerminator: "00"      # XXX breaks without this line ???
 
       # XXX TODO IMPLEMENT THIS:
-      #data_block[] DataBlock: ??
+      #data_sub_block[] DataSubBlock: ??
+
+      # XXX TODO REMOVE THIS:
+      u8 DataSize: ??
+      u8[self.DataSize] Data: ??
+      u8 BlockTerminator: "00"
+
+  data_sub_block:
+    u8 DataSize: ??
+    if self.DataSize == 0:
+      parse: stop
+
+    u8[self.DataSize] Data: ??
 
 layout:
   - header Header

@@ -11,9 +11,7 @@ extensions: [.torrent]
 mime: application/x-bittorrent
 endian: little # XXX
 
-magic:
-  - offset: 0000
-    match: c'd'   # XXX weak detection
+no_magic: true
 
 structs:
   header:

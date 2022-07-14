@@ -371,10 +371,6 @@ input:
       - asf_002.wmv
       - launcherloop.wma
 
-  - folder: network/torrent
-    files:
-      - sample.torrent
-
   - folder: systems/android/dex
     files:
       - classes.dex
@@ -467,6 +463,7 @@ input:
     files:
       - ps3_bDMOIDCdjgRhfnlrJZnyQsOLlykYECYGDhcXKbEGPCSZjtVLacEPwlIDfINwGeGhedySTNxqazLTQtExIoihYgZkwiaVHAYbmxBVE.pkg
       - psvita_iGkjUszJlBHXVNpramDhnzzsUAYCguvGPbHxiAKQynjEVaRnscEZEaSGdUDaKYoZHyzuTuWZePMGXYyllKkUxlHXcmcenWWQRpqZr.pkg
+      - psvita_head.bin
 
   - folder: systems/ps3/ps3_sfo
     files:
