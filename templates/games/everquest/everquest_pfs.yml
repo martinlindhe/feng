@@ -17,9 +17,6 @@ endian: little
 magic:
   - offset: 0004
     match: c'PFS '
-
-constants:
-  u32 DIRENTRY: 6158_0AC9
   
 structs:
   header:
@@ -31,7 +28,8 @@ structs:
 
   block:
     offset: Header.BaseOffset + 4 + (self.index * 12)
-    u32 CRC: ??
+    u32 CRC:
+      eq 6158_0AC9: DIRENTRY
     u32 FileOffset: ??
     u32 Expanded size: ??
 
@@ -41,9 +39,9 @@ structs:
     compressed:zlib[self.CompressedSize] Data: ??
 
     if self.CRC == DIRENTRY:
-      label: DIRENTRY
+      label: '"DIRENTRY"'
     else:
-      label: FILEENTRY
+      label: '"FILEENTRY"'
 
 layout:
   - header Header

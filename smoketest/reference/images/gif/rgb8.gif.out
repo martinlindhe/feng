@@ -16,7 +16,7 @@ LogicalScreenDescriptor
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global color table             u8[768]                                04 02 05 04 83 04 88 02 04 04 44 04 84 84 04 c4 c3 04 64 66 fc 44 44 04 04 02 88 47 02 04 5c 62 ...
 
-Block_0 ImageDescriptor
+Block_0 BLOCK_IMAGE
   [00030d] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [00030e] Left position                  u16 le           0                     00 00

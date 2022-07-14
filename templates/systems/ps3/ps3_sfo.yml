@@ -2,7 +2,7 @@
 #
 # SFO (System File Object)
 #
-# file format used on PSP, PSVita, PS3, PS5 and probably PS4.
+# used on PSP, PSVita, PS3, PS4 and PS5.
 
 references:
   - https://www.psdevwiki.com/ps4/Param.sfo#Internal_Structure
@@ -11,9 +11,9 @@ software:
   - https://github.com/wargio/vitatool/
 
 kind: system
-name: Sony PSVita/PS3/PS4/PS5 System File Object
-extensions: [.sfo]
-endian: little  # XXX at least ps5 version is little endian
+name: Sony System File Object file
+extensions: [.sfo]  # only used in param.sfo
+endian: little      # XXX: psvita and ps5 is confirmed little endian
 
 magic:
   - offset: 0000
@@ -28,11 +28,11 @@ structs:
     u32 indexTableEntries: ?? # Number of entries in index table
 
   sfo_n:
-    u16 keyOffset: ??   # Key table offset
-    u16 param_fmt:      # type of data
-      eq 0204: unknown SEEN ON PS5
-      eq 0400: utf8 special mode WANT SAMPLE
-      eq 0402: character string WANT SAMPLE
+    u16 keyOffset: ??         # Key table offset
+    u16 param_fmt:            # type of data. XXX flags?!
+      eq 0204: unknown        #  SEEN ON PSVita/PS5
+      eq 0400: utf8 special mode # WANT SAMPLE
+      eq 0402: character string # WANT SAMPLE
       eq 0404: u32
     u32 paramLen: ??
     u32 paramMaxLen: ??
@@ -44,7 +44,7 @@ structs:
 
     offset: Header.dataTableOffset + self.dataOffset
     ascii[self.paramMaxLen] Data: ??
-    label: self.Key # FIXME allow string concatenation: label: self.Key  + " = " + self.Data
+    label: self.Key + " = " + self.Data
     offset: restore
 
 layout:

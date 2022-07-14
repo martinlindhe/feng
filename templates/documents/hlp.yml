@@ -25,14 +25,12 @@ structs:
     u32 EntireFileSize: ??
 
   file_header:
-    label: FILEHEADER
     offset: Header.DirectoryStart
     u32 ReservedSpace: ??
     u32 UsedSpace: ??
     u8 FileFlags: ??
 
   btree_header:
-    label: BTREEHEADER
     u8[2] Magic: 3B 29
     u16 Flags:
       bit b0000_0000_0000_0001: Unknown1
@@ -65,7 +63,6 @@ structs:
 
 
   btree_index_header:
-    label: BTREEINDEXHEADER
     u16 Unknown: ??
     u16 Entries: ??
     i16 PreviousPage: ??
@@ -73,7 +70,6 @@ structs:
 
 
   btree_node_header:
-    label: BTREENODEHEADER
     u16 Unknown: ??
     u16 Entries: ??
     i16 PreviousPage: ??

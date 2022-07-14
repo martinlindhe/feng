@@ -16,7 +16,7 @@ LogicalScreenDescriptor
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global color table             u8[192]                                77 77 01 a6 a7 01 67 67 01 bf bf bf 0f 0e 01 c7 c7 01 57 57 01 47 47 01 37 36 01 d6 d6 01 9c 9c ...
 
-Block_0 GraphicControlExtension
+Block_0 EXT_GRAPHIC_CONTROL
   [0000cd] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [0000ce] ExtensionType                  u8               249                   f9
@@ -31,7 +31,7 @@ Block_0 GraphicControlExtension
   [0000d3] Transparent color index        u8               0                     00
   [0000d4] Block terminator               u8               0                     00
 
-Block_1 ImageDescriptor
+Block_1 BLOCK_IMAGE
   [0000d5] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [0000d6] Left position                  u16 le           0                     00 00

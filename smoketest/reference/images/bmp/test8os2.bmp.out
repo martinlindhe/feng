@@ -1,11 +1,11 @@
 # templates/images/bmp.yml
-FILEHEADER BITMAPFILEHEADER
+BITMAPFILEHEADER
   [000000] Signature                      ascii[2]         BM                    42 4d
   [000002] File size                      u32 le           8986                  00 00 23 1a
   [000006] Reserved                       u32 le           0                     00 00 00 00
   [00000a] Bitmap offset                  u32 le           794                   00 00 03 1a
 
-DIBHEADER BITMAPINFOHEADER
+DIBHEADER
   [00000e] HeaderSize                     u32 le           12                    00 00 00 0c
            - V2                           eq
   [000012] Width                          i16 le           127                   00 7f

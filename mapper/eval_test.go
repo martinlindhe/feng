@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/davecgh/go-spew/spew"
+	"github.com/maja42/goval"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
 	"github.com/stretchr/testify/assert"
@@ -69,4 +71,18 @@ layout:
 	_, val, err := fl.GetValue("Header.Reserved", &ds.Layout[0])
 	assert.Equal(t, nil, err)
 	assert.Equal(t, 4, len(val), val)
+}
+
+func TestGovalStrings(t *testing.T) {
+
+	eval := goval.NewEvaluator()
+
+	variables := make(map[string]interface{})
+	functions := make(map[string]goval.ExpressionFunction)
+
+	result, err := eval.Evaluate(` "hello" `, variables, functions)
+
+	assert.Nil(t, err)
+
+	spew.Dump(result)
 }

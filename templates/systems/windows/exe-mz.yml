@@ -470,37 +470,37 @@ structs:
       u32 VirtualAddress: ??
       u32 Size: ??
       if self.index == 0:
-        label: Export
+        label: '"Export"'
       if self.index == 1:
-        label: Import
+        label: '"Import"'
       if self.index == 2:
-        label: Resource
+        label: '"Resource"'
       if self.index == 3:
-        label: Exception
+        label: '"Exception"'
       if self.index == 4:
-        label: Security
+        label: '"Security"'
       if self.index == 5:
-        label: BaseRelocationTable
+        label: '"BaseRelocationTable"'
       if self.index == 6:
-        label: DebugDirectory
+        label: '"DebugDirectory"'
       if self.index == 7:
-        label: CopyrightOrArchitectureSpecificData
+        label: '"CopyrightOrArchitectureSpecificData"'
       if self.index == 8:
-        label: GlobalPtr
+        label: '"GlobalPtr"'
       if self.index == 9:
-        label: TLSDirectory
+        label: '"TLSDirectory"'
       if self.index == 10:
-        label: LoadConfigurationDirectory
+        label: '"LoadConfigurationDirectory"'
       if self.index == 11:
-        label: BoundImportDirectory
+        label: '"BoundImportDirectory"'
       if self.index == 12:
-        label: ImportAddressTable
+        label: '"ImportAddressTable"'
       if self.index == 13:
-        label: DelayLoadImportDescriptors
+        label: '"DelayLoadImportDescriptors"'
       if self.index == 14:
-        label: COMRuntimedescriptor
+        label: '"COMRuntimedescriptor"'
       if self.index == 15:
-        label: Reserved
+        label: '"Reserved"'
 
   pe_section:
     ascii[8] SectionName: ??

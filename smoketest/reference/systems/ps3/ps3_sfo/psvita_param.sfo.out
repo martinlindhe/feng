@@ -1,0 +1,99 @@
+# templates/systems/ps3/ps3_sfo.yml
+Header
+  [000000] Signature                      u8[4]                                  00 50 53 46
+  [000004] Version                        u32 le           257                   00 00 01 01
+  [000008] keyTableOffset                 u32 le           164                   00 00 00 a4
+  [00000c] dataTableOffset                u32 le           248                   00 00 00 f8
+  [000010] indexTableEntries              u32 le           9                     00 00 00 09
+
+SFO_0 ATTRIBUTE =
+  [000014] keyOffset                      u16 le           0                     00 00
+  [000016] param_fmt                      u16 le           1028                  04 04
+           - u32                          eq
+  [000018] paramLen                       u32 le           4                     00 00 00 04
+  [00001c] paramMaxLen                    u32 le           4                     00 00 00 04
+  [000020] dataOffset                     u32 le           0                     00 00 00 00
+  [0000a4] Key                            asciiz           ATTRIBUTE             41 54 54 52 49 42 55 54 45 00
+  [0000f8] Data                           ascii[4]                               00 00 00 00
+
+SFO_1 CATEGORY = ac
+  [000024] keyOffset                      u16 le           10                    00 0a
+  [000026] param_fmt                      u16 le           516                   02 04
+           - unknown                      eq
+  [000028] paramLen                       u32 le           3                     00 00 00 03
+  [00002c] paramMaxLen                    u32 le           4                     00 00 00 04
+  [000030] dataOffset                     u32 le           4                     00 00 00 04
+  [0000ae] Key                            asciiz           CATEGORY              43 41 54 45 47 4f 52 59 00
+  [0000fc] Data                           ascii[4]         ac                    61 63 00 00
+
+SFO_2 CONTENT_ID = UP9000-PCSA00009_00-5555000000020014
+  [000034] keyOffset                      u16 le           19                    00 13
+  [000036] param_fmt                      u16 le           516                   02 04
+           - unknown                      eq
+  [000038] paramLen                       u32 le           37                    00 00 00 25
+  [00003c] paramMaxLen                    u32 le           48                    00 00 00 30
+  [000040] dataOffset                     u32 le           8                     00 00 00 08
+  [0000b7] Key                            asciiz           CONTENT_ID            43 4f 4e 54 45 4e 54 5f 49 44 00
+  [000100] Data                           ascii[48]        UP9000-PCSA00009_00-5555000000020014 55 50 39 30 30 30 2d 50 43 53 41 30 30 30 30 39 5f 30 30 2d 35 35 35 35 30 30 30 30 30 30 30 32 ...
+
+SFO_3 PUBTOOLINFO = c_date=20130510
+  [000044] keyOffset                      u16 le           30                    00 1e
+  [000046] param_fmt                      u16 le           516                   02 04
+           - unknown                      eq
+  [000048] paramLen                       u32 le           16                    00 00 00 10
+  [00004c] paramMaxLen                    u32 le           512                   00 00 02 00
+  [000050] dataOffset                     u32 le           56                    00 00 00 38
+  [0000c2] Key                            asciiz           PUBTOOLINFO           50 55 42 54 4f 4f 4c 49 4e 46 4f 00
+  [000130] Data                           ascii[512]       c_date=20130510       63 5f 64 61 74 65 3d 32 30 31 33 30 35 31 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+
+SFO_4 TITLE = Club Beginner's Level 5
+  [000054] keyOffset                      u16 le           42                    00 2a
+  [000056] param_fmt                      u16 le           516                   02 04
+           - unknown                      eq
+  [000058] paramLen                       u32 le           24                    00 00 00 18
+  [00005c] paramMaxLen                    u32 le           128                   00 00 00 80
+  [000060] dataOffset                     u32 le           568                   00 00 02 38
+  [0000ce] Key                            asciiz           TITLE                 54 49 54 4c 45 00
+  [000330] Data                           ascii[128]       Club Beginner's Level 5 43 6c 75 62 20 42 65 67 69 6e 6e 65 72 27 73 20 4c 65 76 65 6c 20 35 00 00 00 00 00 00 00 00 00 ...
+
+SFO_5 TITLE_02 = Club Beginners Niveau 5
+  [000064] keyOffset                      u16 le           48                    00 30
+  [000066] param_fmt                      u16 le           516                   02 04
+           - unknown                      eq
+  [000068] paramLen                       u32 le           24                    00 00 00 18
+  [00006c] paramMaxLen                    u32 le           128                   00 00 00 80
+  [000070] dataOffset                     u32 le           696                   00 00 02 b8
+  [0000d4] Key                            asciiz           TITLE_02              54 49 54 4c 45 5f 30 32 00
+  [0003b0] Data                           ascii[128]       Club Beginners Niveau 5 43 6c 75 62 20 42 65 67 69 6e 6e 65 72 73 20 4e 69 76 65 61 75 20 35 00 00 00 00 00 00 00 00 00 ...
+
+SFO_6 TITLE_03 = Palo Beginner's Nivel 5
+  [000074] keyOffset                      u16 le           57                    00 39
+  [000076] param_fmt                      u16 le           516                   02 04
+           - unknown                      eq
+  [000078] paramLen                       u32 le           24                    00 00 00 18
+  [00007c] paramMaxLen                    u32 le           128                   00 00 00 80
+  [000080] dataOffset                     u32 le           824                   00 00 03 38
+  [0000dd] Key                            asciiz           TITLE_03              54 49 54 4c 45 5f 30 33 00
+  [000430] Data                           ascii[128]       Palo Beginner's Nivel 5 50 61 6c 6f 20 42 65 67 69 6e 6e 65 72 27 73 20 4e 69 76 65 6c 20 35 00 00 00 00 00 00 00 00 00 ...
+
+SFO_7 TITLE_ID = PCSA00009
+  [000084] keyOffset                      u16 le           66                    00 42
+  [000086] param_fmt                      u16 le           516                   02 04
+           - unknown                      eq
+  [000088] paramLen                       u32 le           10                    00 00 00 0a
+  [00008c] paramMaxLen                    u32 le           12                    00 00 00 0c
+  [000090] dataOffset                     u32 le           952                   00 00 03 b8
+  [0000e6] Key                            asciiz           TITLE_ID              54 49 54 4c 45 5f 49 44 00
+  [0004b0] Data                           ascii[12]        PCSA00009             50 43 53 41 30 30 30 30 39 00 00 00
+
+SFO_8 VERSION = 01.00
+  [000094] keyOffset                      u16 le           75                    00 4b
+  [000096] param_fmt                      u16 le           516                   02 04
+           - unknown                      eq
+  [000098] paramLen                       u32 le           6                     00 00 00 06
+  [00009c] paramMaxLen                    u32 le           8                     00 00 00 08
+  [0000a0] dataOffset                     u32 le           964                   00 00 03 c4
+  [0000ef] Key                            asciiz           VERSION               56 45 52 53 49 4f 4e 00
+  [0004bc] Data                           ascii[8]         01.00                 30 31 2e 30 30 00 00 00
+
+0x0001 (1) unmapped bytes (0.1%)

@@ -61,21 +61,20 @@ structs:
 
   block:
     u8 BlockType:
-      eq 2c: BLOCK_IMAGE
+      eq 2c: BLOCK_IMAGE      # image descriptor
       eq 21: BLOCK_EXTENSION
       eq 3b: BLOCK_TRAILER
 
-    label: self.BlockType # XXX implement
+    label: self.BlockType
 
     if self.BlockType == BLOCK_EXTENSION:
-      label: BLOCK_EXTENSION
       u8 ExtensionType:
         #eq 01: EXT_PLAIN_TEXT
         eq f9: EXT_GRAPHIC_CONTROL
         #eq fe: EXT_COMMENT
         #eq ff: EXT_APPLICATION
       if self.ExtensionType == EXT_GRAPHIC_CONTROL:
-        label: GraphicControlExtension
+        label: self.ExtensionType
         u8 Size: "04"                       # NOTE: should always be 04
         u8 Flags:
           bit b0000_0001: Transparent color
@@ -86,11 +85,7 @@ structs:
         u8 Transparent color index: ??
         u8 Block terminator: "00"
 
-    if self.BlockType == BLOCK_TRAILER:
-      label: Trailer
-
     if self.BlockType == BLOCK_IMAGE:
-      label: ImageDescriptor # BLOCK_IMAGE
       u16 Left position: ??
       u16 Top position: ??
       u16 Image width: ??

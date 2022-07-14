@@ -72,7 +72,7 @@ Block_16 0
 Block_17 0
   [00007f] BlockType                      u8               0                     00
 
-Block_18 GraphicControlExtension
+Block_18 EXT_GRAPHIC_CONTROL
   [000080] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000081] ExtensionType                  u8               249                   f9
@@ -87,7 +87,7 @@ Block_18 GraphicControlExtension
   [000086] Transparent color index        u8               31                    1f
   [000087] Block terminator               u8               0                     00
 
-Block_19 ImageDescriptor
+Block_19 BLOCK_IMAGE
   [000088] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000089] Left position                  u16 le           0                     00 00

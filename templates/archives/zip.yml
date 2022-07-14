@@ -30,8 +30,9 @@ structs:
       eq 0605: ZIPENDLOCATOR
       eq 0807: ZIPDATADESCR
 
+    label: self.Type
+
     if self.Type == ZIPFILERECORD:
-      label: ZIPFILERECORD
       u16 Version needed to extract: ??
       u16 Flags: ??
       u16 Compression:
@@ -52,7 +53,6 @@ structs:
       u8[self.CompressedSize] Data: ??
 
     if self.Type == ZIPDIRENTRY:
-      label: ZIPDIRENTRY
       u16 Version made by: ??
       u16 Version needed to extract: ??
       u16 Flags: ??
@@ -79,13 +79,11 @@ structs:
       ascii[self.CommentLength] Comment: ??
 
     if self.Type == ZIPDATADESCR:
-      label: ZIPDATADESCR
       u32 CRC: ??
       u32 Compressed size: ??
       u32 Uncompressed size: ??
 
     if self.Type == ZIPENDLOCATOR:
-      label: ZIPENDLOCATOR
       u16 Disk number: ??
       u16 Start Disk Number: ??
       u16 Entries on disk: ??

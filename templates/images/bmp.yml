@@ -54,14 +54,12 @@ types:
 
 structs:
   file_header:
-    label: BITMAPFILEHEADER
     ascii[2] Signature: c'BM'
     u32 File size: ??
     u32 Reserved: ??
     u32 Bitmap offset: ??
 
   info_header:
-    label: BITMAPINFOHEADER
     u32 HeaderSize:
       eq 0000_000c: V2 # Windows 2.x         WIN2XBITMAPHEADER aka BITMAPCOREHEADER
       eq 0000_0028: V3 # Windows 3.x         WIN3XBITMAPHEADER aka BITMAPINFOHEADER
@@ -160,5 +158,5 @@ structs:
       #  u8[1] Image data: ??
 
 layout:
-  - file_header FILEHEADER
+  - file_header BITMAPFILEHEADER
   - info_header DIBHEADER

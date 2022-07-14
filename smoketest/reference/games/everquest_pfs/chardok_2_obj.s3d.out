@@ -6,6 +6,7 @@ Header
 
 Block_0 DIRENTRY
   [0064ac] CRC                            u32 le           1633159881            61 58 0a c9
+           - DIRENTRY                     eq
   [0064b0] FileOffset                     u32 le           25693                 00 00 64 5d
   [0064b4] Expanded size                  u32 le           96                    00 00 00 60
   [00645d] CompressedSize                 u32 le           67                    00 00 00 43

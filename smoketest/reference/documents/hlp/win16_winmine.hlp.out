@@ -5,12 +5,12 @@ Header
   [000008] FirstFreeBlock                 u32 le           4294967295            ff ff ff ff
   [00000c] EntireFileSize                 u32 le           12754                 00 00 31 d2
 
-FileHeader FILEHEADER
+FileHeader
   [0002ce] ReservedSpace                  u32 le           1071                  00 00 04 2f
   [0002d2] UsedSpace                      u32 le           1062                  00 00 04 26
   [0002d6] FileFlags                      u8               4                     04
 
-BTreeHeader BTREEHEADER
+BTreeHeader
   [0002d7] Magic                          u8[2]                                  3b 29
   [0002d9] Flags                          u16 le           1026                  04 02
            - Unknown1                     bit 0:1          0
@@ -28,12 +28,12 @@ BTreeHeader BTREEHEADER
   [0002f7] Levels                         u16 le           1                     00 01
   [0002f9] TotalBtreeEntries              u32 le           12                    00 00 00 0c
 
-BTreeIndexHeader_0 BTREEINDEXHEADER
+BTreeIndexHeader_0
   [0002fd] Unknown                        u16 le           876                   03 6c
   [0002ff] Entries                        u16 le           12                    00 0c
   [000301] PreviousPage                   i16 le           65535                 ff ff
 
-BTreeNodeHeader BTREENODEHEADER
+BTreeNodeHeader
   [000303] Unknown                        u16 le           65535                 ff ff
   [000305] Entries                        u16 le           17276                 43 7c
   [000307] PreviousPage                   i16 le           20047                 4e 4f

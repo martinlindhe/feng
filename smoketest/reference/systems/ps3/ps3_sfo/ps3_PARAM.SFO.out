@@ -6,17 +6,17 @@ Header
   [00000c] dataTableOffset                u32 le           148                   00 00 00 94
   [000010] indexTableEntries              u32 le           5                     00 00 00 05
 
-SFO_0 CATEGORY
+SFO_0 CATEGORY = GD
   [000014] keyOffset                      u16 le           0                     00 00
   [000016] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000018] paramLen                       u32 le           3                     00 00 00 03
   [00001c] paramMaxLen                    u32 le           4                     00 00 00 04
   [000020] dataOffset                     u32 le           0                     00 00 00 00
   [000064] Key                            asciiz           CATEGORY              43 41 54 45 47 4f 52 59 00
   [000094] Data                           ascii[4]         GD                    47 44 00 00
 
-SFO_1 PARENTAL_LEVEL
+SFO_1 PARENTAL_LEVEL = .
   [000024] keyOffset                      u16 le           9                     00 09
   [000026] param_fmt                      u16 le           1028                  04 04
            - u32                          eq
@@ -26,30 +26,30 @@ SFO_1 PARENTAL_LEVEL
   [00006d] Key                            asciiz           PARENTAL_LEVEL        50 41 52 45 4e 54 41 4c 5f 4c 45 56 45 4c 00
   [000098] Data                           ascii[4]         .                     03 00 00 00
 
-SFO_2 TITLE
+SFO_2 TITLE = MOBILE SUIT GUNDAM.SIDE STORIES
   [000034] keyOffset                      u16 le           24                    00 18
   [000036] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000038] paramLen                       u32 le           32                    00 00 00 20
   [00003c] paramMaxLen                    u32 le           128                   00 00 00 80
   [000040] dataOffset                     u32 le           8                     00 00 00 08
   [00007c] Key                            asciiz           TITLE                 54 49 54 4c 45 00
   [00009c] Data                           ascii[128]       MOBILE SUIT GUNDAM.SIDE STORIES 4d 4f 42 49 4c 45 20 53 55 49 54 20 47 55 4e 44 41 4d 0a 53 49 44 45 20 53 54 4f 52 49 45 53 00 ...
 
-SFO_3 TITLE_ID
+SFO_3 TITLE_ID = BLAS50710
   [000044] keyOffset                      u16 le           30                    00 1e
   [000046] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000048] paramLen                       u32 le           10                    00 00 00 0a
   [00004c] paramMaxLen                    u32 le           16                    00 00 00 10
   [000050] dataOffset                     u32 le           136                   00 00 00 88
   [000082] Key                            asciiz           TITLE_ID              54 49 54 4c 45 5f 49 44 00
   [00011c] Data                           ascii[16]        BLAS50710             42 4c 41 53 35 30 37 31 30 00 00 00 00 00 00 00
 
-SFO_4 VERSION
+SFO_4 VERSION = 01.0k..\
   [000054] keyOffset                      u16 le           39                    00 27
   [000056] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000058] paramLen                       u32 le           6                     00 00 00 06
   [00005c] paramMaxLen                    u32 le           8                     00 00 00 08
   [000060] dataOffset                     u32 le           152                   00 00 00 98

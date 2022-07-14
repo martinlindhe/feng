@@ -72,7 +72,7 @@ Block_16 0
 Block_17 0
   [000037] BlockType                      u8               0                     00
 
-Block_18 GraphicControlExtension
+Block_18 EXT_GRAPHIC_CONTROL
   [000038] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000039] ExtensionType                  u8               249                   f9
@@ -87,7 +87,7 @@ Block_18 GraphicControlExtension
   [00003e] Transparent color index        u8               7                     07
   [00003f] Block terminator               u8               0                     00
 
-Block_19 ImageDescriptor
+Block_19 BLOCK_IMAGE
   [000040] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000041] Left position                  u16 le           0                     00 00
@@ -105,7 +105,7 @@ Block_19 ImageDescriptor
   [00004c] Data                           u8[67]                                 78 ba 47 c4 90 39 17 57 08 6d 9e 52 e0 bd d9 c6 75 d6 c7 8c 64 19 71 8c 61 54 cb 30 1c ae 0b cb ...
   [00008f] BlockTerminator                u8               0                     00
 
-Block_20 GraphicControlExtension
+Block_20 EXT_GRAPHIC_CONTROL
   [000090] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000091] ExtensionType                  u8               249                   f9
@@ -120,7 +120,7 @@ Block_20 GraphicControlExtension
   [000096] Transparent color index        u8               7                     07
   [000097] Block terminator               u8               0                     00
 
-Block_21 ImageDescriptor
+Block_21 BLOCK_IMAGE
   [000098] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000099] Left position                  u16 le           2                     00 02
@@ -138,7 +138,7 @@ Block_21 ImageDescriptor
   [0000a4] Data                           u8[62]                                 78 aa 11 fb af 35 a8 8c 39 d2 11 b2 ac c5 da c6 1d de b5 88 23 69 3e 1b e5 1e 45 f1 2e 71 3c c3 ...
   [0000e2] BlockTerminator                u8               0                     00
 
-Block_22 GraphicControlExtension
+Block_22 EXT_GRAPHIC_CONTROL
   [0000e3] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [0000e4] ExtensionType                  u8               249                   f9
@@ -153,7 +153,7 @@ Block_22 GraphicControlExtension
   [0000e9] Transparent color index        u8               7                     07
   [0000ea] Block terminator               u8               0                     00
 
-Block_23 ImageDescriptor
+Block_23 BLOCK_IMAGE
   [0000eb] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [0000ec] Left position                  u16 le           0                     00 00
@@ -171,7 +171,7 @@ Block_23 ImageDescriptor
   [0000f7] Data                           u8[62]                                 78 ba 67 c6 90 39 17 e3 7c 21 d4 45 73 de 8c a7 81 cb b7 00 00 49 10 07 8a 6e eb ea a6 55 cc be ...
   [000135] BlockTerminator                u8               0                     00
 
-Block_24 GraphicControlExtension
+Block_24 EXT_GRAPHIC_CONTROL
   [000136] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000137] ExtensionType                  u8               249                   f9
@@ -186,7 +186,7 @@ Block_24 GraphicControlExtension
   [00013c] Transparent color index        u8               7                     07
   [00013d] Block terminator               u8               0                     00
 
-Block_25 ImageDescriptor
+Block_25 BLOCK_IMAGE
   [00013e] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [00013f] Left position                  u16 le           0                     00 00
@@ -204,7 +204,7 @@ Block_25 ImageDescriptor
   [00014a] Data                           u8[62]                                 78 0a a0 7e c6 bc c3 d8 8b f1 d5 e6 b0 d4 dc f5 29 82 30 4d 41 70 94 e5 a9 a4 29 6b ba b0 da ba ...
   [000188] BlockTerminator                u8               0                     00
 
-Block_26 GraphicControlExtension
+Block_26 EXT_GRAPHIC_CONTROL
   [000189] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [00018a] ExtensionType                  u8               249                   f9
@@ -219,7 +219,7 @@ Block_26 GraphicControlExtension
   [00018f] Transparent color index        u8               7                     07
   [000190] Block terminator               u8               0                     00
 
-Block_27 ImageDescriptor
+Block_27 BLOCK_IMAGE
   [000191] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000192] Left position                  u16 le           0                     00 00
@@ -237,7 +237,7 @@ Block_27 ImageDescriptor
   [00019d] Data                           u8[62]                                 78 ba 07 c0 90 39 17 97 10 6d d6 73 6f de 5c 07 32 de 78 0c c3 68 18 27 9a 56 eb ea be 51 cc a2 ...
   [0001db] BlockTerminator                u8               0                     00
 
-Block_28 GraphicControlExtension
+Block_28 EXT_GRAPHIC_CONTROL
   [0001dc] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [0001dd] ExtensionType                  u8               249                   f9
@@ -252,7 +252,7 @@ Block_28 GraphicControlExtension
   [0001e2] Transparent color index        u8               7                     07
   [0001e3] Block terminator               u8               0                     00
 
-Block_29 ImageDescriptor
+Block_29 BLOCK_IMAGE
   [0001e4] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [0001e5] Left position                  u16 le           0                     00 00
@@ -270,7 +270,7 @@ Block_29 ImageDescriptor
   [0001f0] Data                           u8[60]                                 78 ba 27 c2 50 39 17 cf 18 6d 1e 00 d6 bd d9 c6 75 d6 c7 8c 64 19 71 4a 51 54 8c eb c2 ad 4c d7 ...
   [00022c] BlockTerminator                u8               0                     00
 
-Block_30 GraphicControlExtension
+Block_30 EXT_GRAPHIC_CONTROL
   [00022d] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [00022e] ExtensionType                  u8               249                   f9
@@ -285,7 +285,7 @@ Block_30 GraphicControlExtension
   [000233] Transparent color index        u8               7                     07
   [000234] Block terminator               u8               0                     00
 
-Block_31 ImageDescriptor
+Block_31 BLOCK_IMAGE
   [000235] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000236] Left position                  u16 le           0                     00 00
@@ -303,7 +303,7 @@ Block_31 ImageDescriptor
   [000241] Data                           u8[62]                                 78 ba 37 c3 90 39 17 57 29 6d 1e 21 e0 bd d9 c6 75 d6 c7 8c 64 19 71 0c 41 54 0b 00 1c ae 0b cb ...
   [00027f] BlockTerminator                u8               0                     00
 
-Block_32 GraphicControlExtension
+Block_32 EXT_GRAPHIC_CONTROL
   [000280] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000281] ExtensionType                  u8               249                   f9
@@ -318,7 +318,7 @@ Block_32 GraphicControlExtension
   [000286] Transparent color index        u8               7                     07
   [000287] Block terminator               u8               0                     00
 
-Block_33 ImageDescriptor
+Block_33 BLOCK_IMAGE
   [000288] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000289] Left position                  u16 le           0                     00 00
@@ -336,7 +336,7 @@ Block_33 ImageDescriptor
   [000294] Data                           u8[59]                                 78 ba 57 c5 90 39 17 17 21 6d 9e 31 e0 bd d9 c6 75 d6 c7 8c 64 19 71 4c 10 54 8b 20 1c ae 0b cb ...
   [0002cf] BlockTerminator                u8               0                     00
 
-Block_34 Trailer
+Block_34 BLOCK_TRAILER
   [0002d0] BlockType                      u8               59                    3b
            - BLOCK_TRAILER                eq
 

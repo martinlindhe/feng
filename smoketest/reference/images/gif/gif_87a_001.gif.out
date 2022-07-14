@@ -16,7 +16,7 @@ LogicalScreenDescriptor
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global color table             u8[12]                                 00 00 a1 aa 00 2c 00 7f 03 67 67 1a
 
-Block_0 ImageDescriptor
+Block_0 BLOCK_IMAGE
   [000019] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [00001a] Left position                  u16 le           0                     00 00
@@ -34,7 +34,7 @@ Block_0 ImageDescriptor
   [000025] Data                           u8[3]                                  0c 34 05
   [000028] BlockTerminator                u8               0                     00
 
-Block_1 Trailer
+Block_1 BLOCK_TRAILER
   [000029] BlockType                      u8               59                    3b
            - BLOCK_TRAILER                eq
 

@@ -1,10 +1,9 @@
-# STATUS: 30%
+# STATUS: 40%
 
-# - MAX: figure out how to decode image data stream (between SOS and EOI markers)
-#     - need a way to specify unknown length of data until marker bytes is seen
-#
-# - HI: file is a stream of packets with different signature. parse until EOF
-# - MID: use custom types
+# - MAX: use custom structs COMPS, COMPSOS
+# - HI: handle EXIF data
+# - MID: allow pattern matching on ascii[4]
+
 
 references:
   - https://en.wikipedia.org/wiki/JPEG
@@ -23,7 +22,7 @@ magic:
     match: ff d8
 
 types:
-  # XXX MAKE USE OF
+  # XXX MAKE USE OF. TODO they should just be structs ?!??!
   COMPS:
     u8 compId: ??
     u8 Flag:

@@ -286,11 +286,22 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		switch es.Field.Kind {
 		case "label":
 			// "label: APP0". augment node with extra info
-			val, err := fl.MatchedValue(es.Pattern.Value, df)
-			if err != nil {
-				panic(err)
+			s := strings.ReplaceAll(es.Pattern.Value, "self.", df.Label+".")
+			// if it is a numeric field with patterns, return the string for the matched pattern,
+			// ELSE evaluate expression as strings
+			if fl.isPatternVariableName(es.Pattern.Value, df) {
+				val, err := fl.MatchedValue(es.Pattern.Value, df)
+				if err != nil {
+					panic(err)
+				}
+				fs.decoration = strings.TrimSpace(val)
+			} else {
+				val, err := fl.EvaluateStringExpression(s)
+				if err != nil {
+					panic(err)
+				}
+				fs.decoration = strings.TrimSpace(val)
 			}
-			fs.decoration = strings.TrimSpace(val)
 
 		case "parse":
 			// break parser
@@ -571,14 +582,16 @@ func readBytesUntilZero(r io.Reader) ([]byte, error) {
 // reads bytes from reader until the marker byte sequence is found. returned data excludes the marker
 // FIXME: won't find patterns overlapping chunks
 func readBytesUntilMarker(r *bytes.Reader, chunkSize int64, search []byte) ([]byte, error) {
-	var offset int64
+
+	if int(chunkSize) < len(search) {
+		panic("unlikely")
+	}
 
 	chunk := make([]byte, int(chunkSize)+len(search))
-
 	n, err := r.Read(chunk[:chunkSize])
-
 	res := []byte{}
 
+	var offset int64
 	idx := bytes.Index(chunk[:chunkSize], search)
 	for {
 		//log.Printf("Read a slice of len %d, Index %d: % 02x", n, idx, chunk[:4])

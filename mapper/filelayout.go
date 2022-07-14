@@ -256,6 +256,31 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 	return n, err
 }
 
+func (fl *FileLayout) isPatternVariableName(s string, df *value.DataField) bool {
+	if df != nil {
+		s = strings.ReplaceAll(s, "self.", df.Label+".")
+	}
+	parts := strings.SplitN(s, ".", 3)
+	if len(parts) < 2 {
+		return false
+	}
+	structName := parts[0]
+	fieldName := parts[1]
+
+	str, err := fl.GetStruct(structName)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	for _, field := range str.Fields {
+		if field.Format.Label == fieldName {
+			return true
+		}
+	}
+	return false
+}
+
 // returns the pattern matched value of field named `structName`.`fieldName`
 func (fl *FileLayout) MatchedValue(s string, df *value.DataField) (string, error) {
 

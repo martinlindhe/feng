@@ -9,7 +9,8 @@ VERSION 0 - DRAFT. JULY 2022
 
     endian: big         big/little. set endian
 
-    label: "APP0"       set label decoration for the current struct
+    label: '"DIRENTRY"'                     set label decoration for the current struct
+    label: self.Key + " = " self.Value      evaluate strings
 
     offset: self.BaseOffset       set offset to evaluated data field
 

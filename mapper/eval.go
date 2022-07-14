@@ -26,8 +26,59 @@ func (e EvaluateError) Error() string {
 	return e.input + ": " + e.msg
 }
 
+// evaluates a string expression
+func (fl *FileLayout) EvaluateStringExpression(in string) (string, error) {
+	result, err := fl.evaluateExpr(in)
+	if err != nil {
+		return "", err
+	}
+
+	switch v := result.(type) {
+	case string:
+		if DEBUG_EVAL {
+			log.Printf("EvaluateStringExpression: %s => %s", in, v)
+		}
+		return v, nil
+
+	default:
+		panic(fmt.Errorf("unhandled result type %T from %s", result, in))
+	}
+}
+
+// evaluates a math expression
 func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 
+	result, err := fl.evaluateExpr(in)
+	if err != nil {
+		return 0, err
+	}
+
+	switch v := result.(type) {
+	case int:
+		if DEBUG_EVAL {
+			log.Printf("EvaluateExpression: %s => %d", in, v)
+		}
+		return uint64(v), nil
+
+	case uint64:
+		if DEBUG_EVAL {
+			log.Printf("EvaluateExpression: %s => %d", in, v)
+		}
+		return v, nil
+
+	case bool:
+		if v {
+			return 1, nil
+		} else {
+			return 0, nil
+		}
+
+	default:
+		panic(fmt.Errorf("unhandled result type %T from %s", result, in))
+	}
+}
+
+func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
 	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
 
 	// fast path: if "in" looks like decimal number just convert it
@@ -58,10 +109,12 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 				default:
 					mapped[field.Format.Label] = field.Present()
 				}
+			} else {
+				mapped[field.Format.Label] = field.Present()
 			}
 
 			if DEBUG_EVAL {
-				//log.Printf("mapped variable %s to %v => %v", field.Format.Label, field.Value, mapped[field.Format.Label])
+				log.Printf("mapped variable %s values %v => %v", field.Format.Label, field.Value, mapped[field.Format.Label])
 			}
 		}
 		mapped["index"] = int(layout.Index)
@@ -206,20 +259,5 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 		return 0, EvaluateError{input: in, msg: err.Error()}
 	}
 
-	switch v := result.(type) {
-	case int:
-		if DEBUG_EVAL {
-			log.Printf("EvaluateExpression: %s => %d", in, v)
-		}
-		return uint64(v), nil
-
-	case bool:
-		if v {
-			return 1, nil
-		} else {
-			return 0, nil
-		}
-	}
-	panic(fmt.Errorf("unhandled result type %T", result))
-	return 0, fmt.Errorf("unhandled result type %T", result)
+	return result, nil
 }

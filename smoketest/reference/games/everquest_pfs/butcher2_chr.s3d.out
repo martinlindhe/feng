@@ -22,6 +22,7 @@ Block_1 FILEENTRY
 
 Block_2 DIRENTRY
   [0068bd] CRC                            u32 le           1633159881            61 58 0a c9
+           - DIRENTRY                     eq
   [0068c1] FileOffset                     u32 le           26681                 00 00 68 39
   [0068c5] Expanded size                  u32 le           142                   00 00 00 8e
   [006839] CompressedSize                 u32 le           96                    00 00 00 60

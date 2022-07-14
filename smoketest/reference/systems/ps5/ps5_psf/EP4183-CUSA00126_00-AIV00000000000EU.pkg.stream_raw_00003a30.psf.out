@@ -6,7 +6,7 @@ Header
   [00000c] dataTableOffset                u32 le           716                   00 00 02 cc
   [000010] indexTableEntries              u32 le           22                    00 00 00 16
 
-SFO_0 APP_TYPE
+SFO_0 APP_TYPE = .
   [000014] keyOffset                      u16 le           0                     00 00
   [000016] param_fmt                      u16 le           1028                  04 04
            - u32                          eq
@@ -16,17 +16,17 @@ SFO_0 APP_TYPE
   [000174] Key                            asciiz           APP_TYPE              41 50 50 5f 54 59 50 45 00
   [0002cc] Data                           ascii[4]         .                     03 00 00 00
 
-SFO_1 APP_VER
+SFO_1 APP_VER = 01.00
   [000024] keyOffset                      u16 le           9                     00 09
   [000026] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000028] paramLen                       u32 le           6                     00 00 00 06
   [00002c] paramMaxLen                    u32 le           8                     00 00 00 08
   [000030] dataOffset                     u32 le           4                     00 00 00 04
   [00017d] Key                            asciiz           APP_VER               41 50 50 5f 56 45 52 00
   [0002d0] Data                           ascii[8]         01.00                 30 31 2e 30 30 00 00 00
 
-SFO_2 ATTRIBUTE
+SFO_2 ATTRIBUTE = .
   [000034] keyOffset                      u16 le           17                    00 11
   [000036] param_fmt                      u16 le           1028                  04 04
            - u32                          eq
@@ -36,27 +36,27 @@ SFO_2 ATTRIBUTE
   [000185] Key                            asciiz           ATTRIBUTE             41 54 54 52 49 42 55 54 45 00
   [0002d8] Data                           ascii[4]         .                     12 00 00 00
 
-SFO_3 CATEGORY
+SFO_3 CATEGORY = gdk
   [000044] keyOffset                      u16 le           27                    00 1b
   [000046] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000048] paramLen                       u32 le           4                     00 00 00 04
   [00004c] paramMaxLen                    u32 le           4                     00 00 00 04
   [000050] dataOffset                     u32 le           16                    00 00 00 10
   [00018f] Key                            asciiz           CATEGORY              43 41 54 45 47 4f 52 59 00
   [0002dc] Data                           ascii[4]         gdk                   67 64 6b 00
 
-SFO_4 CONTENT_ID
+SFO_4 CONTENT_ID = EP4183-CUSA00126_00-AIV00000000000EU
   [000054] keyOffset                      u16 le           36                    00 24
   [000056] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000058] paramLen                       u32 le           37                    00 00 00 25
   [00005c] paramMaxLen                    u32 le           48                    00 00 00 30
   [000060] dataOffset                     u32 le           20                    00 00 00 14
   [000198] Key                            asciiz           CONTENT_ID            43 4f 4e 54 45 4e 54 5f 49 44 00
   [0002e0] Data                           ascii[48]        EP4183-CUSA00126_00-AIV00000000000EU 45 50 34 31 38 33 2d 43 55 53 41 30 30 31 32 36 5f 30 30 2d 41 49 56 30 30 30 30 30 30 30 30 30 ...
 
-SFO_5 DISP_LOCATION_1
+SFO_5 DISP_LOCATION_1 = .
   [000064] keyOffset                      u16 le           47                    00 2f
   [000066] param_fmt                      u16 le           1028                  04 04
            - u32                          eq
@@ -66,7 +66,7 @@ SFO_5 DISP_LOCATION_1
   [0001a3] Key                            asciiz           DISP_LOCATION_1       44 49 53 50 5f 4c 4f 43 41 54 49 4f 4e 5f 31 00
   [000310] Data                           ascii[4]         .                     01 00 00 00
 
-SFO_6 DISP_LOCATION_2
+SFO_6 DISP_LOCATION_2 = .
   [000074] keyOffset                      u16 le           63                    00 3f
   [000076] param_fmt                      u16 le           1028                  04 04
            - u32                          eq
@@ -76,7 +76,7 @@ SFO_6 DISP_LOCATION_2
   [0001b3] Key                            asciiz           DISP_LOCATION_2       44 49 53 50 5f 4c 4f 43 41 54 49 4f 4e 5f 32 00
   [000314] Data                           ascii[4]         .                     01 00 00 00
 
-SFO_7 DOWNLOAD_DATA_SIZE
+SFO_7 DOWNLOAD_DATA_SIZE =
   [000084] keyOffset                      u16 le           79                    00 4f
   [000086] param_fmt                      u16 le           1028                  04 04
            - u32                          eq
@@ -86,17 +86,17 @@ SFO_7 DOWNLOAD_DATA_SIZE
   [0001c3] Key                            asciiz           DOWNLOAD_DATA_SIZE    44 4f 57 4e 4c 4f 41 44 5f 44 41 54 41 5f 53 49 5a 45 00
   [000318] Data                           ascii[4]                               00 04 00 00
 
-SFO_8 FORMAT
+SFO_8 FORMAT = obs
   [000094] keyOffset                      u16 le           98                    00 62
   [000096] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000098] paramLen                       u32 le           4                     00 00 00 04
   [00009c] paramMaxLen                    u32 le           4                     00 00 00 04
   [0000a0] dataOffset                     u32 le           80                    00 00 00 50
   [0001d6] Key                            asciiz           FORMAT                46 4f 52 4d 41 54 00
   [00031c] Data                           ascii[4]         obs                   6f 62 73 00
 
-SFO_9 PARENTAL_LEVEL
+SFO_9 PARENTAL_LEVEL = .
   [0000a4] keyOffset                      u16 le           105                   00 69
   [0000a6] param_fmt                      u16 le           1028                  04 04
            - u32                          eq
@@ -106,87 +106,87 @@ SFO_9 PARENTAL_LEVEL
   [0001dd] Key                            asciiz           PARENTAL_LEVEL        50 41 52 45 4e 54 41 4c 5f 4c 45 56 45 4c 00
   [000320] Data                           ascii[4]         .                     01 00 00 00
 
-SFO_10 PUBTOOLINFO
+SFO_10 PUBTOOLINFO = c_date=20131010,sdk_ver=01020000,st_type=digital50,img0_l0_size=8,img0_l1_size=0,img0_ch_size=4
   [0000b4] keyOffset                      u16 le           120                   00 78
   [0000b6] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [0000b8] paramLen                       u32 le           96                    00 00 00 60
   [0000bc] paramMaxLen                    u32 le           512                   00 00 02 00
   [0000c0] dataOffset                     u32 le           88                    00 00 00 58
   [0001ec] Key                            asciiz           PUBTOOLINFO           50 55 42 54 4f 4f 4c 49 4e 46 4f 00
   [000324] Data                           ascii[512]       c_date=20131010,sdk_ver=01020000,st_type=digital50,img0_l0_size=8,img0_l1_size=0,img0_ch_size=4 63 5f 64 61 74 65 3d 32 30 31 33 31 30 31 30 2c 73 64 6b 5f 76 65 72 3d 30 31 30 32 30 30 30 30 ...
 
-SFO_11 SERVICE_ID_ADDCONT_ADD_1
+SFO_11 SERVICE_ID_ADDCONT_ADD_1 =
   [0000c4] keyOffset                      u16 le           132                   00 84
   [0000c6] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [0000c8] paramLen                       u32 le           1                     00 00 00 01
   [0000cc] paramMaxLen                    u32 le           20                    00 00 00 14
   [0000d0] dataOffset                     u32 le           600                   00 00 02 58
   [0001f8] Key                            asciiz           SERVICE_ID_ADDCONT_ADD_1 53 45 52 56 49 43 45 5f 49 44 5f 41 44 44 43 4f 4e 54 5f 41 44 44 5f 31 00
   [000524] Data                           ascii[20]                              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-SFO_12 SERVICE_ID_ADDCONT_ADD_2
+SFO_12 SERVICE_ID_ADDCONT_ADD_2 =
   [0000d4] keyOffset                      u16 le           157                   00 9d
   [0000d6] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [0000d8] paramLen                       u32 le           1                     00 00 00 01
   [0000dc] paramMaxLen                    u32 le           20                    00 00 00 14
   [0000e0] dataOffset                     u32 le           620                   00 00 02 6c
   [000211] Key                            asciiz           SERVICE_ID_ADDCONT_ADD_2 53 45 52 56 49 43 45 5f 49 44 5f 41 44 44 43 4f 4e 54 5f 41 44 44 5f 32 00
   [000538] Data                           ascii[20]                              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-SFO_13 SERVICE_ID_ADDCONT_ADD_3
+SFO_13 SERVICE_ID_ADDCONT_ADD_3 =
   [0000e4] keyOffset                      u16 le           182                   00 b6
   [0000e6] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [0000e8] paramLen                       u32 le           1                     00 00 00 01
   [0000ec] paramMaxLen                    u32 le           20                    00 00 00 14
   [0000f0] dataOffset                     u32 le           640                   00 00 02 80
   [00022a] Key                            asciiz           SERVICE_ID_ADDCONT_ADD_3 53 45 52 56 49 43 45 5f 49 44 5f 41 44 44 43 4f 4e 54 5f 41 44 44 5f 33 00
   [00054c] Data                           ascii[20]                              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-SFO_14 SERVICE_ID_ADDCONT_ADD_4
+SFO_14 SERVICE_ID_ADDCONT_ADD_4 =
   [0000f4] keyOffset                      u16 le           207                   00 cf
   [0000f6] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [0000f8] paramLen                       u32 le           1                     00 00 00 01
   [0000fc] paramMaxLen                    u32 le           20                    00 00 00 14
   [000100] dataOffset                     u32 le           660                   00 00 02 94
   [000243] Key                            asciiz           SERVICE_ID_ADDCONT_ADD_4 53 45 52 56 49 43 45 5f 49 44 5f 41 44 44 43 4f 4e 54 5f 41 44 44 5f 34 00
   [000560] Data                           ascii[20]                              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-SFO_15 SERVICE_ID_ADDCONT_ADD_5
+SFO_15 SERVICE_ID_ADDCONT_ADD_5 =
   [000104] keyOffset                      u16 le           232                   00 e8
   [000106] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000108] paramLen                       u32 le           1                     00 00 00 01
   [00010c] paramMaxLen                    u32 le           20                    00 00 00 14
   [000110] dataOffset                     u32 le           680                   00 00 02 a8
   [00025c] Key                            asciiz           SERVICE_ID_ADDCONT_ADD_5 53 45 52 56 49 43 45 5f 49 44 5f 41 44 44 43 4f 4e 54 5f 41 44 44 5f 35 00
   [000574] Data                           ascii[20]                              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-SFO_16 SERVICE_ID_ADDCONT_ADD_6
+SFO_16 SERVICE_ID_ADDCONT_ADD_6 =
   [000114] keyOffset                      u16 le           257                   01 01
   [000116] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000118] paramLen                       u32 le           1                     00 00 00 01
   [00011c] paramMaxLen                    u32 le           20                    00 00 00 14
   [000120] dataOffset                     u32 le           700                   00 00 02 bc
   [000275] Key                            asciiz           SERVICE_ID_ADDCONT_ADD_6 53 45 52 56 49 43 45 5f 49 44 5f 41 44 44 43 4f 4e 54 5f 41 44 44 5f 36 00
   [000588] Data                           ascii[20]                              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-SFO_17 SERVICE_ID_ADDCONT_ADD_7
+SFO_17 SERVICE_ID_ADDCONT_ADD_7 =
   [000124] keyOffset                      u16 le           282                   01 1a
   [000126] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000128] paramLen                       u32 le           1                     00 00 00 01
   [00012c] paramMaxLen                    u32 le           20                    00 00 00 14
   [000130] dataOffset                     u32 le           720                   00 00 02 d0
   [00028e] Key                            asciiz           SERVICE_ID_ADDCONT_ADD_7 53 45 52 56 49 43 45 5f 49 44 5f 41 44 44 43 4f 4e 54 5f 41 44 44 5f 37 00
   [00059c] Data                           ascii[20]                              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-SFO_18 SYSTEM_VER
+SFO_18 SYSTEM_VER =
   [000134] keyOffset                      u16 le           307                   01 33
   [000136] param_fmt                      u16 le           1028                  04 04
            - u32                          eq
@@ -196,30 +196,30 @@ SFO_18 SYSTEM_VER
   [0002a7] Key                            asciiz           SYSTEM_VER            53 59 53 54 45 4d 5f 56 45 52 00
   [0005b0] Data                           ascii[4]                               00 00 07 01
 
-SFO_19 TITLE
+SFO_19 TITLE = Amazon / LOVEFiLM
   [000144] keyOffset                      u16 le           318                   01 3e
   [000146] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000148] paramLen                       u32 le           18                    00 00 00 12
   [00014c] paramMaxLen                    u32 le           128                   00 00 00 80
   [000150] dataOffset                     u32 le           744                   00 00 02 e8
   [0002b2] Key                            asciiz           TITLE                 54 49 54 4c 45 00
   [0005b4] Data                           ascii[128]       Amazon / LOVEFiLM     41 6d 61 7a 6f 6e 20 2f 20 4c 4f 56 45 46 69 4c 4d 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
 
-SFO_20 TITLE_ID
+SFO_20 TITLE_ID = CUSA00126
   [000154] keyOffset                      u16 le           324                   01 44
   [000156] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000158] paramLen                       u32 le           10                    00 00 00 0a
   [00015c] paramMaxLen                    u32 le           12                    00 00 00 0c
   [000160] dataOffset                     u32 le           872                   00 00 03 68
   [0002b8] Key                            asciiz           TITLE_ID              54 49 54 4c 45 5f 49 44 00
   [000634] Data                           ascii[12]        CUSA00126             43 55 53 41 30 30 31 32 36 00 00 00
 
-SFO_21 VERSION
+SFO_21 VERSION = 01.00
   [000164] keyOffset                      u16 le           333                   01 4d
   [000166] param_fmt                      u16 le           516                   02 04
-           - unknown SEEN ON PS5          eq
+           - unknown                      eq
   [000168] paramLen                       u32 le           6                     00 00 00 06
   [00016c] paramMaxLen                    u32 le           8                     00 00 00 08
   [000170] dataOffset                     u32 le           884                   00 00 03 74
