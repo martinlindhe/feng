@@ -459,6 +459,10 @@ input:
     files:
       - ps3_eboot.bin
 
+  - folder: systems/ps3/ps3_npd
+    files:
+      - ci_key.edat
+
   - folder: systems/ps3/ps3_pkg
     files:
       - ps3_bDMOIDCdjgRhfnlrJZnyQsOLlykYECYGDhcXKbEGPCSZjtVLacEPwlIDfINwGeGhedySTNxqazLTQtExIoihYgZkwiaVHAYbmxBVE.pkg
@@ -466,8 +470,7 @@ input:
 
   - folder: systems/ps3/ps3_sfo
     files:
-      # FIXME add samples
-      # - XXX
+      - ps3_PARAM.SFO
 
   - folder: systems/ps4/ps4_pkg
     files:

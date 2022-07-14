@@ -43,7 +43,8 @@ structs:
     offset: restore
 
     offset: Header.dataTableOffset + self.dataOffset
-    ascii[self.paramMaxLen] Data table: ??
+    ascii[self.paramMaxLen] Data: ??
+    label: self.Key # FIXME allow string concatenation: label: self.Key  + " = " + self.Data
     offset: restore
 
 layout:

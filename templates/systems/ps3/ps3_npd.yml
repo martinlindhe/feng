@@ -1,0 +1,68 @@
+# STATUS: 50%
+#
+# HI: need u24 data type
+# HI: need Type = SDAT sample
+
+references:
+  - https://www.psdevwiki.com/ps3/NPD
+  - https://www.psdevwiki.com/ps3/EDAT_files
+
+software:
+  - https://github.com/ErikPshat/make_npdata-hykem
+
+kind: system
+name: Sony PS3 NPD file
+extensions: [.edat]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'NPD' 00
+
+structs:
+  header:
+    u8[4] Magic: c'NPD' 00
+    u32 Version: ??
+    u32 DRMType:
+      eq 00000000: Debug
+      eq 00000001: Network
+      eq 00000002: Local
+      eq 00000003: DRM-free (no license)
+      eq 00000004: PSP
+      eq 0000000d: DRM-free (with license)
+      eq 0000000e: PSMobile
+    u32 ApplicationType: # XXX flags?
+      eq 00000000: Module
+      eq 00000001: Executable
+      eq 00000020: Module (Update for Disc Based Game)
+      eq 00000021: Executable (Update for Disc Based Game)
+    ascii[48] ContentID: ??
+    u8[16] Digest: ??
+    u8[16] NPD CID-FN hash: ??
+    u8[16] NPD Header hash: ??
+    u8[8] Activation time: ??
+    u8[8] Expiration time: ??
+
+    u8 Type:
+      eq 00: EDAT
+      eq 01: SDAT                       # WANT SAMPLE
+      eq 80: Non-finalized (unsigned)   # WANT SAMPLE
+    u8[3] MetadataType: ?? # XXX flags,  XXX need u24 data type
+
+    u32 BlockSize: ??     # default is 16k
+    u64 DataSize: ??
+    u8[16] Metadata sections hash: ??
+    u8[16] Extended header hash: ??
+    u8[40] ECDSA Metadata signature: ??
+    u8[40] ECDSA Header signature: ??
+
+    until: u8 Body c'EDATA'     # XXX is there a faster way to calculate body size? some header value?
+
+  footer:
+    ascii[6] Signature: ?? # "EDATA " or "SDATA "
+    ascii[8] PackageVersion: ??
+    u8[2] Padding: ??
+
+layout:
+  - header Header
+  - footer Footer

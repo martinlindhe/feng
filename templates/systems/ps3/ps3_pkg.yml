@@ -11,8 +11,8 @@ references:
   - https://www.psdevwiki.com/ps3/PKG_files
 
 software:
+  - https://github.com/qwikrazor87/pkgrip   # DOES NOT SUPPORT PSVITA .pkg
   - https://sites.google.com/site/theleecherman/psnpkgdecryptor-extractor
-  - XXX cli app, open source... multi os.
 
 kind: system
 name: Sony PS3/PSVita PKG file
@@ -93,6 +93,7 @@ structs:
 
     if self.Identifier == DRMType:
       u32 DRMType:
+        eq 00000000: Debug
         eq 00000001: Network
         eq 00000002: Local
         eq 00000003: DRM-free (no license)

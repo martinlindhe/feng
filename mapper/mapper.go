@@ -362,21 +362,25 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				panic(err)
 			}
 
-			val, err := readBytesUntilMarker(r, needle)
+			feng.Yellow("Reading until marker from %06x: marker % 02x\n", fl.offset, needle)
+
+			val, err := readBytesUntilMarker(r, 4096, needle)
 			if err != nil {
 				return err
 			}
 			len := uint64(len(val))
-			es.Field.Kind = "u8"
-			es.Field.Range = fmt.Sprintf("%d", len)
-			es.Field.Label = parts[1]
-			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  val,
-				Format: es.Field,
-				Endian: fl.endian})
-			fl.offset += len
+			if len > 0 {
+				es.Field.Kind = "u8"
+				es.Field.Range = fmt.Sprintf("%d", len)
+				es.Field.Label = parts[1]
+				fs.Fields = append(fs.Fields, Field{
+					Offset: fl.offset,
+					Length: len,
+					Value:  val,
+					Format: es.Field,
+					Endian: fl.endian})
+				fl.offset += len
+			}
 
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"ascii", "utf16",
@@ -386,6 +390,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			// internal data types
 			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", df.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
+
 			if totalLength == 0 {
 				if DEBUG {
 					log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
@@ -441,7 +446,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			fl.offset += len
 
 		case "utf16z":
-			val, err := readBytesUntilMarker(r, []byte{0, 0})
+			val, err := readBytesUntilMarker(r, 2, []byte{0, 0})
 			if err != nil {
 				return err
 			}
@@ -564,23 +569,40 @@ func readBytesUntilZero(r io.Reader) ([]byte, error) {
 }
 
 // reads bytes from reader until the marker byte sequence is found. returned data excludes the marker
-// NOTE: only looks for marker on every N bytes, where N is the length of marker
-func readBytesUntilMarker(r *bytes.Reader, mark []byte) ([]byte, error) {
+// FIXME: won't find patterns overlapping chunks
+func readBytesUntilMarker(r *bytes.Reader, chunkSize int64, search []byte) ([]byte, error) {
+	var offset int64
 
-	b := make([]byte, len(mark))
+	chunk := make([]byte, int(chunkSize)+len(search))
+
+	n, err := r.Read(chunk[:chunkSize])
 
 	res := []byte{}
 
+	idx := bytes.Index(chunk[:chunkSize], search)
 	for {
-		if _, err := io.ReadFull(r, b); err != nil {
+		//log.Printf("Read a slice of len %d, Index %d: % 02x", n, idx, chunk[:4])
+		if idx >= 0 {
+			res = append(res, chunk[:idx]...)
+
+			// rewind to before marker
+			r.Seek(int64(-(n - idx)), io.SeekCurrent)
+
+			return res, nil
+		} else {
+			//log.Printf("appended %d bytes: % 02x, res is %d len", len(chunk[:chunkSize]), chunk[:4], len(res))
+			res = append(res, chunk[:chunkSize]...)
+		}
+		if err == io.EOF {
+			return nil, nil
+		} else if err != nil {
 			return nil, err
 		}
-		if bytes.Equal(b, mark) {
-			// rewind N bytes
-			r.Seek(int64(-len(mark)), io.SeekCurrent)
-			break
-		}
-		res = append(res, b...)
+
+		offset += chunkSize
+
+		n, err = r.Read(chunk[:chunkSize])
+
+		idx = bytes.Index(chunk[:chunkSize], search)
 	}
-	return res, nil
 }

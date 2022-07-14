@@ -1,0 +1,31 @@
+# templates/systems/ps3/ps3_npd.yml
+Header
+  [000000] Magic                          u8[4]                                  4e 50 44 00
+  [000004] Version                        u32 be           4                     00 00 00 04
+  [000008] DRMType                        u32 be           2                     00 00 00 02
+           - Local                        eq
+  [00000c] ApplicationType                u32 be           0                     00 00 00 00
+           - Module                       eq
+  [000010] ContentID                      ascii[48]        HP0700-BLAS50710_00-MISSION00000008A 48 50 30 37 30 30 2d 42 4c 41 53 35 30 37 31 30 5f 30 30 2d 4d 49 53 53 49 4f 4e 30 30 30 30 30 ...
+  [000040] Digest                         u8[16]                                 31 02 e8 54 a4 d3 73 f2 fb c0 9a c1 0d 0a b9 01
+  [000050] NPD CID-FN hash                u8[16]                                 bf 8e a2 5a cf 99 00 27 10 f9 b8 55 08 8d 7a 69
+  [000060] NPD Header hash                u8[16]                                 d2 3e 49 e5 b7 a4 20 e6 53 71 c3 e3 d4 84 1c e6
+  [000070] Activation time                u8[8]                                  00 00 00 00 00 00 00 00
+  [000078] Expiration time                u8[8]                                  00 00 00 00 00 00 00 00
+  [000080] Type                           u8               0                     00
+           - EDAT                         eq
+  [000081] MetadataType                   u8[3]                                  00 00 0d
+  [000084] BlockSize                      u32 be           16384                 00 00 40 00
+  [000088] DataSize                       u64 be           6                     00 00 00 00 00 00 00 06
+  [000090] Metadata sections hash         u8[16]                                 db 92 da 01 c2 75 ba 0d 4e a4 7e 82 aa b1 3b 0e
+  [0000a0] Extended header hash           u8[16]                                 3b a8 28 3d fb 30 c3 45 7c e0 06 99 e7 40 93 90
+  [0000b0] ECDSA Metadata signature       u8[40]                                 46 13 9a da f4 a8 ec ba 70 be b4 65 1c 99 58 57 e0 d2 13 25 fb dc 96 26 31 4a ea 53 28 71 9f 7e ...
+  [0000d8] ECDSA Header signature         u8[40]                                 18 11 03 b9 27 d6 b2 18 b7 b8 98 91 74 06 67 54 4d 53 15 c4 3e 89 d4 7b e5 92 92 be a6 01 d7 f2 ...
+  [000100] Body                           u8[48]                                 82 60 bb 74 04 9e b8 dc 1e fd f3 05 7d b7 68 7f 63 4a 9b 7a 1a 63 4a f9 ff d7 d3 0d 86 fe 03 a8 ...
+
+Footer
+  [000130] Signature                      ascii[6]         EDATA                 45 44 41 54 41 20
+  [000136] PackageVersion                 ascii[8]         4.0.0.W               34 2e 30 2e 30 2e 57 00
+  [00013e] Padding                        u8[2]                                  00 00
+
+EOF
