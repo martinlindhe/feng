@@ -32,7 +32,7 @@ func TestCompareWithReferenceParses(t *testing.T) {
 			continue
 		}
 
-		data := fl.Present(false)
+		data := fl.Present(&mapper.PresentFileLayoutConfig{})
 		expected, err := ioutil.ReadFile(entry.Out)
 		if err != nil {
 			//		log.Fatal(err)

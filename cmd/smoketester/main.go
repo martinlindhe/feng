@@ -55,52 +55,7 @@ func main() {
 
 			continue
 		}
-		/*
-			fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err2 error) error {
-				// cannot happen
-				if err != nil {
-					log.Fatal(err)
-				}
-				if d.IsDir() {
-					return nil
-				}
 
-				if filepath.Ext(tpl) != ".yml" {
-					return nil
-				}
-
-				feng.Yellow("Parsing %s with %s ...\n", entry.In, tpl)
-				//return nil
-
-				templateData, err := fs.ReadFile(feng.Templates, tpl)
-				if err != nil {
-					log.Fatal(err)
-				}
-				ds, err := template.UnmarshalTemplateIntoDataStructure(templateData, tpl)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				r, err := os.Open(entry.In)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				fl, err := mapper.MapReader(r, ds)
-				if err != nil {
-					// template don't match, try another
-					if _, ok := err.(mapper.EvaluateError); ok {
-						log.Fatal(tpl, " failed to evaluate:", err)
-					}
-
-					log.Println("MapReader returned err:", err)
-
-					if _, ok := err.(template.ValidationError); ok {
-						return nil
-					}
-					return nil
-				}
-		*/
 		if len(fl.Structs) == 0 {
 			fmt.Println("MapReader failure, skipping")
 			continue
@@ -108,11 +63,10 @@ func main() {
 
 		feng.Green("Parsed %s as %s\n\n", entry.In, fl.BaseName)
 
-		data := fl.Present(false)
+		data := fl.Present(&mapper.PresentFileLayoutConfig{
+			ShowRaw: true})
 
-		//base, _ := os.Getwd()
-		//root := filepath.Join(base, referenceRoot)
-		filename, _ := filepath.Abs(filepath.Join(referenceRoot, entry.Out)) // XXX invalid result
+		filename, _ := filepath.Abs(filepath.Join(referenceRoot, entry.Out))
 		path := filepath.Dir(filename)
 
 		err = os.MkdirAll(path, os.ModePerm)

@@ -37,7 +37,7 @@ Header
   [000002] TypeOne                        u8               255                   ff
 
 EOF
-`, fl.Present(false))
+`, fl.Present(&PresentFileLayoutConfig{}))
 }
 
 func TestIfFieldValueEqualsIntNoMatch(t *testing.T) {
@@ -68,7 +68,7 @@ Header
   [000000] Type                           u16 le           2                     00 02
 
 0x0001 (1) unmapped bytes
-`, fl.Present(false))
+`, fl.Present(&PresentFileLayoutConfig{}))
 }
 
 func TestIfFieldValueEqualsConstant(t *testing.T) {
@@ -102,7 +102,7 @@ Header
   [000002] TypeOne                        u8               255                   ff
 
 EOF
-`, fl.Present(false))
+`, fl.Present(&PresentFileLayoutConfig{}))
 }
 
 func TestIfFieldValueEqualsFieldConstant(t *testing.T) {
@@ -136,7 +136,7 @@ Header
   [000002] TypeOne                        u8               255                   ff
 
 EOF
-`, fl.Present(false))
+`, fl.Present(&PresentFileLayoutConfig{}))
 }
 
 func TestIfFieldValueEqualsFieldNestedConstant(t *testing.T) {
@@ -176,5 +176,5 @@ Header
   [000003] TypeOne                        u8               255                   ff
 
 EOF
-`, fl.Present(false))
+`, fl.Present(&PresentFileLayoutConfig{}))
 }

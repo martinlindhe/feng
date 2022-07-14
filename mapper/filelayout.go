@@ -101,7 +101,7 @@ const (
 )
 
 // renders lines of ascii to present the data field for humans
-func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
+func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 	kind := fl.PresentType(&field.Format)
 	if field.Format.SingleUnitSize() > 1 {
 		if field.Endian == "little" {
@@ -114,8 +114,8 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 	fieldValue := strings.TrimRight(field.Present(), " ")
 
 	res := ""
-	if hideRaw {
-		res = fmt.Sprintf("  [%06x] %-30s %-16s %-21s\n",
+	if !showRaw {
+		res = fmt.Sprintf("  [%06x] %-30s %-16s %-21s",
 			field.Offset, field.Format.Label, kind, fieldValue)
 	} else {
 		hexValue := ""
@@ -126,8 +126,8 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 		}
 		res = fmt.Sprintf("  [%06x] %-30s %-16s %-21s %-20s",
 			field.Offset, field.Format.Label, kind, fieldValue, hexValue)
-		res = strings.TrimRight(res, " ") + "\n"
 	}
+	res = strings.TrimRight(res, " ") + "\n"
 
 	for _, child := range field.MatchedPatterns {
 		pretty := ""
@@ -176,7 +176,12 @@ func (fl *FileLayout) presentField(field *Field, hideRaw bool) string {
 	return res
 }
 
-func (fl *FileLayout) Present(hideRaw bool) (res string) {
+type PresentFileLayoutConfig struct {
+	ShowRaw        bool // XXX: should default to true in cli, false in smoketest
+	ReportUnmapped bool
+}
+
+func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	res = "# " + fl.BaseName + "\n"
 	for _, layout := range fl.Structs {
 		if len(layout.Fields) == 0 {
@@ -191,7 +196,7 @@ func (fl *FileLayout) Present(hideRaw bool) (res string) {
 		}
 		res += heading + "\n"
 		for _, field := range layout.Fields {
-			res += fl.presentField(&field, hideRaw)
+			res += fl.presentField(&field, cfg.ShowRaw)
 		}
 		res += "\n"
 	}
@@ -206,6 +211,7 @@ func (fl *FileLayout) Present(hideRaw bool) (res string) {
 	} else {
 		res += "EOF\n"
 	}
+
 	return
 }
 

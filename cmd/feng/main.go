@@ -22,7 +22,7 @@ var args struct {
 	Filename   string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
 	ExtractDir string `help:"Extract files to this directory."`
 	//Verbose    bool   `short:"v" help:"Be more verbose."`
-	HideRaw    bool   `help:"Hide raw values"`
+	Raw        bool   `help:"Show raw values"`
 	Brief      bool   `help:"Brief file information"`
 	CPUProfile string `name:"cpu-profile" help:"Create CPU profile"`
 	MemProfile string `name:"mem-profile" help:"Create memory profile"`
@@ -157,7 +157,8 @@ func main() {
 			//       don't evaluate full struct (fast mode for scanning many files)
 			fmt.Println(args.Filename+":", fl.BaseName)
 		} else {
-			fmt.Print(fl.Present(args.HideRaw))
+			fmt.Print(fl.Present(&mapper.PresentFileLayoutConfig{
+				ShowRaw: args.Raw}))
 		}
 	}
 
