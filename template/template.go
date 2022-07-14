@@ -104,8 +104,8 @@ func findStructConstants(c *yaml.MapItem) ([]EvaluatedConstant, error) {
 						if m.Operation == "eq" || m.Operation == "bit" {
 							data, err := value.ParseHexStringToUint64(m.Pattern)
 							if err != nil {
-								log.Println("error (ignoring2):", err)
-								continue
+								// example: invalid hex string in a template
+								return nil, err
 							}
 							df := value.DataField{Label: m.Label, Kind: field.Kind}
 							//log.Println(m.Label, ":", data, "=", value.AsUint64(df.Kind, data))

@@ -1,0 +1,72 @@
+# templates/systems/ps3/ps3_pkg.yml
+Header
+  [000000] Magic                          ascii[4]         .PKG                  7f 50 4b 47
+  [000004] Revision                       u16 be           32768                 80 00
+           - finalized (retail)           eq
+  [000006] Type                           u16 be           1                     00 01
+           - PS3                          eq
+  [000008] MetadataOffset                 u32 be           192                   00 00 00 c0
+  [00000c] MetadataCount                  u32 be           8                     00 00 00 08
+  [000010] MetadataSize                   u32 be           192                   00 00 00 c0
+  [000014] ItemCount                      u32 be           12                    00 00 00 0c
+  [000018] TotalSize                      u64 be           102400                00 00 00 00 00 01 90 00
+  [000020] DataOffset                     u64 be           384                   00 00 00 00 00 00 01 80
+  [000028] DataSize                       u64 be           65792                 00 00 00 00 00 01 01 00
+  [000030] ContentID                      ascii[36]        HP0700-BLAS50710_00-MISSION00000008A 48 50 30 37 30 30 2d 42 4c 41 53 35 30 37 31 30 5f 30 30 2d 4d 49 53 53 49 4f 4e 30 30 30 30 30 ...
+  [000054] Padding                        u8[12]                                 00 00 00 00 00 00 00 00 00 00 00 00
+  [000060] Digest                         u8[16]                                 be eb de 1b bb 93 36 f4 9f aa 2c 59 e8 ab 1d e7
+  [000070] AES-128-CTR IV                 u8[16]                                 84 3a 67 e0 0a af 56 ba 62 42 9e a6 5a ce cc e5
+
+PkgHeaderDigest
+  [000080] CMAC hash                      u8[16]                                 3f ec ba 15 61 51 48 d1 3d a7 07 2d 27 4d 0a 14
+  [000090] NPDRM signature                u8[40]                                 e8 a2 0e 01 e3 1d 7a 69 b8 cb 2f b0 2d 98 fb 02 1a 31 ab 37 30 f0 18 8e e5 bb d7 f7 43 a3 44 85 ...
+  [0000b8] SHA1 hash                      u8[8]                                  7c 88 f8 83 0e e6 22 ff
+
+MetadataHeader_0 DRMType
+  [0000c0] Identifier                     u32 be           1                     00 00 00 01
+           - DRMType                      eq
+  [0000c4] Size                           u32 be           4                     00 00 00 04
+  [0000c8] DRMType                        u32 be           2                     00 00 00 02
+           - Local                        eq
+
+MetadataHeader_1 ContentType
+  [0000cc] Identifier                     u32 be           2                     00 00 00 02
+           - ContentType                  eq
+  [0000d0] Size                           u32 be           4                     00 00 00 04
+  [0000d4] ContentType                    u32 be           4                     00 00 00 04
+           - GameData                     eq
+
+MetadataHeader_2 PackageType / PackageFlag / StorageType (PS Vita)
+  [0000d8] Identifier                     u32 be           3                     00 00 00 03
+           - PackageType / PackageFlag / StorageType (PS Vita) eq
+  [0000dc] Size                           u32 be           4                     00 00 00 04
+
+MetadataHeader_3 unk08
+  [0000e0] Identifier                     u32 be           8                     00 00 00 08
+           - unk08                        eq
+  [0000e4] Size                           u32 be           4                     00 00 00 04
+  [0000e8] Data                           u8[4]                                  00 00 00 08
+
+MetadataHeader_4 0
+  [0000ec] Identifier                     u32 be           0                     00 00 00 00
+  [0000f0] Size                           u32 be           65792                 00 01 01 00
+
+MetadataHeader_5 make_package_npdrm
+  [0000f4] Identifier                     u32 be           5                     00 00 00 05
+           - make_package_npdrm           eq
+  [0000f8] Size                           u32 be           4                     00 00 00 04
+  [0000fc] Data                           u8[4]                                  19 70 01 00
+
+MetadataHeader_6 qa_digest
+  [000100] Identifier                     u32 be           7                     00 00 00 07
+           - qa_digest                    eq
+  [000104] Size                           u32 be           24                    00 00 00 18
+  [000108] Data                           u8[24]                                 00 00 00 00 00 00 00 00 61 aa d4 0d 94 3f 06 3f b9 da e0 a4 d0 a4 28 33
+
+MetadataHeader_7 unk08
+  [000120] Identifier                     u32 be           8                     00 00 00 08
+           - unk08                        eq
+  [000124] Size                           u32 be           8                     00 00 00 08
+  [000128] Data                           u8[8]                                  02 00 00 00 01 00 00 00
+
+0x18ed0 (102096) unmapped bytes (99.7%)

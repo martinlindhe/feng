@@ -2,7 +2,7 @@
 #
 # SFO (System File Object)
 #
-# file format used on PSP, PSVITA, PS3, PS5 and probably PS4.
+# file format used on PSP, PSVita, PS3, PS5 and probably PS4.
 
 references:
   - https://www.psdevwiki.com/ps4/Param.sfo#Internal_Structure

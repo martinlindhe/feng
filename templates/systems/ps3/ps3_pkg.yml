@@ -1,11 +1,21 @@
-# STATUS: 5%
-# format used on PS3/PSVita for application packages / updates
+# STATUS: 10%
+#
+# format used on PS3/PSVita/PSMobile for application packages / updates
+#
+# HI: metadata seems to be parsed incorrectly on some (psvita) pkg
 
 references:
+  - https://en.wikipedia.org/wiki/PlayStation_3
+  - https://en.wikipedia.org/wiki/PlayStation_Vita
+  - https://en.wikipedia.org/wiki/PlayStation_Mobile
   - https://www.psdevwiki.com/ps3/PKG_files
 
+software:
+  - https://sites.google.com/site/theleecherman/psnpkgdecryptor-extractor
+  - XXX cli app, open source... multi os.
+
 kind: system
-name: Sony PS3 PKG file
+name: Sony PS3/PSVita PKG file
 extensions: [.pkg]
 endian: big
 
@@ -15,29 +25,111 @@ magic:
 
 structs:
   header:
-    u8[4] Signature: 7f c'PKG'
-    u16 PkgRevision:
+    ascii[4] Magic: 7f c'PKG'
+    u16 Revision:
       eq 8000: finalized (retail)
       eq 0000: non-finalized (debug)
-    u16 PkgType:
+    u16 Type:
       eq 0001: PS3
-      eq 0002: PSP/PSVita
+      eq 0002: PSP / PSVita
       default: invalid
-    u32 pkg_metadata_offset: ??
-    u32 pkg_metadata_count: ??
-    u32 pkg_metadata_size: ??
-    u32 item_count: ??
-    u64 total_size: ??
-    u64 data_offset: ??
-    u64 data_size: ??
-    u8[36] contentid: ??
-    u8[12] padding: ??
-    u8[16] digest: ??
-    u8[16] pkg_data_riv: ??
-    u8[16] header_cmac_hash: ??
-    u8[40] header_npdrm_signature: ??
-    u8[8] header_sha1_hash: ??
+    u32 MetadataOffset: ??
+    u32 MetadataCount: ??
+    u32 MetadataSize: ??
+    u32 ItemCount: ??
+    u64 TotalSize: ??
+    u64 DataOffset: ??
+    u64 DataSize: ??
+    ascii[36] ContentID: ??
+    u8[12] Padding: ??
+    u8[16] Digest: ??
+    u8[16] AES-128-CTR IV: ??
+
+  pkg_header_digest:
+    u8[16] CMAC hash: ??
+    u8[40] NPDRM signature: ??
+    u8[8] SHA1 hash: ??
+
+  ext_header:
+    if Header.Type == 2:
+      # only in PSP/PSVita/PSMobile files
+      ascii[4] Magic: 7f c'ext'
+      u32 Unknown: ??                       # maybe version. always 1
+      u32 ExtHeaderSize: ??                 # always 0x40 ?
+      u32 ExtDataSize: ??
+      u32 MainAndExtHeadersHmacOffset: ??   # always 0x100 ?
+      u32 MetadataHeaderHmacOffset: ??
+      u64 TailOffset: ??
+      u32 Reserved: ??
+      u32 AESKeyID:
+        eq 00000001: PSP
+        eq c0000002: PSVita
+        eq c0000004: PSMobile
+      u32 FullHeaderHmacOffset: ??
+      u8[20] Padding: ??
+
+  metadata_header:
+    u32 Identifier:
+      eq 00000001: DRMType
+      eq 00000002: ContentType
+      eq 00000003: PackageType / PackageFlag / StorageType (PS Vita)
+      eq 00000004: PackageSize
+      eq 00000005: make_package_npdrm
+      eq 00000006: app_version
+      eq 00000007: qa_digest
+      eq 00000008: unk08
+      eq 00000009: unk09
+      eq 0000000a: InstallDirectory
+      eq 0000000b: unk0b
+      eq 0000000c: unk0c
+      eq 0000000d: item_entries
+      eq 0000000e: param_sfo_info
+      eq 0000000f: unknown_data_info
+      eq 00000010: entirety_info
+      eq 00000011: build_version
+      eq 00000012: self_info
+    label: self.Identifier
+    u32 Size: ??
+
+    if self.Identifier == DRMType:
+      u32 DRMType:
+        eq 00000001: Network
+        eq 00000002: Local
+        eq 00000003: DRM-free (no license)
+        eq 00000004: PSP
+        eq 0000000d: DRM-free (with license)
+        eq 0000000e: PSMobile
+
+    if self.Identifier == ContentType:
+      u32 ContentType:
+        eq 00000004: GameData
+        eq 00000005: GameExec
+        eq 00000006: PS1emu
+        eq 00000007: PSP & PCEngine
+        eq 00000009: Theme
+        eq 0000000a: Widget
+        eq 0000000b: License
+        eq 0000000c: VSHModule
+        eq 0000000d: PSN Avatar
+        eq 0000000e: PSPgo
+        eq 0000000f: Minis
+        eq 00000010: NEOGEO
+        eq 00000011: VNC
+        eq 00000015: PSP2GD (PS Vita Game Data)
+        eq 00000016: PSP2AC (PS Vita Additional Content)
+        eq 00000017: PSP2LA (PS Vita LiveArea)
+        eq 0000001f: PSP2Theme (PS Vita Theme)
+
+    if self.Identifier == PackageSize:
+      u64 PackageSize: ??
+
+    if self.Identifier > PackageSize: # XXX need multiple if-elseif support for catch-all unmatched here:
+      u8[self.Size] Data: ??
 
 layout:
   - header Header
+  - pkg_header_digest PkgHeaderDigest
+  - ext_header ExtendedHeader
 
+  - offset Header.MetadataOffset
+  - metadata_header[Header.MetadataCount] MetadataHeader

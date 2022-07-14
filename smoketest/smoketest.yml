@@ -459,6 +459,16 @@ input:
     files:
       - ps3_eboot.bin
 
+  - folder: systems/ps3/ps3_pkg
+    files:
+      - ps3_bDMOIDCdjgRhfnlrJZnyQsOLlykYECYGDhcXKbEGPCSZjtVLacEPwlIDfINwGeGhedySTNxqazLTQtExIoihYgZkwiaVHAYbmxBVE.pkg
+      - psvita_iGkjUszJlBHXVNpramDhnzzsUAYCguvGPbHxiAKQynjEVaRnscEZEaSGdUDaKYoZHyzuTuWZePMGXYyllKkUxlHXcmcenWWQRpqZr.pkg
+
+  - folder: systems/ps3/ps3_sfo
+    files:
+      # FIXME add samples
+      # - XXX
+
   - folder: systems/ps4/ps4_pkg
     files:
       # XXX find smaller samples
