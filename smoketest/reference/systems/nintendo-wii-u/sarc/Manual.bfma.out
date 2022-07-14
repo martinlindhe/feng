@@ -1,0 +1,586 @@
+# templates/systems/nintendo-wii-u/sarc.yml
+SArchHeader
+  [000000] Magic                          ascii[4]         SARC                  53 41 52 43
+  [000004] HeaderLength                   u16 be           20                    00 14
+  [000006] ByteOrderMark                  u16 be           65279                 fe ff
+           - BigEndian                    eq
+  [000008] FileSize                       u32 be           6269280               00 5f a9 60
+  [00000c] DataOffset                     u32 be           1900                  00 00 07 6c
+  [000010] Version                        u16 be           256                   01 00
+  [000012] Reserved                       u16 be           0                     00 00
+
+SFatHeader
+  [000014] Magic                          ascii[4]         SFAT                  53 46 41 54
+  [000018] HeaderLength                   u16 be           12                    00 0c
+  [00001a] NodeCount                      u16 be           52                    00 34
+  [00001c] HashKey                        u32 be           101                   00 00 00 65
+
+SFatNode_0
+  [000020] FileNameHash                   u32 be           50583305              03 03 d7 09
+  [000024] FileAttributes                 u32 be           16777216              01 00 00 00
+  [000028] FileOffset                     u32 be           0                     00 00 00 00
+  [00002c] FileOffsetEnd                  u32 be           1649                  00 00 06 71
+  [00076c] Data                           raw:u8[1649]                           78 9c b5 5a 3d 4c 5c 47 10 9e bb 5b 02 49 1c 1b f0 99 10 82 f1 a1 a0 88 44 c6 b9 07 1c 3e 0c 1c ...
+
+SFatNode_1
+  [000030] FileNameHash                   u32 be           157827903             09 68 43 3f
+  [000034] FileAttributes                 u32 be           16777221              01 00 00 05
+  [000038] FileOffset                     u32 be           1652                  00 00 06 74
+  [00003c] FileOffsetEnd                  u32 be           26596                 00 00 67 e4
+  [000de0] Data                           raw:u8[24944]                          78 9c d5 7d 09 7c 55 c5 d5 f8 84 35 81 84 84 1d 14 e1 b1 c8 1a 42 f6 04 14 4d f2 1e 9b 22 20 41 ...
+
+SFatNode_2
+  [000040] FileNameHash                   u32 be           376229810             16 6c cf b2
+  [000044] FileAttributes                 u32 be           16777226              01 00 00 0a
+  [000048] FileOffset                     u32 be           26596                 00 00 67 e4
+  [00004c] FileOffsetEnd                  u32 be           196866                00 03 01 02
+  [006f50] Data                           raw:u8[170270]                         78 9c ec dd 07 54 55 bb e2 e0 ff 63 ef f4 26 08 62 01 44 54 14 45 45 a4 49 ef c5 de 15 15 15 c4 ...
+
+SFatNode_3
+  [000050] FileNameHash                   u32 be           487600776             1d 10 32 88
+  [000054] FileAttributes                 u32 be           16777231              01 00 00 0f
+  [000058] FileOffset                     u32 be           196868                00 03 01 04
+  [00005c] FileOffsetEnd                  u32 be           582466                00 08 e3 42
+  [030870] Data                           raw:u8[385598]                         78 9c ec bb 07 54 53 4b d7 30 7c 42 68 52 a5 aa b4 20 a0 a8 d4 84 8e 40 44 ba 08 28 55 9a 48 09 ...
+
+SFatNode_4
+  [000060] FileNameHash                   u32 be           495952283             1d 8f a1 9b
+  [000064] FileAttributes                 u32 be           16777235              01 00 00 13
+  [000068] FileOffset                     u32 be           582468                00 08 e3 44
+  [00006c] FileOffsetEnd                  u32 be           606170                00 09 3f da
+  [08eab0] Data                           raw:u8[23702]                          78 9c d5 bd 09 7c 55 c5 f5 38 3e 61 4b 80 84 84 1d 14 e1 21 2a 5b 08 d9 08 01 45 93 bc b0 c9 16 ...
+
+SFatNode_5
+  [000070] FileNameHash                   u32 be           544504330             20 74 7a 0a
+  [000074] FileAttributes                 u32 be           16777240              01 00 00 18
+  [000078] FileOffset                     u32 be           606172                00 09 3f dc
+  [00007c] FileOffsetEnd                  u32 be           776181                00 0b d7 f5
+  [094748] Data                           raw:u8[170009]                         78 9c ec dd 07 54 55 bb e2 e0 ff 63 ef f4 26 08 62 01 44 54 14 45 45 a4 49 ef c5 de 15 15 15 c4 ...
+
+SFatNode_6
+  [000080] FileNameHash                   u32 be           639031203             26 16 d7 a3
+  [000084] FileAttributes                 u32 be           16777245              01 00 00 1d
+  [000088] FileOffset                     u32 be           776184                00 0b d7 f8
+  [00008c] FileOffsetEnd                  u32 be           777808                00 0b de 50
+  [0bdf64] Data                           raw:u8[1624]                           78 9c ad 5a 3d 4c 5b 57 14 3e b6 a1 d0 96 e6 97 50 9a d2 ca a9 50 85 aa 92 f2 08 49 a8 14 29 18 ...
+
+SFatNode_7
+  [000090] FileNameHash                   u32 be           692991129             29 4e 34 99
+  [000094] FileAttributes                 u32 be           16777250              01 00 00 22
+  [000098] FileOffset                     u32 be           777808                00 0b de 50
+  [00009c] FileOffsetEnd                  u32 be           847435                00 0c ee 4b
+  [0be5bc] Data                           raw:u8[69627]                          78 9c ec 7d 0b 9c 5d 55 79 ef 3a 67 de ef 47 26 c9 e4 41 32 79 00 e1 3d e7 cc 1b 02 ce 9c 33 40 ...
+
+SFatNode_8
+  [0000a0] FileNameHash                   u32 be           721791455             2b 05 a9 df
+  [0000a4] FileAttributes                 u32 be           16777255              01 00 00 27
+  [0000a8] FileOffset                     u32 be           847436                00 0c ee 4c
+  [0000ac] FileOffsetEnd                  u32 be           848867                00 0c f3 e3
+  [0cf5b8] Data                           raw:u8[1431]                           78 9c 9d 97 0d 6c 53 55 14 c7 6f c7 5a be d6 8d cf 60 14 cd 50 88 80 b2 f4 6d 03 c6 18 e2 5a b3 ...
+
+SFatNode_9
+  [0000b0] FileNameHash                   u32 be           746567764             2c 7f b8 54
+  [0000b4] FileAttributes                 u32 be           16777261              01 00 00 2d
+  [0000b8] FileOffset                     u32 be           848868                00 0c f3 e4
+  [0000bc] FileOffsetEnd                  u32 be           850357                00 0c f9 b5
+  [0cfb50] Data                           raw:u8[1489]                           78 9c 9d 57 7d 50 54 55 14 bf 8b ec 2e 21 9f 02 a3 93 4e b3 16 4d 82 e5 ec 5b 10 41 30 07 d6 40 ...
+
+SFatNode_10
+  [0000c0] FileNameHash                   u32 be           804783026             2f f8 03 b2
+  [0000c4] FileAttributes                 u32 be           16777267              01 00 00 33
+  [0000c8] FileOffset                     u32 be           850360                00 0c f9 b8
+  [0000cc] FileOffsetEnd                  u32 be           1228151               00 12 bd 77
+  [0d0124] Data                           raw:u8[377791]                         78 9c ec bc 07 5c 53 4d d3 38 7a 42 ef 1d 54 ba 80 a0 52 43 ef 01 e9 22 a2 54 a5 4a 09 9d 84 16 ...
+
+SFatNode_11
+  [0000d0] FileNameHash                   u32 be           974405524             3a 14 3f 94
+  [0000d4] FileAttributes                 u32 be           16777271              01 00 00 37
+  [0000d8] FileOffset                     u32 be           1228152               00 12 bd 78
+  [0000dc] FileOffsetEnd                  u32 be           1229769               00 12 c3 c9
+  [12c4e4] Data                           raw:u8[1617]                           78 9c ad 5a 3d 70 1b 45 14 7e 92 12 6c 20 e4 d7 31 06 02 a3 30 1e f0 30 24 f8 f2 cf 4c 66 62 c9 ...
+
+SFatNode_12
+  [0000e0] FileNameHash                   u32 be           1031295293            3d 78 51 3d
+  [0000e4] FileAttributes                 u32 be           16777276              01 00 00 3c
+  [0000e8] FileOffset                     u32 be           1229772               00 12 c3 cc
+  [0000ec] FileOffsetEnd                  u32 be           1607896               00 18 88 d8
+  [12cb38] Data                           raw:u8[378124]                         78 9c ec bb 07 54 53 dd d2 00 7a 42 07 29 52 55 a4 09 2a 8a 20 84 16 7a e8 88 0a 28 bd 8a 10 42 ...
+
+SFatNode_13
+  [0000f0] FileNameHash                   u32 be           1047332820            3e 6d 07 d4
+  [0000f4] FileAttributes                 u32 be           16777280              01 00 00 40
+  [0000f8] FileOffset                     u32 be           1607896               00 18 88 d8
+  [0000fc] FileOffsetEnd                  u32 be           1676603               00 19 95 3b
+  [189044] Data                           raw:u8[68707]                          78 9c ec bd 0b 9c 5d 55 75 3f be ef 9d f7 fb 99 64 f2 9e bc 20 40 80 b9 77 de 10 60 72 ef 00 01 ...
+
+SFatNode_14
+  [000100] FileNameHash                   u32 be           1128438405            43 42 9a 85
+  [000104] FileAttributes                 u32 be           16777285              01 00 00 45
+  [000108] FileOffset                     u32 be           1676604               00 19 95 3c
+  [00010c] FileOffsetEnd                  u32 be           1846601               00 1c 2d 49
+  [199ca8] Data                           raw:u8[169997]                         78 9c ec dd 07 54 55 bb e2 e0 ff 63 ef f4 26 08 62 01 44 54 14 45 45 a4 49 ef c5 de 15 15 15 c4 ...
+
+SFatNode_15
+  [000110] FileNameHash                   u32 be           1305678020            4d d3 10 c4
+  [000114] FileAttributes                 u32 be           16777290              01 00 00 4a
+  [000118] FileOffset                     u32 be           1846604               00 1c 2d 4c
+  [00011c] FileOffsetEnd                  u32 be           2016381               00 1e c4 7d
+  [1c34b8] Data                           raw:u8[169777]                         78 9c ec dd 07 54 55 bb e2 e0 ff 63 ef f4 26 08 62 01 44 54 14 45 45 a4 49 ef c5 de 15 15 15 c4 ...
+
+SFatNode_16
+  [000120] FileNameHash                   u32 be           1418325806            54 89 ef 2e
+  [000124] FileAttributes                 u32 be           16777295              01 00 00 4f
+  [000128] FileOffset                     u32 be           2016384               00 1e c4 80
+  [00012c] FileOffsetEnd                  u32 be           2041368               00 1f 26 18
+  [1ecbec] Data                           raw:u8[24984]                          78 9c e5 7d 09 78 55 c5 f5 f8 04 1e 90 95 84 25 ec 4b 02 c8 22 db cb 4b 5e f2 12 92 90 b7 04 82 ...
+
+SFatNode_17
+  [000130] FileNameHash                   u32 be           1450066109            56 6e 40 bd
+  [000134] FileAttributes                 u32 be           16777300              01 00 00 54
+  [000138] FileOffset                     u32 be           2041368               00 1f 26 18
+  [00013c] FileOffsetEnd                  u32 be           2111130               00 20 36 9a
+  [1f2d84] Data                           raw:u8[69762]                          78 9c ec bd 09 9c 1c 47 75 3f 5e 33 7b df d2 ee ea be 56 97 25 df 33 b3 b7 2d db bb 33 6b 5b 36 ...
+
+SFatNode_18
+  [000140] FileNameHash                   u32 be           1541060288            5b da b6 c0
+  [000144] FileAttributes                 u32 be           16777305              01 00 00 59
+  [000148] FileOffset                     u32 be           2111132               00 20 36 9c
+  [00014c] FileOffsetEnd                  u32 be           2112603               00 20 3c 5b
+  [203e08] Data                           raw:u8[1471]                           78 9c 9d 57 6d 4c 5b 55 18 3e 85 b6 6c 83 02 01 32 16 45 d2 6d 2c d9 e6 5c 7a cb c7 60 80 13 6a ...
+
+SFatNode_19
+  [000150] FileNameHash                   u32 be           1575158886            5d e3 04 66
+  [000154] FileAttributes                 u32 be           16777311              01 00 00 5f
+  [000158] FileOffset                     u32 be           2112604               00 20 3c 5c
+  [00015c] FileOffsetEnd                  u32 be           2752612               00 2a 00 64
+  [2043c8] Data                           raw:u8[640008]                         78 9c ec bc 75 58 55 5d d7 3e ba e8 ee 52 ba bb 9b 2d dd 21 dd 2d b1 e9 66 23 08 d2 82 8a 34 02 ...
+
+SFatNode_20
+  [000160] FileNameHash                   u32 be           1586600326            5e 91 99 86
+  [000164] FileAttributes                 u32 be           16777315              01 00 00 63
+  [000168] FileOffset                     u32 be           2752612               00 2a 00 64
+  [00016c] FileOffsetEnd                  u32 be           2775334               00 2a 59 26
+  [2a07d0] Data                           raw:u8[22722]                          78 9c d5 7d 09 7c 55 c5 d5 f8 84 35 21 09 89 ec 28 c2 8b 22 6b 08 59 c8 02 8a 26 79 0f 08 ca 12 ...
+
+SFatNode_21
+  [000170] FileNameHash                   u32 be           1601136873            5f 6f 68 e9
+  [000174] FileAttributes                 u32 be           16777320              01 00 00 68
+  [000178] FileOffset                     u32 be           2775336               00 2a 59 28
+  [00017c] FileOffsetEnd                  u32 be           3182017               00 30 8d c1
+  [2a6094] Data                           raw:u8[406681]                         78 9c ec 1d 07 58 54 47 73 39 ec 54 b1 77 0c a2 17 bb 46 8d 49 6c 51 63 34 89 89 49 44 49 7e 23 ...
+
+SFatNode_22
+  [000180] FileNameHash                   u32 be           1864573205            6f 23 21 15
+  [000184] FileAttributes                 u32 be           16777325              01 00 00 6d
+  [000188] FileOffset                     u32 be           3182020               00 30 8d c4
+  [00018c] FileOffsetEnd                  u32 be           3563541               00 36 60 15
+  [309530] Data                           raw:u8[381521]                         78 9c ec bb 07 54 93 4d d3 30 7c 85 0e 52 a4 88 08 42 90 22 8a d4 d0 6b a4 83 8a 80 54 41 44 0c ...
+
+SFatNode_23
+  [000190] FileNameHash                   u32 be           2117979910            7e 3d cf 06
+  [000194] FileAttributes                 u32 be           16777329              01 00 00 71
+  [000198] FileOffset                     u32 be           3563544               00 36 60 18
+  [00019c] FileOffsetEnd                  u32 be           3633067               00 37 6f ab
+  [366784] Data                           raw:u8[69523]                          78 9c ec bd 0b 9c 64 45 75 3f 5e dd f3 7e 3f 76 f6 fd 9a 7d 2f ef e9 9e 37 2c 38 d3 3d c0 82 0b ...
+
+SFatNode_24
+  [0001a0] FileNameHash                   u32 be           2142550158            7f b4 b8 8e
+  [0001a4] FileAttributes                 u32 be           16777334              01 00 00 76
+  [0001a8] FileOffset                     u32 be           3633068               00 37 6f ac
+  [0001ac] FileOffsetEnd                  u32 be           3634006               00 37 73 56
+  [377718] Data                           raw:u8[938]                            78 9c bd 57 4f 6b 13 41 14 7f 49 a3 56 51 28 a5 a8 88 e8 0a 45 52 b0 31 6d ad 5a 2f 9a e6 8f 16 ...
+
+SFatNode_25
+  [0001b0] FileNameHash                   u32 be           2142784285            7f b8 4b 1d
+  [0001b4] FileAttributes                 u32 be           16777338              01 00 00 7a
+  [0001b8] FileOffset                     u32 be           3634008               00 37 73 58
+  [0001bc] FileOffsetEnd                  u32 be           3635567               00 37 79 6f
+  [377ac4] Data                           raw:u8[1559]                           3c 3f 78 6d 6c 20 76 65 72 73 69 6f 6e 3d 22 31 2e 30 22 20 65 6e 63 6f 64 69 6e 67 3d 22 75 74 ...
+
+SFatNode_26
+  [0001c0] FileNameHash                   u32 be           2158749491            80 ab e7 33
+  [0001c4] FileAttributes                 u32 be           16777342              01 00 00 7e
+  [0001c8] FileOffset                     u32 be           3635568               00 37 79 70
+  [0001cc] FileOffsetEnd                  u32 be           3705112               00 38 89 18
+  [3780dc] Data                           raw:u8[69544]                          78 9c ec bd 0b 9c 5d 45 95 2f 5c e7 f4 fb fd 48 e7 fd ea bc 20 bc fb 9c 7e 43 80 ce 39 0d 04 0c ...
+
+SFatNode_27
+  [0001d0] FileNameHash                   u32 be           2170534401            81 5f ba 01
+  [0001d4] FileAttributes                 u32 be           16777347              01 00 00 83
+  [0001d8] FileOffset                     u32 be           3705112               00 38 89 18
+  [0001dc] FileOffsetEnd                  u32 be           3729011               00 38 e6 73
+  [389084] Data                           raw:u8[23899]                          78 9c d5 7d 09 7c 55 c5 f5 f0 84 2d 09 64 93 1d 44 08 88 ec 09 d9 13 50 34 c9 7b 40 90 55 40 44 ...
+
+SFatNode_28
+  [0001e0] FileNameHash                   u32 be           2260398567            86 ba f1 e7
+  [0001e4] FileAttributes                 u32 be           16777352              01 00 00 88
+  [0001e8] FileOffset                     u32 be           3729012               00 38 e6 74
+  [0001ec] FileOffsetEnd                  u32 be           3730520               00 38 ec 58
+  [38ede0] Data                           raw:u8[1508]                           78 9c 9d 57 7b 6c 53 55 1c 3e b7 3b ed de 0c c6 14 44 18 43 46 32 30 23 f7 76 bd a5 ef ad 2d db ...
+
+SFatNode_29
+  [0001f0] FileNameHash                   u32 be           2347774016            8b f0 30 40
+  [0001f4] FileAttributes                 u32 be           16777358              01 00 00 8e
+  [0001f8] FileOffset                     u32 be           3730520               00 38 ec 58
+  [0001fc] FileOffsetEnd                  u32 be           3754816               00 39 4b 40
+  [38f3c4] Data                           raw:u8[24296]                          78 9c e5 bd 07 7c 55 45 f6 00 3c a1 26 90 90 d0 51 10 42 91 1a 42 7a 02 8a 26 79 8f 12 29 46 02 ...
+
+SFatNode_30
+  [000200] FileNameHash                   u32 be           2377308011            8d b2 d7 6b
+  [000204] FileAttributes                 u32 be           16777363              01 00 00 93
+  [000208] FileOffset                     u32 be           3754816               00 39 4b 40
+  [00020c] FileOffsetEnd                  u32 be           3756421               00 39 51 85
+  [3952ac] Data                           raw:u8[1605]                           78 9c b5 5a 3d 6c 14 47 14 7e 77 07 c1 49 08 18 30 8e 43 1c e9 40 14 28 22 89 d7 18 e3 44 48 f8 ...
+
+SFatNode_31
+  [000210] FileNameHash                   u32 be           2449276238            91 fc fd 4e
+  [000214] FileAttributes                 u32 be           16777368              01 00 00 98
+  [000218] FileOffset                     u32 be           3756424               00 39 51 88
+  [00021c] FileOffsetEnd                  u32 be           3757904               00 39 57 50
+  [3958f4] Data                           raw:u8[1480]                           78 9c a5 57 7b 50 54 55 1c 3e 2b ec a2 c0 02 09 d3 c3 98 5c 0b 27 a5 70 f6 2e 0f 79 6a ec 1a a8 ...
+
+SFatNode_32
+  [000220] FileNameHash                   u32 be           2498828856            94 f1 1a 38
+  [000224] FileAttributes                 u32 be           16777374              01 00 00 9e
+  [000228] FileOffset                     u32 be           3757904               00 39 57 50
+  [00022c] FileOffsetEnd                  u32 be           3759416               00 39 5d 38
+  [395ebc] Data                           raw:u8[1512]                           78 9c 9d 57 7d 50 54 55 14 bf eb 7e 91 82 50 e0 47 a9 cd 92 d0 a8 8d ce 3e 40 04 c1 6c 77 75 0d ...
+
+SFatNode_33
+  [000230] FileNameHash                   u32 be           2565860855            98 ef ed f7
+  [000234] FileAttributes                 u32 be           16777380              01 00 00 a4
+  [000238] FileOffset                     u32 be           3759416               00 39 5d 38
+  [00023c] FileOffsetEnd                  u32 be           3929096               00 3b f4 08
+  [3964a4] Data                           raw:u8[169680]                         78 9c ec dd 07 54 55 bb e2 e0 ff 63 ef 74 01 41 10 0b 20 a2 a2 28 2a 22 4d 7a 6f 16 ec 8a 8a 0a ...
+
+SFatNode_34
+  [000240] FileNameHash                   u32 be           2645681438            9d b1 e5 1e
+  [000244] FileAttributes                 u32 be           16777385              01 00 00 a9
+  [000248] FileOffset                     u32 be           3929096               00 3b f4 08
+  [00024c] FileOffsetEnd                  u32 be           3998491               00 3d 03 1b
+  [3bfb74] Data                           raw:u8[69395]                          78 9c ec bd 09 98 5c 47 75 2f 5e dd b3 ef 33 d2 68 df 46 9b 2d ef d3 dd b3 da b2 99 99 1e db b2 ...
+
+SFatNode_35
+  [000250] FileNameHash                   u32 be           2794284419            a6 8d 65 83
+  [000254] FileAttributes                 u32 be           16777390              01 00 00 ae
+  [000258] FileOffset                     u32 be           3998492               00 3d 03 1c
+  [00025c] FileOffsetEnd                  u32 be           4420127               00 43 72 1f
+  [3d0a88] Data                           raw:u8[421635]                         78 9c ec bb 07 54 53 4d b7 30 7c 42 e8 55 aa 28 bd 89 20 2d 74 10 88 48 17 e9 4d 45 45 08 01 43 ...
+
+SFatNode_36
+  [000260] FileNameHash                   u32 be           3063924796            b6 9f c8 3c
+  [000264] FileAttributes                 u32 be           16777394              01 00 00 b2
+  [000268] FileOffset                     u32 be           4420128               00 43 72 20
+  [00026c] FileOffsetEnd                  u32 be           4590159               00 46 0a 4f
+  [43798c] Data                           raw:u8[170031]                         78 9c ec dd 07 54 55 bb e2 e0 ff 63 ef f4 26 08 62 01 44 54 14 45 45 a4 49 ef c5 de 15 15 15 c4 ...
+
+SFatNode_37
+  [000270] FileNameHash                   u32 be           3125712276            ba 4e 95 94
+  [000274] FileAttributes                 u32 be           16777399              01 00 00 b7
+  [000278] FileOffset                     u32 be           4590160               00 46 0a 50
+  [00027c] FileOffsetEnd                  u32 be           4968561               00 4b d0 71
+  [4611bc] Data                           raw:u8[378401]                         78 9c ec bb 09 38 94 df db 38 fe 8c b1 af 89 52 59 43 8b dd d8 29 26 d9 93 25 fb 92 c4 18 8c 65 ...
+
+SFatNode_38
+  [000280] FileNameHash                   u32 be           3257617851            c2 2b 4d bb
+  [000284] FileAttributes                 u32 be           16777403              01 00 00 bb
+  [000288] FileOffset                     u32 be           4968564               00 4b d0 74
+  [00028c] FileOffsetEnd                  u32 be           5348335               00 51 9b ef
+  [4bd7e0] Data                           raw:u8[379771]                         78 9c ec bc 75 5c 54 5d f7 28 7e e8 06 41 10 a4 a5 14 a4 86 ee 1a 52 a4 bb 44 62 68 66 60 18 5a ...
+
+SFatNode_39
+  [000290] FileNameHash                   u32 be           3298736642            c4 9e ba 02
+  [000294] FileAttributes                 u32 be           16777407              01 00 00 bf
+  [000298] FileOffset                     u32 be           5348336               00 51 9b f0
+  [00029c] FileOffsetEnd                  u32 be           5349957               00 51 a2 45
+  [51a35c] Data                           raw:u8[1621]                           78 9c b5 5a 4d 4c 1b 57 10 1e db 50 68 9b 26 24 21 94 a6 b4 72 2b d4 a2 2a 6d 59 42 12 2a 45 0a ...
+
+SFatNode_40
+  [0002a0] FileNameHash                   u32 be           3341985884            c7 32 a8 5c
+  [0002a4] FileAttributes                 u32 be           16777412              01 00 00 c4
+  [0002a8] FileOffset                     u32 be           5349960               00 51 a2 48
+  [0002ac] FileOffsetEnd                  u32 be           5419863               00 52 b3 57
+  [51a9b4] Data                           raw:u8[69903]                          78 9c ec 7d 0b 9c 5c 45 99 6f f5 bc df af 4c de af c9 93 f0 ee ee 79 43 c0 99 ee 01 02 06 08 10 ...
+
+SFatNode_41
+  [0002b0] FileNameHash                   u32 be           3410699203            cb 4b 23 c3
+  [0002b4] FileAttributes                 u32 be           16777417              01 00 00 c9
+  [0002b8] FileOffset                     u32 be           5419864               00 52 b3 58
+  [0002bc] FileOffsetEnd                  u32 be           5589889               00 55 4b 81
+  [52bac4] Data                           raw:u8[170025]                         78 9c ec dd 07 54 55 bb e2 e0 ff 63 ef 74 01 41 10 0b 20 a2 a2 28 2a 22 4d 7a 6f 16 ec 8a 8a 0a ...
+
+SFatNode_42
+  [0002c0] FileNameHash                   u32 be           3460025790            ce 3b cd be
+  [0002c4] FileAttributes                 u32 be           16777422              01 00 00 ce
+  [0002c8] FileOffset                     u32 be           5589892               00 55 4b 84
+  [0002cc] FileOffsetEnd                  u32 be           5591506               00 55 51 d2
+  [5552f0] Data                           raw:u8[1614]                           78 9c bd 5a 4d 6c 1b 45 14 7e b6 53 1a a0 b4 49 9b 86 50 02 72 ab 0a 45 08 4a 36 fd 45 aa 68 5d ...
+
+SFatNode_43
+  [0002d0] FileNameHash                   u32 be           3477326321            cf 43 c9 f1
+  [0002d4] FileAttributes                 u32 be           16777427              01 00 00 d3
+  [0002d8] FileOffset                     u32 be           5591508               00 55 51 d4
+  [0002dc] FileOffsetEnd                  u32 be           5592994               00 55 57 a2
+  [555940] Data                           raw:u8[1486]                           78 9c a5 57 7b 50 54 55 1c 3e 2b ec 82 08 02 81 23 1a d3 ac 86 33 8a e5 ec 5d 1e 2e 2f 0d b6 59 ...
+
+SFatNode_44
+  [0002e0] FileNameHash                   u32 be           3607956851            d7 0d 0d 73
+  [0002e4] FileAttributes                 u32 be           16777433              01 00 00 d9
+  [0002e8] FileOffset                     u32 be           5592996               00 55 57 a4
+  [0002ec] FileOffsetEnd                  u32 be           5617749               00 55 b8 55
+  [555f10] Data                           raw:u8[24753]                          78 9c dd 7d 07 7c 55 45 f6 f0 84 9e 90 10 3a 88 08 8f 22 04 08 21 95 04 14 cd cb 7b 40 50 4a 04 ...
+
+SFatNode_45
+  [0002f0] FileNameHash                   u32 be           3748823583            df 72 82 1f
+  [0002f4] FileAttributes                 u32 be           16777438              01 00 00 de
+  [0002f8] FileOffset                     u32 be           5617752               00 55 b8 58
+  [0002fc] FileOffsetEnd                  u32 be           5787480               00 58 4f 58
+  [55bfc4] Data                           raw:u8[169728]                         78 9c ec dd 07 54 55 bb e2 e0 ff 63 ef f4 26 08 62 01 44 54 14 45 45 a4 49 ef c5 de 15 15 15 c4 ...
+
+SFatNode_46
+  [000300] FileNameHash                   u32 be           3854683468            e5 c1 cd 4c
+  [000304] FileAttributes                 u32 be           16777443              01 00 00 e3
+  [000308] FileOffset                     u32 be           5787480               00 58 4f 58
+  [00030c] FileOffsetEnd                  u32 be           6169066               00 5e 21 ea
+  [5856c4] Data                           raw:u8[381586]                         78 9c ec bb 07 54 53 4b d7 30 7c 42 ef 48 53 a4 18 a4 8a d2 12 3a 08 91 0e 22 d2 bb 88 10 02 84 ...
+
+SFatNode_47
+  [000310] FileNameHash                   u32 be           3897586977            e8 50 75 21
+  [000314] FileAttributes                 u32 be           16777447              01 00 00 e7
+  [000318] FileOffset                     u32 be           6169068               00 5e 21 ec
+  [00031c] FileOffsetEnd                  u32 be           6170621               00 5e 27 fd
+  [5e2958] Data                           raw:u8[1553]                           78 9c b5 5a 3d 4c 63 47 10 1e 63 08 24 21 f7 cb 11 72 21 92 91 90 82 a2 5c c2 e3 b8 3b 22 21 1d ...
+
+SFatNode_48
+  [000320] FileNameHash                   u32 be           4071672150            f2 b0 c9 56
+  [000324] FileAttributes                 u32 be           16777452              01 00 00 ec
+  [000328] FileOffset                     u32 be           6170624               00 5e 28 00
+  [00032c] FileOffsetEnd                  u32 be           6172273               00 5e 2e 71
+  [5e2f6c] Data                           raw:u8[1649]                           78 9c b5 5a 3d 6c 5b 55 14 3e b6 1b 12 4a a1 7f 69 29 25 20 b7 ea 50 21 5a f2 d2 bf 20 55 6a 5d ...
+
+SFatNode_49
+  [000330] FileNameHash                   u32 be           4098293189            f4 46 fd c5
+  [000334] FileAttributes                 u32 be           16777457              01 00 00 f1
+  [000338] FileOffset                     u32 be           6172276               00 5e 2e 74
+  [00033c] FileOffsetEnd                  u32 be           6241515               00 5f 3c eb
+  [5e35e0] Data                           raw:u8[69239]                          78 9c ec bd 0b 9c 5d 55 75 3f be ef 9d f7 fb 91 c9 fb 35 79 41 80 00 73 ef bc 21 e0 cc bd 03 04 ...
+
+SFatNode_50
+  [000340] FileNameHash                   u32 be           4106020792            f4 bc e7 b8
+  [000344] FileAttributes                 u32 be           16777462              01 00 00 f6
+  [000348] FileOffset                     u32 be           6241516               00 5f 3c ec
+  [00034c] FileOffsetEnd                  u32 be           6265886               00 5f 9c 1e
+  [5f4458] Data                           raw:u8[24370]                          78 9c ed 7d 09 78 95 c5 d5 f0 84 35 40 42 22 bb 8a 70 91 2d 40 88 59 08 09 28 9a e4 5e 20 c8 22 ...
+
+SFatNode_51
+  [000350] FileNameHash                   u32 be           4172713609            f8 b6 8e 89
+  [000354] FileAttributes                 u32 be           16777467              01 00 00 fb
+  [000358] FileOffset                     u32 be           6265888               00 5f 9c 20
+  [00035c] FileOffsetEnd                  u32 be           6267380               00 5f a1 f4
+  [5fa38c] Data                           raw:u8[1492]                           78 9c 9d 57 7d 50 14 65 1c 7e 17 b8 53 3e 0e 50 98 b4 d4 e6 2a 6a c8 06 e7 f6 40 04 c1 1c ee 08 ...
+
+SFntHeader
+  [000360] Magic                          ascii[4]         SFNT                  53 46 4e 54
+  [000364] HeaderLength                   u16 be           8                     00 08
+  [000366] Reserved                       u16 be           0                     00 00
+
+FileNameTable_0
+  [000368] FileName                       asciiz           EUR_ru_index.arc      45 55 52 5f 72 75 5f 69 6e 64 65 78 2e 61 72 63 00
+  [000379] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_1
+  [00037c] FileName                       asciiz           EUR_fr_textset.arc    45 55 52 5f 66 72 5f 74 65 78 74 73 65 74 2e 61 72 63 00
+  [00038f] Padding                        u8[1]                                  00
+
+FileNameTable_2
+  [000390] FileName                       asciiz           EUR_ru_texture.arc    45 55 52 5f 72 75 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [0003a3] Padding                        u8[1]                                  00
+
+FileNameTable_3
+  [0003a4] FileName                       asciiz           EUR_fr_jpeg.arc       45 55 52 5f 66 72 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_4
+  [0003b4] FileName                       asciiz           EUR_es_textset.arc    45 55 52 5f 65 73 5f 74 65 78 74 73 65 74 2e 61 72 63 00
+  [0003c7] Padding                        u8[1]                                  00
+
+FileNameTable_5
+  [0003c8] FileName                       asciiz           EUR_en_texture.arc    45 55 52 5f 65 6e 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [0003db] Padding                        u8[1]                                  00
+
+FileNameTable_6
+  [0003dc] FileName                       asciiz           EUR_de_index.arc      45 55 52 5f 64 65 5f 69 6e 64 65 78 2e 61 72 63 00
+  [0003ed] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_7
+  [0003f0] FileName                       asciiz           EUR_fr_middle.arc     45 55 52 5f 66 72 5f 6d 69 64 64 6c 65 2e 61 72 63 00
+  [000402] Padding                        u8[2]                                  00 00
+
+FileNameTable_8
+  [000404] FileName                       asciiz           EUR_en_text_title.arc 45 55 52 5f 65 6e 5f 74 65 78 74 5f 74 69 74 6c 65 2e 61 72 63 00
+  [00041a] Padding                        u8[2]                                  00 00
+
+FileNameTable_9
+  [00041c] FileName                       asciiz           EUR_fr_text_title.arc 45 55 52 5f 66 72 5f 74 65 78 74 5f 74 69 74 6c 65 2e 61 72 63 00
+  [000432] Padding                        u8[2]                                  00 00
+
+FileNameTable_10
+  [000434] FileName                       asciiz           EUR_nl_jpeg.arc       45 55 52 5f 6e 6c 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_11
+  [000444] FileName                       asciiz           EUR_nl_index.arc      45 55 52 5f 6e 6c 5f 69 6e 64 65 78 2e 61 72 63 00
+  [000455] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_12
+  [000458] FileName                       asciiz           EUR_it_jpeg.arc       45 55 52 5f 69 74 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_13
+  [000468] FileName                       asciiz           EUR_en_middle.arc     45 55 52 5f 65 6e 5f 6d 69 64 64 6c 65 2e 61 72 63 00
+  [00047a] Padding                        u8[2]                                  00 00
+
+FileNameTable_14
+  [00047c] FileName                       asciiz           EUR_nl_texture.arc    45 55 52 5f 6e 6c 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [00048f] Padding                        u8[1]                                  00
+
+FileNameTable_15
+  [000490] FileName                       asciiz           EUR_it_texture.arc    45 55 52 5f 69 74 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [0004a3] Padding                        u8[1]                                  00
+
+FileNameTable_16
+  [0004a4] FileName                       asciiz           EUR_ru_textset.arc    45 55 52 5f 72 75 5f 74 65 78 74 73 65 74 2e 61 72 63 00
+  [0004b7] Padding                        u8[1]                                  00
+
+FileNameTable_17
+  [0004b8] FileName                       asciiz           EUR_pt_middle.arc     45 55 52 5f 70 74 5f 6d 69 64 64 6c 65 2e 61 72 63 00
+  [0004ca] Padding                        u8[2]                                  00 00
+
+FileNameTable_18
+  [0004cc] FileName                       asciiz           EUR_es_text_title.arc 45 55 52 5f 65 73 5f 74 65 78 74 5f 74 69 74 6c 65 2e 61 72 63 00
+  [0004e2] Padding                        u8[2]                                  00 00
+
+FileNameTable_19
+  [0004e4] FileName                       asciiz           Common_jpeg.arc       43 6f 6d 6d 6f 6e 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_20
+  [0004f4] FileName                       asciiz           EUR_en_textset.arc    45 55 52 5f 65 6e 5f 74 65 78 74 73 65 74 2e 61 72 63 00
+  [000507] Padding                        u8[1]                                  00
+
+FileNameTable_21
+  [000508] FileName                       asciiz           Common_texture.arc    43 6f 6d 6d 6f 6e 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [00051b] Padding                        u8[1]                                  00
+
+FileNameTable_22
+  [00051c] FileName                       asciiz           EUR_de_jpeg.arc       45 55 52 5f 64 65 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_23
+  [00052c] FileName                       asciiz           EUR_it_middle.arc     45 55 52 5f 69 74 5f 6d 69 64 64 6c 65 2e 61 72 63 00
+  [00053e] Padding                        u8[2]                                  00 00
+
+FileNameTable_24
+  [000540] FileName                       asciiz           BfmaInfo.arc          42 66 6d 61 49 6e 66 6f 2e 61 72 63 00
+  [00054d] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_25
+  [000550] FileName                       asciiz           BfmaInfo.xml          42 66 6d 61 49 6e 66 6f 2e 78 6d 6c 00
+  [00055d] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_26
+  [000560] FileName                       asciiz           EUR_nl_middle.arc     45 55 52 5f 6e 6c 5f 6d 69 64 64 6c 65 2e 61 72 63 00
+  [000572] Padding                        u8[2]                                  00 00
+
+FileNameTable_27
+  [000574] FileName                       asciiz           EUR_nl_textset.arc    45 55 52 5f 6e 6c 5f 74 65 78 74 73 65 74 2e 61 72 63 00
+  [000587] Padding                        u8[1]                                  00
+
+FileNameTable_28
+  [000588] FileName                       asciiz           EUR_ru_text_title.arc 45 55 52 5f 72 75 5f 74 65 78 74 5f 74 69 74 6c 65 2e 61 72 63 00
+  [00059e] Padding                        u8[2]                                  00 00
+
+FileNameTable_29
+  [0005a0] FileName                       asciiz           EUR_it_textset.arc    45 55 52 5f 69 74 5f 74 65 78 74 73 65 74 2e 61 72 63 00
+  [0005b3] Padding                        u8[1]                                  00
+
+FileNameTable_30
+  [0005b4] FileName                       asciiz           EUR_it_index.arc      45 55 52 5f 69 74 5f 69 6e 64 65 78 2e 61 72 63 00
+  [0005c5] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_31
+  [0005c8] FileName                       asciiz           EUR_nl_text_title.arc 45 55 52 5f 6e 6c 5f 74 65 78 74 5f 74 69 74 6c 65 2e 61 72 63 00
+  [0005de] Padding                        u8[2]                                  00 00
+
+FileNameTable_32
+  [0005e0] FileName                       asciiz           EUR_pt_text_title.arc 45 55 52 5f 70 74 5f 74 65 78 74 5f 74 69 74 6c 65 2e 61 72 63 00
+  [0005f6] Padding                        u8[2]                                  00 00
+
+FileNameTable_33
+  [0005f8] FileName                       asciiz           EUR_pt_texture.arc    45 55 52 5f 70 74 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [00060b] Padding                        u8[1]                                  00
+
+FileNameTable_34
+  [00060c] FileName                       asciiz           EUR_de_middle.arc     45 55 52 5f 64 65 5f 6d 69 64 64 6c 65 2e 61 72 63 00
+  [00061e] Padding                        u8[2]                                  00 00
+
+FileNameTable_35
+  [000620] FileName                       asciiz           EUR_ru_jpeg.arc       45 55 52 5f 72 75 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_36
+  [000630] FileName                       asciiz           EUR_de_texture.arc    45 55 52 5f 64 65 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [000643] Padding                        u8[1]                                  00
+
+FileNameTable_37
+  [000644] FileName                       asciiz           EUR_es_jpeg.arc       45 55 52 5f 65 73 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_38
+  [000654] FileName                       asciiz           EUR_en_jpeg.arc       45 55 52 5f 65 6e 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_39
+  [000664] FileName                       asciiz           EUR_fr_index.arc      45 55 52 5f 66 72 5f 69 6e 64 65 78 2e 61 72 63 00
+  [000675] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_40
+  [000678] FileName                       asciiz           EUR_ru_middle.arc     45 55 52 5f 72 75 5f 6d 69 64 64 6c 65 2e 61 72 63 00
+  [00068a] Padding                        u8[2]                                  00 00
+
+FileNameTable_41
+  [00068c] FileName                       asciiz           EUR_fr_texture.arc    45 55 52 5f 66 72 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [00069f] Padding                        u8[1]                                  00
+
+FileNameTable_42
+  [0006a0] FileName                       asciiz           EUR_es_index.arc      45 55 52 5f 65 73 5f 69 6e 64 65 78 2e 61 72 63 00
+  [0006b1] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_43
+  [0006b4] FileName                       asciiz           EUR_it_text_title.arc 45 55 52 5f 69 74 5f 74 65 78 74 5f 74 69 74 6c 65 2e 61 72 63 00
+  [0006ca] Padding                        u8[2]                                  00 00
+
+FileNameTable_44
+  [0006cc] FileName                       asciiz           EUR_pt_textset.arc    45 55 52 5f 70 74 5f 74 65 78 74 73 65 74 2e 61 72 63 00
+  [0006df] Padding                        u8[1]                                  00
+
+FileNameTable_45
+  [0006e0] FileName                       asciiz           EUR_es_texture.arc    45 55 52 5f 65 73 5f 74 65 78 74 75 72 65 2e 61 72 63 00
+  [0006f3] Padding                        u8[1]                                  00
+
+FileNameTable_46
+  [0006f4] FileName                       asciiz           EUR_pt_jpeg.arc       45 55 52 5f 70 74 5f 6a 70 65 67 2e 61 72 63 00
+
+FileNameTable_47
+  [000704] FileName                       asciiz           EUR_en_index.arc      45 55 52 5f 65 6e 5f 69 6e 64 65 78 2e 61 72 63 00
+  [000715] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_48
+  [000718] FileName                       asciiz           EUR_pt_index.arc      45 55 52 5f 70 74 5f 69 6e 64 65 78 2e 61 72 63 00
+  [000729] Padding                        u8[3]                                  00 00 00
+
+FileNameTable_49
+  [00072c] FileName                       asciiz           EUR_es_middle.arc     45 55 52 5f 65 73 5f 6d 69 64 64 6c 65 2e 61 72 63 00
+  [00073e] Padding                        u8[2]                                  00 00
+
+FileNameTable_50
+  [000740] FileName                       asciiz           EUR_de_textset.arc    45 55 52 5f 64 65 5f 74 65 78 74 73 65 74 2e 61 72 63 00
+  [000753] Padding                        u8[1]                                  00
+
+FileNameTable_51
+  [000754] FileName                       asciiz           EUR_de_text_title.arc 45 55 52 5f 64 65 5f 74 65 78 74 5f 74 69 74 6c 65 2e 61 72 63 00
+  [00076a] Padding                        u8[2]                                  00 00
+
+0x004f (79) unmapped bytes (0.0%)

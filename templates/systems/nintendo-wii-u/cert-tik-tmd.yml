@@ -1,0 +1,52 @@
+# STATUS: 1%
+#
+# encrypted files used in Wii-U, downloaded from Nintendo Update Servers (NUS).
+# Is a collection of files: *.h3 *.app, title.cert, title.tmd, title.tik
+
+# .app files
+# Numbered starting from 0 (00000000.app) to however big the channel/game is.
+#  App files contain the actual game data, encrypted and split into sections.
+# To decrypt the content you need the title.tmd which stores the meta data for
+# each .app and the title key for decryption (found in the ticket). With this
+# data you can use a AES decrypter pass in the title key and you should be able to extract all the .app files.
+
+# *.h3 files
+# H3 files are file hashes to verify the downloaded .app file is correct (Each hash is a 20-byte SHA1)
+
+# # title.cert (Certificate chain)
+# Contains the certificates for the ticket and TMD signers, as well as the certificate authority.
+
+# title.tik (Ticket)
+# Contains the title ID, console ID (for downloaded titles), and encrypted title key.
+
+# title.tmd (Title Metadata)
+# The Title Metadata file (.tmd) contains the required IOS version (WiiUOS) and SHA-1 hashes of all of
+# the title’s contents.
+
+# The .tmd file contains all Sha1 of the content, but it’s a SHA1 hash of decrypted files, not encrypted
+# .app files. So it requires decryption and file extraction to check integrity.
+
+references:
+  - https://github.com/VitaSmith/cdecrypt/blob/318147fcc165fe232bc8d0f2ddf7b67aac391b4c/cdecrypt.c
+
+software:
+  - https://github.com/VitaSmith/cdecrypt
+
+kind: archive
+name: xxx
+extensions: [.tmd, .tik]
+endian: big # XXX
+
+magic:
+  - offset: 0150
+    match: c'CP000000'    # .tmd file
+  - offset: 0150
+    match: c'XS000000'    # .tik file
+
+structs:
+  header:
+    offset: "0x0150"
+    ascii[8] Magic: ??
+
+layout:
+  - header Header

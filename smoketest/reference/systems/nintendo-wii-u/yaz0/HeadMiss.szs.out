@@ -1,0 +1,8 @@
+# templates/systems/nintendo-wii-u/yaz0.yml
+Header
+  [000000] Magic                          ascii[4]         Yaz0                  59 61 7a 30
+  [000004] UncompressedSize               u32 be           18636                 00 00 48 cc
+  [000008] Alignment                      u32 be           0                     00 00 00 00
+  [00000c] Reserved                       u32 be           0                     00 00 00 00
+
+0x04c8 (1224) unmapped bytes (98.7%)

@@ -1,0 +1,28 @@
+# STATUS: 0% draft
+
+# Custom compression format used by Nintendo on 3DS and Wii-U
+
+references:
+  - http://www.amnoid.de/gc/yaz0.txt
+
+software:
+  - https://github.com/gcnhax/yaz0-rs
+
+kind: archive
+name: xxx
+extensions: [.szs]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'Yaz0'
+
+structs:
+  header:
+    ascii[4] Magic: c'Yaz0'
+    u32 UncompressedSize: ??
+    u32 Alignment: ??
+    u32 Reserved: ??
+
+layout:
+  - header Header

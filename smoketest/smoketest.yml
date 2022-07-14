@@ -426,6 +426,23 @@ input:
       # XXX find smaller samples
       - k2+ttn-dsniccc.nds
 
+  - folder: systems/nintendo-wii-u/cert_tik_tmd
+    files:
+      #- title.cert     # not detected
+      - title.tik
+      - title.tmd
+
+  - folder: systems/nintendo-wii-u/sarc
+    files:
+      # XXX find smaller samples
+      - Manual.bfma
+
+  - folder: systems/nintendo-wii-u/yaz0
+    files:
+      - CounterMysteryBox.szs
+      - HeadMiss.szs
+      - MemorySystem.szs
+
   - folder: systems/os2/ftcomp
     files:
       - iswindow.co_

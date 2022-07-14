@@ -10,7 +10,7 @@ software:
   - XWBTool XXX
 
 kind: audio
-name: XBox XWB file
+name: XBox Wavebank file
 extensions: [.xwb]
 endian: little
 

@@ -1,0 +1,5 @@
+# templates/systems/nintendo-wii-u/cert-tik-tmd.yml
+Header
+  [000150] Magic                          ascii[8]         CP000000              43 50 30 30 30 30 30 30
+
+0x146c (5228) unmapped bytes (99.8%)

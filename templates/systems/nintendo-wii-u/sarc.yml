@@ -1,0 +1,69 @@
+# STATUS: 70%
+#
+# Archive format used on Nintendo 3DS and Nintendo Wii-U
+#
+# MAX: use filenames to name output when extracting data
+
+references:
+  - https://mk8.tockdom.com/wiki/SARC_(File_Format)
+
+software:
+  - https://github.com/aboood40091/SARC-Tool
+  - https://github.com/zeldamods/sarc
+
+kind: archive
+name: xxx
+extensions: [.arc, .sarc]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'SARC'
+
+structs:
+  sarc_header:
+    ascii[4] Magic: c'SARC'
+    u16 HeaderLength: ??      # always 0x14
+    u16 ByteOrderMark:
+      eq feff: BigEndian
+      eq fffe: LittleEndian
+    if self.ByteOrderMark == LittleEndian:
+      endian: little
+    u32 FileSize: ??
+    u32 DataOffset: ??
+    u16 Version: ??
+    u16 Reserved: ??
+
+  sfat_header:
+    ascii[4] Magic: c'SFAT'
+    u16 HeaderLength: ??
+    u16 NodeCount: ??
+    u32 HashKey: ??           # always 00000065
+
+  sfat_node:
+    u32 FileNameHash: ??
+    u32 FileAttributes: ??    # XXX flags
+    u32 FileOffset: ??
+    u32 FileOffsetEnd: ??
+
+    offset: SArchHeader.DataOffset + self.FileOffset
+    raw:u8[self.FileOffsetEnd - self.FileOffset] Data: ??
+    offset: restore
+
+  sfnt_header:
+    ascii[4] Magic: c'SFNT'
+    u16 HeaderLength: ??      # always 8
+    u16 Reserved: ??
+  
+  filename_table:
+    asciiz FileName: ??
+    # padding to make FileName 4-byte aligned
+    u8[(4 - len("self.FileName") % 4) % 4] Padding: ??
+
+layout:
+  - sarc_header SArchHeader
+  - sfat_header SFatHeader
+  - sfat_node[SFatHeader.NodeCount] SFatNode
+  - sfnt_header SFntHeader
+  - filename_table[SFatHeader.NodeCount] FileNameTable
+

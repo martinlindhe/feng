@@ -394,7 +394,7 @@ func (fl *FileLayout) GetOffset(query string, df *value.DataField) (int, error) 
 }
 
 // finds the first field named `structName`.`fieldName`
-// returns: offset,error
+// returns: length,error
 func (fl *FileLayout) GetLength(s string, df *value.DataField) (int, error) {
 
 	if df != nil {

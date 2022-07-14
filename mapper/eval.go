@@ -174,7 +174,7 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 		return nil, fmt.Errorf("expected string, got %T", args[0])
 	}
 	functions["len"] = func(args ...interface{}) (interface{}, error) {
-		// 1 arg: name of variable. return its offset as int
+		// 1 arg: name of variable. return its data length as int
 		if len(args) != 1 {
 			return nil, fmt.Errorf("expected exactly 1 argument")
 		}
