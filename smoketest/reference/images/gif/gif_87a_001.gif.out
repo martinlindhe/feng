@@ -30,9 +30,13 @@ Block_0 BLOCK_IMAGE
            - Interlace                    bit 6:1          0
            - LocalColorTablePresent       bit 7:1          0
   [000023] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
   [000024] DataSize                       u8               3                     03
   [000025] Data                           u8[3]                                  0c 34 05
-  [000028] BlockTerminator                u8               0                     00
+
+DataSubBlock_1 Terminator
+  [000028] DataSize                       u8               0                     00
 
 Block_1 BLOCK_TRAILER
   [000029] BlockType                      u8               59                    3b

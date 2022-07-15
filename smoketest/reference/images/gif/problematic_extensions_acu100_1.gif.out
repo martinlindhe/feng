@@ -16,63 +16,23 @@ LogicalScreenDescriptor
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global color table             u8[12]                                 ff ff ff c0 c0 c0 99 cc cc 00 00 00
 
-Block_0 BLOCK_EXTENSION
+Block_0 EXT_APPLICATION
   [000019] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [00001a] ExtensionType                  u8               255                   ff
+           - EXT_APPLICATION              eq
+  [00001b] BlockSize                      u8               11                    0b
+  [00001c] ApplicationIdentifier          ascii[8]         NETSCAPE              4e 45 54 53 43 41 50 45
+  [000024] ApplicationAuthenticationCode  ascii[3]         2.0                   32 2e 30
 
-Block_1 11
-  [00001b] BlockType                      u8               11                    0b
+DataSubBlock_0
+  [000027] DataSize                       u8               3                     03
+  [000028] Data                           u8[3]                                  01 00 00
 
-Block_2 78
-  [00001c] BlockType                      u8               78                    4e
+DataSubBlock_1 Terminator
+  [00002b] DataSize                       u8               0                     00
 
-Block_3 69
-  [00001d] BlockType                      u8               69                    45
-
-Block_4 84
-  [00001e] BlockType                      u8               84                    54
-
-Block_5 83
-  [00001f] BlockType                      u8               83                    53
-
-Block_6 67
-  [000020] BlockType                      u8               67                    43
-
-Block_7 65
-  [000021] BlockType                      u8               65                    41
-
-Block_8 80
-  [000022] BlockType                      u8               80                    50
-
-Block_9 69
-  [000023] BlockType                      u8               69                    45
-
-Block_10 50
-  [000024] BlockType                      u8               50                    32
-
-Block_11 46
-  [000025] BlockType                      u8               46                    2e
-
-Block_12 48
-  [000026] BlockType                      u8               48                    30
-
-Block_13 3
-  [000027] BlockType                      u8               3                     03
-
-Block_14 1
-  [000028] BlockType                      u8               1                     01
-
-Block_15 0
-  [000029] BlockType                      u8               0                     00
-
-Block_16 0
-  [00002a] BlockType                      u8               0                     00
-
-Block_17 0
-  [00002b] BlockType                      u8               0                     00
-
-Block_18 EXT_GRAPHIC_CONTROL
+Block_1 EXT_GRAPHIC_CONTROL
   [00002c] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [00002d] ExtensionType                  u8               249                   f9
@@ -85,9 +45,11 @@ Block_18 EXT_GRAPHIC_CONTROL
            - Reserved                     bit 5:3          0
   [000030] Delay time                     u16 le           200                   00 c8
   [000032] Transparent color index        u8               0                     00
-  [000033] Block terminator               u8               0                     00
 
-Block_19 BLOCK_IMAGE
+DataSubBlock_0 Terminator
+  [000033] DataSize                       u8               0                     00
+
+Block_2 BLOCK_IMAGE
   [000034] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000035] Left position                  u16 le           0                     00 00
@@ -100,9 +62,578 @@ Block_19 BLOCK_IMAGE
            - Sort                         bit 5:1          0
            - Interlace                    bit 6:1          0
            - LocalColorTablePresent       bit 7:1          1
-  [00003e] Local color table              u8[384]                                ff ff ff ff cc 99 ff c6 94 ff a5 a5 ff 9c 9c ff 8c 94 ff 66 66 f7 f7 f7 ef bd 8c ef 84 84 de de ...
+  [00003e] LocalColorTable                u8[384]                                ff ff ff ff cc 99 ff c6 94 ff a5 a5 ff 9c 9c ff 8c 94 ff 66 66 f7 f7 f7 ef bd 8c ef 84 84 de de ...
   [0001be] LZWMinimumCodeSize             u8               7                     07
+
+DataSubBlock_0
   [0001bf] DataSize                       u8               255                   ff
   [0001c0] Data                           u8[255]                                80 11 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8a 00 90 0e 06 93 17 41 41 39 1e 99 99 2a 24 9a 2a 9a ...
 
-0x0f9e (3998) unmapped bytes (85.0%)
+DataSubBlock_1
+  [0002bf] DataSize                       u8               255                   ff
+  [0002c0] Data                           u8[255]                                df 4e c5 b5 eb 2a d6 12 99 34 90 e8 fa 62 99 51 06 24 c2 4d 62 26 2b 67 2d c1 f8 18 20 04 11 24 ...
+
+DataSubBlock_2
+  [0003bf] DataSize                       u8               255                   ff
+  [0003c0] Data                           u8[255]                                8d ff 21 28 59 43 02 5e 92 83 88 4e 76 68 5b 43 41 06 f1 c0 90 bd 28 50 c2 6c 24 ec f4 5a 8d 53 ...
+
+DataSubBlock_3
+  [0004bf] DataSize                       u8               255                   ff
+  [0004c0] Data                           u8[255]                                54 2f 01 ab db 83 34 ed aa c0 09 57 c2 00 ef c2 2f 04 a4 c3 08 18 a4 3c c1 04 12 60 10 d0 a1 30 ...
+
+DataSubBlock_4
+  [0005bf] DataSize                       u8               255                   ff
+  [0005c0] Data                           u8[255]                                02 1b c0 e0 78 ea 01 08 00 43 0a d8 a2 10 41 0a 40 00 31 30 dd d0 ea 7c b1 71 d7 eb e2 e8 55 11 ...
+
+DataSubBlock_5
+  [0006bf] DataSize                       u8               255                   ff
+  [0006c0] Data                           u8[255]                                63 13 11 c6 01 7e 83 01 31 2a 08 07 55 db 40 09 46 b6 01 04 ba 12 71 78 a4 9b 26 f7 58 b9 1a 9d ...
+
+DataSubBlock_6
+  [0007bf] DataSize                       u8               255                   ff
+  [0007c0] Data                           u8[255]                                a3 1a ea 0a 7a 50 89 21 f5 46 9b b0 e9 39 40 c4 29 18 cc a7 22 00 b4 55 26 2c 51 cc a9 05 15 96 ...
+
+DataSubBlock_7
+  [0008bf] DataSize                       u8               255                   ff
+  [0008c0] Data                           u8[255]                                28 d2 95 df 3e bd c0 02 2b 68 81 2e cb 7b 5a cd a0 37 38 ea 85 9b 00 0e ac 18 59 a0 a2 01 43 9d ...
+
+DataSubBlock_8
+  [0009bf] DataSize                       u8               255                   ff
+  [0009c0] Data                           u8[255]                                50 4c 0a 34 a0 00 09 48 00 b4 1d 80 40 a3 1a 90 d7 6d 1a 41 ac 62 02 3b 89 8d a0 02 c5 56 b4 2f ...
+
+DataSubBlock_9
+  [000abf] DataSize                       u8               255                   ff
+  [000ac0] Data                           u8[255]                                70 9f 1a ee 0a 80 81 77 76 32 25 4b f0 82 1d 15 08 41 83 2f 89 6f 11 8c fc 66 10 d6 8d 15 07 1f ...
+
+DataSubBlock_10
+  [000bbf] DataSize                       u8               255                   ff
+  [000bc0] Data                           u8[255]                                49 e2 d2 7f 82 64 5a 07 30 40 96 20 80 bb 57 41 23 80 81 39 a8 83 2b d8 7d ff 97 19 0a 60 01 1d ...
+
+DataSubBlock_11
+  [000cbf] DataSize                       u8               250                   fa
+  [000cc0] Data                           u8[250]                                01 79 e7 89 b2 d8 8d 99 64 02 38 c0 57 e1 f8 0b 07 f0 01 25 44 47 1f f0 00 33 31 8e ed f2 48 88 ...
+
+DataSubBlock_12 Terminator
+  [000dba] DataSize                       u8               0                     00
+
+Block_3 EXT_GRAPHIC_CONTROL
+  [000dbb] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000dbc] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [000dbd] Size                           u8               4                     04
+  [000dbe] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [000dbf] Delay time                     u16 le           5                     00 05
+  [000dc1] Transparent color index        u8               1                     01
+
+DataSubBlock_0 Terminator
+  [000dc2] DataSize                       u8               0                     00
+
+Block_4 BLOCK_IMAGE
+  [000dc3] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [000dc4] Left position                  u16 le           47                    00 2f
+  [000dc6] Top position                   u16 le           64                    00 40
+  [000dc8] Image width                    u16 le           23                    00 17
+  [000dca] Image height                   u16 le           9                     00 09
+  [000dcc] ImageDescriptor                u8               1                     01
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          0
+  [000dcd] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [000dce] DataSize                       u8               43                    2b
+  [000dcf] Data                           u8[43]                                 0c 8e a9 1b 26 ff 0e 94 82 56 e0 6a dc ba 83 98 7d 1e 37 81 e2 09 71 e8 b5 b6 6a 24 a6 a5 17 23 ...
+
+DataSubBlock_1 Terminator
+  [000dfa] DataSize                       u8               0                     00
+
+Block_5 EXT_GRAPHIC_CONTROL
+  [000dfb] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000dfc] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [000dfd] Size                           u8               4                     04
+  [000dfe] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [000dff] Delay time                     u16 le           50                    00 32
+  [000e01] Transparent color index        u8               1                     01
+
+DataSubBlock_0 Terminator
+  [000e02] DataSize                       u8               0                     00
+
+Block_6 BLOCK_IMAGE
+  [000e03] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [000e04] Left position                  u16 le           47                    00 2f
+  [000e06] Top position                   u16 le           64                    00 40
+  [000e08] Image width                    u16 le           23                    00 17
+  [000e0a] Image height                   u16 le           9                     00 09
+  [000e0c] ImageDescriptor                u8               129                   81
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [000e0d] LocalColorTable                u8[12]                                 ff ff ff c0 c0 c0 00 66 66 00 00 00
+  [000e19] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [000e1a] DataSize                       u8               43                    2b
+  [000e1b] Data                           u8[43]                                 0c 8e a9 1b 26 ff 0e 94 82 56 e0 6a dc ba 83 98 7d 1e 37 81 e2 09 71 e8 b5 b6 6a 24 a6 a5 17 23 ...
+
+DataSubBlock_1 Terminator
+  [000e46] DataSize                       u8               0                     00
+
+Block_7 EXT_GRAPHIC_CONTROL
+  [000e47] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000e48] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [000e49] Size                           u8               4                     04
+  [000e4a] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [000e4b] Delay time                     u16 le           5                     00 05
+  [000e4d] Transparent color index        u8               1                     01
+
+DataSubBlock_0 Terminator
+  [000e4e] DataSize                       u8               0                     00
+
+Block_8 BLOCK_IMAGE
+  [000e4f] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [000e50] Left position                  u16 le           73                    00 49
+  [000e52] Top position                   u16 le           64                    00 40
+  [000e54] Image width                    u16 le           22                    00 16
+  [000e56] Image height                   u16 le           8                     00 08
+  [000e58] ImageDescriptor                u8               1                     01
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          0
+  [000e59] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [000e5a] DataSize                       u8               37                    25
+  [000e5b] Data                           u8[37]                                 84 8f a9 26 2d e0 5e 64 ee 34 6a 5f 3e 01 ea ea 5d 21 10 74 a2 e8 a5 62 99 b6 aa a4 91 ed 34 85 ...
+
+DataSubBlock_1 Terminator
+  [000e80] DataSize                       u8               0                     00
+
+Block_9 EXT_GRAPHIC_CONTROL
+  [000e81] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000e82] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [000e83] Size                           u8               4                     04
+  [000e84] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [000e85] Delay time                     u16 le           50                    00 32
+  [000e87] Transparent color index        u8               1                     01
+
+DataSubBlock_0 Terminator
+  [000e88] DataSize                       u8               0                     00
+
+Block_10 BLOCK_IMAGE
+  [000e89] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [000e8a] Left position                  u16 le           73                    00 49
+  [000e8c] Top position                   u16 le           64                    00 40
+  [000e8e] Image width                    u16 le           22                    00 16
+  [000e90] Image height                   u16 le           8                     00 08
+  [000e92] ImageDescriptor                u8               129                   81
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [000e93] LocalColorTable                u8[12]                                 ff ff ff c0 c0 c0 00 66 66 00 00 00
+  [000e9f] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [000ea0] DataSize                       u8               37                    25
+  [000ea1] Data                           u8[37]                                 84 8f a9 26 2d e0 5e 64 ee 34 6a 5f 3e 01 ea ea 5d 21 10 74 a2 e8 a5 62 99 b6 aa a4 91 ed 34 85 ...
+
+DataSubBlock_1 Terminator
+  [000ec6] DataSize                       u8               0                     00
+
+Block_11 EXT_GRAPHIC_CONTROL
+  [000ec7] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000ec8] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [000ec9] Size                           u8               4                     04
+  [000eca] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [000ecb] Delay time                     u16 le           5                     00 05
+  [000ecd] Transparent color index        u8               1                     01
+
+DataSubBlock_0 Terminator
+  [000ece] DataSize                       u8               0                     00
+
+Block_12 BLOCK_IMAGE
+  [000ecf] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [000ed0] Left position                  u16 le           40                    00 28
+  [000ed2] Top position                   u16 le           73                    00 49
+  [000ed4] Image width                    u16 le           55                    00 37
+  [000ed6] Image height                   u16 le           11                    00 0b
+  [000ed8] ImageDescriptor                u8               1                     01
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          0
+  [000ed9] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [000eda] DataSize                       u8               98                    62
+  [000edb] Data                           u8[98]                                 8c 8f a9 cb 8d 00 a1 9b b4 3e 01 70 88 bc 6f fe 75 e2 28 86 10 16 09 aa 7a b2 2d 9a ad 31 bb ba ...
+
+DataSubBlock_1 Terminator
+  [000f3d] DataSize                       u8               0                     00
+
+Block_13 EXT_GRAPHIC_CONTROL
+  [000f3e] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000f3f] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [000f40] Size                           u8               4                     04
+  [000f41] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [000f42] Delay time                     u16 le           50                    00 32
+  [000f44] Transparent color index        u8               1                     01
+
+DataSubBlock_0 Terminator
+  [000f45] DataSize                       u8               0                     00
+
+Block_14 BLOCK_IMAGE
+  [000f46] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [000f47] Left position                  u16 le           40                    00 28
+  [000f49] Top position                   u16 le           73                    00 49
+  [000f4b] Image width                    u16 le           55                    00 37
+  [000f4d] Image height                   u16 le           11                    00 0b
+  [000f4f] ImageDescriptor                u8               129                   81
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [000f50] LocalColorTable                u8[12]                                 ff ff ff c0 c0 c0 00 66 66 00 00 00
+  [000f5c] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [000f5d] DataSize                       u8               98                    62
+  [000f5e] Data                           u8[98]                                 8c 8f a9 cb 8d 00 a1 9b b4 3e 01 70 88 bc 6f fe 75 e2 28 86 10 16 09 aa 7a b2 2d 9a ad 31 bb ba ...
+
+DataSubBlock_1 Terminator
+  [000fc0] DataSize                       u8               0                     00
+
+Block_15 EXT_GRAPHIC_CONTROL
+  [000fc1] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000fc2] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [000fc3] Size                           u8               4                     04
+  [000fc4] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [000fc5] Delay time                     u16 le           5                     00 05
+  [000fc7] Transparent color index        u8               1                     01
+
+DataSubBlock_0 Terminator
+  [000fc8] DataSize                       u8               0                     00
+
+Block_16 BLOCK_IMAGE
+  [000fc9] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [000fca] Left position                  u16 le           56                    00 38
+  [000fcc] Top position                   u16 le           86                    00 56
+  [000fce] Image width                    u16 le           27                    00 1b
+  [000fd0] Image height                   u16 le           8                     00 08
+  [000fd2] ImageDescriptor                u8               1                     01
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          0
+  [000fd3] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [000fd4] DataSize                       u8               36                    24
+  [000fd5] Data                           u8[36]                                 84 8f a9 2b 02 fd 5c 94 10 4e 53 5d 8e 7c 9f 0d 6a cd 16 04 9d 38 85 5c 79 b6 aa 85 8d b2 8b 5e ...
+
+DataSubBlock_1 Terminator
+  [000ff9] DataSize                       u8               0                     00
+
+Block_17 EXT_GRAPHIC_CONTROL
+  [000ffa] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000ffb] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [000ffc] Size                           u8               4                     04
+  [000ffd] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [000ffe] Delay time                     u16 le           45                    00 2d
+  [001000] Transparent color index        u8               1                     01
+
+DataSubBlock_0 Terminator
+  [001001] DataSize                       u8               0                     00
+
+Block_18 BLOCK_IMAGE
+  [001002] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [001003] Left position                  u16 le           56                    00 38
+  [001005] Top position                   u16 le           86                    00 56
+  [001007] Image width                    u16 le           27                    00 1b
+  [001009] Image height                   u16 le           8                     00 08
+  [00100b] ImageDescriptor                u8               129                   81
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [00100c] LocalColorTable                u8[12]                                 ff ff ff c0 c0 c0 00 66 66 00 00 00
+  [001018] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [001019] DataSize                       u8               36                    24
+  [00101a] Data                           u8[36]                                 84 8f a9 2b 02 fd 5c 94 10 4e 53 5d 8e 7c 9f 0d 6a cd 16 04 9d 38 85 5c 79 b6 aa 85 8d b2 8b 5e ...
+
+DataSubBlock_1 Terminator
+  [00103e] DataSize                       u8               0                     00
+
+Block_19 EXT_GRAPHIC_CONTROL
+  [00103f] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [001040] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [001041] Size                           u8               4                     04
+  [001042] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [001043] Delay time                     u16 le           50                    00 32
+  [001045] Transparent color index        u8               3                     03
+
+DataSubBlock_0 Terminator
+  [001046] DataSize                       u8               0                     00
+
+Block_20 BLOCK_IMAGE
+  [001047] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [001048] Left position                  u16 le           86                    00 56
+  [00104a] Top position                   u16 le           84                    00 54
+  [00104c] Image width                    u16 le           11                    00 0b
+  [00104e] Image height                   u16 le           11                    00 0b
+  [001050] ImageDescriptor                u8               129                   81
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [001051] LocalColorTable                u8[12]                                 ff ff ff ff 33 00 cc 33 00 c0 c0 c0
+  [00105d] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [00105e] DataSize                       u8               34                    22
+  [00105f] Data                           u8[34]                                 9c 07 79 97 e2 6a 80 0b 34 08 10 45 48 15 cb 0e 80 1a 48 35 a2 e6 95 12 9a 51 d3 c6 84 ea 12 41 ...
+
+DataSubBlock_1 Terminator
+  [001081] DataSize                       u8               0                     00
+
+Block_21 EXT_GRAPHIC_CONTROL
+  [001082] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [001083] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [001084] Size                           u8               4                     04
+  [001085] Flags                          u8               4                     04
+           - Transparent color            bit 0:1          0
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          1
+           - Reserved                     bit 5:3          0
+  [001086] Delay time                     u16 le           50                    00 32
+  [001088] Transparent color index        u8               0                     00
+
+DataSubBlock_0 Terminator
+  [001089] DataSize                       u8               0                     00
+
+Block_22 BLOCK_IMAGE
+  [00108a] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [00108b] Left position                  u16 le           86                    00 56
+  [00108d] Top position                   u16 le           84                    00 54
+  [00108f] Image width                    u16 le           11                    00 0b
+  [001091] Image height                   u16 le           11                    00 0b
+  [001093] ImageDescriptor                u8               132                   84
+           - LocalColorTableSize          bit 0:3          4
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [001094] LocalColorTable                u8[96]                                 ff ff ff f7 f7 f7 de de de ce c6 c6 cc 99 66 c6 94 63 bd a5 84 ad 84 5a 9c 7b 52 94 94 94 8c 5a ...
+  [0010f4] LZWMinimumCodeSize             u8               5                     05
+
+DataSubBlock_0
+  [0010f5] DataSize                       u8               53                    35
+  [0010f6] Data                           u8[53]                                 20 41 28 07 60 9e 80 48 30 06 6a aa 07 23 b8 ea 88 04 68 5d 38 d0 70 d6 a3 48 64 96 aa 21 1c 91 ...
+
+DataSubBlock_1 Terminator
+  [00112b] DataSize                       u8               0                     00
+
+Block_23 EXT_GRAPHIC_CONTROL
+  [00112c] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [00112d] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [00112e] Size                           u8               4                     04
+  [00112f] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [001130] Delay time                     u16 le           50                    00 32
+  [001132] Transparent color index        u8               3                     03
+
+DataSubBlock_0 Terminator
+  [001133] DataSize                       u8               0                     00
+
+Block_24 BLOCK_IMAGE
+  [001134] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [001135] Left position                  u16 le           86                    00 56
+  [001137] Top position                   u16 le           84                    00 54
+  [001139] Image width                    u16 le           11                    00 0b
+  [00113b] Image height                   u16 le           11                    00 0b
+  [00113d] ImageDescriptor                u8               129                   81
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [00113e] LocalColorTable                u8[12]                                 ff ff ff ff 33 00 cc 33 00 c0 c0 c0
+  [00114a] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [00114b] DataSize                       u8               34                    22
+  [00114c] Data                           u8[34]                                 9c 07 79 97 e2 6a 80 0b 34 08 10 45 48 15 cb 0e 80 1a 48 35 a2 e6 95 12 9a 51 d3 c6 84 ea 12 41 ...
+
+DataSubBlock_1 Terminator
+  [00116e] DataSize                       u8               0                     00
+
+Block_25 EXT_GRAPHIC_CONTROL
+  [00116f] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [001170] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [001171] Size                           u8               4                     04
+  [001172] Flags                          u8               4                     04
+           - Transparent color            bit 0:1          0
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          1
+           - Reserved                     bit 5:3          0
+  [001173] Delay time                     u16 le           50                    00 32
+  [001175] Transparent color index        u8               0                     00
+
+DataSubBlock_0 Terminator
+  [001176] DataSize                       u8               0                     00
+
+Block_26 BLOCK_IMAGE
+  [001177] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [001178] Left position                  u16 le           86                    00 56
+  [00117a] Top position                   u16 le           84                    00 54
+  [00117c] Image width                    u16 le           11                    00 0b
+  [00117e] Image height                   u16 le           11                    00 0b
+  [001180] ImageDescriptor                u8               132                   84
+           - LocalColorTableSize          bit 0:3          4
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [001181] LocalColorTable                u8[96]                                 ff ff ff f7 f7 f7 de de de ce c6 c6 cc 99 66 c6 94 63 bd a5 84 ad 84 5a 9c 7b 52 94 94 94 8c 5a ...
+  [0011e1] LZWMinimumCodeSize             u8               5                     05
+
+DataSubBlock_0
+  [0011e2] DataSize                       u8               53                    35
+  [0011e3] Data                           u8[53]                                 20 41 28 07 60 9e 80 48 30 06 6a aa 07 23 b8 ea 88 04 68 5d 38 d0 70 d6 a3 48 64 96 aa 21 1c 91 ...
+
+DataSubBlock_1 Terminator
+  [001218] DataSize                       u8               0                     00
+
+Block_27 EXT_GRAPHIC_CONTROL
+  [001219] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [00121a] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [00121b] Size                           u8               4                     04
+  [00121c] Flags                          u8               1                     01
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          0
+           - Reserved                     bit 5:3          0
+  [00121d] Delay time                     u16 le           200                   00 c8
+  [00121f] Transparent color index        u8               3                     03
+
+DataSubBlock_0 Terminator
+  [001220] DataSize                       u8               0                     00
+
+Block_28 BLOCK_IMAGE
+  [001221] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [001222] Left position                  u16 le           86                    00 56
+  [001224] Top position                   u16 le           84                    00 54
+  [001226] Image width                    u16 le           11                    00 0b
+  [001228] Image height                   u16 le           11                    00 0b
+  [00122a] ImageDescriptor                u8               129                   81
+           - LocalColorTableSize          bit 0:3          1
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          1
+  [00122b] LocalColorTable                u8[12]                                 ff ff ff ff 33 00 cc 33 00 c0 c0 c0
+  [001237] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
+  [001238] DataSize                       u8               34                    22
+  [001239] Data                           u8[34]                                 9c 07 79 97 e2 6a 80 0b 34 08 10 45 48 15 cb 0e 80 1a 48 35 a2 e6 95 12 9a 51 d3 c6 84 ea 12 41 ...
+
+DataSubBlock_1 Terminator
+  [00125b] DataSize                       u8               0                     00
+
+Block_29 BLOCK_TRAILER
+  [00125c] BlockType                      u8               59                    3b
+           - BLOCK_TRAILER                eq
+
+EOF

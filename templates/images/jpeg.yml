@@ -63,8 +63,8 @@ structs:
         default: invalid
       u8 Reserved: "00"
 
-      if ! self.Identifier in {JFIF_APP0, JFXX_APP0}:
-        u8[Length] Unknown data: ?? # XXX verify this Length
+      if not(self.Identifier, JFIF_APP0, JFXX_APP0):
+        u8[self.Length] Unknown data: ?? # XXX verify this Length
 
       if self.Identifier == JFIF_APP0:
         u8 Major version: ??

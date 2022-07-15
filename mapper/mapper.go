@@ -13,7 +13,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
@@ -33,9 +32,14 @@ func init() {
 
 func (fl *FileLayout) mapLayout(rr *bytes.Reader, ds *template.DataStructure, df *value.DataField) error {
 
+	log.Printf("-- mapLayout ds %s, df %s", ds.BaseName, df.Label)
+	if df.Label == "Global color table" {
+		//	panic("w")
+	}
+
 	if df.Kind == "offset" {
-		// evaluate label in top-level layout (needed by ps3_pkg)
-		v, err := fl.EvaluateExpression(df.Label)
+		// evaluate offset directive in top-level layout (needed by ps3_pkg)
+		v, err := fl.EvaluateExpression(df.Label, df)
 		if err != nil {
 			panic(err)
 		}
@@ -47,7 +51,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, ds *template.DataStructure, df
 		return nil
 	}
 
-	es, err := ds.FindStructure(df)
+	es, err := ds.FindStructure(df.Kind)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,6 +70,9 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, ds *template.DataStructure, df
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
+				log.Printf("--- use111d Label %s, restoring to %s", df.Label, baseLabel)
+				df.Label = baseLabel
+
 				if errors.Is(err, ParseStopError) {
 					log.Println("reached ParseStop")
 					break
@@ -88,12 +95,13 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, ds *template.DataStructure, df
 				*/
 				return err
 			}
+			log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
 			df.Label = baseLabel
 		}
 		return nil
 	}
 	if df.Range != "" {
-		parsedRange, err := fl.EvaluateExpression(df.Range)
+		parsedRange, err := fl.EvaluateExpression(df.Range, df) // XXX need to set DF to parent ...
 		if err != nil {
 			panic(err)
 		}
@@ -107,8 +115,11 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, ds *template.DataStructure, df
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
+				log.Printf("--- used2222 Label %s, restoring to %s", df.Label, baseLabel)
+				df.Label = baseLabel
 				return err
 			}
+			log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
 			df.Label = baseLabel
 		}
 		return nil
@@ -254,21 +265,21 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 	return fl, nil
 }
 
-func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG {
-		log.Printf("expandStruct: adding struct %s", df.Label)
+		log.Printf("expandStruct: adding struct %s", dfParent.Label)
 	}
 
-	fl.Structs = append(fl.Structs, Struct{Label: df.Label})
+	fl.Structs = append(fl.Structs, Struct{Label: dfParent.Label})
 
 	idx := len(fl.Structs) - 1
 	fs := &fl.Structs[idx]
 
-	err := fl.expandChildren(r, fs, df, ds, expressions)
+	err := fl.expandChildren(r, fs, dfParent, ds, expressions)
 	if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 		//if DEBUG {
-		feng.Red("expandStruct error: [%08x] failed reading data for '%s' (err:%v)\n", fl.offset, df.Label, err)
+		feng.Red("expandStruct error: [%08x] failed reading data for '%s' (err:%v)\n", fl.offset, dfParent.Label, err)
 		//}
 
 		if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
@@ -279,14 +290,14 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, df *value.DataField, ds *tem
 	return err
 }
 
-func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG {
-		log.Printf("expandChildren: working with struct %s", df.Label)
+		feng.Red("expandChildren: working with struct %s\n", dfParent.Label)
 	}
 
 	// track iterator index while parsing
-	fs.Index = df.Index
+	fs.Index = dfParent.Index
 
 	lastIf := ""
 
@@ -297,21 +308,23 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 		switch es.Field.Kind {
 		case "label":
 			// "label: APP0". augment node with extra info
-			s := strings.ReplaceAll(es.Pattern.Value, "self.", df.Label+".")
+			//s := strings.ReplaceAll(es.Pattern.Value, "self.", dfParent.Label+".")
 			// if it is a numeric field with patterns, return the string for the matched pattern,
 			// ELSE evaluate expression as strings
-			if fl.isPatternVariableName(es.Pattern.Value, df) {
-				val, err := fl.MatchedValue(es.Pattern.Value, df)
+			feng.Yellow("--- LABEL evaluating %s\n", dfParent.Label)
+			if fl.isPatternVariableName(es.Pattern.Value, dfParent) {
+				val, err := fl.MatchedValue(es.Pattern.Value, dfParent)
 				if err != nil {
 					panic(err)
 				}
 				fs.decoration = strings.TrimSpace(val)
 			} else {
-				val, err := fl.EvaluateStringExpression(s)
+				val, err := fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
 				if err != nil {
-					panic(err)
+					log.Println(err)
+				} else {
+					fs.decoration = strings.TrimSpace(val)
 				}
-				fs.decoration = strings.TrimSpace(val)
 			}
 
 		case "parse":
@@ -349,7 +362,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				return fmt.Errorf("too many offset changes from template")
 			}
 			previousOffset := fl.pushOffset()
-			fl.offset, err = fl.GetInt(es.Pattern.Value, df)
+			fl.offset, err = fl.GetInt(es.Pattern.Value, dfParent)
 			log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
 			if err != nil {
 				return err
@@ -410,7 +423,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			"compressed:deflate", "compressed:lz4", "compressed:zlib",
 			"raw:u8":
 			// internal data types
-			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", df.Label+".")
+			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 
 			if totalLength == 0 {
@@ -422,7 +435,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 			val, err := readBytes(r, totalLength, unitLength, fl.endian)
 			if DEBUG {
-				log.Printf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, df.Label, es.Field.Label, val, err)
+				log.Printf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, dfParent.Label, es.Field.Label, val, err)
 			}
 			if err != nil {
 				return err
@@ -486,13 +499,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 
 		case "if":
 			q := es.Field.Label
-			q = strings.ReplaceAll(q, "self.", df.Label+".")
+			//q = strings.ReplaceAll(q, "self.", dfParent.Label+".")
 
 			// workaround for yaml limitation of not allowing [] in keys:
-			q = strings.ReplaceAll(q, "{", "[")
-			q = strings.ReplaceAll(q, "}", "]")
+			//q = strings.ReplaceAll(q, "{", "[")
+			//q = strings.ReplaceAll(q, "}", "]")
 
-			a, err := fl.EvaluateExpression(q)
+			a, err := fl.EvaluateExpression(q, dfParent)
 			if err != nil {
 				return err
 			}
@@ -505,7 +518,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				}
 			}
 			if a != 0 {
-				err := fl.expandChildren(r, fs, df, ds, es.Children)
+				err := fl.expandChildren(r, fs, dfParent, ds, es.Children)
 				if err != nil {
 					return err
 				}
@@ -515,7 +528,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			if DEBUG {
 				log.Println("ELSE: evaluating", lastIf)
 			}
-			a, err := fl.EvaluateExpression(lastIf)
+			a, err := fl.EvaluateExpression(lastIf, dfParent)
 			if err != nil {
 				return err
 			}
@@ -527,7 +540,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 				}
 			}
 			if a == 0 {
-				err := fl.expandChildren(r, fs, df, ds, es.Children)
+				err := fl.expandChildren(r, fs, dfParent, ds, es.Children)
 				if err != nil {
 					return err
 				}
@@ -537,18 +550,26 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, df *value.Data
 			// find custom struct with given name
 			customStruct, err := fl.GetStruct(es.Field.Kind)
 			if err != nil {
-				// this error may be critical. it means the parsed template is not working.
-
-				// XXX IF STRUCT NOT FOUND AS EVALUATED, look in template for the name in struct field and use that !!!
+				found := false
 				for _, ev := range fl.DS.EvaluatedStructs {
-					if ev.Name == es.Field.Kind {
-						spew.Dump(ev)
+					//log.Println("--- layout ev", ev.Name, " .....", es.Field.Kind)
 
-						// XXX hur gjorde vi i top level layout ???
+					if ev.Name == es.Field.Kind {
+						found = true
+						//err = fl.mapLayout(r, ds, dfParent) // XXX es.Field is wrong ??? should be data field for the section !!!
+						err = fl.mapLayout(r, ds, &es.Field)
+						if err != nil {
+							log.Println(err)
+						}
+						break
 					}
 				}
 
-				log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
+				if !found {
+					// this error is critical. it means the parsed template is not working.
+					log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
+				}
+				continue
 			}
 
 			log.Printf("%#v", customStruct)

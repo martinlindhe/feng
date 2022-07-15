@@ -87,7 +87,7 @@ structs:
     if self.Type == sBIT:
       if IHDR.ColorType == COLOR_GRAYSCALE:
         u8 Significant bits grayscale: ??
-      if IHDR.ColorType in {COLOR_RGB, COLOR_PALETTE}:
+      if either(IHDR.ColorType, COLOR_RGB, COLOR_PALETTE):
         u8 Significant bits red: ??
         u8 Significant bits green: ??
         u8 Significant bits blue: ??
@@ -157,10 +157,10 @@ structs:
       if IHDR.ColorType == COLOR_PALETTE:
         u8 Palette index: ??
 
-      if IHDR.ColorType in {COLOR_GRAYSCALE, COLOR_GRAY_ALPHA}:
+      if either(IHDR.ColorType, COLOR_GRAYSCALE, COLOR_GRAY_ALPHA):
         u16 Gray: ??
 
-      if IHDR.ColorType in {COLOR_RGB, COLOR_RGBA}:
+      if either(IHDR.ColorType, COLOR_RGB, COLOR_RGBA):
         u16 Red: ??
         u16 Green: ??
         u16 Blue: ??
@@ -189,7 +189,7 @@ structs:
       u32 IDAT restart offset: ??
 
     # UNKNOWN CHUNK TYPE
-    if !self.Type in {IDAT, PLTE, sBIT, sRGB, pHYs, tEXt, zTXt, iTXt, iCCP, tIME, bKGD, cHRM, gAMA, iDOT}:
+    if not(self.Type, IDAT, PLTE, sBIT, sRGB, pHYs, tEXt, zTXt, iTXt, iCCP, tIME, bKGD, cHRM, gAMA, iDOT):
       u8[self.Length] Chunk data: ??
 
     #crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field

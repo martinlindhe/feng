@@ -1,9 +1,7 @@
-# STATUS: 20%
+# STATUS: 80%
 
-# - MAX: "data_sub_block[] Image data: ??" with custom type and "data: eos" marker to end slice stream
-#     needed to fully parse gif format
-
-# - MID: need to use custom "rgb" type as defined
+# - MAX FIXME: "self." expansion dont work with nesting..
+# - MID: pattern match on ascii[2], u8[2]
 
 references:
   - https://www.w3.org/Graphics/GIF/spec-gif89a.txt
@@ -21,14 +19,12 @@ magic:
   - offset: 0000
     match: c'GIF8'
 
-# XXX implement custom types!
-types:
+structs:
   rgb:
     u8 R: ??
     u8 G: ??
     u8 B: ??
 
-structs:
   header:
     ascii[4] Signature: c'GIF8'
     u16 Version: # TODO pattern match on ascii[2], u8[2]
@@ -48,16 +44,8 @@ structs:
     u8 Aspect ratio: ??
 
     if self.ScreenDescriptor & GlobalColorTablePresent:
-      # FIXME use rgb type. rgb struct is 3 bytes. 4 fields = 12 bytes
-      u8[3 * (2 << (self.ScreenDescriptor & 7))] Global color table: ??
-
-  # XXX need to be able to evaluate this custom struct from "block" struct. XXX or as a type?
-  data_block:
-    u8 DataSize: ??
-    u8[self.DataSize] Data: ??
-    if self.DataSize == 1:
-      parse: stop       # XXX mark end of slice parsing, not the whole file
-      #data: eos  # FIXME TODO - XXX marks end of stream
+      # FIXME use rgb type. bug due to "self." not expanding in custom struct
+      u8[3 * (2 << (self.ScreenDescriptor & 7))] Global color table: ??          # FIXME: "self." expansion dont work with nesting..
 
   block:
     u8 BlockType:
@@ -72,7 +60,7 @@ structs:
         #eq 01: EXT_PLAIN_TEXT
         eq f9: EXT_GRAPHIC_CONTROL
         #eq fe: EXT_COMMENT
-        #eq ff: EXT_APPLICATION
+        eq ff: EXT_APPLICATION
       if self.ExtensionType == EXT_GRAPHIC_CONTROL:
         label: self.ExtensionType
         u8 Size: "04"                       # NOTE: should always be 04
@@ -83,7 +71,12 @@ structs:
           bit b1110_0000: Reserved
         u16 Delay time: ??
         u8 Transparent color index: ??
-        u8 Block terminator: "00"
+
+      if self.ExtensionType == EXT_APPLICATION:
+        label: self.ExtensionType # ApplicationSubBlock
+        u8 BlockSize: ??
+        ascii[8] ApplicationIdentifier: ??
+        ascii[3] ApplicationAuthenticationCode: ??
 
     if self.BlockType == BLOCK_IMAGE:
       u16 Left position: ??
@@ -97,26 +90,16 @@ structs:
         bit b0100_0000: Interlace
         bit b1000_0000: LocalColorTablePresent
       if self.ImageDescriptor & LocalColorTablePresent:
-        # XXX RGB8 type
-        u8[3 * (2 << (self.ImageDescriptor & 7))] Local color table: ??
+        u8[3 * (2 << (self.ImageDescriptor & 7))] LocalColorTable: ??
 
-      # IMAGEDATA starts, says 010:
-      u8 LZWMinimumCodeSize: ??   # XXX meaning?
+      u8 LZWMinimumCodeSize: ??
 
-      # XXX series of data blocks. last block is one with Size==0
-      # needed to parse gif_87a_002_apples.gif
-
-      # XXX TODO IMPLEMENT THIS:
-      #data_sub_block[] DataSubBlock: ??
-
-      # XXX TODO REMOVE THIS:
-      u8 DataSize: ??
-      u8[self.DataSize] Data: ??
-      u8 BlockTerminator: "00"
+    data_sub_block[] DataSubBlock: ??
 
   data_sub_block:
     u8 DataSize: ??
     if self.DataSize == 0:
+      label: '"Terminator"'
       parse: stop
 
     u8[self.DataSize] Data: ??
@@ -125,4 +108,3 @@ layout:
   - header Header
   - logical_screen_descriptor LogicalScreenDescriptor
   - block[] Block
-

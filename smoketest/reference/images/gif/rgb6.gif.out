@@ -29,7 +29,9 @@ Block_0 EXT_GRAPHIC_CONTROL
            - Reserved                     bit 5:3          0
   [0000d1] Delay time                     u16 le           0                     00 00
   [0000d3] Transparent color index        u8               0                     00
-  [0000d4] Block terminator               u8               0                     00
+
+DataSubBlock_0 Terminator
+  [0000d4] DataSize                       u8               0                     00
 
 Block_1 BLOCK_IMAGE
   [0000d5] BlockType                      u8               44                    2c
@@ -45,7 +47,92 @@ Block_1 BLOCK_IMAGE
            - Interlace                    bit 6:1          0
            - LocalColorTablePresent       bit 7:1          0
   [0000df] LZWMinimumCodeSize             u8               6                     06
+
+DataSubBlock_0
   [0000e0] DataSize                       u8               255                   ff
   [0000e1] Data                           u8[255]                                c0 9d 70 48 2c 1a 8f c8 a4 72 c9 6c 3a 9f d0 a8 74 aa fc 59 af d8 ac 76 cb ed 7a bf e0 30 b7 47 ...
 
-0x129c (4764) unmapped bytes (90.8%)
+DataSubBlock_1
+  [0001e0] DataSize                       u8               255                   ff
+  [0001e1] Data                           u8[255]                                98 3c 2b f9 94 05 34 68 a3 a1 99 76 1a bd 82 14 93 d2 a5 3f 9a 4a 2a 0a 15 22 22 10 11 22 f0 d8 ...
+
+DataSubBlock_2
+  [0002e0] DataSize                       u8               255                   ff
+  [0002e1] Data                           u8[255]                                df 56 ef 6d 98 df 3d fb f5 f7 1b 70 e5 1d d8 98 19 76 99 38 1c 5a 8a 31 c6 c3 19 8c ed f5 e2 83 ...
+
+DataSubBlock_3
+  [0003e0] DataSize                       u8               255                   ff
+  [0003e1] Data                           u8[255]                                ec b3 35 ca 46 46 81 0e 82 7b 06 08 75 92 e7 ed a8 65 64 7a af bb f2 92 3a ae a3 ec 71 68 ac 85 ...
+
+DataSubBlock_4
+  [0004e0] DataSize                       u8               255                   ff
+  [0004e1] Data                           u8[255]                                86 e4 32 d9 fe 3a ed 1f e9 1e c7 e6 ac fb fe 3b ef bd 0b 6f 06 ee 2d 19 af 0d f0 a8 2b 7f 3c f3 ...
+
+DataSubBlock_5
+  [0005e0] DataSize                       u8               255                   ff
+  [0005e1] Data                           u8[255]                                f1 8e 1e 54 a3 1e 7d 68 42 21 aa f0 03 46 fc e2 17 95 38 c7 03 d0 d1 89 78 4c a4 22 2b b8 c7 46 ...
+
+DataSubBlock_6
+  [0006e0] DataSize                       u8               255                   ff
+  [0006e1] Data                           u8[255]                                ee 0c 69 1c e5 48 4d 93 1e f4 a2 27 c8 e8 4a 93 d9 d2 11 7a 93 88 81 84 e3 34 4b 59 ca 72 a2 14 ...
+
+DataSubBlock_7
+  [0007e0] DataSize                       u8               255                   ff
+  [0007e1] Data                           u8[255]                                6b 65 51 2b d4 89 66 d6 a6 f6 cc 6a 67 d9 aa 82 f1 aa 60 05 00 30 2f 7a 75 89 5d dc a2 d6 b0 08 ...
+
+DataSubBlock_8
+  [0008e0] DataSize                       u8               255                   ff
+  [0008e1] Data                           u8[255]                                fb 1c 69 13 60 59 c6 95 06 31 33 45 8c 42 80 96 58 a2 aa 7d af 35 d3 ea 69 f1 da d7 c5 42 e6 33 ...
+
+DataSubBlock_9
+  [0009e0] DataSize                       u8               255                   ff
+  [0009e1] Data                           u8[255]                                81 ae 7b fd e3 5a fc 78 9c 87 c9 ed 9a 42 d9 e8 ca 16 ae a8 ef 6d 65 2b b7 fc e9 2f 80 f9 d4 61 ...
+
+DataSubBlock_10
+  [000ae0] DataSize                       u8               255                   ff
+  [000ae1] Data                           u8[255]                                70 17 77 73 47 01 18 18 7e ab 64 77 79 57 73 e4 f7 79 1e 60 77 ec c7 03 57 27 41 21 b8 15 f0 87 ...
+
+DataSubBlock_11
+  [000be0] DataSize                       u8               255                   ff
+  [000be1] Data                           u8[255]                                2d 64 89 3a 90 7c 44 f0 7f 33 c8 89 c2 f7 5b 6c 65 74 43 00 01 2b e0 76 57 16 02 48 18 77 52 e7 ...
+
+DataSubBlock_12
+  [000ce0] DataSize                       u8               255                   ff
+  [000ce1] Data                           u8[255]                                5d f8 88 4e 25 44 40 07 4a 80 44 89 44 e9 8e 46 59 4d 1b 39 83 f6 f4 83 b6 d6 56 f9 b7 03 f8 f6 ...
+
+DataSubBlock_13
+  [000de0] DataSize                       u8               255                   ff
+  [000de1] Data                           u8[255]                                0f 8a 77 12 fa a0 ed b9 2a 95 55 68 08 37 74 ac e7 89 78 a6 67 7b 36 8a 13 d7 9a 16 27 75 59 99 ...
+
+DataSubBlock_14
+  [000ee0] DataSize                       u8               255                   ff
+  [000ee1] Data                           u8[255]                                a1 7a 03 be 4a aa a9 56 42 d7 26 61 af a6 aa dd a6 58 f1 75 60 8c 26 6a 3d ea 76 a4 08 6d 16 67 ...
+
+DataSubBlock_15
+  [000fe0] DataSize                       u8               255                   ff
+  [000fe1] Data                           u8[255]                                2d ca ad 4d 0b b3 32 0b b5 51 bb 4c 48 26 49 8c 9a 70 c6 c6 69 f9 69 8f 29 b7 61 f8 96 b0 2e 47 ...
+
+DataSubBlock_16
+  [0010e0] DataSize                       u8               255                   ff
+  [0010e1] Data                           u8[255]                                86 09 9e b4 89 03 d9 7a 03 c1 db bf a5 5b 03 09 00 c0 e4 4b b3 00 15 74 64 85 68 0b 77 55 05 eb ...
+
+DataSubBlock_17
+  [0011e0] DataSize                       u8               255                   ff
+  [0011e1] Data                           u8[255]                                44 0c ca f9 d5 ac a4 66 01 40 8a c8 80 f8 a5 f4 ea b9 66 8a b6 90 fc ca 1a fc bf 3a 8c c7 0b 40 ...
+
+DataSubBlock_18
+  [0012e0] DataSize                       u8               255                   ff
+  [0012e1] Data                           u8[255]                                b0 c7 67 6e d7 72 6a 7c 81 b7 fa c4 9e 7b af 37 80 cc 1f bd c1 58 cc d3 5a dd 00 76 5d d2 d6 b5 ...
+
+DataSubBlock_19
+  [0013e0] DataSize                       u8               153                   99
+  [0013e1] Data                           u8[153]                                19 f0 72 96 c7 84 b6 fa c4 f8 4b 9b fc 7d c3 e2 9d dc 00 0e d9 02 3e e0 93 1d 70 8e aa 59 2b 0d ...
+
+DataSubBlock_20 Terminator
+  [00147a] DataSize                       u8               0                     00
+
+Block_2 BLOCK_TRAILER
+  [00147b] BlockType                      u8               59                    3b
+           - BLOCK_TRAILER                eq
+
+EOF

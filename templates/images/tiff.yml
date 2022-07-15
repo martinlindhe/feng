@@ -28,7 +28,7 @@ structs:
       endian: little
 
     # invalidate file not matching signature
-    if !self.EndianMarker in {BIG_ENDIAN, LITTLE_ENDIAN}:
+    if not(self.EndianMarker, BIG_ENDIAN, LITTLE_ENDIAN):
       data: invalid
 
     u16 Signature: 00 2a # should decode the same due to endian directive above

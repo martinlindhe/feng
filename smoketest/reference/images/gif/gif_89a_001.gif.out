@@ -29,7 +29,9 @@ Block_0 EXT_GRAPHIC_CONTROL
            - Reserved                     bit 5:3          0
   [00001d] Delay time                     u16 le           0                     00 00
   [00001f] Transparent color index        u8               0                     00
-  [000020] Block terminator               u8               0                     00
+
+DataSubBlock_0 Terminator
+  [000020] DataSize                       u8               0                     00
 
 Block_1 BLOCK_IMAGE
   [000021] BlockType                      u8               44                    2c
@@ -45,9 +47,13 @@ Block_1 BLOCK_IMAGE
            - Interlace                    bit 6:1          0
            - LocalColorTablePresent       bit 7:1          0
   [00002b] LZWMinimumCodeSize             u8               2                     02
+
+DataSubBlock_0
   [00002c] DataSize                       u8               22                    16
   [00002d] Data                           u8[22]                                 8c 2d 99 87 2a 1c dc 33 a0 02 75 ec 95 fa a8 de 60 8c 04 91 4c 01
-  [000043] BlockTerminator                u8               0                     00
+
+DataSubBlock_1 Terminator
+  [000043] DataSize                       u8               0                     00
 
 Block_2 BLOCK_TRAILER
   [000044] BlockType                      u8               59                    3b

@@ -29,7 +29,9 @@ Block_0 EXT_GRAPHIC_CONTROL
            - Reserved                     bit 5:3          0
   [000191] Delay time                     u16 le           0                     00 00
   [000193] Transparent color index        u8               53                    35
-  [000194] Block terminator               u8               0                     00
+
+DataSubBlock_0 Terminator
+  [000194] DataSize                       u8               0                     00
 
 Block_1 BLOCK_IMAGE
   [000195] BlockType                      u8               44                    2c
@@ -45,7 +47,28 @@ Block_1 BLOCK_IMAGE
            - Interlace                    bit 6:1          0
            - LocalColorTablePresent       bit 7:1          0
   [00019f] LZWMinimumCodeSize             u8               7                     07
+
+DataSubBlock_0
   [0001a0] DataSize                       u8               254                   fe
   [0001a1] Data                           u8[254]                                80 35 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f ...
 
-0x0270 (624) unmapped bytes (48.2%)
+DataSubBlock_1
+  [00029f] DataSize                       u8               254                   fe
+  [0002a0] Data                           u8[254]                                44 de c2 3d 48 88 05 80 bb 1c 98 dc dd cb 37 04 21 07 7c 03 4b 4a 1b 69 c5 03 72 e3 1a 10 c2 81 ...
+
+DataSubBlock_2
+  [00039e] DataSize                       u8               254                   fe
+  [00039f] Data                           u8[254]                                60 62 6f 1e f4 c0 1d 68 04 00 a8 42 00 c7 51 a2 41 3f 34 a6 30 43 0a 5a 72 b9 65 43 28 58 30 db ...
+
+DataSubBlock_3
+  [00049d] DataSize                       u8               111                   6f
+  [00049e] Data                           u8[111]                                53 1c 31 11 46 bc 25 f1 c6 18 63 9c 42 aa 0e 33 62 c4 2d 64 ea 42 1b 6d 15 18 11 72 23 2b 10 31 ...
+
+DataSubBlock_4 Terminator
+  [00050d] DataSize                       u8               0                     00
+
+Block_2 BLOCK_TRAILER
+  [00050e] BlockType                      u8               59                    3b
+           - BLOCK_TRAILER                eq
+
+EOF

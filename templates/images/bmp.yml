@@ -73,7 +73,7 @@ structs:
       u16 Color planes: ??
       u16 BitsPerPixel: ??
 
-    if self.HeaderSize in {V3, V4, V5}:
+    if either(self.HeaderSize, V3, V4, V5):
       i32 Width: ??
       i32 Height: ??
       u16 Color planes: ??
@@ -95,7 +95,7 @@ structs:
       u32 UsedColors: ??
       u32 Important colors: ??
 
-    if self.HeaderSize in {V4, V5}:
+    if either(self.HeaderSize, V4, V5):
       u32 Red mask: ??
       u32 Green mask: ??
       u32 Blue mask: ??
@@ -134,14 +134,14 @@ structs:
 
 # XXX  bmp_win_v3-001.bmp does not contain this but !?!?!1111 has bpp32 and V3 hdr....
     # V3, color table  ... XXX also used in V4 and V5 ???
-    if self.HeaderSize == V3 && self.BitsPerPixel == 16: # XXX only for 16 bpp ??????
+    if self.HeaderSize == V3 && either(self.BitsPerPixel, 1, 4, 8, 16): # XXX for more bitdepths?
       if self.UsedColors != 0:
         u32[self.UsedColors] BGRQUAD: ??       # XXX BGRQUAD data type
       if self.UsedColors == 0:               # XXX ELSE-statement
         u32[1 << self.BitsPerPixel] BGRQUAD: ?? # XXX BGRQUAD data type
 
     # V3-V5 image data
-    if self.HeaderSize in {V3, V4, V5}:
+    if either(self.HeaderSize, V3, V4, V5):
 
       #XXX 
       #u8[self.ImageDataSize] Image data: ?? # XXX rle compression

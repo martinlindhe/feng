@@ -83,13 +83,13 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 }
 
 // looks up layout name from sections
-func (ds *DataStructure) FindStructure(df *value.DataField) (*evaluatedStruct, error) {
+func (ds *DataStructure) FindStructure(name string) (*evaluatedStruct, error) {
 	for _, str := range ds.EvaluatedStructs {
-		if df.Kind == str.Name {
+		if name == str.Name {
 			return &str, nil
 		}
 	}
-	return nil, fmt.Errorf("not found in structs: '%s'", df.Kind)
+	return nil, fmt.Errorf("not found in structs: '%s'", name)
 }
 
 /*

@@ -213,15 +213,39 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	}
 
 	if cfg.ReportUnmapped {
-		// XXX improve presentation of blocks of unmapped bytes
-		for i := uint64(0); i < fl.size; i++ {
-			if !fl.isMappedByte(i) {
-				res += fmt.Sprintf("  [%06x] %02x\n", i, fl.rawData[i])
+		unmappedRanges := []dataRange{}
+		r := dataRange{offset: -1}
+		for i := 0; i < int(fl.size); i++ {
+			if !fl.isMappedByte(uint64(i)) {
+				//res += fmt.Sprintf("  [%06x] %02x\n", i, fl.rawData[i])
+				if r.offset == -1 {
+					r.offset = i
+					r.length = 1
+				} else if i >= r.offset && i <= r.offset+r.length+1 {
+					r.length++
+					//log.Println("add byte")
+				} else {
+					//log.Printf("break block... r.offset = %d, i = %d, max = %d", r.offset, i, r.offset+r.length+1)
+					unmappedRanges = append(unmappedRanges, r)
+					r = dataRange{offset: -1}
+				}
 			}
+		}
+		if r.offset != -1 {
+			unmappedRanges = append(unmappedRanges, r)
+		}
+
+		for _, ur := range unmappedRanges {
+			res += fmt.Sprintf("  [%06x] u8[%d]    % 02x\n", ur.offset, ur.length, fl.rawData[ur.offset:])
 		}
 	}
 
 	return
+}
+
+type dataRange struct {
+	offset int
+	length int
 }
 
 func (fl *FileLayout) isMappedByte(offset uint64) bool {
@@ -265,14 +289,14 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 	if df != nil {
 		s = strings.ReplaceAll(s, "self.offset", fmt.Sprintf("%d", fl.offset))
 
-		s = strings.ReplaceAll(s, "self.", df.Label+".")
+		//s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
 	if DEBUG {
 		log.Printf("GetInt: searching for '%s'", s)
 	}
 
-	n, err := fl.EvaluateExpression(s)
+	n, err := fl.EvaluateExpression(s, df)
 	if err != nil {
 		// XXX this is critical error and template must be fixed
 		log.Fatal("GetInt FAILURE:", err)
@@ -493,7 +517,7 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 			// XXX permanently store and reuse the calculated range length. faster lookup & avoid bug with changing offset value... ?!
 			// XXX FIXME TODO! !!! REFACTOR THIS:
 			// STORES CACHED RESULT OF CALCULATION
-			val, err := fl.EvaluateExpression(df.Range)
+			val, err := fl.EvaluateExpression(df.Range, df)
 			if err != nil {
 				panic(err)
 			}
@@ -573,10 +597,10 @@ func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, err
 			continue
 		}
 
-		key = strings.ReplaceAll(key, "self.", df.Label+".")
+		//key = strings.ReplaceAll(key, "self.", df.Label+".")
 		kind, val, err := fl.GetValue(key, df)
 		if err != nil {
-			s, err := fl.EvaluateExpression(key)
+			s, err := fl.EvaluateExpression(key, df)
 
 			if DEBUG {
 				log.Printf("expandVariable: evaluated expression '%s' to %s == %d", key, kind, s)

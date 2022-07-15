@@ -214,7 +214,7 @@ input:
       - test16.bmp        # 010 gives template error (maybe because 16bpp and no color table)
       - test24.bmp
       - test32.bmp
-      - test32bf.bmp      # 010 also fails to map the last trailing bytes
+      - test32bf.bmp      # 010 also fails to map the last trailing bytes. RLE encoded data...
       - test32bfv4.bmp
       - test32v5.bmp
       - testcompress4.bmp
@@ -288,7 +288,7 @@ input:
       - gif_89a_002_anim.gif
       - gif_89a_003_anim.gif
       - gif_89a_004_fish.gif
-      - gif_89a_005_with_application.gif
+      - gif_89a_005_with_application.gif      # XXX is not parsed properly
       - gif_89a_006_win95_attlogo.gif
       - necco.gif
       - newtons_cradle_animation_book_2.gif

@@ -54,7 +54,7 @@ structs:
     u16 Vertical resolution: ??
     u8[54] Reserved: ??
 
-    if self.Version in {3, 4, 5} && self.BitsPerPixel == 8 && self.ColorPlanes == 1:
+    if either(self.Version, 3, 4, 5) && self.BitsPerPixel == 8 && self.ColorPlanes == 1:
       u8[FILE_SIZE - OFFSET - 769] Image data: ??
       offset: FILE_SIZE - 769
       u8 Palette marker: "0c"

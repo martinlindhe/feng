@@ -16,63 +16,23 @@ LogicalScreenDescriptor
   [00000c] Aspect ratio                   u8               0                     00
   [00000d] Global color table             u8[96]                                 ff fa f1 fa f1 e7 f7 eb de ff ee d3 fd e5 cd f7 de c7 eb db d1 f1 d5 bd df d0 c1 f6 c8 b4 e0 c7 ...
 
-Block_0 BLOCK_EXTENSION
+Block_0 EXT_APPLICATION
   [00006d] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [00006e] ExtensionType                  u8               255                   ff
+           - EXT_APPLICATION              eq
+  [00006f] BlockSize                      u8               11                    0b
+  [000070] ApplicationIdentifier          ascii[8]         NETSCAPE              4e 45 54 53 43 41 50 45
+  [000078] ApplicationAuthenticationCode  ascii[3]         2.0                   32 2e 30
 
-Block_1 11
-  [00006f] BlockType                      u8               11                    0b
+DataSubBlock_0
+  [00007b] DataSize                       u8               3                     03
+  [00007c] Data                           u8[3]                                  01 00 00
 
-Block_2 78
-  [000070] BlockType                      u8               78                    4e
+DataSubBlock_1 Terminator
+  [00007f] DataSize                       u8               0                     00
 
-Block_3 69
-  [000071] BlockType                      u8               69                    45
-
-Block_4 84
-  [000072] BlockType                      u8               84                    54
-
-Block_5 83
-  [000073] BlockType                      u8               83                    53
-
-Block_6 67
-  [000074] BlockType                      u8               67                    43
-
-Block_7 65
-  [000075] BlockType                      u8               65                    41
-
-Block_8 80
-  [000076] BlockType                      u8               80                    50
-
-Block_9 69
-  [000077] BlockType                      u8               69                    45
-
-Block_10 50
-  [000078] BlockType                      u8               50                    32
-
-Block_11 46
-  [000079] BlockType                      u8               46                    2e
-
-Block_12 48
-  [00007a] BlockType                      u8               48                    30
-
-Block_13 3
-  [00007b] BlockType                      u8               3                     03
-
-Block_14 1
-  [00007c] BlockType                      u8               1                     01
-
-Block_15 0
-  [00007d] BlockType                      u8               0                     00
-
-Block_16 0
-  [00007e] BlockType                      u8               0                     00
-
-Block_17 0
-  [00007f] BlockType                      u8               0                     00
-
-Block_18 EXT_GRAPHIC_CONTROL
+Block_1 EXT_GRAPHIC_CONTROL
   [000080] BlockType                      u8               33                    21
            - BLOCK_EXTENSION              eq
   [000081] ExtensionType                  u8               249                   f9
@@ -85,9 +45,11 @@ Block_18 EXT_GRAPHIC_CONTROL
            - Reserved                     bit 5:3          0
   [000084] Delay time                     u16 le           100                   00 64
   [000086] Transparent color index        u8               31                    1f
-  [000087] Block terminator               u8               0                     00
 
-Block_19 BLOCK_IMAGE
+DataSubBlock_0 Terminator
+  [000087] DataSize                       u8               0                     00
+
+Block_2 BLOCK_IMAGE
   [000088] BlockType                      u8               44                    2c
            - BLOCK_IMAGE                  eq
   [000089] Left position                  u16 le           0                     00 00
@@ -101,7 +63,99 @@ Block_19 BLOCK_IMAGE
            - Interlace                    bit 6:1          0
            - LocalColorTablePresent       bit 7:1          0
   [000092] LZWMinimumCodeSize             u8               5                     05
+
+DataSubBlock_0
   [000093] DataSize                       u8               255                   ff
   [000094] Data                           u8[255]                                20 20 8e 64 69 06 66 aa 06 6c 8b 96 ad 2a 93 ac 61 9f ee e8 ee 7c df 0b c0 9e 01 42 29 16 27 0c ...
 
-0x07f9 (2041) unmapped bytes (83.5%)
+DataSubBlock_1
+  [000193] DataSize                       u8               255                   ff
+  [000194] Data                           u8[255]                                c8 ba 55 a0 03 12 01 bc 4c 72 38 75 25 00 01 09 2a 0f 98 c3 96 a1 80 3b 81 07 20 4a 1c 57 ce 1c ...
+
+DataSubBlock_2
+  [000293] DataSize                       u8               255                   ff
+  [000294] Data                           u8[255]                                1b 8b cd a4 10 7d 7f bc b7 9e 08 04 cc 61 e1 85 18 66 a8 e1 86 1c ce 01 d8 02 09 20 90 00 6a a7 ...
+
+DataSubBlock_3
+  [000393] DataSize                       u8               255                   ff
+  [000394] Data                           u8[255]                                ac 7f f8 49 68 01 fc 21 e0 80 03 07 c8 a8 aa ae 56 46 40 01 04 00 09 80 00 11 15 5c 50 01 58 c3 ...
+
+DataSubBlock_4
+  [000493] DataSize                       u8               255                   ff
+  [000494] Data                           u8[255]                                c2 9a 47 8e 79 e4 a5 6b ae a8 e5 9a 27 9e 39 14 a9 c0 1b 81 d7 aa 54 16 81 04 83 b9 61 67 33 11 ...
+
+DataSubBlock_5
+  [000593] DataSize                       u8               55                    37
+  [000594] Data                           u8[55]                                 11 d6 a1 88 46 44 80 44 6e 37 42 23 b8 f1 8d 70 8c a3 1c e7 48 c7 3a ca b1 0e 6d a4 80 1b d6 98 ...
+
+DataSubBlock_6 Terminator
+  [0005cb] DataSize                       u8               0                     00
+
+Block_3 EXT_GRAPHIC_CONTROL
+  [0005cc] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [0005cd] ExtensionType                  u8               249                   f9
+           - EXT_GRAPHIC_CONTROL          eq
+  [0005ce] Size                           u8               4                     04
+  [0005cf] Flags                          u8               5                     05
+           - Transparent color            bit 0:1          1
+           - User input                   bit 1:1          0
+           - Disposal method              bit 2:3          1
+           - Reserved                     bit 5:3          0
+  [0005d0] Delay time                     u16 le           100                   00 64
+  [0005d2] Transparent color index        u8               31                    1f
+
+DataSubBlock_0 Terminator
+  [0005d3] DataSize                       u8               0                     00
+
+Block_4 BLOCK_IMAGE
+  [0005d4] BlockType                      u8               44                    2c
+           - BLOCK_IMAGE                  eq
+  [0005d5] Left position                  u16 le           3                     00 03
+  [0005d7] Top position                   u16 le           0                     00 00
+  [0005d9] Image width                    u16 le           82                    00 52
+  [0005db] Image height                   u16 le           29                    00 1d
+  [0005dd] ImageDescriptor                u8               0                     00
+           - LocalColorTableSize          bit 0:3          0
+           - Reserved                     bit 3:2          0
+           - Sort                         bit 5:1          0
+           - Interlace                    bit 6:1          0
+           - LocalColorTablePresent       bit 7:1          0
+  [0005de] LZWMinimumCodeSize             u8               5                     05
+
+DataSubBlock_0
+  [0005df] DataSize                       u8               255                   ff
+  [0005e0] Data                           u8[255]                                e0 27 8e 64 69 9e 68 6a 1a 4f 14 41 8c aa 06 b4 21 c8 78 9e 33 54 c4 18 08 04 a4 a7 2b 1a 8f 29 ...
+
+DataSubBlock_1
+  [0006df] DataSize                       u8               255                   ff
+  [0006e0] Data                           u8[255]                                6c 04 23 06 cd 0d 02 c4 22 e5 ca 53 02 a6 22 35 30 13 1c 7c 26 80 cb 86 37 26 04 30 88 30 e9 e4 ...
+
+DataSubBlock_2
+  [0007df] DataSize                       u8               255                   ff
+  [0007e0] Data                           u8[255]                                04 ed 8d f0 de 03 12 44 50 51 09 f7 61 60 09 01 17 98 e0 c0 05 0d a4 37 80 05 19 f6 f7 df 3d 50 ...
+
+DataSubBlock_3
+  [0008df] DataSize                       u8               134                   86
+  [0008e0] Data                           u8[134]                                06 4a 66 ab 24 04 f7 3d 90 6d 0a 0b 9e a0 ad 92 13 82 c8 ec 90 17 94 a4 ee 03 b3 ba b0 6e 49 d0 ...
+
+DataSubBlock_4 Terminator
+  [000966] DataSize                       u8               0                     00
+
+Block_5 BLOCK_EXTENSION
+  [000967] BlockType                      u8               33                    21
+           - BLOCK_EXTENSION              eq
+  [000968] ExtensionType                  u8               254                   fe
+
+DataSubBlock_0
+  [000969] DataSize                       u8               32                    20
+  [00096a] Data                           u8[32]                                 52 65 64 75 63 65 64 20 35 37 25 20 40 20 77 77 77 2e 67 69 66 77 69 7a 61 72 64 2e 63 6f 6d 00
+
+DataSubBlock_1 Terminator
+  [00098a] DataSize                       u8               0                     00
+
+Block_6 BLOCK_TRAILER
+  [00098b] BlockType                      u8               59                    3b
+           - BLOCK_TRAILER                eq
+
+EOF

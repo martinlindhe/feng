@@ -35,7 +35,7 @@ func TestEvaluateExpression(t *testing.T) {
 		{"Header.Val1 * 2", 12},
 	}
 	for _, h := range test {
-		a, err := fl.EvaluateExpression(h.expr)
+		a, err := fl.EvaluateExpression(h.expr, &value.DataField{})
 		assert.Nil(t, err)
 		assert.Equal(t, h.expected, a)
 	}

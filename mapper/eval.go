@@ -27,8 +27,11 @@ func (e EvaluateError) Error() string {
 }
 
 // evaluates a string expression
-func (fl *FileLayout) EvaluateStringExpression(in string) (string, error) {
-	result, err := fl.evaluateExpr(in)
+func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (string, error) {
+	if in == df.Label {
+		return "", fmt.Errorf("nothing to eval")
+	}
+	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return "", err
 	}
@@ -40,15 +43,20 @@ func (fl *FileLayout) EvaluateStringExpression(in string) (string, error) {
 		}
 		return v, nil
 
+	case map[string]interface{}:
+		// XXX when no match, return result
+		return in, fmt.Errorf("failed to evaluate %s", in)
+
 	default:
+		spew.Dump(result)
 		panic(fmt.Errorf("unhandled result type %T from %s", result, in))
 	}
 }
 
 // evaluates a math expression
-func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
+func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64, error) {
 
-	result, err := fl.evaluateExpr(in)
+	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return 0, err
 	}
@@ -78,12 +86,27 @@ func (fl *FileLayout) EvaluateExpression(in string) (uint64, error) {
 	}
 }
 
-func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
+func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{}, error) {
 	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
+
+	//	if DEBUG_EVAL {
+
+	feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
+	//spew.Dump(variables)
+	//	}
 
 	// fast path: if "in" looks like decimal number just convert it
 	if v, err := strconv.Atoi(in); err == nil {
 		return uint64(v), nil
+	}
+
+	// XXX map "self." to current struct...
+	log.Println(" ---- evaluateExpr1", in, " ------", df.Label)
+	in = strings.ReplaceAll(in, "self.", df.Label+".")
+	log.Println(" ---- evaluateExpr2", in, " ------", df.Label)
+
+	if df.Label == "Global color table" {
+		//panic("kok")
 	}
 
 	eval := goval.NewEvaluator()
@@ -156,7 +179,6 @@ func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
 		if len(args) != 1 {
 			return nil, fmt.Errorf("expected exactly 1 argument")
 		}
-
 		if v, ok := args[0].(string); ok {
 			v, err := value.ParseHexStringToUint64(v)
 			if err != nil {
@@ -171,9 +193,7 @@ func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
 			return int(val), nil
 		}
 		if offset, ok := args[0].(int); ok {
-			spew.Dump(variables)
 			if offset >= len(fl.rawData) {
-
 				return 0, fmt.Errorf("out of range %06x", offset)
 			}
 			val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
@@ -188,9 +208,7 @@ func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
 		if len(args) != 1 {
 			return nil, fmt.Errorf("expected exactly 1 argument")
 		}
-		v, ok := args[0].(string)
-
-		if ok {
+		if v, ok := args[0].(string); ok {
 			res, err := strconv.Atoi(v)
 			if err != nil {
 				return nil, err
@@ -204,8 +222,7 @@ func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
 		if len(args) != 1 {
 			return nil, fmt.Errorf("expected exactly 1 argument")
 		}
-		i, ok := args[0].(int)
-		if ok {
+		if i, ok := args[0].(int); ok {
 			return int(math.Abs(float64(i))), nil
 		}
 		return nil, fmt.Errorf("expected int, got %T", args[0])
@@ -215,8 +232,7 @@ func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
 		if len(args) != 1 {
 			return nil, fmt.Errorf("expected exactly 1 argument")
 		}
-		s, ok := args[0].(string)
-		if ok {
+		if s, ok := args[0].(string); ok {
 			i, err := fl.GetOffset(s, nil)
 			if err != nil {
 				panic(err)
@@ -231,8 +247,7 @@ func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
 		if len(args) != 1 {
 			return nil, fmt.Errorf("expected exactly 1 argument")
 		}
-		s, ok := args[0].(string)
-		if ok {
+		if s, ok := args[0].(string); ok {
 			i, err := fl.GetLength(s, nil)
 			if err != nil {
 				panic(err)
@@ -242,16 +257,53 @@ func (fl *FileLayout) evaluateExpr(in string) (interface{}, error) {
 		return nil, fmt.Errorf("expected string, got %T", args[0])
 	}
 
-	if DEBUG_EVAL {
-		// XXX seems Align field is not yet available as variable in eval.go for some reason??!
-		// it should have been added already
-		feng.Yellow("--- EVALUATING --- %s at %06x\n", in, fl.offset)
-		spew.Dump(variables)
-		if in == `Segment_1.Align == "II"` {
-
-			//panic("wa")
+	functions["not"] = func(args ...interface{}) (interface{}, error) {
+		// 2-n arg: reference value, list of values. returns true if 1st number is not any of the others
+		if len(args) < 2 {
+			return nil, fmt.Errorf("expected at least 2 arguments")
 		}
-		feng.Yellow("---\n")
+		log.Println("not: starting", args)
+		ref := 0
+		found := false
+		for i, j := range args {
+			if v, ok := j.(int); ok {
+				if i == 0 {
+					ref = v
+				} else {
+					log.Printf("not: %d == %d  =  %v", v, ref, v == ref)
+					if v == ref {
+						found = true
+					}
+				}
+			} else {
+				return false, fmt.Errorf("expected int, got %T", args[0])
+			}
+		}
+		log.Println("not: returns", !found)
+		return !found, nil
+	}
+
+	functions["either"] = func(args ...interface{}) (interface{}, error) {
+		// 2-n arg: reference value, list of values. returns true if 1st number is in the others
+		if len(args) < 2 {
+			return nil, fmt.Errorf("expected at least 2 arguments")
+		}
+		ref := 0
+		for i, j := range args {
+			if v, ok := j.(int); ok {
+				if i == 0 {
+					ref = v
+				} else {
+					log.Printf("in: %d != %d  =  %v", v, ref, v != ref)
+					if v == ref {
+						return true, nil
+					}
+				}
+			} else {
+				return false, fmt.Errorf("expected int, got %T", args[0])
+			}
+		}
+		return false, nil
 	}
 
 	result, err := eval.Evaluate(in, variables, functions)
