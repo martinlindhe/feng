@@ -30,7 +30,7 @@ structs:
     ascii[4] Signature: c'regf'
     u32 Primary seq number: ??
     u32 Secondary seq number: ??
-    filetime Timestamp: ??
+    be:filetime Timestamp: ??
     # version Version: ??   # XXX impl
     u32 Major version: ??
     u32 Minor version: ??
@@ -53,7 +53,7 @@ structs:
     u32 Offset: ??   # XXX relative offset to after header. XXX make use of
     u32 Size: ??
     u8[8] Reserved: ??
-    filetime Timestamp: ??
+    be:filetime Timestamp: ??
     u32 Spare: ??
 
   cell:
@@ -82,7 +82,7 @@ structs:
         bit 01_00: VirtualTarget
         bit 02_00: VirtualStore
 
-      filetime Timestamp: ??
+      be:filetime Timestamp: ??
       u32 Access bits:
         bit 0000_0001: was accessed before registry was initialized
         bit 0000_0002: was accessed after registry was initialized

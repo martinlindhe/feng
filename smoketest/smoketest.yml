@@ -306,7 +306,7 @@ input:
 
   - folder: images/jpeg
     files:
-      #- APP1_align_II_little_endian.jpg    # XXX dont parse correctly
+      - APP1_align_II_little_endian.jpg
       #- APP1_align_MM.jpg                  # XXX dont parse correctly
       - greet02.jpg
       - jpeg_001.jpg

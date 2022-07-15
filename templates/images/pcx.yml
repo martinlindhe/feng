@@ -1,6 +1,4 @@
-# STATUS: 70% - all samples map fully
-
-# - LOW: need custom type "rgb" (for palette)
+# STATUS: 95%
 
 references:
   - http://web.archive.org/web/20030111010058/http://www.nist.fss.ru/hr/doc/spec/pcx.htm
@@ -58,7 +56,7 @@ structs:
       u8[FILE_SIZE - OFFSET - 769] Image data: ??
       offset: FILE_SIZE - 769
       u8 Palette marker: "0c"
-      u8[256 * 3] Palette: ??   # XXX custom rgb type
+      rgb8[256] Palette: ??
     else:
       u8[FILE_SIZE - OFFSET] Image data: ??
 

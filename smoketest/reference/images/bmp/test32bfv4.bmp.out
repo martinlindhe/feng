@@ -36,6 +36,6 @@ DIBHEADER
   [00006e] Gamma Red                      u32 le           0                     00 00 00 00
   [000072] Gamma Green                    u32 le           0                     00 00 00 00
   [000076] Gamma Blue                     u32 le           0                     00 00 00 00
-  [00007a] Compressed image data          u8[232752]                             7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 ...
+  [00007a] Compressed image data          raw:u8[232752]                         7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 7c 48 2c 00 ...
 
 EOF

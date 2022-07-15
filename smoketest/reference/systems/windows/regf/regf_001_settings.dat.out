@@ -3,7 +3,7 @@ FILE HEADER
   [000000] Signature                      ascii[4]         regf                  72 65 67 66
   [000004] Primary seq number             u32 le           3                     00 00 00 03
   [000008] Secondary seq number           u32 le           3                     00 00 00 03
-  [00000c] Timestamp                      filetime le      2012-05-22T00:00:19Z  01 cd 37 ad e0 51 eb 62
+  [00000c] Timestamp                      filetime be      2012-05-22T00:00:19Z  62 eb 51 e0 ad 37 cd 01
   [000014] Major version                  u32 le           1                     00 00 00 01
   [000018] Minor version                  u32 le           3                     00 00 00 03
   [00001c] File type                      u32 le           0                     00 00 00 00
@@ -25,11 +25,11 @@ HBINRECORD
   [001004] Offset                         u32 le           0                     00 00 00 00
   [001008] Size                           u32 le           4096                  00 00 10 00
   [00100c] Reserved                       u8[8]                                  00 00 00 00 00 00 00 00
-  [001014] Timestamp                      filetime le      2012-05-22T00:00:19Z  01 cd 37 ad e0 51 eb 62
+  [001014] Timestamp                      filetime be      2012-05-22T00:00:19Z  62 eb 51 e0 ad 37 cd 01
   [00101c] Spare                          u32 le           0                     00 00 00 00
 
 Cell_0 SIG_NK
-  [001020] CellSize                       i32 le           4294967208            ff ff ff a8
+  [001020] CellSize                       i32 le           -88                   ff ff ff a8
   [001024] CellSignature                  u16 le           27502                 6b 6e
            - SIG_NK                       eq
   [001026] Flags                          u16 le           44                    00 2c
@@ -43,7 +43,7 @@ Cell_0 SIG_NK
            - VirtualSource                bit 7:1          0
            - VirtualTarget                bit 8:1          0
            - VirtualStore                 bit 9:1          0
-  [001028] Timestamp                      filetime le      2012-05-22T00:00:08Z  01 cd 37 ad d9 be 81 54
+  [001028] Timestamp                      filetime be      2012-05-22T00:00:08Z  54 81 be d9 ad 37 cd 01
   [001030] Access bits                    u32 le           2                     00 00 00 02
            - was accessed before registry was initialized bit 0:1          0
            - was accessed after registry was initialized bit 1:1          1
@@ -51,11 +51,11 @@ Cell_0 SIG_NK
   [001038] Number of subkeys              i32 le           2                     00 00 00 02
   [00103c] Number of volatile subkeys     i32 le           0                     00 00 00 00
   [001040] Subkeys list offset            i32 le           776                   00 00 03 08
-  [001044] Volatile subkeys list offset   i32 le           4294967295            ff ff ff ff
+  [001044] Volatile subkeys list offset   i32 le           -1                    ff ff ff ff
   [001048] Number of key values           i32 le           0                     00 00 00 00
-  [00104c] Key values list offset         i32 le           4294967295            ff ff ff ff
+  [00104c] Key values list offset         i32 le           -1                    ff ff ff ff
   [001050] Key security offset            i32 le           120                   00 00 00 78
-  [001054] Class name offset              i32 le           4294967295            ff ff ff ff
+  [001054] Class name offset              i32 le           -1                    ff ff ff ff
   [001058] Largest subkey name length     i32 le           24                    00 00 00 18
   [00105c] Largest subkey class name length i32 le           0                     00 00 00 00
   [001060] Largest value name length      i32 le           0                     00 00 00 00
@@ -67,7 +67,7 @@ Cell_0 SIG_NK
   [001074] Padding                        u8[4]                                  00 00 00 00
 
 Cell_1 SIG_SK
-  [001078] CellSize                       i32 le           4294967152            ff ff ff 70
+  [001078] CellSize                       i32 le           -144                  ff ff ff 70
   [00107c] CellSignature                  u16 le           27507                 6b 73
            - SIG_SK                       eq
   [00107e] Reserved                       u16 le           0                     00 00
@@ -93,19 +93,19 @@ Cell_2 SIG_NK
            - VirtualSource                bit 7:1          0
            - VirtualTarget                bit 8:1          0
            - VirtualStore                 bit 9:1          0
-  [001110] Timestamp                      filetime le      2012-05-22T00:00:08Z  01 cd 37 ad d9 be 81 54
+  [001110] Timestamp                      filetime be      2012-05-22T00:00:08Z  54 81 be d9 ad 37 cd 01
   [001118] Access bits                    u32 le           2                     00 00 00 02
            - was accessed before registry was initialized bit 0:1          0
            - was accessed after registry was initialized bit 1:1          1
   [00111c] Parent cell offset             u32 le           32                    00 00 00 20
   [001120] Number of subkeys              i32 le           0                     00 00 00 00
   [001124] Number of volatile subkeys     i32 le           0                     00 00 00 00
-  [001128] Subkeys list offset            i32 le           4294967295            ff ff ff ff
-  [00112c] Volatile subkeys list offset   i32 le           4294967295            ff ff ff ff
+  [001128] Subkeys list offset            i32 le           -1                    ff ff ff ff
+  [00112c] Volatile subkeys list offset   i32 le           -1                    ff ff ff ff
   [001130] Number of key values           i32 le           0                     00 00 00 00
-  [001134] Key values list offset         i32 le           4294967295            ff ff ff ff
+  [001134] Key values list offset         i32 le           -1                    ff ff ff ff
   [001138] Key security offset            i32 le           360                   00 00 01 68
-  [00113c] Class name offset              i32 le           4294967295            ff ff ff ff
+  [00113c] Class name offset              i32 le           -1                    ff ff ff ff
   [001140] Largest subkey name length     i32 le           0                     00 00 00 00
   [001144] Largest subkey class name length i32 le           0                     00 00 00 00
   [001148] Largest value name length      i32 le           0                     00 00 00 00
@@ -117,7 +117,7 @@ Cell_2 SIG_NK
   [001162] Padding                        u8[6]                                  00 00 00 00 00 00
 
 Cell_3 SIG_SK
-  [001168] CellSize                       i32 le           4294967152            ff ff ff 70
+  [001168] CellSize                       i32 le           -144                  ff ff ff 70
   [00116c] CellSignature                  u16 le           27507                 6b 73
            - SIG_SK                       eq
   [00116e] Reserved                       u16 le           0                     00 00
@@ -136,7 +136,7 @@ Cell_4 SIG_LF
   [001200] Offset                         u8[8]                                  08 01 00 00 4e 65 77 20
 
 Cell_5 SIG_NK
-  [001208] CellSize                       i32 le           4294967200            ff ff ff a0
+  [001208] CellSize                       i32 le           -96                   ff ff ff a0
   [00120c] CellSignature                  u16 le           27502                 6b 6e
            - SIG_NK                       eq
   [00120e] Flags                          u16 le           32                    00 20
@@ -150,19 +150,19 @@ Cell_5 SIG_NK
            - VirtualSource                bit 7:1          0
            - VirtualTarget                bit 8:1          0
            - VirtualStore                 bit 9:1          0
-  [001210] Timestamp                      filetime le      2012-05-22T00:00:05Z  01 cd 37 ad d7 d8 4f 33
+  [001210] Timestamp                      filetime be      2012-05-22T00:00:05Z  33 4f d8 d7 ad 37 cd 01
   [001218] Access bits                    u32 le           0                     00 00 00 00
            - was accessed before registry was initialized bit 0:1          0
            - was accessed after registry was initialized bit 1:1          0
   [00121c] Parent cell offset             u32 le           32                    00 00 00 20
   [001220] Number of subkeys              i32 le           0                     00 00 00 00
   [001224] Number of volatile subkeys     i32 le           0                     00 00 00 00
-  [001228] Subkeys list offset            i32 le           4294967295            ff ff ff ff
-  [00122c] Volatile subkeys list offset   i32 le           4294967295            ff ff ff ff
+  [001228] Subkeys list offset            i32 le           -1                    ff ff ff ff
+  [00122c] Volatile subkeys list offset   i32 le           -1                    ff ff ff ff
   [001230] Number of key values           i32 le           0                     00 00 00 00
-  [001234] Key values list offset         i32 le           4294967295            ff ff ff ff
+  [001234] Key values list offset         i32 le           -1                    ff ff ff ff
   [001238] Key security offset            i32 le           360                   00 00 01 68
-  [00123c] Class name offset              i32 le           4294967295            ff ff ff ff
+  [00123c] Class name offset              i32 le           -1                    ff ff ff ff
   [001240] Largest subkey name length     i32 le           0                     00 00 00 00
   [001244] Largest subkey class name length i32 le           0                     00 00 00 00
   [001248] Largest value name length      i32 le           0                     00 00 00 00
@@ -182,7 +182,7 @@ Cell_6 SIG_LF
   [001278] Padding                        u8[24]                                 18 00 00 00 6c 66 02 00 08 02 00 00 4c 6f 63 61 08 01 00 00 4e 65 77 20
 
 Cell_7 SIG_NK
-  [001290] CellSize                       i32 le           4294967200            ff ff ff a0
+  [001290] CellSize                       i32 le           -96                   ff ff ff a0
   [001294] CellSignature                  u16 le           27502                 6b 6e
            - SIG_NK                       eq
   [001296] Flags                          u16 le           32                    00 20
@@ -196,19 +196,19 @@ Cell_7 SIG_NK
            - VirtualSource                bit 7:1          0
            - VirtualTarget                bit 8:1          0
            - VirtualStore                 bit 9:1          0
-  [001298] Timestamp                      filetime le      2012-05-22T00:00:13Z  01 cd 37 ad dc d6 89 63
+  [001298] Timestamp                      filetime be      2012-05-22T00:00:13Z  63 89 d6 dc ad 37 cd 01
   [0012a0] Access bits                    u32 le           2                     00 00 00 02
            - was accessed before registry was initialized bit 0:1          0
            - was accessed after registry was initialized bit 1:1          1
   [0012a4] Parent cell offset             u32 le           32                    00 00 00 20
   [0012a8] Number of subkeys              i32 le           0                     00 00 00 00
   [0012ac] Number of volatile subkeys     i32 le           0                     00 00 00 00
-  [0012b0] Subkeys list offset            i32 le           4294967295            ff ff ff ff
-  [0012b4] Volatile subkeys list offset   i32 le           4294967295            ff ff ff ff
+  [0012b0] Subkeys list offset            i32 le           -1                    ff ff ff ff
+  [0012b4] Volatile subkeys list offset   i32 le           -1                    ff ff ff ff
   [0012b8] Number of key values           i32 le           0                     00 00 00 00
-  [0012bc] Key values list offset         i32 le           4294967295            ff ff ff ff
+  [0012bc] Key values list offset         i32 le           -1                    ff ff ff ff
   [0012c0] Key security offset            i32 le           360                   00 00 01 68
-  [0012c4] Class name offset              i32 le           4294967295            ff ff ff ff
+  [0012c4] Class name offset              i32 le           -1                    ff ff ff ff
   [0012c8] Largest subkey name length     i32 le           0                     00 00 00 00
   [0012cc] Largest subkey class name length i32 le           0                     00 00 00 00
   [0012d0] Largest value name length      i32 le           0                     00 00 00 00
@@ -227,7 +227,7 @@ Cell_8 SIG_LF
   [0012f8] Offset                         u8[16]                                 08 02 00 00 4c 6f 63 61 08 01 00 00 4e 65 77 20
 
 Cell_9 SIG_LF
-  [001308] CellSize                       i32 le           4294967256            ff ff ff d8
+  [001308] CellSize                       i32 le           -40                   ff ff ff d8
   [00130c] CellSignature                  u16 le           26220                 66 6c
            - SIG_LF                       eq
   [00130e] NumberOfOffsets                i16 le           2                     00 02

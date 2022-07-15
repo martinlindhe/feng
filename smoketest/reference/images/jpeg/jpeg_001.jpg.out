@@ -49,7 +49,7 @@ Segment_4 M_SOF2
   [0000b1] Precision                      u8               8                     08
   [0000b2] Image height                   u16 be           600                   02 58
   [0000b4] Image width                    u16 be           800                   03 20
-  [0000b6] nr_comp                        u8               3                     03
+  [0000b6] CompCount                      u8               3                     03
   [0000b7] COMPS data                     u8[9]                                  01 11 00 02 11 01 03 11 01
 
 Segment_5 M_DHT

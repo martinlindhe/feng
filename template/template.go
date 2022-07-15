@@ -146,7 +146,7 @@ type evaluatedStruct struct {
 	Expressions []Expression
 }
 
-func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, error) {
+func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.MatchedPattern, error) {
 	res := []value.MatchedPattern{}
 	if len(es.MatchPatterns) == 0 {
 		return res, nil
@@ -202,7 +202,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte) ([]value.MatchedPattern, e
 					Label:     mp.Label,
 					Operation: mp.Operation,
 					Value:     actual,
-					Parsed:    es.Field.Present(b)})
+					Parsed:    es.Field.Present(b, endian)})
 			}
 
 		case "default":

@@ -23,7 +23,7 @@ BTreeHeader
   [0002ed] Unknown1                       u16 le           0                     00 00
   [0002ef] PageSplits                     u16 le           0                     00 00
   [0002f1] RootPage                       u16 le           0                     00 00
-  [0002f3] Unknown2                       i16 le           65535                 ff ff
+  [0002f3] Unknown2                       i16 le           -1                    ff ff
   [0002f5] TotalPages                     u16 le           1                     00 01
   [0002f7] Levels                         u16 le           1                     00 01
   [0002f9] TotalBtreeEntries              u32 le           12                    00 00 00 0c
@@ -31,7 +31,7 @@ BTreeHeader
 BTreeIndexHeader_0
   [0002fd] Unknown                        u16 le           876                   03 6c
   [0002ff] Entries                        u16 le           12                    00 0c
-  [000301] PreviousPage                   i16 le           65535                 ff ff
+  [000301] PreviousPage                   i16 le           -1                    ff ff
 
 BTreeNodeHeader
   [000303] Unknown                        u16 le           65535                 ff ff

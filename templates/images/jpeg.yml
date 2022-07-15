@@ -21,21 +21,6 @@ magic:
   - offset: 0000
     match: ff d8
 
-types:
-  # XXX MAKE USE OF. TODO they should just be structs ?!??!
-  COMPS:
-    u8 compId: ??
-    u8 Flag:
-      bit b1111_0000: Horizontal
-      bit b0000_1111: Vertical
-    u8 compNr: ??
-
-  COMPSOS:
-    u8 compId: ??
-    u8 Flag:
-      bit b1111_0000: DC
-      bit b0000_1111: AC
-
 structs:
   header:
     u8[2] SOI marker: ff d8
@@ -60,7 +45,6 @@ structs:
       u32 Identifier: # XXX TODO: allow pattern matching on ascii[4]
         eq c'JFIF': JFIF_APP0
         eq c'JFXX': JFXX_APP0
-        default: invalid
       u8 Reserved: "00"
 
       if not(self.Identifier, JFIF_APP0, JFXX_APP0):
@@ -77,8 +61,8 @@ structs:
         u16 Ydensity: ??
         u8 Xthumbnail: ??
         u8 Ythumbnail: ??
-        #if Xthumbnail != 0 && Ythumbnail != 0: # XXX ?! if form ...
-        #  rgb8[Xthumbnail * Ythumbnail * 3] Thumbnail data: ?? # XXX 8 bit per channel rgb: R, G, B bytes
+        if self.Xthumbnail != 0 && self.Ythumbnail != 0:
+          rgb8[Xthumbnail * Ythumbnail] Thumbnail data: ?? # XXX 8 bit per channel rgb: R, G, B bytes
 
       if self.Identifier == JFXX_APP0:
         u8 Thumbnail format:
@@ -88,26 +72,34 @@ structs:
         u8[10] Thumbnail data: ?? # XXX size depends on Thumbnail format, see tagApp0 in https://www.sweetscape.com/010editor/repository/files/JPG.bt
 
     if self.Signature == M_APP1:
-      ascii[6] EXIF: c'Exif' 00 00 # XXX
-      ascii[2] Align: ??  # XXX marks endianness. FIXME map big & little values + invalidate rest
-      if self.Align == "II":  # XXX execution bug right now here !!!!
+      ascii[6] EXIF: c'Exif' 00 00  # XXX other values exist too, but "Exif" marks the start of the following bytes. NEED SAMPLE
+      u16 Align:                    # XXX match on ascii[2]
+        eq c'MM': BIG_ENDIAN
+        eq c'II': LITTLE_ENDIAN
+        default: invalid
+      if self.Align == LITTLE_ENDIAN:
         endian: little
+      #var: exifBaseOffset = offset("self.Align")     # XXX implement. need exact offset for later calculations
+
       u16 tagMark: ??
-      u32 offsetFirstIFD: ?? # XXX
-      # XXX WHAT FOLLOWS IS A LIST OF SECTIONS ...
-      # XXX TODO FINISH
+      u32 FirstIFDOffset: ??
+      if self.FirstIFDOffset != 8:
+        offset: self.offset + self.FirstIFDOffset
+      ifd[] IFD: ??
+      endian: big
 
     if self.Signature == M_COMM:
       ascii[self.Length - 2] Comment: ??
 
     if self.Signature == M_DQT:
+      # XXX self.Length indicates if multiples of this follows: NEED SAMPLE
       u8 QuanFlag:
         bit b1111_0000: Pq
         bit b0000_1111: Tq
-      #if self.QuanFlag.Pq == 0:  # XXX does not seem to eval ?!?!?!   because QuanFlag fields was never mapped up, because eval code is not fully recursive
-      u8[64] qTable: ??
-      #if !(self.QuanFlag.Pq == 0):    # XXX does not seem to eval ?!?!?!
-      #  u16[64] qTable: ??
+      if (self.QuanFlag & Pq) != 0:
+        u16[64] qTable: ??
+      else:
+        u8[64] qTable: ??
 
     if self.Signature == M_DHT:
       u8 htInfo: ??
@@ -137,8 +129,59 @@ structs:
       u8 Precision: ??
       u16 Image height: ??
       u16 Image width: ??
-      u8 nr_comp: ??
-      u8[3 * self.nr_comp] COMPS data: ?? # XXX nr_comp number of COMPS structs. XXX make COMPS a types
+      u8 CompCount: ??
+      u8[3 * self.CompCount] COMPS data: ?? # XXX nr_comp number of COMPS structs. XXX make COMPS a types
+
+  ifd:
+    u16 DirEntryCount: ??
+    direntry[self.DirEntryCount] DirEntry: ??
+    u32 nextIFDOffset: ?? # XXX
+    if self.nextIFDOffset == 0:
+      parse: stop
+    offset: self.nextIFDOffset
+
+  direntry:
+    u16 ExifTagNumber:
+      eq 010f: Make
+      eq 0110: Model
+      eq 0112: Orientation
+      eq 011a: XResolution
+      eq 011b: YResolution
+      eq 0128: ResolutionUnit
+      eq 0131: Software
+      eq 0132: ModifyDate
+      eq 0213: YCbCrPositioning
+      eq 8298: Copyright
+      eq 8769: ExifOffset
+    label: self.ExifTagNumber
+    u16 DataFormat:
+      eq 0002: ascii
+      eq 0003: u16
+      eq 0004: u32
+      eq 0005: ratio # XXX
+    u32 ComponentSize: ??
+    u32 DataOffset: ??
+    #if self.DataFormat == ascii:
+    #  offset: exifBaseOffset + self.DataOffset    # XXX base is the ALIGN byte offset in APP1
+    #  ascii[self.ComponentSize] Text: ??
+    #  offset: restore
+
+
+  # XXX MAKE USE OF
+  comps:
+    u8 compId: ??
+    u8 Flag:
+      bit b1111_0000: Horizontal
+      bit b0000_1111: Vertical
+    u8 compNr: ??
+
+  COMPSOS:
+    u8 compId: ??
+    u8 Flag:
+      bit b1111_0000: DC
+      bit b0000_1111: AC
+
+
 
 layout:
   - header Header

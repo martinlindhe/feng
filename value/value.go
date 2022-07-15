@@ -10,7 +10,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/fatih/color"
@@ -227,16 +226,37 @@ func ParseDataField(in string) (DataField, error) {
 		df.Kind = in
 	} else if p1 >= 0 {
 		// ranged format: kind[range] label
-		df.Kind = strings.TrimSpace(in[0:p1])
+		df.Kind, df.Endian = parseKindEndianPair(in[0:p1])
 		df.Range = strings.TrimSpace(in[p1+1 : p2])
 		df.Label = strings.TrimSpace(in[p2+1:])
 	} else {
 		// non-ranged format: kind label
-		df.Kind = strings.TrimSpace(in[0:space])
+		df.Kind, df.Endian = parseKindEndianPair(in[0:space])
 		df.Label = strings.TrimSpace(in[space+1:])
 	}
 
 	return df, nil
+}
+
+// parses "u8" or "be:datetime". returns kind, endian
+func parseKindEndianPair(s string) (string, string) {
+	s = strings.TrimSpace(s)
+	idx := strings.Index(s, ":")
+	if idx == -1 {
+		return s, ""
+	}
+	endian := s[0:idx]
+	kind := s[idx+1:]
+	switch endian {
+	case "le":
+		endian = "little"
+	case "be":
+		endian = "big"
+	default:
+		// not a endian + datatype pair, do nothing
+		return s, ""
+	}
+	return kind, endian
 }
 
 // a parsed data field
@@ -258,6 +278,9 @@ type DataField struct {
 
 	// tracks the index of this DataField in it's parent array
 	Index int
+
+	// if set, endianness override for this field
+	Endian string
 }
 
 // A match for values of a fileField.
@@ -296,6 +319,8 @@ func SingleUnitSize(kind string) uint64 {
 	case "u16", "i16", "utf16", "utf16z",
 		"dostime", "dosdate":
 		return 2
+	case "rgb8":
+		return 3
 	case "u32", "i32", "time_t_32":
 		return 4
 	case "u64", "i64", "filetime":
@@ -396,8 +421,10 @@ func AsInt64(kind string, b []byte) int64 {
 	return 0
 }
 
+var filetimeDelta = time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
+
 // presents the value of the data type (format.Kind) in a human-readable form
-func (format DataField) Present(b []byte) string {
+func (format DataField) Present(b []byte, endian string) string {
 	switch format.Kind {
 	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
 		return ""
@@ -412,7 +439,16 @@ func (format DataField) Present(b []byte) string {
 		if format.Slice || format.Range != "" {
 			return ""
 		}
-		return fmt.Sprintf("%d", AsUint64Raw(b))
+		switch format.Kind {
+		case "i8":
+			return fmt.Sprintf("%d", int8(AsUint64Raw(b)))
+		case "i16":
+			return fmt.Sprintf("%d", int16(AsUint64Raw(b)))
+		case "i32":
+			return fmt.Sprintf("%d", int32(AsUint64Raw(b)))
+		case "i64":
+			return fmt.Sprintf("%d", int64(AsUint64Raw(b)))
+		}
 
 	case "ascii", "asciiz":
 		v, _ := AsciiZString(b, len(b))
@@ -433,11 +469,12 @@ func (format DataField) Present(b []byte) string {
 		return timestamp.Format(time.RFC3339)
 
 	case "filetime":
-		ft := &syscall.Filetime{
-			HighDateTime: binary.BigEndian.Uint32(b[:4]),
-			LowDateTime:  binary.BigEndian.Uint32(b[4:]),
-		}
-		timestamp := time.Unix(0, ft.Nanoseconds())
+		// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601.
+		// Windows, XBox
+
+		// b is already in little endian
+		t := binary.LittleEndian.Uint64(b)
+		timestamp := time.Unix(0, int64(t)*100+filetimeDelta)
 		if IN_UTC {
 			timestamp = timestamp.UTC()
 		}
@@ -450,6 +487,9 @@ func (format DataField) Present(b []byte) string {
 	case "dosdate":
 		v := AsUint64Raw(b)
 		return asDosDate(uint16(v)).String()
+
+	case "rgb8":
+		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
 	}
 
 	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", format.Kind, format.Slice, format.Range, b)

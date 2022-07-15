@@ -46,7 +46,7 @@ structs:
 
     if self.Flags & DDSD_PIXELFORMAT:
       # XXX this is type DDS_PIXELFORMAT:
-      u32 Pixel format size: ??           # XXX always 32 bytes?
+      u32 Pixel format size: ??
       u32 Pixel format flags:
         bit b00000000_00000000_00000000_00000001: DDPF_ALPHAPIXELS
         bit b00000000_00000000_00000000_00000010: DDPF_ALPHA

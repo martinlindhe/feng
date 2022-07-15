@@ -89,7 +89,7 @@ type Field struct {
 }
 
 func (field *Field) Present() string {
-	return field.Format.Present(field.Value)
+	return field.Format.Present(field.Value, field.Endian)
 }
 
 var (

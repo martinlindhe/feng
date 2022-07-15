@@ -1,0 +1,112 @@
+# templates/images/jpeg.yml
+Header
+  [000000] SOI marker                     u8[2]                                  ff d8
+
+Segment_0 M_APP0
+  [000002] Signature                      u16 be           65504                 ff e0
+           - M_APP0                       eq
+  [000004] Length                         u16 be           16                    00 10
+  [000006] Identifier                     u32 be           1246120262            4a 46 49 46
+           - JFIF_APP0                    eq
+  [00000a] Reserved                       u8               0                     00
+  [00000b] Major version                  u8               1                     01
+  [00000c] Minor version                  u8               1                     01
+  [00000d] Density units                  u8               1                     01
+           - Pixels per inch              eq
+  [00000e] Xdensity                       u16 be           96                    00 60
+  [000010] Ydensity                       u16 be           96                    00 60
+  [000012] Xthumbnail                     u8               0                     00
+  [000013] Ythumbnail                     u8               0                     00
+
+Segment_1 M_APP1
+  [000014] Signature                      u16 be           65505                 ff e1
+           - M_APP1                       eq
+  [000016] Length                         u16 be           22                    00 16
+  [000018] EXIF                           ascii[6]         Exif                  45 78 69 66 00 00
+  [00001e] Align                          u16 be           18761                 49 49
+           - LITTLE_ENDIAN                eq
+  [000020] tagMark                        u16 le           42                    00 2a
+  [000022] FirstIFDOffset                 u32 le           8                     00 00 00 08
+
+IFD_0
+  [000026] DirEntryCount                  u16 le           0                     00 00
+  [000028] nextIFDOffset                  u32 le           0                     00 00 00 00
+
+Segment_2 M_DQT
+  [00002c] Signature                      u16 be           65499                 ff db
+           - M_DQT                        eq
+  [00002e] Length                         u16 be           67                    00 43
+  [000030] QuanFlag                       u8               0                     00
+           - Pq                           bit 4:4          0                     0
+           - Tq                           bit 0:4          0                     0
+  [000031] qTable                         u8[64]                                 05 03 04 04 04 03 05 04 04 04 05 05 05 06 07 0c 08 07 07 07 07 0f 0b 0b 09 0c 11 0f 12 12 11 0f ...
+
+Segment_3 M_DQT
+  [000071] Signature                      u16 be           65499                 ff db
+           - M_DQT                        eq
+  [000073] Length                         u16 be           67                    00 43
+  [000075] QuanFlag                       u8               1                     01
+           - Pq                           bit 4:4          0                     0
+           - Tq                           bit 0:4          1                     1
+  [000076] qTable                         u8[64]                                 05 05 05 07 06 07 0e 08 08 0e 1e 14 11 14 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e ...
+
+Segment_4 M_SOF0
+  [0000b6] Signature                      u16 be           65472                 ff c0
+           - M_SOF0                       eq
+  [0000b8] Length                         u16 be           17                    00 11
+  [0000ba] Precision                      u8               8                     08
+  [0000bb] Image height                   u16 be           35                    00 23
+  [0000bd] Image width                    u16 be           90                    00 5a
+  [0000bf] nr_comp                        u8               3                     03
+  [0000c0] COMPS data                     u8[9]                                  01 22 00 02 11 01 03 11 01
+
+Segment_5 M_DHT
+  [0000c9] Signature                      u16 be           65476                 ff c4
+           - M_DHT                        eq
+  [0000cb] Length                         u16 be           28                    00 1c
+  [0000cd] htInfo                         u8               0                     00
+  [0000ce] htLength                       u8[16]                                 00 02 03 00 03 01 00 00 00 00 00 00 00 00 00 00
+  [0000de] HTV                            u8[9]                                  00 06 04 05 07 01 02 03 08
+
+Segment_6 M_DHT
+  [0000e7] Signature                      u16 be           65476                 ff c4
+           - M_DHT                        eq
+  [0000e9] Length                         u16 be           48                    00 30
+  [0000eb] htInfo                         u8               16                    10
+  [0000ec] htLength                       u8[16]                                 00 02 02 02 01 03 02 05 02 05 05 00 00 00 00 00
+  [0000fc] HTV                            u8[29]                                 01 02 03 04 05 11 12 00 06 21 13 31 07 14 22 41 51 23 32 16 42 61 71 91 15 25 33 81 92
+
+Segment_7 M_DHT
+  [000119] Signature                      u16 be           65476                 ff c4
+           - M_DHT                        eq
+  [00011b] Length                         u16 be           20                    00 14
+  [00011d] htInfo                         u8               1                     01
+  [00011e] htLength                       u8[16]                                 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [00012e] HTV                            u8[1]                                  00
+
+Segment_8 M_DHT
+  [00012f] Signature                      u16 be           65476                 ff c4
+           - M_DHT                        eq
+  [000131] Length                         u16 be           20                    00 14
+  [000133] htInfo                         u8               17                    11
+  [000134] htLength                       u8[16]                                 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [000144] HTV                            u8[1]                                  00
+
+Segment_9 M_SOS
+  [000145] Signature                      u16 be           65498                 ff da
+           - M_SOS                        eq
+  [000147] Length                         u16 be           12                    00 0c
+  [000149] nr_comp                        u8               3                     03
+  [00014a] COMPSOS data                   u8[6]                                  01 00 02 11 03 11
+  [000150] Ss                             u8               0                     00
+  [000151] Se                             u8               63                    3f
+  [000152] Flag                           u8               0                     00
+           - Ah                           bit 4:4          0                     0
+           - Al                           bit 0:4          0                     0
+  [000153] scanData                       u8[1574]                               f9 1f b9 70 b2 e1 6d d7 8d e4 12 c3 66 ac 56 ab ca 17 42 48 e4 5d 8f 1f 90 76 a7 fa a9 e9 c7 e1 ...
+
+Segment_10 M_EOI
+  [000779] Signature                      u16 be           65497                 ff d9
+           - M_EOI                        eq
+
+EOF

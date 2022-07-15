@@ -40,6 +40,6 @@ DIBHEADER
   [00007e] bV5ProfileData                 u32 le           0                     00 00 00 00
   [000082] bV5ProfileSize                 u32 le           0                     00 00 00 00
   [000086] bV5Reserved                    u32 le           0                     00 00 00 00
-  [00008a] Compressed image data          u8[2400]                               ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ...
+  [00008a] Compressed image data          raw:u8[2400]                           ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ...
 
 EOF

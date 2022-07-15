@@ -3,10 +3,10 @@
 # IMPORTANT: This implements the more common Windows bitmap format. 
 # The OS/2 variants is IGNORED (OS22XBITMAPHEADER etc should be implemented in a separate file).
 #
-# - LO: extract RLE compressed image data
 # - LO: custom bgr type for V2 palette (u8 blue,green,red)
 # - LO: custom bgrquad type for V3 palette (u8 blue,green,red,reserved)
 # - LO: custom CIEXYZTRIPLE for V4,V5
+# - MIN: extract RLE compressed image data?
 
 references:
   - https://en.wikipedia.org/wiki/BMP_file_format
@@ -130,32 +130,21 @@ structs:
     # V2, color palette
     if self.HeaderSize == V2:
         u8[3 * (1 << self.BitsPerPixel)] Color palette: ??  # XXX need bgr data type, in "u8 B,G,R" format
-        u8[self.Height * ( ((self.BitsPerPixel * self.Width + 31) / 32) * 4 )] Image data: ??
+        raw:u8[self.Height * ( ((self.BitsPerPixel * self.Width + 31) / 32) * 4 )] Image data: ??
 
-# XXX  bmp_win_v3-001.bmp does not contain this but !?!?!1111 has bpp32 and V3 hdr....
     # V3, color table  ... XXX also used in V4 and V5 ???
     if self.HeaderSize == V3 && either(self.BitsPerPixel, 1, 4, 8, 16): # XXX for more bitdepths?
       if self.UsedColors != 0:
-        u32[self.UsedColors] BGRQUAD: ??       # XXX BGRQUAD data type
-      if self.UsedColors == 0:               # XXX ELSE-statement
+        u32[self.UsedColors] BGRQUAD: ??        # XXX BGRQUAD data type
+      else:
         u32[1 << self.BitsPerPixel] BGRQUAD: ?? # XXX BGRQUAD data type
 
     # V3-V5 image data
     if either(self.HeaderSize, V3, V4, V5):
-
-      #XXX 
-      #u8[self.ImageDataSize] Image data: ?? # XXX rle compression
-
-      if self.CompressionMethod != 0:
-        # COMPRESSED image data
-        u8[self.ImageDataSize] Compressed image data: ?? # XXX rle compression
-      if self.CompressionMethod == 0:  # XXX ELSE
-        # UNCOMPRESSED image data
-
-        # XXX this calc goes wrong on bmp_win_v3-001.bmp and more ???
-        u8[self.Height * ( ((self.BitsPerPixel * self.Width + 31) / 32) * 4 )] Image data: ??
-
-      #  u8[1] Image data: ??
+      if self.CompressionMethod != 0:           # COMPRESSED image data
+        raw:u8[self.ImageDataSize] Compressed image data: ?? # XXX rle compression
+      else:                                     # UNCOMPRESSED image data
+        raw:u8[self.Height * ( ((self.BitsPerPixel * self.Width + 31) / 32) * 4 )] Image data: ??
 
 layout:
   - file_header BITMAPFILEHEADER

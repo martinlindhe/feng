@@ -17,6 +17,20 @@ VERSION 0 - DRAFT. JULY 2022
     parse: stop          stops parsing. useful for custom end-of-stream conditions (CURRENTLY NOT NEEDED. MAY BE REMOVED)
 
 
+# endianness
+
+on a single field:
+
+    be:filetime   Time: ??
+
+on a block:
+    endian: big
+    u16 A: ??
+    u32 B: ??
+    endian: little
+
+
+
 # pre-defined values
 
     FILE_SIZE           the file size in bytes
@@ -75,6 +89,9 @@ date / time
     filetime            64-bit windows timestamp, in UTC
     dosdate             16-bit MS-DOS datestamp, in UTC
     dostime             16-bit MS-DOS timestamp, in UTC
+
+colors
+    rgb8                3 byte values for R, G, B
 
 
 data (for extraction feature)

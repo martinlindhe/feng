@@ -1,6 +1,5 @@
 # STATUS: 80% - all samples parse fully
 
-# - MID: PLTE chunk want custom type "rgb"
 # - MID: decode "vpAg" chunk (need docs)
 # - MID: decode utf8 text in iTXt
 # - LOW: calculate crc32
@@ -19,12 +18,6 @@ endian: big
 magic:
   - offset: 0000
     match: 89 c'PNG' 0d 0a 1a 0a
-
-types:
-  rgb:
-    u8 Red: ??
-    u8 Green: ??
-    u8 Blue: ??
 
 structs:
   header:
@@ -58,7 +51,7 @@ structs:
 
   chunk:
     u32 Length: ??                          # length of chunk data (excluding Length and Type fields)
-    u32 Type:     # XXX allow to patternmatch on ascii[4] for pretty presentation
+    u32 Type:     # XXX allow to pattern match on ascii[4] for pretty presentation
       eq c'IDAT': IDAT
       eq c'PLTE': PLTE
       eq c'IEND': IEND
@@ -75,14 +68,13 @@ structs:
       eq c'gAMA': gAMA
       eq c'iDOT': iDOT                # non-registered chunk used by Apple
 
-    label: self.Type   # XXX todo evaluate
+    label: self.Type
 
     if self.Type == IDAT:
       u8[self.Length] Image data: ??
 
     if self.Type == PLTE:
-      #rgb[self.Length / 3] Palette: ??      # XXX chunk Length 768 = 256 palette values (R, G, B)   need to use custom type "rgb"
-      u8[self.Length] Palette: ??
+      rgb8[self.Length / 3] Palette: ??
 
     if self.Type == sBIT:
       if IHDR.ColorType == COLOR_GRAYSCALE:
@@ -123,7 +115,7 @@ structs:
       u8 Compression method:
         eq 00: Deflate
         default: invalid
-      u8[self.Length - (OFFSET - offset("self.Keyword"))] Compressed text: ??            # XXX mark as deflate for decompression
+      compressed:deflate[self.Length - (OFFSET - offset("self.Keyword"))] Compressed text: ??
 
     if self.Type == iTXt:
       asciiz Keyword: ??
@@ -142,7 +134,7 @@ structs:
       u8 Compression method:
         eq 00: Deflate
         default: invalid
-      u8[self.Length - (OFFSET - offset("self.ProfileName"))] Compressed profile: ??   # XXX mark as deflate for decompression
+      compressed:deflate[self.Length - (OFFSET - offset("self.ProfileName"))] Compressed profile: ??
 
     if self.Type == tIME:
       # time in UTC
@@ -197,5 +189,5 @@ structs:
 
 layout:
   - header Header
-  - ihdr IHDR                               # a valid PNG must start with an IHDR chunk (FIXME: this breaks if IHDR is missing and another chunk is matched)
-  - chunk[] Chunk                           # unknown amount of chunks until end of file
+  - ihdr IHDR                               # a valid PNG must start with an IHDR chunk
+  - chunk[] Chunk                           # multiple chunks until end of file

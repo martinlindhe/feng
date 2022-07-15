@@ -18,18 +18,12 @@ magic:
 
 structs:
   header:
-    u16 EndianMarker:
+    u16 Endian: # XXX match on ascii[2]
       eq c'MM': BIG_ENDIAN
       eq c'II': LITTLE_ENDIAN
-
-    if self.EndianMarker == BIG_ENDIAN:
+      default: invalid
+    if self.Endian == BIG_ENDIAN:
       endian: big
-    if self.EndianMarker == LITTLE_ENDIAN:
-      endian: little
-
-    # invalidate file not matching signature
-    if not(self.EndianMarker, BIG_ENDIAN, LITTLE_ENDIAN):
-      data: invalid
 
     u16 Signature: 00 2a # should decode the same due to endian directive above
 

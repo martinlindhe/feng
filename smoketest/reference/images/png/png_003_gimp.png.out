@@ -26,7 +26,7 @@ Chunk_0 iCCP
   [000029] ProfileName                    asciiz           ICC profile           49 43 43 20 70 72 6f 66 69 6c 65 00
   [000035] Compression method             u8               0                     00
            - Deflate                      eq
-  [000036] Compressed profile             u8[376]                                28 91 7d 91 3d 48 c3 40 1c c5 5f 53 c5 0f 2a 82 56 10 11 c9 50 9d 2c 88 8a 38 4a 15 8b 60 a1 b4 ...
+  [000036] Compressed profile             compressed:deflate[376]                       28 91 7d 91 3d 48 c3 40 1c c5 5f 53 c5 0f 2a 82 56 10 11 c9 50 9d 2c 88 8a 38 4a 15 8b 60 a1 b4 ...
   [0001ae] Checksum                       u32 be           2358576981            8c 95 07 55
 
 Chunk_1 pHYs

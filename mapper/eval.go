@@ -31,6 +31,7 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 	if in == df.Label {
 		return "", fmt.Errorf("nothing to eval")
 	}
+	log.Println("EVAL STR EXPR", in)
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return "", err
@@ -89,24 +90,16 @@ func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64
 func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{}, error) {
 	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
 
-	//	if DEBUG_EVAL {
+	in = strings.ReplaceAll(in, "self.", df.Label+".")
 
-	feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
-	//spew.Dump(variables)
-	//	}
+	if DEBUG_EVAL {
+		feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
+		//spew.Dump(variables)
+	}
 
 	// fast path: if "in" looks like decimal number just convert it
 	if v, err := strconv.Atoi(in); err == nil {
 		return uint64(v), nil
-	}
-
-	// XXX map "self." to current struct...
-	log.Println(" ---- evaluateExpr1", in, " ------", df.Label)
-	in = strings.ReplaceAll(in, "self.", df.Label+".")
-	log.Println(" ---- evaluateExpr2", in, " ------", df.Label)
-
-	if df.Label == "Global color table" {
-		//panic("kok")
 	}
 
 	eval := goval.NewEvaluator()
