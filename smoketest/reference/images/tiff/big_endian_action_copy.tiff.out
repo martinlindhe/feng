@@ -3,5 +3,185 @@ Header
   [000000] Endian                         u16 le           19789                 4d 4d
            - BIG_ENDIAN                   eq
   [000002] Signature                      u16 be           42                    00 2a
+  [000004] Offset                         u32 be           1346                  00 00 05 42
 
-0x2296 (8854) unmapped bytes (100.0%)
+IFD
+  [000542] EntryCount                     u16 be           20                    00 14
+
+Dir_0
+  [000544] Tag                            u16 be           256                   01 00
+           - ImageWidth                   eq
+  [000546] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [000548] Count                          u32 be           1                     00 00 00 01
+  [00054c] Value                          u16 be           48                    00 30
+  [00054e] Reserved                       u16 be           0                     00 00
+
+Dir_1
+  [000550] Tag                            u16 be           257                   01 01
+           - ImageLength                  eq
+  [000552] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [000554] Count                          u32 be           1                     00 00 00 01
+  [000558] Value                          u16 be           48                    00 30
+  [00055a] Reserved                       u16 be           0                     00 00
+
+Dir_2
+  [00055c] Tag                            u16 be           258                   01 02
+           - BitsPerSample                eq
+  [00055e] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [000560] Count                          u32 be           4                     00 00 00 04
+  [000564] Value                          u16 be           0                     00 00
+  [000566] Reserved                       u16 be           1608                  06 48
+
+Dir_3
+  [000568] Tag                            u16 be           259                   01 03
+           - Compression                  eq
+  [00056a] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [00056c] Count                          u32 be           1                     00 00 00 01
+  [000570] Value                          u16 be           5                     00 05
+  [000572] Reserved                       u16 be           0                     00 00
+
+Dir_4
+  [000574] Tag                            u16 be           262                   01 06
+           - PhotometricInterpretation    eq
+  [000576] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [000578] Count                          u32 be           1                     00 00 00 01
+  [00057c] Value                          u16 be           2                     00 02
+  [00057e] Reserved                       u16 be           0                     00 00
+
+Dir_5
+  [000580] Tag                            u16 be           270                   01 0e
+  [000582] Type                           u16 be           2                     00 02
+           - ascii                        eq
+  [000584] Count                          u32 be           19                    00 00 00 13
+  [000588] Offset                         u32 be           1624                  00 00 06 58
+  [000658] Text                           ascii[19]        action_copy@2x.png    61 63 74 69 6f 6e 5f 63 6f 70 79 40 32 78 2e 70 6e 67 00
+
+Dir_6
+  [00058c] Tag                            u16 be           273                   01 11
+           - StripOffsets                 eq
+  [00058e] Type                           u16 be           4                     00 04
+           - u32                          eq
+  [000590] Count                          u32 be           1                     00 00 00 01
+  [000594] Value                          u32 be           8                     00 00 00 08
+
+Dir_7
+  [000598] Tag                            u16 be           274                   01 12
+  [00059a] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [00059c] Count                          u32 be           1                     00 00 00 01
+  [0005a0] Value                          u16 be           1                     00 01
+  [0005a2] Reserved                       u16 be           0                     00 00
+
+Dir_8
+  [0005a4] Tag                            u16 be           277                   01 15
+           - SamplesPerPixel              eq
+  [0005a6] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [0005a8] Count                          u32 be           1                     00 00 00 01
+  [0005ac] Value                          u16 be           4                     00 04
+  [0005ae] Reserved                       u16 be           0                     00 00
+
+Dir_9
+  [0005b0] Tag                            u16 be           278                   01 16
+           - RowsPerStrip                 eq
+  [0005b2] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [0005b4] Count                          u32 be           1                     00 00 00 01
+  [0005b8] Value                          u16 be           48                    00 30
+  [0005ba] Reserved                       u16 be           0                     00 00
+
+Dir_10
+  [0005bc] Tag                            u16 be           279                   01 17
+           - StripByteCounts              eq
+  [0005be] Type                           u16 be           4                     00 04
+           - u32                          eq
+  [0005c0] Count                          u32 be           1                     00 00 00 01
+  [0005c4] Value                          u32 be           1338                  00 00 05 3a
+
+Dir_11
+  [0005c8] Tag                            u16 be           282                   01 1a
+  [0005ca] Type                           u16 be           5                     00 05
+           - rational                     eq
+  [0005cc] Count                          u32 be           1                     00 00 00 01
+  [0005d0] Offset                         u32 be           1592                  00 00 06 38
+
+Rational
+  [000638] Num                            u32 be           144                   00 00 00 90
+  [00063c] Dom                            u32 be           1                     00 00 00 01
+
+Dir_12
+  [0005d4] Tag                            u16 be           283                   01 1b
+  [0005d6] Type                           u16 be           5                     00 05
+           - rational                     eq
+  [0005d8] Count                          u32 be           1                     00 00 00 01
+  [0005dc] Offset                         u32 be           1600                  00 00 06 40
+
+Rational
+  [000640] Num                            u32 be           144                   00 00 00 90
+  [000644] Dom                            u32 be           1                     00 00 00 01
+
+Dir_13
+  [0005e0] Tag                            u16 be           284                   01 1c
+           - PlanarConfiguration          eq
+  [0005e2] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [0005e4] Count                          u32 be           1                     00 00 00 01
+  [0005e8] Value                          u16 be           1                     00 01
+  [0005ea] Reserved                       u16 be           0                     00 00
+
+Dir_14
+  [0005ec] Tag                            u16 be           296                   01 28
+  [0005ee] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [0005f0] Count                          u32 be           1                     00 00 00 01
+  [0005f4] Value                          u16 be           2                     00 02
+  [0005f6] Reserved                       u16 be           0                     00 00
+
+Dir_15
+  [0005f8] Tag                            u16 be           305                   01 31
+           - Software                     eq
+  [0005fa] Type                           u16 be           2                     00 02
+           - ascii                        eq
+  [0005fc] Count                          u32 be           14                    00 00 00 0e
+  [000600] Offset                         u32 be           1644                  00 00 06 6c
+  [00066c] Text                           ascii[14]        tiffutil v287         74 69 66 66 75 74 69 6c 20 76 32 38 37 00
+
+Dir_16
+  [000604] Tag                            u16 be           317                   01 3d
+  [000606] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [000608] Count                          u32 be           1                     00 00 00 01
+  [00060c] Value                          u16 be           2                     00 02
+  [00060e] Reserved                       u16 be           0                     00 00
+
+Dir_17
+  [000610] Tag                            u16 be           338                   01 52
+           - ExtraSamples                 eq
+  [000612] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [000614] Count                          u32 be           1                     00 00 00 01
+  [000618] Value                          u16 be           2                     00 02
+  [00061a] Reserved                       u16 be           0                     00 00
+
+Dir_18
+  [00061c] Tag                            u16 be           339                   01 53
+  [00061e] Type                           u16 be           3                     00 03
+           - u16                          eq
+  [000620] Count                          u32 be           4                     00 00 00 04
+  [000624] Value                          u16 be           0                     00 00
+  [000626] Reserved                       u16 be           1616                  06 50
+
+Dir_19
+  [000628] Tag                            u16 be           34675                 87 73
+  [00062a] Type                           u16 be           7                     00 07
+           - undef                        eq
+  [00062c] Count                          u32 be           3144                  00 00 0c 48
+  [000630] Offset                         u32 be           1658                  00 00 06 7a
+  [00067a] Data                           u8[3144]                               00 00 0c 48 4c 69 6e 6f 02 10 00 00 6d 6e 74 72 52 47 42 20 58 59 5a 20 07 ce 00 02 00 09 00 06 ...
+
+0x1527 (5415) unmapped bytes (61.1%)

@@ -1,4 +1,7 @@
-# STATUS: 2%
+# STATUS: 30%
+
+# - MAX: ifd Offset field is not mapped in big_endian_action_copy.tiff
+# - MID: match on ascii[2]
 
 references:
   - https://en.wikipedia.org/wiki/TIFF
@@ -12,9 +15,9 @@ endian: little
 
 magic:
   - offset: 0000
-    match: c'MM'
+    match: c'MM' 00 2a
   - offset: 0000
-    match: c'II'
+    match: c'II' 2a 00
 
 structs:
   header:
@@ -25,9 +28,68 @@ structs:
     if self.Endian == BIG_ENDIAN:
       endian: big
 
-    u16 Signature: 00 2a # should decode the same due to endian directive above
+    u16 Signature: 00 2a
 
-    # XXX rest
+    u32 Offset: ??
+    if self.Offset == 0:
+      parse: stop
+    offset: self.Offset
+
+  ifd:
+    u16 EntryCount: ??
+    dir[self.EntryCount] Dir: ??
+    u32 Offset: ??    # XXX this is skipped!?!?
+
+  dir:
+    u16 Tag:
+      eq 0100: ImageWidth
+      eq 0101: ImageLength
+      eq 0102: BitsPerSample
+      eq 0103: Compression
+      eq 0106: PhotometricInterpretation
+      eq 010a: FillOrder
+      eq 0111: StripOffsets
+      eq 0115: SamplesPerPixel
+      eq 0116: RowsPerStrip
+      eq 0117: StripByteCounts
+      eq 011c: PlanarConfiguration
+      eq 0131: Software
+      eq 0152: ExtraSamples
+    u16 Type:
+      # TODO BYTE, SBYTE types, need samples
+      eq 0002: ascii
+      eq 0003: u16
+      eq 0004: u32
+      eq 0005: rational
+      eq 0007: undef
+    u32 Count: ??
+
+    if self.Type == ascii:
+      u32 Offset: ??
+      offset: self.Offset
+      ascii[self.Count] Text: ??
+      offset: restore
+    if self.Type == u16:
+      u16 Value: ??
+      u16 Reserved: ??
+    if self.Type == u32:
+      u32 Value: ??
+    if self.Type == rational:
+      u32 Offset: ??
+      offset: self.Offset
+      rational Rational: ??
+      offset: restore
+    if self.Type == undef:
+      u32 Offset: ??
+      offset: self.Offset
+      u8[self.Count] Data: ??
+      offset: restore
+
+  rational:
+    # TODO present value as "Num/Dom"
+    u32 Num: ??
+    u32 Dom: ??
 
 layout:
   - header Header
+  - ifd IFD

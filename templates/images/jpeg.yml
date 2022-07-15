@@ -1,9 +1,8 @@
-# STATUS: 40%
+# STATUS: 50%
 
-# - MAX: use custom structs COMPS, COMPSOS
-# - HI: handle EXIF data
+# - MAX: implement "var: exifBaseOffset = offset("self.Align")" for further parsing of EXIF data
+# - HI: use custom structs COMPS, COMPSOS
 # - MID: allow pattern matching on ascii[4]
-
 
 references:
   - https://en.wikipedia.org/wiki/JPEG
@@ -180,8 +179,6 @@ structs:
     u8 Flag:
       bit b1111_0000: DC
       bit b0000_1111: AC
-
-
 
 layout:
   - header Header

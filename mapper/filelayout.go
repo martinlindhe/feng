@@ -221,9 +221,8 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 				if r.offset == -1 {
 					r.offset = i
 					r.length = 1
-				} else if i >= r.offset && i <= r.offset+r.length+1 {
+				} else if i >= r.offset && i <= r.offset+r.length {
 					r.length++
-					//log.Println("add byte")
 				} else {
 					//log.Printf("break block... r.offset = %d, i = %d, max = %d", r.offset, i, r.offset+r.length+1)
 					unmappedRanges = append(unmappedRanges, r)
@@ -236,7 +235,13 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 		}
 
 		for _, ur := range unmappedRanges {
-			res += fmt.Sprintf("  [%06x] u8[%d]    % 02x\n", ur.offset, ur.length, fl.rawData[ur.offset:])
+			end := ur.offset + ur.length
+			trail := ""
+			if ur.length > 16 {
+				end = ur.offset + 16
+				trail = " .."
+			}
+			res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, ur.offset+ur.length-1, ur.length, fl.rawData[ur.offset:end], trail)
 		}
 	}
 
