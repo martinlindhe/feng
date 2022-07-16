@@ -1,4 +1,4 @@
-# templates/documents/hlp.yml
+# templates/systems/windows/hlp.yml
 Header
   [000000] Signature                      u8[4]                                  3f 5f 03 00
   [000004] DirectoryStart                 u32 le           379                   00 00 01 7b

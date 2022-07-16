@@ -1,4 +1,4 @@
-# templates/documents/wri.yml
+# templates/systems/windows/wri.yml
 Header
   [000000] Signature                      u8[2]                                  31 be
   [000002] Reserved                       u16 le           0                     00 00

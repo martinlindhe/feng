@@ -21,12 +21,6 @@ input:
     files:
       - bzip2_001.bz2
 
-  - folder: archives/cab
-    files:
-      - cab_001_win95_mini.cab
-      - cab_002_3_files.cab
-      - cab_003_IE40CIF.cab
-
   - folder: archives/gzip
     files:
       - gzip_001.gz
@@ -71,13 +65,6 @@ input:
     files:
       - dos125.td0
 
-  - folder: archives/xar
-    files:
-      - xar_001_one_file.xar
-      - xar_002_two_files.xar
-      - xar_003_3_files.xar
-      - xar_004_macos_MobileDeviceDevelopment.pkg
-
   - folder: archives/xz
     files:
       - xz_001.xz
@@ -107,12 +94,6 @@ input:
       - sol-11-x-86_meta.sqlite
       - sqlite3db.sqlite
 
-  - folder: documents/chm
-    files:
-      - ACCESSIB_18.CHM
-      - FIND.CHM
-      - win2k_brief.chm
-
   - folder: documents/doc
     files:
       - doc_001_word_document.doc
@@ -123,18 +104,9 @@ input:
       - xls_001_one.xls
       - xls_002_two.xls
 
-  - folder: documents/hlp
-    files:
-      - win16_winmine.hlp
-      - win2k_defrag.hlp
-
   - folder: documents/pdf
     files:
       - pdf_001.pdf
-
-  - folder: documents/rtf
-    files:
-      - rtf_001.rtf
 
   - folder: documents/wri
     files:
@@ -297,13 +269,6 @@ input:
       - rgb6.gif
       - rgb8.gif
 
-#  - folder: images/ico-windows     # ico lacks file magic
-#    files:
-#      - cursor_win2k_cross.cur
-#      - icon_24bit_01.ico
-#      - icon_embedded_png.ico
-#      - icon_two_resources.ico
-
   - folder: images/jpeg
     files:
       - APP1_align_II_little_endian.jpg
@@ -412,6 +377,13 @@ input:
       - Darkwood_2.5.sit
       #- macbinary_header_fixer.sit # XXX no match, has some mac os meta-data header ?
 
+  - folder: systems/macos/xar
+    files:
+      - xar_001_one_file.xar
+      - xar_002_two_files.xar
+      - xar_003_3_files.xar
+      - xar_004_macos_MobileDeviceDevelopment.pkg
+
   - folder: systems/nintendo64
     files:
       - Rampage_2_PLUS4_USA-CZN.v64   # XXX byte-swapped, need to implement special data processing
@@ -502,6 +474,18 @@ input:
       - rmid-solaris
       - zdebug-test-gcc484-x86-64.obj
 
+  - folder: systems/windows/cab
+    files:
+      - cab_001_win95_mini.cab
+      - cab_002_3_files.cab
+      - cab_003_IE40CIF.cab
+
+  - folder: systems/windows/chm
+    files:
+      - ACCESSIB_18.CHM
+      - FIND.CHM
+      - win2k_brief.chm
+
   - folder: systems/windows/compress-kwaj
     files:
       - 5202.cp_
@@ -523,14 +507,34 @@ input:
       - MZ-PE32-win32_pbrush.exe
       - mz-dos_tlink_header.exe
       - mz-dos_multiple_reloc_items.exe
-      - mz-dos_packed_exepack.exe        # TODO enable exepack detection, needs fixes
+      - mz-dos_packed_exepack.exe
       - mz-dos_packed_lzexe_keen1.exe
       - mz-dos_packed_lzexe_sample.exe
       - mz-dos_packed_pklite.exe
 
+  - folder: systems/windows/hlp
+    files:
+      - win16_winmine.hlp
+      - win2k_defrag.hlp
+
+#  - folder: systems/windows/ico-windows     # ico lacks file magic
+#    files:
+#      - cursor_win2k_cross.cur
+#      - icon_24bit_01.ico
+#      - icon_embedded_png.ico
+#      - icon_two_resources.ico
+
+  - folder: systems/windows/mszip
+    files:
+      - mszip_from_cab
+
   - folder: systems/windows/regf
     files:
       - regf_001_settings.dat
+
+  - folder: systems/windows/rtf
+    files:
+      - rtf_001.rtf
 
   - folder: systems/x11/snf
     files:

@@ -2,7 +2,7 @@
 Header
   [000000] Signature                      ascii[8]         !<arch>.              21 3c 61 72 63 68 3e 0a
 
-File debian-binary
+File_0 debian-binary
   [000008] Filename                       ascii[16]        debian-binary         64 65 62 69 61 6e 2d 62 69 6e 61 72 79 20 20 20
   [000018] Modification time              ascii[12]        1460438548            31 34 36 30 34 33 38 35 34 38 20 20
   [000024] Owner ID                       ascii[6]         0                     30 20 20 20 20 20
@@ -10,5 +10,26 @@ File debian-binary
   [000030] File mode                      ascii[8]         100644                31 30 30 36 34 34 20 20
   [000038] FileStreamSize                 ascii[10]        4                     34 20 20 20 20 20 20 20 20 20
   [000042] EndMarker                      u8[2]                                  60 0a
+  [000044] Data                           u8[4]                                  32 2e 30 0a
 
-0x2860 (10336) unmapped bytes (99.3%)
+File_1 control.tar.gz
+  [000048] Filename                       ascii[16]        control.tar.gz        63 6f 6e 74 72 6f 6c 2e 74 61 72 2e 67 7a 20 20
+  [000058] Modification time              ascii[12]        1460438548            31 34 36 30 34 33 38 35 34 38 20 20
+  [000064] Owner ID                       ascii[6]         0                     30 20 20 20 20 20
+  [00006a] Group ID                       ascii[6]         0                     30 20 20 20 20 20
+  [000070] File mode                      ascii[8]         100644                31 30 30 36 34 34 20 20
+  [000078] FileStreamSize                 ascii[10]        1236                  31 32 33 36 20 20 20 20 20 20
+  [000082] EndMarker                      u8[2]                                  60 0a
+  [000084] Data                           u8[1236]                               1f 8b 08 00 00 00 00 00 04 03 ed 58 5d 6f db 36 14 cd eb f4 2b b8 64 0f 2b 36 4b 24 f5 69 af 2d ...
+
+File_2 data.tar.xz
+  [000558] Filename                       ascii[16]        data.tar.xz           64 61 74 61 2e 74 61 72 2e 78 7a 20 20 20 20 20
+  [000568] Modification time              ascii[12]        1460438548            31 34 36 30 34 33 38 35 34 38 20 20
+  [000574] Owner ID                       ascii[6]         0                     30 20 20 20 20 20
+  [00057a] Group ID                       ascii[6]         0                     30 20 20 20 20 20
+  [000580] File mode                      ascii[8]         100644                31 30 30 36 34 34 20 20
+  [000588] FileStreamSize                 ascii[10]        8976                  38 39 37 36 20 20 20 20 20 20
+  [000592] EndMarker                      u8[2]                                  60 0a
+  [000594] Data                           u8[8976]                               fd 37 7a 58 5a 00 00 01 69 22 de 36 02 00 21 01 16 00 00 00 74 2f e5 a3 e0 9f ff 22 d1 5d 00 17 ...
+
+EOF

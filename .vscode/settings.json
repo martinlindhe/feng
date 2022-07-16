@@ -63,6 +63,7 @@
         "fileheader",
         "filetime",
         "FIRSTVOLUME",
+        "flate",
         "fontobject",
         "fourcc",
         "freelist",

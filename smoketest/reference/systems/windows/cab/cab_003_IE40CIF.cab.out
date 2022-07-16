@@ -1,4 +1,4 @@
-# templates/archives/cab.yml
+# templates/systems/windows/cab.yml
 Header
   [000000] Signature                      ascii[4]         MSCF                  4d 53 43 46
   [000004] Reserved 1                     u32 le           0                     00 00 00 00
@@ -26,10 +26,10 @@ CFFOLDER_0
   [00182c] DataBlocks                     u16 le           2                     00 02
   [00182e] Compression                    u16 le           1                     00 01
            - MSZIP                        eq
-  [001849] csum                           u32 le           2179292623            81 e5 5d cf
-  [00184d] DataLen                        u16 le           5863                  16 e7
-  [00184f] cbUncomp                       u16 le           32768                 80 00
-  [001851] Data                           u8[5863]                               43 4b ec 9d 5b 73 db b8 92 80 df 53 95 ff e0 ca 1e bf 6c 51 09 6e bc 4d 95 1f 28 8a 4a 9c 48 b2 ...
+  [001849] Checksum                       u32 le           2179292623            81 e5 5d cf
+  [00184d] DataSize                       u16 le           5863                  16 e7
+  [00184f] UncompressedSize               u16 le           32768                 80 00
+  [001851] Data                           raw:u8[5863]                           43 4b ec 9d 5b 73 db b8 92 80 df 53 95 ff e0 ca 1e bf 6c 51 09 6e bc 4d 95 1f 28 8a 4a 9c 48 b2 ...
 
 CFFILE_0
   [001830] Uncompressed size              u32 le           43734                 00 00 aa d6

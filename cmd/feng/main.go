@@ -65,8 +65,7 @@ func main() {
 		}
 
 		for _, layout := range fl.Structs {
-			log.Println("--- extracting", layout.Label)
-
+			//log.Println("--- extracting", layout.Label)
 			for _, field := range layout.Fields {
 				switch field.Format.Kind {
 				case "compressed:lz4":

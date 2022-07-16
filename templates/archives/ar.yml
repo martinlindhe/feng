@@ -1,6 +1,6 @@
-# STATUS: 2%
-#
-# MAX: in order to progress format, we need to access strings in scripting language
+# STATUS: 90%
+
+# MAX: handle unix timestamp as ascii number. nested data types ???? ascii[16] -> unixtime
 
 references:
   - https://www.sweetscape.com/010editor/repository/files/AR.bt
@@ -8,7 +8,6 @@ references:
 kind: archive
 name: AR archive
 extensions: [.a, .lib, .ar, .deb]
-endian: big # XXX
 
 magic:
   - offset: 0000
@@ -21,16 +20,15 @@ structs:
   ar_file:
     ascii[16] Filename: ??
     label: self.Filename
-    ascii[12] Modification time: ?? # XXX ascii number, unix timestamp
+    ascii[12] Modification time: ??
     ascii[6] Owner ID: ??
     ascii[6] Group ID: ??
     ascii[8] File mode: ??
     ascii[10] FileStreamSize: ??
     u8[2] EndMarker: 60 0a
 
-    # XXX data bytes follow in FileStreamSize size... TODO the string is not available in scripting eval
-    #u8[atoi(self.FileStreamSize)] Data: ??   # XXX need self.FileStreamSize string value available !!!
+    u8[atoi(self.FileStreamSize)] Data: ??
 
 layout:
   - header Header
-  - ar_file File
+  - ar_file[] File

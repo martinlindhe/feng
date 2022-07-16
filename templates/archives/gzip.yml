@@ -1,6 +1,5 @@
 # STATUS: 95% - parses all samples
 #
-# - LOW: mark deflate data for decompression
 # - LOW: mark crc32 for data validation
 # - LOW: mark crc16 for header validation
 #
@@ -77,7 +76,6 @@ structs:
     if self.HeaderFlags & FLAG_COMMENT:
       asciiz Comment: ??
 
-    # XXX if deflate, mark data as such
     if self.CompressionMethod == 8:
       compressed:deflate[FILE_SIZE - OFFSET - 8] Data: ??
     else:

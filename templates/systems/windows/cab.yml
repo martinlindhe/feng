@@ -1,7 +1,5 @@
 # STATUS: 40%
 
-# - HI: fix CFDATA area tagging (custom types)
-
 references:
   - https://en.wikipedia.org/wiki/Cabinet_(file_format)
   - https://msdn.microsoft.com/en-us/library/bb267310.aspx
@@ -70,11 +68,10 @@ structs:
       default: invalid
 
     offset: self.CFDATA_Offset
-    # XXX custom type:
-    u32 csum: ??
-    u16 DataLen: ??
-    u16 cbUncomp: ??
-    u8[self.DataLen] Data: ??
+    u32 Checksum: ??
+    u16 DataSize: ??
+    u16 UncompressedSize: ??
+    raw:u8[self.DataSize] Data: ??
     offset: restore
 
   CFFILE:

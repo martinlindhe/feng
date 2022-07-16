@@ -202,7 +202,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			return nil, fmt.Errorf("expected exactly 1 argument")
 		}
 		if v, ok := args[0].(string); ok {
-			res, err := strconv.Atoi(v)
+			res, err := strconv.Atoi(strings.TrimRight(v, " "))
 			if err != nil {
 				return nil, err
 			}

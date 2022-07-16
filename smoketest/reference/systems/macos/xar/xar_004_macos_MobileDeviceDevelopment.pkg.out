@@ -1,4 +1,4 @@
-# templates/archives/xar.yml
+# templates/systems/macos/xar.yml
 Header
   [000000] Signature                      ascii[4]         xar!                  78 61 72 21
   [000004] Header size                    u16 be           28                    00 1c

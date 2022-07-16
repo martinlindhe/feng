@@ -1,0 +1,8 @@
+# templates/systems/windows/mszip.yml
+Header
+  [000000] Magic                          ascii[2]         CK                    43 4b
+
+Data
+  [000002] Data                           compressed:deflate[22692]                       ed bd 0b 58 54 d7 d5 30 bc cf 75 06 18 67 46 44 24 46 87 e1 e2 89 c2 08 04 0c 31 61 24 18 11 bc ...
+
+EOF

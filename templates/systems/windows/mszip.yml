@@ -1,0 +1,26 @@
+# STATUS: 100%
+#
+# MSZIP is used in CAB files.
+# A MSZIP archive contains RFC 1951 compatible DEFLATE streams.
+
+references:
+  - https://interoperability.blob.core.windows.net/files/MS-MCI/[MS-MCI].pdf
+  - https://github.com/mdsteele/rust-cab/blob/master/src/internal/mszip.rs
+
+kind: archive
+name: MSZIP archive
+
+magic:
+  - offset: 0000
+    match: c'CK'
+
+structs:
+  header:
+    ascii[2] Magic: c'CK'
+
+  data:
+    compressed:deflate[FILE_SIZE - 2] Data: ??
+
+layout:
+  - header Header
+  - data Data

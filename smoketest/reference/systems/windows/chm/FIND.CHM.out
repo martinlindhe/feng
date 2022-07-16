@@ -1,10 +1,10 @@
-# templates/documents/chm.yml
+# templates/systems/windows/chm.yml
 Header
   [000000] Signature                      ascii[4]         ITSF                  49 54 53 46
   [000004] Version                        u32 le           3                     00 00 00 03
   [000008] HeaderSize                     u32 le           96                    00 00 00 60
   [00000c] Unknown                        u32 le           1                     00 00 00 01
-  [000010] Timestamp                      u32 le           3746977838            df 56 58 2e
+  [000010] Timestamp                      u32 le           1021533734            3c e3 5e 26
   [000014] Windows Language ID            u32 le           1033                  00 00 04 09
            - US English                   eq
   [000018] GUID 1                         u8[16]                                 10 fd 01 7c aa 7b d0 11 9e 0c 00 a0 c9 22 e6 ec
@@ -24,7 +24,7 @@ HeaderV1Extra
 HeaderSection
   [000060] Unknown                        u32 le           510                   00 00 01 fe
   [000064] Unknown                        u32 le           0                     00 00 00 00
-  [000068] FileSize                       u64 le           19199                 00 00 00 00 00 00 4a ff
+  [000068] FileSize                       u64 le           11572                 00 00 00 00 00 00 2d 34
   [000070] Unknown                        u32 le           0                     00 00 00 00
   [000074] Unknown                        u32 le           0                     00 00 00 00
   [000078] Section Signature              ascii[4]         ITSP                  49 54 53 50
@@ -34,7 +34,7 @@ HeaderSection
   [000088] Directory chunk size           u32 le           4096                  00 00 10 00
   [00008c] Density of quickref section    u32 le           2                     00 00 00 02
   [000090] Depth of index tree            u32 le           1                     00 00 00 01
-  [000094] Chunk number of root index chunk, -1 if there is none i32 le           -1                    ff ff ff ff
+  [000094] Chunk number of root index chunk, -1 if there is none i32 le           0                     00 00 00 00
   [000098] Chunk number of first PMGL (listing) chunk u32 le           0                     00 00 00 00
   [00009c] Chunk number of last PMGL (listing) chunk u32 le           0                     00 00 00 00
   [0000a0] Unknown                        i32 le           -1                    ff ff ff ff
@@ -48,9 +48,9 @@ HeaderSection
 
 ListingChunk_0
   [0000cc] Chunk Signature                ascii[4]         PMGL                  50 4d 47 4c
-  [0000d0] Length of free space and/or quickref area at end of directory chunk u32 le           2967                  00 00 0b 97
+  [0000d0] Length of free space and/or quickref area at end of directory chunk u32 le           3135                  00 00 0c 3f
   [0000d4] Reserved                       u32 le           0                     00 00 00 00
   [0000d8] Chunk number of previous listing chunk when reading directory in sequence i32 le           -1                    ff ff ff ff
   [0000dc] Chunk number of next listing chunk when reading directory in sequence i32 le           -1                    ff ff ff ff
 
-0x4a1f (18975) unmapped bytes (98.8%)
+0x08d0 (2256) unmapped bytes (91.0%)
