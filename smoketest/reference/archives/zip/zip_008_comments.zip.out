@@ -16,7 +16,7 @@ Chunk_0 ZIPFILERECORD
   [00001c] ExtraFieldLength               u16 le           28                    00 1c
   [00001e] File name                      ascii[12]        LOGICOMM.ICO          4c 4f 47 49 43 4f 4d 4d 2e 49 43 4f
   [00002a] Extra field                    u8[28]                                 55 54 09 00 03 21 22 06 5f 21 22 06 5f 75 78 0b 00 01 04 61 1e 00 00 04 e8 03 00 00
-  [000046] Data                           u8[182]                                ed d0 3b 0a c2 40 10 06 e0 09 b1 d3 ce ce 42 73 07 0f 30 01 2b 4f 95 74 96 16 56 82 b0 47 c9 11 ...
+  [000046] Data                           compressed:deflate[182]                       ed d0 3b 0a c2 40 10 06 e0 09 b1 d3 ce ce 42 73 07 0f 30 01 2b 4f 95 74 96 16 56 82 b0 47 c9 11 ...
 
 Chunk_1 ZIPFILERECORD
   [0000fc] Signature                      ascii[2]         PK                    50 4b
@@ -35,7 +35,7 @@ Chunk_1 ZIPFILERECORD
   [000118] ExtraFieldLength               u16 le           28                    00 1c
   [00011a] File name                      ascii[11]        biplane.art           62 69 70 6c 61 6e 65 2e 61 72 74
   [000125] Extra field                    u8[28]                                 55 54 09 00 03 1d 22 06 5f 1d 22 06 5f 75 78 0b 00 01 04 61 1e 00 00 04 e8 03 00 00
-  [000141] Data                           u8[440]                                a5 d3 b1 4b dc 70 14 07 f0 6f 8c 4a 2b c2 5d c1 73 e8 5a 84 d2 a9 20 6e 87 17 17 e7 2b f8 d2 9e ...
+  [000141] Data                           compressed:deflate[440]                       a5 d3 b1 4b dc 70 14 07 f0 6f 8c 4a 2b c2 5d c1 73 e8 5a 84 d2 a9 20 6e 87 17 17 e7 2b f8 d2 9e ...
 
 Chunk_2 ZIPDIRENTRY
   [0002f9] Signature                      ascii[2]         PK                    50 4b

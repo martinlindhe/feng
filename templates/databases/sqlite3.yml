@@ -1,6 +1,5 @@
 # STATUS: 5%
 #
-# HI: 32-bit boolean field
 
 references:
   - https://www.sqlite.org/fileformat2.html

@@ -1,4 +1,4 @@
-# templates/fonts/eot.yml
+# templates/systems/windows/eot.yml
 Header
   [000000] TotalFileSize                  u32 le           20127                 00 00 4e 9f
   [000004] FontDataSize                   u32 le           19777                 00 00 4d 41

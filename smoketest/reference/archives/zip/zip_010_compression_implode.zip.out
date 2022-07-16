@@ -15,7 +15,7 @@ Chunk_0 ZIPFILERECORD
   [00001a] FileNameLength                 u16 le           10                    00 0a
   [00001c] ExtraFieldLength               u16 le           0                     00 00
   [00001e] File name                      ascii[10]        VGAROW.EXE            56 47 41 52 4f 57 2e 45 58 45
-  [000028] Data                           u8[1261]                               0f 00 12 03 24 15 36 27 38 39 6a 7b 4c 9d 6e 1f 09 06 01 13 34 e5 f6 96 f7 9b 6a 45 1b b0 c0 b1 ...
+  [000028] Data                           raw:u8[1261]                           0f 00 12 03 24 15 36 27 38 39 6a 7b 4c 9d 6e 1f 09 06 01 13 34 e5 f6 96 f7 9b 6a 45 1b b0 c0 b1 ...
 
 Chunk_1 ZIPFILERECORD
   [000515] Signature                      ascii[2]         PK                    50 4b
@@ -33,7 +33,7 @@ Chunk_1 ZIPFILERECORD
   [00052f] FileNameLength                 u16 le           10                    00 0a
   [000531] ExtraFieldLength               u16 le           0                     00 00
   [000533] File name                      ascii[10]        VGAROW.DOC            56 47 41 52 4f 57 2e 44 4f 43
-  [00053d] Data                           u8[5002]                               61 0a 7b 07 06 1b 06 bb 0c 4b 03 09 07 0b 09 0b 09 07 16 07 08 06 05 06 07 06 05 36 07 16 17 0b ...
+  [00053d] Data                           raw:u8[5002]                           61 0a 7b 07 06 1b 06 bb 0c 4b 03 09 07 0b 09 0b 09 07 16 07 08 06 05 06 07 06 05 36 07 16 17 0b ...
 
 Chunk_2 ZIPFILERECORD
   [0018c7] Signature                      ascii[2]         PK                    50 4b
@@ -51,7 +51,7 @@ Chunk_2 ZIPFILERECORD
   [0018e1] FileNameLength                 u16 le           10                    00 0a
   [0018e3] ExtraFieldLength               u16 le           0                     00 00
   [0018e5] File name                      ascii[10]        FILEID.DIZ            46 49 4c 45 49 44 2e 44 49 5a
-  [0018ef] Data                           u8[378]                                0d 02 01 12 23 14 15 36 37 68 89 9a db 3c 05 06 12 13 44 c5 f6 96 f7 ad 1e 0d 2a f5 e9 55 90 31 ...
+  [0018ef] Data                           raw:u8[378]                            0d 02 01 12 23 14 15 36 37 68 89 9a db 3c 05 06 12 13 44 c5 f6 96 f7 ad 1e 0d 2a f5 e9 55 90 31 ...
 
 Chunk_3 ZIPDIRENTRY
   [001a69] Signature                      ascii[2]         PK                    50 4b

@@ -16,7 +16,7 @@ Chunk_0 ZIPFILERECORD
   [00001c] ExtraFieldLength               u16 le           28                    00 1c
   [00001e] File name                      ascii[11]        message.txt           6d 65 73 73 61 67 65 2e 74 78 74
   [000029] Extra field                    u8[28]                                 55 54 09 00 03 77 82 c4 58 79 82 c4 58 75 78 0b 00 01 04 f8 01 00 00 04 50 00 00 00
-  [000045] Data                           u8[18]                                 23 d7 5f 88 c3 c0 27 1f c0 42 fe 4c 2c 5c 89 89 3c 84
+  [000045] Data                           raw:u8[18]                             23 d7 5f 88 c3 c0 27 1f c0 42 fe 4c 2c 5c 89 89 3c 84
 
 Chunk_1 ZIPDATADESCR
   [000057] Signature                      ascii[2]         PK                    50 4b

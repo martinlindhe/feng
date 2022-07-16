@@ -16,7 +16,7 @@ Chunk_0 ZIPFILERECORD
   [00001c] ExtraFieldLength               u16 le           28                    00 1c
   [00001e] File name                      ascii[2]         xx                    78 78
   [000020] Extra field                    u8[28]                                 55 54 09 00 03 bc a3 49 52 ad a3 49 52 75 78 0b 00 01 04 e8 03 00 00 04 e8 03 00 00
-  [00003c] Data                           u8[7]                                  78 78 6c 6f 78 6f 0a
+  [00003c] Data                           raw:u8[7]                              78 78 6c 6f 78 6f 0a
 
 Chunk_1 ZIPDIRENTRY
   [000043] Signature                      ascii[2]         PK                    50 4b

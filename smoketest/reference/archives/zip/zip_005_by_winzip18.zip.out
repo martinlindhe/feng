@@ -15,7 +15,7 @@ Chunk_0 ZIPFILERECORD
   [00001a] FileNameLength                 u16 le           8                     00 08
   [00001c] ExtraFieldLength               u16 le           0                     00 00
   [00001e] File name                      ascii[8]         file.txt              66 69 6c 65 2e 74 78 74
-  [000026] Data                           u8[7]                                  f3 70 f5 f1 f1 07 00
+  [000026] Data                           compressed:deflate[7]                       f3 70 f5 f1 f1 07 00
 
 Chunk_1 ZIPDIRENTRY
   [00002d] Signature                      ascii[2]         PK                    50 4b

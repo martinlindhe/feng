@@ -1,7 +1,7 @@
 # STATUS: 5%
 #
 # HI: guid data type
-# HI: indistinguish from doc and pps files
+# HI: distinguish from doc and pps files
 
 references:
   - https://www.sweetscape.com/010editor/repository/files/DOC.bt

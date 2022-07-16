@@ -15,7 +15,7 @@ Chunk_0 ZIPFILERECORD
   [00001a] FileNameLength                 u16 le           12                    00 0c
   [00001c] ExtraFieldLength               u16 le           0                     00 00
   [00001e] File name                      ascii[12]        RESET_OV.PRG          52 45 53 45 54 5f 4f 56 2e 50 52 47
-  [00002a] Data                           u8[82]                                 4b 90 62 60 60 f0 63 c0 0a 9c 96 db db 30 28 f8 39 c6 f8 db db fc ff 0f 64 47 f8 f9 45 f8 db 31 ...
+  [00002a] Data                           compressed:deflate[82]                       4b 90 62 60 60 f0 63 c0 0a 9c 96 db db 30 28 f8 39 c6 f8 db db fc ff 0f 64 47 f8 f9 45 f8 db 31 ...
 
 Chunk_1 ZIPFILERECORD
   [00007c] Signature                      ascii[2]         PK                    50 4b
@@ -33,7 +33,7 @@ Chunk_1 ZIPFILERECORD
   [000096] FileNameLength                 u16 le           12                    00 0c
   [000098] ExtraFieldLength               u16 le           0                     00 00
   [00009a] File name                      ascii[12]        SET_OVER.PRG          53 45 54 5f 4f 56 45 52 2e 50 52 47
-  [0000a6] Data                           u8[97]                                 4b 90 62 60 60 88 61 c0 0a 9c 96 db db 30 28 f8 39 c6 f8 db db fc ff 0f 64 47 f8 f9 45 f8 db 31 ...
+  [0000a6] Data                           compressed:deflate[97]                       4b 90 62 60 60 88 61 c0 0a 9c 96 db db 30 28 f8 39 c6 f8 db db fc ff 0f 64 47 f8 f9 45 f8 db 31 ...
 
 Chunk_2 ZIPDIRENTRY
   [000107] Signature                      ascii[2]         PK                    50 4b

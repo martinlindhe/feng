@@ -15,7 +15,7 @@ Chunk_0 ZIPFILERECORD
   [00001a] FileNameLength                 u16 le           12                    00 0c
   [00001c] ExtraFieldLength               u16 le           0                     00 00
   [00001e] File name                      ascii[12]        BREAKOUT.ACC          42 52 45 41 4b 4f 55 54 2e 41 43 43
-  [00002a] Data                           u8[8028]                               60 34 00 00 50 c2 d9 40 01 06 06 2a 70 a7 10 c2 c0 87 10 01 b8 e0 33 70 05 37 27 b9 06 06 00 21 ...
+  [00002a] Data                           raw:u8[8028]                           60 34 00 00 50 c2 d9 40 01 06 06 2a 70 a7 10 c2 c0 87 10 01 b8 e0 33 70 05 37 27 b9 06 06 00 21 ...
 
 Chunk_1 ZIPDIRENTRY
   [001f86] Signature                      ascii[2]         PK                    50 4b

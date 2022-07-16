@@ -1,4 +1,4 @@
-# STATUS: 90%
+# STATUS: 100%
 
 # A MOZLZ4 file contains Mozilla Firefox user profile data.
 # The mozlz4 format is similar to the .LZ4 archive format but includes a unique file header.

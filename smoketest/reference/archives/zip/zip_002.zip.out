@@ -15,7 +15,7 @@ Chunk_0 ZIPFILERECORD
   [00001a] FileNameLength                 u16 le           9                     00 09
   [00001c] ExtraFieldLength               u16 le           0                     00 00
   [00001e] File name                      ascii[9]         7z_001.7z             37 7a 5f 30 30 31 2e 37 7a
-  [000027] Data                           u8[106]                                33 af da b3 5e 5d 86 81 f9 94 7b 71 00 27 03 04 78 41 e9 fc 53 0a f3 18 4c 24 3d fb 22 ee 32 30 ...
+  [000027] Data                           compressed:deflate[106]                       33 af da b3 5e 5d 86 81 f9 94 7b 71 00 27 03 04 78 41 e9 fc 53 0a f3 18 4c 24 3d fb 22 ee 32 30 ...
 
 Chunk_1 ZIPFILERECORD
   [000091] Signature                      ascii[2]         PK                    50 4b
@@ -33,7 +33,7 @@ Chunk_1 ZIPFILERECORD
   [0000ab] FileNameLength                 u16 le           11                    00 0b
   [0000ad] ExtraFieldLength               u16 le           0                     00 00
   [0000af] File name                      ascii[11]        rar_001.rar           72 61 72 5f 30 30 31 2e 72 61 72
-  [0000ba] Data                           u8[75]                                 0b 4a 2c 52 94 62 67 38 3f a1 98 81 81 97 01 02 9e bd 29 51 68 50 65 e0 07 32 59 80 98 99 23 99 ...
+  [0000ba] Data                           compressed:deflate[75]                       0b 4a 2c 52 94 62 67 38 3f a1 98 81 81 97 01 02 9e bd 29 51 68 50 65 e0 07 32 59 80 98 99 23 99 ...
 
 Chunk_2 ZIPFILERECORD
   [000105] Signature                      ascii[2]         PK                    50 4b
@@ -51,7 +51,7 @@ Chunk_2 ZIPFILERECORD
   [00011f] FileNameLength                 u16 le           11                    00 0b
   [000121] ExtraFieldLength               u16 le           0                     00 00
   [000123] File name                      ascii[11]        zip_001.zip           7a 69 70 5f 30 30 31 2e 7a 69 70
-  [00012e] Data                           u8[96]                                 0b f0 66 66 e1 62 00 81 3f 13 ed 9c 25 45 fc 0f b1 03 d9 20 cc c4 20 c3 50 51 11 1a c2 c9 c0 bc ...
+  [00012e] Data                           compressed:deflate[96]                       0b f0 66 66 e1 62 00 81 3f 13 ed 9c 25 45 fc 0f b1 03 d9 20 cc c4 20 c3 50 51 11 1a c2 c9 c0 bc ...
 
 Chunk_3 ZIPDIRENTRY
   [00018e] Signature                      ascii[2]         PK                    50 4b

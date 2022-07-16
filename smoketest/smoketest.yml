@@ -112,19 +112,6 @@ input:
     files:
       - pdf_001.pdf
 
-  - folder: documents/wri
-    files:
-      - win16_mail.wri
-
-  - folder: fonts/eot
-    files:
-      - eot_001_glyphicons.eot
-
-  - folder: fonts/dfont
-    files:
-      - CharcoalCY.dfont
-      - GenevaCY.dfont
-
   - folder: fonts/otf
     files:
       - otf_001.otf
@@ -372,6 +359,11 @@ input:
       - example1-52.luac
       #- example2-52.luac     # XXX need to parse nested(?) proto block
 
+  - folder: systems/macos/dfont
+    files:
+      - CharcoalCY.dfont
+      - GenevaCY.dfont
+
   - folder: systems/macos/icns
     files:
       - workflowicon.icns
@@ -495,6 +487,10 @@ input:
       - 5202.cp_
       - mono.gr_
 
+  - folder: systems/windows/eot
+    files:
+      - eot_001_glyphicons.eot
+
   - folder: systems/windows/exe-mz
     files:
       #- EDXOR165.exe
@@ -539,6 +535,10 @@ input:
   - folder: systems/windows/rtf
     files:
       - rtf_001.rtf
+
+  - folder: systems/windows/wri
+    files:
+      - win16_mail.wri
 
   - folder: systems/x11/snf
     files:

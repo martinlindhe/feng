@@ -1,5 +1,6 @@
 # STATUS: 95% - parses all samples
 
+# HI: need ZIPDIGITALSIG sample
 # LOW: parse + present "Version made by" and "Version needed to extract" with some data type
 # LOW: calculate crc32
 
@@ -50,7 +51,10 @@ structs:
       u16 ExtraFieldLength: ??
       ascii[self.FileNameLength] File name: ??
       u8[self.ExtraFieldLength] Extra field: ??
-      u8[self.CompressedSize] Data: ??
+      if self.Compression == Deflated:
+        compressed:deflate[self.CompressedSize] Data: ??
+      else:
+        raw:u8[self.CompressedSize] Data: ??
 
     if self.Type == ZIPDIRENTRY:
       u16 Version made by: ??

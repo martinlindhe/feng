@@ -1,4 +1,4 @@
-# templates/fonts/dfont.yml
+# templates/systems/macos/dfont.yml
 Header
   [000000] Magic                          u8[5]                                  00 00 01 00 00
 

@@ -1,4 +1,4 @@
-# STATUS: 60% - parses many samples
+# STATUS: 60% - parses all samples
 
 # - HI: declare some in-lined structs as custom data types
 # - MID: if MHD_PASSWORD is set, rest of file is scrambled, so stop decoding
@@ -123,7 +123,7 @@ structs:
       ascii[self.NameSize] File name: ??
       # struct FileHeadBlock END :::
 
-      u8[self.HeaderSize - (OFFSET - offset("self.CRC")) + 111 - 111] Reserved: ??
+      u8[self.HeaderSize - (OFFSET - offset("self.CRC"))] Reserved: ??
       u8[self.CompressedSize] Data: ??
 
     if self.Type == SUBBLOCK:
