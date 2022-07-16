@@ -1,0 +1,280 @@
+# templates/archives/rar.yml
+Chunk_0 MARKER
+  [000000] CRC                            u16 le           24914                 61 52
+  [000002] Type                           u8               114                   72
+           - MARKER                       eq
+  [000003] CommonFlags                    u16 le           6689                  1a 21
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         0
+  [000005] HeaderSize                     u16 le           7                     00 07
+
+Chunk_1 ARCHIVE
+  [000007] CRC                            u16 le           63496                 f8 08
+  [000009] Type                           u8               115                   73
+           - ARCHIVE                      eq
+  [00000a] ArchiveFlags                   u16 le           34                    00 22
+           - ARCHIVE_VOLUME               bit 0:1          0
+           - ARCHIVE_COMMENT_PRESENT      bit 1:1          1
+           - ARCHIVE_LOCKED               bit 2:1          0
+           - ARCHIVE_SOLID                bit 3:1          0
+           - NEW_VOLUME_NAMING            bit 4:1          0
+           - AV_PRESENT                   bit 5:1          1
+           - RECOVERY_PRESENT             bit 6:1          0
+           - BLOCK_HEADERS_ENCRYPTED      bit 7:1          0
+           - IS_FIRST_VOLUME              bit 8:1          0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         0
+  [00000c] HeaderSize                     u16 le           580                   02 44
+  [00000e] HighPosAv                      u16 le           0                     00 00
+  [000010] PosAv                          u32 le           2777                  00 00 0a d9
+  [000014] Reserved (unmapped data?)      u8[567]                                1e 96 75 00 00 37 02 8c 05 0f 34 0f 39 24 ff 9b c9 eb 64 0d 94 5d f9 f3 0f f6 7f 0c 01 00 00 8d ...
+
+Chunk_2 EXEBBS.BAT
+  [00024b] CRC                            u16 le           4385                  11 21
+  [00024d] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [00024e] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [000250] HeaderSize                     u16 le           42                    00 2a
+  [000252] RawDataSize                    u32 le           361                   00 00 01 69
+  [000256] Unpacked size                  u32 le           880                   00 00 03 70
+  [00025a] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [00025b] CRC32                          u32 le           2469512494            93 31 c5 2e
+  [00025f] Time                           dostime le       07:36:56              3c 9c
+  [000261] Date                           dosdate le       1995-07-26            1e fa
+  [000263] Version to unpack              u8               15                    0f
+  [000264] Pack method                    u8               51                    33
+           - Normal                       eq
+  [000265] NameSize                       u16 le           10                    00 0a
+  [000267] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [00026b] FileName                       ascii[10]        EXEBBS.BAT            45 58 45 42 42 53 2e 42 41 54
+  [000275] Data                           u8[361]                                0f 56 e4 4e e7 e8 f3 9e 4a b3 94 47 49 1d 9e 39 12 1e 40 a9 b0 f9 0f 32 04 09 f2 7e 6b 98 ce fc ...
+
+Chunk_3 1.BAT
+  [0003de] CRC                            u16 le           20208                 4e f0
+  [0003e0] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [0003e1] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [0003e3] HeaderSize                     u16 le           37                    00 25
+  [0003e5] RawDataSize                    u32 le           57                    00 00 00 39
+  [0003e9] Unpacked size                  u32 le           71                    00 00 00 47
+  [0003ed] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [0003ee] CRC32                          u32 le           1269334408            4b a8 81 88
+  [0003f2] Time                           dostime le       20:07:36              a0 f2
+  [0003f4] Date                           dosdate le       1995-07-23            1e f7
+  [0003f6] Version to unpack              u8               15                    0f
+  [0003f7] Pack method                    u8               51                    33
+           - Normal                       eq
+  [0003f8] NameSize                       u16 le           5                     00 05
+  [0003fa] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [0003fe] FileName                       ascii[5]         1.BAT                 31 2e 42 41 54
+  [000403] Data                           u8[57]                                 0f a6 dc 89 de 8f d2 79 cf 65 59 e8 69 1e be ef 08 ac 70 5f 61 6b 49 db 39 b7 29 11 64 da 95 d2 ...
+
+Chunk_4 RUN.BAT
+  [00043c] CRC                            u16 le           7430                  1d 06
+  [00043e] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [00043f] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [000441] HeaderSize                     u16 le           39                    00 27
+  [000443] RawDataSize                    u32 le           701                   00 00 02 bd
+  [000447] Unpacked size                  u32 le           2073                  00 00 08 19
+  [00044b] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [00044c] CRC32                          u32 le           3432883616            cc 9d a5 a0
+  [000450] Time                           dostime le       19:23:38              9a f3
+  [000452] Date                           dosdate le       1995-07-28            1e fc
+  [000454] Version to unpack              u8               15                    0f
+  [000455] Pack method                    u8               51                    33
+           - Normal                       eq
+  [000456] NameSize                       u16 le           7                     00 07
+  [000458] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [00045c] FileName                       ascii[7]         RUN.BAT               52 55 4e 2e 42 41 54
+  [000463] Data                           u8[701]                                0f 27 4f 3f 67 8e 42 3a 80 52 27 79 62 bc 97 68 6e 3c c8 b7 88 5b c9 88 1e 50 94 f9 52 ef e1 c9 ...
+
+Chunk_5 RUN0.BAT
+  [000720] CRC                            u16 le           11665                 2d 91
+  [000722] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [000723] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [000725] HeaderSize                     u16 le           40                    00 28
+  [000727] RawDataSize                    u32 le           661                   00 00 02 95
+  [00072b] Unpacked size                  u32 le           1901                  00 00 07 6d
+  [00072f] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [000730] CRC32                          u32 le           757478866             2d 26 35 d2
+  [000734] Time                           dostime le       22:56:28              b7 0e
+  [000736] Date                           dosdate le       1995-06-29            1e dd
+  [000738] Version to unpack              u8               15                    0f
+  [000739] Pack method                    u8               51                    33
+           - Normal                       eq
+  [00073a] NameSize                       u16 le           8                     00 08
+  [00073c] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [000740] FileName                       ascii[8]         RUN0.BAT              52 55 4e 30 2e 42 41 54
+  [000748] Data                           u8[661]                                0f 27 4f 3f 67 8e 42 3a 80 52 27 79 62 bc 97 68 6e 3c c8 b7 88 5b c9 88 1e 50 94 f9 52 ef e1 c9 ...
+
+Chunk_6 DOBBS0.BAT
+  [0009dd] CRC                            u16 le           56610                 dd 22
+  [0009df] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [0009e0] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [0009e2] HeaderSize                     u16 le           42                    00 2a
+  [0009e4] RawDataSize                    u32 le           46                    00 00 00 2e
+  [0009e8] Unpacked size                  u32 le           47                    00 00 00 2f
+  [0009ec] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [0009ed] CRC32                          u32 le           3818972036            e3 a0 e3 84
+  [0009f1] Time                           dostime le       20:42:46              a5 57
+  [0009f3] Date                           dosdate le       1995-07-06            1e e6
+  [0009f5] Version to unpack              u8               15                    0f
+  [0009f6] Pack method                    u8               51                    33
+           - Normal                       eq
+  [0009f7] NameSize                       u16 le           10                    00 0a
+  [0009f9] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [0009fd] FileName                       ascii[10]        DOBBS0.BAT            44 4f 42 42 53 30 2e 42 41 54
+  [000a07] Data                           u8[46]                                 0f 4f 98 07 30 bc 9c 99 41 a0 ac 85 91 98 81 24 cf b0 02 58 f9 7c 90 3c 89 fe 58 d3 09 f0 20 f3 ...
+
+Chunk_7 DOBBS.BAT
+  [000a35] CRC                            u16 le           36544                 8e c0
+  [000a37] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [000a38] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [000a3a] HeaderSize                     u16 le           41                    00 29
+  [000a3c] RawDataSize                    u32 le           46                    00 00 00 2e
+  [000a40] Unpacked size                  u32 le           47                    00 00 00 2f
+  [000a44] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [000a45] CRC32                          u32 le           1868884419            6f 64 e9 c3
+  [000a49] Time                           dostime le       17:59:50              8f 79
+  [000a4b] Date                           dosdate le       1995-07-31            1e ff
+  [000a4d] Version to unpack              u8               15                    0f
+  [000a4e] Pack method                    u8               51                    33
+           - Normal                       eq
+  [000a4f] NameSize                       u16 le           9                     00 09
+  [000a51] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [000a55] FileName                       ascii[9]         DOBBS.BAT             44 4f 42 42 53 2e 42 41 54
+  [000a5e] Data                           u8[46]                                 0f 4f 98 07 30 bc 9c 99 8c 6c 2b 21 61 c8 d4 90 79 48 12 c7 cb e4 81 e4 4e f2 d9 f4 13 e0 3d e7 ...
+
+Chunk_8 DOBBS1.BAT
+  [000a8c] CRC                            u16 le           16014                 3e 8e
+  [000a8e] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [000a8f] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [000a91] HeaderSize                     u16 le           42                    00 2a
+  [000a93] RawDataSize                    u32 le           35                    00 00 00 23
+  [000a97] Unpacked size                  u32 le           36                    00 00 00 24
+  [000a9b] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [000a9c] CRC32                          u32 le           1765760379            69 3f 5d 7b
+  [000aa0] Time                           dostime le       21:07:20              a8 ea
+  [000aa2] Date                           dosdate le       1995-07-06            1e e6
+  [000aa4] Version to unpack              u8               15                    0f
+  [000aa5] Pack method                    u8               51                    33
+           - Normal                       eq
+  [000aa6] NameSize                       u16 le           10                    00 0a
+  [000aa8] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [000aac] FileName                       ascii[10]        DOBBS1.BAT            44 4f 42 42 53 31 2e 42 41 54
+  [000ab6] Data                           u8[35]                                 0f 4f 98 07 30 bc 9c 99 41 a0 ac 85 91 98 81 3c 27 38 b0 31 f9 63 40 61 de 2f 1a 04 00 d3 66 72 ...
+
+Chunk_9 AV_HEAD
+  [000ad9] CRC                            u16 le           19637                 4c b5
+  [000adb] Type                           u8               118                   76
+           - AV_HEAD                      eq
+  [000adc] CommonFlags                    u16 le           0                     00 00
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         0
+  [000ade] HeaderSize                     u16 le           319                   01 3f
+  [000ae0] Reserved (unmapped data?)      u8[312]                                0f 30 00 fd 5f da 2d d3 6f be 00 38 a2 4c 17 ba 6e e5 04 73 af 0e 72 b2 d6 f8 5d 0f a5 32 8a ee ...
+
+EOF

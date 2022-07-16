@@ -1,0 +1,144 @@
+# templates/archives/rar.yml
+Chunk_0 MARKER
+  [000000] CRC                            u16 le           24914                 61 52
+  [000002] Type                           u8               114                   72
+           - MARKER                       eq
+  [000003] CommonFlags                    u16 le           6689                  1a 21
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         0
+  [000005] HeaderSize                     u16 le           7                     00 07
+
+Chunk_1 ARCHIVE
+  [000007] CRC                            u16 le           19139                 4a c3
+  [000009] Type                           u8               115                   73
+           - ARCHIVE                      eq
+  [00000a] ArchiveFlags                   u16 le           42                    00 2a
+           - ARCHIVE_VOLUME               bit 0:1          0
+           - ARCHIVE_COMMENT_PRESENT      bit 1:1          1
+           - ARCHIVE_LOCKED               bit 2:1          0
+           - ARCHIVE_SOLID                bit 3:1          1
+           - NEW_VOLUME_NAMING            bit 4:1          0
+           - AV_PRESENT                   bit 5:1          1
+           - RECOVERY_PRESENT             bit 6:1          0
+           - BLOCK_HEADERS_ENCRYPTED      bit 7:1          0
+           - IS_FIRST_VOLUME              bit 8:1          0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         0
+  [00000c] HeaderSize                     u16 le           575                   02 3f
+  [00000e] HighPosAv                      u16 le           0                     00 00
+  [000010] PosAv                          u32 le           297381                00 04 89 a5
+  [000014] Reserved (unmapped data?)      u8[562]                                b1 6b 75 00 00 32 02 26 09 0f 34 b5 e0 19 ff 37 9b 48 fa 03 92 d1 93 d6 a2 70 82 92 ef ca 5c 8d ...
+
+Chunk_2 ICEEDIT.DIC
+  [000246] CRC                            u16 le           13195                 33 8b
+  [000248] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [000249] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [00024b] HeaderSize                     u16 le           43                    00 2b
+  [00024d] RawDataSize                    u32 le           296331                00 04 85 8b
+  [000251] Unpacked size                  u32 le           1243452               00 12 f9 3c
+  [000255] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [000256] CRC32                          u32 le           3183108173            bd ba 60 4d
+  [00025a] Time                           dostime le       11:45:20              5d aa
+  [00025c] Date                           dosdate le       1994-04-04            1c 84
+  [00025e] Version to unpack              u8               15                    0f
+  [00025f] Pack method                    u8               53                    35
+           - Best                         eq
+  [000260] NameSize                       u16 le           11                    00 0b
+  [000262] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [000266] FileName                       ascii[11]        ICEEDIT.DIC           49 43 45 45 44 49 54 2e 44 49 43
+  [000271] Data                           u8[296331]                             78 3e 50 3e 2a 1f b7 f8 a0 f3 7e 62 ca 6a 49 d9 b1 20 bb cc 69 8e 18 f0 66 27 81 02 b1 b2 23 a4 ...
+
+Chunk_3 FILE_ID.DIZ
+  [0487fc] CRC                            u16 le           37484                 92 6c
+  [0487fe] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [0487ff] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [048801] HeaderSize                     u16 le           43                    00 2b
+  [048803] RawDataSize                    u32 le           267                   00 00 01 0b
+  [048807] Unpacked size                  u32 le           317                   00 00 01 3d
+  [04880b] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [04880c] CRC32                          u32 le           1396171454            53 37 e2 be
+  [048810] Time                           dostime le       22:54:56              b6 dc
+  [048812] Date                           dosdate le       1995-07-30            1e fe
+  [048814] Version to unpack              u8               15                    0f
+  [048815] Pack method                    u8               53                    35
+           - Best                         eq
+  [048816] NameSize                       u16 le           11                    00 0b
+  [048818] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [04881c] FileName                       ascii[11]        FILE_ID.DIZ           46 49 4c 45 5f 49 44 2e 44 49 5a
+  [048827] Data                           u8[267]                                fd 3f f7 d4 f0 f6 2f 64 1f 63 f5 3f 97 b4 e4 f6 de e3 c9 fa 6e 6a 41 fb 45 89 f4 3e b3 da d5 cf ...
+
+Chunk_4 ICEEDIT.IDX
+  [048932] CRC                            u16 le           3138                  0c 42
+  [048934] Type                           u8               116                   74
+           - FILE_OR_DIR                  eq
+  [048935] FileFlags                      u16 le           32768                 80 00
+           - FROM_PREV_VOLUME             bit 0:1          0
+           - TO_NEXT_VOLUME               bit 1:1          0
+           - PASSWORD_ENCRYPTED           bit 2:1          0
+           - FILE_COMMENT_PRESENT         bit 3:1          0
+           - SOLID                        bit 4:1          0
+           - HIGH_SIZE                    bit 8:1          0
+           - HAS_UNICODE_FILENAME         bit 9:1          0
+           - ENCRYPTION_SALT              bit 10:1         0
+           - IS_OLD_FILE_VERSION          bit 11:1         0
+           - EXTENDED_TIME_INFO           bit 12:1         0
+           - reserved                     bit 13:1         0
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         1
+  [048937] HeaderSize                     u16 le           43                    00 2b
+  [048939] RawDataSize                    u32 le           72                    00 00 00 48
+  [04893d] Unpacked size                  u32 le           52                    00 00 00 34
+  [048941] Host OS                        u8               0                     00
+           - MS-DOS                       eq
+  [048942] CRC32                          u32 le           3353937961            c7 e9 08 29
+  [048946] Time                           dostime le       11:56:44              5f 16
+  [048948] Date                           dosdate le       1994-04-04            1c 84
+  [04894a] Version to unpack              u8               15                    0f
+  [04894b] Pack method                    u8               53                    35
+           - Best                         eq
+  [04894c] NameSize                       u16 le           11                    00 0b
+  [04894e] UnixStyleAttrs                 u32 le           32                    00 00 00 20
+  [048952] FileName                       ascii[11]        ICEEDIT.IDX           49 43 45 45 44 49 54 2e 49 44 58
+  [04895d] Data                           u8[72]                                 f3 7a 0f 33 ed bd 9f c8 7b 40 f9 5f e6 5f fc 88 f1 fb 9f 89 db f8 be eb e8 7d de ff 7d fb 9e fd ...
+
+Chunk_5 AV_HEAD
+  [0489a5] CRC                            u16 le           8785                  22 51
+  [0489a7] Type                           u8               118                   76
+           - AV_HEAD                      eq
+  [0489a8] CommonFlags                    u16 le           0                     00 00
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         0
+  [0489aa] HeaderSize                     u16 le           88                    00 58
+  [0489ac] Reserved (unmapped data?)      u8[81]                                 0f 34 00 70 78 ac 3c ec 37 ea e2 b8 a1 3f 2a 93 81 46 48 8d 32 ad 12 90 d1 5f 1a 55 45 20 75 ee ...
+
+EOF

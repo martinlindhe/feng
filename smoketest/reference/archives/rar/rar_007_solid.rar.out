@@ -1,16 +1,18 @@
 # templates/archives/rar.yml
-Header
-  [000000] CRC                            u8[2]                                  52 61
+Chunk_0 MARKER
+  [000000] CRC                            u16 le           24914                 61 52
   [000002] Type                           u8               114                   72
            - MARKER                       eq
-  [000003] Flags                          u16 le           6689                  1a 21
-  [000005] Header size                    u16 le           7                     00 07
+  [000003] CommonFlags                    u16 le           6689                  1a 21
+           - OLD_VERSION_IGNORE           bit 14:1         0
+           - ADD_SIZE_PRESENT             bit 15:1         0
+  [000005] HeaderSize                     u16 le           7                     00 07
 
-Chunk_0 ARCHIVE
+Chunk_1 ARCHIVE
   [000007] CRC                            u16 le           53307                 d0 3b
   [000009] Type                           u8               115                   73
            - ARCHIVE                      eq
-  [00000a] archiveFlags                   u16 le           8                     00 08
+  [00000a] ArchiveFlags                   u16 le           8                     00 08
            - ARCHIVE_VOLUME               bit 0:1          0
            - ARCHIVE_COMMENT_PRESENT      bit 1:1          0
            - ARCHIVE_LOCKED               bit 2:1          0
@@ -22,15 +24,15 @@ Chunk_0 ARCHIVE
            - IS_FIRST_VOLUME              bit 8:1          0
            - OLD_VERSION_IGNORE           bit 14:1         0
            - ADD_SIZE_PRESENT             bit 15:1         0
-  [00000c] Header size                    u16 le           13                    00 0d
+  [00000c] HeaderSize                     u16 le           13                    00 0d
   [00000e] HighPosAv                      u16 le           0                     00 00
   [000010] PosAv                          u32 le           0                     00 00 00 00
 
-Chunk_1 FILE_OR_DIR
+Chunk_2 file.txt
   [000014] CRC                            u16 le           3009                  0b c1
   [000016] Type                           u8               116                   74
            - FILE_OR_DIR                  eq
-  [000017] HEAD_FLAGS                     u16 le           36992                 90 80
+  [000017] FileFlags                      u16 le           36992                 90 80
            - FROM_PREV_VOLUME             bit 0:1          0
            - TO_NEXT_VOLUME               bit 1:1          0
            - PASSWORD_ENCRYPTED           bit 2:1          0
@@ -45,7 +47,7 @@ Chunk_1 FILE_OR_DIR
            - OLD_VERSION_IGNORE           bit 14:1         0
            - ADD_SIZE_PRESENT             bit 15:1         1
   [000019] HeaderSize                     u16 le           45                    00 2d
-  [00001b] CompressedSize                 u32 le           15                    00 00 00 0f
+  [00001b] RawDataSize                    u32 le           15                    00 00 00 0f
   [00001f] Unpacked size                  u32 le           5                     00 00 00 05
   [000023] Host OS                        u8               2                     02
            - Win32                        eq
@@ -57,15 +59,15 @@ Chunk_1 FILE_OR_DIR
            - Normal                       eq
   [00002e] NameSize                       u16 le           8                     00 08
   [000030] UnixStyleAttrs                 u32 le           32                    00 00 00 20
-  [000034] File name                      ascii[8]         file.txt              66 69 6c 65 2e 74 78 74
+  [000034] FileName                       ascii[8]         file.txt              66 69 6c 65 2e 74 78 74
   [00003c] Reserved                       u8[5]                                  00 b0 9d 04 11
   [000041] Data                           u8[15]                                 08 08 ff 0c a7 58 1e 10 6f f1 bd 7f f8 cb 74
 
-Chunk_2 END
+Chunk_3 END
   [000050] CRC                            u16 le           15812                 3d c4
   [000052] Type                           u8               123                   7b
            - END                          eq
-  [000053] Common block flags             u16 le           16384                 40 00
+  [000053] CommonFlags                    u16 le           16384                 40 00
            - OLD_VERSION_IGNORE           bit 14:1         1
            - ADD_SIZE_PRESENT             bit 15:1         0
   [000055] HeaderSize                     u16 le           7                     00 07

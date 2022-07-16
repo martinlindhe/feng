@@ -166,7 +166,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	for _, df := range ds.Layout {
 		err := fileLayout.mapLayout(rr, nil, ds, &df)
 		if err != nil {
-			log.Println(err)
+			feng.Red("mapLayout error processing %s: %s\n", df.Label, err.Error())
 			//return nil, err
 			return &fileLayout, nil
 		}
@@ -592,6 +592,10 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 func readBytes(r io.Reader, totalLength, unitLength uint64, endian string) ([]byte, error) {
 	if unitLength > 1 && endian == "" {
 		return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
+	}
+
+	if totalLength > 1024*1024*1024 {
+		return nil, fmt.Errorf("readBytes: attempt to read unexpected amount of data %d", totalLength)
 	}
 
 	val := make([]byte, totalLength)

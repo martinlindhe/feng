@@ -61,6 +61,13 @@ input:
 
   - folder: archives/rar
     files:
+      - archive_comment.rar            # TODO decode comment block
+      - archive_comment_IDICTVXX.RAR   # TODO decode comment block
+      #- problem_archive_comment_REGISTER.RAR    # TODO Finish decoding
+      #- problem_comment_rar_v5.rar # TODO parse
+      #- problem_multiline-comment-rar-v5.rar # TODO parse
+      #- problem_password_apa_encrypted_filenames.rar # TODO parse
+      #- problem_password-rar-v5.rar # TODO parse
       - rar_001_linux.rar
       - rar_002_winrar420.rar
       - rar_003_password_apa.rar

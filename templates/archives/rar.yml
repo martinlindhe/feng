@@ -1,6 +1,8 @@
-# STATUS: 60% - parses all samples
+# STATUS: 70%
 
-# - HI: declare some in-lined structs as custom data types
+# - HI: archive_comment.rar, archive_comment_IDICTVXX.RAR decode COMM_HEAD chunk and extract comment data
+
+# - HI: need samples with unsupported chunk types
 # - MID: if MHD_PASSWORD is set, rest of file is scrambled, so stop decoding
 # - LOW: calculate crc
 
@@ -19,39 +21,33 @@ magic:
   - offset: 0000
     match: c'Rar!' 1a
 
-constants:
-  u8 ARCHIVE:     "73"
-  u8 FILE_OR_DIR: "74"
-  u8 SUBBLOCK:    "7a"
-  u8 END:         "7b"
-
 structs:
-  header:
-    u8[2] CRC: c'Ra'
-    u8 Type:
-      eq c'r': MARKER
-      default: invalid
-    u16 Flags: 1a c'!' 
-    u16 Header size: ?? # seen "00 07", "01 07" (v5)
-
   chunk:
     u16 CRC: ??
     u8 Type:
       eq 72: MARKER # MARK_HEAD
       eq 73: ARCHIVE #MAIN_HEAD
       eq 74: FILE_OR_DIR  #FILE_HEAD
-      #eq 75: COMM_HEAD
-      #eq 76: AV_HEAD
+      eq 75: COMM_HEAD
+      eq 76: AV_HEAD
       #eq 77: SUB_HEAD
-      #eq 78: PROTECT_HEAD
+      eq 78: PROTECT_HEAD
       #eq 79: SIGN_HEAD
       eq 7a: SUBBLOCK # NEWSUB_HEAD
       eq 7b: END #ENDARC_HEAD
       #default: invalid
     label: self.Type
 
+    if either(self.Type, AV_HEAD, MARKER, PROTECT_HEAD, END):
+      u16 CommonFlags:
+        bit 4000: OLD_VERSION_IGNORE
+        bit 8000: ADD_SIZE_PRESENT
+      u16 HeaderSize: ??
+      if self.CommonFlags & ADD_SIZE_PRESENT:
+        u32 RawDataSize: ??
+
     if self.Type == ARCHIVE:
-      u16 archiveFlags:
+      u16 ArchiveFlags:
         bit 0001: ARCHIVE_VOLUME
         bit 0002: ARCHIVE_COMMENT_PRESENT
         bit 0004: ARCHIVE_LOCKED
@@ -63,20 +59,18 @@ structs:
         bit 0100: IS_FIRST_VOLUME
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
-      u16 Header size: ??
+      u16 HeaderSize: ??
+      if self.ArchiveFlags & ADD_SIZE_PRESENT:
+        u32 RawDataSize: ??
       u16 HighPosAv: ??
       u32 PosAv: ??
-      if self.archiveFlags & ARCHIVE_COMMENT_PRESENT:
-        # XXX struct MainComment
-        u16 Head CRC: ??
-        u8 Head Type:
-          eq 75: COMMENT_OLD
-        u16 Head Flags: ?? # XXX
-        u16 Head size: ??
-        #XXX more, see problem_archive_comment.rar
+
+      #if self.archiveFlags & ARCHIVE_COMMENT_PRESENT:
+      #  # XXX will need to know absolute offset now in order to calculate comment data size later
+      #  chunk Comment: ??
 
     if self.Type == FILE_OR_DIR:
-      u16 HEAD_FLAGS:
+      u16 FileFlags:
         bit 0001: FROM_PREV_VOLUME # LHD_SPLIT_BEFORE
         bit 0002: TO_NEXT_VOLUME   # LHD_SPLIT_AFTER
         bit 0004: PASSWORD_ENCRYPTED
@@ -95,10 +89,9 @@ structs:
         bit 2000: reserved            # LHD_EXTFLAGS
         bit 4000: OLD_VERSION_IGNORE
         bit 8000: ADD_SIZE_PRESENT
-
       u16 HeaderSize: ??
-      u32 CompressedSize: ??
-      # struct FileHeadBlock START :::
+      if self.FileFlags & ADD_SIZE_PRESENT:
+        u32 RawDataSize: ??
       u32 Unpacked size: ??
       u8 Host OS:
         eq 00: MS-DOS
@@ -120,11 +113,17 @@ structs:
         eq 35: Best
       u16 NameSize: ??
       u32 UnixStyleAttrs: ?? # XXX enum, 010 has mapping
-      ascii[self.NameSize] File name: ??
-      # struct FileHeadBlock END :::
-
+      ascii[self.NameSize] FileName: ??
+      label: self.FileName
       u8[self.HeaderSize - (OFFSET - offset("self.CRC"))] Reserved: ??
-      u8[self.CompressedSize] Data: ??
+      u8[self.RawDataSize] Data: ??   # XXX not always present...
+    
+    #if self.Type == COMM_HEAD:
+    #  u16 UncompressedSize: ??
+    #  u8 VersionToUnpack: ?? # XXX
+    #  u8 CompressionMethod: ?? # XXX map
+    #  u16 CommentCRC: ??
+    #  u8[OFFSET - offset("x")] Comment data: ?? # XXX
 
     if self.Type == SUBBLOCK:
       u16 Main header flags:
@@ -132,22 +131,16 @@ structs:
         bit 8000: ADD_SIZE_PRESENT
       u16 HeaderSize: ??
       u32 DataSize: ??
-      # struct SubBlock START :::
       u8[15] Unknown: ??
       u8 SubTypeLen: ??
       u8[5] Unknown: ??
       ascii[self.SubTypeLen] SubType: ??
-      # struct SubBlock END :::
 
       u8[self.HeaderSize - (OFFSET - offset("self.CRC"))] Reserved: ??
       u8[self.DataSize] Data: ??
 
-    if self.Type == END:
-      u16 Common block flags:
-        bit 4000: OLD_VERSION_IGNORE
-        bit 8000: ADD_SIZE_PRESENT
-      u16 HeaderSize: ??
+    if either(self.Type, ARCHIVE, AV_HEAD, PROTECT_HEAD): # XXX also FILE_OR_DIR ?. padding calc goes wrong
+      u8[self.HeaderSize - (OFFSET - offset("self.CRC"))] Reserved (unmapped data?): ??
 
 layout:
-  - header Header
   - chunk []Chunk
