@@ -10,7 +10,7 @@ StartHeader
   [000014] NextHeaderSize                 u64 le           74                    00 00 00 00 00 00 00 4a
   [00001c] NextHeaderCRC                  u32 le           2652949103            9e 20 ca 6f
 
-Header
+Header kHeader
   [000029] NID                            u8               1                     01
            - kHeader                      eq
 

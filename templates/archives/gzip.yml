@@ -1,4 +1,4 @@
-# STATUS: 95% - parses all samples
+# STATUS: 95%
 #
 # - LOW: mark crc32 for data validation
 # - LOW: mark crc16 for header validation

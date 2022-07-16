@@ -2,7 +2,7 @@
 Header
   [000000] Signature                      u32 le           407708164             18 4d 22 04
            - Magic number                 eq
-  [000004] flags                          u8               108                   6c
+  [000004] Flags                          u8               108                   6c
            - PresetDictionary             bit 0:1          0
            - Reserved                     bit 1:1          0
            - ContentChecksum              bit 2:1          1
@@ -16,13 +16,19 @@ Header
            - Reserved                     bit 7:1          0
   [000006] ContentSize                    u64 le           6                     00 00 00 00 00 00 00 06
   [00000e] HeaderChecksum                 u8               137                   89
+
+Block_0
   [00000f] DataSize                       u32 le           2147483654            80 00 00 06
            - DATA_SIZE                    bit 0:31         6                     00 00 00 06
            - Uncompressed                 bit 31:1         1
-  [000013] Data                           u8[6]                                  6b 75 6b 65 6e 0a
-  [000019] DataSize2                      u32 le           0                     00 00 00 00
+  [000013] Data                           raw:u8[6]                              6b 75 6b 65 6e 0a
+
+Block_1 EndMarker
+  [000019] DataSize                       u32 le           0                     00 00 00 00
            - DATA_SIZE                    bit 0:31         0                     00 00 00 00
            - Uncompressed                 bit 31:1         0
+
+Trailer
   [00001d] ContentChecksum                u32 le           2882547001            ab d0 2d 39
 
 EOF

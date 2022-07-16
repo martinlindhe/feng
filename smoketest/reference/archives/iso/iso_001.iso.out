@@ -1,0 +1,26 @@
+# templates/archives/iso.yml
+VolumeDescriptor
+  [008000] volumeDescriptorType           u8               1                     01
+  [008001] Identifier                     ascii[5]         CD001                 43 44 30 30 31
+  [008006] VolumeDescriptorVersion        u8               1                     01
+  [008007] Reserved                       u8               0                     00
+  [008008] System ID                      ascii[32]        LINUX                 4c 49 4e 55 58 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+  [008028] Volume ID                      ascii[32]        CDROM                 43 44 52 4f 4d 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+  [008048] Reserved                       u8[8]                                  00 00 00 00 00 00 00 00
+
+VolumeRoot
+  [008050] VolumeSpaceSize                u32 le           180                   00 00 00 b4
+  [008054] VolumeSpaceSizeBE              u32 be           180                   00 00 00 b4
+  [008058] EscSeq                         u8[32]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [008078] VolumeSetSize                  u16 le           1                     00 01
+  [00807a] VolumeSetSizeBE                u16 be           1                     00 01
+  [00807c] VolumeSequenceNumber           u16 le           1                     00 01
+  [00807e] VolumeSequenceNumberBE         u16 be           1                     00 01
+  [008080] LogicalBlockSize               u16 le           2048                  08 00
+  [008082] LogicalBlockSizeBE             u16 be           2048                  08 00
+  [008084] PathTableSize                  u32 le           46                    00 00 00 2e
+  [008088] PathTableSizeBE                u32 be           46                    00 00 00 2e
+  [00808c] LocationOfPathTable            u32 le           19                    00 00 00 13
+  [008090] LocationOfOptionalPathTable    u32 le           0                     00 00 00 00
+
+0x59f6c (368492) unmapped bytes (100.0%)

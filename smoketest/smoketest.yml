@@ -28,6 +28,10 @@ input:
       - gzip_003.gz
       - gzip_004_no_name.gz
 
+  - folder: archives/iso
+    files:
+      - iso_001.iso
+
   - folder: archives/lha
     files:
       - lha_001_tiny.lzh

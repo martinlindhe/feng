@@ -431,7 +431,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 			endian := fl.endian
 			if es.Field.Endian != "" {
-				feng.Yellow("-- endian override on field %s to %s", es.Field.Label, es.Field.Endian)
+				feng.Yellow("-- endian override on field %s to %s\n", es.Field.Label, es.Field.Endian)
 				endian = es.Field.Endian
 			}
 

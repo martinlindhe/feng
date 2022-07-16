@@ -1,6 +1,6 @@
-# STATUS: 50%
+# STATUS: 70%
 #
-# - HI: parse all N data blocks (need a LOOP construct?)
+# - HI: need more samples
 
 references:
   - https://en.wikipedia.org/wiki/LZ4_(compression_algorithm)
@@ -24,7 +24,7 @@ structs:
       # TODO handle legacy format with magic 184C2102. NEED SAMPLE.
       # XXX TODO handle 184D2A50 "skippable frame"
       default: invalid
-    u8 flags:
+    u8 Flags:
       bit b0000_0001: PresetDictionary
       bit b0000_0010: Reserved
       bit b0000_0100: ContentChecksum
@@ -38,7 +38,7 @@ structs:
       bit b0111_0000: BlockMaximumSize
       bit b1000_0000: Reserved
 
-    if self.flags & ContentSize:  # SAMPLE: file1-content-size.lz4
+    if self.Flags & ContentSize:  # SAMPLE: file1-content-size.lz4
       u64 ContentSize: ??
 
     # TODO need sample
@@ -47,20 +47,22 @@ structs:
     
     u8 HeaderChecksum: ??     # XXX checksum type?
 
-    # now comes N data blocks with a NULL one as terminator. XXX how to terminate parsing
+  block:
     u32 DataSize:
       bit b0111_1111_11111111_11111111_11111111: DATA_SIZE
       bit b1000_0000_00000000_00000000_00000000: Uncompressed
-    u8[self.DataSize & DATA_SIZE] Data: ??
-    if self.flags & BlockChecksum:
+    raw:u8[self.DataSize & DATA_SIZE] Data: ??
+    if Header.Flags & BlockChecksum:
       u32 BlockChecksum: ??
+    if (self.DataSize & DATA_SIZE) == 0:
+      label: '"EndMarker"'
+      parse: stop
 
-    u32 DataSize2:
-      bit b0111_1111_11111111_11111111_11111111: DATA_SIZE
-      bit b1000_0000_00000000_00000000_00000000: Uncompressed
-    u8[self.DataSize2 & DATA_SIZE] Data: ??
-    if self.flags & ContentChecksum:
+  trailer:
+    if Header.Flags & ContentChecksum:
       u32 ContentChecksum: ??
 
 layout:
   - header Header
+  - block[] Block
+  - trailer Trailer

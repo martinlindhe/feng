@@ -1,6 +1,6 @@
 # templates/archives/arj.yml
 Header
-  [000000] Signature                      u8[2]                                  60 ea
+  [000000] Magic                          u8[2]                                  60 ea
   [000002] HeaderSize                     u16 le           45                    00 2d
   [000004] SizeWithExtraData              u8               34                    22
   [000005] Archiver version               u8               11                    0b
@@ -36,7 +36,7 @@ Header
   [000035] ExtHeaderSize                  u16 le           0                     00 00
 
 LocalHeader_0
-  [000037] Signature                      u8[2]                                  60 ea
+  [000037] Magic                          u8[2]                                  60 ea
   [000039] HeaderSize                     u16 le           39                    00 27
   [00003b] SizeWithExtraData              u8               30                    1e
   [00003c] Archiver version               u8               11                    0b
@@ -45,12 +45,10 @@ LocalHeader_0
            - MS-DOS                       eq
   [00003f] Flags                          u8               16                    10
            - Garbled                      bit 0:1          0
-           - Reserved1                    bit 1:1          0
            - Volume                       bit 2:1          0
            - Extfile                      bit 3:1          0
            - Pathsym                      bit 4:1          1
            - Backup                       bit 5:1          0
-           - Reserved2                    bit 6:2          0
   [000040] Compression method             u8               0                     00
            - Stored                       eq
   [000041] File type                      u8               0                     00
@@ -58,8 +56,8 @@ LocalHeader_0
   [000042] Reserved                       u8               148                   94
   [000043] Modified time                  u32 le           1215368268            48 71 0c 4c
   [000047] CompressedSize                 u32 le           60                    00 00 00 3c
-  [00004b] Original size                  u32 le           60                    00 00 00 3c
-  [00004f] Original file CRC              u32 le           177095624             0a 8e 43 c8
+  [00004b] Uncompressed size              u32 le           60                    00 00 00 3c
+  [00004f] Uncompressed CRC               u32 le           177095624             0a 8e 43 c8
   [000053] Filespec position in filename  u16 le           0                     00 00
   [000055] File access mode               u16 le           32                    00 20
   [000057] First chapter                  u8               0                     00
@@ -71,7 +69,7 @@ LocalHeader_0
   [000068] Compressed data                raw:u8[60]                             73 61 61 73 64 66 61 77 67 20 32 61 77 20 67 7a 64 61 76 20 7a 64 66 7a 78 76 6b 6d 20 c3 a4 6f ...
 
 LocalHeader_1
-  [0000a4] Signature                      u8[2]                                  60 ea
+  [0000a4] Magic                          u8[2]                                  60 ea
   [0000a6] HeaderSize                     u16 le           39                    00 27
   [0000a8] SizeWithExtraData              u8               30                    1e
   [0000a9] Archiver version               u8               11                    0b
@@ -80,12 +78,10 @@ LocalHeader_1
            - MS-DOS                       eq
   [0000ac] Flags                          u8               16                    10
            - Garbled                      bit 0:1          0
-           - Reserved1                    bit 1:1          0
            - Volume                       bit 2:1          0
            - Extfile                      bit 3:1          0
            - Pathsym                      bit 4:1          1
            - Backup                       bit 5:1          0
-           - Reserved2                    bit 6:2          0
   [0000ad] Compression method             u8               1                     01
            - Compressed 1a (best)         eq
   [0000ae] File type                      u8               0                     00
@@ -93,8 +89,8 @@ LocalHeader_1
   [0000af] Reserved                       u8               148                   94
   [0000b0] Modified time                  u32 le           1215368276            48 71 0c 54
   [0000b4] CompressedSize                 u32 le           32                    00 00 00 20
-  [0000b8] Original size                  u32 le           73                    00 00 00 49
-  [0000bc] Original file CRC              u32 le           3786400166            e1 af e1 a6
+  [0000b8] Uncompressed size              u32 le           73                    00 00 00 49
+  [0000bc] Uncompressed CRC               u32 le           3786400166            e1 af e1 a6
   [0000c0] Filespec position in filename  u16 le           0                     00 00
   [0000c2] File access mode               u16 le           32                    00 20
   [0000c4] First chapter                  u8               0                     00
@@ -105,8 +101,8 @@ LocalHeader_1
   [0000d3] ExtHeaderSize                  u16 le           0                     00 00
   [0000d5] Compressed data                raw:u8[32]                             00 18 42 6e 69 cc 28 31 27 f8 9a 84 10 4c c8 dc 50 d5 40 80 88 d5 ca 74 63 8c a2 f0 7d 08 1b e0
 
-LocalHeader_2
-  [0000f5] Signature                      u8[2]                                  60 ea
+LocalHeader_2 EofMarker
+  [0000f5] Magic                          u8[2]                                  60 ea
   [0000f7] HeaderSize                     u16 le           0                     00 00
 
 EOF

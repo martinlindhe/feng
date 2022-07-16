@@ -10,8 +10,12 @@ StartHeader
   [000014] NextHeaderSize                 u64 le           33                    00 00 00 00 00 00 00 21
   [00001c] NextHeaderCRC                  u32 le           2059058453            7a ba bd 15
 
-Header
+Header kEncodedHeader
   [0000ac] NID                            u8               23                    17
            - kEncodedHeader               eq
 
-0x00ac (172) unmapped bytes (83.9%)
+PackInfo
+  [0000ad] NID                            u8               6                     06
+  [0000ae] PackPos                        u64 le           75161517108560164     01 0b 07 00 68 09 01 24
+
+0x00a3 (163) unmapped bytes (79.5%)

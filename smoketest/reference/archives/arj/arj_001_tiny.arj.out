@@ -1,6 +1,6 @@
 # templates/archives/arj.yml
 Header
-  [000000] Signature                      u8[2]                                  60 ea
+  [000000] Magic                          u8[2]                                  60 ea
   [000002] HeaderSize                     u16 le           43                    00 2b
   [000004] SizeWithExtraData              u8               34                    22
   [000005] Archiver version               u8               11                    0b
@@ -36,7 +36,7 @@ Header
   [000033] ExtHeaderSize                  u16 le           0                     00 00
 
 LocalHeader_0
-  [000035] Signature                      u8[2]                                  60 ea
+  [000035] Magic                          u8[2]                                  60 ea
   [000037] HeaderSize                     u16 le           50                    00 32
   [000039] SizeWithExtraData              u8               46                    2e
   [00003a] Archiver version               u8               11                    0b
@@ -45,12 +45,10 @@ LocalHeader_0
            - Unix                         eq
   [00003d] Flags                          u8               16                    10
            - Garbled                      bit 0:1          0
-           - Reserved1                    bit 1:1          0
            - Volume                       bit 2:1          0
            - Extfile                      bit 3:1          0
            - Pathsym                      bit 4:1          1
            - Backup                       bit 5:1          0
-           - Reserved2                    bit 6:2          0
   [00003e] Compression method             u8               0                     00
            - Stored                       eq
   [00003f] File type                      u8               0                     00
@@ -58,15 +56,24 @@ LocalHeader_0
   [000040] Reserved                       u8               101                   65
   [000041] Modified time                  u32 le           1381921521            52 5e 72 f1
   [000045] CompressedSize                 u32 le           4                     00 00 00 04
-  [000049] Original size                  u32 le           4                     00 00 00 04
-  [00004d] Original file CRC              u32 le           3993854728            ee 0d 63 08
+  [000049] Uncompressed size              u32 le           4                     00 00 00 04
+  [00004d] Uncompressed CRC               u32 le           3993854728            ee 0d 63 08
   [000051] Filespec position in filename  u16 le           0                     00 00
   [000053] File access mode               u16 le           4516                  11 a4
   [000055] First chapter                  u8               0                     00
   [000056] Last chapter                   u8               0                     00
-  [000057] FileName                       asciiz                                 00
-  [000058] File comment                   asciiz                                 00
-  [000059] CRC32                          u32 le           1930559488            73 12 00 00
-  [00005d] ExtHeaderSize                  u16 le           21086                 52 5e
+  [000057] Extended file position         u32 le           0                     00 00 00 00
+  [00005b] Access time                    u32 le           1381921554            52 5e 73 12
+  [00005f] Creation time                  u32 le           1381921521            52 5e 72 f1
+  [000063] Original file size             u32 le           0                     00 00 00 00
+  [000067] FileName                       asciiz           x1                    78 31 00
+  [00006a] File comment                   asciiz                                 00
+  [00006b] CRC32                          u32 le           966372347             39 99 ab fb
+  [00006f] ExtHeaderSize                  u16 le           0                     00 00
+  [000071] Compressed data                raw:u8[4]                              68 65 6a 0a
 
-0x001a (26) unmapped bytes (21.5%)
+LocalHeader_1 EofMarker
+  [000075] Magic                          u8[2]                                  60 ea
+  [000077] HeaderSize                     u16 le           0                     00 00
+
+EOF

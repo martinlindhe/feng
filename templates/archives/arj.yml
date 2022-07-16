@@ -1,6 +1,7 @@
-# STATUS: 50%
+# STATUS: 80%
 #
 # MID: decode arj date+time format, should be MS-DOS format
+# MID: decode 8bit version format MinorMajor8Five
 
 references:
   - https://en.wikipedia.org/wiki/ARJ
@@ -17,7 +18,7 @@ magic:
 
 structs:
   header:
-    u8[2] Signature: 60 ea
+    u8[2] Magic: 60 ea
     u16 HeaderSize: ??
     u8 SizeWithExtraData: ??
     u8 Archiver version: ??
@@ -60,7 +61,7 @@ structs:
       eq 04: 40 bit key GOST
     u8 Last chapter: ??
 
-    if self.SizeWithExtraData == 0x22:
+    if self.SizeWithExtraData == 0x22:      # XXX sample please if != 0x22 and != 0x1E (no extra data)
       u8 Protection factor: ??
       u8 Flags (second series): ??
       u8[2] Reserved: ??
@@ -74,68 +75,79 @@ structs:
       u8[self.ExtHeaderSize] Ext Header data: ?? # XXX decode
 
   local_header:
-    u8[2] Signature: 60 ea
+    u8[2] Magic: 60 ea
     u16 HeaderSize: ??
-    if self.HeaderSize > 0:
-      u8 SizeWithExtraData: ??
-      u8 Archiver version: ??
-      u8 Minimum archiver version: ??
-      u8 Host OS:
-        eq 00: MS-DOS
-        eq 01: PRIMOS
-        eq 02: Unix
-        eq 03: Amiga
-        eq 04: Mac-OS
-        eq 05: OS/2
-        eq 06: Apple GS
-        eq 07: Atari ST
-        eq 08: NEXT
-        eq 09: VAX VMS
-        eq 0a: Win95
-        eq 0b: Win32
-      u8 Flags:
-        bit b0000_0001: Garbled
-        bit b0000_0010: Reserved1
-        bit b0000_0100: Volume
-        bit b0000_1000: Extfile
-        bit b0001_0000: Pathsym
-        bit b0010_0000: Backup
-        bit b1100_0000: Reserved2
-      u8 Compression method:
-        eq 00: Stored
-        eq 01: Compressed 1a (best)
-        eq 02: Compressed 1b
-        eq 03: Compressed 1c
-        eq 04: Compressed 2 (fastest)
-        eq 08: No data, no CRC
-        eq 09: No data
-      u8 File type:
-        eq 00: Binary
-        eq 01: 7-bit text
-        eq 03: Directory
-        eq 04: Volume label
-        eq 05: Chapter label
-      u8 Reserved: ??
+    if self.HeaderSize == 0:
+      label: '"EofMarker"'
+      parse: stop
 
-      u32 Modified time: ?? # XXX decode
+    u8 SizeWithExtraData: ??
+    u8 Archiver version: ??         # XXX parse.MinorMajor8Five
+    u8 Minimum archiver version: ?? # XXX parse.MinorMajor8Five
+    u8 Host OS:
+      eq 00: MS-DOS
+      eq 01: PRIMOS
+      eq 02: Unix
+      eq 03: Amiga
+      eq 04: Mac-OS
+      eq 05: OS/2
+      eq 06: Apple GS
+      eq 07: Atari ST
+      eq 08: NEXT
+      eq 09: VAX VMS
+      eq 0a: Win95
+      eq 0b: Win32
+    u8 Flags:
+      bit b0000_0001: Garbled
+      #bit b0000_0010: Reserved1
+      bit b0000_0100: Volume
+      bit b0000_1000: Extfile
+      bit b0001_0000: Pathsym
+      bit b0010_0000: Backup
+      #bit b1100_0000: Reserved2
+    u8 Compression method:
+      eq 00: Stored
+      eq 01: Compressed 1a (best)
+      eq 02: Compressed 1b
+      eq 03: Compressed 1c
+      eq 04: Compressed 2 (fastest)
+      eq 08: No data, no CRC
+      eq 09: No data
+    u8 File type:
+      eq 00: Binary
+      eq 01: 7-bit text
+      eq 03: Directory
+      eq 04: Volume label
+      eq 05: Chapter label
+    u8 Reserved: ??
 
-      u32 CompressedSize: ??
-      u32 Original size: ??
-      u32 Original file CRC: ??
-      u16 Filespec position in filename: ??
-      u16 File access mode: ??
-      u8 First chapter: ??
-      u8 Last chapter: ??
+    u32 Modified time: ?? # XXX decode parse.ArjDateTime
 
-      asciiz FileName: ??
-      asciiz File comment: ??
+    u32 CompressedSize: ??
+    u32 Uncompressed size: ??
+    u32 Uncompressed CRC: ??
+    u16 Filespec position in filename: ??
+    u16 File access mode: ??
+    u8 First chapter: ??
+    u8 Last chapter: ??
 
-      u32 CRC32: ??
-      u16 ExtHeaderSize: ??
-      if self.ExtHeaderSize:
-        u8[self.ExtHeaderSize] Ext Header data: ?? # XXX decode
+    if self.SizeWithExtraData == 0x2e:  # XXX sample pls if not 0x1e (no ext data), or 0x2e
+      u32 Extended file position: ??
+      # the following twelve bytes may be present in ARJ 2.62 and above:
+      u32 Access time: ??
+      u32 Creation time: ??
+      u32 Original file size: ??
 
-      raw:u8[self.CompressedSize] Compressed data: ??
+    asciiz FileName: ??
+    asciiz File comment: ??
+
+    u32 CRC32: ??
+    u16 ExtHeaderSize: ??
+    if self.ExtHeaderSize:
+      # NOTE: if ext header size > 0, it should follow here. not used in file format
+      u8[self.ExtHeaderSize] Ext Header data: ??
+
+    raw:u8[self.CompressedSize] Compressed data: ??
 
 layout:
   - header Header

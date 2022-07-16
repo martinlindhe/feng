@@ -1,8 +1,7 @@
 # STATUS: 1%
 
-# - HIGH: ArchiveVersion version: ?? # XXX custom types define!
-#         will be very good for readable templates
-#         will allow for impl. of built in advanced types like VersionMajorMinor16 (u8,u8)
+# - MAX: to progress format parse, need to handle packed u64 values as used by 7zip
+# - MID: ArchiveVersion version: ?? # XXX custom types define!
 
 references:
   - https://en.wikipedia.org/wiki/7z
@@ -28,7 +27,6 @@ types:
 
 structs:
   sig_header:
-    # SignatureHeader
     u8[6] Signature: c'7z' bc af 27 1c
 
     #ArchiveVersion Version: ?? # XXX custom struct define, this should become a built-in standard type "version16" byte 0=major, byte 1=minor
@@ -73,6 +71,18 @@ structs:
       eq 17: kEncodedHeader
       eq 18: kStartPos
       eq 19: kDummy
+    label: self.NID
+    #if self.NID == kHeader:
+      # XXX LZMA compressed data follows?
+    if self.NID == kEncodedHeader:
+      # XXX
+      pack_info PackInfo: ??
+
+  pack_info:
+    u8 NID: "06"  # XXX
+    u64 PackPos: ??             # XXX packed u64 value ...
+    #u64 PackStreamsCount: ??   # XXX packed u64 value ...
+    #u64 Size: ??               # XXX packed u64 value ...
 
 layout:
   - sig_header SignatureHeader
