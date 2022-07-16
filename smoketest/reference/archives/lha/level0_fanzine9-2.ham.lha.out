@@ -1,0 +1,23 @@
+# templates/archives/lha.yml
+Header_0 Level0
+  [000000] HeaderSize                     u8               36                    24
+  [000001] Checksum                       u8               70                    46
+  [000002] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000005] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000006] Signature                      ascii            -                     2d
+  [000007] CompressedSize                 u32 le           68379                 00 01 0b 1b
+  [00000b] UncompressedSize               u32 le           72350                 00 01 1a 9e
+  [00000f] File modified date             dosdate le       2056-07-20            98 f4
+  [000011] File modified time             dostime le       00:01:30              00 2f
+  [000013] Reserved                       u8               0                     00
+  [000014] HeaderLevel                    u8               0                     00
+  [000015] FilenameLength                 u8               14                    0e
+  [000016] Path and filename              ascii[14]        Fanzine9-2.HAM        46 61 6e 7a 69 6e 65 39 2d 32 2e 48 41 4d
+  [000024] Uncompressed CRC16             u16 le           38461                 96 3d
+  [000026] Compressed data                raw:u8[68379]                          32 b8 87 80 fd d6 22 fd ee 84 fc f7 bb dd 5d dc a7 7a ea 9a b0 5e b9 d2 ae 6e 6b 20 01 de b9 45 ...
+
+Header_1 EndMarker
+  [010b41] HeaderSize                     u8               0                     00
+
+EOF

@@ -1,0 +1,23 @@
+# templates/archives/lha.yml
+Header_0 Level0
+  [000000] HeaderSize                     u8               43                    2b
+  [000001] Checksum                       u8               135                   87
+  [000002] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000005] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000006] Signature                      ascii            -                     2d
+  [000007] CompressedSize                 u32 le           108675                00 01 a8 83
+  [00000b] UncompressedSize               u32 le           252992                00 03 dc 40
+  [00000f] File modified date             dosdate le       1993-07-18            1a f2
+  [000011] File modified time             dostime le       04:03:20              20 6a
+  [000013] Reserved                       u8               0                     00
+  [000014] HeaderLevel                    u8               0                     00
+  [000015] FilenameLength                 u8               21                    15
+  [000016] Path and filename              ascii[21]        ProTracker_030-SupXPK 50 72 6f 54 72 61 63 6b 65 72 5f 30 33 30 2d 53 75 70 58 50 4b
+  [00002b] Uncompressed CRC16             u16 le           44601                 ae 39
+  [00002d] Compressed data                raw:u8[108675]                         26 18 8d f7 af 77 ab 69 b7 7b 63 f3 a9 a1 34 d4 51 b4 31 8e 21 85 67 44 dd 75 8e 36 c5 1b 75 c2 ...
+
+Header_1 EndMarker
+  [01a8b0] HeaderSize                     u8               0                     00
+
+EOF

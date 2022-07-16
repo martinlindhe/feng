@@ -1,8 +1,6 @@
 # STATUS: 1%
 
 # Format used for optical disc images
-#
-# XXX this format has u16 and u32 LE+BE pair of values, use custom structs!
 
 references:
   - https://www.sweetscape.com/010editor/repository/files/ISO.bt

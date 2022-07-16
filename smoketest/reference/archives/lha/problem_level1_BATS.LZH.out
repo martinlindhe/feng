@@ -1,0 +1,446 @@
+# templates/archives/lha.yml
+Header_0 Level1
+  [000000] HeaderSize                     u8               37                    25
+  [000001] Checksum                       u8               160                   a0
+  [000002] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000005] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000006] Signature                      ascii            -                     2d
+  [000007] CompressedSize                 u32 le           534                   00 00 02 16
+  [00000b] UncompressedSize               u32 le           872                   00 00 03 68
+  [00000f] File modified date             dosdate le       2019-11-30            50 00
+  [000011] File modified time             dostime le       02:59:54              17 7b
+  [000013] Reserved                       u8               32                    20
+  [000014] HeaderLevel                    u8               1                     01
+  [000015] FilenameLength                 u8               12                    0c
+  [000016] Path and filename              ascii[12]        SHELLOUT.BAT          53 48 45 4c 4c 4f 55 54 2e 42 41 54
+  [000022] Uncompressed CRC16             u16 le           19613                 4c 9d
+  [000024] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [000025] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000027] Compressed data                raw:u8[534]                            02 33 62 9a d5 b6 dc 37 9d 83 ef fe d2 53 6c 10 81 4d c5 6f 1c ce 39 6d c5 71 c1 b7 43 6e 44 db ...
+
+Header_1 Level1
+  [00023d] HeaderSize                     u8               34                    22
+  [00023e] Checksum                       u8               159                   9f
+  [00023f] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000242] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000243] Signature                      ascii            -                     2d
+  [000244] CompressedSize                 u32 le           143                   00 00 00 8f
+  [000248] UncompressedSize               u32 le           207                   00 00 00 cf
+  [00024c] File modified date             dosdate le       2019-11-30            50 00
+  [00024e] File modified time             dostime le       02:59:54              17 7b
+  [000250] Reserved                       u8               32                    20
+  [000251] HeaderLevel                    u8               1                     01
+  [000252] FilenameLength                 u8               9                     09
+  [000253] Path and filename              ascii[9]         GOTO1.BAT             47 4f 54 4f 31 2e 42 41 54
+  [00025c] Uncompressed CRC16             u16 le           37763                 93 83
+  [00025e] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [00025f] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000261] Compressed data                raw:u8[143]                            00 8d 52 76 b1 b5 07 8f 42 c9 61 7e 42 69 0c 34 c6 cb 0e e0 73 15 0c e7 8d 68 d2 f5 2d b8 4b e3 ...
+
+Header_2 Level1
+  [0002f0] HeaderSize                     u8               34                    22
+  [0002f1] Checksum                       u8               210                   d2
+  [0002f2] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0002f5] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0002f6] Signature                      ascii            -                     2d
+  [0002f7] CompressedSize                 u32 le           272                   00 00 01 10
+  [0002fb] UncompressedSize               u32 le           480                   00 00 01 e0
+  [0002ff] File modified date             dosdate le       2019-11-30            50 00
+  [000301] File modified time             dostime le       02:59:54              17 7b
+  [000303] Reserved                       u8               32                    20
+  [000304] HeaderLevel                    u8               1                     01
+  [000305] FilenameLength                 u8               9                     09
+  [000306] Path and filename              ascii[9]         GOTO2.BAT             47 4f 54 4f 32 2e 42 41 54
+  [00030f] Uncompressed CRC16             u16 le           43020                 a8 0c
+  [000311] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [000312] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000314] Compressed data                raw:u8[272]                            01 11 5a 76 b1 b6 e1 c9 e0 45 39 17 28 a5 4d 8a 8f 14 b7 64 72 86 95 2e 07 1b eb 23 33 af a0 f9 ...
+
+Header_3 Level1
+  [000424] HeaderSize                     u8               31                    1f
+  [000425] Checksum                       u8               83                    53
+  [000426] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000429] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [00042a] Signature                      ascii            -                     2d
+  [00042b] CompressedSize                 u32 le           170                   00 00 00 aa
+  [00042f] UncompressedSize               u32 le           229                   00 00 00 e5
+  [000433] File modified date             dosdate le       2019-11-30            50 00
+  [000435] File modified time             dostime le       02:59:54              17 7b
+  [000437] Reserved                       u8               32                    20
+  [000438] HeaderLevel                    u8               1                     01
+  [000439] FilenameLength                 u8               6                     06
+  [00043a] Path and filename              ascii[6]         FH.BAT                46 48 2e 42 41 54
+  [000440] Uncompressed CRC16             u16 le           27150                 6a 0e
+  [000442] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [000443] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000445] Compressed data                raw:u8[170]                            00 bb 5a 7a d5 b5 21 31 f8 3a 7f fc c2 50 4c 08 c2 da 1a aa 82 c1 53 65 91 5d bf 7b 51 d6 d4 f7 ...
+
+Header_4 Level1
+  [0004ef] HeaderSize                     u8               32                    20
+  [0004f0] Checksum                       u8               95                    5f
+  [0004f1] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0004f4] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0004f5] Signature                      ascii            -                     2d
+  [0004f6] CompressedSize                 u32 le           370                   00 00 01 72
+  [0004fa] UncompressedSize               u32 le           598                   00 00 02 56
+  [0004fe] File modified date             dosdate le       2019-11-30            50 00
+  [000500] File modified time             dostime le       02:59:54              17 7b
+  [000502] Reserved                       u8               32                    20
+  [000503] HeaderLevel                    u8               1                     01
+  [000504] FilenameLength                 u8               7                     07
+  [000505] Path and filename              ascii[7]         CDD.BAT               43 44 44 2e 42 41 54
+  [00050c] Uncompressed CRC16             u16 le           21941                 55 b5
+  [00050e] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [00050f] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000511] Compressed data                raw:u8[370]                            01 85 62 9a d6 37 14 27 11 08 13 3f f7 81 05 4a 4a 51 c2 eb 80 d1 eb 24 5a 8f 48 96 4a 17 17 59 ...
+
+Header_5 Level1
+  [000683] HeaderSize                     u8               36                    24
+  [000684] Checksum                       u8               220                   dc
+  [000685] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000688] Compression method             ascii            0                     30
+           - None                         eq
+  [000689] Signature                      ascii            -                     2d
+  [00068a] CompressedSize                 u32 le           19                    00 00 00 13
+  [00068e] UncompressedSize               u32 le           19                    00 00 00 13
+  [000692] File modified date             dosdate le       2019-11-30            50 00
+  [000694] File modified time             dostime le       02:59:54              17 7b
+  [000696] Reserved                       u8               32                    20
+  [000697] HeaderLevel                    u8               1                     01
+  [000698] FilenameLength                 u8               11                    0b
+  [000699] Path and filename              ascii[11]        PATHADD.BAT           50 41 54 48 41 44 44 2e 42 41 54
+  [0006a4] Uncompressed CRC16             u16 le           2043                  07 fb
+  [0006a6] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [0006a7] NextExtendedHeaderSize         u16 le           0                     00 00
+  [0006a9] Compressed data                raw:u8[19]                             53 45 54 20 50 41 54 48 3d 25 50 41 54 48 25 3b 25 31 1a
+
+Header_6 Level1
+  [0006bc] HeaderSize                     u8               37                    25
+  [0006bd] Checksum                       u8               112                   70
+  [0006be] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0006c1] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0006c2] Signature                      ascii            -                     2d
+  [0006c3] CompressedSize                 u32 le           120                   00 00 00 78
+  [0006c7] UncompressedSize               u32 le           175                   00 00 00 af
+  [0006cb] File modified date             dosdate le       2019-11-30            50 00
+  [0006cd] File modified time             dostime le       02:59:54              17 7b
+  [0006cf] Reserved                       u8               32                    20
+  [0006d0] HeaderLevel                    u8               1                     01
+  [0006d1] FilenameLength                 u8               12                    0c
+  [0006d2] Path and filename              ascii[12]        CTRL_G&H.BAT          43 54 52 4c 5f 47 26 48 2e 42 41 54
+  [0006de] Uncompressed CRC16             u16 le           10260                 28 14
+  [0006e0] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [0006e1] NextExtendedHeaderSize         u16 le           0                     00 00
+  [0006e3] Compressed data                raw:u8[120]                            00 72 53 76 b1 a5 0b a8 b0 90 b2 d2 fd 45 a2 df 63 10 29 25 16 b3 27 1b 72 ed 0c 6e 21 b8 a0 78 ...
+
+Header_7 Level1
+  [00075b] HeaderSize                     u8               37                    25
+  [00075c] Checksum                       u8               160                   a0
+  [00075d] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000760] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000761] Signature                      ascii            -                     2d
+  [000762] CompressedSize                 u32 le           1385                  00 00 05 69
+  [000766] UncompressedSize               u32 le           3059                  00 00 0b f3
+  [00076a] File modified date             dosdate le       2019-11-30            50 00
+  [00076c] File modified time             dostime le       02:59:54              17 7b
+  [00076e] Reserved                       u8               32                    20
+  [00076f] HeaderLevel                    u8               1                     01
+  [000770] FilenameLength                 u8               12                    0c
+  [000771] Path and filename              ascii[12]        HEADCHEK.BAT          48 45 41 44 43 48 45 4b 2e 42 41 54
+  [00077d] Uncompressed CRC16             u16 le           49283                 c0 83
+  [00077f] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [000780] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000782] Compressed data                raw:u8[1385]                           04 a5 6b bb d1 a6 dc f7 c9 52 12 3d ff c6 a3 4a d5 44 ec 85 db 6d 65 44 59 8c e2 05 84 6c 43 05 ...
+
+Header_8 Level1
+  [000ceb] HeaderSize                     u8               33                    21
+  [000cec] Checksum                       u8               194                   c2
+  [000ced] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000cf0] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000cf1] Signature                      ascii            -                     2d
+  [000cf2] CompressedSize                 u32 le           904                   00 00 03 88
+  [000cf6] UncompressedSize               u32 le           2598                  00 00 0a 26
+  [000cfa] File modified date             dosdate le       2019-11-30            50 00
+  [000cfc] File modified time             dostime le       02:59:54              17 7b
+  [000cfe] Reserved                       u8               32                    20
+  [000cff] HeaderLevel                    u8               1                     01
+  [000d00] FilenameLength                 u8               8                     08
+  [000d01] Path and filename              ascii[8]         COPI.BAT              43 4f 50 49 2e 42 41 54
+  [000d09] Uncompressed CRC16             u16 le           32414                 7e 9e
+  [000d0b] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [000d0c] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000d0e] Compressed data                raw:u8[904]                            03 07 6a bb d1 b6 dc cb cf 02 7b ff 8c 11 6d 09 9d ce 5f 15 60 cc 26 92 72 2d a4 6a 64 95 b2 b0 ...
+
+Header_9 Level1
+  [001096] HeaderSize                     u8               32                    20
+  [001097] Checksum                       u8               106                   6a
+  [001098] Signature                      ascii[3]         -lh                   2d 6c 68
+  [00109b] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [00109c] Signature                      ascii            -                     2d
+  [00109d] CompressedSize                 u32 le           195                   00 00 00 c3
+  [0010a1] UncompressedSize               u32 le           258                   00 00 01 02
+  [0010a5] File modified date             dosdate le       2019-11-30            50 00
+  [0010a7] File modified time             dostime le       02:59:54              17 7b
+  [0010a9] Reserved                       u8               32                    20
+  [0010aa] HeaderLevel                    u8               1                     01
+  [0010ab] FilenameLength                 u8               7                     07
+  [0010ac] Path and filename              ascii[7]         CHD.BAT               43 48 44 2e 42 41 54
+  [0010b3] Uncompressed CRC16             u16 le           22208                 56 c0
+  [0010b5] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [0010b6] NextExtendedHeaderSize         u16 le           0                     00 00
+  [0010b8] Compressed data                raw:u8[195]                            00 d5 5b 9a b9 a6 a1 3c e4 9b bf ce 93 48 b2 68 30 5e 2d b8 d4 a1 32 f0 8c 0d b8 de 1a e3 d9 2c ...
+
+Header_10 Level1
+  [00117b] HeaderSize                     u8               31                    1f
+  [00117c] Checksum                       u8               172                   ac
+  [00117d] Signature                      ascii[3]         -lh                   2d 6c 68
+  [001180] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [001181] Signature                      ascii            -                     2d
+  [001182] CompressedSize                 u32 le           326                   00 00 01 46
+  [001186] UncompressedSize               u32 le           511                   00 00 01 ff
+  [00118a] File modified date             dosdate le       2019-11-30            50 00
+  [00118c] File modified time             dostime le       02:59:54              17 7b
+  [00118e] Reserved                       u8               32                    20
+  [00118f] HeaderLevel                    u8               1                     01
+  [001190] FilenameLength                 u8               6                     06
+  [001191] Path and filename              ascii[6]         CP.BAT                43 50 2e 42 41 54
+  [001197] Uncompressed CRC16             u16 le           26031                 65 af
+  [001199] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [00119a] NextExtendedHeaderSize         u16 le           0                     00 00
+  [00119c] Compressed data                raw:u8[326]                            01 62 63 bd 76 6d 29 09 f3 92 6f 7f fe 24 b2 3d 20 e8 89 cf 28 78 c7 1b 46 3e 1d a2 27 81 f2 53 ...
+
+Header_11 Level1
+  [0012e2] HeaderSize                     u8               31                    1f
+  [0012e3] Checksum                       u8               54                    36
+  [0012e4] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0012e7] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0012e8] Signature                      ascii            -                     2d
+  [0012e9] CompressedSize                 u32 le           202                   00 00 00 ca
+  [0012ed] UncompressedSize               u32 le           269                   00 00 01 0d
+  [0012f1] File modified date             dosdate le       2019-11-30            50 00
+  [0012f3] File modified time             dostime le       02:59:54              17 7b
+  [0012f5] Reserved                       u8               32                    20
+  [0012f6] HeaderLevel                    u8               1                     01
+  [0012f7] FilenameLength                 u8               6                     06
+  [0012f8] Path and filename              ascii[6]         DA.BAT                44 41 2e 42 41 54
+  [0012fe] Uncompressed CRC16             u16 le           25783                 64 b7
+  [001300] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [001301] NextExtendedHeaderSize         u16 le           0                     00 00
+  [001303] Compressed data                raw:u8[202]                            00 de 5a 9a d5 a6 e1 3c e8 3d ff ea 18 36 a5 1c 26 e2 6f 06 0b 98 a6 d8 4a d1 6d e8 9a be b9 86 ...
+
+Header_12 Level1
+  [0013cd] HeaderSize                     u8               31                    1f
+  [0013ce] Checksum                       u8               113                   71
+  [0013cf] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0013d2] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0013d3] Signature                      ascii            -                     2d
+  [0013d4] CompressedSize                 u32 le           300                   00 00 01 2c
+  [0013d8] UncompressedSize               u32 le           474                   00 00 01 da
+  [0013dc] File modified date             dosdate le       2019-11-30            50 00
+  [0013de] File modified time             dostime le       02:59:54              17 7b
+  [0013e0] Reserved                       u8               32                    20
+  [0013e1] HeaderLevel                    u8               1                     01
+  [0013e2] FilenameLength                 u8               6                     06
+  [0013e3] Path and filename              ascii[6]         DC.BAT                44 43 2e 42 41 54
+  [0013e9] Uncompressed CRC16             u16 le           45682                 b2 72
+  [0013eb] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [0013ec] NextExtendedHeaderSize         u16 le           0                     00 00
+  [0013ee] Compressed data                raw:u8[300]                            01 40 5a bd 76 8d 28 87 9d 07 df fd c0 95 02 31 ab c4 a0 f8 1b 6d 95 88 72 39 42 f0 5e 1e 76 f9 ...
+
+Header_13 Level1
+  [00151a] HeaderSize                     u8               33                    21
+  [00151b] Checksum                       u8               87                    57
+  [00151c] Signature                      ascii[3]         -lh                   2d 6c 68
+  [00151f] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [001520] Signature                      ascii            -                     2d
+  [001521] CompressedSize                 u32 le           488                   00 00 01 e8
+  [001525] UncompressedSize               u32 le           800                   00 00 03 20
+  [001529] File modified date             dosdate le       2019-11-30            50 00
+  [00152b] File modified time             dostime le       02:59:54              17 7b
+  [00152d] Reserved                       u8               32                    20
+  [00152e] HeaderLevel                    u8               1                     01
+  [00152f] FilenameLength                 u8               8                     08
+  [001530] Path and filename              ascii[8]         MDEL.BAT              4d 44 45 4c 2e 42 41 54
+  [001538] Uncompressed CRC16             u16 le           39376                 99 d0
+  [00153a] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [00153b] NextExtendedHeaderSize         u16 le           0                     00 00
+  [00153d] Compressed data                raw:u8[488]                            01 f3 62 bd 76 8d 37 0b f3 c0 9e ff f5 04 b6 82 37 3b 78 ad 0a 61 cb d2 ae d5 62 49 2e 33 e4 e5 ...
+
+Header_14 Level1
+  [001725] HeaderSize                     u8               33                    21
+  [001726] Checksum                       u8               177                   b1
+  [001727] Signature                      ascii[3]         -lh                   2d 6c 68
+  [00172a] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [00172b] Signature                      ascii            -                     2d
+  [00172c] CompressedSize                 u32 le           750                   00 00 02 ee
+  [001730] UncompressedSize               u32 le           2019                  00 00 07 e3
+  [001734] File modified date             dosdate le       2019-11-30            50 00
+  [001736] File modified time             dostime le       02:59:54              17 7b
+  [001738] Reserved                       u8               32                    20
+  [001739] HeaderLevel                    u8               1                     01
+  [00173a] FilenameLength                 u8               8                     08
+  [00173b] Path and filename              ascii[8]         MENU.BAT              4d 45 4e 55 2e 42 41 54
+  [001743] Uncompressed CRC16             u16 le           57856                 e2 00
+  [001745] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [001746] NextExtendedHeaderSize         u16 le           0                     00 00
+  [001748] Compressed data                raw:u8[750]                            02 a7 6b 9a ee ad 29 26 38 e4 86 7f ee d9 36 3d d2 30 1a 00 00 e0 ec 2d 2d 57 95 2b 2d 06 24 d7 ...
+
+Header_15 Level1
+  [001a36] HeaderSize                     u8               34                    22
+  [001a37] Checksum                       u8               248                   f8
+  [001a38] Signature                      ascii[3]         -lh                   2d 6c 68
+  [001a3b] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [001a3c] Signature                      ascii            -                     2d
+  [001a3d] CompressedSize                 u32 le           1821                  00 00 07 1d
+  [001a41] UncompressedSize               u32 le           4797                  00 00 12 bd
+  [001a45] File modified date             dosdate le       2019-11-30            50 00
+  [001a47] File modified time             dostime le       02:59:54              17 7b
+  [001a49] Reserved                       u8               32                    20
+  [001a4a] HeaderLevel                    u8               1                     01
+  [001a4b] FilenameLength                 u8               9                     09
+  [001a4c] Path and filename              ascii[9]         MENU1.BAT             4d 45 4e 55 31 2e 42 41 54
+  [001a55] Uncompressed CRC16             u16 le           48162                 bc 22
+  [001a57] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [001a58] NextExtendedHeaderSize         u16 le           0                     00 00
+  [001a5a] Compressed data                raw:u8[1821]                           05 d3 73 9b d5 a6 e4 f7 62 54 a2 53 3f f8 28 d5 b7 6c 4e 40 09 24 25 52 ef 31 8c 81 d0 1b 13 61 ...
+
+Header_16 Level1
+  [002177] HeaderSize                     u8               35                    23
+  [002178] Checksum                       u8               26                    1a
+  [002179] Signature                      ascii[3]         -lh                   2d 6c 68
+  [00217c] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [00217d] Signature                      ascii            -                     2d
+  [00217e] CompressedSize                 u32 le           676                   00 00 02 a4
+  [002182] UncompressedSize               u32 le           1906                  00 00 07 72
+  [002186] File modified date             dosdate le       2019-11-30            50 00
+  [002188] File modified time             dostime le       02:59:54              17 7b
+  [00218a] Reserved                       u8               32                    20
+  [00218b] HeaderLevel                    u8               1                     01
+  [00218c] FilenameLength                 u8               10                    0a
+  [00218d] Path and filename              ascii[10]        MENUS1.BAT            4d 45 4e 55 53 31 2e 42 41 54
+  [002197] Uncompressed CRC16             u16 le           45519                 b1 cf
+  [002199] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [00219a] NextExtendedHeaderSize         u16 le           0                     00 00
+  [00219c] Compressed data                raw:u8[676]                            02 6e 63 b6 da b4 d5 cf 8e 48 73 fe 74 9a 65 66 86 68 00 14 91 8c a1 bc 26 70 01 2d 05 c7 12 e0 ...
+
+Header_17 Level1
+  [002440] HeaderSize                     u8               35                    23
+  [002441] Checksum                       u8               1                     01
+  [002442] Signature                      ascii[3]         -lh                   2d 6c 68
+  [002445] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [002446] Signature                      ascii            -                     2d
+  [002447] CompressedSize                 u32 le           991                   00 00 03 df
+  [00244b] UncompressedSize               u32 le           3199                  00 00 0c 7f
+  [00244f] File modified date             dosdate le       2019-11-30            50 00
+  [002451] File modified time             dostime le       02:59:54              17 7b
+  [002453] Reserved                       u8               32                    20
+  [002454] HeaderLevel                    u8               1                     01
+  [002455] FilenameLength                 u8               10                    0a
+  [002456] Path and filename              ascii[10]        MENUS2.BAT            4d 45 4e 55 53 32 2e 42 41 54
+  [002460] Uncompressed CRC16             u16 le           30115                 75 a3
+  [002462] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [002463] NextExtendedHeaderSize         u16 le           0                     00 00
+  [002465] Compressed data                raw:u8[991]                            03 3e 6b 9a ee ad 36 ee 7c e2 47 7f e9 52 aa ed 94 45 cc 20 00 25 96 4e 03 2c 34 00 88 64 da 9c ...
+
+Header_18 Level1
+  [002844] HeaderSize                     u8               37                    25
+  [002845] Checksum                       u8               214                   d6
+  [002846] Signature                      ascii[3]         -lh                   2d 6c 68
+  [002849] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [00284a] Signature                      ascii            -                     2d
+  [00284b] CompressedSize                 u32 le           347                   00 00 01 5b
+  [00284f] UncompressedSize               u32 le           2139                  00 00 08 5b
+  [002853] File modified date             dosdate le       2019-11-30            50 00
+  [002855] File modified time             dostime le       02:59:54              17 7b
+  [002857] Reserved                       u8               32                    20
+  [002858] HeaderLevel                    u8               1                     01
+  [002859] FilenameLength                 u8               12                    0c
+  [00285a] Path and filename              ascii[12]        M_SCREEN.BAT          4d 5f 53 43 52 45 45 4e 2e 42 41 54
+  [002866] Uncompressed CRC16             u16 le           33891                 84 63
+  [002868] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [002869] NextExtendedHeaderSize         u16 le           0                     00 00
+  [00286b] Compressed data                raw:u8[347]                            01 36 5a 9a ee ad 2f f7 3a 0f 7f e5 e2 a0 44 12 e2 5e 3a cb 88 89 98 73 73 47 a7 7f 6d 87 6d a3 ...
+
+Header_19 Level1
+  [0029c6] HeaderSize                     u8               37                    25
+  [0029c7] Checksum                       u8               40                    28
+  [0029c8] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0029cb] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0029cc] Signature                      ascii            -                     2d
+  [0029cd] CompressedSize                 u32 le           278                   00 00 01 16
+  [0029d1] UncompressedSize               u32 le           622                   00 00 02 6e
+  [0029d5] File modified date             dosdate le       2019-11-30            50 00
+  [0029d7] File modified time             dostime le       02:59:54              17 7b
+  [0029d9] Reserved                       u8               32                    20
+  [0029da] HeaderLevel                    u8               1                     01
+  [0029db] FilenameLength                 u8               12                    0c
+  [0029dc] Path and filename              ascii[12]        PARAMDEM.BAT          50 41 52 41 4d 44 45 4d 2e 42 41 54
+  [0029e8] Uncompressed CRC16             u16 le           64921                 fd 99
+  [0029ea] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [0029eb] NextExtendedHeaderSize         u16 le           0                     00 00
+  [0029ed] Compressed data                raw:u8[278]                            01 18 5a 9a d6 44 a4 d8 e8 39 ff c8 21 40 89 33 50 2e 1b 2f 71 10 27 42 b6 14 58 1a f7 7b ae d2 ...
+
+Header_20 Level1
+  [002b03] HeaderSize                     u8               35                    23
+  [002b04] Checksum                       u8               168                   a8
+  [002b05] Signature                      ascii[3]         -lh                   2d 6c 68
+  [002b08] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [002b09] Signature                      ascii            -                     2d
+  [002b0a] CompressedSize                 u32 le           378                   00 00 01 7a
+  [002b0e] UncompressedSize               u32 le           610                   00 00 02 62
+  [002b12] File modified date             dosdate le       2019-11-30            50 00
+  [002b14] File modified time             dostime le       02:59:54              17 7b
+  [002b16] Reserved                       u8               32                    20
+  [002b17] HeaderLevel                    u8               1                     01
+  [002b18] FilenameLength                 u8               10                    0a
+  [002b19] Path and filename              ascii[10]        SERASE.BAT            53 45 52 41 53 45 2e 42 41 54
+  [002b23] Uncompressed CRC16             u16 le           58209                 e3 61
+  [002b25] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [002b26] NextExtendedHeaderSize         u16 le           0                     00 00
+  [002b28] Compressed data                raw:u8[378]                            01 87 62 9a d5 b6 dc 27 9e 04 ef fe d0 c1 68 42 6d 0d c5 2f 1c d1 a7 b4 c6 33 83 6e 86 e2 c0 9c ...
+
+Header_21 EndMarker
+  [002ca2] HeaderSize                     u8               0                     00
+
+EOF

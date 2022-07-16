@@ -1,21 +1,25 @@
 # templates/archives/lha.yml
-Header
-  [000000] Header size                    u8               52                    34
+Header_0 Level2
+  [000000] HeaderSize                     u8               52                    34
   [000001] Checksum                       u8               0                     00
   [000002] Signature                      ascii[3]         -lh                   2d 6c 68
   [000005] Compression method             ascii            0                     30
            - None                         eq
   [000006] Signature                      ascii            -                     2d
   [000007] CompressedSize                 u32 le           6                     00 00 00 06
-  [00000b] Original size                  u32 le           6                     00 00 00 06
+  [00000b] UncompressedSize               u32 le           6                     00 00 00 06
   [00000f] File modified date             dosdate le       2004-01-10            2f aa
   [000011] File modified time             dostime le       11:06:06              58 c3
-  [000013] Signature                      ascii                                  20
-  [000014] Header Level                   u8               2                     02
+  [000013] Reserved                       u8               32                    20
+  [000014] HeaderLevel                    u8               2                     02
   [000015] Uncompressed CRC16             u16 le           23092                 5a 34
   [000017] OS ID                          u8               85                    55
            - UNIX                         eq
-  [000018] Size of next extended header   u16 le           5                     00 05
-  [00001a] Uncompressed CRC16             u16 le           14336                 38 00
+  [000018] NextExtendedHeaderSize         u16 le           5                     00 05
+  [00001a] Compressed data                raw:u8[6]                              00 38 e0 09 00 01
 
-0x001f (31) unmapped bytes (52.5%)
+Header_1
+  [000020] HeaderSize                     u8               104                   68
+  [000021] Checksum                       u8               105                   69
+
+0x0019 (25) unmapped bytes (42.4%)

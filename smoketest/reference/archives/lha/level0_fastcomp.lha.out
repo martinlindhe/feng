@@ -1,0 +1,23 @@
+# templates/archives/lha.yml
+Header_0 Level0
+  [000000] HeaderSize                     u8               35                    23
+  [000001] Checksum                       u8               21                    15
+  [000002] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000005] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000006] Signature                      ascii            -                     2d
+  [000007] CompressedSize                 u32 le           1270                  00 00 04 f6
+  [00000b] UncompressedSize               u32 le           10336                 00 00 28 60
+  [00000f] File modified date             dosdate le       2032-12-22            69 96
+  [000011] File modified time             dostime le       03:09:04              19 22
+  [000013] Reserved                       u8               0                     00
+  [000014] HeaderLevel                    u8               0                     00
+  [000015] FilenameLength                 u8               13                    0d
+  [000016] Path and filename              ascii[13]        mod.fastcompo         6d 6f 64 2e 66 61 73 74 63 6f 6d 70 6f
+  [000023] Uncompressed CRC16             u16 le           62906                 f5 ba
+  [000025] Compressed data                raw:u8[1270]                           03 28 6b 77 16 36 d7 fb ff e9 c4 32 8a 2d 3e b4 67 6c e2 fc 68 21 58 b6 59 0a ad 9c 10 48 42 18 ...
+
+Header_1 EndMarker
+  [00051b] HeaderSize                     u8               0                     00
+
+EOF

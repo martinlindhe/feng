@@ -1,0 +1,65 @@
+# templates/archives/lha.yml
+Header_0 Level1
+  [000000] HeaderSize                     u8               34                    22
+  [000001] Checksum                       u8               156                   9c
+  [000002] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000005] Compression method             ascii            7                     37
+           - LZW, 64K sliding window. Static Huffman eq
+  [000006] Signature                      ascii            -                     2d
+  [000007] CompressedSize                 u32 le           3484                  00 00 0d 9c
+  [00000b] UncompressedSize               u32 le           12627                 00 00 31 53
+  [00000f] File modified date             dosdate le       2028-01-12            60 2c
+  [000011] File modified time             dostime le       04:23:26              22 ed
+  [000013] Reserved                       u8               32                    20
+  [000014] HeaderLevel                    u8               1                     01
+  [000015] FilenameLength                 u8               9                     09
+  [000016] Path and filename              ascii[9]         LHARK.TXT             4c 48 41 52 4b 2e 54 58 54
+  [00001f] Uncompressed CRC16             u16 le           41444                 a1 e4
+  [000021] OS ID                          u8               32                    20
+  [000022] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000024] Compressed data                raw:u8[3484]                           09 cf 7c 9b ad b6 e3 d1 ad 79 99 37 c7 2d 16 9e 62 2a 46 fa 4e 96 4b a1 dc 9b 6e 7f 1d 92 47 71 ...
+
+Header_1 Level1
+  [000dc0] HeaderSize                     u8               36                    24
+  [000dc1] Checksum                       u8               131                   83
+  [000dc2] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000dc5] Compression method             ascii            7                     37
+           - LZW, 64K sliding window. Static Huffman eq
+  [000dc6] Signature                      ascii            -                     2d
+  [000dc7] CompressedSize                 u32 le           626                   00 00 02 72
+  [000dcb] UncompressedSize               u32 le           1053                  00 00 04 1d
+  [000dcf] File modified date             dosdate le       2068-09-27            b1 3b
+  [000dd1] File modified time             dostime le       04:17:56              22 3c
+  [000dd3] Reserved                       u8               32                    20
+  [000dd4] HeaderLevel                    u8               1                     01
+  [000dd5] FilenameLength                 u8               11                    0b
+  [000dd6] Path and filename              ascii[11]        LHARK-A.INF           4c 48 41 52 4b 2d 41 2e 49 4e 46
+  [000de1] Uncompressed CRC16             u16 le           9954                  26 e2
+  [000de3] OS ID                          u8               32                    20
+  [000de4] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000de6] Compressed data                raw:u8[626]                            02 99 6b 9b b1 a5 34 37 1c 90 cf f7 ee 0a b2 7f 68 8c e1 63 a7 1d 1b c2 b1 fe 2b 16 08 f6 09 1c ...
+
+Header_2 Level1
+  [001058] HeaderSize                     u8               36                    24
+  [001059] Checksum                       u8               32                    20
+  [00105a] Signature                      ascii[3]         -lh                   2d 6c 68
+  [00105d] Compression method             ascii            7                     37
+           - LZW, 64K sliding window. Static Huffman eq
+  [00105e] Signature                      ascii            -                     2d
+  [00105f] CompressedSize                 u32 le           814                   00 00 03 2e
+  [001063] UncompressedSize               u32 le           1392                  00 00 05 70
+  [001067] File modified date             dosdate le       2068-10-03            b1 43
+  [001069] File modified time             dostime le       04:17:56              22 3c
+  [00106b] Reserved                       u8               32                    20
+  [00106c] HeaderLevel                    u8               1                     01
+  [00106d] FilenameLength                 u8               11                    0b
+  [00106e] Path and filename              ascii[11]        LHARK-B.INF           4c 48 41 52 4b 2d 42 2e 49 4e 46
+  [001079] Uncompressed CRC16             u16 le           29209                 72 19
+  [00107b] OS ID                          u8               32                    20
+  [00107c] NextExtendedHeaderSize         u16 le           0                     00 00
+  [00107e] Compressed data                raw:u8[814]                            03 33 6b bd 76 71 b4 e1 9e 78 94 f7 fd af 86 f4 4b 4e a5 c8 04 86 14 56 94 22 b9 52 eb 55 b4 d8 ...
+
+Header_3 EndMarker
+  [0013ac] HeaderSize                     u8               0                     00
+
+EOF

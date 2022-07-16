@@ -1,0 +1,24 @@
+# templates/archives/lha.yml
+Header_0 Level0
+  [000000] HeaderSize                     u8               37                    25
+  [000001] Checksum                       u8               120                   78
+  [000002] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000005] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000006] Signature                      ascii            -                     2d
+  [000007] CompressedSize                 u32 le           161826                00 02 78 22
+  [00000b] UncompressedSize               u32 le           620550                00 09 78 06
+  [00000f] File modified date             dosdate le       2028-09-05            61 25
+  [000011] File modified time             dostime le       03:09:04              19 22
+  [000013] Reserved                       u8               32                    20
+  [000014] HeaderLevel                    u8               0                     00
+  [000015] FilenameLength                 u8               12                    0c
+  [000016] Path and filename              ascii[12]        FALCON3G.TIF          46 41 4c 43 4f 4e 33 47 2e 54 49 46
+  [000022] Uncompressed CRC16             u16 le           644                   02 84
+  [000024] Compressed data                raw:u8[161826]                         41 00 00 1d 20 83 ba ee b6 49 1b 5f ee d5 5d e6 66 3b 13 a0 a0 da cd 83 a5 6e 4d ad 66 dd a6 e4 ...
+
+Header_1
+  [027846] HeaderSize                     u8               127                   7f
+  [027847] Checksum                       u8               247                   f7
+
+0x0038 (56) unmapped bytes (0.0%)

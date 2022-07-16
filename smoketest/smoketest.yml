@@ -34,7 +34,17 @@ input:
 
   - folder: archives/lha
     files:
-      - lha_001_tiny.lzh
+      - level0_endtheme.lha
+      - level0_fanzine9-2.ham.lha
+      - level0_fastcomp.lha
+      - level0_protracksuportxpk.lha
+      - level1_seven_files.lha
+      # WIP:
+      - problem_level0_falcngry.lzh   # 56 unmapped
+      - problem_level1_BATS.LZH       # 10870 unmapped
+      - problem_level1_LHARK.LZH      # 1530 unmapped
+      - problem_level1_MANUAL.LZH     # 20602 unmapped
+      - problem_level2_tiny.lzh       # 25 unmapped
 
   - folder: archives/lz4
     files:

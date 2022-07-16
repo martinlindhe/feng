@@ -1,0 +1,145 @@
+# templates/archives/lha.yml
+Header_0 Level1
+  [000000] HeaderSize                     u8               33                    21
+  [000001] Checksum                       u8               56                    38
+  [000002] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000005] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000006] Signature                      ascii            -                     2d
+  [000007] CompressedSize                 u32 le           463                   00 00 01 cf
+  [00000b] UncompressedSize               u32 le           852                   00 00 03 54
+  [00000f] File modified date             dosdate le       2030-01-31            63 c0
+  [000011] File modified time             dostime le       10:05:02              50 a1
+  [000013] Reserved                       u8               0                     00
+  [000014] HeaderLevel                    u8               1                     01
+  [000015] FilenameLength                 u8               8                     08
+  [000016] Path and filename              ascii[8]         hexify.c              68 65 78 69 66 79 2e 63
+  [00001e] Uncompressed CRC16             u16 le           10240                 28 00
+  [000020] OS ID                          u8               65                    41
+  [000021] NextExtendedHeaderSize         u16 le           10                    00 0a
+  [000023] Compressed data                raw:u8[463]                            02 68 65 78 69 66 79 ff 05 00 00 21 12 00 00 01 b6 62 bb d1 b6 a3 3e 7e f8 03 f9 50 ba 4b 31 3a ...
+
+Header_1 Level1
+  [0001f2] HeaderSize                     u8               33                    21
+  [0001f3] Checksum                       u8               135                   87
+  [0001f4] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0001f7] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0001f8] Signature                      ascii            -                     2d
+  [0001f9] CompressedSize                 u32 le           366                   00 00 01 6e
+  [0001fd] UncompressedSize               u32 le           593                   00 00 02 51
+  [000201] File modified date             dosdate le       2030-01-31            63 c0
+  [000203] File modified time             dostime le       10:05:02              50 a1
+  [000205] Reserved                       u8               0                     00
+  [000206] HeaderLevel                    u8               1                     01
+  [000207] FilenameLength                 u8               8                     08
+  [000208] Path and filename              ascii[8]         hexify.h              68 65 78 69 66 79 2e 68
+  [000210] Uncompressed CRC16             u16 le           15005                 3a 9d
+  [000212] OS ID                          u8               65                    41
+  [000213] NextExtendedHeaderSize         u16 le           10                    00 0a
+  [000215] Compressed data                raw:u8[366]                            02 68 65 78 69 66 79 ff 05 00 00 ee 45 00 00 01 6d 62 b7 8d b6 e2 5e 77 f0 0f 04 f0 37 21 06 ae ...
+
+Header_2 Level1
+  [000383] HeaderSize                     u8               38                    26
+  [000384] Checksum                       u8               103                   67
+  [000385] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000388] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000389] Signature                      ascii            -                     2d
+  [00038a] CompressedSize                 u32 le           497                   00 00 01 f1
+  [00038e] UncompressedSize               u32 le           1006                  00 00 03 ee
+  [000392] File modified date             dosdate le       2030-01-31            63 c0
+  [000394] File modified time             dostime le       10:05:02              50 a1
+  [000396] Reserved                       u8               0                     00
+  [000397] HeaderLevel                    u8               1                     01
+  [000398] FilenameLength                 u8               13                    0d
+  [000399] Path and filename              ascii[13]        hexify.readme         68 65 78 69 66 79 2e 72 65 61 64 6d 65
+  [0003a6] Uncompressed CRC16             u16 le           29719                 74 17
+  [0003a8] OS ID                          u8               65                    41
+  [0003a9] NextExtendedHeaderSize         u16 le           10                    00 0a
+  [0003ab] Compressed data                raw:u8[497]                            02 68 65 78 69 66 79 ff 05 00 00 41 9a 00 00 01 da 62 db b1 b6 a2 df 3f 7e 01 f1 51 0b 2b 99 2d ...
+
+Header_3 Level1
+  [00059c] HeaderSize                     u8               32                    20
+  [00059d] Checksum                       u8               241                   f1
+  [00059e] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0005a1] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0005a2] Signature                      ascii            -                     2d
+  [0005a3] CompressedSize                 u32 le           650                   00 00 02 8a
+  [0005a7] UncompressedSize               u32 le           1079                  00 00 04 37
+  [0005ab] File modified date             dosdate le       2030-01-31            63 c0
+  [0005ad] File modified time             dostime le       10:05:02              50 a1
+  [0005af] Reserved                       u8               0                     00
+  [0005b0] HeaderLevel                    u8               1                     01
+  [0005b1] FilenameLength                 u8               7                     07
+  [0005b2] Path and filename              ascii[7]         LICENSE               4c 49 43 45 4e 53 45
+  [0005b9] Uncompressed CRC16             u16 le           52624                 cd 90
+  [0005bb] OS ID                          u8               65                    41
+  [0005bc] NextExtendedHeaderSize         u16 le           10                    00 0a
+  [0005be] Compressed data                raw:u8[650]                            02 68 65 78 69 66 79 ff 05 00 00 e9 21 00 00 02 97 6b 9b ad 36 f4 3b 9d fc 01 f2 9c 56 a4 2b fe ...
+
+Header_4 Level1
+  [000848] HeaderSize                     u8               33                    21
+  [000849] Checksum                       u8               54                    36
+  [00084a] Signature                      ascii[3]         -lh                   2d 6c 68
+  [00084d] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [00084e] Signature                      ascii            -                     2d
+  [00084f] CompressedSize                 u32 le           211                   00 00 00 d3
+  [000853] UncompressedSize               u32 le           282                   00 00 01 1a
+  [000857] File modified date             dosdate le       2030-01-31            63 c0
+  [000859] File modified time             dostime le       10:05:02              50 a1
+  [00085b] Reserved                       u8               0                     00
+  [00085c] HeaderLevel                    u8               1                     01
+  [00085d] FilenameLength                 u8               8                     08
+  [00085e] Path and filename              ascii[8]         Makefile              4d 61 6b 65 66 69 6c 65
+  [000866] Uncompressed CRC16             u16 le           33501                 82 dd
+  [000868] OS ID                          u8               65                    41
+  [000869] NextExtendedHeaderSize         u16 le           10                    00 0a
+  [00086b] Compressed data                raw:u8[211]                            02 68 65 78 69 66 79 ff 05 00 00 15 d9 00 00 00 c1 5a 97 ad a7 0f e6 bf f0 07 fc 15 06 60 fc b8 ...
+
+Header_5 Level1
+  [00093e] HeaderSize                     u8               31                    1f
+  [00093f] Checksum                       u8               232                   e8
+  [000940] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000943] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000944] Signature                      ascii            -                     2d
+  [000945] CompressedSize                 u32 le           11052                 00 00 2b 2c
+  [000949] UncompressedSize               u32 le           19120                 00 00 4a b0
+  [00094d] File modified date             dosdate le       2030-01-31            63 c0
+  [00094f] File modified time             dostime le       10:05:02              50 a1
+  [000951] Reserved                       u8               0                     00
+  [000952] HeaderLevel                    u8               1                     01
+  [000953] FilenameLength                 u8               6                     06
+  [000954] Path and filename              ascii[6]         sample                73 61 6d 70 6c 65
+  [00095a] Uncompressed CRC16             u16 le           53372                 d0 7c
+  [00095c] OS ID                          u8               65                    41
+  [00095d] NextExtendedHeaderSize         u16 le           10                    00 0a
+  [00095f] Compressed data                raw:u8[11052]                          02 68 65 78 69 66 79 ff 05 00 00 97 da 00 00 21 75 8c e1 7b dd 5b 69 c9 d4 5f be 49 36 26 a2 25 ...
+
+Header_6 Level1
+  [00348b] HeaderSize                     u8               33                    21
+  [00348c] Checksum                       u8               15                    0f
+  [00348d] Signature                      ascii[3]         -lh                   2d 6c 68
+  [003490] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [003491] Signature                      ascii            -                     2d
+  [003492] CompressedSize                 u32 le           324                   00 00 01 44
+  [003496] UncompressedSize               u32 le           543                   00 00 02 1f
+  [00349a] File modified date             dosdate le       2030-01-31            63 c0
+  [00349c] File modified time             dostime le       10:05:02              50 a1
+  [00349e] Reserved                       u8               0                     00
+  [00349f] HeaderLevel                    u8               1                     01
+  [0034a0] FilenameLength                 u8               8                     08
+  [0034a1] Path and filename              ascii[8]         sample.c              73 61 6d 70 6c 65 2e 63
+  [0034a9] Uncompressed CRC16             u16 le           42788                 a7 24
+  [0034ab] OS ID                          u8               65                    41
+  [0034ac] NextExtendedHeaderSize         u16 le           10                    00 0a
+  [0034ae] Compressed data                raw:u8[324]                            02 68 65 78 69 66 79 ff 05 00 00 38 77 00 00 01 32 63 9b ad 35 a1 9c f7 e0 0f a1 fa c8 19 d0 d4 ...
+
+Header_7 EndMarker
+  [0035f2] HeaderSize                     u8               0                     00
+
+EOF

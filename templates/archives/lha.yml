@@ -1,5 +1,8 @@
-# STATUS: 5%
+# STATUS: 50%
 
+# - HI: level2_tiny.lzh does not fully map
+# - HI: need sample with level3 header
+# - HI: parse extended area: https://web.archive.org/web/20070818080110/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/ExtendArea.html
 # - LOW: dos time+date does not seem to be exactly right
 # - LOW: header checksum algorithm
 
@@ -24,72 +27,82 @@ magic:
 
 structs:
   header:
-    u8 Header size: ??          # seen 0x34
+    u8 HeaderSize: ??          # XXX for level3, this + Checksum is u16 WordSize
+    if self.HeaderSize == 0:
+      label: '"EndMarker"'
+      parse: stop
     u8 Checksum: ??             # xxx algorithm: This is low 1 byte of the total of each bytes of whole header without 2 bytes of the head. Header checksum is 0xC3 in the foregoing sample. (Total of each bytes of whole header without 2 bytes of the head is 0x07C3.)
     ascii[3] Signature: c'-lh'
     ascii Compression method:
       eq c'0': None
       eq c'1': LZW, 4K sliding window. Dynamic Huffman
       eq c'2': LZW, 8K sliding window. Dynamic Huffman
-      eq c'3': LZW, 8K sliding window. Static Huffman (lh3)
+      eq c'3': LZW, 8K sliding window. Static Huffman
       eq c'4': LZW, 4K sliding window. Static Huffman
-      eq c'5': LZW, 8K sliding window. Static Huffman (lh5)
+      eq c'5': LZW, 8K sliding window. Static Huffman
       eq c'6': LZW, 32K sliding window. Static Huffman
       eq c'7': LZW, 64K sliding window. Static Huffman
       default: invalid
     ascii Signature: "2d"  # -
     u32 CompressedSize: ??
-    u32 Original size: ??
+    u32 UncompressedSize: ??
     dosdate File modified date: ??    # XXX should maybe be 32-bit dos_datetime
     dostime File modified time: ??
 
+    if peek_i8(OFFSET + 2) == 0:
+      u8 FileAttributes: ?? # XXX map: https://web.archive.org/web/20061231183150/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/DataNotes.html#DosAttr
+    else:
+      u8 Reserved: ??
+    
+    u8 HeaderLevel: ?? # high byte of FileAttributes but always 00 in MS-DOS, so it is used for header level detection
 
-    # LEVEL 0 header:
-    #u8 File attributes: ??     # XXX ? flags? ms-dos file attributes. should be "20" for normal file
-    #u8 Header Level: "00" # must be 00 for "level 0 header"
-    #u8 Filename length: ??
-    #ascii[Filename length] Path and filename: ??
+    label: '"Level" + self.HeaderLevel'
 
-    # LEVEL 1 header:
-    # XXX variable size with filenames embedded...
-    # SEE https://web.archive.org/web/20070912142508/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/Level1Header.html
-    # NEED SAMPLES WITH LEVEL 1 HEADER
-
-
-
-
-    # LEVEL 2 header:
-    ascii Signature: "20" # space
-    u8 Header Level: "02" # must be 02 for "level 2 header"   XXX 02 for "level 3 header"
-    u16 Uncompressed CRC16: ??    # XXX ALSO LV3 header
-    u8 OS ID:                     # XXX ALSO LV3 header
-      eq 00: MS-DOS (generic)
-      eq 32: OS/2
-      eq 33: OS/386
-      eq 39: OS-9
-      eq 43: CP/M
-      eq 46: FLEX (OS for 6809)
-      eq 48: Human68K (OS for X68000)
-      eq 4A: Java VM
-      eq 4B: OS/68K
-      eq 4D: MS-DOS
-      eq 52: Runser (OS for FM-7)
-      eq 54: TownsOS (OS for FM-Towns)
-      eq 55: UNIX
-      eq 57: Windows NT
-      eq 58: XOSK
-      eq 6D: Macintosh developed by Apple
-      eq 77: Windows 95
-
-    u16 Size of next extended header: ??    # XXX ONLY Lv2 header
-
-    # XXX only LEVEL 3 headers:
-    #u32 Size of header: ??
-    #u32 Size of next extended header: ??
-
-    # BODY:
+    if either(self.HeaderLevel, 0, 1):
+      u8 FilenameLength: ??
+      ascii[self.FilenameLength] Path and filename: ??
+    
     u16 Uncompressed CRC16: ??
-    #u8[self.CompressedSize] Compressed data: ??
+
+    if either(self.HeaderLevel, 1, 2):
+      u8 OS ID:                     # XXX ALSO LV3 header
+        eq 00: MS-DOS (generic)
+        eq 32: OS/2
+        eq 33: OS/386
+        eq 39: OS-9
+        eq 43: CP/M
+        eq 46: FLEX (OS for 6809)
+        eq 48: Human68K (OS for X68000)
+        eq 4A: Java VM
+        eq 4B: OS/68K
+        eq 4D: MS-DOS
+        eq 52: Runser (OS for FM-7)
+        eq 54: TownsOS (OS for FM-Towns)
+        eq 55: UNIX
+        eq 57: Windows NT
+        eq 58: XOSK
+        eq 6D: Macintosh developed by Apple
+        eq 77: Windows 95
+
+    if either(self.HeaderLevel, 1, 2):
+      u16 NextExtendedHeaderSize: ??
+      #if self.NextExtendedHeaderSize > 0:
+      #  # XXX parse
+      #  u8[self.NextExtendedHeaderSize] ExtendedHeader: ??
+
+    if self.HeaderLevel == 3:
+      u32 Size of header: ??
+      u32 NextExtendedHeaderSize: ??
+
+    # XXX level0, 1: extended area is part of compressed data area?. TODO parse it
+    # XXX level1 has a different meaning for CompressedSize ... called SkipSize
+    #
+    # This is the sum of byte count of total of all extended headers and the byte
+    # count of the compressed file which is following this header. 
+    # Skip size is 0x0000000D in the foregoing sample. (The byte count of
+    # compressed file : 0 + Total of the byte count of each extended headers : 13)
+    raw:u8[self.CompressedSize] Compressed data: ??
 
 layout:
-  - header Header
+  - header[] Header
+

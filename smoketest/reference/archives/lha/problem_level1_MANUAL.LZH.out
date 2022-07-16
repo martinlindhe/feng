@@ -1,0 +1,47 @@
+# templates/archives/lha.yml
+Header_0 Level1
+  [000000] HeaderSize                     u8               35                    23
+  [000001] Checksum                       u8               223                   df
+  [000002] Signature                      ascii[3]         -lh                   2d 6c 68
+  [000005] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [000006] Signature                      ascii            -                     2d
+  [000007] CompressedSize                 u32 le           2467                  00 00 09 a3
+  [00000b] UncompressedSize               u32 le           4132                  00 00 10 24
+  [00000f] File modified date             dosdate le       1981-07-31            03 00
+  [000011] File modified time             dostime le       03:02:44              18 56
+  [000013] Reserved                       u8               32                    20
+  [000014] HeaderLevel                    u8               1                     01
+  [000015] FilenameLength                 u8               10                    0a
+  [000016] Path and filename              ascii[10]        MANUAL.EXE            4d 41 4e 55 41 4c 2e 45 58 45
+  [000020] Uncompressed CRC16             u16 le           12469                 30 b5
+  [000022] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [000023] NextExtendedHeaderSize         u16 le           0                     00 00
+  [000025] Compressed data                raw:u8[2467]                           08 9b 74 de fd d5 a6 9f fb ff d2 49 e9 69 4b 09 6d 69 55 e1 8f 8c 9c 6b ad a8 2a a8 8d a3 2a 68 ...
+
+Header_1 Level1
+  [0009c8] HeaderSize                     u8               37                    25
+  [0009c9] Checksum                       u8               66                    42
+  [0009ca] Signature                      ascii[3]         -lh                   2d 6c 68
+  [0009cd] Compression method             ascii            5                     35
+           - LZW, 8K sliding window. Static Huffman eq
+  [0009ce] Signature                      ascii            -                     2d
+  [0009cf] CompressedSize                 u32 le           20548                 00 00 50 44
+  [0009d3] UncompressedSize               u32 le           55276                 00 00 d7 ec
+  [0009d7] File modified date             dosdate le       2019-01-17            4d b1
+  [0009d9] File modified time             dostime le       03:02:54              18 5b
+  [0009db] Reserved                       u8               32                    20
+  [0009dc] HeaderLevel                    u8               1                     01
+  [0009dd] FilenameLength                 u8               12                    0c
+  [0009de] Path and filename              ascii[12]        SHAREMAN.ASC          53 48 41 52 45 4d 41 4e 2e 41 53 43
+  [0009ea] Uncompressed CRC16             u16 le           59744                 e9 60
+  [0009ec] OS ID                          u8               77                    4d
+           - MS-DOS                       eq
+  [0009ed] NextExtendedHeaderSize         u16 le           0                     00 00
+  [0009ef] Compressed data                raw:u8[20548]                          1c 08 83 b6 da c6 e3 91 d9 b8 e8 05 cf a1 b3 81 72 00 59 c6 dd 87 36 66 e3 17 01 b4 8d dd 9d 8a ...
+
+Header_2 EndMarker
+  [005a33] HeaderSize                     u8               0                     00
+
+EOF

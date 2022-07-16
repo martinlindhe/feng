@@ -241,7 +241,12 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 				end = ur.offset + 16
 				trail = " .."
 			}
-			res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, ur.offset+ur.length-1, ur.length, fl.rawData[ur.offset:end], trail)
+			lastOffset := ur.offset + ur.length - 1
+			if lastOffset != ur.offset {
+				res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, fl.rawData[ur.offset:end], trail)
+			} else {
+				res += fmt.Sprintf("  [%06x] u8 \t% 02x%s\n", ur.offset, fl.rawData[ur.offset:end], trail)
+			}
 		}
 	}
 
