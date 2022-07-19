@@ -1,0 +1,29 @@
+# templates/documents/ole_compound.yml
+Header
+  [000000] Magic                          u8[8]                                  d0 cf 11 e0 a1 b1 1a e1
+  [000008] CLSID                          u8[16]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  [000018] Minor version                  u16 le           59                    00 3b
+  [00001a] Major version                  u16 le           3                     00 03
+           - v3                           eq
+  [00001c] ByteOrder                      u16 le           65534                 ff fe
+           - little                       eq
+  [00001e] SectorShift                    u16 le           9                     00 09
+  [000020] MiniSectorShift                u16 le           6                     00 06
+  [000022] Reserved                       u8[6]                                  00 00 00 00 00 00
+  [000028] DirectorySectorCount           u32 le           0                     00 00 00 00
+  [00002c] FATSectorCount                 u32 le           1                     00 00 00 01
+  [000030] FirstDirectorySectorOffset     u32 le           15                    00 00 00 0f
+  [000034] TransactionSignatureNumber     u32 le           0                     00 00 00 00
+  [000038] MiniStreamCutoffSize           u32 le           4096                  00 00 10 00
+  [00003c] FistMiniFATSectorOffset        u32 le           2                     00 00 00 02
+  [000040] MiniFATSectorCount             u32 le           1                     00 00 00 01
+  [000044] FirstDIFATSectorLocation       u32 le           4294967294            ff ff ff fe
+  [000048] NumberOfDIFATSectors           i32 le           0                     00 00 00 00
+
+DIFAT sector chain
+  [00004c] Sector                         u32[109] le                            00 00 00 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ...
+
+FAT sector chain
+  [000200] Sector                         u32[128] le                            ff ff ff fd ff ff ff ff ff ff ff fe 00 00 00 04 00 00 00 05 00 00 00 06 00 00 00 07 00 00 00 08 ...
+
+0x2000 (8192) unmapped bytes (88.9%)

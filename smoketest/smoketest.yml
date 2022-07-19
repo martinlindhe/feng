@@ -115,7 +115,7 @@ input:
       - v4_sol-11-x-86_meta.sqlite
       - v4_sqlite3db.sqlite
 
-  - folder: documents/doc
+  - folder: documents/ole_compound
     files:
       - doc_001_word_document.doc
       - doc_002_winword.doc

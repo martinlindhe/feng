@@ -1,0 +1,69 @@
+# STATUS: 20%
+#
+# This is a OLE compound file, a container format holding a Microsoft Office document (Word, PowerPoint, Excel)
+#
+# HI: guid data type
+# HI: distinguish doc, pps, xls files
+
+references:
+  - https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-cfb/53989ce4-7b05-4f8d-829b-d08d6148375b            # [MS-CFB]: Compound File Binary File Format
+  - https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-ppt/6be79dde-33c1-4c1b-8ccc-4b2301c08662          # [MS-PPT]: PowerPoint (.ppt) Binary File Format
+  - https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-doc/ccd7b486-7881-484c-a137-51170af7cc22          # [MS-DOC]: Word (.doc) Binary File Format
+  # other implementations:
+  - https://www.sweetscape.com/010editor/repository/files/DOC.bt
+
+
+kind: container
+# .doc = Microsoft Word Document
+# .pps = Microsoft PowerPoint Slideshow
+# .ppt = Microsoft PowerPoint presentation
+# .pot = Microsoft PowerPoint template
+# .xls = Microsoft Excel Spreadsheet
+name: Microsoft OLE compound file (Office document)             # TODO able to set format name during parsing
+extensions: [.doc, .pps, .ppt, .xls]
+# XXX .pps, .ppt, .pot mime: application/vnd.ms-powerpoint      TODO able to set mimetype during parsing
+endian: little
+
+magic:
+  - offset: 0000
+    match: D0 CF 11 E0 A1 B1 1A E1
+
+structs:
+  header:
+    u8[8] Magic: D0 CF 11 E0 A1 B1 1A E1
+    u8[16] CLSID: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  # XXX null guid
+    u16 Minor version: ??
+    u16 Major version: 
+      eq 0003: v3
+      eq 0004: v4
+      default: invalid
+    u16 ByteOrder:
+      # only little endian is supported according to MS-CFB
+      eq FFFE: little
+      default: invalid
+    u16 SectorShift: ??
+    u16 MiniSectorShift: ??
+    u8[6] Reserved: ??
+    u32 DirectorySectorCount: ??      # FSINDEX xxx
+    u32 FATSectorCount: ??
+    u32 FirstDirectorySectorOffset: ??
+    u32 TransactionSignatureNumber: ??
+    u32 MiniStreamCutoffSize: ??
+    u32 FistMiniFATSectorOffset: ??
+    u32 MiniFATSectorCount: ??
+    u32 FirstDIFATSectorLocation: ??
+    i32 NumberOfDIFATSectors: ??
+
+  difat:
+    u32[109] Sector: ??
+
+  fat:
+    u32[128] Sector: ??
+
+
+layout:
+  - header Header
+  - difat DIFAT sector chain
+  - fat FAT sector chain
+
+  # XXX after fat should be the data for "directory sector chain"
