@@ -383,8 +383,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				panic("invalid input: " + es.Pattern.Value)
 			}
 
-			if parts[0] != "u8" {
-				panic(fmt.Sprintf("until directive don't support type '%s'", parts[0]))
+			kind := parts[0]
+			if kind != "u8" && kind != "ascii" {
+				panic(fmt.Sprintf("until directive don't support type '%s'", kind))
 			}
 
 			needle, err := value.ParseHexString(parts[2])
@@ -400,7 +401,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 			len := uint64(len(val))
 			if len > 0 {
-				es.Field.Kind = "u8"
+				es.Field.Kind = kind
 				es.Field.Range = fmt.Sprintf("%d", len)
 				es.Field.Label = parts[1]
 				fs.Fields = append(fs.Fields, Field{

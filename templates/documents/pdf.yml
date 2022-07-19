@@ -1,7 +1,9 @@
 # STATUS: 1%
 
 references:
+  - https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf # PDF 1.7 (ISO 32000-1:2008)
   - https://en.wikipedia.org/wiki/PDF
+  - https://www.sweetscape.com/010editor/repository/files/PDF.bt
 
 kind: document
 name: Portable Document Format
@@ -16,6 +18,8 @@ magic:
 structs:
   header:
     ascii[4] Signature: c'%PDF'
+    ascii Separator: c'-'
+    until: ascii Version 0d
 
 layout:
   - header Header
