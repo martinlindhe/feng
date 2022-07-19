@@ -8,9 +8,7 @@ STATUS: private draft work
 # Features
 - universal binary format template language (WIP)
 - command line print-out of binary file structure (WIP)
-- TODO: auto validate file checksums
-- TODO: extract data from file (currently only zlib streams is supported)
-- TODO: binwalk-type of program
+- extract raw and compressed data from file (zlib, deflate, lz4)
 
 
 # Command line tools
@@ -54,7 +52,6 @@ STATUS: private draft work
 
 
 - LATER: "binwalk" like feature ?
-
 
 
 - low prio TODO: terminal ui hex editor, like in formats cmd. proof of concept and dogfooding

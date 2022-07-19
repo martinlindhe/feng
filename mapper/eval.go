@@ -281,6 +281,27 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		}
 		return nil, fmt.Errorf("expected int, got %T", args[0])
 	}
+	functions["alignment"] = func(args ...interface{}) (interface{}, error) {
+		// 2 args: 1) size value, 2) alignment. return the alignment needed for size value to fit into "alignment"
+		// example: value 4, align 4. returns 0
+		// example: value 4, align 8. returns 4
+		if len(args) != 2 {
+			return nil, fmt.Errorf("expected exactly 2 argument")
+		}
+		v1, ok := args[0].(int)
+		if !ok {
+			return nil, fmt.Errorf("expected int, got %T", args[0])
+		}
+		v2, ok := args[1].(int)
+		if !ok {
+			return nil, fmt.Errorf("expected int, got %T", args[1])
+		}
+
+		i := (v2 - (v1 % v2)) % v2
+		log.Printf("aligned %d, %d => %d", v1, v2, i)
+		return i, nil
+	}
+
 	functions["offset"] = func(args ...interface{}) (interface{}, error) {
 		// 1 arg: name of variable. return its offset as int
 		if len(args) != 1 {

@@ -1,8 +1,9 @@
-# STATUS: 30%
+# STATUS: 100%
 
 references:
   - https://docs.microsoft.com/en-us/typography/opentype/spec/
   - https://en.wikipedia.org/wiki/OpenType
+  - https://www.sweetscape.com/010editor/repository/files/OpenType.bt
 
 kind: font
 name: OpenType font
@@ -17,12 +18,12 @@ magic:
 structs:
   header:
     u32 Magic: c'OTTO'
-    u16 NumTables: ??
-    u16 searchRange: ??
-    u16 entrySelector: ??
-    u16 rangeShift: ??
+    u16 TableCount: ??
+    u16 SearchRange: ??
+    u16 EntrySelector: ??
+    u16 RangeShift: ??
 
-  table_record:
+  table:
     ascii[4] Tag: ??
     label: self.Tag
 
@@ -32,8 +33,10 @@ structs:
 
     offset: self.Offset
     u8[self.Length] Data: ??
+
+    u8[alignment(self.Length, 4)] Padding: ??
     offset: restore
 
 layout:
   - header Header
-  - table_record[Header.NumTables] TableRecord
+  - table[Header.TableCount] Table

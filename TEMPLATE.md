@@ -60,6 +60,9 @@ peek_i16("0100")    hex string offset
 peek_i32(123)  = -1  returns i32 value from offset
 atoi("123")    = 123   returns integer from alphanumeric string
 otoi("123")    = 83    returns integer from octal numeric string (archives/tar)
+alignment(3,4) = 1     returns the number of bytes needed to align the first arg to the second arg
+
+
 
 # data types
 

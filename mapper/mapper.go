@@ -2,7 +2,6 @@ package mapper
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"io/fs"
@@ -12,6 +11,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
@@ -65,7 +66,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
-				log.Printf("--- use111d Label %s, restoring to %s", df.Label, baseLabel)
+				//log.Printf("--- used0 Label %s, restoring to %s", df.Label, baseLabel)
 				df.Label = baseLabel
 
 				if errors.Is(err, ParseStopError) {
@@ -90,7 +91,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 				*/
 				return err
 			}
-			feng.Yellow("--- used Label %s, restoring to %s\n", df.Label, baseLabel)
+			//feng.Yellow("--- used1 Label %s, restoring to %s\n", df.Label, baseLabel)
 			df.Label = baseLabel
 		}
 		return nil
@@ -114,11 +115,11 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
-				log.Printf("--- used2222 Label %s, restoring to %s", df.Label, baseLabel)
+				//log.Printf("--- used2 Label %s, restoring to %s", df.Label, baseLabel)
 				df.Label = baseLabel
 				return err
 			}
-			log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
+			//log.Printf("--- used3 Label %s, restoring to %s", df.Label, baseLabel)
 			df.Label = baseLabel
 		}
 		return nil
@@ -384,6 +385,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 
 			kind := parts[0]
+			label := parts[1]
 			if kind != "u8" && kind != "ascii" {
 				panic(fmt.Sprintf("until directive don't support type '%s'", kind))
 			}
@@ -397,13 +399,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 			val, err := readBytesUntilMarker(r, 4096, needle)
 			if err != nil {
-				return err
+				return errors.Wrapf(err, "%s at %06x", label, fl.offset)
 			}
 			len := uint64(len(val))
 			if len > 0 {
 				es.Field.Kind = kind
 				es.Field.Range = fmt.Sprintf("%d", len)
-				es.Field.Label = parts[1]
+				es.Field.Label = label
 				fs.Fields = append(fs.Fields, Field{
 					Offset: fl.offset,
 					Length: len,
@@ -441,7 +443,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				log.Printf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, dfParent.Label, es.Field.Label, val, err)
 			}
 			if err != nil {
-				return err
+				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 
 			// if known data pattern, see if it matches file data
@@ -472,7 +474,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		case "asciiz":
 			val, err := readBytesUntilZero(r)
 			if err != nil {
-				return err
+				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			len := uint64(len(val))
 			fs.Fields = append(fs.Fields, Field{
@@ -486,7 +488,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		case "utf16z":
 			val, err := readBytesUntilMarker(r, 2, []byte{0, 0})
 			if err != nil {
-				return err
+				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			// append terminator marker since readBytesUntilMarker() excludes it
 			val = append(val, []byte{0, 0}...)
@@ -590,7 +592,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 }
 
 // reads bytes from reader and returns them in network byte order (big endian)
-func readBytes(r io.Reader, totalLength, unitLength uint64, endian string) ([]byte, error) {
+func readBytes(r io.ReadSeeker, totalLength, unitLength uint64, endian string) ([]byte, error) {
 	if unitLength > 1 && endian == "" {
 		return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
 	}

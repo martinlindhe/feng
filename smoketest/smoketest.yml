@@ -1,3 +1,5 @@
+# feng-samples can be found at https://github.com/martinlindhe/feng-samples
+
 root: ../../feng-samples
 input:
   - folder: archives/7zip
@@ -131,6 +133,8 @@ input:
 
   - folder: fonts/otf
     files:
+      - example.otf
+      - NTBixa-Color.otf
       - otf_001.otf
 
   - folder: fonts/pfb

@@ -1,5 +1,7 @@
 # templates/documents/pdf.yml
 Header
   [000000] Signature                      ascii[4]         %PDF                  25 50 44 46
+  [000004] Separator                      ascii            -                     2d
+  [000005] Version                        ascii[3]         1.2                   31 2e 32
 
-0x431b (17179) unmapped bytes (100.0%)
+0x4317 (17175) unmapped bytes (100.0%)
