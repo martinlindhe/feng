@@ -226,6 +226,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	}
 
 	functions["atoi"] = func(args ...interface{}) (interface{}, error) {
+		// convert alphanumeric string to int
 		// 1 arg: string. return integer value
 		if len(args) != 1 {
 			return nil, fmt.Errorf("expected exactly 1 argument")
@@ -238,6 +239,37 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			return res, nil
 		}
 		return nil, fmt.Errorf("expected string, got %T", args[0])
+	}
+	functions["otoi"] = func(args ...interface{}) (interface{}, error) {
+		// convert octal numeric string to int
+		// 1 arg: string. return integer value
+		if len(args) != 1 {
+			return nil, fmt.Errorf("expected exactly 1 argument")
+		}
+		if v, ok := args[0].(string); ok {
+			v = strings.TrimRight(v, " ")
+			if v == "" {
+				return 0, nil
+			}
+			res, err := strconv.ParseInt(v, 8, 64)
+			if err != nil {
+				return nil, err
+			}
+			return int(res), nil
+		}
+		return nil, fmt.Errorf("expected string, got %T", args[0])
+	}
+	functions["ceil"] = func(args ...interface{}) (interface{}, error) {
+		// returns ceil of float64
+		// 1 arg: int. return integer value
+		if len(args) != 1 {
+			return nil, fmt.Errorf("expected exactly 1 argument")
+		}
+		if v, ok := args[0].(float64); ok {
+			res := math.Ceil(float64(v))
+			return int(res), nil
+		}
+		return nil, fmt.Errorf("expected int, got %T", args[0])
 	}
 	functions["abs"] = func(args ...interface{}) (interface{}, error) {
 		// 1 arg: integer. return absolute value

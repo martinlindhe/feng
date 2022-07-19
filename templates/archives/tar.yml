@@ -1,9 +1,9 @@
-# STATUS: 10%
+# STATUS: 50%
 #
 # For the extended "ustar" (unix standard tar) format, not the older "tar"
 
 # - MAX: could specify 2 details on a data field: meaning (uint32,crc32), encoding (ascii+octal)
-# - LOW: octal ascii parsing?
+# - LOW: octal ascii parsing and conversion (octal ascii number + unix timestamp) to present OctalModificationTime
 
 references:
   - https://en.wikipedia.org/wiki/Tar_(computing)
@@ -24,18 +24,19 @@ structs:
   # XXX The final block of an archive is padded out to full length with zeros.
   header:
     ascii[100] Filename: ??
-    ascii[8] File mode: ??     # XXX octal ascii number, like "000644 "
-    ascii[8] Owner ID: ??      # XXX octal ascii number
-    ascii[8] Group ID: ??      # XXX octal ascii number
-    ascii[12] File size in bytes (OCTAL): ?? # XXX octal ascii number, like "00000000002 "
-    ascii[12] Modification time (OCTAL): ?? # XXX (unix time) octal ascii number, like "14020143052 "
-    # special tar checksum format: The checksum is calculated by taking the sum of the unsigned byte values of the header record with the eight checksum bytes taken to be ASCII spaces (decimal value 32). It is stored as a six digit octal number with leading zeroes followed by a NUL and then a space
-    ascii[8] Checksum (OCTAL): ??      # XXX octal ascii ??? like "010577"
-    u8 File type:
-      # NOTE: only 0,1,2 is valid for classic tar, the rest is ustar only
+    label: self.Filename
+    ascii[8] FileMode: ??               # octal ascii number, like "000644 "
+    ascii[8] OwnerID: ??                # octal ascii number
+    ascii[8] GroupID: ??                # octal ascii number
+    ascii[12] OctalFileSize: ??         # octal ascii number, like "00000000002 "
+    ascii[12] OctalModificationTime: ?? # (unix time) octal ascii number, like "14020143052 "
+    ascii[8] OctalChecksum: ??          # octal ascii number, like "010577"
+    ascii FileType:
+      # classic tar:
       eq c'0': Normal file
       eq c'1': Hard link
       eq c'2': Symbolic link
+      # ustar extensions:
       eq c'3': Character special
       eq c'4': Block special
       eq c'5': Directory
@@ -43,22 +44,22 @@ structs:
       eq c'7': Contiguous file
       eq c'g': Global extended header with meta data (POSIX.1-2001)
       eq c'x': Extended header with meta data for the next file in the archive (POSIX.1-2001)
-      # A-Z: Vendor specific extensions (POSIX.1-1988)
-      default: invalid
-    ascii[100] Name of linked file: ??
+      # A-Z: Vendor specific extensions (POSIX.1-1988): TODO
+    ascii[100] LinkedFileName: ??
 
     # start of ustar header
-    ascii[6] Signature: c'ustar' 00
-    ascii[2] Version: c'00'
-    ascii[32] Owner name: ??
-    ascii[32] Group name: ??
-    ascii[8] Device major number: ?? # XXX octal ascii number
-    ascii[8] Device minor number: ?? # XXX octal ascii number
-    ascii[155] Filename prefix: ??
-    u8[12] Reserved: ??
+    ascii[6] Signature: ?? # c'ustar' 00
+    ascii[2] Version: ?? # c'00'
+    ascii[32] OwnerName: ??
+    ascii[32] GroupName: ??
+    ascii[8] OctalDeviceMajor: ??   # octal ascii number
+    ascii[8] OctalDeviceMinor: ??   # octal ascii number
+ #   ascii[155] FilenamePrefix: ??
+    u8[167] Reserved: ??    # XXX?
 
     # BODY XXX:
-    #u8[512] File data: ??
+    u8[ceil(otoi(self.OctalFileSize) / 512.0) * 512] File data: ??
+    # XXX pad to 512-byte align
 
 layout:
-  - header Header
+  - header[] Header

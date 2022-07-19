@@ -58,7 +58,8 @@ abs(-95)       = 95  returns absolute value
 peek_i16(123)  = -1  returns i16 value from offset
 peek_i16("0100")    hex string offset
 peek_i32(123)  = -1  returns i32 value from offset
-
+atoi("123")    = 123   returns integer from alphanumeric string
+otoi("123")    = 83    returns integer from octal numeric string (archives/tar)
 
 # data types
 
