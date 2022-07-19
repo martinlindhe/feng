@@ -7,6 +7,7 @@
 references:
   - https://www.sqlite.org/fileformat2.html
   - https://www.sweetscape.com/010editor/repository/files/SQLite.bt
+  - https://www.x-ways.net/winhex/templates/SQLite%20Header.tpl
 
 software:
   - https://www.sqlite.org/cli.html

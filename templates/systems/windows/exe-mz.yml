@@ -8,6 +8,7 @@ references:
   - https://wiki.osdev.org/MZ
   - https://moddingwiki.shikadi.net/wiki/EXE_Format
   - https://www.sweetscape.com/010editor/repository/files/EXE.bt
+  - https://www.x-ways.net/winhex/templates/DOS_exe.tpl
 
   # MZ-LE format: Linear Executable (Win VxD:s, and OS/2)
   - http://fileformats.archiveteam.org/wiki/Linear_Executable

@@ -61,11 +61,6 @@ STATUS: private draft work
 
 
 
-# SCRIPTING
-
-later: maybe https://mun-lang.org/ ?
-    has the needed native integer types
-
 
 
 # SIMILAR WORKS
@@ -111,6 +106,9 @@ malcat - has some form of binary templates
 
 
 http://www.nyangau.org/be/be.htm - TODO evaluate
+
+winhex templates:
+https://www.x-ways.net/winhex/templates/index.html
 
 
 http://wiki.xentax.com/index.php/Category:File_Format - Wiki documentation of many game file formats

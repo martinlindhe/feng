@@ -5,8 +5,11 @@
 
 references:
   - https://en.wikipedia.org/wiki/TIFF
+  # other implementations:
   - https://www.sweetscape.com/010editor/repository/files/TIF.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/TIFF.tcl
+  - https://www.x-ways.net/winhex/templates/TIFF%20File%20Format.tpl
+  - https://www.x-ways.net/winhex/templates/TIFF%20File%20IFD.tpl
 
 kind: image
 extensions: [.tiff, .tif]

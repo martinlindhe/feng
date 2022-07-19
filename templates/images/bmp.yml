@@ -11,9 +11,11 @@
 references:
   - https://en.wikipedia.org/wiki/BMP_file_format
   - https://www.fileformat.info/format/bmp/egff.htm
+  # other implementations:
   - incomplete https://github.com/synalysis/Grammars/blob/master/bitmap.grammar
   - incomplete https://github.com/HexFiend/HexFiend/blob/master/templates/Images/BMP.tcl
   - https://www.sweetscape.com/010editor/repository/files/BMP.bt
+  - https://www.x-ways.net/winhex/templates/BMP.tpl
 
 kind: image
 name: Microsoft Windows Bitmap
