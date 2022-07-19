@@ -1,0 +1,35 @@
+# STATUS: 10%
+
+# used in classic MacOS
+
+references:
+  - https://en.wikipedia.org/wiki/Preferred_Executable_Format
+  - https://web.archive.org/web/20020208214155/http://developer.apple.com/techpubs/mac/runtimehtml/RTArch-89.html
+
+kind: executable
+name: PEF executable
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'Joy!'
+
+structs:
+  header:
+    ascii[4] Magic: c'Joy!'
+    ascii[4] ContainerType: c'peff'
+    u32 Architecture: # XXX match on ascii
+      eq c'pwpc': PowerPC CFM
+      eq c'm68k': CFM-68K
+      default: invalid
+    u32 FormatVersion: ??
+    u32 DateTimeStamp: ?? # XXX format is Macintosh time-measurement scheme (that is, the number of seconds measured from January 1, 1904). 
+    u32 OldDefVersion: ??
+    u32 OldImpVersion: ??
+    u32 CurrentVersion: ??
+    u16 SectionCount: ??
+    u16 InstSectionCount: ??
+    u32 Reserved: ??
+
+layout:
+  - header Header

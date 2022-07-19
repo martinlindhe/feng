@@ -146,6 +146,7 @@ input:
   - folder: fonts/ttc
     files:
       - v1_mingliu.ttc
+      - v2_GillSans.ttc
 
   - folder: fonts/ttf
     files:
@@ -388,6 +389,10 @@ input:
   - folder: systems/macos/icns
     files:
       - workflowicon.icns
+
+  - folder: systems/macos/pef
+    files:
+      - ttc2ttf
 
   - folder: systems/macos/stuffit
     files:

@@ -1,0 +1,16 @@
+# templates/systems/macos/pef.yml
+Header
+  [000000] Magic                          ascii[4]         Joy!                  4a 6f 79 21
+  [000004] ContainerType                  ascii[4]         peff                  70 65 66 66
+  [000008] Architecture                   u32 be           1886875747            70 77 70 63
+           - PowerPC CFM                  eq
+  [00000c] FormatVersion                  u32 be           1                     00 00 00 01
+  [000010] DateTimeStamp                  u32 be           0                     00 00 00 00
+  [000014] OldDefVersion                  u32 be           0                     00 00 00 00
+  [000018] OldImpVersion                  u32 be           0                     00 00 00 00
+  [00001c] CurrentVersion                 u32 be           0                     00 00 00 00
+  [000020] SectionCount                   u16 be           3                     00 03
+  [000022] InstSectionCount               u16 be           2                     00 02
+  [000024] Reserved                       u32 be           0                     00 00 00 00
+
+0x0b00 (2816) unmapped bytes (98.6%)
