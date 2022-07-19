@@ -112,8 +112,8 @@ input:
 
   - folder: databases/sqlite
     files:
-      - sol-11-x-86_meta.sqlite
-      - sqlite3db.sqlite
+      - v4_sol-11-x-86_meta.sqlite
+      - v4_sqlite3db.sqlite
 
   - folder: documents/doc
     files:

@@ -8,12 +8,13 @@ Header
   [000015] Max index embed                u8               64                    40
   [000016] Min index embed                u8               32                    20
   [000017] Min table embed                u8               32                    20
-  [000018] Change count                   u32 be           15                    00 00 00 0f
-  [00001c] Database size                  u32 be           5                     00 00 00 05
+  [000018] Change count                   u32 be           3                     00 00 00 03
+  [00001c] Database size                  u32 be           2                     00 00 00 02
   [000020] Freelist trunk page            u32 be           0                     00 00 00 00
   [000024] Freelist page count            u32 be           0                     00 00 00 00
-  [000028] Schema cookie                  u32 be           3                     00 00 00 03
+  [000028] Schema cookie                  u32 be           1                     00 00 00 01
   [00002c] Schema file format             u32 be           4                     00 00 00 04
+           - V4                           eq
   [000030] Page cache size                u32 be           0                     00 00 00 00
   [000034] Top root page                  u32 be           0                     00 00 00 00
   [000038] TextEncoding                   u32 be           1                     00 00 00 01
@@ -22,7 +23,16 @@ Header
   [000040] Incremental vacuum             u32 be           0                     00 00 00 00
   [000044] Application ID                 u32 be           0                     00 00 00 00
   [000048] Reserved                       u8[20]                                 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-  [00005c] Version valid for              u32 be           15                    00 00 00 0f
-  [000060] SQLite version number          u32 be           3031001               00 2e 3f d9
+  [00005c] Version valid for              u32 be           3                     00 00 00 03
+  [000060] SQLite version number          u32 be           3008010               00 2d e6 0a
 
-0x4f9c (20380) unmapped bytes (99.5%)
+BTreeHeader
+  [000064] BTreeType                      u8               13                    0d
+           - leaf table b-tree page       eq
+  [000065] FreeBlockOffset                u16 be           0                     00 00
+  [000067] CellCount                      u16 be           1                     00 01
+  [000069] CellContentOffset              u16 be           4026                  0f ba
+  [00006b] FragmentedFreeBytes            u8               0                     00
+  [00006c] RightMostPointer               u32 be           263847936             0f ba 00 00
+
+0x1f90 (8080) unmapped bytes (98.6%)
