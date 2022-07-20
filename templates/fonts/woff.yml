@@ -1,13 +1,16 @@
-# STATUS: 1%
+# STATUS: 80%
+
+# HI: can we reconstruct the embedded font data into a TTF ?
 
 references:
   - https://en.wikipedia.org/wiki/Web_Open_Font_Format
+  - https://www.w3.org/TR/WOFF/Overview.html
 
 kind: font
 name: Woff font
 extensions: [.woff]
-mime: font/otf
-endian: big # XXX
+mime: font/woff
+endian: big
 
 magic:
   - offset: 0000
@@ -16,6 +19,39 @@ magic:
 structs:
   header:
     ascii[4] Magic: c'wOFF'
+    u32 Flavor:
+      # other flavors may exist
+      eq c'OTTO': OTTO
+      eq 0001_0000: TrueType
+    u32 Length: ??
+    u16 TableCount: ??
+    u16 Reserved: ??
+    u32 TotalSfntSize: ??
+    u16 MajorVersion: ??
+    u16 MinorVersion: ??
+    u32 MetaOffset: ??
+    u32 MetaLength: ??
+    u32 MetaUncompressedLength: ??
+    u32 PrivateOffset: ??
+    u32 PrivateLength: ??
+
+  tbl_dir:
+    ascii[4] Tag: ??
+    u32 Offset: ??
+    u32 CompressedLength: ??
+    u32 OriginalLength: ??
+    u32 OriginalChecksum: ??
+    offset: self.Offset
+    if self.CompressedLength > self.OriginalLength:
+      data: invalid
+    if self.OriginalLength == self.CompressedLength:
+      raw:u8[self.OriginalLength] Data: ??
+    else:
+      # compressed
+      compressed:zlib[self.CompressedLength] Data: ??
+    u8[alignment(self.CompressedLength, 4)] Padding: ??
+    offset: restore
 
 layout:
   - header Header
+  - tbl_dir[Header.TableCount] TableDirectory

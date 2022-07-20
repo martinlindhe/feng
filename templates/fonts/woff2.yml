@@ -2,11 +2,12 @@
 
 references:
   - https://en.wikipedia.org/wiki/Web_Open_Font_Format
+  - https://www.w3.org/TR/WOFF2/
 
 kind: font
 name: Woff2 font
 extensions: [.woff2]
-mime: font/otf
+mime: font/woff2
 endian: big # XXX
 
 magic:
