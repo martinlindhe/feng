@@ -5,50 +5,60 @@ VERSION 0 - DRAFT. JULY 2022
 
 # directives
 
-    data: invalid       invalidates the file
+```
+data: invalid                           invalidates the file
+data: unseen                            marks data as previously unseen, asking the user to submit a sample at the end of parsing
 
-    endian: big         big/little. set endian
+endian: big                             set endian to big/little
 
-    label: '"DIRENTRY"'                     set label decoration for the current struct
-    label: self.Key + " = " self.Value      evaluate strings
+label: '"DIRENTRY"'                     set label decoration for the current struct
+label: self.Key + " = " self.Value      evaluate strings
 
-    offset: self.BaseOffset       set offset to evaluated data field
+offset: self.BaseOffset                 set offset to evaluated struct field
 
-    parse: stop          stops parsing. useful for custom end-of-stream conditions (CURRENTLY NOT NEEDED. MAY BE REMOVED)
-
+parse: stop                             stops parsing. used to signal custom end-of-stream conditions
+```
 
 # endianness
 
 on a single field:
 
-    be:filetime   Time: ??
+```
+be:filetime   Time: ??
+```
 
-on a block:
-    endian: big
-    u16 A: ??
-    u32 B: ??
-    endian: little
+until another directive:
 
+```
+endian: big
+u16 Big A: ??
+u16 Big B: ??
+endian: little
+u16 Little A: ??
+```
 
 
 # pre-defined values
 
-    FILE_SIZE           the file size in bytes
-    OFFSET              current offset
+```
+FILE_SIZE           the file size in bytes
+OFFSET              current offset
+field.len           field length  # XXX BROKEN/UNUSED
+self                evaluates to the current struct
+self.index          slice-based iteration index, 0-based
+```
 
-    field.len           field length  # XXX BROKEN/UNUSED
 
-    self.index        slice-based iteration index, 0-based
+# required byte sequences
 
+You can specify a required byte sequence like this
+```
+ascii[2] Magic:    c'PK'
 
-# constants
+u16 TYPE: 00 01 ff
+```
 
-    ascii[2] BIG:    c'MM'
-    ascii[2] LITTLE: c'II'
-
-    u16 RES_STRING_POOL_TYPE: 00 01
-
-Constants is always expressed in network byte order
+Hex byte strings is always expressed in network byte order
 
 
 # built-in functions
@@ -136,39 +146,29 @@ used by images/jpeg
 
 NOTE: variables used in if-statements cannot contain spaces
 
-    if self.Signature == BIG:   # where big is a constant or a eq pattern type value
-      ...
+```
+if self.Signature == BIG:   # where big is a constant or a eq pattern type value
+  ...
 
-    if self.Signature == 5:
-      ...
+if self.Signature == 5:
+  ...
 
-    # example from bmp.yml
-    u32 HeaderSize:
-      eq 0000_000c: V2   # V2 automatically becomes a constant
-      eq 0000_0028: V3
-      eq 0000_006c: V4
-      eq 0000_007c: V5
-      default: invalid
+# example from bmp.yml
+u32 HeaderSize:
+  eq 0000_000c: V2   # V2 automatically becomes a constant
+  eq 0000_0028: V3
+  eq 0000_006c: V4
+  eq 0000_007c: V5
+  default: invalid
 
-    if self.HeaderSize in {V3, V4, V5}:
-      i32 Width: ??
-
-
-    # example from cab.yml
-    u16 Flags:
-      bit b00000000_00000100: ReservePresent  # ReservePresent automatically becomes a constant
-
-    if self.Flags & ReservePresent:
-      u16 cbCFHeader: ??  # size of per-cabinet reserved area
+if self.HeaderSize in {V3, V4, V5}:
+  i32 Width: ??
 
 
-# loops (TODO)
+# example from cab.yml
+u16 Flags:
+  bit b00000000_00000100: ReservePresent  # ReservePresent automatically becomes a constant
 
-TODO consider lz4, where there is N data blocks and the last one has DataSize == 0.
-
-    u32 DataSize:
-      bit b0111_1111_11111111_11111111_11111111: DataSize
-      bit b1000_0000_00000000_00000000_00000000: Uncompressed
-    u8[self.DataSize.DataSize] Data: ??
-
-How to parse this?
+if self.Flags & ReservePresent:
+  u16 cbCFHeader: ??
+```

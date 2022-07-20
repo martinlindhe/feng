@@ -14,7 +14,7 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-var DEBUG_EVAL = false
+var DEBUG_EVAL = true
 
 // an expression failed to evaluate
 type EvaluateError struct {
@@ -92,11 +92,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 
 	in = strings.ReplaceAll(in, "self.", df.Label+".")
 
-	if DEBUG_EVAL {
-		feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
-		//spew.Dump(variables)
-	}
-
 	// fast path: if "in" looks like decimal number just convert it
 	if v, err := strconv.Atoi(in); err == nil {
 		return uint64(v), nil
@@ -128,10 +123,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			} else {
 				mapped[field.Format.Label] = field.Present()
 			}
-
-			if DEBUG_EVAL {
-				log.Printf("mapped variable %s values %v => %v", field.Format.Label, field.Value, mapped[field.Format.Label])
-			}
 		}
 		mapped["index"] = int(layout.Index)
 		variables[layout.Label] = mapped
@@ -141,6 +132,11 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	for _, constant := range fl.DS.Constants {
 		//feng.Green("adding constant %s\n", constant.Field.Label)
 		variables[constant.Field.Label] = int(constant.Value)
+	}
+
+	if DEBUG_EVAL {
+		feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
+		spew.Dump(variables)
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)

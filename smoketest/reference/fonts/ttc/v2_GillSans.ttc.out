@@ -1,0 +1,130 @@
+# templates/fonts/ttc.yml
+V1Header
+  [000000] Magic                          ascii[4]         ttcf                  74 74 63 66
+  [000004] MajorVersion                   u16 be           2                     00 02
+  [000006] MinorVersion                   u16 be           0                     00 00
+  [000008] NumFonts                       u32 be           9                     00 00 00 09
+
+FontTable_0
+  [00000c] Offset                         u32 be           60                    00 00 00 3c
+  [00003c] NumTables                      u16 be           1                     00 01
+  [00003e] SearchRange                    u16 be           0                     00 00
+  [000040] EntrySelector                  u16 be           21                    00 15
+  [000042] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [000044] Offset                         u32 be           262224                00 04 00 50
+  [000048] Tag                            ascii[4]         GPOS                  47 50 4f 53
+  [00004c] Checksum                       u32 be           3269325432            c2 dd f2 78
+  [000050] Length                         u32 be           26712                 00 00 68 58
+
+FontTable_1
+  [000010] Offset                         u32 be           408                   00 00 01 98
+  [000198] NumTables                      u16 be           1                     00 01
+  [00019a] SearchRange                    u16 be           0                     00 00
+  [00019c] EntrySelector                  u16 be           18                    00 12
+  [00019e] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [0001a0] Offset                         u32 be           262176                00 04 00 20
+  [0001a4] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [0001a8] Checksum                       u32 be           2643102612            9d 8a 8b 94
+  [0001ac] Length                         u32 be           4232                  00 00 10 88
+
+FontTable_2
+  [000014] Offset                         u32 be           708                   00 00 02 c4
+  [0002c4] NumTables                      u16 be           1                     00 01
+  [0002c6] SearchRange                    u16 be           0                     00 00
+  [0002c8] EntrySelector                  u16 be           16                    00 10
+  [0002ca] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [0002cc] Offset                         u32 be           262144                00 04 00 00
+  [0002d0] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [0002d4] Checksum                       u32 be           776400246             2e 46 ed 76
+  [0002d8] Length                         u32 be           4328                  00 00 10 e8
+
+FontTable_3
+  [000018] Offset                         u32 be           976                   00 00 03 d0
+  [0003d0] NumTables                      u16 be           1                     00 01
+  [0003d2] SearchRange                    u16 be           0                     00 00
+  [0003d4] EntrySelector                  u16 be           16                    00 10
+  [0003d6] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [0003d8] Offset                         u32 be           262144                00 04 00 00
+  [0003dc] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [0003e0] Checksum                       u32 be           3125210486            ba 46 ed 76
+  [0003e4] Length                         u32 be           4424                  00 00 11 48
+
+FontTable_4
+  [00001c] Offset                         u32 be           1244                  00 00 04 dc
+  [0004dc] NumTables                      u16 be           1                     00 01
+  [0004de] SearchRange                    u16 be           0                     00 00
+  [0004e0] EntrySelector                  u16 be           20                    00 14
+  [0004e2] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [0004e4] Offset                         u32 be           262208                00 04 00 40
+  [0004e8] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [0004ec] Checksum                       u32 be           652270961             26 e0 dd 71
+  [0004f0] Length                         u32 be           4520                  00 00 11 a8
+
+FontTable_5
+  [000020] Offset                         u32 be           1576                  00 00 06 28
+  [000628] NumTables                      u16 be           1                     00 01
+  [00062a] SearchRange                    u16 be           0                     00 00
+  [00062c] EntrySelector                  u16 be           19                    00 13
+  [00062e] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [000630] Offset                         u32 be           262192                00 04 00 30
+  [000634] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [000638] Checksum                       u32 be           1390527345            52 e1 c3 71
+  [00063c] Length                         u32 be           4616                  00 00 12 08
+
+FontTable_6
+  [000024] Offset                         u32 be           1892                  00 00 07 64
+  [000764] NumTables                      u16 be           1                     00 01
+  [000766] SearchRange                    u16 be           0                     00 00
+  [000768] EntrySelector                  u16 be           20                    00 14
+  [00076a] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [00076c] Offset                         u32 be           262208                00 04 00 40
+  [000770] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [000774] Checksum                       u32 be           1424175217            54 e3 30 71
+  [000778] Length                         u32 be           4712                  00 00 12 68
+
+FontTable_7
+  [000028] Offset                         u32 be           2224                  00 00 08 b0
+  [0008b0] NumTables                      u16 be           1                     00 01
+  [0008b2] SearchRange                    u16 be           0                     00 00
+  [0008b4] EntrySelector                  u16 be           20                    00 14
+  [0008b6] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [0008b8] Offset                         u32 be           262208                00 04 00 40
+  [0008bc] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [0008c0] Checksum                       u32 be           2867396979            aa e9 01 73
+  [0008c4] Length                         u32 be           4808                  00 00 12 c8
+
+FontTable_8
+  [00002c] Offset                         u32 be           2556                  00 00 09 fc
+  [0009fc] NumTables                      u16 be           1                     00 01
+  [0009fe] SearchRange                    u16 be           0                     00 00
+  [000a00] EntrySelector                  u16 be           19                    00 13
+  [000a02] RangeShift                     u16 be           256                   01 00
+
+Table_0 GPOS
+  [000a04] Offset                         u32 be           262192                00 04 00 30
+  [000a08] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [000a0c] Checksum                       u32 be           2867528051            aa eb 01 73
+  [000a10] Length                         u32 be           4904                  00 00 13 28
+
+V2Header
+  [000030] dsigTag                        u32 be           0                     00 00 00 00
+  [000034] dsigLength                     u32 be           0                     00 00 00 00
+  [000038] dsigOffset                     u32 be           0                     00 00 00 00
+
+0x12abb0 (1223600) unmapped bytes (100.0%)

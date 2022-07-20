@@ -8,8 +8,7 @@
 - LOW: error if field name is reserved, like "offset", "len", "FILE_SIZE"
 
 
-# TEMPLATE DECORATION
-- MID: template directive for "SAMPLE PLEASE!"
+
 
 
 

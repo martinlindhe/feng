@@ -1,8 +1,8 @@
 # templates/fonts/ttc.yml
-Header
+V1Header
   [000000] Magic                          ascii[4]         ttcf                  74 74 63 66
-  [000004] Major version                  u16 be           1                     00 01
-  [000006] Minor version                  u16 be           0                     00 00
+  [000004] MajorVersion                   u16 be           1                     00 01
+  [000006] MinorVersion                   u16 be           0                     00 00
   [000008] NumFonts                       u32 be           2                     00 00 00 02
 
 FontTable_0
@@ -12,6 +12,12 @@ FontTable_0
   [000018] EntrySelector                  u16 be           18                    00 12
   [00001a] RangeShift                     u16 be           256                   01 00
 
+Table_0 EBDT
+  [00001c] Offset                         u32 be           262176                00 04 00 20
+  [000020] Tag                            ascii[4]         EBDT                  45 42 44 54
+  [000024] Checksum                       u32 be           1524602452            5a df 96 54
+  [000028] Length                         u32 be           620                   00 00 02 6c
+
 FontTable_1
   [000010] Offset                         u32 be           320                   00 00 01 40
   [000140] NumTables                      u16 be           1                     00 01
@@ -19,4 +25,10 @@ FontTable_1
   [000144] EntrySelector                  u16 be           18                    00 12
   [000146] RangeShift                     u16 be           256                   01 00
 
-0x25c64 (154724) unmapped bytes (100.0%)
+Table_0 EBDT
+  [000148] Offset                         u32 be           262176                00 04 00 20
+  [00014c] Tag                            ascii[4]         EBDT                  45 42 44 54
+  [000150] Checksum                       u32 be           1524602452            5a df 96 54
+  [000154] Length                         u32 be           620                   00 00 02 6c
+
+0x25c44 (154692) unmapped bytes (100.0%)

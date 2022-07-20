@@ -42,6 +42,9 @@ type FileLayout struct {
 
 	// the raw data underlying the structure. used for peek()
 	rawData []byte
+
+	// if unseen, ask user to submit a sample
+	unseen bool
 }
 
 // pop last offset from previousOffsets list
@@ -213,44 +216,51 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	}
 
 	if cfg.ReportUnmapped {
-		unmappedRanges := []dataRange{}
-		r := dataRange{offset: -1}
-		for i := 0; i < int(fl.size); i++ {
-			if !fl.isMappedByte(uint64(i)) {
-				//res += fmt.Sprintf("  [%06x] %02x\n", i, fl.rawData[i])
-				if r.offset == -1 {
-					r.offset = i
-					r.length = 1
-				} else if i >= r.offset && i <= r.offset+r.length {
-					r.length++
-				} else {
-					//log.Printf("break block... r.offset = %d, i = %d, max = %d", r.offset, i, r.offset+r.length+1)
-					unmappedRanges = append(unmappedRanges, r)
-					r = dataRange{offset: -1}
-				}
-			}
-		}
-		if r.offset != -1 {
-			unmappedRanges = append(unmappedRanges, r)
-		}
+		res += fl.reportUnmappedData()
+	}
 
-		for _, ur := range unmappedRanges {
-			end := ur.offset + ur.length
-			trail := ""
-			if ur.length > 16 {
-				end = ur.offset + 16
-				trail = " .."
-			}
-			lastOffset := ur.offset + ur.length - 1
-			if lastOffset != ur.offset {
-				res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, fl.rawData[ur.offset:end], trail)
-			} else {
-				res += fmt.Sprintf("  [%06x] u8 \t% 02x%s\n", ur.offset, fl.rawData[ur.offset:end], trail)
-			}
-		}
+	if fl.unseen {
+		res += "\nUNSEEN data file. please submit a sample\n"
 	}
 
 	return
+}
+
+func (fl *FileLayout) reportUnmappedData() string {
+	res := ""
+	unmappedRanges := []dataRange{}
+	r := dataRange{offset: -1}
+	for i := 0; i < int(fl.size); i++ {
+		if !fl.isMappedByte(uint64(i)) {
+			if r.offset == -1 {
+				r.offset = i
+				r.length = 1
+			} else if i >= r.offset && i <= r.offset+r.length {
+				r.length++
+			} else {
+				unmappedRanges = append(unmappedRanges, r)
+				r = dataRange{offset: -1}
+			}
+		}
+	}
+	if r.offset != -1 {
+		unmappedRanges = append(unmappedRanges, r)
+	}
+	for _, ur := range unmappedRanges {
+		end := ur.offset + ur.length
+		trail := ""
+		if ur.length > 16 {
+			end = ur.offset + 16
+			trail = " .."
+		}
+		lastOffset := ur.offset + ur.length - 1
+		if lastOffset != ur.offset {
+			res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, fl.rawData[ur.offset:end], trail)
+		} else {
+			res += fmt.Sprintf("  [%06x] u8 \t% 02x%s\n", ur.offset, fl.rawData[ur.offset:end], trail)
+		}
+	}
+	return res
 }
 
 type dataRange struct {

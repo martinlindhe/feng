@@ -206,7 +206,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		if err != nil {
 			return err // or panic or ignore
 		}
-		log.Println(tpl)
+		//log.Println(tpl)
 		ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, tpl)
 		if err != nil {
 			return err
@@ -290,9 +290,9 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
-	//if DEBUG {
-	feng.Red("expandChildren: %06x working with struct %s\n", fl.offset, dfParent.Label)
-	//}
+	if DEBUG {
+		feng.Red("expandChildren: %06x working with struct %s\n", fl.offset, dfParent.Label)
+	}
 
 	// track iterator index while parsing
 	fs.Index = dfParent.Index
@@ -369,11 +369,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 
 		case "data":
-			// the template directive "data:invalid" marks the data stream invalid
-			if es.Pattern.Value != "invalid" {
-				log.Fatalf("unhandled file value '%s", es.Pattern.Value)
+			switch es.Pattern.Value {
+			case "invalid":
+				return fmt.Errorf("file invalidated by template")
+			case "unseen":
+				fl.unseen = true
+			default:
+				log.Fatalf("unhandled data value '%s'", es.Pattern.Value)
 			}
-			return fmt.Errorf("file invalidated by template")
 
 		case "until":
 			// syntax: "until: u8 scanData ff d9"
