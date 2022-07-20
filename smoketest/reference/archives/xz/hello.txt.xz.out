@@ -1,0 +1,18 @@
+# templates/archives/xz.yml
+Header
+  [000000] Magic                          u8[6]                                  fd 37 7a 58 5a 00
+  [000006] Stream flags                   u16 be           4                     00 04
+           - CRC64                        eq
+  [000008] CRC32                          u32 be           3872830534            e6 d6 b4 46
+
+BlockHeader
+  [00000c] HeaderSize                     u8               2                     02
+  [00000d] Flags                          u8               0                     00
+           - FilterCount                  bit 0:2          0
+           - Reserved                     bit 2:4          0                     0
+           - CompressedSizeFieldPresent   bit 6:1          0
+           - UncompressedSizeFieldPresent bit 7:1          0
+  [00000e] CRC32                          u32 be           553719296             21 01 16 00
+  [000012] Compressed data                u8[1]                                  00
+
+0x0031 (49) unmapped bytes (72.1%)

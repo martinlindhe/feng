@@ -1,11 +1,16 @@
-# STATUS: 1%
+# STATUS: 25%
 
 # - MAX: variable length integer type special encoding
 
 # - HI: block syntax
 
+# - HI: map "stream footer". magic bytes "YZ"
+
+# For variable-length decoding, see decode() in https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/xz-file-format.txt;hb=HEAD
+
 references:
   - https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/xz-file-format.txt;hb=HEAD
+  - https://github.com/gendx/lzma-rs
 
 kind: archive
 name: XZ Archive
@@ -20,7 +25,7 @@ magic:
 structs:
   header:
     # stream header. valid xz contains 1 or more streams with header+data
-    u8[6] Signature: FD c'7zXZ' 00
+    u8[6] Magic: FD c'7zXZ' 00
     u16 Stream flags:
       eq 0000: None
       eq 0001: CRC32      # XXX 4 bytes
@@ -28,42 +33,45 @@ structs:
       eq 000a: SHA-256    # XXX 32 bytes
       default: invalid
 
-    # XXX calculated over Reserved+Stream flags (2 bytes)
-    u32 CRC32: ?? # XXX seems header always has a crc32, the Stream flags checksum is used elsewhere ???
+    u32 CRC32: ??
 
   block_header:
-    u8 HeaderSize: ??    # XXX real_header_size = (encoded_header_size + 1) * 4;
+    u8 HeaderSize: ??    # XXX real_header_size = (self.HeaderSize + 1) * 4;
     u8 Flags:
-      bit b0000_0011: Number of filters
+      bit b0000_0011: FilterCount
       bit b0011_1100: Reserved
       bit b0100_0000: CompressedSizeFieldPresent
       bit b1000_0000: UncompressedSizeFieldPresent
 
-    #if Block flags[CompressedSizeFieldPresent]:
-    #  XXX variable-length integer encoding, see decode() in https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/xz-file-format.txt;hb=HEAD
+    if self.Flags & Reserved:
+      # non-zero reserved indicates error or file format changes
+      data: unseen
+    if self.Flags & CompressedSizeFieldPresent:
+      vu64 CompressedSize: ??
 
-    #if Block flags[UncompressedSizeFieldPresent]:
-    #  XXX variable-length integer encoding, see decode() in https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/xz-file-format.txt;hb=HEAD
+    if self.Flags & UncompressedSizeFieldPresent:
+      vu64 UncompressedSize: ??
 
-    # XXX variable number of filter blocks
-    #for Block flags.Number of filters:      # XXX FOR-LOOP
-    #  type-xxx Filter ID: ?? # variable-length encoding specific for xz format
-    #  type-xxx Size of properties: ?? # variable-length encoding specific for xz format
-    #  type-some Filter properties: ?? # XXX
+    filter[(self.Flags & FilterCount)] Filter: ??
 
-
-    # XXX HEADER PADDING: This field contains as many null byte as it is needed to make the Block Header have the size specified in Block Header Size.
+    # This field contains as many null byte as it is needed to make the Block Header have the size specified in Block Header Size.
+    u8[self.HeaderSize - (OFFSET - offset("self.HeaderSize"))] Padding: ??
 
     u32 CRC32: ?? # XXX ?!
 
-    u8[2] Compressed data: ?? # XXX size ???
+    u8[1] Compressed data: ?? # XXX size is dependant on filters
 
+  filter:
+    vu64 FilterID: ??
+    vu64 SizeOfProperties: ??
+    u8[self.SizeOfProperties] FilterProperties: ??
 
-    # STREAM FOOTER (0x0C bytes):
-    #u32 CRC32: ??
-    #u32 Backward size: ?? # XXX
-    #u16 Stream flags: ??  # XXX MIRROR OF above stream flags !
-    #ascii[2] Footer signature: c'YZ'
+  footer:
+    # XXX TODO MAP STREAM FOOTER (0x0C bytes):
+    u32 CRC32: ??
+    u32 Backward size: ?? # XXX
+    u16 Stream flags: ??  # XXX MIRROR OF above stream flags !
+    ascii[2] Footer signature: c'YZ'
 
 layout:
   - header Header

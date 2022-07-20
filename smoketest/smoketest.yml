@@ -90,7 +90,10 @@ input:
 
   - folder: archives/xz
     files:
-      - xz_001.xz
+      - empty.txt.xz
+      - foo.txt.xz
+      - hello.txt.xz
+      - tiny.xz
 
   - folder: archives/zip
     files:
