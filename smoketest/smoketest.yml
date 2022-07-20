@@ -161,11 +161,12 @@ input:
 
   - folder: fonts/woff
     files:
-      - woff_001_glyphicons.woff
+      - glyphicons.woff
 
   - folder: fonts/woff2
     files:
-      - woff2_001_glyphicons.woff2
+      - glyphicons.woff2
+      - lato-v22-latin-regular.woff2
 
   - folder: games/everquest_pfs
     files:

@@ -1,10 +1,15 @@
-# STATUS: 20%
+# STATUS: 30%
 
-# MAX: to progress format, we need to handle woff2 UIntBase128 (variable length encoded u32)
+# HI: allow presentation of KnownTagTableIndex TAG with a lookup table of strings
+
+# HI: support brotli compression for extraction
 
 references:
   - https://en.wikipedia.org/wiki/Web_Open_Font_Format
   - https://www.w3.org/TR/WOFF2/
+
+software:
+  - https://github.com/Cimpress-MCP/woff2-rs
 
 kind: font
 name: Woff2 font
@@ -39,11 +44,15 @@ structs:
   tbl_dir:
     u8 Flags:
       bit b0011_1111: KnownTagTableIndex
-      bit b1100_0000: PreProcessTransformationVersion
-    ascii[4] Tag: ??
-    u32 OriginalLength: ??  # XXX UIntBase128
-    u32 TransformLength: ?? # XXX UIntBase128. variable-length encoding of u32
+      bit b1100_0000: PreProcessTransformation
+    if (self.Flags & KnownTagTableIndex) == 63:
+      ascii[4] Tag: ??
+      label: self.Tag
+    # XXX self.Flags.KnownTagTableIndex value 0 to 62 corresponds with a TAG from lookup table
+    vu32 OriginalLength: ??
+    if (self.Flags & PreProcessTransformation) != 0:
+      vu32 TransformLength: ??
 
 layout:
   - header Header
-  #- tbl_dir[Header.TableCount] TableDirectory
+  - tbl_dir[Header.TableCount] TableDirectory

@@ -322,8 +322,7 @@ func SingleUnitSize(kind string) uint64 {
 	case "u64", "i64", "filetime":
 		return 8
 	}
-	log.Fatalf("SingleUnitSize cant handle kind '%s'", kind)
-	return 0
+	panic(fmt.Sprintf("SingleUnitSize cant handle kind '%s'", kind))
 }
 
 // returns true if unit is a single u8, u16, u32 or u64 that can have eq/bit field as child

@@ -1,6 +1,7 @@
 package mapper
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"log"
@@ -203,6 +204,10 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 
 	case "rgb8":
 		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
+
+	case "vu32":
+		got, _, _, _ := value.ReadVariableLengthU32(bytes.NewReader(b))
+		return fmt.Sprintf("%d", got)
 	}
 
 	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
@@ -322,6 +327,10 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 
 	case "rgb8":
 		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
+
+	case "vu32":
+		got, _, _, _ := value.ReadVariableLengthU32(bytes.NewReader(b))
+		return fmt.Sprintf("%d", got)
 	}
 
 	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
@@ -331,7 +340,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 // renders lines of ascii to present the data field for humans
 func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 	kind := fl.PresentType(&field.Format)
-	if field.Format.SingleUnitSize() > 1 {
+	if field.Format.Kind != "vu32" && field.Format.SingleUnitSize() > 1 { // XXX hacky handling of vu32
 		if field.Endian == "little" {
 			kind += " le"
 		} else {

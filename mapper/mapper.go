@@ -474,6 +474,20 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				MatchedPatterns: matchPatterns})
 			fl.offset += totalLength
 
+		case "vu32":
+			// variable-length u32
+			_, raw, len, err := value.ReadVariableLengthU32(r)
+			if err != nil {
+				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
+			}
+			fs.Fields = append(fs.Fields, Field{
+				Offset: fl.offset,
+				Length: len,
+				Value:  raw,
+				Format: es.Field,
+				Endian: fl.endian})
+			fl.offset += len
+
 		case "asciiz":
 			val, err := readBytesUntilZero(r)
 			if err != nil {

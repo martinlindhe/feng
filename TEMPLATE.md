@@ -116,6 +116,11 @@ data (for extraction feature)
     compressed:deflate[self.Size] mark area as DEFLATE compressed data
 
 
+variable length encoding
+
+    vu32                        variable-length u32 (fonts/woff2)
+
+
 # pattern matching data types
 
   until: u8 scanData ff d9            maps all bytes to scanData until marker is seen

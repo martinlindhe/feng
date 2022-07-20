@@ -1,0 +1,117 @@
+# templates/fonts/woff2.yml
+Header
+  [000000] Magic                          ascii[4]         wOF2                  77 4f 46 32
+  [000004] Flavor                         u32 be           65536                 00 01 00 00
+           - TrueType                     eq
+  [000008] Length                         u32 be           23580                 00 00 5c 1c
+  [00000c] TableCount                     u16 be           16                    00 10
+  [00000e] Reserved                       u16 be           0                     00 00
+  [000010] TotalSfntSize                  u32 be           60716                 00 00 ed 2c
+  [000014] TotalCompressedSize            u32 be           23486                 00 00 5b be
+  [000018] MajorVersion                   u16 be           1                     00 01
+  [00001a] MinorVersion                   u16 be           0                     00 00
+  [00001c] MetaOffset                     u32 be           0                     00 00 00 00
+  [000020] MetaLength                     u32 be           0                     00 00 00 00
+  [000024] MetaUncompressedLength         u32 be           0                     00 00 00 00
+  [000028] PrivateOffset                  u32 be           0                     00 00 00 00
+  [00002c] PrivateLength                  u32 be           0                     00 00 00 00
+
+TableDirectory_0
+  [000030] Flags                          u8               27                    1b
+           - KnownTagTableIndex           bit 0:6          27                    1b
+           - PreProcessTransformation     bit 6:2          0
+  [000031] OriginalLength                 vu32             4730                  a4 7a
+
+TableDirectory_1
+  [000033] Flags                          u8               28                    1c
+           - KnownTagTableIndex           bit 0:6          28                    1c
+           - PreProcessTransformation     bit 6:2          0
+  [000034] OriginalLength                 vu32             112                   70
+
+TableDirectory_2
+  [000035] Flags                          u8               6                     06
+           - KnownTagTableIndex           bit 0:6          6                     06
+           - PreProcessTransformation     bit 6:2          0
+  [000036] OriginalLength                 vu32             96                    60
+
+TableDirectory_3
+  [000037] Flags                          u8               0                     00
+           - KnownTagTableIndex           bit 0:6          0                     00
+           - PreProcessTransformation     bit 6:2          0
+  [000038] OriginalLength                 vu32             196                   81 44
+
+TableDirectory_4
+  [00003a] Flags                          u8               8                     08
+           - KnownTagTableIndex           bit 0:6          8                     08
+           - PreProcessTransformation     bit 6:2          0
+  [00003b] OriginalLength                 vu32             46                    2e
+
+TableDirectory_5
+  [00003c] Flags                          u8               9                     09
+           - KnownTagTableIndex           bit 0:6          9                     09
+           - PreProcessTransformation     bit 6:2          0
+  [00003d] OriginalLength                 vu32             1765                  8d 65
+
+TableDirectory_6
+  [00003f] Flags                          u8               17                    11
+           - KnownTagTableIndex           bit 0:6          17                    11
+           - PreProcessTransformation     bit 6:2          0
+  [000040] OriginalLength                 vu32             12                    0c
+
+TableDirectory_7
+  [000041] Flags                          u8               10                    0a
+           - KnownTagTableIndex           bit 0:6          10                    0a
+           - PreProcessTransformation     bit 6:2          0
+  [000042] OriginalLength                 vu32             50696                 83 8c 08
+
+TableDirectory_8
+  [000045] Flags                          u8               130                   82
+           - KnownTagTableIndex           bit 0:6          2                     02
+           - PreProcessTransformation     bit 6:2          2
+  [000046] OriginalLength                 vu32             14429                 f0 5d
+  [000048] TransformLength                vu32             11                    0b
+
+TableDirectory_9
+  [000049] Flags                          u8               131                   83
+           - KnownTagTableIndex           bit 0:6          3                     03
+           - PreProcessTransformation     bit 6:2          2
+  [00004a] OriginalLength                 vu32             66                    42
+  [00004b] TransformLength                vu32             0                     00
+
+TableDirectory_10
+  [00004c] Flags                          u8               1                     01
+           - KnownTagTableIndex           bit 0:6          1                     01
+           - PreProcessTransformation     bit 6:2          0
+  [00004d] OriginalLength                 vu32             54                    36
+
+TableDirectory_11
+  [00004e] Flags                          u8               2                     02
+           - KnownTagTableIndex           bit 0:6          2                     02
+           - PreProcessTransformation     bit 6:2          0
+  [00004f] OriginalLength                 vu32             36                    24
+
+TableDirectory_12
+  [000050] Flags                          u8               3                     03
+           - KnownTagTableIndex           bit 0:6          3                     03
+           - PreProcessTransformation     bit 6:2          0
+  [000051] OriginalLength                 vu32             886                   86 76
+
+TableDirectory_13
+  [000053] Flags                          u8               4                     04
+           - KnownTagTableIndex           bit 0:6          4                     04
+           - PreProcessTransformation     bit 6:2          0
+  [000054] OriginalLength                 vu32             32                    20
+
+TableDirectory_14
+  [000055] Flags                          u8               5                     05
+           - KnownTagTableIndex           bit 0:6          5                     05
+           - PreProcessTransformation     bit 6:2          0
+  [000056] OriginalLength                 vu32             664                   85 18
+
+TableDirectory_15
+  [000058] Flags                          u8               7                     07
+           - KnownTagTableIndex           bit 0:6          7                     07
+           - PreProcessTransformation     bit 6:2          0
+  [000059] OriginalLength                 vu32             581                   84 45
+
+0x5bc1 (23489) unmapped bytes (99.6%)
