@@ -1,0 +1,90 @@
+# templates/fonts/otf.yml
+Header
+  [000000] Magic                          u32 be           1330926671            4f 54 54 4f
+  [000004] TableCount                     u16 be           11                    00 0b
+  [000006] SearchRange                    u16 be           128                   00 80
+  [000008] EntrySelector                  u16 be           3                     00 03
+  [00000a] RangeShift                     u16 be           48                    00 30
+
+Table_0 CFF
+  [00000c] Tag                            ascii[4]         CFF                   43 46 46 20
+  [000010] Checksum                       u32 be           2246098895            85 e0 bf cf
+  [000014] Offset                         u32 be           1320                  00 00 05 28
+  [000018] Length                         u32 be           1064                  00 00 04 28
+  [000528] Data                           u8[1064]                               01 00 04 04 00 01 01 01 0d 54 65 61 6d 56 69 65 77 65 72 31 35 00 01 02 00 01 00 2a f8 1b 00 f8 ...
+
+Table_1 FFTM
+  [00001c] Tag                            ascii[4]         FFTM                  46 46 54 4d
+  [000020] Checksum                       u32 be           2075108406            7b af a4 36
+  [000024] Offset                         u32 be           2424                  00 00 09 78
+  [000028] Length                         u32 be           28                    00 00 00 1c
+  [000978] Data                           u8[28]                                 00 00 00 01 00 00 00 00 d5 a4 98 db 00 00 00 00 cc 57 90 93 00 00 00 00 d9 b3 7a c7
+
+Table_2 GDEF
+  [00002c] Tag                            ascii[4]         GDEF                  47 44 45 46
+  [000030] Checksum                       u32 be           2555972               00 27 00 44
+  [000034] Offset                         u32 be           2384                  00 00 09 50
+  [000038] Length                         u32 be           38                    00 00 00 26
+  [000950] Data                           u8[38]                                 00 01 00 00 00 0c 00 00 00 16 00 1e 00 02 00 01 00 01 00 1d 00 01 00 04 00 00 00 02 00 00 00 01 ...
+  [000976] Padding                        u8[2]                                  00 00
+
+Table_3 OS/2
+  [00003c] Tag                            ascii[4]         OS/2                  4f 53 2f 32
+  [000040] Checksum                       u32 be           3716541317            dd 85 eb 85
+  [000044] Offset                         u32 be           288                   00 00 01 20
+  [000048] Length                         u32 be           96                    00 00 00 60
+  [000120] Data                           u8[96]                                 00 04 02 b2 01 f4 00 05 00 02 02 8a 02 bb 00 00 00 8c 02 8a 02 bb 00 00 01 df 00 31 01 02 0c 00 ...
+
+Table_4 cmap
+  [00004c] Tag                            ascii[4]         cmap                  63 6d 61 70
+  [000050] Checksum                       u32 be           1903709693            71 78 4d fd
+  [000054] Offset                         u32 be           900                   00 00 03 84
+  [000058] Length                         u32 be           386                   00 00 01 82
+  [000384] Data                           u8[386]                                00 00 00 03 00 00 00 03 00 00 00 1c 00 01 00 00 00 00 00 7c 00 03 00 01 00 00 00 1c 00 04 00 60 ...
+  [000506] Padding                        u8[2]                                  00 00
+
+Table_5 head
+  [00005c] Tag                            ascii[4]         head                  68 65 61 64
+  [000060] Checksum                       u32 be           141119251             08 69 4f 13
+  [000064] Offset                         u32 be           188                   00 00 00 bc
+  [000068] Length                         u32 be           54                    00 00 00 36
+  [0000bc] Data                           u8[54]                                 00 01 00 00 00 01 00 00 38 f2 10 16 5f 0f 3c f5 00 0b 03 e8 00 00 00 00 cc 57 90 93 00 00 00 00 ...
+  [0000f2] Padding                        u8[2]                                  00 00
+
+Table_6 hhea
+  [00006c] Tag                            ascii[4]         hhea                  68 68 65 61
+  [000070] Checksum                       u32 be           106497077             06 59 04 35
+  [000074] Offset                         u32 be           244                   00 00 00 f4
+  [000078] Length                         u32 be           36                    00 00 00 24
+  [0000f4] Data                           u8[36]                                 00 01 00 00 02 d4 00 2e 00 5a 03 e8 00 00 00 00 03 2a 00 01 00 00 00 00 00 00 00 00 00 00 00 00 ...
+
+Table_7 hmtx
+  [00007c] Tag                            ascii[4]         hmtx                  68 6d 74 78
+  [000080] Checksum                       u32 be           1344735072            50 27 07 60
+  [000084] Offset                         u32 be           2452                  00 00 09 94
+  [000088] Length                         u32 be           120                   00 00 00 78
+  [000994] Data                           u8[120]                                01 f4 00 32 02 3a 00 36 03 e8 01 74 00 64 00 1c 01 f4 00 1c 03 e8 00 1c 03 e8 00 1c 03 e8 00 1c ...
+
+Table_8 maxp
+  [00008c] Tag                            ascii[4]         maxp                  6d 61 78 70
+  [000090] Checksum                       u32 be           1986560               00 1e 50 00
+  [000094] Offset                         u32 be           280                   00 00 01 18
+  [000098] Length                         u32 be           6                     00 00 00 06
+  [000118] Data                           u8[6]                                  00 00 50 00 00 1e
+  [00011e] Padding                        u8[2]                                  00 00
+
+Table_9 name
+  [00009c] Tag                            ascii[4]         name                  6e 61 6d 65
+  [0000a0] Checksum                       u32 be           3773513184            e0 eb 3d e0
+  [0000a4] Offset                         u32 be           384                   00 00 01 80
+  [0000a8] Length                         u32 be           516                   00 00 02 04
+  [000180] Data                           u8[516]                                00 00 00 0e 00 ae 00 01 00 00 00 00 00 00 00 1a 00 36 00 01 00 00 00 00 00 01 00 0c 00 6b 00 01 ...
+
+Table_10 post
+  [0000ac] Tag                            ascii[4]         post                  70 6f 73 74
+  [0000b0] Checksum                       u32 be           4286971954            ff 86 00 32
+  [0000b4] Offset                         u32 be           1288                  00 00 05 08
+  [0000b8] Length                         u32 be           32                    00 00 00 20
+  [000508] Data                           u8[32]                                 00 03 00 00 00 00 00 00 ff 83 00 32 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+EOF

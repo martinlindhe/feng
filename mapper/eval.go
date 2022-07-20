@@ -14,7 +14,7 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-var DEBUG_EVAL = true
+var DEBUG_EVAL = false
 
 // an expression failed to evaluate
 type EvaluateError struct {

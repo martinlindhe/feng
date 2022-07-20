@@ -139,6 +139,7 @@ input:
       - example.otf
       - NTBixa-Color.otf
       - otf_001.otf
+      - TeamViewer15.otf
 
   - folder: fonts/pfb
     files:
