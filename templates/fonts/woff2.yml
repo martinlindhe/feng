@@ -1,4 +1,6 @@
-# STATUS: 1%
+# STATUS: 20%
+
+# MAX: to progress format, we need to handle woff2 UIntBase128 (variable length encoded u32)
 
 references:
   - https://en.wikipedia.org/wiki/Web_Open_Font_Format
@@ -17,6 +19,31 @@ magic:
 structs:
   header:
     ascii[4] Magic: c'wOF2'
+    u32 Flavor:
+      # other flavors may exist
+      eq c'OTTO': OTTO
+      eq 0001_0000: TrueType
+    u32 Length: ??
+    u16 TableCount: ??
+    u16 Reserved: ??
+    u32 TotalSfntSize: ??
+    u32 TotalCompressedSize: ??
+    u16 MajorVersion: ??
+    u16 MinorVersion: ??
+    u32 MetaOffset: ??
+    u32 MetaLength: ??
+    u32 MetaUncompressedLength: ??
+    u32 PrivateOffset: ??
+    u32 PrivateLength: ??
+
+  tbl_dir:
+    u8 Flags:
+      bit b0011_1111: KnownTagTableIndex
+      bit b1100_0000: PreProcessTransformationVersion
+    ascii[4] Tag: ??
+    u32 OriginalLength: ??  # XXX UIntBase128
+    u32 TransformLength: ?? # XXX UIntBase128. variable-length encoding of u32
 
 layout:
   - header Header
+  #- tbl_dir[Header.TableCount] TableDirectory

@@ -1,5 +1,19 @@
 # templates/fonts/woff2.yml
 Header
   [000000] Magic                          ascii[4]         wOF2                  77 4f 46 32
+  [000004] Flavor                         u32 be           65536                 00 01 00 00
+           - TrueType                     eq
+  [000008] Length                         u32 be           18028                 00 00 46 6c
+  [00000c] TableCount                     u16 be           15                    00 0f
+  [00000e] Reserved                       u16 be           0                     00 00
+  [000010] TotalSfntSize                  u32 be           45404                 00 00 b1 5c
+  [000014] TotalCompressedSize            u32 be           17929                 00 00 46 09
+  [000018] MajorVersion                   u16 be           1                     00 01
+  [00001a] MinorVersion                   u16 be           589                   02 4d
+  [00001c] MetaOffset                     u32 be           0                     00 00 00 00
+  [000020] MetaLength                     u32 be           0                     00 00 00 00
+  [000024] MetaUncompressedLength         u32 be           0                     00 00 00 00
+  [000028] PrivateOffset                  u32 be           0                     00 00 00 00
+  [00002c] PrivateLength                  u32 be           0                     00 00 00 00
 
-0x4668 (18024) unmapped bytes (100.0%)
+0x463c (17980) unmapped bytes (99.7%)
