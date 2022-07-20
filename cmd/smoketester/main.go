@@ -64,7 +64,9 @@ func main() {
 		feng.Green("Parsed %s as %s\n\n", entry.In, fl.BaseName)
 
 		data := fl.Present(&mapper.PresentFileLayoutConfig{
-			ShowRaw: true})
+			ShowRaw:           true,
+			ReportOverlapping: true,
+			InUTC:             true})
 
 		filename, _ := filepath.Abs(filepath.Join(referenceRoot, entry.Out))
 		path := filepath.Dir(filename)

@@ -89,11 +89,11 @@ func TestReverseBytes(t *testing.T) {
 }
 
 func TestDosTime(t *testing.T) {
-	assert.Equal(t, "16:24:50", asDosTime(33561).String())
+	assert.Equal(t, "16:24:50", AsDosTime(33561).String())
 }
 
 func TestDosDate(t *testing.T) {
-	assert.Equal(t, "2016-04-10", asDosDate(18570).String())
+	assert.Equal(t, "2016-04-10", AsDosDate(18570).String())
 }
 
 func TestUtf16String(t *testing.T) {
@@ -111,7 +111,7 @@ func TestUtf16String(t *testing.T) {
 		b[i] = n2
 		b[i+1] = n1
 	}
-	assert.Equal(t, "1h2txyewy\\Settings\\settings.dat", utf16String(b))
+	assert.Equal(t, "1h2txyewy\\Settings\\settings.dat", Utf16String(b))
 }
 
 func TestUtf16zString(t *testing.T) {
@@ -120,5 +120,5 @@ func TestUtf16zString(t *testing.T) {
 		0x2E, 0x00, 0x65, 0x00, 0x78, 0x00, 0x65, 0x00, 0x00, 0x00,
 		0x31, 0x00, // trailing data that should be ignored
 	}
-	assert.Equal(t, ".exe", utf16zString(b))
+	assert.Equal(t, ".exe", Utf16zString(b))
 }

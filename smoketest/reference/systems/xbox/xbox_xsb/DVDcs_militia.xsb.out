@@ -34,7 +34,7 @@ Sound_0
   [000045] trackIndex                     u16 le           2560                  0a 00
   [000047] waveBankIndex                  u8               0                     00
   [000048] DSPNum                         u8               255                   ff
-  [000049] Unkn                           u32[255] le                            00 07 ff ff 7d 00 01 00 ff 00 00 01 00 ff ff ff ff 00 0b 00 00 07 ff ff 8a 00 02 00 ff 00 00 01 ...
+  [000049] Unkn                           u32[255] le      [4294903552, 65661, 16777471 ... ] 00 07 ff ff 7d 00 01 00 ff 00 00 01 00 ff ff ff ff 00 0b 00 00 07 ff ff 8a 00 02 00 ff 00 00 01 ...
 
 Sound_1
   [000445] Flags                          u8               32                    20

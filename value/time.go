@@ -12,7 +12,7 @@ func (dt DosTime) String() string {
 	return dt.ts.Format("15:04:05")
 }
 
-func asDosTime(v uint16) DosTime {
+func AsDosTime(v uint16) DosTime {
 	hour := int(v >> 11)
 	min := int((v >> 5) & 0x3f)
 	sec := int((v & 0x1f) * 2)
@@ -31,7 +31,7 @@ func (dt DosDate) String() string {
 	return dt.ts.Format("2006-01-02")
 }
 
-func asDosDate(v uint16) DosDate {
+func AsDosDate(v uint16) DosDate {
 	day := int(v & 0x1f)
 	month := time.Month((v >> 5 & 0x0f))
 	year := int(1980 + (v >> 9))

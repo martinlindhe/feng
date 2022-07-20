@@ -14,7 +14,7 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-var DEBUG_EVAL = true
+var DEBUG_EVAL = false
 
 // an expression failed to evaluate
 type EvaluateError struct {
@@ -108,7 +108,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			if !field.Format.Slice && field.Format.Range == "" {
 				switch field.Format.Kind {
 				case "u8", "u16", "u32", "u64":
-					mapped[field.Format.Label] = int(value.AsUint64Raw(field.Value))
+					mapped[field.Format.Label] = fl.GetFieldValue(&field)
 				case "i8":
 					mapped[field.Format.Label] = int(uint64(int8(value.AsUint64Raw(field.Value))))
 				case "i16":
@@ -118,10 +118,10 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				case "i64":
 					mapped[field.Format.Label] = int(uint64(int64(value.AsUint64Raw(field.Value))))
 				default:
-					mapped[field.Format.Label] = field.Present()
+					mapped[field.Format.Label] = fl.GetFieldValue(&field)
 				}
 			} else {
-				mapped[field.Format.Label] = field.Present()
+				mapped[field.Format.Label] = fl.GetFieldValue(&field)
 			}
 		}
 		mapped["index"] = int(layout.Index)

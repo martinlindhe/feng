@@ -16,7 +16,7 @@ DDS_HEADER
   [000014] PitchOrLinearSize              u32 le           0                     00 00 00 00
   [000018] Depth                          u32 le           0                     00 00 00 00
   [00001c] MipMapCount                    u32 le           0                     00 00 00 00
-  [000020] Reserved1                      u32[11] le                             00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000020] Reserved1                      u32[11] le       [0, 0, 0 ... ]        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
   [00004c] Pixel format size              u32 le           32                    00 00 00 20
   [000050] Pixel format flags             u32 le           131072                00 02 00 00
            - DDPF_ALPHAPIXELS             bit 0:1          0

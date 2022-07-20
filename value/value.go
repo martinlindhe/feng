@@ -12,16 +12,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fatih/color"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 )
 
 const (
 	DEBUG = false
-
-	// TODO: make IN_UTC configurable from cli
-	IN_UTC = true
 )
 
 var (
@@ -421,10 +417,9 @@ func AsInt64(kind string, b []byte) int64 {
 	return 0
 }
 
-var filetimeDelta = time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
-
 // presents the value of the data type (format.Kind) in a human-readable form
 func (format DataField) Present(b []byte, endian string) string {
+	// TODO DEPRECATE. instead use fl.PresentFieldValue()
 	switch format.Kind {
 	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
 		return ""
@@ -455,38 +450,32 @@ func (format DataField) Present(b []byte, endian string) string {
 		return v
 
 	case "utf16":
-		return utf16String(b)
+		return Utf16String(b)
 
 	case "utf16z":
-		return utf16zString(b)
+		return Utf16zString(b)
 
 	case "time_t_32":
 		v := AsUint64Raw(b)
 		timestamp := time.Unix(int64(v), 0)
-		if IN_UTC {
-			timestamp = timestamp.UTC()
-		}
 		return timestamp.Format(time.RFC3339)
 
 	case "filetime":
 		// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601.
 		// Windows, XBox
 
-		// b is already in little endian
+		filetimeDelta := time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
 		t := binary.LittleEndian.Uint64(b)
 		timestamp := time.Unix(0, int64(t)*100+filetimeDelta)
-		if IN_UTC {
-			timestamp = timestamp.UTC()
-		}
 		return timestamp.Format(time.RFC3339)
 
 	case "dostime":
 		v := AsUint64Raw(b)
-		return asDosTime(uint16(v)).String()
+		return AsDosTime(uint16(v)).String()
 
 	case "dosdate":
 		v := AsUint64Raw(b)
-		return asDosDate(uint16(v)).String()
+		return AsDosDate(uint16(v)).String()
 
 	case "rgb8":
 		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
@@ -496,12 +485,8 @@ func (format DataField) Present(b []byte, endian string) string {
 	return ""
 }
 
-var (
-	red = color.New(color.FgRed).SprintFunc()
-)
-
 // text encoding used by Windows
-func utf16String(b []byte) string {
+func Utf16String(b []byte) string {
 
 	// Make an transformer that converts MS-Win default to UTF8
 	win16be := unicode.UTF16(unicode.BigEndian, unicode.IgnoreBOM)
@@ -519,7 +504,7 @@ func utf16String(b []byte) string {
 }
 
 // text encoding used by Windows (00 00-terminated)
-func utf16zString(b []byte) string {
+func Utf16zString(b []byte) string {
 	end := 0
 	// read 2 bytes until eof or 00
 	for i := 0; i < len(b); i += 2 {

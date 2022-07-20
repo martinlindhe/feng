@@ -1,54 +1,66 @@
-# STATUS: 10%
+# STATUS: 60%
 #
 # TrueType Collection (TTC) is an extension of TrueType format that
 # allows combining multiple fonts into a single file.
 #
-# TODO: need a version 2 sample file in order to support v2 file format
+# MAX: allow to concat data areas for data extraction. needed to produce a ttc2ttf feature from this template
 #
-# MAX: need to use "table" struct in "font_table" struct. # XXX make use of defined struct to fully declare this form
-
+# MID: can we extract ttf fonts from a ttc file without much extra effort?
 
 references:
   - https://docs.fileformat.com/font/ttc/
 
+software:
+  - http://hp.vector.co.jp/authors/VA010851/be/ttc2ttf_AA.tar.gz
+  - breakttc by Microsoft. extracts individual TTF files from a TTC
+
 kind: font
 name: TrueType font collection
 extensions: [.ttc]
-mime: xxx
-endian: big # XXX
+endian: big
 
 magic:
   - offset: 0000
     match: c'ttcf'
 
 structs:
-  header:
+  v1_header:
     ascii[4] Magic: c'ttcf'
-    u16 Major version: ??     # XXX if major == 2, extra header fields exists
-    u16 Minor version: ??
+    u16 MajorVersion: ??
+    u16 MinorVersion: ??
     u32 NumFonts: ??
+    u32[self.NumFonts] Offsets: ??            # offsets to table headers
+    font_table[self.NumFonts] FontTable: ??
 
   font_table:
-    u32 Offset: ??
-    offset: self.Offset
-
+    offset: V1Header.Offsets[self.index]
+    # XXX names of this struct is uncertain
     u16 NumTables: ??
     u16 SearchRange: ??
-    u16 EntrySelector: ??
+    u16 EntrySelector: ??   # XXX table_count
     u16 RangeShift: ??
-    #table[self.NumTables] Table: ??     # XXX make use of defined struct to fully declare this form
+    u32 Unknown: ?? # XXX
+    table[self.EntrySelector] Table: ??
     offset: restore
 
   table:
     ascii[4] Tag: ??
     u32 Checksum: ??
+    label: self.Tag
     u32 Offset: ??
     u32 Length: ??
+    offset: self.Offset
+    u8[self.Length] Data: ??
+    offset: restore
 
-#    offset: self.Offset
-#    u8[self.Length] Data: ??
-#    offset: restore
+  v2_header:
+    if V1Header.MajorVersion == 2:
+      u32 dsigTag: ??
+      u32 dsigLength: ??
+      u32 dsigOffset: ??
+      if self.dsigLength != 0:
+        data: unseen  # want sample with DSIG block
 
 layout:
-  - header Header
-  - font_table[Header.NumFonts] FontTable
+  - v1_header V1Header
+  - v2_header V2Header

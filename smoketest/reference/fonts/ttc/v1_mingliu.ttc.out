@@ -4,31 +4,32 @@ V1Header
   [000004] MajorVersion                   u16 be           1                     00 01
   [000006] MinorVersion                   u16 be           0                     00 00
   [000008] NumFonts                       u32 be           2                     00 00 00 02
+  [00000c] Offsets                        u32[2] be        [20, 320]             00 00 00 14 00 00 01 40
 
 FontTable_0
-  [00000c] Offset                         u32 be           20                    00 00 00 14
   [000014] NumTables                      u16 be           1                     00 01
   [000016] SearchRange                    u16 be           0                     00 00
   [000018] EntrySelector                  u16 be           18                    00 12
   [00001a] RangeShift                     u16 be           256                   01 00
+  [00001c] Unknown                        u32 be           262176                00 04 00 20
 
 Table_0 EBDT
-  [00001c] Offset                         u32 be           262176                00 04 00 20
   [000020] Tag                            ascii[4]         EBDT                  45 42 44 54
   [000024] Checksum                       u32 be           1524602452            5a df 96 54
-  [000028] Length                         u32 be           620                   00 00 02 6c
+  [000028] Offset                         u32 be           620                   00 00 02 6c
+  [00002c] Length                         u32 be           3704930               00 38 88 62
 
 FontTable_1
-  [000010] Offset                         u32 be           320                   00 00 01 40
   [000140] NumTables                      u16 be           1                     00 01
   [000142] SearchRange                    u16 be           0                     00 00
   [000144] EntrySelector                  u16 be           18                    00 12
   [000146] RangeShift                     u16 be           256                   01 00
+  [000148] Unknown                        u32 be           262176                00 04 00 20
 
 Table_0 EBDT
-  [000148] Offset                         u32 be           262176                00 04 00 20
   [00014c] Tag                            ascii[4]         EBDT                  45 42 44 54
   [000150] Checksum                       u32 be           1524602452            5a df 96 54
-  [000154] Length                         u32 be           620                   00 00 02 6c
+  [000154] Offset                         u32 be           620                   00 00 02 6c
+  [000158] Length                         u32 be           3704930               00 38 88 62
 
-0x25c44 (154692) unmapped bytes (100.0%)
+0x25c3c (154684) unmapped bytes (100.0%)

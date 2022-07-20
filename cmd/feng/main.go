@@ -22,11 +22,13 @@ var args struct {
 	Filename   string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
 	ExtractDir string `help:"Extract files to this directory."`
 	//Verbose    bool   `short:"v" help:"Be more verbose."`
-	Raw        bool   `help:"Show raw values"`
-	Unmapped   bool   `help:"Print a report on unmapped bytes"`
-	Brief      bool   `help:"Brief file information"`
-	CPUProfile string `name:"cpu-profile" help:"Create CPU profile"`
-	MemProfile string `name:"mem-profile" help:"Create memory profile"`
+	Raw         bool   `help:"Show raw values"`
+	Unmapped    bool   `help:"Print a report on unmapped bytes."`
+	Overlapping bool   `help:"Print a report on overlapping bytes."`
+	LocalTime   bool   `help:"Show timestamps in local timezone. Default is UTC."`
+	Brief       bool   `help:"Show brief file information."`
+	CPUProfile  string `name:"cpu-profile" help:"Create CPU profile."`
+	MemProfile  string `name:"mem-profile" help:"Create memory profile."`
 }
 
 func main() {
@@ -158,8 +160,10 @@ func main() {
 			fmt.Println(args.Filename+":", fl.BaseName)
 		} else {
 			fmt.Print(fl.Present(&mapper.PresentFileLayoutConfig{
-				ShowRaw:        args.Raw,
-				ReportUnmapped: args.Unmapped,
+				ShowRaw:           args.Raw,
+				ReportUnmapped:    args.Unmapped,
+				ReportOverlapping: args.Overlapping,
+				InUTC:             !args.LocalTime,
 			}))
 		}
 	}

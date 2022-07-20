@@ -1,11 +1,13 @@
 package mapper
 
 import (
+	"encoding/binary"
 	"fmt"
 	"log"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
@@ -45,6 +47,9 @@ type FileLayout struct {
 
 	// if unseen, ask user to submit a sample
 	unseen bool
+
+	// present datetimes in UTC
+	inUTC bool
 }
 
 // pop last offset from previousOffsets list
@@ -103,6 +108,226 @@ const (
 	maxHexDisplayLength = 0x20
 )
 
+// returns the value of the data type (field.Format.Kind)
+func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
+	b := field.Value
+	switch field.Format.Kind {
+	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
+		return ""
+
+	case "u8", "u16", "u32", "u64":
+		if field.Format.Slice && field.Format.Range == "" {
+			panic("FIXME present slice")
+		}
+		if !field.Format.Slice && field.Format.Range != "" {
+			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
+			values := []interface{}{}
+			switch field.Format.Kind {
+			case "u8":
+				return field.Value
+			case "u16":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					if field.Endian == "big" {
+						values = append(values, uint64(binary.BigEndian.Uint16(b[i:])))
+					} else {
+						values = append(values, uint64(binary.LittleEndian.Uint16(b[i:])))
+					}
+				}
+			case "u32":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					if field.Endian == "big" {
+						values = append(values, uint64(binary.BigEndian.Uint32(b[i:])))
+					} else {
+						values = append(values, uint64(binary.LittleEndian.Uint32(b[i:])))
+					}
+				}
+			default:
+				panic("FIXME handle " + field.Format.Kind)
+			}
+			return values
+		}
+		return int(value.AsUint64Raw(b))
+
+	case "i8", "i16", "i32", "i64":
+		if field.Format.Slice || field.Format.Range != "" {
+			return ""
+		}
+		switch field.Format.Kind {
+		case "i8":
+			return fmt.Sprintf("%d", int8(value.AsUint64Raw(b)))
+		case "i16":
+			return fmt.Sprintf("%d", int16(value.AsUint64Raw(b)))
+		case "i32":
+			return fmt.Sprintf("%d", int32(value.AsUint64Raw(b)))
+		case "i64":
+			return fmt.Sprintf("%d", int64(value.AsUint64Raw(b)))
+		}
+
+	case "ascii", "asciiz":
+		v, _ := value.AsciiZString(b, len(b))
+		return v
+
+	case "utf16":
+		return value.Utf16String(b)
+
+	case "utf16z":
+		return value.Utf16zString(b)
+
+	case "time_t_32":
+		v := value.AsUint64Raw(b)
+		timestamp := time.Unix(int64(v), 0)
+		if fl.inUTC {
+			timestamp = timestamp.UTC()
+		}
+		return timestamp.Format(time.RFC3339)
+
+	case "filetime":
+		// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601.
+		// Windows, XBox
+
+		filetimeDelta := time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
+		t := binary.LittleEndian.Uint64(b)
+		timestamp := time.Unix(0, int64(t)*100+filetimeDelta)
+		if fl.inUTC {
+			timestamp = timestamp.UTC()
+		}
+		return timestamp.Format(time.RFC3339)
+
+	case "dostime":
+		v := value.AsUint64Raw(b)
+		return value.AsDosTime(uint16(v)).String()
+
+	case "dosdate":
+		v := value.AsUint64Raw(b)
+		return value.AsDosDate(uint16(v)).String()
+
+	case "rgb8":
+		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
+	}
+
+	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
+	return ""
+}
+
+// presents the value of the data type (field.Format.Kind) in a human-readable form
+func (fl *FileLayout) PresentFieldValue(field *Field) string {
+	b := field.Value
+	switch field.Format.Kind {
+	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
+		return ""
+
+	case "u8", "u16", "u32", "u64":
+		if field.Format.Slice && field.Format.Range == "" {
+			panic("FIXME present slice")
+		}
+		if !field.Format.Slice && field.Format.Range != "" {
+			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
+
+			values := []string{}
+			val := 0
+			skipRest := false
+
+			switch field.Format.Kind {
+			case "u8":
+				return ""
+			case "u16":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					val++
+					if field.Endian == "big" {
+						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint16(b[i:])))
+					} else {
+						values = append(values, fmt.Sprintf("%d", binary.LittleEndian.Uint16(b[i:])))
+					}
+					if val >= 3 {
+						skipRest = true
+						break
+					}
+				}
+			case "u32":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					val++
+					if field.Endian == "big" {
+						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint32(b[i:])))
+					} else {
+						values = append(values, fmt.Sprintf("%d", binary.LittleEndian.Uint32(b[i:])))
+					}
+					if val >= 3 {
+						skipRest = true
+						break
+					}
+				}
+			default:
+				panic("FIXME handle " + field.Format.Kind)
+			}
+
+			if skipRest {
+				return "[" + strings.Join(values, ", ") + " ... ]"
+			}
+			return "[" + strings.Join(values, ", ") + "]"
+		}
+		return fmt.Sprintf("%d", value.AsUint64Raw(b))
+
+	case "i8", "i16", "i32", "i64":
+		if field.Format.Slice || field.Format.Range != "" {
+			return ""
+		}
+		switch field.Format.Kind {
+		case "i8":
+			return fmt.Sprintf("%d", int8(value.AsUint64Raw(b)))
+		case "i16":
+			return fmt.Sprintf("%d", int16(value.AsUint64Raw(b)))
+		case "i32":
+			return fmt.Sprintf("%d", int32(value.AsUint64Raw(b)))
+		case "i64":
+			return fmt.Sprintf("%d", int64(value.AsUint64Raw(b)))
+		}
+
+	case "ascii", "asciiz":
+		v, _ := value.AsciiZString(b, len(b))
+		return v
+
+	case "utf16":
+		return value.Utf16String(b)
+
+	case "utf16z":
+		return value.Utf16zString(b)
+
+	case "time_t_32":
+		v := value.AsUint64Raw(b)
+		timestamp := time.Unix(int64(v), 0)
+		if fl.inUTC {
+			timestamp = timestamp.UTC()
+		}
+		return timestamp.Format(time.RFC3339)
+
+	case "filetime":
+		// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601.
+		// Windows, XBox
+
+		filetimeDelta := time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
+		t := binary.LittleEndian.Uint64(b)
+		timestamp := time.Unix(0, int64(t)*100+filetimeDelta)
+		if fl.inUTC {
+			timestamp = timestamp.UTC()
+		}
+		return timestamp.Format(time.RFC3339)
+
+	case "dostime":
+		v := value.AsUint64Raw(b)
+		return value.AsDosTime(uint16(v)).String()
+
+	case "dosdate":
+		v := value.AsUint64Raw(b)
+		return value.AsDosDate(uint16(v)).String()
+
+	case "rgb8":
+		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
+	}
+
+	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
+	return ""
+}
+
 // renders lines of ascii to present the data field for humans
 func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 	kind := fl.PresentType(&field.Format)
@@ -114,7 +339,7 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 		}
 	}
 
-	fieldValue := strings.TrimRight(field.Present(), " ")
+	fieldValue := strings.TrimRight(fl.PresentFieldValue(field), " ")
 
 	res := ""
 	if !showRaw {
@@ -180,11 +405,14 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 }
 
 type PresentFileLayoutConfig struct {
-	ShowRaw        bool // XXX: should default to true in cli, false in smoketest
-	ReportUnmapped bool
+	ShowRaw           bool // XXX: should default to true in cli, false in smoketest
+	ReportUnmapped    bool
+	ReportOverlapping bool
+	InUTC             bool
 }
 
 func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
+	fl.inUTC = cfg.InUTC
 	res = "# " + fl.BaseName + "\n"
 	for _, layout := range fl.Structs {
 		if len(layout.Fields) == 0 {
@@ -210,9 +438,14 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 		unmappedPct := (float64(unmapped) / float64(fl.size)) * 100
 		res += fmt.Sprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
 	} else if mappedBytes > fl.size {
-		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x\n", fl.size, mappedBytes)
+		overflow := mappedBytes - fl.size
+		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
 	} else {
 		res += "EOF\n"
+	}
+
+	if cfg.ReportOverlapping {
+		res += fl.reportOverlappingData()
 	}
 
 	if cfg.ReportUnmapped {
@@ -224,6 +457,12 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	}
 
 	return
+}
+
+func (fl *FileLayout) reportOverlappingData() string {
+	// XXX report overlapping bytes.
+
+	return ""
 }
 
 func (fl *FileLayout) reportUnmappedData() string {
@@ -379,7 +618,7 @@ func (fl *FileLayout) MatchedValue(s string, df *value.DataField) (string, error
 	for _, field := range str.Fields {
 		if field.Format.Label == fieldName {
 			if len(field.MatchedPatterns) == 0 {
-				return field.Present(), nil
+				return fl.PresentFieldValue(&field), nil
 			}
 			for _, child := range field.MatchedPatterns {
 				if DEBUG {
