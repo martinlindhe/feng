@@ -1,8 +1,8 @@
 # templates/archives/7zip.yml
 SignatureHeader
   [000000] Signature                      u8[6]                                  37 7a bc af 27 1c
-  [000006] Major version                  u8               0                     00
-  [000007] Minor version                  u8               4                     04
+  [000006] MajorVersion                   u8               0                     00
+  [000007] MinorVersion                   u8               4                     04
   [000008] StartHeaderCRC                 u32 le           809329955             30 3d 65 23
 
 StartHeader
@@ -16,6 +16,17 @@ Header kEncodedHeader
 
 PackInfo
   [0000ad] NID                            u8               6                     06
-  [0000ae] PackPos                        u64 le           75161517108560164     01 0b 07 00 68 09 01 24
+           - kPackInfo                    eq
+  [0000ae] PackPos                        vu64             36                    24
+  [0000af] PackStreamsCount               vu64             1                     01
 
-0x00a3 (163) unmapped bytes (79.5%)
+Size_0
+  [0000b0] NID                            u8               9                     09
+           - kSize                        eq
+  [0000b1] Size                           vu64             104                   68
+
+Terminator
+  [0000b2] NID                            u8               0                     00
+           - kEnd                         eq
+
+0x00a6 (166) unmapped bytes (81.0%)

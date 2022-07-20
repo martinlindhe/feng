@@ -1,7 +1,6 @@
-# STATUS: 1%
+# STATUS: 25%
 
-# - MAX: to progress format parse, need to handle packed u64 values as used by 7zip
-# - MID: ArchiveVersion version: ?? # XXX custom types define!
+# - MAX: continue parsing
 
 references:
   - https://en.wikipedia.org/wiki/7z
@@ -18,24 +17,12 @@ magic:
   - offset: 0000
     match: c'7z' bc af 27 1c
 
-types:
-  # XXX impl!!!
-  ArchiveVersion:
-    u8 Major: ??        # 0.3 and 0.4 is seen in 2021
-    u8 Minor: ??
-    format: "{0}.{1}"    # XXX impl presentation formatting string
-
 structs:
   sig_header:
     u8[6] Signature: c'7z' bc af 27 1c
-
-    #ArchiveVersion Version: ?? # XXX custom struct define, this should become a built-in standard type "version16" byte 0=major, byte 1=minor
-    u8 Major version: ??
-    u8 Minor version: ??
-
-    # XXX impl crc32
-    #crc32[NextHeaderOffset.offset:NextHeaderCRC.offset+4] StartHeaderCRC: ??
-    u32 StartHeaderCRC: ??
+    u8 MajorVersion: ??
+    u8 MinorVersion: ??
+    u32 StartHeaderCRC: ??    #crc32[NextHeaderOffset.offset:NextHeaderCRC.offset+4] StartHeaderCRC: ??       # XXX impl crc32
 
   start_header:
     u64 NextHeaderOffset: ??
@@ -72,20 +59,35 @@ structs:
       eq 18: kStartPos
       eq 19: kDummy
     label: self.NID
-    #if self.NID == kHeader:
+    if self.NID == kHeader:
       # XXX LZMA compressed data follows?
+      nid_block kHeader: ??
     if self.NID == kEncodedHeader:
-      # XXX
-      pack_info PackInfo: ??
+      nid_block PackInfo: ??
 
-  pack_info:
-    u8 NID: "06"  # XXX
-    u64 PackPos: ??             # XXX packed u64 value ...
-    #u64 PackStreamsCount: ??   # XXX packed u64 value ...
-    #u64 Size: ??               # XXX packed u64 value ...
+
+  nid_block:
+    u8 NID:
+      eq 00: kEnd
+      eq 01: kHeader
+      eq 06: kPackInfo
+      eq 09: kSize
+    if self.NID == kEnd:
+      parse: stop
+    if self.NID == kHeader:
+      # XXX ArchiveProperties follows
+      u8 ArchivePropertiesXXX: ??
+    if self.NID == kPackInfo:
+      vu64 PackPos: ??
+      vu64 PackStreamsCount: ??
+      nid_block[self.PackStreamsCount] Size: ??
+      nid_block Terminator: ??
+      if self.Terminator.NID != kEnd:
+        data: invalid
+    if self.NID == kSize:
+      vu64 Size: ??
 
 layout:
   - sig_header SignatureHeader
   - start_header StartHeader
-
   - header Header

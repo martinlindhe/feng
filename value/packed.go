@@ -44,11 +44,11 @@ func ReadVariableLengthU64(r *bytes.Reader) (uint64, []byte, uint64, error) {
 			return 0, nil, 0, err
 		}
 
-		if v == 0 {
-			panic("XXX") // XXX the xz decode() example returns error here
+		if v != 0 {
+			//			panic("XXX") // XXX the xz decode() example returns error here
+			raw = append(raw, v)
+			accum |= (uint64(v) & 0x7f) << (i * 7)
 		}
-		raw = append(raw, v)
-		accum |= (uint64(v) & 0x7f) << (i * 7)
 
 		if v&0x80 == 0 {
 			return accum, raw, uint64(i + 1), nil

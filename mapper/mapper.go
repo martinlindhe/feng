@@ -488,6 +488,20 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				Endian: fl.endian})
 			fl.offset += len
 
+		case "vu64":
+			// variable-length u64
+			_, raw, len, err := value.ReadVariableLengthU64(r)
+			if err != nil {
+				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
+			}
+			fs.Fields = append(fs.Fields, Field{
+				Offset: fl.offset,
+				Length: len,
+				Value:  raw,
+				Format: es.Field,
+				Endian: fl.endian})
+			fl.offset += len
+
 		case "asciiz":
 			val, err := readBytesUntilZero(r)
 			if err != nil {

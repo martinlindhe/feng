@@ -14,7 +14,7 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-var DEBUG_EVAL = false
+var DEBUG_EVAL = true
 
 // an expression failed to evaluate
 type EvaluateError struct {
@@ -31,7 +31,9 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 	if in == df.Label {
 		return "", fmt.Errorf("nothing to eval")
 	}
-	log.Println("EVAL STR EXPR", in)
+	if DEBUG_EVAL {
+		log.Println("EVAL STR EXPR", in)
+	}
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return "", err
@@ -123,6 +125,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			} else {
 				mapped[field.Format.Label] = fl.GetFieldValue(&field)
 			}
+
 		}
 		mapped["index"] = int(layout.Index)
 		variables[layout.Label] = mapped
@@ -333,7 +336,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		if len(args) < 2 {
 			return nil, fmt.Errorf("expected at least 2 arguments")
 		}
-		log.Println("not: starting", args)
 		ref := 0
 		found := false
 		for i, j := range args {
@@ -341,7 +343,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				if i == 0 {
 					ref = v
 				} else {
-					log.Printf("not: %d == %d  =  %v", v, ref, v == ref)
 					if v == ref {
 						found = true
 					}
@@ -350,7 +351,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				return false, fmt.Errorf("expected int, got %T", args[0])
 			}
 		}
-		log.Println("not: returns", !found)
 		return !found, nil
 	}
 

@@ -1,8 +1,8 @@
 # templates/archives/7zip.yml
 SignatureHeader
   [000000] Signature                      u8[6]                                  37 7a bc af 27 1c
-  [000006] Major version                  u8               0                     00
-  [000007] Minor version                  u8               3                     03
+  [000006] MajorVersion                   u8               0                     00
+  [000007] MinorVersion                   u8               3                     03
   [000008] StartHeaderCRC                 u32 le           1349732298            50 73 47 ca
 
 StartHeader
@@ -14,4 +14,7 @@ Header kHeader
   [000029] NID                            u8               1                     01
            - kHeader                      eq
 
-0x0052 (82) unmapped bytes (71.3%)
+kHeader
+  [00002a] NID                            u8               4                     04
+
+0x0051 (81) unmapped bytes (70.4%)
