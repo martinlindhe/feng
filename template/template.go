@@ -40,9 +40,6 @@ type Template struct {
 	// magic id:s
 	Magic []Magic
 
-	// constants
-	Constants []yaml.MapItem
-
 	// file structs
 	Structs []yaml.MapItem
 
@@ -50,30 +47,18 @@ type Template struct {
 	Layout []string
 }
 
-type EvaluatedConstant struct {
-	Field value.DataField
+type Constant struct {
+	Name  string
 	Value int64
 }
 
-func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
-	res := []EvaluatedConstant{}
-	for _, c := range t.Constants {
-		key, err := value.ParseDataField(c.Key.(string))
-		if err != nil {
-			return nil, err
-		}
-		val, err := value.ParseHexStringToUint64(c.Value.(string))
-		if err != nil {
-			return nil, err
-		}
-		res = append(res, EvaluatedConstant{key, int64(val)})
-	}
-
-	// add all fields with eq subkey pattern matches as constants
+// returns all fields with eq or bit subkey pattern matches as constants
+func (t *Template) evaluateConstants() ([]Constant, error) {
+	res := []Constant{}
 	for _, section := range t.Structs {
 		constants, err := findStructConstants(&section)
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 		res = append(res, constants...)
 	}
@@ -81,8 +66,8 @@ func (t *Template) evaluateConstants() ([]EvaluatedConstant, error) {
 	return res, nil
 }
 
-func findStructConstants(c *yaml.MapItem) ([]EvaluatedConstant, error) {
-	res := []EvaluatedConstant{}
+func findStructConstants(c *yaml.MapItem) ([]Constant, error) {
+	res := []Constant{}
 
 	for _, v := range c.Value.([]yaml.MapItem) {
 		switch v.Value.(type) {
@@ -104,12 +89,10 @@ func findStructConstants(c *yaml.MapItem) ([]EvaluatedConstant, error) {
 						if m.Operation == "eq" || m.Operation == "bit" {
 							data, err := value.ParseHexStringToUint64(m.Pattern)
 							if err != nil {
-								// example: invalid hex string in a template
 								return nil, err
 							}
 							df := value.DataField{Label: m.Label, Kind: field.Kind}
-							//log.Println(m.Label, ":", data, "=", value.AsUint64(df.Kind, data))
-							res = append(res, EvaluatedConstant{df, int64(data)})
+							res = append(res, Constant{df.Label, int64(data)})
 						}
 					}
 				}

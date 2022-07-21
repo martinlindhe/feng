@@ -81,6 +81,9 @@ type Struct struct {
 
 	// slice-based counter index, 0-based
 	Index int
+
+	// when evaluated once, struct can be skipped by eval function
+	evaluated bool
 }
 
 type Field struct {

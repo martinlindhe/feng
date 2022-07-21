@@ -88,7 +88,6 @@ func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64
 	}
 }
 
-// used by evaluateExpr()
 func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
 	// 1 arg: hex string
 	if len(args) != 1 {
@@ -339,6 +338,10 @@ func (fl *FileLayout) evalNot(args ...interface{}) (interface{}, error) {
 	return !found, nil
 }
 
+var (
+	evalVariables = make(map[string]interface{})
+)
+
 func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{}, error) {
 	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
 	in = strings.ReplaceAll(in, "self.", df.Label+".")
@@ -349,9 +352,17 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	}
 
 	eval := goval.NewEvaluator()
-	variables := make(map[string]interface{})
 
-	for _, layout := range fl.Structs {
+	for idx, layout := range fl.Structs {
+		if layout.evaluated {
+			if idx+2 < len(fl.Structs) {
+				// must not skip the struct currently being parsed when evaluateExpr() is invoked
+				if DEBUG_EVAL {
+					log.Println("skipping", layout.Name, "while evaluating", df.Label, ". idx", idx+1, "len", len(fl.Structs))
+				}
+				continue
+			}
+		}
 		mapped := make(map[string]interface{})
 		for _, field := range layout.Fields {
 			if !field.Format.Slice && field.Format.Range == "" {
@@ -372,21 +383,21 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			} else {
 				mapped[field.Format.Label] = fl.GetFieldValue(&field)
 			}
-
 		}
 		mapped["index"] = int(layout.Index)
-		variables[layout.Name] = mapped
+		evalVariables[layout.Name] = mapped
+
+		fl.Structs[idx].evaluated = true
 	}
 
-	// add constants as variables
 	for _, constant := range fl.DS.Constants {
-		//feng.Green("adding constant %s\n", constant.Field.Label)
-		variables[constant.Field.Label] = int(constant.Value)
+		evalVariables[constant.Name] = int(constant.Value)
 	}
+	evalVariables["FILE_SIZE"] = int(fl.size)
 
 	if DEBUG_EVAL {
 		feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
-		spew.Dump(variables)
+		spew.Dump(evalVariables)
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)
@@ -403,7 +414,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["not"] = fl.evalNot
 	functions["either"] = fl.evalEither
 
-	result, err := eval.Evaluate(in, variables, functions)
+	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
 		return 0, EvaluateError{input: in, msg: err.Error()}
 	}

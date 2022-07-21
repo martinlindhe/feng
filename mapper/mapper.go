@@ -150,11 +150,6 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	fileLayout.size = uint64(len(b))
 	rr := bytes.NewReader(b)
 
-	fileLayout.DS.Constants = append(fileLayout.DS.Constants, template.EvaluatedConstant{
-		Field: value.DataField{Label: "FILE_SIZE", Kind: "u64"},
-		Value: int64(fileLayout.size),
-	})
-
 	if DEBUG {
 		log.Printf("mapping ds '%s'", ds.BaseName)
 	}

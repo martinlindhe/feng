@@ -54,21 +54,6 @@ func TestEvaluateAllTemplates(t *testing.T) {
 	})
 }
 
-func TestEvaluateTemplateConstants(t *testing.T) {
-	templateData := `
-constants:
-  u8[2] I: c'I' 00
-  u8[3] X: c'XX' 00
-layout:
-  -
-`
-	ds, err := UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
-	assert.Equal(t, nil, err)
-
-	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "2", Label: "I"}, 0x49}, ds.Constants[0])
-	assert.Equal(t, EvaluatedConstant{value.DataField{Kind: "u8", Range: "3", Label: "X"}, 0x5858}, ds.Constants[1])
-}
-
 func TestEvaluateStructsAndLayout(t *testing.T) {
 	templateData := `
 structs:
@@ -96,7 +81,6 @@ layout:
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, &DataStructure{
-		Constants: []EvaluatedConstant{},
 		EvaluatedStructs: []evaluatedStruct{
 			{Name: "header", Expressions: []Expression{
 				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: true, Pattern: []uint8{0xff, 0xd8}, Value: ""}, Children: []Expression{}, MatchPatterns: []MatchPattern{}}},
