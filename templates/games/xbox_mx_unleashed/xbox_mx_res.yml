@@ -45,7 +45,7 @@ structs:
     #u16 Unknown6a: ?? # XXX flags ??? values like 8000, c000, 2000
     u32 DecompressedSizeMaybe: ?? # XXX uncompressed size ???
 
-    offset: self.offset + self.DataOffset - self.FilenameSize - 8 # XXX  unsure for #0 in LOC should be  00002a +   dataoffset 9e  = 0xc8
+    offset: OFFSET + self.DataOffset - self.FilenameSize - 8 # XXX  unsure for #0 in LOC should be  00002a +   dataoffset 9e  = 0xc8
     u8[1] Data: ?? # XXX len
     offset: restore
 

@@ -49,7 +49,7 @@ structs:
   header:
     u16 CRC: ??
     u16 HeaderSize: ??
-    u8[self.HeaderSize - (self.offset - offset("self.CRC"))] Reserved: ??
+    u8[self.HeaderSize - (OFFSET - offset("self.CRC"))] Reserved: ??
 
 layout:
   - header Header

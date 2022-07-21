@@ -121,7 +121,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 
 	case "u8", "u16", "u32", "u64":
 		if field.Format.Slice && field.Format.Range == "" {
-			panic("FIXME present slice")
+			panic("FIXME present slice " + field.Format.Kind)
 		}
 		if !field.Format.Slice && field.Format.Range != "" {
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
@@ -146,7 +146,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 					}
 				}
 			default:
-				panic("FIXME handle " + field.Format.Kind)
+				panic("handle " + field.Format.Kind)
 			}
 			return values
 		}
@@ -313,9 +313,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 		return timestamp.Format(time.RFC3339)
 
 	case "filetime":
-		// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601.
-		// Windows, XBox
-
+		// The FILETIME structure is a 64-bit value representing the number of 100-nanoseconds since Jan 1, 1601 (Windows, XBox)
 		filetimeDelta := time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
 		t := binary.LittleEndian.Uint64(b)
 		timestamp := time.Unix(0, int64(t)*100+filetimeDelta)
@@ -425,7 +423,7 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 }
 
 type PresentFileLayoutConfig struct {
-	ShowRaw           bool // XXX: should default to true in cli, false in smoketest
+	ShowRaw           bool
 	ReportUnmapped    bool
 	ReportOverlapping bool
 	InUTC             bool
@@ -551,26 +549,15 @@ func (fl *FileLayout) MappedBytes() uint64 {
 
 func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 	for _, str := range fl.Structs {
-		if DEBUG {
-			//log.Printf("GetStruct: want %s, got %s", name, str.Label)
-		}
 		if str.Name == name {
 			return &str, nil
 		}
 	}
-
 	return nil, fmt.Errorf("GetStruct: %s not found", name)
 }
 
 // finds the first field named `structName`.`fieldName`
 func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
-
-	if df != nil {
-		s = strings.ReplaceAll(s, "self.offset", fmt.Sprintf("%d", fl.offset))
-
-		//s = strings.ReplaceAll(s, "self.", df.Label+".")
-	}
-
 	if DEBUG {
 		log.Printf("GetInt: searching for '%s'", s)
 	}
@@ -831,8 +818,6 @@ func (fl *FileLayout) PresentType(df *value.DataField) string {
 
 // replace variables with their values
 func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, error) {
-
-	s = strings.Replace(s, "self.offset", fmt.Sprintf("%d", fl.offset), 1)
 
 	if DEBUG {
 		log.Printf("ExpandVariables: %s", s)

@@ -23,6 +23,7 @@ const (
 	DEBUG        = false
 	DEBUG_MAPPER = false
 	DEBUG_OFFSET = false
+	DEBUG_LABEL  = false
 )
 
 var (
@@ -68,7 +69,9 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
-				//log.Printf("--- used0 Label %s, restoring to %s", df.Label, baseLabel)
+				if DEBUG_LABEL {
+					log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
+				}
 				df.Label = baseLabel
 
 				if errors.Is(err, ParseStopError) {
@@ -83,21 +86,11 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 					}
 					break
 				}
-				/*
-					// do not propagate error, so that trailing data after slices will not count as parse error
-					if err != nil {
-						if _, ok := err.(template.ValidationError); ok {
-							log.Println("invalidating file due to no matching pattern", err)
-							//return &fileLayout, nil
-							break
-						}
-						// XXX must respect "TYPE IS NOT VALID" error
-						log.Printf("error (ignored): %#v   ", err)
-					}
-				*/
 				return err
 			}
-			//feng.Yellow("--- used1 Label %s, restoring to %s\n", df.Label, baseLabel)
+			if DEBUG_LABEL {
+				log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
+			}
 			df.Label = baseLabel
 		}
 		return nil
@@ -107,7 +100,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 		if fs != nil {
 			rangeQ = strings.ReplaceAll(rangeQ, "self.", fs.Name+".")
 		}
-		parsedRange, err := fl.EvaluateExpression(rangeQ, df) // XXX need to set DF to parent ...
+		parsedRange, err := fl.EvaluateExpression(rangeQ, df)
 		if err != nil {
 			panic(err)
 		}
@@ -121,11 +114,9 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
-				//log.Printf("--- used2 Label %s, restoring to %s", df.Label, baseLabel)
 				df.Label = baseLabel
 				return err
 			}
-			//log.Printf("--- used3 Label %s, restoring to %s", df.Label, baseLabel)
 			df.Label = baseLabel
 		}
 		return nil
@@ -137,9 +128,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 			// accept eof errors as valid parse for otherwise valid mapping
 			return nil
 		}
-		//if DEBUG {
 		feng.Yellow("%s errors out: %s\n", ds.BaseName, err.Error())
-		//}
 		return err
 	}
 	return nil
@@ -176,7 +165,6 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 				feng.Red("mapLayout error processing %s: %s\n", df.Label, err.Error())
 			}
-			//return nil, err
 			return &fileLayout, nil
 		}
 	}
@@ -214,14 +202,15 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		if err != nil {
 			return err // or panic or ignore
 		}
-		//log.Println(tpl)
 		ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, tpl)
 		if err != nil {
 			return err
 		}
 
 		if ds.NoMagic {
-			//log.Println("skip no_magic template", tpl)
+			if DEBUG {
+				log.Println("skip no_magic template", tpl)
+			}
 			return nil
 		}
 
@@ -239,7 +228,9 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 			}
 		}
 		if !found {
-			//feng.Red("%s magic bytes don't match\n", tpl)
+			if DEBUG {
+				log.Printf("%s magic bytes don't match", tpl)
+			}
 			return nil
 		}
 
@@ -297,7 +288,7 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 }
 
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
-
+	var err error
 	if DEBUG {
 		feng.Red("expandChildren: %06x working with struct %s\n", fl.offset, dfParent.Label)
 	}
@@ -361,7 +352,6 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				continue
 			}
 
-			var err error
 			fl.offsetChanges++
 			if fl.offsetChanges > 1000 {
 				panic("debug recursion: too many offset changes from template")
@@ -393,7 +383,6 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		case "until":
 			// syntax: "until: u8 scanData ff d9"
 			// creates a variable named scanData with all data up until terminating hex string
-
 			parts := strings.SplitN(es.Pattern.Value, " ", 3)
 			if len(parts) != 3 {
 				panic("invalid input: " + es.Pattern.Value)
@@ -549,12 +538,6 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 		case "if":
 			q := es.Field.Label
-			//q = strings.ReplaceAll(q, "self.", dfParent.Label+".")
-
-			// workaround for yaml limitation of not allowing [] in keys:
-			//q = strings.ReplaceAll(q, "{", "[")
-			//q = strings.ReplaceAll(q, "}", "]")
-
 			a, err := fl.EvaluateExpression(q, dfParent)
 			if err != nil {
 				return err

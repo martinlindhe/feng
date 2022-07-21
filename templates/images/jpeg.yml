@@ -84,7 +84,7 @@ structs:
       u16 tagMark: ??
       u32 FirstIFDOffset: ??
       if self.FirstIFDOffset != 8:
-        offset: self.offset + self.FirstIFDOffset
+        offset: OFFSET + self.FirstIFDOffset
       ifd[] IFD: ??
       endian: big
 

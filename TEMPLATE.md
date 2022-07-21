@@ -173,7 +173,7 @@ pattern matching data types
 
 # Tricks
 
-    u8[FILE_SIZE-self.offset] Extra: ??         tags the remaining bytes
+    u8[FILE_SIZE - OFFSET] Extra: ??         tags the remaining bytes
 
 
 # If-statements

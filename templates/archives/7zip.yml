@@ -28,7 +28,7 @@ structs:
     u64 NextHeaderOffset: ??
     u64 NextHeaderSize: ??
     u32 NextHeaderCRC: ??    # XXX impl crc32
-    offset: self.offset + self.NextHeaderOffset
+    offset: OFFSET + self.NextHeaderOffset
 
   header:
     u8 NID:
