@@ -56,9 +56,9 @@ layout:
 
 # Installation
 
-The software is still in alpha state, so no releases have yet been made.
+Windows/macOS and Linux binaries is available on the [Releases](https://github.com/martinlindhe/feng/releases) page.
 
-Assuming you have golang, then installing the commandline is as easy as:
+Assuming you have golang, then installing the cli app `feng` is as easy as:
 
     go install github.com/martinlindhe/feng/cmd/feng@latest
 
