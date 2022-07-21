@@ -71,8 +71,11 @@ func (fl *FileLayout) pushOffset() uint64 {
 
 // parsed file data section from a template "struct"
 type Struct struct {
-	Label      string
-	decoration string
+	// unique name of this instance of the struct
+	Name string
+
+	// additional decoration
+	Label string
 
 	Fields []Field
 
@@ -434,13 +437,13 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	for _, layout := range fl.Structs {
 		if len(layout.Fields) == 0 {
 			if DEBUG {
-				feng.Yellow("skip empty struct '%s'\n", layout.Label)
+				feng.Yellow("skip empty struct '%s'\n", layout.Name)
 			}
 			continue
 		}
-		heading := layout.Label
-		if layout.decoration != "" {
-			heading += " " + layout.decoration
+		heading := layout.Name
+		if layout.Label != "" {
+			heading += " " + layout.Label
 		}
 		res += heading + "\n"
 		for _, field := range layout.Fields {
@@ -551,7 +554,7 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 		if DEBUG {
 			//log.Printf("GetStruct: want %s, got %s", name, str.Label)
 		}
-		if str.Label == name {
+		if str.Name == name {
 			return &str, nil
 		}
 	}

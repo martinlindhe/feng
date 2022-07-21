@@ -16,7 +16,7 @@ func TestEvaluateExpression(t *testing.T) {
 	fl := &FileLayout{
 		Structs: []Struct{
 			{
-				Label: "Header",
+				Name: "Header",
 				Fields: []Field{
 					{Offset: 0x0, Length: 0x1, Value: []uint8{0x6}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Val1"}, MatchedPatterns: []value.MatchedPattern{}},
 					{Offset: 0x1, Length: 0x1, Value: []uint8{0x3}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Len1"}, MatchedPatterns: []value.MatchedPattern{}},

@@ -75,7 +75,7 @@ layout:
 	assert.Equal(t,
 		&FileLayout{
 			Structs: []Struct{
-				{Label: "Header", Fields: []Field{
+				{Name: "Header", Fields: []Field{
 					{Offset: 0x0, Length: 0x1, Value: []uint8{0xfb}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "U8 single"}, MatchedPatterns: []value.MatchedPattern{}},
 					{Offset: 0x1, Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", RangeVal: 2, Slice: false, Label: "U8 array"}, MatchedPatterns: []value.MatchedPattern{}},
 					{Offset: 0x3, Length: 0x2, Value: []uint8{0xaa, 0xf0}, Endian: "big", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "U16BE single"}, MatchedPatterns: []value.MatchedPattern{}},
@@ -131,7 +131,7 @@ layout:
 		},
 			&FileLayout{
 				Structs: []Struct{
-					{Label: "Header", Fields: []Field{
+					{Name: "Header", Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0xfb}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Sig8a"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x1, Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Sig8b"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x3, Length: 0x2, Value: []uint8{0x4a, 0xf0}, Endian: "big", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Sig16be"}, MatchedPatterns: []value.MatchedPattern{}},
@@ -191,7 +191,7 @@ layout:
 	assert.Equal(t,
 		&FileLayout{
 			Structs: []Struct{
-				{Label: "Header", Fields: []Field{
+				{Name: "Header", Fields: []Field{
 					{
 						Offset: 0x0, Length: 0x1, Value: []uint8{0xc7}, Endian: "",
 						Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bitfield"},
@@ -229,7 +229,7 @@ layout:
 	assert.Equal(t,
 		&FileLayout{
 			Structs: []Struct{
-				{Label: "Header", Fields: []Field{
+				{Name: "Header", Fields: []Field{
 					{
 						Offset: 0x0, Length: 0x2, Value: []uint8{0xff, 0xff}, Endian: "little",
 						Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Bitfield"},
@@ -268,7 +268,7 @@ layout:
 			},
 			&FileLayout{
 				Structs: []Struct{
-					{Label: "Header", Fields: []Field{
+					{Name: "Header", Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0x01}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"},
 							MatchedPatterns: []value.MatchedPattern{
 								{Operation: "eq", Label: "One", Value: 1},
@@ -323,7 +323,7 @@ layout:
 	assert.Equal(t,
 		&FileLayout{
 			Structs: []Struct{
-				{Label: "Header",
+				{Name: "Header",
 					Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"}, MatchedPatterns: []value.MatchedPattern{{Label: "Size", Operation: "bit", Value: 0x3}}},
 						{Offset: 0x1, Length: 0x8, Value: []uint8{0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7}, Endian: "", Format: value.DataField{Kind: "u8", Range: "8", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
@@ -356,7 +356,7 @@ layout:
 	assert.Equal(t,
 		&FileLayout{
 			Structs: []Struct{
-				{Label: "Header",
+				{Name: "Header",
 					Fields: []Field{
 						{Offset: 0x0, Length: 0x2, Value: []uint8{0x0, 0x2}, Endian: "little", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Length"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x2, Length: 0x2, Value: []uint8{0x44, 0x55}, Endian: "little", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
@@ -402,7 +402,7 @@ layout:
 		&FileLayout{
 			Structs: []Struct{
 				{
-					Label: "Header",
+					Name: "Header",
 					Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0x4}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Number"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x1, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Four"}, MatchedPatterns: []value.MatchedPattern{}},
@@ -448,7 +448,7 @@ layout:
 			&FileLayout{
 				Structs: []Struct{
 					{
-						Label: "Header",
+						Name: "Header",
 						Fields: []Field{
 							{Offset: 0x0, Length: 0x2, Value: []uint8{'M', 'M'}, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
 						},
@@ -460,7 +460,7 @@ layout:
 			&FileLayout{
 				Structs: []Struct{
 					{
-						Label: "Header",
+						Name: "Header",
 						Fields: []Field{
 							{Offset: 0x0, Length: 0x2, Value: []uint8{'I', 'I'}, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
 						},
@@ -512,7 +512,7 @@ layout:
 		&FileLayout{
 			Structs: []Struct{
 				{
-					Label: "Header",
+					Name: "Header",
 					Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bit field"},
 							MatchedPatterns: []value.MatchedPattern{{Label: "High bit", Operation: "bit", Value: 1}}},
@@ -548,7 +548,7 @@ layout:
 		&FileLayout{
 			Structs: []Struct{
 				{
-					Label: "Header",
+					Name: "Header",
 					Fields: []Field{
 						{Offset: 0x0, Length: 0x4, Value: []uint8{'f', 'o', 'o', 0x00}, Endian: "", Format: value.DataField{Kind: "asciiz", Range: "", Slice: false, Label: "Name"}},
 					},
@@ -580,7 +580,7 @@ layout:
 		&FileLayout{
 			Structs: []Struct{
 				{
-					Label:  "Header",
+					Name:   "Header",
 					Fields: []Field{{Offset: 0x0, Length: 0x6, Value: []uint8{0x00, 'f', 0x00, 'o', 0x00, 'o'}, Endian: "little", Format: value.DataField{Kind: "utf16", Range: "3", Slice: false, Label: "Name"}, MatchedPatterns: []value.MatchedPattern{}}}}},
 			endian: "little", offset: 0x6, size: 0x6}, fl)
 }
@@ -614,14 +614,14 @@ layout:
 		&FileLayout{
 			Structs: []Struct{
 				{
-					Label: "Header",
+					Name: "Header",
 					Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0x02}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "ID"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 				},
 
 				{
-					Label: "Unsized block_0",
+					Name: "Unsized block_0",
 					Fields: []Field{
 						{Offset: 0x1, Length: 0x1, Value: []uint8{0x80}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x2, Length: 0x1, Value: []uint8{0x81}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
@@ -630,7 +630,7 @@ layout:
 				},
 
 				{
-					Label: "Unsized block_1",
+					Name: "Unsized block_1",
 					Fields: []Field{
 						{Offset: 0x3, Length: 0x1, Value: []uint8{0x90}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x4, Length: 0x1, Value: []uint8{0x91}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},

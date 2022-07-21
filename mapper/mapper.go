@@ -105,7 +105,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 	if df.Range != "" {
 		rangeQ := df.Range
 		if fs != nil {
-			rangeQ = strings.ReplaceAll(rangeQ, "self.", fs.Label+".")
+			rangeQ = strings.ReplaceAll(rangeQ, "self.", fs.Name+".")
 		}
 		parsedRange, err := fl.EvaluateExpression(rangeQ, df) // XXX need to set DF to parent ...
 		if err != nil {
@@ -279,7 +279,7 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 		log.Printf("expandStruct: adding struct %s", dfParent.Label)
 	}
 
-	fl.Structs = append(fl.Structs, Struct{Label: dfParent.Label})
+	fl.Structs = append(fl.Structs, Struct{Name: dfParent.Label})
 
 	idx := len(fl.Structs) - 1
 	fs := &fl.Structs[idx]
@@ -321,13 +321,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				if err != nil {
 					panic(err)
 				}
-				fs.decoration = strings.TrimSpace(val)
+				fs.Label = strings.TrimSpace(val)
 			} else {
 				val, err := fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
 				if err != nil {
 					log.Println(err)
 				} else {
-					fs.decoration = strings.TrimSpace(val)
+					fs.Label = strings.TrimSpace(val)
 				}
 			}
 

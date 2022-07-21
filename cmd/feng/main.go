@@ -71,7 +71,7 @@ func main() {
 			for _, field := range layout.Fields {
 				switch field.Format.Kind {
 				case "compressed:lz4":
-					log.Printf("%s.%s %s: extracting lz4 stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					log.Printf("%s.%s %s: extracting lz4 stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
 					n, err := lz4.UncompressBlock(field.Value, expanded)
@@ -90,7 +90,7 @@ func main() {
 					}
 
 				case "compressed:zlib":
-					log.Printf("%s.%s %s: extracting zlib stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					log.Printf("%s.%s %s: extracting zlib stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					reader, err := zlib.NewReader(bytes.NewReader(field.Value))
 					if err != nil {
@@ -113,7 +113,7 @@ func main() {
 					}
 
 				case "compressed:deflate":
-					log.Printf("%s.%s %s: extracting DEFLATE stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					log.Printf("%s.%s %s: extracting DEFLATE stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					reader := flate.NewReader(bytes.NewReader(field.Value))
 					defer reader.Close()
@@ -136,7 +136,7 @@ func main() {
 					if len(field.Value) <= 1 {
 						continue
 					}
-					log.Printf("%s.%s %s: extracting raw data stream from %08x", layout.Label, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					log.Printf("%s.%s %s: extracting raw data stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
 

@@ -124,7 +124,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 
 		}
 		mapped["index"] = int(layout.Index)
-		variables[layout.Label] = mapped
+		variables[layout.Name] = mapped
 	}
 
 	// add constants as variables
