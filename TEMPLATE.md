@@ -3,7 +3,7 @@
 VERSION 0 - DRAFT. JULY 2022
 
 
-# directives
+# Directives
 
 ```
 data: invalid                           invalidates the file
@@ -19,15 +19,27 @@ offset: self.BaseOffset                 set offset to evaluated struct field
 parse: stop                             stops parsing. used to signal custom end-of-stream conditions
 ```
 
-# endianness
+# Endianness
 
-on a single field:
+In order to parse multi-byte data fields, the template needs to know the byte order (big/little).
+
+If endianness is unknown by the reader, it will error out.
+
+You can set endian in the top level document:
+
+```
+endian: little
+kind: archive
+...
+```
+
+Or on a single field:
 
 ```
 be:filetime   Time: ??
 ```
 
-until another directive:
+You can also change endianness during struct evaluation, like this:
 
 ```
 endian: big
@@ -37,8 +49,25 @@ endian: little
 u16 Little A: ??
 ```
 
+A common pattern is:
 
-# pre-defined values
+```
+endian: big    # top level default endianness
+...
+structs:
+  segment:
+    ...
+    # in a struct, change endianness
+    u16 Align:
+      eq c'MM': BIG_ENDIAN
+      eq c'II': LITTLE_ENDIAN
+    if self.Align == LITTLE_ENDIAN:
+      endian: little
+```
+
+
+
+# Pre-defined values
 
 ```
 FILE_SIZE           the file size in bytes
@@ -49,7 +78,7 @@ self.index          slice-based iteration index, 0-based
 ```
 
 
-# required byte sequences
+# Required byte sequences
 
 You can specify a required byte sequence like this
 ```
@@ -61,7 +90,7 @@ u16 TYPE: 00 01 ff
 Hex byte strings is always expressed in network byte order
 
 
-# built-in functions
+# Built-in functions
 
 
 abs(-95)       = 95  returns absolute value
@@ -75,7 +104,7 @@ not(self.Value, 4, 5) = true   returns true if self.Value is neither 4 or 5
 either(self.Value, 4, 5) = false   returns true if self.Value is either 4 or 5
 
 
-# data types
+# Data types
 
 numeric
 
@@ -106,6 +135,7 @@ date / time
     dostime             16-bit MS-DOS timestamp, in UTC
 
 colors
+
     rgb8                3 byte values for R, G, B
 
 
@@ -122,15 +152,13 @@ variable length encoding
     vu32                        variable-length u32 (fonts/woff2)
     vu64                        variable-length u32 (archives/xz, archives/7zip)
 
-# pattern matching data types
+pattern matching data types
 
-  until: u8 scanData ff d9            maps all bytes to scanData until marker is seen
-
-used by images/jpeg
+  until: u8 scanData ff d9            maps all bytes to scanData until marker is seen (images/jpeg)
 
 
 
-# arrays
+# Arrays
 
     u32[4]
     u8[FILE_SIZE-10]
@@ -138,17 +166,17 @@ used by images/jpeg
 
 
 
-# slices
+# Slices
 
     chunk[]
 
 
-# tricks
+# Tricks
 
     u8[FILE_SIZE-self.offset] Extra: ??         tags the remaining bytes
 
 
-# if-statements
+# If-statements
 
 NOTE: variables used in if-statements cannot contain spaces
 
