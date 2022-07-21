@@ -88,6 +88,257 @@ func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64
 	}
 }
 
+// used by evaluateExpr()
+func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
+	// 1 arg: hex string
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if v, ok := args[0].(string); ok {
+		v, err := value.ParseHexStringToUint64(v)
+		if err != nil {
+			return nil, err
+		}
+		offset := int(v)
+		if offset >= len(fl.rawData) {
+			return 0, fmt.Errorf("out of range %06x", offset)
+		}
+		val := binary.LittleEndian.Uint32(fl.rawData[offset:]) // XXX endianness
+		if DEBUG_EVAL {
+			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
+		}
+		return int(val), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
+	// 1 arg: hex string
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if v, ok := args[0].(string); ok {
+		v, err := value.ParseHexStringToUint64(v)
+		if err != nil {
+			return nil, err
+		}
+		offset := int(v)
+		if offset >= len(fl.rawData) {
+			return 0, fmt.Errorf("out of range %06x", offset)
+		}
+		val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
+		if DEBUG_EVAL {
+			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+		}
+		return int(val), nil
+	}
+	if offset, ok := args[0].(int); ok {
+		if offset >= len(fl.rawData) {
+			return 0, fmt.Errorf("out of range %06x", offset)
+		}
+		val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
+		if DEBUG_EVAL {
+			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+		}
+		return int(val), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalPeekI8(args ...interface{}) (interface{}, error) {
+	// 1 arg: hex string
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if v, ok := args[0].(string); ok {
+		v, err := value.ParseHexStringToUint64(v)
+		if err != nil {
+			return nil, err
+		}
+		offset := int(v)
+		if offset >= len(fl.rawData) {
+			return 0, fmt.Errorf("out of range %06x", offset)
+		}
+		val := fl.rawData[offset]
+		if DEBUG_EVAL {
+			log.Printf("peek_i8 AT OFFSET %06x: %04x", offset, val)
+		}
+		return int(val), nil
+	}
+	if offset, ok := args[0].(int); ok {
+		if offset >= len(fl.rawData) {
+			return 0, fmt.Errorf("out of range %06x", offset)
+		}
+		val := fl.rawData[offset]
+		if DEBUG_EVAL {
+			log.Printf("peek_i8 AT OFFSET %06x: %02x", offset, val)
+		}
+		return int(val), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalAtoi(args ...interface{}) (interface{}, error) {
+	// convert alphanumeric string to int
+	// 1 arg: string. return integer value
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if v, ok := args[0].(string); ok {
+		res, err := strconv.Atoi(strings.TrimRight(v, " "))
+		if err != nil {
+			return nil, err
+		}
+		return res, nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalOtoi(args ...interface{}) (interface{}, error) {
+	// convert octal numeric string to int
+	// 1 arg: string. return integer value
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if v, ok := args[0].(string); ok {
+		v = strings.TrimRight(v, " ")
+		if v == "" {
+			return 0, nil
+		}
+		res, err := strconv.ParseInt(v, 8, 64)
+		if err != nil {
+			return nil, err
+		}
+		return int(res), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalCeil(args ...interface{}) (interface{}, error) {
+	// returns ceil of float64
+	// 1 arg: int. return integer value
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if v, ok := args[0].(float64); ok {
+		res := math.Ceil(float64(v))
+		return int(res), nil
+	}
+	return nil, fmt.Errorf("expected int, got %T", args[0])
+}
+
+func (fl *FileLayout) evalAbs(args ...interface{}) (interface{}, error) {
+	// 1 arg: integer. return absolute value
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if i, ok := args[0].(int); ok {
+		return int(math.Abs(float64(i))), nil
+	}
+	return nil, fmt.Errorf("expected int, got %T", args[0])
+}
+
+func (fl *FileLayout) evalAlignment(args ...interface{}) (interface{}, error) {
+	// 2 args: 1) size value, 2) alignment. return the alignment needed for size value to fit into "alignment"
+	// example: value 4, align 4. returns 0
+	// example: value 4, align 8. returns 4
+	if len(args) != 2 {
+		return nil, fmt.Errorf("expected exactly 2 argument")
+	}
+	v1, ok := args[0].(int)
+	if !ok {
+		return nil, fmt.Errorf("expected int, got %T", args[0])
+	}
+	v2, ok := args[1].(int)
+	if !ok {
+		return nil, fmt.Errorf("expected int, got %T", args[1])
+	}
+
+	i := (v2 - (v1 % v2)) % v2
+	if DEBUG_EVAL {
+		log.Printf("aligned %d, %d => %d", v1, v2, i)
+	}
+	return i, nil
+}
+
+func (fl *FileLayout) evalOffset(args ...interface{}) (interface{}, error) {
+	// 1 arg: name of variable. return its offset as int
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if s, ok := args[0].(string); ok {
+		i, err := fl.GetOffset(s, nil)
+		if err != nil {
+			panic(err)
+		}
+		if DEBUG_EVAL {
+			log.Printf("eval offset('%s') => %06x", s, i)
+		}
+		return i, nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalLen(args ...interface{}) (interface{}, error) {
+	// 1 arg: name of variable. return its data length as int
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if s, ok := args[0].(string); ok {
+		i, err := fl.GetLength(s, nil)
+		if err != nil {
+			panic(err)
+		}
+		return i, nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalEither(args ...interface{}) (interface{}, error) {
+	// 2-n arg: reference value, list of values. returns true if 1st number is in the others
+	if len(args) < 2 {
+		return nil, fmt.Errorf("expected at least 2 arguments")
+	}
+	ref := 0
+	for i, j := range args {
+		if v, ok := j.(int); ok {
+			if i == 0 {
+				ref = v
+			} else {
+				if v == ref {
+					return true, nil
+				}
+			}
+		} else {
+			return false, fmt.Errorf("expected int, got %T", args[0])
+		}
+	}
+	return false, nil
+}
+
+func (fl *FileLayout) evalNot(args ...interface{}) (interface{}, error) {
+	// 2-n arg: reference value, list of values. returns true if 1st number is not any of the others
+	if len(args) < 2 {
+		return nil, fmt.Errorf("expected at least 2 arguments")
+	}
+	ref := 0
+	found := false
+	for i, j := range args {
+		if v, ok := j.(int); ok {
+			if i == 0 {
+				ref = v
+			} else {
+				if v == ref {
+					found = true
+				}
+			}
+		} else {
+			return false, fmt.Errorf("expected int, got %T", args[0])
+		}
+	}
+	return !found, nil
+}
+
 func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{}, error) {
 	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
 	in = strings.ReplaceAll(in, "self.", df.Label+".")
@@ -139,248 +390,18 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)
-
-	functions["peek_i32"] = func(args ...interface{}) (interface{}, error) {
-		// 1 arg: hex string
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if v, ok := args[0].(string); ok {
-			v, err := value.ParseHexStringToUint64(v)
-			if err != nil {
-				return nil, err
-			}
-			offset := int(v)
-			if offset >= len(fl.rawData) {
-				return 0, fmt.Errorf("out of range %06x", offset)
-			}
-			val := binary.LittleEndian.Uint32(fl.rawData[offset:]) // XXX endianness
-			if DEBUG_EVAL {
-				log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
-			}
-			return int(val), nil
-		}
-		return nil, fmt.Errorf("expected string, got %T", args[0])
-	}
-
-	functions["peek_i16"] = func(args ...interface{}) (interface{}, error) {
-		// 1 arg: hex string
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if v, ok := args[0].(string); ok {
-			v, err := value.ParseHexStringToUint64(v)
-			if err != nil {
-				return nil, err
-			}
-			offset := int(v)
-			if offset >= len(fl.rawData) {
-				return 0, fmt.Errorf("out of range %06x", offset)
-			}
-			val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
-			if DEBUG_EVAL {
-				log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
-			}
-			return int(val), nil
-		}
-		if offset, ok := args[0].(int); ok {
-			if offset >= len(fl.rawData) {
-				return 0, fmt.Errorf("out of range %06x", offset)
-			}
-			val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
-			if DEBUG_EVAL {
-				log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
-			}
-			return int(val), nil
-		}
-		return nil, fmt.Errorf("expected string, got %T", args[0])
-	}
-
-	functions["peek_i8"] = func(args ...interface{}) (interface{}, error) {
-		// 1 arg: hex string
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if v, ok := args[0].(string); ok {
-			v, err := value.ParseHexStringToUint64(v)
-			if err != nil {
-				return nil, err
-			}
-			offset := int(v)
-			if offset >= len(fl.rawData) {
-				return 0, fmt.Errorf("out of range %06x", offset)
-			}
-			val := fl.rawData[offset]
-			if DEBUG_EVAL {
-				log.Printf("peek_i8 AT OFFSET %06x: %04x", offset, val)
-			}
-			return int(val), nil
-		}
-		if offset, ok := args[0].(int); ok {
-			if offset >= len(fl.rawData) {
-				return 0, fmt.Errorf("out of range %06x", offset)
-			}
-			val := fl.rawData[offset]
-			if DEBUG_EVAL {
-				log.Printf("peek_i8 AT OFFSET %06x: %02x", offset, val)
-			}
-			return int(val), nil
-		}
-		return nil, fmt.Errorf("expected string, got %T", args[0])
-	}
-
-	functions["atoi"] = func(args ...interface{}) (interface{}, error) {
-		// convert alphanumeric string to int
-		// 1 arg: string. return integer value
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if v, ok := args[0].(string); ok {
-			res, err := strconv.Atoi(strings.TrimRight(v, " "))
-			if err != nil {
-				return nil, err
-			}
-			return res, nil
-		}
-		return nil, fmt.Errorf("expected string, got %T", args[0])
-	}
-	functions["otoi"] = func(args ...interface{}) (interface{}, error) {
-		// convert octal numeric string to int
-		// 1 arg: string. return integer value
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if v, ok := args[0].(string); ok {
-			v = strings.TrimRight(v, " ")
-			if v == "" {
-				return 0, nil
-			}
-			res, err := strconv.ParseInt(v, 8, 64)
-			if err != nil {
-				return nil, err
-			}
-			return int(res), nil
-		}
-		return nil, fmt.Errorf("expected string, got %T", args[0])
-	}
-	functions["ceil"] = func(args ...interface{}) (interface{}, error) {
-		// returns ceil of float64
-		// 1 arg: int. return integer value
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if v, ok := args[0].(float64); ok {
-			res := math.Ceil(float64(v))
-			return int(res), nil
-		}
-		return nil, fmt.Errorf("expected int, got %T", args[0])
-	}
-	functions["abs"] = func(args ...interface{}) (interface{}, error) {
-		// 1 arg: integer. return absolute value
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if i, ok := args[0].(int); ok {
-			return int(math.Abs(float64(i))), nil
-		}
-		return nil, fmt.Errorf("expected int, got %T", args[0])
-	}
-	functions["alignment"] = func(args ...interface{}) (interface{}, error) {
-		// 2 args: 1) size value, 2) alignment. return the alignment needed for size value to fit into "alignment"
-		// example: value 4, align 4. returns 0
-		// example: value 4, align 8. returns 4
-		if len(args) != 2 {
-			return nil, fmt.Errorf("expected exactly 2 argument")
-		}
-		v1, ok := args[0].(int)
-		if !ok {
-			return nil, fmt.Errorf("expected int, got %T", args[0])
-		}
-		v2, ok := args[1].(int)
-		if !ok {
-			return nil, fmt.Errorf("expected int, got %T", args[1])
-		}
-
-		i := (v2 - (v1 % v2)) % v2
-		if DEBUG_EVAL {
-			log.Printf("aligned %d, %d => %d", v1, v2, i)
-		}
-		return i, nil
-	}
-	functions["offset"] = func(args ...interface{}) (interface{}, error) {
-		// 1 arg: name of variable. return its offset as int
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if s, ok := args[0].(string); ok {
-			i, err := fl.GetOffset(s, nil)
-			if err != nil {
-				panic(err)
-			}
-			if DEBUG_EVAL {
-				log.Printf("eval offset('%s') => %06x", s, i)
-			}
-			return i, nil
-		}
-		return nil, fmt.Errorf("expected string, got %T", args[0])
-	}
-	functions["len"] = func(args ...interface{}) (interface{}, error) {
-		// 1 arg: name of variable. return its data length as int
-		if len(args) != 1 {
-			return nil, fmt.Errorf("expected exactly 1 argument")
-		}
-		if s, ok := args[0].(string); ok {
-			i, err := fl.GetLength(s, nil)
-			if err != nil {
-				panic(err)
-			}
-			return i, nil
-		}
-		return nil, fmt.Errorf("expected string, got %T", args[0])
-	}
-	functions["not"] = func(args ...interface{}) (interface{}, error) {
-		// 2-n arg: reference value, list of values. returns true if 1st number is not any of the others
-		if len(args) < 2 {
-			return nil, fmt.Errorf("expected at least 2 arguments")
-		}
-		ref := 0
-		found := false
-		for i, j := range args {
-			if v, ok := j.(int); ok {
-				if i == 0 {
-					ref = v
-				} else {
-					if v == ref {
-						found = true
-					}
-				}
-			} else {
-				return false, fmt.Errorf("expected int, got %T", args[0])
-			}
-		}
-		return !found, nil
-	}
-	functions["either"] = func(args ...interface{}) (interface{}, error) {
-		// 2-n arg: reference value, list of values. returns true if 1st number is in the others
-		if len(args) < 2 {
-			return nil, fmt.Errorf("expected at least 2 arguments")
-		}
-		ref := 0
-		for i, j := range args {
-			if v, ok := j.(int); ok {
-				if i == 0 {
-					ref = v
-				} else {
-					if v == ref {
-						return true, nil
-					}
-				}
-			} else {
-				return false, fmt.Errorf("expected int, got %T", args[0])
-			}
-		}
-		return false, nil
-	}
+	functions["peek_i32"] = fl.evalPeekI32
+	functions["peek_i16"] = fl.evalPeekI16
+	functions["peek_i8"] = fl.evalPeekI8
+	functions["atoi"] = fl.evalAtoi
+	functions["otoi"] = fl.evalOtoi
+	functions["ceil"] = fl.evalCeil
+	functions["abs"] = fl.evalAbs
+	functions["alignment"] = fl.evalAlignment
+	functions["offset"] = fl.evalOffset
+	functions["len"] = fl.evalLen
+	functions["not"] = fl.evalNot
+	functions["either"] = fl.evalEither
 
 	result, err := eval.Evaluate(in, variables, functions)
 	if err != nil {

@@ -5,10 +5,7 @@
 # USER FRIENDLINESS
 - LOW: error if a struct name occurs more than once
 - LOW: error if a layout name (label) occurs more than once
-- LOW: error if field name is reserved, like "offset", "len", "FILE_SIZE"
-
-
-
+- LOW: error if field name is reserved, like "OFFSET", "FILE_SIZE"
 
 
 
@@ -21,7 +18,9 @@
 
 ### USABILITY + POLISH
 
-for no_magic formats: match on input file extension
+HI: ability to parse and use additional templates in a user folder
+
+HI: for no_magic formats: match on input file extension, or force by cli arg
 
 feng printout: show complete printout of all hex values in long arrays with an cli option (default to show only 1st)
 
@@ -29,10 +28,11 @@ logging: use something better
 
 fix failing tests
 
-simple cli hex navigator, similar to formats cli app
+simple cli hex navigator, similar to [formats](https://github.com/martinlindhe/formats/tree/master/cmd/formats) cli app
 
-ability to parse and use additional templates in a user folder
 
-LATER yaml format: single bits: "u1" (1 bit), "u24" (24 bits), "u4" (4 bits) data types:
-  - rework internals to use golang bitreader by default so we can implement support for bzip2 bit stream?
 
+yaml format: single bits: "u1" (1 bit), "u24" (24 bits), "u4" (4 bits) data types:
+  - rework internals to use golang bitreader by default. needed by archive/bzip2
+
+yaml format: ability to extend a template with structs from another template. in order to reuse templates for commonly embedded formats such as RIFF, Exif, PNG
