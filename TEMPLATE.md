@@ -167,7 +167,7 @@ u32 HeaderSize:
   eq 0000_007c: V5
   default: invalid
 
-if self.HeaderSize in {V3, V4, V5}:
+if either(self.HeaderSize, V3, V4, V5):
   i32 Width: ??
 
 
