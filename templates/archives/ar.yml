@@ -4,6 +4,7 @@
 
 references:
   - https://www.sweetscape.com/010editor/repository/files/AR.bt
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/archive.grammar
 
 kind: archive
 name: AR archive

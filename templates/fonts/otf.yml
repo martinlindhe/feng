@@ -4,6 +4,7 @@ references:
   - https://docs.microsoft.com/en-us/typography/opentype/spec/
   - https://en.wikipedia.org/wiki/OpenType
   - https://www.sweetscape.com/010editor/repository/files/OpenType.bt
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/opentype.grammar
 
 kind: font
 name: OpenType font

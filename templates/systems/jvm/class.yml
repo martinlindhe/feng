@@ -3,6 +3,10 @@
 references:
   - https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html
 
+software:
+  - https://github.com/mstrobel/procyon
+  - https://github.com/leibnitz27/cfr
+
 kind: system
 name: Java Class
 extensions: [.class, .cla]

@@ -5,7 +5,8 @@
 references:
   - https://www.sweetscape.com/010editor/repository/files/MachO.bt
   - https://github.com/thetlk/Mach-O/tree/master/pymacho
-  # NOTE: on MacOS, there is C headers in /usr/include/mach-o
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/mach-o.grammar
+  - on MacOS, there is C headers in /usr/include/mach-o
 
 kind: executable
 name:  Mach-O executable

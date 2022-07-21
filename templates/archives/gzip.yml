@@ -12,6 +12,7 @@ references:
   - https://forensicswiki.xyz/page/Gzip
   - https://www.sweetscape.com/010editor/repository/files/GZip.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/GZIP.tcl
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/gzip.grammar
 
 kind: archive
 name: Gzip Archive

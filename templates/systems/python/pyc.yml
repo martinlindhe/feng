@@ -2,6 +2,7 @@
 
 references:
   - https://www.sweetscape.com/010editor/repository/files/PYC.bt
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/pyc.grammar
 
 software:
   - https://docs.python.org/3/library/dis.html

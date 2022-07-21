@@ -9,6 +9,7 @@ references:
   - https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format
   - https://www.sweetscape.com/010editor/repository/files/JPG.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/JPEG.tcl
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/jpeg.grammar
   - https://github.com/martinlindhe/formats/blob/master/parse/image/img_jpeg.go
 
 kind: image

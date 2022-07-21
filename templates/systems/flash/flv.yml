@@ -2,7 +2,9 @@
 
 references:
   - https://en.wikipedia.org/wiki/Flash_Video#Flash_Video_Structure
+  - http://osflash.org/
   - https://www.sweetscape.com/010editor/repository/files/FLV.bt
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/flv.grammar
 
 kind: executable
 name: Adobe Flash Video

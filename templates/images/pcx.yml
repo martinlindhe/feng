@@ -4,6 +4,7 @@ references:
   - http://web.archive.org/web/20030111010058/http://www.nist.fss.ru/hr/doc/spec/pcx.htm
   - http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt
   - https://www.sweetscape.com/010editor/repository/files/PCX.bt
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/pcx.grammar
 
 kind: image
 extensions: [.pcx]

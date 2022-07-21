@@ -2,6 +2,7 @@
 
 references:
   - https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/elf.grammar
 
 software:
   - xxx

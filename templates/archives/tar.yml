@@ -8,6 +8,7 @@
 references:
   - https://en.wikipedia.org/wiki/Tar_(computing)
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/TAR.tcl
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/gnutar.grammar
 
 kind: archive
 name: Tar (ustar) Archive

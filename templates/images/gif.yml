@@ -8,6 +8,7 @@ references:
   - https://en.wikipedia.org/wiki/GIF
   - https://www.sweetscape.com/010editor/repository/files/GIF.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Images/GIF.tcl
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/gif.grammar
   - https://github.com/martinlindhe/formats/blob/master/parse/image/img_gif.go
 
 kind: image

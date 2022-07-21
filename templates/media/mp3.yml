@@ -4,6 +4,7 @@
 
 references:
   - https://en.wikipedia.org/wiki/MP3
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/mp3.grammar
 
 software:
   - ffmpeg

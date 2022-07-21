@@ -25,6 +25,7 @@ references:
   - http://wiki.osdev.org/PE
   - https://en.wikibooks.org/wiki/X86_Disassembly/Windows_Executable_Files
   - https://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/pe.grammar
 
 kind: executable
 name: MS-DOS / OS-2 / Windows executable

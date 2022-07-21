@@ -12,6 +12,7 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/ZIP.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/ZIP.tcl
   - https://www.x-ways.net/winhex/templates/ZIP.tpl
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/zip.grammar
 
 kind: archive
 name: Zip Archive
