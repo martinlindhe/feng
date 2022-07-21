@@ -29,8 +29,6 @@ logging: use something better
 
 fix failing tests
 
-yaml format: mark up certain conditions for "want sample please" in a standardized way
-
 simple cli hex navigator, similar to formats cli app
 
 ability to parse and use additional templates in a user folder

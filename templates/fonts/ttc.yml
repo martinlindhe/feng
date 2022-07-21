@@ -3,9 +3,8 @@
 # TrueType Collection (TTC) is an extension of TrueType format that
 # allows combining multiple fonts into a single file.
 #
-# MAX: allow to concat data areas for data extraction. needed to produce a ttc2ttf feature from this template
-#
-# MID: can we extract ttf fonts from a ttc file without much extra effort?
+# MAX: allow to concat data areas for data extraction. needed to produce a ttc2ttf feature from this template (can we extract ttf fonts from a ttc file without much extra effort?)
+# HI:  want sample with DSIG block
 
 references:
   - https://docs.fileformat.com/font/ttc/
@@ -59,7 +58,7 @@ structs:
       u32 dsigLength: ??
       u32 dsigOffset: ??
       if self.dsigLength != 0:
-        data: unseen  # want sample with DSIG block
+        data: unseen
 
 layout:
   - v1_header V1Header

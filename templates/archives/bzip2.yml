@@ -21,7 +21,6 @@ structs:
   header:
     ascii[2] Signature: c'BZ'
     ascii Encoding:
-      # only huffman is known
       eq c'h': Huffman
       default: invalid
     ascii Compression level:

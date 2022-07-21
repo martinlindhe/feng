@@ -59,21 +59,22 @@ structs:
       eq 0d: Acorn RISCOS
       eq ff: Unknown OS
 
-    # TODO NEED sample with FLAG_CRC16:
     if self.HeaderFlags & FLAG_CRC16:
-      u16 Header checksum: ??       # XXX mark data type as crc16 over range... crc16[0000:000a]  ?
+      data: unseen
+      u16 Header checksum: ??                   # XXX mark data type as crc16 over range... crc16[0000:000a]  ?
       # crc16[0000:000a] Header checksum: ??
 
-    # TODO NEED sample with FLAG_EXTRA:
-    if self.HeaderFlags & FLAG_EXTRA:            # XXX format: u16 length + byte[len] data
+    if self.HeaderFlags & FLAG_EXTRA:
+      # XXX format: u16 length + byte[len] data
+      data: unseen
       u16 Extra Length: ??
       u8[self.Extra Length] Data: ??
 
     if self.HeaderFlags & FLAG_NAME:
       asciiz Filename: ??
 
-    # TODO NEED sample with FLAG_COMMENT
     if self.HeaderFlags & FLAG_COMMENT:
+      data: unseen
       asciiz Comment: ??
 
     if self.CompressionMethod == 8:

@@ -1,6 +1,6 @@
 # STATUS: 70%
 #
-# - HI: need more samples
+# - HI: need sample with PresetDictionary=1
 
 references:
   - https://en.wikipedia.org/wiki/LZ4_(compression_algorithm)
@@ -18,7 +18,7 @@ magic:
     match: 04 22 4d 18
 
 structs:
-  header: # XXX frame header
+  header:
     u32 Signature:
       eq 184D2204: Magic number
       # TODO handle legacy format with magic 184C2102. NEED SAMPLE.
@@ -41,9 +41,9 @@ structs:
     if self.Flags & ContentSize:  # SAMPLE: file1-content-size.lz4
       u64 ContentSize: ??
 
-    # TODO need sample
-    #if (Flags.FlagData.PresetDictionary > 0)
-    #    UINT32 DictionaryID;    
+    if self.Flags & PresetDictionary:
+      data: unseen
+      u32 DictionaryID: ??
     
     u8 HeaderChecksum: ??     # XXX checksum type?
 

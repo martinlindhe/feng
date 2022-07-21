@@ -91,6 +91,7 @@ structs:
       #  u8[self.NextExtendedHeaderSize] ExtendedHeader: ??
 
     if self.HeaderLevel == 3:
+      data: unseen
       u32 Size of header: ??
       u32 NextExtendedHeaderSize: ??
 

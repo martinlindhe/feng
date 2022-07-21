@@ -36,13 +36,15 @@ structs:
     u32 Freelist trunk page: ??
     u32 Freelist page count: ??           # TODO if != 0, parse freelist data. NEED SAMPLE
     u32 Schema cookie: ??
-    u32 Schema file format:
+    u32 SchemaFileFormat:
       #eq 0000_0000: V0                    # NEED SAMPLE
       #eq 0000_0001: V1                    # NEED SAMPLE
       #eq 0000_0002: V2                    # NEED SAMPLE
       #eq 0000_0003: V3                    # NEED SAMPLE
       eq 0000_0004: V4
       default: invalid
+    if self.SchemaFileFormat != 4:
+      data: unseen
     u32 Page cache size: ??
     u32 Top root page: ??
     u32 TextEncoding:
