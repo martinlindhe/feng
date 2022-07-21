@@ -13,7 +13,7 @@ Header
   [000020] Freelist trunk page            u32 be           0                     00 00 00 00
   [000024] Freelist page count            u32 be           0                     00 00 00 00
   [000028] Schema cookie                  u32 be           3                     00 00 00 03
-  [00002c] Schema file format             u32 be           4                     00 00 00 04
+  [00002c] SchemaFileFormat               u32 be           4                     00 00 00 04
            - V4                           eq
   [000030] Page cache size                u32 be           0                     00 00 00 00
   [000034] Top root page                  u32 be           0                     00 00 00 00

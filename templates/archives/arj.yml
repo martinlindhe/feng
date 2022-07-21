@@ -66,7 +66,6 @@ structs:
 
     if self.SizeWithExtraData == 0x22:
       # extra data
-      data: unseen
       u8 Protection factor: ??
       u8 Flags (second series): ??
       u8[2] Reserved: ??

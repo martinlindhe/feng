@@ -6,12 +6,19 @@
 # LO: need big endian sample file
 
 references:
-  - https://www.sweetscape.com/010editor/repository/files/Luac.bt
   - https://gist.github.com/seanjensengrey/e198380afc64f0eb17a47512b48f040f
+  - https://www.sweetscape.com/010editor/repository/files/Luac.bt
+  - https://raw.githubusercontent.com/synalysis/Grammars/master/luac.grammar
+
+software:
+  - https://github.com/viruscamp/luadec
+  - https://github.com/HansWessels/unluac
 
 kind: bytecode
 name: Lua compiled bytecode
 extensions: [.luac]
+
+endian: little
 
 magic:
   - offset: 0000
@@ -25,15 +32,15 @@ structs:
       eq 52: "5.2"
       eq 53: "5.3"  # XXX want 5.3 sample
       eq 54: "5.4"
+    if self.Version == 0x53:
+      data: unseen
     u8 Format:
       eq 00: Official
     u8 Endian:
-      eq 00: big
-      eq 01: little
-    if self.Endian == 1:
-      endian: little
-    if self.Endian == 0:
-      # XXX want luac 5.2 sample
+      eq 00: Big
+      eq 01: Little
+    if self.Endian == Big:
+      data: unseen
       endian: big
     u8 size_int: ??             # sizeof(int)
     u8 size_size_t: ??          # sizeof(size_t)

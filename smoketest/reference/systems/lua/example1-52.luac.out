@@ -6,7 +6,7 @@ Header
   [000005] Format                         u8               0                     00
            - Official                     eq
   [000006] Endian                         u8               1                     01
-           - little                       eq
+           - Little                       eq
   [000007] size_int                       u8               4                     04
   [000008] size_size_t                    u8               8                     08
   [000009] size_instruction               u8               4                     04
