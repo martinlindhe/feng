@@ -58,7 +58,6 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 
 // evaluates a math expression
 func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64, error) {
-
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return 0, err
@@ -91,7 +90,6 @@ func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64
 
 func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{}, error) {
 	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
-
 	in = strings.ReplaceAll(in, "self.", df.Label+".")
 
 	// fast path: if "in" looks like decimal number just convert it
@@ -100,12 +98,10 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	}
 
 	eval := goval.NewEvaluator()
-
 	variables := make(map[string]interface{})
 
 	for _, layout := range fl.Structs {
 		mapped := make(map[string]interface{})
-
 		for _, field := range layout.Fields {
 			if !field.Format.Slice && field.Format.Range == "" {
 				switch field.Format.Kind {
@@ -159,8 +155,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				return 0, fmt.Errorf("out of range %06x", offset)
 			}
 			val := binary.LittleEndian.Uint32(fl.rawData[offset:]) // XXX endianness
-			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
-
+			if DEBUG_EVAL {
+				log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
+			}
 			return int(val), nil
 		}
 		return nil, fmt.Errorf("expected string, got %T", args[0])
@@ -181,7 +178,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				return 0, fmt.Errorf("out of range %06x", offset)
 			}
 			val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
-			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			if DEBUG_EVAL {
+				log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			}
 			return int(val), nil
 		}
 		if offset, ok := args[0].(int); ok {
@@ -189,7 +188,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				return 0, fmt.Errorf("out of range %06x", offset)
 			}
 			val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
-			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			if DEBUG_EVAL {
+				log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			}
 			return int(val), nil
 		}
 		return nil, fmt.Errorf("expected string, got %T", args[0])
@@ -210,7 +211,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				return 0, fmt.Errorf("out of range %06x", offset)
 			}
 			val := fl.rawData[offset]
-			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			if DEBUG_EVAL {
+				log.Printf("peek_i8 AT OFFSET %06x: %04x", offset, val)
+			}
 			return int(val), nil
 		}
 		if offset, ok := args[0].(int); ok {
@@ -218,7 +221,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				return 0, fmt.Errorf("out of range %06x", offset)
 			}
 			val := fl.rawData[offset]
-			log.Printf("peek_i8 AT OFFSET %06x: %02x", offset, val)
+			if DEBUG_EVAL {
+				log.Printf("peek_i8 AT OFFSET %06x: %02x", offset, val)
+			}
 			return int(val), nil
 		}
 		return nil, fmt.Errorf("expected string, got %T", args[0])
@@ -297,10 +302,11 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		}
 
 		i := (v2 - (v1 % v2)) % v2
-		log.Printf("aligned %d, %d => %d", v1, v2, i)
+		if DEBUG_EVAL {
+			log.Printf("aligned %d, %d => %d", v1, v2, i)
+		}
 		return i, nil
 	}
-
 	functions["offset"] = func(args ...interface{}) (interface{}, error) {
 		// 1 arg: name of variable. return its offset as int
 		if len(args) != 1 {
@@ -311,7 +317,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			if err != nil {
 				panic(err)
 			}
-			log.Printf("eval offset('%s') => %06x", s, i)
+			if DEBUG_EVAL {
+				log.Printf("eval offset('%s') => %06x", s, i)
+			}
 			return i, nil
 		}
 		return nil, fmt.Errorf("expected string, got %T", args[0])
@@ -330,7 +338,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		}
 		return nil, fmt.Errorf("expected string, got %T", args[0])
 	}
-
 	functions["not"] = func(args ...interface{}) (interface{}, error) {
 		// 2-n arg: reference value, list of values. returns true if 1st number is not any of the others
 		if len(args) < 2 {
@@ -353,7 +360,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		}
 		return !found, nil
 	}
-
 	functions["either"] = func(args ...interface{}) (interface{}, error) {
 		// 2-n arg: reference value, list of values. returns true if 1st number is in the others
 		if len(args) < 2 {
@@ -365,7 +371,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				if i == 0 {
 					ref = v
 				} else {
-					log.Printf("in: %d != %d  =  %v", v, ref, v != ref)
 					if v == ref {
 						return true, nil
 					}

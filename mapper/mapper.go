@@ -20,7 +20,9 @@ import (
 )
 
 const (
-	DEBUG = false
+	DEBUG        = false
+	DEBUG_MAPPER = false
+	DEBUG_OFFSET = false
 )
 
 var (
@@ -51,9 +53,9 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 	if err != nil {
 		log.Fatal(err)
 	}
-	//if DEBUG {
-	log.Printf("mapping ds %s, df '%s' (kind %s)", ds.BaseName, df.Label, df.Kind)
-	//}
+	if DEBUG_MAPPER {
+		log.Printf("mapping ds %s, df '%s' (kind %s)", ds.BaseName, df.Label, df.Kind)
+	}
 
 	if df.Slice {
 		// like ranged layout but keep reading until EOF
@@ -70,11 +72,15 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 				df.Label = baseLabel
 
 				if errors.Is(err, ParseStopError) {
-					log.Println("reached ParseStop")
+					if DEBUG_MAPPER {
+						log.Println("reached ParseStop")
+					}
 					break
 				}
 				if err == io.EOF {
-					log.Println("reached EOF")
+					if DEBUG_MAPPER {
+						log.Println("reached EOF")
+					}
 					break
 				}
 				/*
@@ -167,7 +173,9 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	for _, df := range ds.Layout {
 		err := fileLayout.mapLayout(rr, nil, ds, &df)
 		if err != nil {
-			feng.Red("mapLayout error processing %s: %s\n", df.Label, err.Error())
+			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+				feng.Red("mapLayout error processing %s: %s\n", df.Label, err.Error())
+			}
 			//return nil, err
 			return &fileLayout, nil
 		}
@@ -334,15 +342,17 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		case "endian":
 			// change endian
 			fl.endian = es.Pattern.Value
-			//if DEBUG {
-			feng.Yellow("endian set to '%s' at %06x\n", fl.endian, fl.offset)
-			//}
+			if DEBUG_MAPPER {
+				feng.Yellow("endian set to '%s' at %06x\n", fl.endian, fl.offset)
+			}
 
 		case "offset":
 			// set/restore current offset
 			if es.Pattern.Value == "restore" {
 				previousOffset := fl.popLastOffset()
-				log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, previousOffset)
+				if DEBUG_OFFSET {
+					log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, previousOffset)
+				}
 				fl.offset = previousOffset
 				_, err := r.Seek(int64(fl.offset), io.SeekStart)
 				if err != nil {
@@ -359,7 +369,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 			previousOffset := fl.pushOffset()
 			fl.offset, err = fl.GetInt(es.Pattern.Value, dfParent)
-			log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
+			if DEBUG_OFFSET {
+				log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
+			}
 			if err != nil {
 				return err
 			}
@@ -437,7 +449,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 			endian := fl.endian
 			if es.Field.Endian != "" {
-				feng.Yellow("-- endian override on field %s to %s\n", es.Field.Label, es.Field.Endian)
+				if DEBUG {
+					feng.Yellow("-- endian override on field %s to %s\n", es.Field.Label, es.Field.Endian)
+				}
 				endian = es.Field.Endian
 			}
 
@@ -588,23 +602,17 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			if err != nil {
 				found := false
 				for _, ev := range fl.DS.EvaluatedStructs {
-
 					if ev.Name == es.Field.Kind {
 						found = true
-						log.Println("--- layout ev", ev.Name, " .....", es.Field.Kind)
-
-						//err = fl.mapLayout(r, ds, dfParent) // XXX es.Field is wrong ??? should be data field for the current section !!!
-
-						// XXX need to eval "self." in field range HERE, because we will be in child struct context i mapLayout( .....)
-
-						err = fl.mapLayout(r, fs, ds, &es.Field) // XXX works for none?!. ..
+						err = fl.mapLayout(r, fs, ds, &es.Field)
 						if err != nil {
-							log.Println(err)
+							if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+								log.Println(err)
+							}
 						}
 						break
 					}
 				}
-
 				if !found {
 					// this error is critical. it means the parsed template is not working.
 					log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
