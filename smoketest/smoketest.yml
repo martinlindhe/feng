@@ -295,18 +295,18 @@ input:
       - jpeg_001.jpg
       - jpeg-134byte.jpg
 
-  - folder: images/pcx
-    files:
-      - pcx_001_1bpp_lena9.pcx
-      - pcx_1bpp_rgb1.pcx
-      - pcx_1bpp_rgb4.pcx
-      - pcx_1bpp_rgb4v2.pcx
-      - pcx_002_vga.pcx
-      - PCX_gimp.pcx
-      - PCX_ps.pcx
-      - PCX_psp.pcx
-      - rgb8_with_palette.pcx
-      - rgb24.pcx
+  #- folder: images/pcx                      # XXX lacks file magic
+  #  files:
+  #    - pcx_001_1bpp_lena9.pcx
+  #    - pcx_1bpp_rgb1.pcx
+  #    - pcx_1bpp_rgb4.pcx
+  #    - pcx_1bpp_rgb4v2.pcx
+  #    - pcx_002_vga.pcx
+  #    - PCX_gimp.pcx
+  #    - PCX_ps.pcx
+  #    - PCX_psp.pcx
+  #    - rgb8_with_palette.pcx
+  #    - rgb24.pcx
 
   - folder: images/png
     files:

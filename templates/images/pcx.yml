@@ -11,9 +11,11 @@ extensions: [.pcx]
 mime: image/x-pcx
 endian: little
 
-magic:
-  - offset: 0000
-    match: 0a
+no_magic: true      # magic is too weak
+
+#magic:
+#  - offset: 0000
+#    match: 0a
 
 structs:
   header:
