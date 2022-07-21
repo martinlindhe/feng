@@ -2,7 +2,7 @@ env:
   - CGO_ENABLED=0
 
 builds:
-  - id: eqbc-go
+  - id: feng
     main: ./cmd/feng
     binary: feng
     goos:
