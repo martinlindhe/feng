@@ -5,18 +5,18 @@ VERSION 0 - DRAFT. JULY 2022
 
 # Directives
 
-```
-data: invalid                           invalidates the file
-data: unseen                            marks data as previously unseen, asking the user to submit a sample at the end of parsing
+```yaml
+data: invalid                           # invalidates the file
+data: unseen                            # marks data as previously unseen, asking the user to submit a sample at the end of parsing
 
-endian: big                             set endian to big/little
+endian: big                             # set endian to big/little
 
-label: '"DIRENTRY"'                     set label decoration for the current struct
-label: self.Key + " = " self.Value      evaluate strings
+label: '"DIRENTRY"'                     # set label decoration for the current struct
+label: self.Key + " = " self.Value      # evaluate strings
 
-offset: self.BaseOffset                 set offset to evaluated struct field
+offset: self.BaseOffset                 # set offset to evaluated struct field
 
-parse: stop                             stops parsing. used to signal custom end-of-stream conditions
+parse: stop                             # stops parsing. used to signal custom end-of-stream conditions
 ```
 
 # Endianness
@@ -27,7 +27,7 @@ If endianness is unknown by the reader, it will error out.
 
 You can set endian in the top level document:
 
-```
+```yaml
 endian: little
 kind: archive
 ...
@@ -35,13 +35,13 @@ kind: archive
 
 Or on a single field:
 
-```
+```yaml
 be:filetime   Time: ??
 ```
 
 You can also change endianness during struct evaluation, like this:
 
-```
+```yaml
 endian: big
 u16 Big A: ??
 u16 Big B: ??
@@ -51,7 +51,7 @@ u16 Little A: ??
 
 A common pattern is:
 
-```
+```yaml
 endian: big    # top level default endianness
 ...
 structs:
@@ -69,19 +69,18 @@ structs:
 
 # Pre-defined values
 
-```
-FILE_SIZE           the file size in bytes
-OFFSET              current offset
-field.len           field length  # XXX BROKEN/UNUSED
-self                evaluates to the current struct
-self.index          slice-based iteration index, 0-based
+```yaml
+FILE_SIZE           # the file size in bytes
+OFFSET              # current offset
+self                # evaluates to the current struct
+self.index          # slice-based iteration index, 0-based
 ```
 
 
 # Required byte sequences
 
 You can specify a required byte sequence like this
-```
+```yaml
 ascii[2] Magic:    c'PK'
 
 u16 TYPE: 00 01 ff
@@ -92,17 +91,17 @@ Hex byte strings is always expressed in network byte order
 
 # Built-in functions
 
-
-abs(-95)       = 95  returns absolute value
-peek_i16(123)  = -1  returns i16 value from offset
-peek_i16("0100")    hex string offset
-peek_i32(123)  = -1  returns i32 value from offset
-atoi("123")    = 123   returns integer from alphanumeric string
-otoi("123")    = 83    returns integer from octal numeric string (archives/tar)
-alignment(3,4) = 1     returns the number of bytes needed to align the first arg to the second arg
+```
+abs(-95)       = 95     returns absolute value
+peek_i16(123)  = -1     returns i16 value from offset
+peek_i16("0100")        hex string offset
+peek_i32(123)  = -1     returns i32 value from offset
+atoi("123")    = 123    returns integer from alphanumeric string
+otoi("123")    = 83     returns integer from octal numeric string (archives/tar)
+alignment(3,4) = 1      returns the number of bytes needed to align the first arg to the second arg
 not(self.Value, 4, 5) = true   returns true if self.Value is neither 4 or 5
 either(self.Value, 4, 5) = false   returns true if self.Value is either 4 or 5
-
+```
 
 # Data types
 
@@ -113,11 +112,12 @@ numeric
 
 numeric bit fields
 
-    u16 Type:
-      eq 0000: TYPE_NULL            these types will evaluate as constants
-      eq 0001: TYPE_STRING_POOL
-      default: invalid
-
+```yaml
+u16 Type:
+  eq 0000: TYPE_NULL
+  eq 0001: TYPE_STRING_POOL
+  default: invalid
+```
 
 text
 
@@ -157,6 +157,29 @@ pattern matching data types
   until: u8 scanData ff d9            maps all bytes to scanData until marker is seen (images/jpeg)
 
 
+# Constants
+
+The `eq` and `bit` pattern matches automatically evaluates to constants
+
+eq:
+```yaml
+u16 Type:
+  eq 0000: TYPE_NULL
+  eq 0001: TYPE_STRING_POOL
+  default: invalid
+if self.Type == TYPE_NULL:
+  u8 Footer: ??
+```
+
+bit:
+```yaml
+u16 Flag:
+  bit b0000_0000_0111_1111: Lo
+  bit b0000_1111_1000_0000: B3
+  bit b1111_0000_0000_0000: Hi
+if self.Flag & Lo:
+  u8 LoData: ??
+```
 
 # Arrays
 
@@ -180,7 +203,7 @@ pattern matching data types
 
 NOTE: variables used in if-statements cannot contain spaces
 
-```
+```yaml
 if self.Signature == BIG:   # where big is a constant or a eq pattern type value
   ...
 

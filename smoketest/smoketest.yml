@@ -281,7 +281,7 @@ input:
       - gif_89a_005_with_application.gif      # XXX is not parsed properly
       - gif_89a_006_win95_attlogo.gif
       - necco.gif
-      #- newtons_cradle_animation_book_2.gif     #  is parsed properly but very slow (1s versus 20ms for a small gif). XXX this is a good sample to analyze the parser for better performance
+      - newtons_cradle_animation_book_2.gif     #  is parsed properly but very slow (300ms versus 20ms for a small gif). XXX this is a good sample to analyze the parser for better performance
       - rgb1.gif
       - rgb4.gif
       - rgb6.gif
