@@ -3,7 +3,6 @@
 # MID: need REVERSE_ENDIAN_CONSTANT sample
 # LOW: calculate adler32 + sha1 hashes. reason as to why: able to replace tools such as https://github.com/feicong/android_re/blob/master/DexFixer.1sc
 
-
 # versions:
 # 009 = Android M3 (2007)
 # 013 = Android M5 (2008)
@@ -30,41 +29,39 @@ magic:
   - offset: 0000
     match: c'dex' 0a
 
-constants:
-  ascii[2] ENDIAN_CONSTANT:         12 34 56 78     # little endian (default)
-  ascii[2] REVERSE_ENDIAN_CONSTANT: 78 56 34 12     # big endian
-
 structs:
   header:
     ascii[4] Signature: c'dex' 0a
     ascii[4] Version: ??
-    u32 Checksum: ?? # adler32 checksum of the rest of the file
-    u8[20] SHA1: ??  # sha1 hash of the rest of the file
+    u32 Checksum: ??              # adler32 checksum of the rest of the file
+    u8[20] SHA1: ??               # sha1 hash of the rest of the file
     u32 File size: ??
-    u32 Header size: 00 00 00 70 # only allowed size is 0x70 ??
+    u32 Header size: ??
 
-    u32 EndianMarker: ??
-    if self.EndianMarker == REVERSE_ENDIAN_CONSTANT:
-      endian: big       # XXX need sample to study rest of header
+    u32 Endian:
+      eq 12345678: Little         # ENDIAN_CONSTANT (default)
+      eq 78563412: Big            # REVERSE_ENDIAN_CONSTANT
+    if self.Endian == Big:
+      data: unseen
+      endian: big
 
-    u32 Link size: ??   # XXX size of the link section, or 0 if this file isn't statically linked
-    u32 Link offset: ?? # XXX offset from the start of the file to the link section, or 0 if link_size == 0.
-    u32 Map offset: ??  # XXX offset from the start of the file to the map item
-    u32 String IDs size: ??
-    u32 String IDs offset: ??
-    u32 Type IDs size: ??
-    u32 Type IDs offset: ??
-    u32 Proto IDs size: ??
-    u32 Proto IDs offset: ??
-    u32 Field IDs size: ??
-    u32 Field IDs offset: ??
-    u32 Method IDs size: ??
-    u32 Method IDs offset: ??
-    u32 Class defs size: ??
-    u32 Class defs offset: ??
-    u32 Data size: ??
-    u32 Data offset: ??
-
+    u32 LinkSize: ??
+    u32 LinkOffset: ??
+    u32 MapOffset: ??             # XXX offset from the start of the file to the map item
+    u32 StringIDsSize: ??
+    u32 StringIDsOffset: ??
+    u32 TypeIDsSize: ??
+    u32 TypeIDsOffset: ??
+    u32 ProtoIDsSize: ??
+    u32 ProtoIDsOffset: ??
+    u32 FieldIDsSize: ??
+    u32 FieldIDsOffset: ??
+    u32 MethodIDsSize: ??
+    u32 MethodIDsOffset: ??
+    u32 ClassDefsSize: ??
+    u32 ClassDefsOffset: ??
+    u32 DataSize: ??
+    u32 DataOffset: ??
 
 layout:
   - header Header
