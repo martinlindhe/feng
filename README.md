@@ -1,5 +1,8 @@
 # feng - a very data driven file format template system
 
+[![Discord](https://img.shields.io/discord/999601338407190569.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/mYBn9XqRBr)
+
+
 Proof of concept reference implementation is being written in golang for
 quick iteration, while a rust or zig (explore integration possibilities) implementation is planned.
 
