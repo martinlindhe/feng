@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
+	"time"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -15,6 +17,11 @@ import (
 
 var args struct {
 	Filename string `kong:"arg" name:"filename" type:"existingfile" help:"Input yaml with file listing."`
+}
+
+type measuredExecution struct {
+	duration time.Duration
+	filename string
 }
 
 func main() {
@@ -41,8 +48,12 @@ func main() {
 	}
 	filenames := smoketests.GenerateFilenames(filepath.Dir(args.Filename))
 
+	measures := []measuredExecution{}
+
 	for _, entry := range filenames {
 		feng.Green("Start entry %s\n", entry.In)
+
+		started := time.Now()
 
 		fl, err := mapper.MapFileToTemplate(entry.In)
 		if err != nil {
@@ -68,6 +79,12 @@ func main() {
 			ReportOverlapping: true,
 			InUTC:             true})
 
+		timeSpent := time.Since(started)
+		measures = append(measures, measuredExecution{
+			duration: timeSpent,
+			filename: entry.Out,
+		})
+
 		filename, _ := filepath.Abs(filepath.Join(referenceRoot, entry.Out))
 		path := filepath.Dir(filename)
 
@@ -80,7 +97,21 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+	}
 
+	sort.Slice(measures, func(i, j int) bool {
+		return measures[i].duration > measures[j].duration
+	})
+
+	// XXX sort by exec speed and show the slowest first
+	topMeasures := 25
+	if len(measures) > topMeasures {
+		measures = measures[:topMeasures]
+	}
+
+	fmt.Println("--- the", topMeasures, "slowest mappings were ---")
+	for _, measure := range measures {
+		fmt.Printf("%v:\t%s\n", measure.duration, measure.filename)
 	}
 
 }
