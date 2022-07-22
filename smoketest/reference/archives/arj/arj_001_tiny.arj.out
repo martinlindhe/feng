@@ -3,9 +3,10 @@ Header
   [000000] Magic                          u8[2]                                  60 ea
   [000002] HeaderSize                     u16 le           43                    00 2b
   [000004] SizeWithExtraData              u8               34                    22
-  [000005] Archiver version               u8               11                    0b
-  [000006] Minimum archiver version       u8               1                     01
-  [000007] Host OS                        u8               2                     02
+  [000005] ArchiverVersion                u8               11                    0b
+           - ARJ with UNIX support (2.77/3.10 and higher) eq
+  [000006] MinimumArchiverVersion         u8               1                     01
+  [000007] HostOS                         u8               2                     02
            - Unix                         eq
   [000008] Flags                          u8               16                    10
            - Garbled                      bit 1:1          0
@@ -18,8 +19,8 @@ Header
   [000009] Security version               u8               0                     00
   [00000a] File type                      u8               2                     02
   [00000b] Reserved                       u8               146                   92
-  [00000c] Creation time                  u32 le           1381922917            52 5e 78 65
-  [000010] Modified time                  u32 le           1381922917            52 5e 78 65
+  [00000c] UnixTS Created                 u32 le           1381922917            52 5e 78 65
+  [000010] UnixTS Modified                u32 le           1381922917            52 5e 78 65
   [000014] Secured archive size           u32 le           0                     00 00 00 00
   [000018] Security envelope offset       u32 le           0                     00 00 00 00
   [00001c] Filespec position in filename  u16 le           0                     00 00
@@ -54,7 +55,7 @@ LocalHeader_0
   [00003f] FileType                       u8               0                     00
            - Binary                       eq
   [000040] Reserved                       u8               101                   65
-  [000041] ModifiedTime                   u32 le           1381921521            52 5e 72 f1
+  [000041] UnixTS Modified                u32 le           1381921521            52 5e 72 f1
   [000045] CompressedSize                 u32 le           4                     00 00 00 04
   [000049] Uncompressed size              u32 le           4                     00 00 00 04
   [00004d] Uncompressed CRC               u32 le           3993854728            ee 0d 63 08

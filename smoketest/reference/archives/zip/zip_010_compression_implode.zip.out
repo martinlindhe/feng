@@ -7,8 +7,7 @@ Chunk_0 ZIPFILERECORD
   [000006] Flags                          u16 le           0                     00 00
   [000008] Compression                    u16 le           6                     00 06
            - Imploded                     eq
-  [00000a] Modification time              dostime le       17:51:08              8e 64
-  [00000c] Modification date              dosdate le       1993-05-22            1a b6
+  [00000a] Modification time              dostimedate le   1993-05-22 17:51:08 +0000 UTC 1a b6 8e 64
   [00000e] CRC32 of uncompressed data     u32 le           1585981413            5e 88 27 e5
   [000012] CompressedSize                 u32 le           1261                  00 00 04 ed
   [000016] Uncompressed size              u32 le           2408                  00 00 09 68
@@ -25,8 +24,7 @@ Chunk_1 ZIPFILERECORD
   [00051b] Flags                          u16 le           6                     00 06
   [00051d] Compression                    u16 le           6                     00 06
            - Imploded                     eq
-  [00051f] Modification time              dostime le       20:53:08              a6 a4
-  [000521] Modification date              dosdate le       1993-05-22            1a b6
+  [00051f] Modification time              dostimedate le   1993-05-22 20:53:08 +0000 UTC 1a b6 a6 a4
   [000523] CRC32 of uncompressed data     u32 le           2472810439            93 64 17 c7
   [000527] CompressedSize                 u32 le           5002                  00 00 13 8a
   [00052b] Uncompressed size              u32 le           12534                 00 00 30 f6
@@ -43,8 +41,7 @@ Chunk_2 ZIPFILERECORD
   [0018cd] Flags                          u16 le           0                     00 00
   [0018cf] Compression                    u16 le           6                     00 06
            - Imploded                     eq
-  [0018d1] Modification time              dostime le       20:55:08              a6 e4
-  [0018d3] Modification date              dosdate le       1993-05-22            1a b6
+  [0018d1] Modification time              dostimedate le   1993-05-22 20:55:08 +0000 UTC 1a b6 a6 e4
   [0018d5] CRC32 of uncompressed data     u32 le           682160515             28 a8 f1 83
   [0018d9] CompressedSize                 u32 le           378                   00 00 01 7a
   [0018dd] Uncompressed size              u32 le           446                   00 00 01 be
@@ -62,8 +59,7 @@ Chunk_3 ZIPDIRENTRY
   [001a71] Flags                          u16 le           0                     00 00
   [001a73] Compression                    u16 le           6                     00 06
            - Imploded                     eq
-  [001a75] Modification time              dostime le       17:51:08              8e 64
-  [001a77] Modification date              dosdate le       1993-05-22            1a b6
+  [001a75] Modification time              dostimedate le   1993-05-22 17:51:08 +0000 UTC 1a b6 8e 64
   [001a79] CRC32 of uncompressed data     u32 le           1585981413            5e 88 27 e5
   [001a7d] Compressed size                u32 le           1261                  00 00 04 ed
   [001a81] Uncompressed size              u32 le           2408                  00 00 09 68
@@ -85,8 +81,7 @@ Chunk_4 ZIPDIRENTRY
   [001aa9] Flags                          u16 le           6                     00 06
   [001aab] Compression                    u16 le           6                     00 06
            - Imploded                     eq
-  [001aad] Modification time              dostime le       20:53:08              a6 a4
-  [001aaf] Modification date              dosdate le       1993-05-22            1a b6
+  [001aad] Modification time              dostimedate le   1993-05-22 20:53:08 +0000 UTC 1a b6 a6 a4
   [001ab1] CRC32 of uncompressed data     u32 le           2472810439            93 64 17 c7
   [001ab5] Compressed size                u32 le           5002                  00 00 13 8a
   [001ab9] Uncompressed size              u32 le           12534                 00 00 30 f6
@@ -108,8 +103,7 @@ Chunk_5 ZIPDIRENTRY
   [001ae1] Flags                          u16 le           0                     00 00
   [001ae3] Compression                    u16 le           6                     00 06
            - Imploded                     eq
-  [001ae5] Modification time              dostime le       20:55:08              a6 e4
-  [001ae7] Modification date              dosdate le       1993-05-22            1a b6
+  [001ae5] Modification time              dostimedate le   1993-05-22 20:55:08 +0000 UTC 1a b6 a6 e4
   [001ae9] CRC32 of uncompressed data     u32 le           682160515             28 a8 f1 83
   [001aed] Compressed size                u32 le           378                   00 00 01 7a
   [001af1] Uncompressed size              u32 le           446                   00 00 01 be

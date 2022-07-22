@@ -101,8 +101,7 @@ structs:
         eq 04: MacOS
         eq 05: BeOS
       u32 CRC32: ??
-      dostime Time: ??
-      dosdate Date: ??
+      dostimedate Time: ??
       u8 Version to unpack: ??
       u8 Pack method:
         eq 30: Store

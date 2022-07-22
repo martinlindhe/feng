@@ -7,8 +7,7 @@ Chunk_0 ZIPFILERECORD
   [000006] Flags                          u16 le           0                     00 00
   [000008] Compression                    u16 le           8                     00 08
            - Deflated                     eq
-  [00000a] Modification time              dostime le       15:44:34              7d 91
-  [00000c] Modification date              dosdate le       2020-07-08            50 e8
+  [00000a] Modification time              dostimedate le   2020-07-08 15:44:34 +0000 UTC 50 e8 7d 91
   [00000e] CRC32 of uncompressed data     u32 le           1829412897            6d 0a a0 21
   [000012] CompressedSize                 u32 le           182                   00 00 00 b6
   [000016] Uncompressed size              u32 le           1152                  00 00 04 80
@@ -26,8 +25,7 @@ Chunk_1 ZIPFILERECORD
   [000102] Flags                          u16 le           0                     00 00
   [000104] Compression                    u16 le           8                     00 08
            - Deflated                     eq
-  [000106] Modification time              dostime le       15:44:30              7d 8f
-  [000108] Modification date              dosdate le       2020-07-08            50 e8
+  [000106] Modification time              dostimedate le   2020-07-08 15:44:30 +0000 UTC 50 e8 7d 8f
   [00010a] CRC32 of uncompressed data     u32 le           2090460652            7c 99 e5 ec
   [00010e] CompressedSize                 u32 le           440                   00 00 01 b8
   [000112] Uncompressed size              u32 le           1496                  00 00 05 d8
@@ -46,8 +44,7 @@ Chunk_2 ZIPDIRENTRY
   [000301] Flags                          u16 le           0                     00 00
   [000303] Compression                    u16 le           8                     00 08
            - Deflated                     eq
-  [000305] Modification time              dostime le       15:44:34              7d 91
-  [000307] Modification date              dosdate le       2020-07-08            50 e8
+  [000305] Modification time              dostimedate le   2020-07-08 15:44:34 +0000 UTC 50 e8 7d 91
   [000309] CRC32 of uncompressed data     u32 le           1829412897            6d 0a a0 21
   [00030d] Compressed size                u32 le           182                   00 00 00 b6
   [000311] Uncompressed size              u32 le           1152                  00 00 04 80
@@ -71,8 +68,7 @@ Chunk_3 ZIPDIRENTRY
   [000367] Flags                          u16 le           0                     00 00
   [000369] Compression                    u16 le           8                     00 08
            - Deflated                     eq
-  [00036b] Modification time              dostime le       15:44:30              7d 8f
-  [00036d] Modification date              dosdate le       2020-07-08            50 e8
+  [00036b] Modification time              dostimedate le   2020-07-08 15:44:30 +0000 UTC 50 e8 7d 8f
   [00036f] CRC32 of uncompressed data     u32 le           2090460652            7c 99 e5 ec
   [000373] Compressed size                u32 le           440                   00 00 01 b8
   [000377] Uncompressed size              u32 le           1496                  00 00 05 d8

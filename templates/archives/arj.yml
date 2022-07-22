@@ -1,10 +1,10 @@
 # STATUS: 80%
-#
-# MID: decode arj date+time format, should be MS-DOS format
-# MID: decode 8bit version format MinorMajor8Five
+
+# MID: decode unix time
 
 references:
-  - https://en.wikipedia.org/wiki/ARJ
+  - https://raw.githubusercontent.com/FarGroup/FarManager/master/plugins/multiarc/arc.doc/arj.txt
+  - http://fileformats.archiveteam.org/wiki/ARJ
   - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_arj.go
 
 kind: archive
@@ -21,9 +21,25 @@ structs:
     u8[2] Magic: 60 ea
     u16 HeaderSize: ??
     u8 SizeWithExtraData: ??
-    u8 Archiver version: ??
-    u8 Minimum archiver version: ??
-    u8 Host OS:
+    u8 ArchiverVersion:
+      eq 01: ARJ versions earlier than 0.14
+      eq 02: ARJ v 0.14...0.20
+      eq 03: ARJ v 1.00...2.22
+      eq 04: ARJ v 2.30, X1
+      eq 05: ARJ v 2.39a, 2.39b
+      eq 06: ARJ v 2.39c...2.41
+      eq 07: ARJ v 2.42a...2.50a
+      eq 08: ARJ v 2.55...2.61, ARJ/2 v 2.61
+      eq 09: ARJ v 2.62, ARJ/2 v 2.62, ARJ32 v 3.00
+      eq 0a: ARJ v 2.70 and higher, ARJ/2 v 2.62.10 and higher
+      eq 0b: ARJ with UNIX support (2.77/3.10 and higher)
+      eq 32: ARJZ with maximum distance up to 32K
+      eq 33: ARJZ with maximum distance up to 64K
+      eq 64: ARJ32 v 3.00b...3.01
+      eq 65: ARJ32 v 3.02 and higher
+
+    u8 MinimumArchiverVersion: ??
+    u8 HostOS:
       eq 00: MS-DOS
       eq 01: PRIMOS
       eq 02: Unix
@@ -32,7 +48,7 @@ structs:
       eq 05: OS/2
       eq 06: Apple GS
       eq 07: Atari ST
-      eq 08: NEXT
+      eq 08: NeXT
       eq 09: VAX VMS
       eq 0a: Win95
       eq 0b: Win32
@@ -47,8 +63,12 @@ structs:
     u8 Security version: ??
     u8 File type: "02"            # must equal 2
     u8 Reserved: ??
-    u32 Creation time: ?? # XXX decode
-    u32 Modified time: ?? # XXX decode
+    if self.ArchiverVersion >= 0x0b && (self.HostOS == Unix || self.HostOS == NeXT):
+      u32 UnixTS Created: ?? # xxx unix timestamp
+      u32 UnixTS Modified: ??
+    else:
+      dostimedate Created: ??
+      dostimedate Modified: ??
     u32 Secured archive size: ??
     u32 Security envelope offset: ??
     u16 Filespec position in filename: ??
@@ -125,7 +145,10 @@ structs:
       eq 05: Chapter label
     u8 Reserved: ??
 
-    u32 ModifiedTime: ?? # XXX decode parse.ArjDateTime
+    if Header.ArchiverVersion >= 0x0b && (Header.HostOS == Unix || Header.HostOS == NeXT):
+      u32 UnixTS Modified: ?? # XXX
+    else:
+      dostimedate Modified: ??
 
     u32 CompressedSize: ??
     u32 Uncompressed size: ??

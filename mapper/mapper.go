@@ -417,7 +417,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"ascii", "utf16",
 			"rgb8",
-			"time_t_32", "filetime", "dostime", "dosdate",
+			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 			"compressed:deflate", "compressed:lz4", "compressed:zlib",
 			"raw:u8":
 			// internal data types

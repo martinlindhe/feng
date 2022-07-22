@@ -6,8 +6,7 @@ Header
   [000108] Size of Headers                u32 le           8192                  00 00 20 00
   [00010c] Size of Image                  u32 le           1121376               00 11 1c 60
   [000110] Size of Image Header           u32 le           388                   00 00 01 84
-  [000114] Creation Time                  dostime le       22:16:58              b2 1d
-  [000116] Creation Date                  dosdate le       2011-09-15            3f 2f
+  [000114] Creation Time                  dostimedate le   2011-09-15 22:16:58 +0000 UTC 3f 2f b2 1d
   [000118] CertificateAddress             u32 le           65924                 00 01 01 84
   [00011c] NumberOfSections               u32 le           24                    00 00 00 18
   [000120] SectionHeaderAddress           u32 le           66416                 00 01 03 70
@@ -24,8 +23,7 @@ Header
   [00013c] PE Base Address                u32 le           72576                 00 01 1b 80
   [000140] PE Size of Image               u32 le           784320                00 0b f7 c0
   [000144] PE Checksum                    u32 le           787952                00 0c 05 f0
-  [000148] PE Creation Time               dostime le       22:16:44              b2 16
-  [00014a] PE Creation Date               dosdate le       2011-09-15            3f 2f
+  [000148] PE Creation Time               dostimedate le   2011-09-15 22:16:44 +0000 UTC 3f 2f b2 16
   [00014c] DebugPathNameAddress           u32 le           68182                 00 01 0a 56
   [000a56] DebugPathName                  asciiz           d:\xboxfre-aug03\private\ui\dl\dl\obj\i386\Downloader.exe 64 3a 5c 78 62 6f 78 66 72 65 2d 61 75 67 30 33 5c 70 72 69 76 61 74 65 5c 75 69 5c 64 6c 5c 64 ...
   [000150] DebugFileNameAddress           u32 le           68225                 00 01 0a 81
@@ -45,8 +43,7 @@ Header
 
 Certificate
   [000184] Size of Certificate            u32 le           492                   00 00 01 ec
-  [000188] Certificate Time               dostime le       17:36:08              8c 84
-  [00018a] Certificate Date               dosdate le       2011-12-25            3f 99
+  [000188] Certificate Time               dostimedate le   2011-12-25 17:36:08 +0000 UTC 3f 99 8c 84
   [00018c] Title ID                       u16 le           54                    00 36
   [00018e] Publisher ID                   ascii[2]         SM                    53 4d
   [000190] Title Name                     utf16[40] le     Downloader            00 44 00 6f 00 77 00 6e 00 6c 00 6f 00 61 00 64 00 65 00 72 00 00 00 00 00 00 00 00 00 00 00 00 ...

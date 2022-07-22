@@ -7,8 +7,7 @@ Chunk_0 ZIPFILERECORD
   [000006] Flags                          u16 le           0                     00 00
   [000008] Compression                    u16 le           0                     00 00
            - Stored                       eq
-  [00000a] Modification time              dostime le       18:15:56              91 fc
-  [00000c] Modification date              dosdate le       2013-09-30            43 3e
+  [00000a] Modification time              dostimedate le   2013-09-30 18:15:56 +0000 UTC 43 3e 91 fc
   [00000e] CRC32 of uncompressed data     u32 le           3259962393            c2 4f 14 19
   [000012] CompressedSize                 u32 le           7                     00 00 00 07
   [000016] Uncompressed size              u32 le           7                     00 00 00 07
@@ -27,8 +26,7 @@ Chunk_1 ZIPDIRENTRY
   [00004b] Flags                          u16 le           0                     00 00
   [00004d] Compression                    u16 le           0                     00 00
            - Stored                       eq
-  [00004f] Modification time              dostime le       18:15:56              91 fc
-  [000051] Modification date              dosdate le       2013-09-30            43 3e
+  [00004f] Modification time              dostimedate le   2013-09-30 18:15:56 +0000 UTC 43 3e 91 fc
   [000053] CRC32 of uncompressed data     u32 le           3259962393            c2 4f 14 19
   [000057] Compressed size                u32 le           7                     00 00 00 07
   [00005b] Uncompressed size              u32 le           7                     00 00 00 07

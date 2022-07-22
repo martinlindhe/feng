@@ -53,8 +53,7 @@ Chunk_2 ICEEDIT.DIC
   [000255] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [000256] CRC32                          u32 le           3183108173            bd ba 60 4d
-  [00025a] Time                           dostime le       11:45:20              5d aa
-  [00025c] Date                           dosdate le       1994-04-04            1c 84
+  [00025a] Time                           dostimedate le   1994-04-04 11:45:20 +0000 UTC 1c 84 5d aa
   [00025e] Version to unpack              u8               15                    0f
   [00025f] Pack method                    u8               53                    35
            - Best                         eq
@@ -87,8 +86,7 @@ Chunk_3 FILE_ID.DIZ
   [04880b] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [04880c] CRC32                          u32 le           1396171454            53 37 e2 be
-  [048810] Time                           dostime le       22:54:56              b6 dc
-  [048812] Date                           dosdate le       1995-07-30            1e fe
+  [048810] Time                           dostimedate le   1995-07-30 22:54:56 +0000 UTC 1e fe b6 dc
   [048814] Version to unpack              u8               15                    0f
   [048815] Pack method                    u8               53                    35
            - Best                         eq
@@ -121,8 +119,7 @@ Chunk_4 ICEEDIT.IDX
   [048941] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [048942] CRC32                          u32 le           3353937961            c7 e9 08 29
-  [048946] Time                           dostime le       11:56:44              5f 16
-  [048948] Date                           dosdate le       1994-04-04            1c 84
+  [048946] Time                           dostimedate le   1994-04-04 11:56:44 +0000 UTC 1c 84 5f 16
   [04894a] Version to unpack              u8               15                    0f
   [04894b] Pack method                    u8               53                    35
            - Best                         eq

@@ -10,23 +10,46 @@ StartHeader
   [000014] NextHeaderSize                 u64 le           33                    00 00 00 00 00 00 00 21
   [00001c] NextHeaderCRC                  u32 le           2059058453            7a ba bd 15
 
-Header kEncodedHeader
+NidBlock kEncodedHeader
   [0000ac] NID                            u8               23                    17
            - kEncodedHeader               eq
 
-PackInfo
+PackInfo kPackInfo
   [0000ad] NID                            u8               6                     06
            - kPackInfo                    eq
   [0000ae] PackPos                        vu64             36                    24
   [0000af] PackStreamsCount               vu64             1                     01
 
-Size_0
+Size_0 kSize
   [0000b0] NID                            u8               9                     09
            - kSize                        eq
   [0000b1] Size                           vu64             104                   68
 
-Terminator
+Terminator kEnd
   [0000b2] NID                            u8               0                     00
            - kEnd                         eq
 
-0x00a6 (166) unmapped bytes (81.0%)
+UnPackInfo kUnPackInfo
+  [0000b3] NID                            u8               7                     07
+           - kUnPackInfo                  eq
+
+Folders kFolder
+  [0000b4] NID                            u8               11                    0b
+           - kFolder                      eq
+  [0000b5] FolderCount                    vu64             1                     01
+  [0000b6] External                       u8               0                     00
+
+Folder_0
+  [0000b7] NumCoders                      vu64             1                     01
+  [0000b8] Codec                          u8[10]                                 23 03 01 01 05 5d 00 10 00 00
+
+CodersUnPackSize kCodersUnPackSize
+  [0000c2] NID                            u8               12                    0c
+           - kCodersUnPackSize            eq
+  [0000c3] UnPackSize                     vu64             166144                80 92 0a
+
+CRC kHeader
+  [0000c6] NID                            u8               1                     01
+           - kHeader                      eq
+
+0x0092 (146) unmapped bytes (71.2%)

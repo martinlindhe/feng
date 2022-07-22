@@ -133,6 +133,7 @@ date / time
     filetime            64-bit windows timestamp, in UTC
     dosdate             16-bit MS-DOS datestamp, in UTC
     dostime             16-bit MS-DOS timestamp, in UTC
+    dostimedate         32-bit MS-DOS (dostime, dosdate)
 
 colors
 

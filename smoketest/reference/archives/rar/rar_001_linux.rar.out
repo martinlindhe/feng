@@ -52,8 +52,7 @@ Chunk_2 filen
   [000023] Host OS                        u8               3                     03
            - Unix                         eq
   [000024] CRC32                          u32 le           3993854728            ee 0d 63 08
-  [000028] Time                           dostime le       14:35:54              74 7b
-  [00002a] Date                           dosdate le       2013-10-01            43 41
+  [000028] Time                           dostimedate le   2013-10-01 14:35:54 +0000 UTC 43 41 74 7b
   [00002c] Version to unpack              u8               29                    1d
   [00002d] Pack method                    u8               51                    33
            - Normal                       eq

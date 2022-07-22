@@ -96,6 +96,10 @@ func TestDosDate(t *testing.T) {
 	assert.Equal(t, "2016-04-10", AsDosDate(18570).String())
 }
 
+func TestDosTimeDate(t *testing.T) {
+	assert.Equal(t, "2016-03-17 01:36:40 +0000 UTC", AsDosTimeDate(1215368340).String())
+}
+
 func TestUtf16String(t *testing.T) {
 	b := []byte{
 		0x31, 0x00, 0x68, 0x00, 0x32, 0x00, 0x74, 0x00, 0x78, 0x00, 0x79, 0x00, 0x65, 0x00, 0x77, 0x00,

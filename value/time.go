@@ -1,6 +1,8 @@
 package value
 
-import "time"
+import (
+	"time"
+)
 
 // MS-DOS 16-bit "dos time" value
 // Identical to the Time-part of a 32-Bit Windows Time+Date field
@@ -38,4 +40,17 @@ func AsDosDate(v uint16) DosDate {
 	return DosDate{
 		ts: time.Date(year, month, day, 0, 0, 0, 0, time.UTC),
 	}
+}
+
+func AsDosTimeDate(v uint32) time.Time {
+	date := uint16(v >> 16)
+	day := int(date & 0x1f)
+	month := time.Month((date >> 5 & 0x0f))
+	year := int(1980 + (date >> 9))
+
+	tod := uint16(v)
+	hour := int(tod >> 11)
+	min := int((tod >> 5) & 0x3f)
+	sec := int((tod & 0x1f) * 2)
+	return time.Date(year, month, day, hour, min, sec, 0, time.UTC)
 }

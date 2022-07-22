@@ -67,8 +67,7 @@ Chunk_3 file.txt
   [00006c] Host OS                        u8               2                     02
            - Win32                        eq
   [00006d] CRC32                          u32 le           3242484790            c1 44 64 36
-  [000071] Time                           dostime le       16:12:26              81 8d
-  [000073] Date                           dosdate le       2014-04-02            44 82
+  [000071] Time                           dostimedate le   2014-04-02 16:12:26 +0000 UTC 44 82 81 8d
   [000075] Version to unpack              u8               29                    1d
   [000076] Pack method                    u8               48                    30
            - Store                        eq

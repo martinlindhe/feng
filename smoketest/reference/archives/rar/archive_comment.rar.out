@@ -53,8 +53,7 @@ Chunk_2 EXEBBS.BAT
   [00025a] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [00025b] CRC32                          u32 le           2469512494            93 31 c5 2e
-  [00025f] Time                           dostime le       07:36:56              3c 9c
-  [000261] Date                           dosdate le       1995-07-26            1e fa
+  [00025f] Time                           dostimedate le   1995-07-26 07:36:56 +0000 UTC 1e fa 3c 9c
   [000263] Version to unpack              u8               15                    0f
   [000264] Pack method                    u8               51                    33
            - Normal                       eq
@@ -87,8 +86,7 @@ Chunk_3 1.BAT
   [0003ed] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [0003ee] CRC32                          u32 le           1269334408            4b a8 81 88
-  [0003f2] Time                           dostime le       20:07:36              a0 f2
-  [0003f4] Date                           dosdate le       1995-07-23            1e f7
+  [0003f2] Time                           dostimedate le   1995-07-23 20:07:36 +0000 UTC 1e f7 a0 f2
   [0003f6] Version to unpack              u8               15                    0f
   [0003f7] Pack method                    u8               51                    33
            - Normal                       eq
@@ -121,8 +119,7 @@ Chunk_4 RUN.BAT
   [00044b] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [00044c] CRC32                          u32 le           3432883616            cc 9d a5 a0
-  [000450] Time                           dostime le       19:23:38              9a f3
-  [000452] Date                           dosdate le       1995-07-28            1e fc
+  [000450] Time                           dostimedate le   1995-07-28 19:23:38 +0000 UTC 1e fc 9a f3
   [000454] Version to unpack              u8               15                    0f
   [000455] Pack method                    u8               51                    33
            - Normal                       eq
@@ -155,8 +152,7 @@ Chunk_5 RUN0.BAT
   [00072f] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [000730] CRC32                          u32 le           757478866             2d 26 35 d2
-  [000734] Time                           dostime le       22:56:28              b7 0e
-  [000736] Date                           dosdate le       1995-06-29            1e dd
+  [000734] Time                           dostimedate le   1995-06-29 22:56:28 +0000 UTC 1e dd b7 0e
   [000738] Version to unpack              u8               15                    0f
   [000739] Pack method                    u8               51                    33
            - Normal                       eq
@@ -189,8 +185,7 @@ Chunk_6 DOBBS0.BAT
   [0009ec] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [0009ed] CRC32                          u32 le           3818972036            e3 a0 e3 84
-  [0009f1] Time                           dostime le       20:42:46              a5 57
-  [0009f3] Date                           dosdate le       1995-07-06            1e e6
+  [0009f1] Time                           dostimedate le   1995-07-06 20:42:46 +0000 UTC 1e e6 a5 57
   [0009f5] Version to unpack              u8               15                    0f
   [0009f6] Pack method                    u8               51                    33
            - Normal                       eq
@@ -223,8 +218,7 @@ Chunk_7 DOBBS.BAT
   [000a44] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [000a45] CRC32                          u32 le           1868884419            6f 64 e9 c3
-  [000a49] Time                           dostime le       17:59:50              8f 79
-  [000a4b] Date                           dosdate le       1995-07-31            1e ff
+  [000a49] Time                           dostimedate le   1995-07-31 17:59:50 +0000 UTC 1e ff 8f 79
   [000a4d] Version to unpack              u8               15                    0f
   [000a4e] Pack method                    u8               51                    33
            - Normal                       eq
@@ -257,8 +251,7 @@ Chunk_8 DOBBS1.BAT
   [000a9b] Host OS                        u8               0                     00
            - MS-DOS                       eq
   [000a9c] CRC32                          u32 le           1765760379            69 3f 5d 7b
-  [000aa0] Time                           dostime le       21:07:20              a8 ea
-  [000aa2] Date                           dosdate le       1995-07-06            1e e6
+  [000aa0] Time                           dostimedate le   1995-07-06 21:07:20 +0000 UTC 1e e6 a8 ea
   [000aa4] Version to unpack              u8               15                    0f
   [000aa5] Pack method                    u8               51                    33
            - Normal                       eq

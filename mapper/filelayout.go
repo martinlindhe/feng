@@ -208,6 +208,14 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		v := value.AsUint64Raw(b)
 		return value.AsDosDate(uint16(v)).String()
 
+	case "dostimedate":
+		v := value.AsUint64Raw(b)
+		timestamp := value.AsDosTimeDate(uint32(v))
+		if fl.inUTC {
+			timestamp = timestamp.UTC()
+		}
+		return timestamp.Format(time.RFC3339)
+
 	case "rgb8":
 		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
 
@@ -226,6 +234,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 
 // presents the value of the data type (field.Format.Kind) in a human-readable form
 func (fl *FileLayout) PresentFieldValue(field *Field) string {
+	// XXX alot of stuff is re-evaluated here, should reuse data from parsing
 	b := field.Value
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
@@ -332,6 +341,10 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 	case "dosdate":
 		v := value.AsUint64Raw(b)
 		return value.AsDosDate(uint16(v)).String()
+
+	case "dostimedate":
+		v := value.AsUint64Raw(b)
+		return value.AsDosTimeDate(uint32(v)).String()
 
 	case "rgb8":
 		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])

@@ -317,7 +317,7 @@ func SingleUnitSize(kind string) uint64 {
 		return 2
 	case "rgb8":
 		return 3
-	case "u32", "i32", "time_t_32":
+	case "u32", "i32", "time_t_32", "dostimedate":
 		return 4
 	case "u64", "i64", "filetime":
 		return 8

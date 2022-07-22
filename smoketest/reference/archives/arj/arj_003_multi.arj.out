@@ -3,9 +3,10 @@ Header
   [000000] Magic                          u8[2]                                  60 ea
   [000002] HeaderSize                     u16 le           45                    00 2d
   [000004] SizeWithExtraData              u8               34                    22
-  [000005] Archiver version               u8               11                    0b
-  [000006] Minimum archiver version       u8               1                     01
-  [000007] Host OS                        u8               0                     00
+  [000005] ArchiverVersion                u8               11                    0b
+           - ARJ with UNIX support (2.77/3.10 and higher) eq
+  [000006] MinimumArchiverVersion         u8               1                     01
+  [000007] HostOS                         u8               0                     00
            - MS-DOS                       eq
   [000008] Flags                          u8               16                    10
            - Garbled                      bit 1:1          0
@@ -18,8 +19,8 @@ Header
   [000009] Security version               u8               0                     00
   [00000a] File type                      u8               2                     02
   [00000b] Reserved                       u8               148                   94
-  [00000c] Creation time                  u32 le           1215368340            48 71 0c 94
-  [000010] Modified time                  u32 le           1215368340            48 71 0c 94
+  [00000c] Created                        dostimedate le   2016-03-17 01:36:40 +0000 UTC 48 71 0c 94
+  [000010] Modified                       dostimedate le   2016-03-17 01:36:40 +0000 UTC 48 71 0c 94
   [000014] Secured archive size           u32 le           0                     00 00 00 00
   [000018] Security envelope offset       u32 le           0                     00 00 00 00
   [00001c] Filespec position in filename  u16 le           0                     00 00
@@ -54,7 +55,7 @@ LocalHeader_0
   [000041] FileType                       u8               0                     00
            - Binary                       eq
   [000042] Reserved                       u8               148                   94
-  [000043] ModifiedTime                   u32 le           1215368268            48 71 0c 4c
+  [000043] Modified                       dostimedate le   2016-03-17 01:34:24 +0000 UTC 48 71 0c 4c
   [000047] CompressedSize                 u32 le           60                    00 00 00 3c
   [00004b] Uncompressed size              u32 le           60                    00 00 00 3c
   [00004f] Uncompressed CRC               u32 le           177095624             0a 8e 43 c8
@@ -87,7 +88,7 @@ LocalHeader_1
   [0000ae] FileType                       u8               0                     00
            - Binary                       eq
   [0000af] Reserved                       u8               148                   94
-  [0000b0] ModifiedTime                   u32 le           1215368276            48 71 0c 54
+  [0000b0] Modified                       dostimedate le   2016-03-17 01:34:40 +0000 UTC 48 71 0c 54
   [0000b4] CompressedSize                 u32 le           32                    00 00 00 20
   [0000b8] Uncompressed size              u32 le           73                    00 00 00 49
   [0000bc] Uncompressed CRC               u32 le           3786400166            e1 af e1 a6

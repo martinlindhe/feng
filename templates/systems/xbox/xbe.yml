@@ -27,8 +27,7 @@ structs:
     u32 Size of Headers: ??
     u32 Size of Image: ??
     u32 Size of Image Header: ??
-    dostime Creation Time: ??  # XXX have a 32-bit windows datetime format for dostime+dosdate field.
-    dosdate Creation Date: ??
+    dostimedate Creation Time: ??
     u32 CertificateAddress: ??
     u32 NumberOfSections: ??
     u32 SectionHeaderAddress: ??
@@ -45,8 +44,7 @@ structs:
     u32 PE Base Address: ??
     u32 PE Size of Image: ??
     u32 PE Checksum: ??
-    dostime PE Creation Time: ?? # XXX 32-bit windows datetime format
-    dosdate PE Creation Date: ??
+    dostimedate PE Creation Time: ??
 
     u32 DebugPathNameAddress: ??
     offset: self.DebugPathNameAddress - 0x10000
@@ -80,8 +78,7 @@ structs:
   cert:
     offset: Header.CertificateAddress - 0x10000
     u32 Size of Certificate: ??
-    dostime Certificate Time: ?? # XXX 32-bit windows datetime format
-    dosdate Certificate Date: ??
+    dostimedate Certificate Time: ??
 
     # NOTE: Title ID appears to be encoded in big endian as opposed to little for the rest of the file
 #    u32 Title ID: ??

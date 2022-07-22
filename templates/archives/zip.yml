@@ -45,8 +45,7 @@ structs:
         eq 0006: Imploded
         eq 0008: Deflated
         default: invalid
-      dostime Modification time: ??
-      dosdate Modification date: ??
+      dostimedate Modification time: ??
       u32 CRC32 of uncompressed data: ??
       u32 CompressedSize: ??
       u32 Uncompressed size: ??
@@ -69,8 +68,7 @@ structs:
         eq 0006: Imploded
         eq 0008: Deflated
         default: invalid
-      dostime Modification time: ??
-      dosdate Modification date: ??
+      dostimedate Modification time: ??
       u32 CRC32 of uncompressed data: ??
       u32 Compressed size: ??
       u32 Uncompressed size: ??

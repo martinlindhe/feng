@@ -6,8 +6,7 @@ Header
   [000108] Size of Headers                u32 le           3616                  00 00 0e 20
   [00010c] Size of Image                  u32 le           3484736               00 35 2c 40
   [000110] Size of Image Header           u32 le           388                   00 00 01 84
-  [000114] Creation Time                  dostime le       00:37:34              c4 b1
-  [000116] Creation Date                  dosdate le       2011-12-12            40 0c
+  [000114] Creation Time                  dostimedate le   2011-12-13 00:37:34 +0000 UTC 40 0c c4 b1
   [000118] CertificateAddress             u32 le           65924                 00 01 01 84
   [00011c] NumberOfSections               u32 le           29                    00 00 00 1d
   [000120] SectionHeaderAddress           u32 le           66416                 00 01 03 70
@@ -24,8 +23,7 @@ Header
   [00013c] PE Base Address                u32 le           67872                 00 01 09 20
   [000140] PE Size of Image               u32 le           3630016               00 37 63 c0
   [000144] PE Checksum                    u32 le           0                     00 00 00 00
-  [000148] PE Creation Time               dostime le       00:37:24              c4 ac
-  [00014a] PE Creation Date               dosdate le       2011-12-12            40 0c
+  [000148] PE Creation Time               dostimedate le   2011-12-13 00:37:24 +0000 UTC 40 0c c4 ac
   [00014c] DebugPathNameAddress           u32 le           68426                 00 01 0b 4a
   [000b4a] DebugPathName                  asciiz           c:\_Projects\MX\Release\MX.exe 63 3a 5c 5f 50 72 6f 6a 65 63 74 73 5c 4d 58 5c 52 65 6c 65 61 73 65 5c 4d 58 2e 65 78 65 00
   [000150] DebugFileNameAddress           u32 le           68450                 00 01 0b 62
@@ -45,8 +43,7 @@ Header
 
 Certificate
   [000184] Size of Certificate            u32 le           492                   00 00 01 ec
-  [000188] Certificate Time               dostime le       15:39:30              7c ef
-  [00018a] Certificate Date               dosdate le       2011-12-21            40 15
+  [000188] Certificate Time               dostimedate le   2011-12-21 15:39:30 +0000 UTC 40 15 7c ef
   [00018c] Title ID                       u16 le           33                    00 21
   [00018e] Publisher ID                   ascii[2]         QT                    51 54
   [000190] Title Name                     utf16[40] le     MX Unleashed          00 4d 00 58 00 20 00 55 00 6e 00 6c 00 65 00 61 00 73 00 68 00 65 00 64 00 00 00 00 00 00 00 00 ...

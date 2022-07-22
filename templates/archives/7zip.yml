@@ -1,11 +1,11 @@
-# STATUS: 25%
+# STATUS: 30%
 
-# - MAX: continue parsing
+# - MAX: double-check vu64 is the same format as used in 7zip
 
 references:
   - https://en.wikipedia.org/wiki/7z
-  - https://github.com/kornelski/7z/blob/master/DOC/7zFormat.txt
-  - https://www.sweetscape.com/010editor/repository/files/7ZIP.bt       # very rough
+  - https://raw.githubusercontent.com/kornelski/7z/main/DOC/7zFormat.txt
+  - https://www.sweetscape.com/010editor/repository/files/7ZIP.bt
 
 kind: archive
 name: 7z Archive
@@ -23,6 +23,7 @@ structs:
     u8 MajorVersion: ??
     u8 MinorVersion: ??
     u32 StartHeaderCRC: ??    #crc32[NextHeaderOffset.offset:NextHeaderCRC.offset+4] StartHeaderCRC: ??       # XXX impl crc32
+    start_header StartHeader: ??
 
   start_header:
     u64 NextHeaderOffset: ??
@@ -30,7 +31,7 @@ structs:
     u32 NextHeaderCRC: ??    # XXX impl crc32
     offset: OFFSET + self.NextHeaderOffset
 
-  header:
+  nid_block:
     u8 NID:
       eq 00: kEnd
       eq 01: kHeader
@@ -59,35 +60,38 @@ structs:
       eq 18: kStartPos
       eq 19: kDummy
     label: self.NID
-    if self.NID == kHeader:
-      # XXX LZMA compressed data follows?
-      nid_block kHeader: ??
+    if self.NID == kEnd:
+      parse: stop # XXX "parse: break" for slice-level ?
     if self.NID == kEncodedHeader:
       nid_block PackInfo: ??
-
-
-  nid_block:
-    u8 NID:
-      eq 00: kEnd
-      eq 01: kHeader
-      eq 06: kPackInfo
-      eq 09: kSize
-    if self.NID == kEnd:
-      parse: stop
-    if self.NID == kHeader:
-      # XXX ArchiveProperties follows
-      u8 ArchivePropertiesXXX: ??
+      nid_block UnPackInfo: ??
     if self.NID == kPackInfo:
       vu64 PackPos: ??
       vu64 PackStreamsCount: ??
       nid_block[self.PackStreamsCount] Size: ??
       nid_block Terminator: ??
-      if self.Terminator.NID != kEnd:
-        data: invalid
+    if self.NID == kUnPackInfo:
+      nid_block Folders: ??
+      nid_block CodersUnPackSize: ??
+    if self.NID == kCodersUnPackSize:
+      vu64 UnPackSize: ??
+      nid_block CRC: ??
+
+    if self.NID == kCRC:
+      u8 AllAreDefined: ??
+      u32[self.AllAreDefined] CRCs: ??
+
+    if self.NID == kFolder:
+      vu64 FolderCount: ??
+      u8 External: ??
+      folder[self.FolderCount] Folder: ??
     if self.NID == kSize:
       vu64 Size: ??
 
+  folder:
+    vu64 NumCoders: ??
+    u8[10] Codec: ?? # XXX decode
+
 layout:
   - sig_header SignatureHeader
-  - start_header StartHeader
-  - header Header
+  - nid_block NidBlock
