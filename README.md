@@ -1,15 +1,11 @@
-# feng - a very data driven file format template system
-
 [![Discord](https://img.shields.io/discord/999601338407190569.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/mYBn9XqRBr)
 
-The reference implementation is being written in golang for quick iteration, while a rust
-or zig (explore integration possibilities) implementation is planned.
+Feng is a yaml-based template format for specifying binary file structures,
+and a commandline app working with the format.
+
+**WARNING : The format is not yet stabilized and things may break.**
 
 
-# Feature overview
-- universal binary format template language
-- command line print-out of binary file structure
-- extract raw and compressed data from file (zlib, deflate, lz4)
 
 
 # Template example
@@ -50,7 +46,10 @@ layout:
   - header Header
   - table[Header.TableCount] Table
 ```
-*From [templates/fonts/otf.yml](templates/fonts/otf.yml).*
+
+Mapping a file with the above structure would result in something like [smoketest/reference/fonts/otf](smoketest/reference/fonts/otf).
+
+*Template is from [templates/fonts/otf.yml](templates/fonts/otf.yml).*
 
 
 
@@ -58,7 +57,7 @@ layout:
 
 Windows/macOS and Linux binaries is available on the [Releases](https://github.com/martinlindhe/feng/releases) page.
 
-Assuming you have golang, then installing the cli app `feng` is as easy as:
+Assuming you have golang, then installing the cli app `feng` from git is as easy as:
 
     go install github.com/martinlindhe/feng/cmd/feng@latest
 

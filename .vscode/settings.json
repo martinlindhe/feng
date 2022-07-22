@@ -17,6 +17,7 @@
         "bitmapinfoheader",
         "bitmapv",
         "bitmask",
+        "bitreader",
         "bootsector",
         "Borland",
         "brotli",
