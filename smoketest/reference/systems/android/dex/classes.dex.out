@@ -2,10 +2,11 @@
 Header
   [000000] Signature                      ascii[4]         dex.                  64 65 78 0a
   [000004] Version                        ascii[4]         035                   30 33 35 00
+           - Pre Android 7.0              eq
   [000008] Checksum                       u32 le           1520309531            5a 9e 15 1b
   [00000c] SHA1                           u8[20]                                 eb b8 5a a5 03 7b 06 71 ad 53 ea e2 98 5a d3 c8 da dc 0d 59
-  [000020] File size                      u32 le           30420                 00 00 76 d4
-  [000024] Header size                    u32 le           112                   00 00 00 70
+  [000020] FileSize                       u32 le           30420                 00 00 76 d4
+  [000024] HeaderSize                     u32 le           112                   00 00 00 70
   [000028] Endian                         u32 le           305419896             12 34 56 78
            - Little                       eq
   [00002c] LinkSize                       u32 le           0                     00 00 00 00

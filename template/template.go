@@ -1,6 +1,7 @@
 package template
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"math/bits"
@@ -11,7 +12,7 @@ import (
 )
 
 const (
-	DEBUG = false
+	DEBUG_PATTERNS = false
 )
 
 // Template represents the structure of a templates/*.yml file
@@ -132,17 +133,19 @@ type evaluatedStruct struct {
 func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.MatchedPattern, error) {
 	res := []value.MatchedPattern{}
 	if len(es.MatchPatterns) == 0 {
+		if DEBUG_PATTERNS {
+			log.Printf("MatchPattern: gave up early on %s", es.Field.Label)
+		}
 		return res, nil
 	}
 	invalidIfNoMatch := false
-	actual := value.AsUint64(es.Field.Kind, b)
 
-	if DEBUG {
-		log.Printf("MatchPattern: %#v ... %08b", b, actual)
+	if DEBUG_PATTERNS {
+		log.Printf("MatchPattern: looking for %#v", b)
 	}
 
 	for _, mp := range es.MatchPatterns {
-		if DEBUG {
+		if DEBUG_PATTERNS {
 			log.Printf("--- %#v", mp)
 		}
 
@@ -152,20 +155,22 @@ func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.Ma
 			if err != nil {
 				return nil, err
 			}
+			actual := value.AsUint64(es.Field.Kind, b)
 			bitmask := value.AsUint64(es.Field.Kind, bitmaskSlice)
 			masked := bitmask & actual
 			ones := bits.OnesCount(uint(bitmask))
 			shift := bits.TrailingZeros64(bitmask)
 			val := masked >> shift
 
-			if DEBUG {
+			if DEBUG_PATTERNS {
 				log.Printf("--- %s %s: bitmask %02x %08b on value %02x %08b == res %02x %08b",
 					mp.Operation, es.Field.Kind, bitmask, bitmask, actual, actual, val, val)
 			}
 			res = append(res, value.MatchedPattern{
 				Label:     mp.Label,
 				Operation: mp.Operation,
-				Value:     val,
+				Value:     b,
+				Parsed:    fmt.Sprintf("%d", val),
 				Index:     int8(shift),
 				Size:      int8(ones)})
 
@@ -174,17 +179,16 @@ func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.Ma
 			if err != nil {
 				return nil, err
 			}
-			pattern := value.AsUint64(es.Field.Kind, patternData)
-			match := actual == pattern
+			match := bytes.Compare(patternData, b)
 
-			if DEBUG {
-				log.Printf("--- %s %s: %08x == %08x is %v (%s)", mp.Operation, es.Field.Kind, actual, pattern, match, mp.Label)
+			if DEBUG_PATTERNS {
+				log.Printf("--- %s %s: %v == %v is %v (%s)", mp.Operation, es.Field.Kind, b, patternData, match, mp.Label)
 			}
-			if match {
+			if match == 0 {
 				res = append(res, value.MatchedPattern{
 					Label:     mp.Label,
 					Operation: mp.Operation,
-					Value:     actual,
+					Value:     b,
 					Parsed:    es.Field.Present(b, endian)})
 			}
 
@@ -195,12 +199,12 @@ func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.Ma
 			invalidIfNoMatch = true
 
 		default:
-			log.Fatalf("unhandled matchpattern operation '%s'", mp.Operation)
+			log.Fatalf("unhandled pattern match operation '%s'", mp.Operation)
 		}
 	}
 	if invalidIfNoMatch && len(res) == 0 {
 		// if we don't find any patterns, return error
-		return nil, ValidationError{fmt.Sprintf("value %08x (%d) for %s is not valid", actual, actual, es.Field.Label)}
+		return nil, ValidationError{fmt.Sprintf("value %v for %s is not valid", b, es.Field.Label)}
 	}
 	return res, nil
 }
@@ -239,17 +243,9 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 			return es, err
 		}
 
-		if DEBUG {
-			log.Printf("parsing %#v", v.Value)
-		}
-
 		var expr Expression
 		switch val := v.Value.(type) {
 		case []yaml.MapItem:
-			if DEBUG {
-				log.Printf("parsing 2: %#v", val)
-			}
-			// if current node is u8, u16, u32 or u64, children must be pattern matchers (bit / eq)
 			if field.IsPatternableUnit() {
 				matchPatterns, err := parseMatchPatterns(val)
 				if err != nil {
@@ -287,9 +283,6 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 
 		default:
 			log.Fatalf("cant handle type '%T' in '%#v'", val, v)
-		}
-		if DEBUG {
-			log.Printf("appending %+v", expr)
 		}
 		es.Expressions = append(es.Expressions, expr)
 	}

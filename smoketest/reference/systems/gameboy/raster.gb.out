@@ -6,7 +6,7 @@ Header
   [000134] Title                          ascii[11]        RASTERBARS            52 41 53 54 45 52 42 41 52 53 20
   [00013f] ManufacturerCode               ascii[4]                               20 20 20 20
   [000143] CGB Flag                       u8               32                    20
-           - unknown                      bit 0:7          32                    20
+           - unknown                      bit 0:7          32
            - CGB                          bit 7:1          0
   [000144] New Licensee Code              ascii[2]                               00 00
   [000146] SGB Flag                       u8               0                     00

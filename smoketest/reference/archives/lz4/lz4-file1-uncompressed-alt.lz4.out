@@ -11,20 +11,20 @@ Header
            - BlockIndependence            bit 5:1          1
            - Version                      bit 6:2          1
   [000005] blockDescriptor                u8               112                   70
-           - Reserved                     bit 0:4          0                     0
+           - Reserved                     bit 0:4          0
            - BlockMaximumSize             bit 4:3          7
            - Reserved                     bit 7:1          0
   [000006] HeaderChecksum                 u8               115                   73
 
 Block_0
   [000007] DataSize                       u32 le           2147483654            80 00 00 06
-           - DATA_SIZE                    bit 0:31         6                     00 00 00 06
+           - DATA_SIZE                    bit 0:31         6
            - Uncompressed                 bit 31:1         1
   [00000b] Data                           raw:u8[6]                              6b 75 6b 65 6e 0a
 
 Block_1 EndMarker
   [000011] DataSize                       u32 le           0                     00 00 00 00
-           - DATA_SIZE                    bit 0:31         0                     00 00 00 00
+           - DATA_SIZE                    bit 0:31         0
            - Uncompressed                 bit 31:1         0
 
 EOF

@@ -9,7 +9,7 @@ BlockHeader
   [00000c] HeaderSize                     u8               0                     00
   [00000d] Flags                          u8               0                     00
            - FilterCount                  bit 0:2          0
-           - Reserved                     bit 2:4          0                     0
+           - Reserved                     bit 2:4          0
            - CompressedSizeFieldPresent   bit 6:1          0
            - UncompressedSizeFieldPresent bit 7:1          0
 

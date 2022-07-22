@@ -2,7 +2,7 @@
 HeicFile
   [000000] Signature                      ascii[4]         BPG.                  42 50 47 fb
   [000004] Flags                          u8               34                    22
-           - bit_depth_minus_8            bit 0:4          2                     2
+           - bit_depth_minus_8            bit 0:4          2
            - alpha1                       bit 4:1          0
            - pixel_format                 bit 5:3          1
   [000005] Flags2                         u8               0                     00

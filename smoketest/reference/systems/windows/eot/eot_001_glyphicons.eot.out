@@ -11,11 +11,11 @@ Header
   [00001b] Italic                         u8               0                     00
   [00001c] Weight                         u32 le           400                   00 00 01 90
   [000020] Fs type                        u16 le           4                     00 04
-           - Usage permissions            bit 0:4          4                     4
-           - Reserved1                    bit 4:4          0                     0
+           - Usage permissions            bit 0:4          4
+           - Reserved1                    bit 4:4          0
            - No subsetting                bit 8:1          0
            - Bitmap embedding only        bit 9:1          0
-           - Reserved2                    bit 10:6         0                     00
+           - Reserved2                    bit 10:6         0
   [000022] Magic                          u8[2]                                  4c 50
   [000024] Unicode range 1                u32 le           0                     00 00 00 00
   [000028] Unicode range 2                u32 le           33554432              02 00 00 00

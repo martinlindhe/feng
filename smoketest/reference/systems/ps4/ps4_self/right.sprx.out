@@ -19,10 +19,10 @@ Segment_0
            - Encrypted                    bit 1:1          1
            - Signed                       bit 2:1          1
            - Deflated                     bit 3:1          0
-           - Reserved                     bit 4:7          0                     00
+           - Reserved                     bit 4:7          0
            - Block segment                bit 11:1         0
-           - Unknown                      bit 12:40        272                   00 00 00 01 10
-           - ID ???                       bit 52:12        0                     00 00
+           - Unknown                      bit 12:40        272
+           - ID ???                       bit 52:12        0
   [000028] Offset                         u64 le           1808                  00 00 00 00 00 00 07 10
   [000030] EncryptedCompressedSize        u64 le           32                    00 00 00 00 00 00 00 20
   [000038] DecryptedDecompressedSize      u64 le           32                    00 00 00 00 00 00 00 20
@@ -34,10 +34,10 @@ Segment_1
            - Encrypted                    bit 1:1          1
            - Signed                       bit 2:1          1
            - Deflated                     bit 3:1          0
-           - Reserved                     bit 4:7          0                     00
+           - Reserved                     bit 4:7          0
            - Block segment                bit 11:1         1
-           - Unknown                      bit 12:40        2                     00 00 00 00 02
-           - ID ???                       bit 52:12        0                     00 00
+           - Unknown                      bit 12:40        2
+           - ID ???                       bit 52:12        0
   [000048] Offset                         u64 le           1840                  00 00 00 00 00 00 07 30
   [000050] EncryptedCompressedSize        u64 le           12496                 00 00 00 00 00 00 30 d0
   [000058] DecryptedDecompressedSize      u64 le           12496                 00 00 00 00 00 00 30 d0
@@ -49,10 +49,10 @@ Segment_2
            - Encrypted                    bit 1:1          1
            - Signed                       bit 2:1          1
            - Deflated                     bit 3:1          0
-           - Reserved                     bit 4:7          0                     00
+           - Reserved                     bit 4:7          0
            - Block segment                bit 11:1         0
-           - Unknown                      bit 12:40        784                   00 00 00 03 10
-           - ID ???                       bit 52:12        0                     00 00
+           - Unknown                      bit 12:40        784
+           - ID ???                       bit 52:12        0
   [000068] Offset                         u64 le           14336                 00 00 00 00 00 00 38 00
   [000070] EncryptedCompressedSize        u64 le           32                    00 00 00 00 00 00 00 20
   [000078] DecryptedDecompressedSize      u64 le           32                    00 00 00 00 00 00 00 20
@@ -64,10 +64,10 @@ Segment_3
            - Encrypted                    bit 1:1          1
            - Signed                       bit 2:1          1
            - Deflated                     bit 3:1          0
-           - Reserved                     bit 4:7          0                     00
+           - Reserved                     bit 4:7          0
            - Block segment                bit 11:1         1
-           - Unknown                      bit 12:40        258                   00 00 00 01 02
-           - ID ???                       bit 52:12        0                     00 00
+           - Unknown                      bit 12:40        258
+           - ID ???                       bit 52:12        0
   [000088] Offset                         u64 le           14368                 00 00 00 00 00 00 38 20
   [000090] EncryptedCompressedSize        u64 le           64                    00 00 00 00 00 00 00 40
   [000098] DecryptedDecompressedSize      u64 le           64                    00 00 00 00 00 00 00 40
@@ -79,10 +79,10 @@ Segment_4
            - Encrypted                    bit 1:1          1
            - Signed                       bit 2:1          1
            - Deflated                     bit 3:1          0
-           - Reserved                     bit 4:7          0                     00
+           - Reserved                     bit 4:7          0
            - Block segment                bit 11:1         0
-           - Unknown                      bit 12:40        1296                  00 00 00 05 10
-           - ID ???                       bit 52:12        0                     00 00
+           - Unknown                      bit 12:40        1296
+           - ID ???                       bit 52:12        0
   [0000a8] Offset                         u64 le           14432                 00 00 00 00 00 00 38 60
   [0000b0] EncryptedCompressedSize        u64 le           32                    00 00 00 00 00 00 00 20
   [0000b8] DecryptedDecompressedSize      u64 le           32                    00 00 00 00 00 00 00 20
@@ -94,10 +94,10 @@ Segment_5
            - Encrypted                    bit 1:1          1
            - Signed                       bit 2:1          1
            - Deflated                     bit 3:1          0
-           - Reserved                     bit 4:7          0                     00
+           - Reserved                     bit 4:7          0
            - Block segment                bit 11:1         1
-           - Unknown                      bit 12:40        1282                  00 00 00 05 02
-           - ID ???                       bit 52:12        0                     00 00
+           - Unknown                      bit 12:40        1282
+           - ID ???                       bit 52:12        0
   [0000c8] Offset                         u64 le           14464                 00 00 00 00 00 00 38 80
   [0000d0] EncryptedCompressedSize        u64 le           1256                  00 00 00 00 00 00 04 e8
   [0000d8] DecryptedDecompressedSize      u64 le           1256                  00 00 00 00 00 00 04 e8
@@ -109,10 +109,10 @@ Segment_6
            - Encrypted                    bit 1:1          1
            - Signed                       bit 2:1          1
            - Deflated                     bit 3:1          0
-           - Reserved                     bit 4:7          0                     00
+           - Reserved                     bit 4:7          0
            - Block segment                bit 11:1         0
-           - Unknown                      bit 12:40        1808                  00 00 00 07 10
-           - ID ???                       bit 52:12        0                     00 00
+           - Unknown                      bit 12:40        1808
+           - ID ???                       bit 52:12        0
   [0000e8] Offset                         u64 le           15728                 00 00 00 00 00 00 3d 70
   [0000f0] EncryptedCompressedSize        u64 le           32                    00 00 00 00 00 00 00 20
   [0000f8] DecryptedDecompressedSize      u64 le           32                    00 00 00 00 00 00 00 20
@@ -124,10 +124,10 @@ Segment_7
            - Encrypted                    bit 1:1          1
            - Signed                       bit 2:1          1
            - Deflated                     bit 3:1          0
-           - Reserved                     bit 4:7          0                     00
+           - Reserved                     bit 4:7          0
            - Block segment                bit 11:1         1
-           - Unknown                      bit 12:40        1538                  00 00 00 06 02
-           - ID ???                       bit 52:12        0                     00 00
+           - Unknown                      bit 12:40        1538
+           - ID ???                       bit 52:12        0
   [000108] Offset                         u64 le           15760                 00 00 00 00 00 00 3d 90
   [000110] EncryptedCompressedSize        u64 le           68                    00 00 00 00 00 00 00 44
   [000118] DecryptedDecompressedSize      u64 le           68                    00 00 00 00 00 00 00 44

@@ -68,7 +68,7 @@ NEHeader
            - Win2 protected mode          bit 1:1          0
            - Win2 proportional fonts      bit 2:1          0
            - Fastload area                bit 3:1          1
-           - Reserved                     bit 4:4          0                     0
+           - Reserved                     bit 4:4          0
   [0000b8] FastloadAreaOffset             u16 le           60                    00 3c
   [0000ba] FastloadAreaSize               u16 le           64                    00 40
   [0000bc] Reserved                       u16 le           0                     00 00

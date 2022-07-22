@@ -6,7 +6,7 @@ Header
   [000134] Title                          ascii[11]        MR DIG                4d 52 20 44 49 47 20 20 20 20 20
   [00013f] ManufacturerCode               ascii[4]                               20 20 20 20
   [000143] CGB Flag                       u8               192                   c0
-           - unknown                      bit 0:7          64                    40
+           - unknown                      bit 0:7          64
            - CGB                          bit 7:1          1
   [000144] New Licensee Code              ascii[2]         ..                    b1 b0
   [000146] SGB Flag                       u8               0                     00

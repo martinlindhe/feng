@@ -37,8 +37,8 @@ Segment_2 M_DQT
            - M_DQT                        eq
   [00002e] Length                         u16 be           67                    00 43
   [000030] QuanFlag                       u8               0                     00
-           - Pq                           bit 4:4          0                     0
-           - Tq                           bit 0:4          0                     0
+           - Pq                           bit 4:4          0
+           - Tq                           bit 0:4          0
   [000031] qTable                         u8[64]                                 05 03 04 04 04 03 05 04 04 04 05 05 05 06 07 0c 08 07 07 07 07 0f 0b 0b 09 0c 11 0f 12 12 11 0f ...
 
 Segment_3 M_DQT
@@ -46,8 +46,8 @@ Segment_3 M_DQT
            - M_DQT                        eq
   [000073] Length                         u16 be           67                    00 43
   [000075] QuanFlag                       u8               1                     01
-           - Pq                           bit 4:4          0                     0
-           - Tq                           bit 0:4          1                     1
+           - Pq                           bit 4:4          0
+           - Tq                           bit 0:4          1
   [000076] qTable                         u8[64]                                 05 05 05 07 06 07 0e 08 08 0e 1e 14 11 14 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e ...
 
 Segment_4 M_SOF0
@@ -101,8 +101,8 @@ Segment_9 M_SOS
   [000150] Ss                             u8               0                     00
   [000151] Se                             u8               63                    3f
   [000152] Flag                           u8               0                     00
-           - Ah                           bit 4:4          0                     0
-           - Al                           bit 0:4          0                     0
+           - Ah                           bit 4:4          0
+           - Al                           bit 0:4          0
   [000153] scanData                       u8[1574]                               f9 1f b9 70 b2 e1 6d d7 8d e4 12 c3 66 ac 56 ab ca 17 42 48 e4 5d 8f 1f 90 76 a7 fa a9 e9 c7 e1 ...
 
 Segment_10 M_EOI

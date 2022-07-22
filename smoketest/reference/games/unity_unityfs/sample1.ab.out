@@ -8,7 +8,7 @@ Header
   [000026] compressedSize                 u32 be           86                    00 00 00 56
   [00002a] uncompressedSize               u32 be           153                   00 00 00 99
   [00002e] flags                          u32 be           67                    00 00 00 43
-           - compression                  bit 0:6          3                     03
+           - compression                  bit 0:6          3
            - directory info               bit 6:1          1
            - BlocksInfoAtTheEnd           bit 7:1          0
   [000032] Compressed data                raw:u8[86]                             1e 00 01 00 fa 00 01 00 00 24 8c 00 00 0f 93 00 03 00 00 00 02 1d 00 f8 1b 20 8c 00 00 00 04 43 ...

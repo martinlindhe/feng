@@ -18,99 +18,99 @@ Header
 
 TableDirectory_0
   [000030] Flags                          u8               27                    1b
-           - KnownTagTableIndex           bit 0:6          27                    1b
+           - KnownTagTableIndex           bit 0:6          27
            - PreProcessTransformation     bit 6:2          0
   [000031] OriginalLength                 vu32             4730                  a4 7a
 
 TableDirectory_1
   [000033] Flags                          u8               28                    1c
-           - KnownTagTableIndex           bit 0:6          28                    1c
+           - KnownTagTableIndex           bit 0:6          28
            - PreProcessTransformation     bit 6:2          0
   [000034] OriginalLength                 vu32             112                   70
 
 TableDirectory_2
   [000035] Flags                          u8               6                     06
-           - KnownTagTableIndex           bit 0:6          6                     06
+           - KnownTagTableIndex           bit 0:6          6
            - PreProcessTransformation     bit 6:2          0
   [000036] OriginalLength                 vu32             96                    60
 
 TableDirectory_3
   [000037] Flags                          u8               0                     00
-           - KnownTagTableIndex           bit 0:6          0                     00
+           - KnownTagTableIndex           bit 0:6          0
            - PreProcessTransformation     bit 6:2          0
   [000038] OriginalLength                 vu32             196                   81 44
 
 TableDirectory_4
   [00003a] Flags                          u8               8                     08
-           - KnownTagTableIndex           bit 0:6          8                     08
+           - KnownTagTableIndex           bit 0:6          8
            - PreProcessTransformation     bit 6:2          0
   [00003b] OriginalLength                 vu32             46                    2e
 
 TableDirectory_5
   [00003c] Flags                          u8               9                     09
-           - KnownTagTableIndex           bit 0:6          9                     09
+           - KnownTagTableIndex           bit 0:6          9
            - PreProcessTransformation     bit 6:2          0
   [00003d] OriginalLength                 vu32             1765                  8d 65
 
 TableDirectory_6
   [00003f] Flags                          u8               17                    11
-           - KnownTagTableIndex           bit 0:6          17                    11
+           - KnownTagTableIndex           bit 0:6          17
            - PreProcessTransformation     bit 6:2          0
   [000040] OriginalLength                 vu32             12                    0c
 
 TableDirectory_7
   [000041] Flags                          u8               10                    0a
-           - KnownTagTableIndex           bit 0:6          10                    0a
+           - KnownTagTableIndex           bit 0:6          10
            - PreProcessTransformation     bit 6:2          0
   [000042] OriginalLength                 vu32             50696                 83 8c 08
 
 TableDirectory_8
   [000045] Flags                          u8               130                   82
-           - KnownTagTableIndex           bit 0:6          2                     02
+           - KnownTagTableIndex           bit 0:6          2
            - PreProcessTransformation     bit 6:2          2
   [000046] OriginalLength                 vu32             14429                 f0 5d
   [000048] TransformLength                vu32             11                    0b
 
 TableDirectory_9
   [000049] Flags                          u8               131                   83
-           - KnownTagTableIndex           bit 0:6          3                     03
+           - KnownTagTableIndex           bit 0:6          3
            - PreProcessTransformation     bit 6:2          2
   [00004a] OriginalLength                 vu32             66                    42
   [00004b] TransformLength                vu32             0                     00
 
 TableDirectory_10
   [00004c] Flags                          u8               1                     01
-           - KnownTagTableIndex           bit 0:6          1                     01
+           - KnownTagTableIndex           bit 0:6          1
            - PreProcessTransformation     bit 6:2          0
   [00004d] OriginalLength                 vu32             54                    36
 
 TableDirectory_11
   [00004e] Flags                          u8               2                     02
-           - KnownTagTableIndex           bit 0:6          2                     02
+           - KnownTagTableIndex           bit 0:6          2
            - PreProcessTransformation     bit 6:2          0
   [00004f] OriginalLength                 vu32             36                    24
 
 TableDirectory_12
   [000050] Flags                          u8               3                     03
-           - KnownTagTableIndex           bit 0:6          3                     03
+           - KnownTagTableIndex           bit 0:6          3
            - PreProcessTransformation     bit 6:2          0
   [000051] OriginalLength                 vu32             886                   86 76
 
 TableDirectory_13
   [000053] Flags                          u8               4                     04
-           - KnownTagTableIndex           bit 0:6          4                     04
+           - KnownTagTableIndex           bit 0:6          4
            - PreProcessTransformation     bit 6:2          0
   [000054] OriginalLength                 vu32             32                    20
 
 TableDirectory_14
   [000055] Flags                          u8               5                     05
-           - KnownTagTableIndex           bit 0:6          5                     05
+           - KnownTagTableIndex           bit 0:6          5
            - PreProcessTransformation     bit 6:2          0
   [000056] OriginalLength                 vu32             664                   85 18
 
 TableDirectory_15
   [000058] Flags                          u8               7                     07
-           - KnownTagTableIndex           bit 0:6          7                     07
+           - KnownTagTableIndex           bit 0:6          7
            - PreProcessTransformation     bit 6:2          0
   [000059] OriginalLength                 vu32             581                   84 45
 

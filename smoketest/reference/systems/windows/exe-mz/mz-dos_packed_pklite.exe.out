@@ -18,7 +18,7 @@ Header
 PKLiteHeader
   [00001c] Minor version                  u8               12                    0c
   [00001d] Flags                          u8               1                     01
-           - Major version                bit 0:4          1                     1
+           - Major version                bit 0:4          1
            - Extra compression            bit 4:1          0
            - Multi-segment file           bit 5:1          0
            - Unknown                      bit 6:2          0

@@ -141,10 +141,12 @@ colors
 
 data (for extraction feature)
 
-    raw:u8[size]                mark area as file data
-    compressed:zlib[self.Size]  mark area as zlib compressed data
-    compressed:lz4[self.Size]   mark area as lz4-compressed data
-    compressed:deflate[self.Size] mark area as DEFLATE compressed data
+    raw:u8[40]                      mark area as raw data (extracted as-is)
+
+    u32 Size: ??
+    compressed:zlib[self.Size]      mark area as zlib compressed data
+    compressed:lz4[self.Size]       mark area as lz4-compressed data
+    compressed:deflate[self.Size]   mark area as DEFLATE compressed data
 
 
 variable length encoding

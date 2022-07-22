@@ -662,7 +662,7 @@ LibraryVersion_0 XAPILIB
   [000ad6] Minor Version                  u16 le           0                     00 00
   [000ad8] Build Version                  u16 le           5558                  15 b6
   [000ada] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit 0:13         1                     00 01
+           - QFEVersion                   bit 0:13         1
            - Approved                     bit 13:2         2
            - Debug Build                  bit 15:1         0
 
@@ -672,7 +672,7 @@ LibraryVersion_1 D3D8
   [000ae6] Minor Version                  u16 le           0                     00 00
   [000ae8] Build Version                  u16 le           5558                  15 b6
   [000aea] Library Flags                  u16 le           16388                 40 04
-           - QFEVersion                   bit 0:13         4                     00 04
+           - QFEVersion                   bit 0:13         4
            - Approved                     bit 13:2         2
            - Debug Build                  bit 15:1         0
 
@@ -682,7 +682,7 @@ LibraryVersion_2 D3DX8
   [000af6] Minor Version                  u16 le           0                     00 00
   [000af8] Build Version                  u16 le           5558                  15 b6
   [000afa] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit 0:13         1                     00 01
+           - QFEVersion                   bit 0:13         1
            - Approved                     bit 13:2         2
            - Debug Build                  bit 15:1         0
 
@@ -692,7 +692,7 @@ LibraryVersion_3 XGRAPHC
   [000b06] Minor Version                  u16 le           0                     00 00
   [000b08] Build Version                  u16 le           5558                  15 b6
   [000b0a] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit 0:13         1                     00 01
+           - QFEVersion                   bit 0:13         1
            - Approved                     bit 13:2         2
            - Debug Build                  bit 15:1         0
 
@@ -702,7 +702,7 @@ LibraryVersion_4 DSOUND
   [000b16] Minor Version                  u16 le           0                     00 00
   [000b18] Build Version                  u16 le           5558                  15 b6
   [000b1a] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit 0:13         1                     00 01
+           - QFEVersion                   bit 0:13         1
            - Approved                     bit 13:2         2
            - Debug Build                  bit 15:1         0
 
@@ -712,7 +712,7 @@ LibraryVersion_5 XBOXKRNL
   [000b26] Minor Version                  u16 le           0                     00 00
   [000b28] Build Version                  u16 le           5558                  15 b6
   [000b2a] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit 0:13         1                     00 01
+           - QFEVersion                   bit 0:13         1
            - Approved                     bit 13:2         2
            - Debug Build                  bit 15:1         0
 
@@ -722,7 +722,7 @@ LibraryVersion_6 LIBCMT
   [000b36] Minor Version                  u16 le           0                     00 00
   [000b38] Build Version                  u16 le           5558                  15 b6
   [000b3a] Library Flags                  u16 le           16385                 40 01
-           - QFEVersion                   bit 0:13         1                     00 01
+           - QFEVersion                   bit 0:13         1
            - Approved                     bit 13:2         2
            - Debug Build                  bit 15:1         0
 

@@ -261,7 +261,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 
 func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
-	if DEBUG {
+	if DEBUG_MAPPER {
 		log.Printf("expandStruct: adding struct %s", dfParent.Label)
 	}
 
@@ -284,7 +284,7 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
-	if DEBUG {
+	if DEBUG_MAPPER {
 		feng.Red("expandChildren: %06x working with struct %s\n", fl.offset, dfParent.Label)
 	}
 
@@ -294,7 +294,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 	lastIf := ""
 
 	for _, es := range expressions {
-		if DEBUG {
+		if DEBUG_MAPPER {
 			log.Printf("expandChildren: working with field %s %s: %v", es.Field.Kind, es.Field.Label, es)
 		}
 		switch es.Field.Kind {

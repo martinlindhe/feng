@@ -352,7 +352,8 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 // renders lines of ascii to present the data field for humans
 func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 	kind := fl.PresentType(&field.Format)
-	if (field.Format.Kind != "vu32" && field.Format.Kind != "vu64") && field.Format.SingleUnitSize() > 1 { // XXX hacky handling of vu32
+	if (field.Format.Kind != "vu32" && field.Format.Kind != "vu64") && field.Format.SingleUnitSize() > 1 {
+		// XXX hacky way of skipping variable length fields
 		if field.Endian == "little" {
 			kind += " le"
 		} else {
@@ -379,47 +380,17 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 	res = strings.TrimRight(res, " ") + "\n"
 
 	for _, child := range field.MatchedPatterns {
+		op := ""
 		pretty := ""
-		raw := ""
-		if child.Operation != "eq" {
-			pretty = fmt.Sprintf("%d", child.Value)
-			if child.Parsed != "" {
-				pretty = child.Parsed
-			}
-
-			switch child.Size {
-			case 0, 1, 2, 3:
-				break
-			case 4:
-				raw = fmt.Sprintf("%01x ", child.Value)
-			case 5, 6, 7, 8:
-				raw = fmt.Sprintf("%02x", child.Value)
-			case 12, 13:
-				raw = fmt.Sprintf("%04x", child.Value)
-			case 20, 21, 22, 23, 24:
-				raw = fmt.Sprintf("%06x", child.Value)
-			case 31, 32:
-				raw = fmt.Sprintf("%08x", child.Value)
-			case 40:
-				raw = fmt.Sprintf("%010x", child.Value)
-			default:
-				panic(fmt.Sprintf("handle bit count %d", child.Size))
-			}
-
-			// add a space between each hex byte
-			rawParts := []string{}
-			for i := 0; i < len(raw); i += 2 {
-				rawParts = append(rawParts, raw[i:i+2])
-			}
-			raw = strings.Join(rawParts, " ")
-		}
-		op := child.Operation
-		if op == "bit" {
+		if child.Operation == "bit" {
 			// decorate bit range
 			op = fmt.Sprintf("bit %d:%d", child.Index, child.Size)
+			pretty = child.Parsed
+		} else {
+			op = child.Operation
 		}
 
-		line := fmt.Sprintf("           - %-28s %-16s %-21s %s", child.Label, op, pretty, raw)
+		line := fmt.Sprintf("           - %-28s %-16s %-21s", child.Label, op, pretty)
 		res += strings.TrimRight(line, " ") + "\n"
 	}
 	return res
@@ -592,7 +563,6 @@ func (fl *FileLayout) isPatternVariableName(s string, df *value.DataField) bool 
 		log.Println(err)
 		return false
 	}
-
 	for _, field := range str.Fields {
 		if field.Format.Label == fieldName {
 			return true
@@ -689,11 +659,7 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 
 			for _, child := range field.MatchedPatterns {
 				if child.Label == childName {
-					val := value.U64toBytesBigEndian(child.Value, field.Format.SingleUnitSize())
-					if DEBUG {
-						log.Printf("-- matched pattern %s = %d", child.Label, val)
-					}
-					return field.Format.Kind, val, nil
+					return field.Format.Kind, child.Value, nil
 				}
 			}
 		}

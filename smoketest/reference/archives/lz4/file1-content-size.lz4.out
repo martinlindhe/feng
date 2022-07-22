@@ -11,7 +11,7 @@ Header
            - BlockIndependence            bit 5:1          1
            - Version                      bit 6:2          1
   [000005] blockDescriptor                u8               64                    40
-           - Reserved                     bit 0:4          0                     0
+           - Reserved                     bit 0:4          0
            - BlockMaximumSize             bit 4:3          4
            - Reserved                     bit 7:1          0
   [000006] ContentSize                    u64 le           6                     00 00 00 00 00 00 00 06
@@ -19,13 +19,13 @@ Header
 
 Block_0
   [00000f] DataSize                       u32 le           2147483654            80 00 00 06
-           - DATA_SIZE                    bit 0:31         6                     00 00 00 06
+           - DATA_SIZE                    bit 0:31         6
            - Uncompressed                 bit 31:1         1
   [000013] Data                           raw:u8[6]                              6b 75 6b 65 6e 0a
 
 Block_1 EndMarker
   [000019] DataSize                       u32 le           0                     00 00 00 00
-           - DATA_SIZE                    bit 0:31         0                     00 00 00 00
+           - DATA_SIZE                    bit 0:31         0
            - Uncompressed                 bit 31:1         0
 
 Trailer

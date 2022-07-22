@@ -1,15 +1,7 @@
 # STATUS: 5%
 
 # MID: need REVERSE_ENDIAN_CONSTANT sample
-# LOW: calculate adler32 + sha1 hashes. reason as to why: able to replace tools such as https://github.com/feicong/android_re/blob/master/DexFixer.1sc
-
-# versions:
-# 009 = Android M3 (2007)
-# 013 = Android M5 (2008)
-# 035 = Pre Android 7.0
-# 037 = Android 7.0
-# 038 = Android 8.0
-# 039 = Android 9.0
+# LOW: calculate adler32 + sha1 hashes. reason as to why: able to reimplement tools such as https://github.com/feicong/android_re/blob/master/DexFixer.1sc
 
 references:
   - https://source.android.com/devices/tech/dalvik/dex-format
@@ -32,11 +24,18 @@ magic:
 structs:
   header:
     ascii[4] Signature: c'dex' 0a
-    ascii[4] Version: ??
+    ascii[4] Version:
+      eq c'009' 00: Android M3 (2007)
+      eq c'013' 00: Android M5 (2008)
+      eq c'035' 00: Pre Android 7.0
+      eq c'037' 00: Android 7.0
+      eq c'038' 00: Android 8.0
+      eq c'039' 00: Android 9.0
+
     u32 Checksum: ??              # adler32 checksum of the rest of the file
     u8[20] SHA1: ??               # sha1 hash of the rest of the file
-    u32 File size: ??
-    u32 Header size: ??
+    u32 FileSize: ??
+    u32 HeaderSize: ??
 
     u32 Endian:
       eq 12345678: Little         # ENDIAN_CONSTANT (default)

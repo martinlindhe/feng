@@ -166,10 +166,10 @@ PESection_0 .text
            - Reserved                     bit 10:1         0
            - Remove                       bit 11:1         0
            - COMDAT data                  bit 12:1         0
-           - Reserved                     bit 13:4         0                     0
+           - Reserved                     bit 13:4         0
            - Data referenced through the global pointer bit 17:1         0
            - Reserved                     bit 18:2         0
-           - Align x-bytes                bit 20:4         0                     0
+           - Align x-bytes                bit 20:4         0
            - Extended relocations         bit 24:1         0
            - Discardable                  bit 25:1         0
            - Cacheable                    bit 26:1         0
@@ -202,10 +202,10 @@ PESection_1 .idata
            - Reserved                     bit 10:1         0
            - Remove                       bit 11:1         0
            - COMDAT data                  bit 12:1         0
-           - Reserved                     bit 13:4         0                     0
+           - Reserved                     bit 13:4         0
            - Data referenced through the global pointer bit 17:1         0
            - Reserved                     bit 18:2         0
-           - Align x-bytes                bit 20:4         0                     0
+           - Align x-bytes                bit 20:4         0
            - Extended relocations         bit 24:1         0
            - Discardable                  bit 25:1         0
            - Cacheable                    bit 26:1         0
@@ -238,10 +238,10 @@ PESection_2 .rsrc
            - Reserved                     bit 10:1         0
            - Remove                       bit 11:1         0
            - COMDAT data                  bit 12:1         0
-           - Reserved                     bit 13:4         0                     0
+           - Reserved                     bit 13:4         0
            - Data referenced through the global pointer bit 17:1         0
            - Reserved                     bit 18:2         0
-           - Align x-bytes                bit 20:4         0                     0
+           - Align x-bytes                bit 20:4         0
            - Extended relocations         bit 24:1         0
            - Discardable                  bit 25:1         0
            - Cacheable                    bit 26:1         0
@@ -274,10 +274,10 @@ PESection_3 .reloc
            - Reserved                     bit 10:1         0
            - Remove                       bit 11:1         0
            - COMDAT data                  bit 12:1         0
-           - Reserved                     bit 13:4         0                     0
+           - Reserved                     bit 13:4         0
            - Data referenced through the global pointer bit 17:1         0
            - Reserved                     bit 18:2         0
-           - Align x-bytes                bit 20:4         0                     0
+           - Align x-bytes                bit 20:4         0
            - Extended relocations         bit 24:1         0
            - Discardable                  bit 25:1         1
            - Cacheable                    bit 26:1         0

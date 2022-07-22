@@ -15,9 +15,9 @@ BTreeHeader
   [0002d9] Flags                          u16 le           1026                  04 02
            - Unknown1                     bit 0:1          0
            - Unknown2                     bit 1:1          1
-           - Unknown3                     bit 2:8          0                     00
+           - Unknown3                     bit 2:8          0
            - Directory                    bit 10:1         1
-           - Unknown4                     bit 11:5         0                     00
+           - Unknown4                     bit 11:5         0
   [0002db] PageSize                       u16 le           1024                  04 00
   [0002dd] Structure                      ascii[16]        z4                    7a 34 00 01 0d 01 04 01 00 00 c1 7e 59 ff 44 3a
   [0002ed] Unknown1                       u16 le           0                     00 00

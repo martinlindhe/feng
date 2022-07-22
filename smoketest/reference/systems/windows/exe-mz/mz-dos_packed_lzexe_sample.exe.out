@@ -18,6 +18,7 @@ Header
 LZEXEHeader
   [00001c] Identifier                     ascii[2]         LZ                    4c 5a
   [00001e] Version                        ascii[2]         91                    39 31
+           - 0.91                         eq
   [000020] Real CS:IP                     u32 le           2337669119            8b 55 ff ff
   [000024] Real SS:SP                     u32 le           116163564             06 ec 83 ec
   [000028] Compressed load module size    u16 le           22103                 56 57

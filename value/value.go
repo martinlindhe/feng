@@ -288,7 +288,7 @@ type MatchedPattern struct {
 	Operation string
 
 	// parsed value of bit field
-	Value uint64
+	Value []byte
 
 	// parsed value for display
 	Parsed string
@@ -327,6 +327,26 @@ func SingleUnitSize(kind string) uint64 {
 
 // returns true if unit is a single u8, u16, u32 or u64 that can have eq/bit field as child
 func (df *DataField) IsPatternableUnit() bool {
+
+	if df.Slice {
+		return false
+	}
+
+	// only allow pattern matching on single values of simple units
+	if df.Range == "" && (df.Kind == "u8" || df.Kind == "i8" || df.Kind == "u16" || df.Kind == "i16" || df.Kind == "u32" || df.Kind == "i32" || df.Kind == "u64" || df.Kind == "i64") {
+		return true
+	}
+
+	// allow pattern matching on arbitrary length ascii
+	if df.Kind == "ascii" {
+		return true
+	}
+
+	return false
+}
+
+// returns true if unit is a single u8, u16, u32 or u64 that can be used in IF statements
+func (df *DataField) IsSimpleUnit() bool {
 	if df.Slice || df.Range != "" {
 		return false
 	}
@@ -335,11 +355,6 @@ func (df *DataField) IsPatternableUnit() bool {
 		return true
 	}
 	return false
-}
-
-// returns true if unit is a single u8, u16, u32 or u64 that can be used in IF statements
-func (df *DataField) IsSimpleUnit() bool {
-	return df.IsPatternableUnit()
 }
 
 // reverse byte order in groups of `unitLength` to handle u16/u32 ordering
