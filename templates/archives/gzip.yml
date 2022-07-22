@@ -1,11 +1,6 @@
 # STATUS: 95%
 #
-# - LOW: mark crc32 for data validation
-# - LOW: mark crc16 for header validation
-#
-# - SAMPLE: WANT sample file with FLAG_CRC16
-# - SAMPLE: WANT sample file with FLAG_EXTRA
-# - SAMPLE: WANT sample file with FLAG_COMMENT
+# - LOW: mark crc16, crc32 for data validation
 
 references:
   - https://tools.ietf.org/html/rfc1952
@@ -62,11 +57,9 @@ structs:
 
     if self.HeaderFlags & FLAG_CRC16:
       data: unseen
-      u16 Header checksum: ??                   # XXX mark data type as crc16 over range... crc16[0000:000a]  ?
-      # crc16[0000:000a] Header checksum: ??
+      u16 Header checksum: ??                   # XXX crc16 over range...    crc16[0000:000a] Header checksum: ??
 
     if self.HeaderFlags & FLAG_EXTRA:
-      # XXX format: u16 length + byte[len] data
       data: unseen
       u16 Extra Length: ??
       u8[self.Extra Length] Data: ??

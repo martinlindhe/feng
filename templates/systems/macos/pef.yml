@@ -7,7 +7,7 @@ references:
   - https://web.archive.org/web/20020208214155/http://developer.apple.com/techpubs/mac/runtimehtml/RTArch-89.html
 
 kind: executable
-name: PEF executable
+name: Preferred Executable
 endian: big
 
 magic:

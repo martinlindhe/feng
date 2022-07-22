@@ -1,7 +1,5 @@
 # STATUS: 5%
 
-# TODO: many false matches. Gamecube DOL format incorrectly matches ICO template. Maybe solve by having to match by extension?
-
 references:
   - http://hitmen.c02.at/files/yagcd/yagcd/chap14.html
 
@@ -9,6 +7,7 @@ kind: system
 name:  Nintendo Gamecube Executable
 extensions: [.dol]
 endian: big
+no_magic: true
 
 structs:
   header:

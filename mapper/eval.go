@@ -391,7 +391,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	}
 
 	for _, constant := range fl.DS.Constants {
-		evalVariables[constant.Name] = int(constant.Value)
+		if len(constant.Value) <= 4 || len(constant.Value) == 8 {
+			evalVariables[constant.Name] = int(value.AsUint64Raw(constant.Value))
+		}
 	}
 	evalVariables["FILE_SIZE"] = int(fl.size)
 

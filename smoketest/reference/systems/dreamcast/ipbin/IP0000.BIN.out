@@ -1,0 +1,24 @@
+# templates/systems/dreamcast/ip_bin.yml
+Meta Information
+  [000000] HardwareID                     ascii[16]        SEGA SEGAKATANA       53 45 47 41 20 53 45 47 41 4b 41 54 41 4e 41 20
+  [000010] MakerID                        ascii[16]        SEGA ENTERPRISES      53 45 47 41 20 45 4e 54 45 52 50 52 49 53 45 53
+  [000020] CRC                            ascii[4]         EDB5                  45 44 42 35
+  [000024] Padding                        ascii                                  20
+  [000025] Device                         ascii[6]         GD-ROM                47 44 2d 52 4f 4d
+  [00002b] Disc                           ascii[6]         1/1                   31 2f 31 20 20 20
+  [000031] Region                         ascii[7]         U                     55 20 20 20 20 20 20
+           - USA                          eq
+  [000038] Peripherals                    ascii[8]         0799A10               30 37 39 39 41 31 30 20
+  [000040] Product number                 ascii[10]        MK-51035              4d 4b 2d 35 31 30 33 35 20 20
+  [00004a] Product version                ascii[6]         V1.004                56 31 2e 30 30 34
+  [000050] Release date                   ascii[16]        19991219              31 39 39 39 31 32 31 39 20 20 20 20 20 20 20 20
+  [000060] Boot file                      ascii[16]        1ST_READ.BIN          31 53 54 5f 52 45 41 44 2e 42 49 4e 20 20 20 20
+  [000070] Manufacturer ID                ascii[16]        SEGA ENTERPRISES      53 45 47 41 20 45 4e 54 45 52 50 52 49 53 45 53
+  [000080] Software name                  ascii[128]       CRAZY TAXI            43 52 41 5a 59 20 54 41 58 49 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 ...
+  [000100] Table of contents              u8[512]                                00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [000300] SEGA license screen code       u8[13312]                              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [003700] Area protection symbols        u8[256]                                00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+  [003800] Bootstrap 1                    raw:u8[10240]                          53 45 47 41 20 53 45 47 41 4b 41 54 41 4e 41 20 53 45 47 41 20 45 4e 54 45 52 50 52 49 53 45 53 ...
+  [006000] Bootstrap 2                    raw:u8[8192]                           53 45 47 41 20 53 45 47 41 4b 41 54 41 4e 41 20 53 45 47 41 20 45 4e 54 45 52 50 52 49 53 45 53 ...
+
+EOF

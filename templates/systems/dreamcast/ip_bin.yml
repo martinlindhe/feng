@@ -1,17 +1,14 @@
 # STATUS: 50%
-# format used on dreamcast IP.BIN (game boot executable)
 
-# HI: XXX MAP: U = USA, need eq match on ascii[7]
+# format used on dreamcast 
+
 # MID : interpret ascii[4] CRC as a value for crc calculation comparison
-# MID: mark up bootstrap areas as SH-4 binary code in little endian for auto disassembly with capstone or something
-
 
 references:
   - https://dreamcast.wiki/IP.BIN
-  - https://mc.pp.se/dc/ip0000.bin.html
 
 kind: system
-name:  Dreamcast disc bootsector
+name:  Dreamcast IP.BIN (disc bootsector)
 extensions: [.bin]
 endian: little
 
@@ -25,9 +22,12 @@ structs:
     ascii[16] MakerID: c'SEGA ENTERPRISES'
     ascii[4] CRC: ??
     ascii Padding: c' '
-    ascii[6] Device: ?? # "GD-ROM"
-    ascii[6] Disc: ?? # "1/1   "
-    ascii[7] Region: ??               # XXX MAP: U = USA, J = Japan, E = Europe. need eq match on ascii[7]
+    ascii[6] Device: ??         # "GD-ROM"
+    ascii[6] Disc: ??           # "1/1   "
+    ascii[7] Region:
+      eq c'J      ': Japan
+      eq c'U      ': USA
+      eq c'E      ': Europe
     ascii[8] Peripherals: ??
     ascii[10] Product number: ??
     ascii[6] Product version: ??
@@ -40,8 +40,8 @@ structs:
     u8[13312] SEGA license screen code: ??
     u8[256] Area protection symbols: ?? # XXX map up
 
-    u8[10240] Bootstrap 1: ??  # XXX mark as sh4 binary code
-    u8[8192] Bootstrap 2: ??
+    raw:u8[10240] Bootstrap 1: ??
+    raw:u8[8192] Bootstrap 2: ??
 
 layout:
   - header Meta Information

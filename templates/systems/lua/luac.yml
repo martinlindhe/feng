@@ -30,7 +30,7 @@ structs:
     u8 Version: # XXX major.minor 4 bits each data type
       eq 51: "5.1"
       eq 52: "5.2"
-      eq 53: "5.3"  # XXX want 5.3 sample
+      eq 53: "5.3"
       eq 54: "5.4"
     if self.Version == 0x53:
       data: unseen

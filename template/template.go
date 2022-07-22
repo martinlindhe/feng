@@ -50,7 +50,7 @@ type Template struct {
 
 type Constant struct {
 	Name  string
-	Value int64
+	Value []byte
 }
 
 // returns all fields with eq or bit subkey pattern matches as constants
@@ -88,12 +88,12 @@ func findStructConstants(c *yaml.MapItem) ([]Constant, error) {
 							continue
 						}
 						if m.Operation == "eq" || m.Operation == "bit" {
-							data, err := value.ParseHexStringToUint64(m.Pattern)
+							data, err := value.ParseHexString(m.Pattern)
 							if err != nil {
 								return nil, err
 							}
 							df := value.DataField{Label: m.Label, Kind: field.Kind}
-							res = append(res, Constant{df.Label, int64(data)})
+							res = append(res, Constant{df.Label, data})
 						}
 					}
 				}

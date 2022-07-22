@@ -28,6 +28,7 @@ structs:
 
   table:
     ascii[4] Tag: ??
+    label: self.Tag
     u32 Checksum: ??
     u32 Offset: ??
     u32 Length: ??

@@ -358,6 +358,10 @@ input:
     files:
       - classes.dex
 
+  - folder: systems/dreamcast/ipbin
+    files:
+      - IP0000.BIN
+
   - folder: systems/flash/flv
     files:
       - flash_001.flv

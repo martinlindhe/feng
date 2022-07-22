@@ -24,8 +24,6 @@ magic:
 structs:
   header:
     ascii[4] Signature: c'DDS '
-
-    # header
     u32 Size: 0000007c
     u32 Flags:
       bit b00000000_00000000_00000000_00000001: DDSD_CAPS
@@ -45,7 +43,6 @@ structs:
     u32[11] Reserved1: ??
 
     if self.Flags & DDSD_PIXELFORMAT:
-      # XXX this is type DDS_PIXELFORMAT:
       u32 Pixel format size: ??
       u32 Pixel format flags:
         bit b00000000_00000000_00000000_00000001: DDPF_ALPHAPIXELS
@@ -68,8 +65,7 @@ structs:
     u32 Caps4: ??
     u32 Reserved2: ??
 
-    # opaque image data
-    u8[FILE_SIZE - DDS_HEADER.Size - 4] Image data: ??
+    u8[FILE_SIZE - self.Size - 4] Image data: ??
 
 layout:
   - header DDS_HEADER

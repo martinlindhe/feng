@@ -57,8 +57,7 @@ structs:
   
   filename_table:
     asciiz FileName: ??
-    # padding to make FileName 4-byte aligned
-    u8[(4 - len("self.FileName") % 4) % 4] Padding: ??
+    u8[alignment(len("self.FileName"), 4)] Padding: ??
 
 layout:
   - sarc_header SArchHeader

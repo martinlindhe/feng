@@ -37,6 +37,7 @@ structs:
 
   tbl_dir:
     ascii[4] Tag: ??
+    label: self.Tag
     u32 Offset: ??
     u32 CompressedLength: ??
     u32 OriginalLength: ??

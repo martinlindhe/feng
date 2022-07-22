@@ -15,7 +15,7 @@ Header
   [000024] PrivateOffset                  u32 be           0                     00 00 00 00
   [000028] PrivateLength                  u32 be           0                     00 00 00 00
 
-TableDirectory_0
+TableDirectory_0 FFTM
   [00002c] Tag                            ascii[4]         FFTM                  46 46 54 4d
   [000030] Offset                         u32 be           344                   00 00 01 58
   [000034] CompressedLength               u32 be           28                    00 00 00 1c
@@ -23,7 +23,7 @@ TableDirectory_0
   [00003c] OriginalChecksum               u32 be           1831507932            6d 2a 97 dc
   [000158] Data                           raw:u8[28]                             00 00 00 01 00 00 00 00 cc 3d a2 cf 00 00 00 00 d0 76 81 75 00 00 00 00 d0 76 73 97
 
-TableDirectory_1
+TableDirectory_1 GDEF
   [000040] Tag                            ascii[4]         GDEF                  47 44 45 46
   [000044] Offset                         u32 be           372                   00 00 01 74
   [000048] CompressedLength               u32 be           31                    00 00 00 1f
@@ -32,7 +32,7 @@ TableDirectory_1
   [000174] Data                           compressed:zlib[31]                       78 da 63 60 64 60 60 e0 03 62 09 06 10 60 62 60 64 60 64 14 03 92 2c 60 1e 03 00 05 48 00 4a
   [000193] Padding                        u8[1]                                  00
 
-TableDirectory_2
+TableDirectory_2 OS/2
   [000054] Tag                            ascii[4]         OS/2                  4f 53 2f 32
   [000058] Offset                         u32 be           404                   00 00 01 94
   [00005c] CompressedLength               u32 be           69                    00 00 00 45
@@ -41,7 +41,7 @@ TableDirectory_2
   [000194] Data                           compressed:zlib[69]                       78 da 63 60 66 e9 66 9c c0 c0 ca c0 c2 cc c3 74 81 81 81 21 0a 42 33 2e 61 30 62 da 01 e4 03 a5 ...
   [0001d9] Padding                        u8[3]                                  00 00 00
 
-TableDirectory_3
+TableDirectory_3 cmap
   [000068] Tag                            ascii[4]         cmap                  63 6d 61 70
   [00006c] Offset                         u32 be           476                   00 00 01 dc
   [000070] CompressedLength               u32 be           704                   00 00 02 c0
@@ -49,7 +49,7 @@ TableDirectory_3
   [000078] OriginalChecksum               u32 be           3668829057            da ad e3 81
   [0001dc] Data                           compressed:zlib[704]                       78 da ed 94 3f 68 53 41 1c c7 7f 97 a4 69 53 c4 c6 fe 89 8d 6d df bd 34 34 b1 ad d0 2c 0e 71 ca ...
 
-TableDirectory_4
+TableDirectory_4 cvt
   [00007c] Tag                            ascii[4]         cvt                   63 76 74 20
   [000080] Offset                         u32 be           1180                  00 00 04 9c
   [000084] CompressedLength               u32 be           4                     00 00 00 04
@@ -57,7 +57,7 @@ TableDirectory_4
   [00008c] OriginalChecksum               u32 be           2622200               00 28 02 f8
   [00049c] Data                           raw:u8[4]                              00 28 02 f8
 
-TableDirectory_5
+TableDirectory_5 gasp
   [000090] Tag                            ascii[4]         gasp                  67 61 73 70
   [000094] Offset                         u32 be           1184                  00 00 04 a0
   [000098] CompressedLength               u32 be           8                     00 00 00 08
@@ -65,7 +65,7 @@ TableDirectory_5
   [0000a0] OriginalChecksum               u32 be           4294901763            ff ff 00 03
   [0004a0] Data                           raw:u8[8]                              00 00 00 01 ff ff 00 02
 
-TableDirectory_6
+TableDirectory_6 glyf
   [0000a4] Tag                            ascii[4]         glyf                  67 6c 79 66
   [0000a8] Offset                         u32 be           1192                  00 00 04 a8
   [0000ac] CompressedLength               u32 be           19735                 00 00 4d 17
@@ -74,7 +74,7 @@ TableDirectory_6
   [0004a8] Data                           compressed:zlib[19735]                       78 da c5 bd 09 7c 1b d5 b5 30 3e 77 16 8d d6 19 6d 23 59 b6 65 5b 92 25 59 de 2d 59 52 1c 27 72 ...
   [0051bf] Padding                        u8[1]                                  00
 
-TableDirectory_7
+TableDirectory_7 head
   [0000b8] Tag                            ascii[4]         head                  68 65 61 64
   [0000bc] Offset                         u32 be           20928                 00 00 51 c0
   [0000c0] CompressedLength               u32 be           52                    00 00 00 34
@@ -82,7 +82,7 @@ TableDirectory_7
   [0000c8] OriginalChecksum               u32 be           88944600              05 4d 2f d8
   [0051c0] Data                           compressed:zlib[52]                       78 da 63 60 64 60 60 60 64 f2 cd 3f cc 12 1f cf 6f f3 95 41 9e 65 03 50 84 e1 42 59 f1 74 18 fd ...
 
-TableDirectory_8
+TableDirectory_8 hhea
   [0000cc] Tag                            ascii[4]         hhea                  68 68 65 61
   [0000d0] Offset                         u32 be           20980                 00 00 51 f4
   [0000d4] CompressedLength               u32 be           28                    00 00 00 1c
@@ -90,7 +90,7 @@ TableDirectory_8
   [0000dc] OriginalChecksum               u32 be           172229649             0a 44 04 11
   [0051f4] Data                           compressed:zlib[28]                       78 da 63 60 64 60 60 15 f9 df 0a 26 03 ff 5d 61 bd c3 00 14 41 01 8b 01 8a 8f 06 5f
 
-TableDirectory_9
+TableDirectory_9 hmtx
   [0000e0] Tag                            ascii[4]         hmtx                  68 6d 74 78
   [0000e4] Offset                         u32 be           21008                 00 00 52 10
   [0000e8] CompressedLength               u32 be           335                   00 00 01 4f
@@ -99,7 +99,7 @@ TableDirectory_9
   [005210] Data                           compressed:zlib[335]                       78 da 7d 53 bd 4a 03 41 10 9e d5 53 3c 91 60 11 8c da d9 18 8b ab 04 0b 11 04 8b 80 da f9 00 16 ...
   [00535f] Padding                        u8[1]                                  00
 
-TableDirectory_10
+TableDirectory_10 loca
   [0000f4] Tag                            ascii[4]         loca                  6c 6f 63 61
   [0000f8] Offset                         u32 be           21344                 00 00 53 60
   [0000fc] CompressedLength               u32 be           551                   00 00 02 27
@@ -108,7 +108,7 @@ TableDirectory_10
   [005360] Data                           compressed:zlib[551]                       78 da 63 60 60 d0 82 c2 4d 0c 2f 18 5e 30 fa e1 81 4b 98 d8 98 94 98 ea 98 da 98 d6 30 3d 61 76 ...
   [005587] Padding                        u8[1]                                  00
 
-TableDirectory_11
+TableDirectory_11 maxp
   [000108] Tag                            ascii[4]         maxp                  6d 61 78 70
   [00010c] Offset                         u32 be           21896                 00 00 55 88
   [000110] CompressedLength               u32 be           32                    00 00 00 20
@@ -116,7 +116,7 @@ TableDirectory_11
   [000118] OriginalChecksum               u32 be           23724248              01 6a 00 d8
   [005588] Data                           raw:u8[32]                             00 01 00 00 01 17 00 a7 00 11 00 00 00 00 00 02 00 00 00 01 00 01 00 00 00 40 00 2e 00 00 00 00
 
-TableDirectory_12
+TableDirectory_12 name
   [00011c] Tag                            ascii[4]         name                  6e 61 6d 65
   [000120] Offset                         u32 be           21928                 00 00 55 a8
   [000124] CompressedLength               u32 be           414                   00 00 01 9e
@@ -125,7 +125,7 @@ TableDirectory_12
   [0055a8] Data                           compressed:zlib[414]                       78 da ad 92 bd 4e 02 41 10 c7 ff 77 a0 91 68 0c 91 84 c2 ea 0a 0b 1b 2f 87 22 82 54 c6 44 f1 23 ...
   [005746] Padding                        u8[2]                                  00 00
 
-TableDirectory_13
+TableDirectory_13 post
   [000130] Tag                            ascii[4]         post                  70 6f 73 74
   [000134] Offset                         u32 be           22344                 00 00 57 48
   [000138] CompressedLength               u32 be           1069                  00 00 04 2d
@@ -134,7 +134,7 @@ TableDirectory_13
   [005748] Data                           compressed:zlib[1069]                       78 da 6d d5 55 94 53 67 18 46 e1 ec 83 17 a7 42 dd 5d f3 fd c9 39 49 ea 03 24 75 77 f7 02 2d 05 ...
   [005b75] Padding                        u8[3]                                  00 00 00
 
-TableDirectory_14
+TableDirectory_14 webf
   [000144] Tag                            ascii[4]         webf                  77 65 62 66
   [000148] Offset                         u32 be           23416                 00 00 5b 78
   [00014c] CompressedLength               u32 be           6                     00 00 00 06

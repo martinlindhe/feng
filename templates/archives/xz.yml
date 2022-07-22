@@ -1,7 +1,5 @@
 # STATUS: 25%
 
-# - MAX: variable length integer type special encoding
-
 # - HI: block syntax
 
 # - HI: map "stream footer". magic bytes "YZ"

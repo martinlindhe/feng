@@ -4,7 +4,7 @@
 
 # MID: support little endian. need sample
 
-byteswaps: # XXX DRAFT - TODO IMPLEMENT AND MAKE USE OF
+byteswaps: # XXX DRAFT
   badc: # byteswapped. bytes ABCD is stored as BADC
     - 0: 1
     - 1: 0

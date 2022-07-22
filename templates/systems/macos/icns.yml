@@ -23,7 +23,6 @@ structs:
 
   icon:
     ascii[4] Type:
-      # XXX impl. matching doesnt work on ascii[4] currently
       eq c'ICON': 32x32, 1-bit mono icon, OS=1.0
       eq c'ICN#': 32x32, 1-bit mono icon with 1-bit mask, OS=6.0
       eq c'icm#': 16x12, 1 bit mono icon with 1-bit mask, OS=6.0

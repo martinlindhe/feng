@@ -1,6 +1,5 @@
-# STATUS: 80% - all samples parse fully
+# STATUS: 80%
 
-# - HI: allow to pattern match on ascii[4] for pretty presentation
 # - MID: decode "vpAg" chunk (need docs)
 # - MID: decode utf8 text in iTXt
 # - LOW: calculate crc32
