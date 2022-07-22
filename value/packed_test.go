@@ -16,6 +16,11 @@ func TestReadVariableLengthU32(t *testing.T) {
 		{[]byte{0x3f}, 1, 63},
 		{[]byte{0xa9, 0x24}, 2, 5284},
 		{[]byte{0x81, 0xe5, 0x65}, 3, 29413},
+
+		// from bpg:
+		{[]byte{0x08}, 1, 8},
+		{[]byte{0x84, 0x1e}, 2, 542},
+		{[]byte{0xac, 0xbe, 0x17}, 3, 728855},
 	}
 	for _, tst := range tests {
 		r := bytes.NewReader(tst.Bytes)

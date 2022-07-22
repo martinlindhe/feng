@@ -2,15 +2,17 @@
 HeicFile
   [000000] Signature                      ascii[4]         BPG.                  42 50 47 fb
   [000004] Flags                          u8               34                    22
-           - bit_depth_minus_8            bit 0:4          2
-           - alpha1                       bit 4:1          0
-           - pixel_format                 bit 5:3          1
+           - BitDepthMinus8               bit 0:4          2
+           - Alpha1                       bit 4:1          0
+           - PixelFormat                  bit 5:3          1
   [000005] Flags2                         u8               0                     00
-           - animation                    bit 7:1          0
-           - limited_range                bit 6:1          0
-           - alpha2                       bit 5:1          0
-           - extension_present            bit 4:1          0
-           - color_space                  bit 5:3          0
-  [000006] PictureWidth                   u32 le           8650884               00 84 00 84
+           - Animation                    bit 7:1          0
+           - LimitedRange                 bit 6:1          0
+           - Alpha2                       bit 5:1          0
+           - ExtensionPresent             bit 4:1          0
+           - ColorSpace                   bit 5:3          0
+  [000006] PictureWidth                   vu32             512                   84 00
+  [000008] PictureHeight                  vu32             512                   84 00
+  [00000a] PictureDataLength              vu32             5824                  ad 40
 
-0x16c2 (5826) unmapped bytes (99.8%)
+0x16c0 (5824) unmapped bytes (99.8%)

@@ -71,6 +71,8 @@ structs:
     u8 FragmentedFreeBytes: ??
     u32 RightMostPointer: ??
 
+    u16[self.CellCount] CellPointerArray: ??
+
     # XXX need varint decoding to progress.
     # A variable-length integer or "varint" is a static Huffman encoding of 64-bit twos-complement integers that uses less space for small
     # positive values. A varint is between 1 and 9 bytes in length. The varint consists of either zero or more bytes which have the

@@ -34,5 +34,6 @@ BTreeHeader
   [000069] CellContentOffset              u16 be           4026                  0f ba
   [00006b] FragmentedFreeBytes            u8               0                     00
   [00006c] RightMostPointer               u32 be           263847936             0f ba 00 00
+  [000070] CellPointerArray               u16[1] be        [0]                   00 00
 
-0x1f90 (8080) unmapped bytes (98.6%)
+0x1f8e (8078) unmapped bytes (98.6%)

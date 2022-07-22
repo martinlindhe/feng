@@ -151,7 +151,7 @@ data (for extraction feature)
 
 variable length encoding
 
-    vu32                        variable-length u32 (fonts/woff2)
+    vu32                        variable-length u32 (fonts/woff2, images/bpg)
     vu64                        variable-length u32 (archives/xz, archives/7zip)
 
 pattern matching data types

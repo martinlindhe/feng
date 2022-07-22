@@ -33,6 +33,6 @@ simple cli hex navigator, similar to [formats](https://github.com/martinlindhe/f
 
 
 yaml format: single bits: "u1" (1 bit), "u24" (24 bits), "u4" (4 bits) data types:
-  - rework internals to use golang bitreader by default. needed by archive/bzip2
+  - rework internals to use golang bitreader by default. needed by archive/bzip2, image/bpg
 
 yaml format: ability to extend a template with structs from another template. in order to reuse templates for commonly embedded formats such as RIFF, Exif, PNG
