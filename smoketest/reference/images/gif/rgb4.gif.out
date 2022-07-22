@@ -1,7 +1,7 @@
 # templates/images/gif.yml
 Header
   [000000] Signature                      ascii[4]         GIF8                  47 49 46 38
-  [000004] Version                        u16 le           24889                 61 39
+  [000004] Version                        ascii[2]         9a                    39 61
            - GIF89a                       eq
 
 LogicalScreenDescriptor
@@ -14,7 +14,86 @@ LogicalScreenDescriptor
            - GlobalColorTablePresent      bit 7:1          1
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
-  [00000d] Global color table             u8[48]                                 5e 5e 03 de dd 01 20 20 02 00 af 00 85 85 03 af ae 01 a3 00 00 bf bf bf 00 00 ae 00 4a 00 3d 3d ...
+
+Global color table_0
+  [00000d] R                              u8               94                    5e
+  [00000e] G                              u8               94                    5e
+  [00000f] B                              u8               3                     03
+
+Global color table_1
+  [000010] R                              u8               222                   de
+  [000011] G                              u8               221                   dd
+  [000012] B                              u8               1                     01
+
+Global color table_2
+  [000013] R                              u8               32                    20
+  [000014] G                              u8               32                    20
+  [000015] B                              u8               2                     02
+
+Global color table_3
+  [000016] R                              u8               0                     00
+  [000017] G                              u8               175                   af
+  [000018] B                              u8               0                     00
+
+Global color table_4
+  [000019] R                              u8               133                   85
+  [00001a] G                              u8               133                   85
+  [00001b] B                              u8               3                     03
+
+Global color table_5
+  [00001c] R                              u8               175                   af
+  [00001d] G                              u8               174                   ae
+  [00001e] B                              u8               1                     01
+
+Global color table_6
+  [00001f] R                              u8               163                   a3
+  [000020] G                              u8               0                     00
+  [000021] B                              u8               0                     00
+
+Global color table_7
+  [000022] R                              u8               191                   bf
+  [000023] G                              u8               191                   bf
+  [000024] B                              u8               191                   bf
+
+Global color table_8
+  [000025] R                              u8               0                     00
+  [000026] G                              u8               0                     00
+  [000027] B                              u8               174                   ae
+
+Global color table_9
+  [000028] R                              u8               0                     00
+  [000029] G                              u8               74                    4a
+  [00002a] B                              u8               0                     00
+
+Global color table_10
+  [00002b] R                              u8               61                    3d
+  [00002c] G                              u8               61                    3d
+  [00002d] B                              u8               7                     07
+
+Global color table_11
+  [00002e] R                              u8               255                   ff
+  [00002f] G                              u8               255                   ff
+  [000030] B                              u8               255                   ff
+
+Global color table_12
+  [000031] R                              u8               0                     00
+  [000032] G                              u8               0                     00
+  [000033] B                              u8               0                     00
+
+Global color table_13
+  [000034] R                              u8               0                     00
+  [000035] G                              u8               255                   ff
+  [000036] B                              u8               0                     00
+
+Global color table_14
+  [000037] R                              u8               0                     00
+  [000038] G                              u8               0                     00
+  [000039] B                              u8               255                   ff
+
+Global color table_15
+  [00003a] R                              u8               255                   ff
+  [00003b] G                              u8               0                     00
+  [00003c] B                              u8               0                     00
 
 Block_0 EXT_GRAPHIC_CONTROL
   [00003d] BlockType                      u8               33                    21

@@ -1,6 +1,6 @@
 # templates/fonts/otf.yml
 Header
-  [000000] Magic                          u32 be           1330926671            4f 54 54 4f
+  [000000] Magic                          ascii[4]         OTTO                  4f 54 54 4f
   [000004] TableCount                     u16 be           10                    00 0a
   [000006] SearchRange                    u16 be           128                   00 80
   [000008] EntrySelector                  u16 be           3                     00 03

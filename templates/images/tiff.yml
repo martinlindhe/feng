@@ -1,7 +1,6 @@
 # STATUS: 30%
 
 # - MAX: ifd Offset field is not mapped in big_endian_action_copy.tiff
-# - MID: match on ascii[2]
 
 references:
   - https://en.wikipedia.org/wiki/TIFF
@@ -25,7 +24,7 @@ magic:
 
 structs:
   header:
-    u16 Endian: # XXX match on ascii[2]
+    u16 Endian:
       eq c'MM': BIG_ENDIAN
       eq c'II': LITTLE_ENDIAN
       default: invalid

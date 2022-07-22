@@ -39,8 +39,8 @@ LocalHeader_0
   [000036] Magic                          u8[2]                                  60 ea
   [000038] HeaderSize                     u16 le           50                    00 32
   [00003a] SizeWithExtraData              u8               46                    2e
-  [00003b] Archiver version               u8               102                   66
-  [00003c] Minimum archiver version       u8               1                     01
+  [00003b] ArchiverVersion                u8               102                   66
+  [00003c] MinimumArchiverVersion         u8               1                     01
   [00003d] Host OS                        u8               11                    0b
            - Win32                        eq
   [00003e] Flags                          u8               16                    10
@@ -49,12 +49,12 @@ LocalHeader_0
            - Extfile                      bit 3:1          0
            - Pathsym                      bit 4:1          1
            - Backup                       bit 5:1          0
-  [00003f] Compression method             u8               0                     00
+  [00003f] CompressionMethod              u8               0                     00
            - Stored                       eq
-  [000040] File type                      u8               0                     00
+  [000040] FileType                       u8               0                     00
            - Binary                       eq
   [000041] Reserved                       u8               27                    1b
-  [000042] Modified time                  u32 le           781230360             2e 90 a1 18
+  [000042] ModifiedTime                   u32 le           781230360             2e 90 a1 18
   [000046] CompressedSize                 u32 le           8                     00 00 00 08
   [00004a] Uncompressed size              u32 le           8                     00 00 00 08
   [00004e] Uncompressed CRC               u32 le           3107898361            b9 3e c3 f9
@@ -63,14 +63,14 @@ LocalHeader_0
   [000056] First chapter                  u8               0                     00
   [000057] Last chapter                   u8               0                     00
   [000058] Extended file position         u32 le           0                     00 00 00 00
-  [00005c] Access time                    u32 le           781230360             2e 90 a1 18
-  [000060] Creation time                  u32 le           781228112             2e 90 98 50
-  [000064] Original file size             u32 le           8                     00 00 00 08
+  [00005c] AccessTime                     u32 le           781230360             2e 90 a1 18
+  [000060] CreationTime                   u32 le           781228112             2e 90 98 50
+  [000064] OriginalFileSize               u32 le           8                     00 00 00 08
   [000068] FileName                       asciiz           aa                    61 61 00
-  [00006b] File comment                   asciiz                                 00
+  [00006b] FileComment                    asciiz                                 00
   [00006c] CRC32                          u32 le           806374005             30 10 4a 75
   [000070] ExtHeaderSize                  u16 le           0                     00 00
-  [000072] Compressed data                raw:u8[8]                              54 75 72 62 6f 58 58 58
+  [000072] CompressedData                 raw:u8[8]                              54 75 72 62 6f 58 58 58
 
 LocalHeader_1 EofMarker
   [00007a] Magic                          u8[2]                                  60 ea

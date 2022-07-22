@@ -86,8 +86,8 @@ structs:
       parse: stop
 
     u8 SizeWithExtraData: ??
-    u8 Archiver version: ??         # XXX parse.MinorMajor8Five
-    u8 Minimum archiver version: ?? # XXX parse.MinorMajor8Five
+    u8 ArchiverVersion: ??
+    u8 MinimumArchiverVersion: ??
     u8 Host OS:
       eq 00: MS-DOS
       eq 01: PRIMOS
@@ -109,7 +109,7 @@ structs:
       bit b0001_0000: Pathsym
       bit b0010_0000: Backup
       #bit b1100_0000: Reserved2
-    u8 Compression method:
+    u8 CompressionMethod:
       eq 00: Stored
       eq 01: Compressed 1a (best)
       eq 02: Compressed 1b
@@ -117,7 +117,7 @@ structs:
       eq 04: Compressed 2 (fastest)
       eq 08: No data, no CRC
       eq 09: No data
-    u8 File type:
+    u8 FileType:
       eq 00: Binary
       eq 01: 7-bit text
       eq 03: Directory
@@ -125,7 +125,7 @@ structs:
       eq 05: Chapter label
     u8 Reserved: ??
 
-    u32 Modified time: ?? # XXX decode parse.ArjDateTime
+    u32 ModifiedTime: ?? # XXX decode parse.ArjDateTime
 
     u32 CompressedSize: ??
     u32 Uncompressed size: ??
@@ -142,12 +142,12 @@ structs:
       # no extra-data
       u32 Extended file position: ??
       # the following twelve bytes may be present in ARJ 2.62 and above:
-      u32 Access time: ??
-      u32 Creation time: ??
-      u32 Original file size: ??
+      u32 AccessTime: ??
+      u32 CreationTime: ??
+      u32 OriginalFileSize: ??
 
     asciiz FileName: ??
-    asciiz File comment: ??
+    asciiz FileComment: ??
 
     u32 CRC32: ??
     u16 ExtHeaderSize: ??
@@ -155,7 +155,7 @@ structs:
       # NOTE: if ext header size > 0, it should follow here. not used in file format
       u8[self.ExtHeaderSize] Ext Header data: ??
 
-    raw:u8[self.CompressedSize] Compressed data: ??
+    raw:u8[self.CompressedSize] CompressedData: ??
 
 layout:
   - header Header

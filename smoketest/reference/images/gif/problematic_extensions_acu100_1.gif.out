@@ -1,7 +1,7 @@
 # templates/images/gif.yml
 Header
   [000000] Signature                      ascii[4]         GIF8                  47 49 46 38
-  [000004] Version                        u16 le           24889                 61 39
+  [000004] Version                        ascii[2]         9a                    39 61
            - GIF89a                       eq
 
 LogicalScreenDescriptor
@@ -14,7 +14,26 @@ LogicalScreenDescriptor
            - GlobalColorTablePresent      bit 7:1          1
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
-  [00000d] Global color table             u8[12]                                 ff ff ff c0 c0 c0 99 cc cc 00 00 00
+
+Global color table_0
+  [00000d] R                              u8               255                   ff
+  [00000e] G                              u8               255                   ff
+  [00000f] B                              u8               255                   ff
+
+Global color table_1
+  [000010] R                              u8               192                   c0
+  [000011] G                              u8               192                   c0
+  [000012] B                              u8               192                   c0
+
+Global color table_2
+  [000013] R                              u8               153                   99
+  [000014] G                              u8               204                   cc
+  [000015] B                              u8               204                   cc
+
+Global color table_3
+  [000016] R                              u8               0                     00
+  [000017] G                              u8               0                     00
+  [000018] B                              u8               0                     00
 
 Block_0 EXT_APPLICATION
   [000019] BlockType                      u8               33                    21

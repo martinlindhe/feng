@@ -4,7 +4,7 @@
 #
 # Used in Unity3D since version 5
 #
-# - HI: compressed:lz4 cant extract (no lz4 header) with ../feng-samples/games/unity/unityfs/sakurawarsfactory_f4c5d39bff55b30dfa4e1ae53402c210.ab
+# - HI: compressed:lz4 cant extract (no lz4 header) with ../feng-samples/games/unity/unityfs/sample1.ab
 
 references:
   - https://github.com/SeriousCache/UABE/blob/edc33b430f58acfd5501535731a22edfc7440ec9/AssetsTools/AssetBundleFileFormat.cpp

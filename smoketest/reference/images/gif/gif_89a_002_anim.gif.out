@@ -1,7 +1,7 @@
 # templates/images/gif.yml
 Header
   [000000] Signature                      ascii[4]         GIF8                  47 49 46 38
-  [000004] Version                        u16 le           24889                 61 39
+  [000004] Version                        ascii[2]         9a                    39 61
            - GIF89a                       eq
 
 LogicalScreenDescriptor

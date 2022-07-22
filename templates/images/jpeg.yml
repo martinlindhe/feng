@@ -2,7 +2,6 @@
 
 # - MAX: implement "var: exifBaseOffset = offset("self.Align")" for further parsing of EXIF data
 # - HI: use custom structs COMPS, COMPSOS
-# - MID: allow pattern matching on ascii[4]
 
 references:
   - https://en.wikipedia.org/wiki/JPEG
@@ -42,7 +41,7 @@ structs:
     u16 Length: ??  # length of segment excluding signature
 
     if self.Signature == M_APP0:
-      u32 Identifier: # XXX TODO: allow pattern matching on ascii[4]
+      u32 Identifier:
         eq c'JFIF': JFIF_APP0
         eq c'JFXX': JFXX_APP0
       u8 Reserved: "00"
@@ -73,7 +72,7 @@ structs:
 
     if self.Signature == M_APP1:
       ascii[6] EXIF: c'Exif' 00 00  # XXX other values exist too, but "Exif" marks the start of the following bytes. NEED SAMPLE
-      u16 Align:                    # XXX match on ascii[2]
+      u16 Align:
         eq c'MM': BIG_ENDIAN
         eq c'II': LITTLE_ENDIAN
         default: invalid

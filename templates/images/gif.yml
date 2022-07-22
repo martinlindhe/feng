@@ -1,8 +1,5 @@
 # STATUS: 80%
 
-# - MAX FIXME: "self." expansion dont work with nesting..
-# - MID: pattern match on ascii[2], u8[2]
-
 references:
   - https://www.w3.org/Graphics/GIF/spec-gif89a.txt
   - https://en.wikipedia.org/wiki/GIF
@@ -28,9 +25,9 @@ structs:
 
   header:
     ascii[4] Signature: c'GIF8'
-    u16 Version: # TODO pattern match on ascii[2], u8[2]
-      eq 6137: GIF87a
-      eq 6139: GIF89a
+    ascii[2] Version:
+      eq c'7a': GIF87a
+      eq c'9a': GIF89a
       default: invalid
 
   logical_screen_descriptor:
@@ -45,8 +42,7 @@ structs:
     u8 Aspect ratio: ??
 
     if self.ScreenDescriptor & GlobalColorTablePresent:
-      # FIXME use rgb type. bug due to "self." not expanding in custom struct
-      u8[3 * (2 << (self.ScreenDescriptor & 7))] Global color table: ??          # FIXME: "self." expansion dont work with nesting..
+      rgb[(2 << (self.ScreenDescriptor & 7))] Global color table: ??
 
   block:
     u8 BlockType:
@@ -64,7 +60,7 @@ structs:
         eq ff: EXT_APPLICATION
       if self.ExtensionType == EXT_GRAPHIC_CONTROL:
         label: self.ExtensionType
-        u8 Size: "04"                       # NOTE: should always be 04
+        u8 Size: "04"
         u8 Flags:
           bit b0000_0001: Transparent color
           bit b0000_0010: User input

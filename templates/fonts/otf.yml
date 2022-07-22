@@ -18,7 +18,7 @@ magic:
 
 structs:
   header:
-    u32 Magic: c'OTTO'
+    ascii[4] Magic: c'OTTO'
     u16 TableCount: ??
     u16 SearchRange: ??
     u16 EntrySelector: ??

@@ -53,7 +53,7 @@ structs:
 
   chunk:
     u32 Length: ??                          # length of chunk data (excluding Length and Type fields)
-    u32 Type:     # XXX allow to pattern match on ascii[4] for pretty presentation
+    u32 Type:
       eq c'IDAT': IDAT
       eq c'PLTE': PLTE
       eq c'IEND': IEND
@@ -175,9 +175,9 @@ structs:
     if self.Type == iDOT:
       # NOTE: based on guesses from https://www.hackerfactor.com/blog/index.php?/archives/895-Connecting-the-iDOTs.html
       u32 Height divisor: ??
-      u32 Unknown: ??                       # always 0 ?
+      u32 Unknown1: ??                      # always 0 ?
       u32 Divided height: ??
-      u32 Unknown: ??                       # always 0x40 ?
+      u32 Unknown2: ??                      # always 0x40 ?
       u32 First half height: ??
       u32 Second half height: ??
       u32 IDAT restart offset: ??

@@ -31,7 +31,7 @@ magic:
 structs:
   header:
     u8[8] Magic: D0 CF 11 E0 A1 B1 1A E1
-    u8[16] CLSID: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  # XXX null guid
+    u8[16] CLSID: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
     u16 Minor version: ??
     u16 Major version: 
       eq 0003: v3

@@ -1,7 +1,7 @@
 # templates/images/gif.yml
 Header
   [000000] Signature                      ascii[4]         GIF8                  47 49 46 38
-  [000004] Version                        u16 le           24889                 61 39
+  [000004] Version                        ascii[2]         9a                    39 61
            - GIF89a                       eq
 
 LogicalScreenDescriptor
@@ -14,7 +14,166 @@ LogicalScreenDescriptor
            - GlobalColorTablePresent      bit 7:1          1
   [00000b] Background color               u8               0                     00
   [00000c] Aspect ratio                   u8               0                     00
-  [00000d] Global color table             u8[96]                                 ff fa f1 fa f1 e7 f7 eb de ff ee d3 fd e5 cd f7 de c7 eb db d1 f1 d5 bd df d0 c1 f6 c8 b4 e0 c7 ...
+
+Global color table_0
+  [00000d] R                              u8               255                   ff
+  [00000e] G                              u8               250                   fa
+  [00000f] B                              u8               241                   f1
+
+Global color table_1
+  [000010] R                              u8               250                   fa
+  [000011] G                              u8               241                   f1
+  [000012] B                              u8               231                   e7
+
+Global color table_2
+  [000013] R                              u8               247                   f7
+  [000014] G                              u8               235                   eb
+  [000015] B                              u8               222                   de
+
+Global color table_3
+  [000016] R                              u8               255                   ff
+  [000017] G                              u8               238                   ee
+  [000018] B                              u8               211                   d3
+
+Global color table_4
+  [000019] R                              u8               253                   fd
+  [00001a] G                              u8               229                   e5
+  [00001b] B                              u8               205                   cd
+
+Global color table_5
+  [00001c] R                              u8               247                   f7
+  [00001d] G                              u8               222                   de
+  [00001e] B                              u8               199                   c7
+
+Global color table_6
+  [00001f] R                              u8               235                   eb
+  [000020] G                              u8               219                   db
+  [000021] B                              u8               209                   d1
+
+Global color table_7
+  [000022] R                              u8               241                   f1
+  [000023] G                              u8               213                   d5
+  [000024] B                              u8               189                   bd
+
+Global color table_8
+  [000025] R                              u8               223                   df
+  [000026] G                              u8               208                   d0
+  [000027] B                              u8               193                   c1
+
+Global color table_9
+  [000028] R                              u8               246                   f6
+  [000029] G                              u8               200                   c8
+  [00002a] B                              u8               180                   b4
+
+Global color table_10
+  [00002b] R                              u8               224                   e0
+  [00002c] G                              u8               199                   c7
+  [00002d] B                              u8               177                   b1
+
+Global color table_11
+  [00002e] R                              u8               250                   fa
+  [00002f] G                              u8               178                   b2
+  [000030] B                              u8               156                   9c
+
+Global color table_12
+  [000031] R                              u8               207                   cf
+  [000032] G                              u8               189                   bd
+  [000033] B                              u8               170                   aa
+
+Global color table_13
+  [000034] R                              u8               192                   c0
+  [000035] G                              u8               177                   b1
+  [000036] B                              u8               217                   d9
+
+Global color table_14
+  [000037] R                              u8               176                   b0
+  [000038] G                              u8               160                   a0
+  [000039] B                              u8               212                   d4
+
+Global color table_15
+  [00003a] R                              u8               190                   be
+  [00003b] G                              u8               169                   a9
+  [00003c] B                              u8               148                   94
+
+Global color table_16
+  [00003d] R                              u8               171                   ab
+  [00003e] G                              u8               151                   97
+  [00003f] B                              u8               138                   8a
+
+Global color table_17
+  [000040] R                              u8               156                   9c
+  [000041] G                              u8               133                   85
+  [000042] B                              u8               118                   76
+
+Global color table_18
+  [000043] R                              u8               142                   8e
+  [000044] G                              u8               118                   76
+  [000045] B                              u8               96                    60
+
+Global color table_19
+  [000046] R                              u8               144                   90
+  [000047] G                              u8               110                   6e
+  [000048] B                              u8               80                    50
+
+Global color table_20
+  [000049] R                              u8               118                   76
+  [00004a] G                              u8               92                    5c
+  [00004b] B                              u8               72                    48
+
+Global color table_21
+  [00004c] R                              u8               86                    56
+  [00004d] G                              u8               70                    46
+  [00004e] B                              u8               158                   9e
+
+Global color table_22
+  [00004f] R                              u8               72                    48
+  [000050] G                              u8               64                    40
+  [000051] B                              u8               226                   e2
+
+Global color table_23
+  [000052] R                              u8               13                    0d
+  [000053] G                              u8               11                    0b
+  [000054] B                              u8               238                   ee
+
+Global color table_24
+  [000055] R                              u8               120                   78
+  [000056] G                              u8               110                   6e
+  [000057] B                              u8               226                   e2
+
+Global color table_25
+  [000058] R                              u8               244                   f4
+  [000059] G                              u8               116                   74
+  [00005a] B                              u8               108                   6c
+
+Global color table_26
+  [00005b] R                              u8               234                   ea
+  [00005c] G                              u8               144                   90
+  [00005d] B                              u8               97                    61
+
+Global color table_27
+  [00005e] R                              u8               255                   ff
+  [00005f] G                              u8               135                   87
+  [000060] B                              u8               113                   71
+
+Global color table_28
+  [000061] R                              u8               250                   fa
+  [000062] G                              u8               146                   92
+  [000063] B                              u8               131                   83
+
+Global color table_29
+  [000064] R                              u8               253                   fd
+  [000065] G                              u8               82                    52
+  [000066] B                              u8               58                    3a
+
+Global color table_30
+  [000067] R                              u8               244                   f4
+  [000068] G                              u8               35                    23
+  [000069] B                              u8               15                    0f
+
+Global color table_31
+  [00006a] R                              u8               4                     04
+  [00006b] G                              u8               5                     05
+  [00006c] B                              u8               6                     06
 
 Block_0 EXT_APPLICATION
   [00006d] BlockType                      u8               33                    21
