@@ -1,7 +1,5 @@
 # STATUS: 80%
 
-# MID: decode unix time
-
 references:
   - https://raw.githubusercontent.com/FarGroup/FarManager/master/plugins/multiarc/arc.doc/arj.txt
   - http://fileformats.archiveteam.org/wiki/ARJ
@@ -64,8 +62,8 @@ structs:
     u8 File type: "02"            # must equal 2
     u8 Reserved: ??
     if self.ArchiverVersion >= 0x0b && (self.HostOS == Unix || self.HostOS == NeXT):
-      u32 UnixTS Created: ?? # xxx unix timestamp
-      u32 UnixTS Modified: ??
+      time_t_32 Created: ??
+      time_t_32 Modified: ??
     else:
       dostimedate Created: ??
       dostimedate Modified: ??
@@ -146,7 +144,7 @@ structs:
     u8 Reserved: ??
 
     if Header.ArchiverVersion >= 0x0b && (Header.HostOS == Unix || Header.HostOS == NeXT):
-      u32 UnixTS Modified: ?? # XXX
+      time_t_32 Modified: ??
     else:
       dostimedate Modified: ??
 

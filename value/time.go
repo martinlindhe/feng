@@ -1,8 +1,18 @@
 package value
 
 import (
+	"encoding/binary"
 	"time"
 )
+
+func AsFileTime(b []byte) time.Time {
+	// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601.
+	// Windows, XBox
+
+	filetimeDelta := time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
+	t := binary.LittleEndian.Uint64(b)
+	return time.Unix(0, int64(t)*100+filetimeDelta)
+}
 
 // MS-DOS 16-bit "dos time" value
 // Identical to the Time-part of a 32-Bit Windows Time+Date field

@@ -19,8 +19,8 @@ Header
   [000009] Security version               u8               0                     00
   [00000a] File type                      u8               2                     02
   [00000b] Reserved                       u8               146                   92
-  [00000c] UnixTS Created                 u32 le           1381922917            52 5e 78 65
-  [000010] UnixTS Modified                u32 le           1381922917            52 5e 78 65
+  [00000c] Created                        time_t_32 le     2013-10-16T11:28:37Z  52 5e 78 65
+  [000010] Modified                       time_t_32 le     2013-10-16T11:28:37Z  52 5e 78 65
   [000014] Secured archive size           u32 le           0                     00 00 00 00
   [000018] Security envelope offset       u32 le           0                     00 00 00 00
   [00001c] Filespec position in filename  u16 le           0                     00 00
@@ -55,7 +55,7 @@ LocalHeader_0
   [00003f] FileType                       u8               0                     00
            - Binary                       eq
   [000040] Reserved                       u8               101                   65
-  [000041] UnixTS Modified                u32 le           1381921521            52 5e 72 f1
+  [000041] Modified                       time_t_32 le     2013-10-16T11:05:21Z  52 5e 72 f1
   [000045] CompressedSize                 u32 le           4                     00 00 00 04
   [000049] Uncompressed size              u32 le           4                     00 00 00 04
   [00004d] Uncompressed CRC               u32 le           3993854728            ee 0d 63 08
