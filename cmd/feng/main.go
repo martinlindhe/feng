@@ -27,6 +27,7 @@ var args struct {
 	Overlapping bool   `help:"Print a report on overlapping bytes."`
 	LocalTime   bool   `help:"Show timestamps in local timezone. Default is UTC."`
 	Brief       bool   `help:"Show brief file information."`
+	Tree        bool   `help:"Show parsed structure tree."`
 	CPUProfile  string `name:"cpu-profile" help:"Create CPU profile."`
 	MemProfile  string `name:"mem-profile" help:"Create memory profile."`
 }
@@ -154,7 +155,9 @@ func main() {
 		}
 
 	} else {
-		if args.Brief {
+		if args.Tree {
+			fmt.Print(fl.PresentStructureTree(fl.Structs))
+		} else if args.Brief {
 			// TODO: if brief, only do magic match + if no match do attempted fuzzy match.
 			//       don't evaluate full struct (fast mode for scanning many files)
 			fmt.Println(args.Filename+":", fl.BaseName)

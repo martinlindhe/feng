@@ -43,6 +43,9 @@ type FileLayout struct {
 	// lastpath/filename-without-ext, eg "archives/zip"
 	BaseName string
 
+	// the file that was processed to produce this FileLayout struct
+	DataFileName string
+
 	// the raw data underlying the structure. used for peek()
 	rawData []byte
 
@@ -73,6 +76,9 @@ func (fl *FileLayout) pushOffset() uint64 {
 type Struct struct {
 	// unique name of this instance of the struct
 	Name string
+
+	// child nodes
+	Children []Struct
 
 	// additional decoration
 	Label string
@@ -404,6 +410,30 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 	return res
 }
 
+func (fl *FileLayout) PresentStructureTree(structs []Struct) string {
+	res := fmt.Sprintf("# structure tree of %s\n", fl.DataFileName)
+	for _, layout := range structs {
+		res += fl.presentStructureTreeNode(layout, 0)
+	}
+	return res
+}
+func (fl *FileLayout) presentStructureTreeNode(layout Struct, indent int) string {
+	prefix := strings.Repeat(" ", indent)
+	res := ""
+	heading := prefix + layout.Name
+	if layout.Label != "" {
+		heading += " " + layout.Label
+	}
+	if len(layout.Fields) == 0 {
+		res += "   empty struct"
+	}
+	res += heading + "\n"
+	for _, child := range layout.Children {
+		res += prefix + fl.presentStructureTreeNode(child, indent+2)
+	}
+	return res
+}
+
 type PresentFileLayoutConfig struct {
 	ShowRaw           bool
 	ReportUnmapped    bool
@@ -411,25 +441,35 @@ type PresentFileLayoutConfig struct {
 	InUTC             bool
 }
 
+func (fl *FileLayout) presentStruct(layout *Struct, showRaw bool) string {
+	if len(layout.Fields) == 0 {
+		if DEBUG {
+			feng.Yellow("skip empty struct '%s'\n", layout.Name)
+		}
+		return ""
+	}
+	heading := layout.Name
+	if layout.Label != "" {
+		heading += " " + layout.Label
+	}
+	res := heading + "\n"
+	for _, field := range layout.Fields {
+		res += fl.presentField(&field, showRaw)
+	}
+	res += "\n"
+
+	for _, child := range layout.Children {
+		res += fl.presentStruct(&child, showRaw)
+	}
+
+	return res
+}
+
 func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	fl.inUTC = cfg.InUTC
 	res = "# " + fl.BaseName + "\n"
 	for _, layout := range fl.Structs {
-		if len(layout.Fields) == 0 {
-			if DEBUG {
-				feng.Yellow("skip empty struct '%s'\n", layout.Name)
-			}
-			continue
-		}
-		heading := layout.Name
-		if layout.Label != "" {
-			heading += " " + layout.Label
-		}
-		res += heading + "\n"
-		for _, field := range layout.Fields {
-			res += fl.presentField(&field, cfg.ShowRaw)
-		}
-		res += "\n"
+		res += fl.presentStruct(&layout, cfg.ShowRaw)
 	}
 
 	mappedBytes := fl.MappedBytes()

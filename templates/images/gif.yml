@@ -52,6 +52,9 @@ structs:
 
     label: self.BlockType
 
+    if self.BlockType == BLOCK_TRAILER:
+      parse: stop
+
     if self.BlockType == BLOCK_EXTENSION:
       u8 ExtensionType:
         #eq 01: EXT_PLAIN_TEXT

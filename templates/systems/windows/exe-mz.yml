@@ -27,6 +27,9 @@ references:
   - https://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
   - https://raw.githubusercontent.com/synalysis/Grammars/master/pe.grammar
 
+  # general unpacker
+  - https://github.com/virginwidow/mz-explode
+
 kind: executable
 name: MS-DOS / OS-2 / Windows executable
 mime: application/x-dosexec

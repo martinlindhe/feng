@@ -37,7 +37,7 @@
 - https://github.com/RoadTrain/noesis-plugins-official
 
 ### Ninja ripper
-- extract individual models from games
+- extract individual models from DirectX 3D games, while they are running
 - https://ninjaripper.com/
 
 

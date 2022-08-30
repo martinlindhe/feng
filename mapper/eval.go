@@ -14,7 +14,7 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-var DEBUG_EVAL = false
+var DEBUG_EVAL = true
 
 // an expression failed to evaluate
 type EvaluateError struct {
@@ -399,7 +399,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 
 	if DEBUG_EVAL {
 		feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
-		spew.Dump(evalVariables)
+		//spew.Dump(evalVariables)
 	}
 
 	functions := make(map[string]goval.ExpressionFunction)
@@ -418,6 +418,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
+		if DEBUG_MAPPER {
+			spew.Dump(evalVariables)
+		}
 		return 0, EvaluateError{input: in, msg: err.Error()}
 	}
 

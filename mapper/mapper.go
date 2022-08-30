@@ -40,19 +40,19 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 		// evaluate offset directive in top-level layout (needed by ps3_pkg)
 		v, err := fl.EvaluateExpression(df.Label, df)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		fl.offset = v
 		_, err = rr.Seek(int64(v), io.SeekStart)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		return nil
 	}
 
 	es, err := ds.FindStructure(df.Kind)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	if DEBUG_MAPPER {
 		log.Printf("mapping ds %s, df '%s' (kind %s)", ds.BaseName, df.Label, df.Kind)
@@ -102,7 +102,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 		}
 		parsedRange, err := fl.EvaluateExpression(rangeQ, df)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		if DEBUG {
@@ -123,7 +123,6 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 	}
 
 	if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
-
 		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 			// accept eof errors as valid parse for otherwise valid mapping
 			return nil
@@ -232,6 +231,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		r.Reset(data)
 
 		fl, err = MapReader(r, ds)
+		fl.DataFileName = filename
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(EvaluateError); ok {
@@ -295,7 +295,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 	for _, es := range expressions {
 		if DEBUG_MAPPER {
-			log.Printf("expandChildren: working with field %s %s: %v", es.Field.Kind, es.Field.Label, es)
+			log.Printf("expandChildren: working with %s field '%s %s': %v", dfParent.Label, es.Field.Kind, es.Field.Label, es)
 		}
 		switch es.Field.Kind {
 		case "label":
@@ -582,12 +582,23 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				for _, ev := range fl.DS.EvaluatedStructs {
 					if ev.Name == es.Field.Kind {
 						found = true
-						err = fl.mapLayout(r, fs, ds, &es.Field)
+						if DEBUG_MAPPER {
+							log.Printf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
+						}
+						subEs, err := ds.FindStructure(es.Field.Kind)
+						if err != nil {
+							return err
+						}
+
+						// add this as child node to current struct (fs)
+						child := Struct{Name: es.Field.Label}
+						err = fl.expandChildren(r, &child, &es.Field, ds, subEs.Expressions)
 						if err != nil {
 							if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-								log.Println(err)
+								feng.Red("expanding custom struct '%s %s' error: %s\n", es.Field.Kind, es.Field.Label, err.Error())
 							}
 						}
+						fs.Children = append(fs.Children, child)
 						break
 					}
 				}
