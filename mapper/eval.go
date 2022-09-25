@@ -3,14 +3,14 @@ package mapper
 import (
 	"encoding/binary"
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/maja42/goval"
-	"github.com/martinlindhe/feng"
+	"github.com/rs/zerolog/log"
+
 	"github.com/martinlindhe/feng/value"
 )
 
@@ -31,9 +31,9 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 	if in == df.Label {
 		return "", fmt.Errorf("nothing to eval")
 	}
-	if DEBUG_EVAL {
-		log.Println("EVAL STR EXPR", in)
-	}
+
+	log.Debug().Msgf("EVAL STR EXPR %s", in)
+
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return "", err
@@ -358,7 +358,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			if idx+2 < len(fl.Structs) {
 				// must not skip the struct currently being parsed when evaluateExpr() is invoked
 				if DEBUG_EVAL {
-					log.Println("skipping", layout.Name, "while evaluating", df.Label, ". idx", idx+1, "len", len(fl.Structs))
+					log.Print("skipping", layout.Name, "while evaluating", df.Label, ". idx", idx+1, "len", len(fl.Structs))
 				}
 				continue
 			}
@@ -398,7 +398,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	evalVariables["FILE_SIZE"] = int(fl.size)
 
 	if DEBUG_EVAL {
-		feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
+		log.Debug().Msgf("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
 		//spew.Dump(evalVariables)
 	}
 

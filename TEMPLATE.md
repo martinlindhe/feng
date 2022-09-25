@@ -107,7 +107,7 @@ either(self.Value, 4, 5) = false   returns true if self.Value is either 4 or 5
 
 numeric
 
-    u8, u16, u32, u64
+    u8, u16, u32, u64, f32
 
 
 numeric bit fields
@@ -140,13 +140,13 @@ colors
     rgb8                3 byte values for R, G, B
 
 
-data (for extraction feature)
+data tagging (for extraction feature)
 
     raw:u8[40]                      mark area as raw data (extracted as-is)
 
     u32 Size: ??
     compressed:zlib[self.Size]      mark area as zlib compressed data
-    compressed:lz4[self.Size]       mark area as lz4-compressed data
+    compressed:lz4[self.Size]       mark area as LZ4-compressed data
     compressed:deflate[self.Size]   mark area as DEFLATE compressed data
 
 

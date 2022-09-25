@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"log"
 	"math"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
@@ -236,7 +237,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		return got
 	}
 
-	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
+	log.Fatal().Msgf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
 	return ""
 }
 
@@ -397,7 +398,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 		return fmt.Sprintf("%d", got)
 	}
 
-	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
+	log.Fatal().Msgf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
 	return ""
 }
 
@@ -645,7 +646,7 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 	n, err := fl.EvaluateExpression(s, df)
 	if err != nil {
 		// XXX this is critical error and template must be fixed
-		log.Fatal("GetInt FAILURE on '"+s+"': ", err)
+		log.Fatal().Err(err).Msg("GetInt FAILURE on '" + s + "'")
 	}
 	if DEBUG {
 		log.Printf("GetInt: %s => %d", s, n)
@@ -666,7 +667,7 @@ func (fl *FileLayout) isPatternVariableName(s string, df *value.DataField) bool 
 
 	str, err := fl.GetStruct(structName)
 	if err != nil {
-		log.Println(err)
+		log.Print(err)
 		return false
 	}
 	for _, field := range str.Fields {
@@ -867,7 +868,7 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 		rangeLength = uint64(df.RangeVal)
 
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err)
 		}
 	}
 	totalLength := unitLength * uint64(rangeLength)

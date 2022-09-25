@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -32,19 +33,19 @@ func main() {
 
 	data, err := ioutil.ReadFile(args.Filename)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err)
 	}
 
 	referenceRoot := "./smoketest/reference"
 
 	err = os.RemoveAll(referenceRoot)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err)
 	}
 
 	smoketests, err := smoketest.UnmarshalData(data)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err)
 	}
 	filenames := smoketests.GenerateFilenames(filepath.Dir(args.Filename))
 
@@ -59,10 +60,10 @@ func main() {
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(mapper.EvaluateError); ok {
-				log.Println(" failed to evaluate:", err)
+				log.Print(" failed to evaluate:", err)
 			}
 
-			log.Println("MapReader returned err:", err)
+			log.Print("MapReader returned err:", err)
 
 			continue
 		}
@@ -90,12 +91,12 @@ func main() {
 
 		err = os.MkdirAll(path, os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err)
 		}
 		feng.Green("WRITE ROOT %s, out %s, full %s\n", referenceRoot, entry.Out, filename)
 		err = ioutil.WriteFile(filename, []byte(data), 0644)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err)
 		}
 	}
 

@@ -7,11 +7,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
 	"runtime/pprof"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng/mapper"
@@ -30,6 +32,7 @@ var args struct {
 	Tree        bool   `help:"Show parsed structure tree."`
 	CPUProfile  string `name:"cpu-profile" help:"Create CPU profile."`
 	MemProfile  string `name:"mem-profile" help:"Create memory profile."`
+	Debug       bool   `help:"Enable debug logging"`
 }
 
 func main() {
@@ -44,27 +47,34 @@ func main() {
 		}
 	*/
 
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	if args.Debug {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	}
+
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr}).With().Caller().Logger()
+
 	if args.CPUProfile != "" {
 		f, err := os.Create(args.CPUProfile)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err)
 		}
 		defer f.Close()
 		if err := pprof.StartCPUProfile(f); err != nil {
-			log.Fatal("could not start CPU profile: ", err)
+			log.Fatal().Err(err).Msg("could not start CPU profile")
 		}
 		defer pprof.StopCPUProfile()
 	}
 
 	fl, err := mapper.MapFileToTemplate(args.Filename)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err)
 	}
 	if args.ExtractDir != "" {
 		// write data streams to specified dir
 		err = os.MkdirAll(args.ExtractDir, os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err)
 		}
 
 		for _, layout := range fl.Structs {
@@ -72,7 +82,7 @@ func main() {
 			for _, field := range layout.Fields {
 				switch field.Format.Kind {
 				case "compressed:lz4":
-					log.Printf("%s.%s %s: extracting lz4 stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					log.Info().Msgf("%s.%s %s: extracting lz4 stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
 					n, err := lz4.UncompressBlock(field.Value, expanded)
@@ -87,7 +97,7 @@ func main() {
 
 					err = ioutil.WriteFile(filename, expanded, 0644)
 					if err != nil {
-						log.Fatal(err)
+						log.Fatal().Err(err)
 					}
 
 				case "compressed:zlib":
@@ -95,13 +105,13 @@ func main() {
 
 					reader, err := zlib.NewReader(bytes.NewReader(field.Value))
 					if err != nil {
-						log.Fatal(err)
+						log.Fatal().Err(err)
 					}
 					defer reader.Close()
 
 					var b bytes.Buffer
 					if _, err = io.Copy(&b, reader); err != nil {
-						log.Fatal(err)
+						log.Fatal().Err(err)
 					}
 
 					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
@@ -110,7 +120,7 @@ func main() {
 
 					err = ioutil.WriteFile(filename, b.Bytes(), 0644)
 					if err != nil {
-						log.Fatal(err)
+						log.Fatal().Err(err)
 					}
 
 				case "compressed:deflate":
@@ -121,7 +131,7 @@ func main() {
 
 					var b bytes.Buffer
 					if _, err = io.Copy(&b, reader); err != nil {
-						log.Fatal(err)
+						log.Fatal().Err(err)
 					}
 
 					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
@@ -130,7 +140,7 @@ func main() {
 
 					err = ioutil.WriteFile(filename, b.Bytes(), 0644)
 					if err != nil {
-						log.Fatal(err)
+						log.Fatal().Err(err)
 					}
 
 				case "raw:u8":
@@ -145,7 +155,7 @@ func main() {
 
 					err = ioutil.WriteFile(filename, field.Value, 0644)
 					if err != nil {
-						log.Fatal(err)
+						log.Fatal().Err(err)
 					}
 
 				default:
@@ -174,12 +184,12 @@ func main() {
 	if args.MemProfile != "" {
 		f, err := os.Create(args.MemProfile)
 		if err != nil {
-			log.Fatal("could not create memory profile: ", err)
+			log.Fatal().Err(err).Msg("could not create memory profile")
 		}
 		defer f.Close()
 		runtime.GC() // get up-to-date statistics
 		if err := pprof.WriteHeapProfile(f); err != nil {
-			log.Fatal("could not write memory profile: ", err)
+			log.Fatal().Err(err).Msg("could not write memory profile")
 		}
 	}
 }

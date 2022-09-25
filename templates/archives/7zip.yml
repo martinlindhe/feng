@@ -23,7 +23,6 @@ structs:
     u8 MajorVersion: ??
     u8 MinorVersion: ??
     u32 StartHeaderCRC: ??    #crc32[NextHeaderOffset.offset:NextHeaderCRC.offset+4] StartHeaderCRC: ??       # XXX impl crc32
-    start_header StartHeader: ??
 
   start_header:
     u64 NextHeaderOffset: ??
@@ -94,4 +93,5 @@ structs:
 
 layout:
   - sig_header SignatureHeader
+  - start_header StartHeader
   - nid_block NidBlock

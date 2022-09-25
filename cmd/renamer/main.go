@@ -3,10 +3,11 @@ package main
 import (
 	"io/fs"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -28,7 +29,7 @@ func main() {
 
 	err := filepath.Walk(args.Folder, func(tpl string, fi os.FileInfo, err error) error {
 		if err != nil {
-			log.Println(err)
+			log.Print(err)
 			return nil
 		}
 		if fi.IsDir() {
@@ -57,7 +58,7 @@ func main() {
 			if err != nil {
 				// template don't match, try another
 				if args.Verbose {
-					log.Println(tpl, ":", err)
+					log.Print(tpl, ":", err)
 				}
 				return nil
 			}
@@ -66,7 +67,7 @@ func main() {
 			return nil
 		})
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err)
 		}
 
 		ext := filepath.Ext(tpl)
@@ -80,14 +81,14 @@ func main() {
 				feng.Red("RENAMING %s => %s\n", tpl, newName)
 				oldName, err := filepath.Abs(tpl)
 				if err != nil {
-					log.Fatal(err)
+					log.Fatal().Err(err)
 				}
 				newName, err = filepath.Abs(newName)
 				if err != nil {
-					log.Fatal(err)
+					log.Fatal().Err(err)
 				}
 				if err := os.Rename(oldName, newName); err != nil {
-					log.Fatal(err)
+					log.Fatal().Err(err)
 				}
 			} else {
 				feng.Red("WRONG EXT %s: %s\n", tpl, extensions[0])
@@ -103,6 +104,6 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err)
 	}
 }

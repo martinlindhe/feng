@@ -6,13 +6,13 @@ import (
 	"io"
 	"io/fs"
 	"io/ioutil"
-	"log"
 	"math"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
@@ -29,10 +29,6 @@ const (
 var (
 	ParseStopError = errors.New("manual parse stop")
 )
-
-func init() {
-	log.SetFlags(log.Lshortfile)
-}
 
 func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
 
@@ -76,13 +72,13 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 
 				if errors.Is(err, ParseStopError) {
 					if DEBUG_MAPPER {
-						log.Println("reached ParseStop")
+						log.Print("reached ParseStop")
 					}
 					break
 				}
 				if err == io.EOF {
 					if DEBUG_MAPPER {
-						log.Println("reached EOF")
+						log.Print("reached EOF")
 					}
 					break
 				}
@@ -203,7 +199,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 
 		if ds.NoMagic {
 			if DEBUG {
-				log.Println("skip no_magic template", tpl)
+				log.Print("skip no_magic template", tpl)
 			}
 			return nil
 		}
@@ -272,7 +268,7 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 
 	err := fl.expandChildren(r, fs, dfParent, ds, expressions)
 	if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
-		feng.Red("expandStruct error: [%08x] failed reading data for '%s' (err:%v)\n", fl.offset, dfParent.Label, err)
+		log.Error().Msgf("expandStruct error: [%08x] failed reading data for '%s' (err:%v)", fl.offset, dfParent.Label, err)
 
 		if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
 			return fmt.Errorf("eof and no structs mapped")
@@ -285,7 +281,7 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
 	if DEBUG_MAPPER {
-		feng.Red("expandChildren: %06x working with struct %s\n", fl.offset, dfParent.Label)
+		log.Debug().Msgf("expandChildren: %06x working with struct %s\n", fl.offset, dfParent.Label)
 	}
 
 	// track iterator index while parsing
@@ -303,8 +299,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			// if it is a numeric field with patterns, return the string for the matched pattern,
 			// else evaluate expression as strings
 			if fs.Label != "" {
-				panic("overwriting label " + fs.Label)
+				log.Warn().Msg("overwriting label " + fs.Label + " with '" + es.Pattern.Value + "'")
 			}
+
 			if fl.isPatternVariableName(es.Pattern.Value, dfParent) {
 				val, err := fl.MatchedValue(es.Pattern.Value, dfParent)
 				if err != nil {
@@ -323,7 +320,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		case "parse":
 			// break parser
 			if es.Pattern.Value != "stop" {
-				log.Fatalf("invalid parse value '%s'", es.Pattern.Value)
+				log.Fatal().Msgf("invalid parse value '%s'", es.Pattern.Value)
 			}
 			//log.Println("-- PARSE STOP --")
 			return ParseStopError
@@ -353,7 +350,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			fl.offsetChanges++
 			if fl.offsetChanges > 1000 {
 				panic("debug recursion: too many offset changes from template")
-				return fmt.Errorf("too many offset changes from template")
+				//return fmt.Errorf("too many offset changes from template")
 			}
 			previousOffset := fl.pushOffset()
 			fl.offset, err = fl.GetInt(es.Pattern.Value, dfParent)
@@ -375,7 +372,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			case "unseen":
 				fl.unseen = true
 			default:
-				log.Fatalf("unhandled data value '%s'", es.Pattern.Value)
+				log.Fatal().Msgf("unhandled data value '%s'", es.Pattern.Value)
 			}
 
 		case "until":
@@ -544,9 +541,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			lastIf = q
 			if DEBUG {
 				if a != 0 {
-					log.Println("IF EVALUATED TRUE: q=", q, ", a=", a)
+					log.Print("IF EVALUATED TRUE: q=", q, ", a=", a)
 				} else {
-					log.Println("IF EVALUATED FALSE: q=", q, ", a=", a)
+					log.Print("IF EVALUATED FALSE: q=", q, ", a=", a)
 				}
 			}
 			if a != 0 {
@@ -558,7 +555,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 		case "else":
 			if DEBUG {
-				log.Println("ELSE: evaluating", lastIf)
+				log.Print("ELSE: evaluating", lastIf)
 			}
 			a, err := fl.EvaluateExpression(lastIf, dfParent)
 			if err != nil {
@@ -566,9 +563,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 			if DEBUG {
 				if a == 0 {
-					log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
+					log.Print("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
 				} else {
-					log.Println("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
+					log.Print("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
 				}
 			}
 			if a == 0 {
@@ -608,7 +605,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				}
 				if !found {
 					// this error is critical. it means the parsed template is not working.
-					log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
+					log.Fatal().Msgf("error fetching struct '%s': %v", es.Field.Kind, err)
 				}
 				continue
 			}

@@ -12,18 +12,26 @@ import (
 )
 
 func TestEvaluateExpression(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    u8 Val1: ??
+    u8 Len1: ??
 
-	fl := &FileLayout{
-		Structs: []Struct{
-			{
-				Name: "Header",
-				Fields: []Field{
-					{Offset: 0x0, Length: 0x1, Value: []uint8{0x6}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Val1"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x1, Length: 0x1, Value: []uint8{0x3}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Len1"}, MatchedPatterns: []value.MatchedPattern{}},
-				},
-			},
-		},
-		offset: 0x4, size: 0xc}
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		// Header
+		0x06, // Val1
+		0x03, // Len1
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
 
 	test := []struct {
 		expr     string
@@ -36,6 +44,41 @@ func TestEvaluateExpression(t *testing.T) {
 	}
 	for _, h := range test {
 		a, err := fl.EvaluateExpression(h.expr, &value.DataField{})
+		assert.Nil(t, err)
+		assert.Equal(t, h.expected, a)
+	}
+}
+
+func TestEvaluateStringExpression(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    ascii[2] Name: ??
+    u8 Val: ??
+
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
+	assert.Equal(t, nil, err)
+
+	data := []byte{
+		// Header
+		'H', 'i', // Name
+		0x01, // Val
+	}
+
+	fl, err := MapReader(bytes.NewReader(data), ds)
+	assert.Equal(t, nil, err)
+
+	test := []struct {
+		expr     string
+		expected string
+	}{
+		{"Header.Name", "Hi"},
+	}
+	for _, h := range test {
+		a, err := fl.EvaluateStringExpression(h.expr, &value.DataField{})
 		assert.Nil(t, err)
 		assert.Equal(t, h.expected, a)
 	}

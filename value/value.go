@@ -6,12 +6,12 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/rs/zerolog/log"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 )
@@ -136,7 +136,7 @@ func replaceNextBitTag(s string) (string, error) {
 		res = fmt.Sprintf("% 02x", x)
 
 	default:
-		log.Fatalf("unhandled bit length %d", lm)
+		log.Fatal().Msgf("unhandled bit length %d", lm)
 	}
 
 	s = s[0:idx[0]] + res + s[idx[1]:]
@@ -162,7 +162,7 @@ func U64toBytesBigEndian(val uint64, unitSize uint64) []byte {
 	case 8:
 		return r
 	default:
-		log.Fatalf("unhandled unit size %d", unitSize)
+		log.Fatal().Msgf("unhandled unit size %d", unitSize)
 	}
 	return r
 }
@@ -346,7 +346,7 @@ func (df *DataField) IsSimpleUnit() bool {
 func ReverseBytes(b []byte, unitLength int) []byte {
 
 	if len(b)%unitLength != 0 {
-		log.Fatalf("invalid input '%v', length %d", b, unitLength)
+		log.Fatal().Msgf("invalid input '%v', length %d", b, unitLength)
 	}
 
 	res := make([]byte, len(b))
@@ -375,7 +375,7 @@ func AsUint64(kind string, b []byte) uint64 {
 	case "u64", "i64":
 		return binary.BigEndian.Uint64(b)
 	}
-	log.Fatalf("AsUint64 unhandled kind %s", kind)
+	log.Fatal().Msgf("AsUint64 unhandled kind %s", kind)
 	return 0
 }
 
@@ -412,7 +412,7 @@ func AsInt64(kind string, b []byte) int64 {
 	case "i64":
 		return int64(binary.BigEndian.Uint64(b))
 	}
-	log.Fatalf("AsInt64 unhandled kind %s", kind)
+	log.Fatal().Msgf("AsInt64 unhandled kind %s", kind)
 	return 0
 }
 
@@ -480,7 +480,7 @@ func (format DataField) Present(b []byte, endian string) string {
 		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
 	}
 
-	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", format.Kind, format.Slice, format.Range, b)
+	log.Fatal().Msgf("don't know how to present %s (slice:%v, range:%s): %v", format.Kind, format.Slice, format.Range, b)
 	return ""
 }
 

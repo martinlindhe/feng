@@ -2,10 +2,11 @@ package smoketest
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/martinlindhe/feng/mapper"
 	"github.com/stretchr/testify/assert"

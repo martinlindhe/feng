@@ -196,11 +196,11 @@ layout:
 						Offset: 0x0, Length: 0x1, Value: []uint8{0xc7}, Endian: "",
 						Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bitfield"},
 						MatchedPatterns: []value.MatchedPattern{
-							{Operation: "bit", Label: "LocalColorTable", Value: 1},
-							{Operation: "bit", Label: "Interlace", Value: 1},
-							{Operation: "bit", Label: "Sort", Value: 1},
-							{Operation: "bit", Label: "Reserved", Value: 0},
-							{Operation: "bit", Label: "Size", Value: 6},
+							{Operation: "bit", Label: "LocalColorTable", Value: []byte{1}},
+							{Operation: "bit", Label: "Interlace", Value: []byte{1}},
+							{Operation: "bit", Label: "Sort", Value: []byte{1}},
+							{Operation: "bit", Label: "Reserved", Value: []byte{0}},
+							{Operation: "bit", Label: "Size", Value: []byte{6}},
 						}},
 				}}}, offset: 0x1, size: 1}, fl)
 }
@@ -234,9 +234,9 @@ layout:
 						Offset: 0x0, Length: 0x2, Value: []uint8{0xff, 0xff}, Endian: "little",
 						Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Bitfield"},
 						MatchedPatterns: []value.MatchedPattern{
-							{Operation: "bit", Label: "Lo", Value: 0x7f},
-							{Operation: "bit", Label: "B3", Value: 0x1f},
-							{Operation: "bit", Label: "Hi", Value: 0xf},
+							{Operation: "bit", Label: "Lo", Value: []byte{0x7f}},
+							{Operation: "bit", Label: "B3", Value: []byte{0x1f}},
+							{Operation: "bit", Label: "Hi", Value: []byte{0xf}},
 						}},
 				}}},
 			offset: 0x2, size: 0x2, endian: "little"}, ff)
@@ -271,7 +271,7 @@ layout:
 					{Name: "Header", Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0x01}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"},
 							MatchedPatterns: []value.MatchedPattern{
-								{Operation: "eq", Label: "One", Value: 1},
+								{Operation: "eq", Label: "One", Value: []byte{1}},
 							}},
 					}}}, offset: 0x1, size: 1},
 			nil,
@@ -325,7 +325,7 @@ layout:
 			Structs: []Struct{
 				{Name: "Header",
 					Fields: []Field{
-						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"}, MatchedPatterns: []value.MatchedPattern{{Label: "Size", Operation: "bit", Value: 0x3}}},
+						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"}, MatchedPatterns: []value.MatchedPattern{{Label: "Size", Operation: "bit", Value: []byte{0x3}}}},
 						{Offset: 0x1, Length: 0x8, Value: []uint8{0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7}, Endian: "", Format: value.DataField{Kind: "u8", Range: "8", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 				}}, offset: 0x9, size: 9}, fl)
@@ -515,7 +515,7 @@ layout:
 					Name: "Header",
 					Fields: []Field{
 						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bit field"},
-							MatchedPatterns: []value.MatchedPattern{{Label: "High bit", Operation: "bit", Value: 1}}},
+							MatchedPatterns: []value.MatchedPattern{{Label: "High bit", Operation: "bit", Value: []byte{1}}}},
 						{Offset: 0x1, Length: 0x1, Value: []uint8{0xaa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "HighExact"},
 							MatchedPatterns: []value.MatchedPattern{}},
 						{Offset: 0x2, Length: 0x1, Value: []uint8{0xbb}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "HighSet"},

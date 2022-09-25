@@ -3,12 +3,13 @@ package template
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"math/bits"
 	"strings"
 
-	"github.com/martinlindhe/feng/value"
+	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v2"
+
+	"github.com/martinlindhe/feng/value"
 )
 
 const (
@@ -70,6 +71,10 @@ func (t *Template) evaluateConstants() ([]Constant, error) {
 func findStructConstants(c *yaml.MapItem) ([]Constant, error) {
 	res := []Constant{}
 
+	if _, ok := c.Value.([]yaml.MapItem); !ok {
+		panic("findStructConstants c.Value is unexpected type. probably input yaml structs data is malformed (check indentation)")
+	}
+
 	for _, v := range c.Value.([]yaml.MapItem) {
 		switch v.Value.(type) {
 		case []yaml.MapItem:
@@ -84,7 +89,7 @@ func findStructConstants(c *yaml.MapItem) ([]Constant, error) {
 					for _, sub := range t {
 						m, err := ParseMatchPattern(sub)
 						if err != nil {
-							log.Println("error (ignoring1):", err)
+							log.Print("error (ignoring1):", err)
 							continue
 						}
 						if m.Operation == "eq" || m.Operation == "bit" {
@@ -199,7 +204,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.Ma
 			invalidIfNoMatch = true
 
 		default:
-			log.Fatalf("unhandled pattern match operation '%s'", mp.Operation)
+			log.Fatal().Msgf("unhandled pattern match operation '%s'", mp.Operation)
 		}
 	}
 	if invalidIfNoMatch && len(res) == 0 {
@@ -275,14 +280,14 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				pattern, err := value.ParseDataPattern(val) // XXX evaluate only once
 				if err != nil {
 					log.Printf("%#v", field)
-					log.Fatalf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
+					log.Fatal().Msgf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
 					return es, err
 				}
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 			}
 
 		default:
-			log.Fatalf("cant handle type '%T' in '%#v'", val, v)
+			log.Fatal().Msgf("cant handle type '%T' in '%#v'", val, v)
 		}
 		es.Expressions = append(es.Expressions, expr)
 	}
@@ -306,7 +311,7 @@ func parseMatchPatterns(mi []yaml.MapItem) ([]MatchPattern, error) {
 	for _, item := range mi {
 		p, err := ParseMatchPattern(item)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err)
 		}
 		res = append(res, *p)
 	}
@@ -336,7 +341,7 @@ func ParseMatchPattern(item yaml.MapItem) (*MatchPattern, error) {
 		p.Label = value
 
 	default:
-		log.Fatalf("evaluateMatchPatterns: unrecognized form '%s': %s", parts[0], key)
+		log.Fatal().Msgf("evaluateMatchPatterns: unrecognized form '%s': %s", parts[0], key)
 	}
 	return &p, nil
 }

@@ -1,3 +1,8 @@
+# software
+
+Ghidra plugin: https://github.com/Cuyler36/Ghidra-GameCube-Loader
+
+
 # disc images
 
 .nkit.iso is compressed with NKit. Can be extracted with GCRebuilder
