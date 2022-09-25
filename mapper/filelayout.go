@@ -242,7 +242,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 
 // presents the value of the data type (field.Format.Kind) in a human-readable form
 func (fl *FileLayout) PresentFieldValue(field *Field) string {
-	// XXX alot of stuff is re-evaluated here, should reuse data from parsing
+	// XXX a lot of stuff is re-evaluated here, should reuse data from parsing
 	b := field.Value
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
@@ -488,7 +488,7 @@ func (fl *FileLayout) presentStruct(layout *Struct, showRaw bool) string {
 	}
 	heading := layout.Name
 	if layout.Label != "" {
-		heading += " " + layout.Label
+		heading += " \"" + layout.Label + "\""
 	}
 	res := heading + "\n"
 	for _, field := range layout.Fields {
@@ -510,17 +510,7 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 		res += fl.presentStruct(&layout, cfg.ShowRaw)
 	}
 
-	mappedBytes := fl.MappedBytes()
-	if mappedBytes < fl.size {
-		unmapped := fl.size - mappedBytes
-		unmappedPct := (float64(unmapped) / float64(fl.size)) * 100
-		res += fmt.Sprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
-	} else if mappedBytes > fl.size {
-		overflow := mappedBytes - fl.size
-		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
-	} else {
-		res += "EOF\n"
-	}
+	res += fl.reportUnmappedByteCount()
 
 	if cfg.ReportOverlapping {
 		res += fl.reportOverlappingData()
@@ -535,6 +525,22 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	}
 
 	return
+}
+
+func (fl *FileLayout) reportUnmappedByteCount() string {
+	res := ""
+	mappedBytes := fl.MappedBytes()
+	if mappedBytes < fl.size {
+		unmapped := fl.size - mappedBytes
+		unmappedPct := (float64(unmapped) / float64(fl.size)) * 100
+		res += fmt.Sprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
+	} else if mappedBytes > fl.size {
+		overflow := mappedBytes - fl.size
+		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
+	} else {
+		res += "EOF\n"
+	}
+	return res
 }
 
 func (fl *FileLayout) reportOverlappingData() string {

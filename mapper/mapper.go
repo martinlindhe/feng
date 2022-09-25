@@ -299,9 +299,12 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		}
 		switch es.Field.Kind {
 		case "label":
-			// "label: APP0". augment node with extra info
+			// "label: Foo Bar". augment the node with extra info
 			// if it is a numeric field with patterns, return the string for the matched pattern,
 			// else evaluate expression as strings
+			if fs.Label != "" {
+				panic("overwriting label " + fs.Label)
+			}
 			if fl.isPatternVariableName(es.Pattern.Value, dfParent) {
 				val, err := fl.MatchedValue(es.Pattern.Value, dfParent)
 				if err != nil {
@@ -311,7 +314,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			} else {
 				val, err := fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
 				if err != nil {
-					log.Println(err)
+					fs.Label = es.Pattern.Value
 				} else {
 					fs.Label = strings.TrimSpace(val)
 				}
