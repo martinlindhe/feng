@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -128,6 +129,12 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
 		return ""
 
+	case "f32":
+		if field.Format.Slice || field.Format.Range != "" {
+			return ""
+		}
+		return fmt.Sprintf("%f", math.Float32frombits(uint32(value.AsUint64Raw(b))))
+
 	case "u8", "u16", "u32", "u64":
 		if field.Format.Slice && field.Format.Range == "" {
 			panic("FIXME present slice " + field.Format.Kind)
@@ -240,6 +247,37 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
 		return ""
+
+	case "f32":
+		if field.Format.Slice && field.Format.Range == "" {
+			panic("FIXME present slice")
+		}
+
+		if !field.Format.Slice && field.Format.Range != "" {
+			values := []string{}
+			val := 0
+			skipRest := false
+
+			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
+
+			for i := uint64(0); i < totalLength; i += unitLength {
+				val++
+				if field.Endian == "big" {
+					values = append(values, fmt.Sprintf("%f", math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
+				} else {
+					values = append(values, fmt.Sprintf("%f", math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
+				}
+				if val >= 3 {
+					skipRest = true
+					break
+				}
+			}
+			if skipRest {
+				return "[" + strings.Join(values, ", ") + " ... ]"
+			}
+			return "[" + strings.Join(values, ", ") + "]"
+		}
+		return fmt.Sprintf("%f", math.Float32frombits(uint32(value.AsUint64Raw(b))))
 
 	case "u8", "u16", "u32", "u64":
 		if field.Format.Slice && field.Format.Range == "" {
@@ -525,11 +563,13 @@ func (fl *FileLayout) reportUnmappedData() string {
 	if r.offset != -1 {
 		unmappedRanges = append(unmappedRanges, r)
 	}
+
+	maxBytesShown := 32
 	for _, ur := range unmappedRanges {
 		end := ur.offset + ur.length
 		trail := ""
-		if ur.length > 16 {
-			end = ur.offset + 16
+		if ur.length > maxBytesShown {
+			end = ur.offset + maxBytesShown
 			trail = " .."
 		}
 		lastOffset := ur.offset + ur.length - 1
@@ -554,6 +594,13 @@ func (fl *FileLayout) isMappedByte(offset uint64) bool {
 				return true
 			}
 		}
+		for _, child := range layout.Children {
+			for _, field := range child.Fields {
+				if offset >= field.Offset && offset < field.Offset+field.Length {
+					return true
+				}
+			}
+		}
 	}
 	return false
 }
@@ -564,6 +611,11 @@ func (fl *FileLayout) MappedBytes() uint64 {
 	for _, layout := range fl.Structs {
 		for _, field := range layout.Fields {
 			count += field.Length
+		}
+		for _, child := range layout.Children {
+			for _, field := range child.Fields {
+				count += field.Length
+			}
 		}
 	}
 	return count
@@ -587,7 +639,7 @@ func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
 	n, err := fl.EvaluateExpression(s, df)
 	if err != nil {
 		// XXX this is critical error and template must be fixed
-		log.Fatal("GetInt FAILURE:", err)
+		log.Fatal("GetInt FAILURE on '"+s+"': ", err)
 	}
 	if DEBUG {
 		log.Printf("GetInt: %s => %d", s, n)

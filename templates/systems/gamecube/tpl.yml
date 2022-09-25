@@ -1,0 +1,52 @@
+# STATUS: 10%
+
+# TPL files (Texture Palette Library) are containers for one or more images.
+
+references:
+  - https://wiki.tockdom.com/wiki/TPL_(File_Format)
+
+kind: game
+name: Texture Palette Library (Wii/GameCube)
+extensions: [.tpl]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 00 20 af 30
+
+structs:
+  header:
+    u32 Magic: ??
+    u32 ImageCount: ?? # XXX need sample with != 1
+    u32 ImageTableOffset: ??
+    offset: self.ImageTableOffset
+
+  image_offset_table:
+    u32 ImageHeaderOffset: ??
+    offset: self.ImageHeaderOffset
+
+    # -- image header
+    u16 Height: ??
+    u16 Width: ??
+    u32 Format: ?? # XXX
+    u32 ImageDataOffset: ??
+    u32 WrapS: ??
+    u32 WrapT: ??
+    u32 MinFilter: ??
+    u32 MaxFilter: ??
+    u32 LODBias: ??       # XXX f32 type.
+    u8 EdgeLODEnable: ??
+    u8 MinLOD: ??
+    u8 MaxLOD: ??
+    u8 Unpacked: ??
+
+    # -- image header end
+    offset: restore
+    u32 PaletteHeaderOffset: ??
+
+layout:
+  - header Header
+
+  #- image_offset_table #[Header.ImageCount]   # XXX
+  #- image_offset_table[Header.ImageCount]   # XXX
+

@@ -98,7 +98,7 @@ peek_i16("0100")        hex string offset
 peek_i32(123)  = -1     returns i32 value from offset
 atoi("123")    = 123    returns integer from alphanumeric string
 otoi("123")    = 83     returns integer from octal numeric string (archives/tar)
-alignment(3,4) = 1      returns the number of bytes needed to align the first arg to the second arg
+alignment(3,4) = 1      returns the number of bytes needed to align the first arg to the second arg (add padding bytes)
 not(self.Value, 4, 5) = true   returns true if self.Value is neither 4 or 5
 either(self.Value, 4, 5) = false   returns true if self.Value is either 4 or 5
 ```

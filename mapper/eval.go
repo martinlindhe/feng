@@ -415,12 +415,8 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["len"] = fl.evalLen
 	functions["not"] = fl.evalNot
 	functions["either"] = fl.evalEither
-
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
-		if DEBUG_MAPPER {
-			spew.Dump(evalVariables)
-		}
 		return 0, EvaluateError{input: in, msg: err.Error()}
 	}
 

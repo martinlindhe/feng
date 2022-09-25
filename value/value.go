@@ -167,7 +167,7 @@ func U64toBytesBigEndian(val uint64, unitSize uint64) []byte {
 	return r
 }
 
-// find next ascii between c'' characters and replace with hex
+// find next ascii between c” characters and replace with hex
 func replaceNextASCIITag(s string) (string, error) {
 	p1 := strings.Index(s, "c'")
 	if p1 == -1 {
@@ -317,7 +317,7 @@ func SingleUnitSize(kind string) uint64 {
 		return 2
 	case "rgb8":
 		return 3
-	case "u32", "i32", "time_t_32", "dostimedate":
+	case "u32", "i32", "f32", "time_t_32", "dostimedate":
 		return 4
 	case "u64", "i64", "filetime":
 		return 8
@@ -327,22 +327,7 @@ func SingleUnitSize(kind string) uint64 {
 
 // returns true if unit is a single u8, u16, u32 or u64 that can have eq/bit field as child
 func (df *DataField) IsPatternableUnit() bool {
-
-	if df.Slice {
-		return false
-	}
-
-	// only allow pattern matching on single values of simple units
-	if df.Range == "" && (df.Kind == "u8" || df.Kind == "i8" || df.Kind == "u16" || df.Kind == "i16" || df.Kind == "u32" || df.Kind == "i32" || df.Kind == "u64" || df.Kind == "i64") {
-		return true
-	}
-
-	// allow pattern matching on arbitrary length ascii
-	if df.Kind == "ascii" {
-		return true
-	}
-
-	return false
+	return df.IsSimpleUnit()
 }
 
 // returns true if unit is a single u8, u16, u32 or u64 that can be used in IF statements
@@ -351,7 +336,7 @@ func (df *DataField) IsSimpleUnit() bool {
 		return false
 	}
 	switch df.Kind {
-	case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64", "ascii":
+	case "u8", "i8", "u16", "i16", "u32", "i32", "f32", "u64", "i64", "ascii":
 		return true
 	}
 	return false
@@ -385,7 +370,7 @@ func AsUint64(kind string, b []byte) uint64 {
 		return uint64(b[0])
 	case "u16", "i16", "dosdate", "dostime":
 		return uint64(binary.BigEndian.Uint16(b))
-	case "u32", "i32", "time_t_32":
+	case "u32", "i32", "f32", "time_t_32":
 		return uint64(binary.BigEndian.Uint32(b))
 	case "u64", "i64":
 		return binary.BigEndian.Uint64(b)
