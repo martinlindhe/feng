@@ -1,12 +1,14 @@
 # STATUS: 5%
 
 references:
-  - http://hitmen.c02.at/files/yagcd/yagcd/chap14.html
+  - https://wiibrew.org/wiki/DOL
+  - https://www.sweetscape.com/010editor/repository/files/DOL.bt
 
 kind: system
 name:  Nintendo Gamecube Executable
 extensions: [.dol]
 endian: big
+
 no_magic: true
 
 structs:
@@ -22,7 +24,7 @@ structs:
     u32 BSS Mem address: ??
     u32 BSS Size: ??
     u32 Entry Point: ??
-    u8[0x1c] Unused: ??
+    u8[0x1c] Padding: ??
 
     # 0x0100: Start of sections data (body)
 

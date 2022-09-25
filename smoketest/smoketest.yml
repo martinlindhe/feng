@@ -380,6 +380,11 @@ input:
     files:
       - shadow-invitro.gba
 
+  - folder: systems/gamecube/tpl
+    files:
+      - crash-bandicoot-woc.banner.tpl
+      - crash-bandicoot-woc.icon.tpl
+
   - folder: systems/jvm/class
     files:
       - java_001_test.class
@@ -389,11 +394,6 @@ input:
     files:
       - example1-52.luac
       #- example2-52.luac     # XXX need to parse nested(?) proto block
-
-  - folder: systems/macos/dfont
-    files:
-      - CharcoalCY.dfont
-      - GenevaCY.dfont
 
   - folder: systems/macos/icns
     files:

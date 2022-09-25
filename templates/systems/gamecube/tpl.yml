@@ -1,12 +1,17 @@
-# STATUS: 10%
+# STATUS: 60%
+
+# TODO: handle sizes of more image formats & map palette formats (need samples)
 
 # TPL files (Texture Palette Library) are containers for one or more images.
 
 references:
   - https://wiki.tockdom.com/wiki/TPL_(File_Format)
 
+software:
+  - https://github.com/Wiimm/wiimms-szs-tools
+
 kind: game
-name: Texture Palette Library (Wii/GameCube)
+name: Nintendo Texture Palette Library (Wii/GameCube)
 extensions: [.tpl]
 endian: big
 
@@ -17,7 +22,9 @@ magic:
 structs:
   header:
     u32 Magic: ??
-    u32 ImageCount: ?? # XXX need sample with != 1
+    u32 ImageCount: ??
+    if self.ImageCount != 1:
+      data: unseen
     u32 ImageTableOffset: ??
     offset: self.ImageTableOffset
 
@@ -25,28 +32,63 @@ structs:
     u32 ImageHeaderOffset: ??
     offset: self.ImageHeaderOffset
 
-    # -- image header
+    # -- image header start
     u16 Height: ??
     u16 Width: ??
-    u32 Format: ?? # XXX
-    u32 ImageDataOffset: ??
+    u32 ImageFormat:
+      # https://wiki.tockdom.com/wiki/Image_Formats#Image_Formats
+      eq 00000000: I4
+      eq 00000001: I8
+      eq 00000002: IA4
+      eq 00000003: IA8
+      eq 00000004: RGB565
+      eq 00000005: RGB5A3
+      eq 00000006: RGBA32 # (RGBA8)
+      eq 00000008: C4     # (CI4)
+      eq 00000009: C8     # (CI8)
+      eq 0000000A: C14X2  # (CI14x2)
+      eq 0000000E: CMPR
+      default: invalid
+    u32 ImageDataOffset: ?? # XXX map
     u32 WrapS: ??
     u32 WrapT: ??
     u32 MinFilter: ??
     u32 MaxFilter: ??
-    u32 LODBias: ??       # XXX f32 type.
+    f32 LODBias: ??
     u8 EdgeLODEnable: ??
     u8 MinLOD: ??
     u8 MaxLOD: ??
-    u8 Unpacked: ??
-
+    u8 UnpackedImage: ??
+    offset: self.ImageDataOffset
+    if self.ImageFormat == C8:
+      u8[self.Width * self.Height] Image data: ??
+    if self.ImageFormat == RGB5A3:
+      u16[self.Width * self.Height] Image data: ??
+    offset: restore
     # -- image header end
     offset: restore
+
     u32 PaletteHeaderOffset: ??
+    if self.PaletteHeaderOffset != 0:
+      offset: self.PaletteHeaderOffset
+      # -- palette header start
+      u16 EntryCount: ??
+      u8 UnpackedPalette: ??
+      u8 Padding: ??
+      u32 PaletteFormat:
+        eq 00000000: PAL_IA8
+        eq 00000001: PAL_RGB565
+        eq 00000002: PAL_RGB5A3
+        default: invalid
+      if self.PaletteFormat == PAL_RGB5A3:
+        data: unseen
+      u32 PaletteDataOffset: ??
+      offset: self.PaletteDataOffset
+      u16[256] Palette: ??  # XXX map
+      offset: restore
+      # -- palette header end
+      offset: restore
 
 layout:
   - header Header
-
-  #- image_offset_table #[Header.ImageCount]   # XXX
-  #- image_offset_table[Header.ImageCount]   # XXX
-
+  - image_offset_table[Header.ImageCount] ImageOffsetTable

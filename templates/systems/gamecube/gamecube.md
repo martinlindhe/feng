@@ -1,7 +1,9 @@
 # disc images
 
-.nkit.iso is compressed with NKit
+.nkit.iso is compressed with NKit. Can be extracted with GCRebuilder
 
+NKit format: https://wiki.gbatemp.net/wiki/NKit/NKitFormat
+GCRebuilder: https://gamebanana.com/tools/6410
 
 
 # various formats
