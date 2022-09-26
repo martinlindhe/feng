@@ -357,9 +357,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		if layout.evaluated {
 			if idx+2 < len(fl.Structs) {
 				// must not skip the struct currently being parsed when evaluateExpr() is invoked
-				if DEBUG_EVAL {
-					log.Print("skipping", layout.Name, "while evaluating", df.Label, ". idx", idx+1, "len", len(fl.Structs))
-				}
+				log.Debug().Msgf("Skipping %s while evaluating %s. idx %d, len %d",
+					layout.Name, df.Label, idx+1, len(fl.Structs))
+
 				continue
 			}
 		}
@@ -384,6 +384,31 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				mapped[field.Format.Label] = fl.GetFieldValue(&field)
 			}
 		}
+
+		for _, child := range layout.Children {
+			for _, field := range child.Fields {
+				//log.Debug().Msgf("Adding child node %s to %s", field.Format.Label, layout.Name)
+				if !field.Format.Slice && field.Format.Range == "" {
+					switch field.Format.Kind {
+					case "u8", "u16", "u32", "u64":
+						mapped[field.Format.Label] = fl.GetFieldValue(&field)
+					case "i8":
+						mapped[field.Format.Label] = int(uint64(int8(value.AsUint64Raw(field.Value))))
+					case "i16":
+						mapped[field.Format.Label] = int(uint64(int16(value.AsUint64Raw(field.Value))))
+					case "i32":
+						mapped[field.Format.Label] = int(uint64(int32(value.AsUint64Raw(field.Value))))
+					case "i64":
+						mapped[field.Format.Label] = int(uint64(int64(value.AsUint64Raw(field.Value))))
+					default:
+						mapped[field.Format.Label] = fl.GetFieldValue(&field)
+					}
+				} else {
+					mapped[field.Format.Label] = fl.GetFieldValue(&field)
+				}
+			}
+		}
+
 		mapped["index"] = int(layout.Index)
 		evalVariables[layout.Name] = mapped
 
@@ -397,10 +422,8 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	}
 	evalVariables["FILE_SIZE"] = int(fl.size)
 
-	if DEBUG_EVAL {
-		log.Debug().Msgf("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
-		//spew.Dump(evalVariables)
-	}
+	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
+	spew.Dump(evalVariables)
 
 	functions := make(map[string]goval.ExpressionFunction)
 	functions["peek_i32"] = fl.evalPeekI32

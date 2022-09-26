@@ -123,6 +123,19 @@ const (
 	maxHexDisplayLength = 0x20
 )
 
+func shortFloat(f float32) string {
+	if f == 1. {
+		return "1."
+	}
+	if f == 0. {
+		return "0."
+	}
+	if f == -1. {
+		return "-1."
+	}
+	return fmt.Sprintf("%.04f", f)
+}
+
 // returns the value of the data type (field.Format.Kind)
 func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	b := field.Value
@@ -134,7 +147,18 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		if field.Format.Slice || field.Format.Range != "" {
 			return ""
 		}
-		return fmt.Sprintf("%f", math.Float32frombits(uint32(value.AsUint64Raw(b))))
+		return shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
+
+	case "xyzm32":
+		if field.Format.Slice || field.Format.Range != "" {
+			return ""
+		}
+		return fmt.Sprintf("%s, %s, %s, %s",
+			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[:4])))),
+			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[4:8])))),
+			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[8:12])))),
+			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[12:16])))),
+		)
 
 	case "u8", "u16", "u32", "u64":
 		if field.Format.Slice && field.Format.Range == "" {
@@ -184,7 +208,11 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			return fmt.Sprintf("%d", int64(value.AsUint64Raw(b)))
 		}
 
-	case "ascii", "asciiz":
+	case "ascii":
+		v, _ := value.AsciiPrintableString(b, len(b))
+		return v
+
+	case "asciiz":
 		v, _ := value.AsciiZString(b, len(b))
 		return v
 
@@ -264,9 +292,9 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 			for i := uint64(0); i < totalLength; i += unitLength {
 				val++
 				if field.Endian == "big" {
-					values = append(values, fmt.Sprintf("%f", math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
+					values = append(values, shortFloat(math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
 				} else {
-					values = append(values, fmt.Sprintf("%f", math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
+					values = append(values, shortFloat(math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
 				}
 				if val >= 3 {
 					skipRest = true
@@ -278,7 +306,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 			}
 			return "[" + strings.Join(values, ", ") + "]"
 		}
-		return fmt.Sprintf("%f", math.Float32frombits(uint32(value.AsUint64Raw(b))))
+		return shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
 
 	case "u8", "u16", "u32", "u64":
 		if field.Format.Slice && field.Format.Range == "" {
@@ -331,71 +359,10 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 		}
 		return fmt.Sprintf("%d", value.AsUint64Raw(b))
 
-	case "i8", "i16", "i32", "i64":
-		if field.Format.Slice || field.Format.Range != "" {
-			return ""
-		}
-		switch field.Format.Kind {
-		case "i8":
-			return fmt.Sprintf("%d", int8(value.AsUint64Raw(b)))
-		case "i16":
-			return fmt.Sprintf("%d", int16(value.AsUint64Raw(b)))
-		case "i32":
-			return fmt.Sprintf("%d", int32(value.AsUint64Raw(b)))
-		case "i64":
-			return fmt.Sprintf("%d", int64(value.AsUint64Raw(b)))
-		}
-
-	case "ascii", "asciiz":
-		v, _ := value.AsciiZString(b, len(b))
-		return v
-
-	case "utf16":
-		return value.Utf16String(b)
-
-	case "utf16z":
-		return value.Utf16zString(b)
-
-	case "time_t_32":
-		v := value.AsUint64Raw(b)
-		timestamp := time.Unix(int64(v), 0)
-		if fl.inUTC {
-			timestamp = timestamp.UTC()
-		}
-		return timestamp.Format(time.RFC3339)
-
-	case "filetime":
-		// The FILETIME structure is a 64-bit value representing the number of 100-nanoseconds since Jan 1, 1601 (Windows, XBox)
-		filetimeDelta := time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
-		t := binary.LittleEndian.Uint64(b)
-		timestamp := time.Unix(0, int64(t)*100+filetimeDelta)
-		if fl.inUTC {
-			timestamp = timestamp.UTC()
-		}
-		return timestamp.Format(time.RFC3339)
-
-	case "dostime":
-		v := value.AsUint64Raw(b)
-		return value.AsDosTime(uint16(v)).String()
-
-	case "dosdate":
-		v := value.AsUint64Raw(b)
-		return value.AsDosDate(uint16(v)).String()
-
-	case "dostimedate":
-		v := value.AsUint64Raw(b)
-		return value.AsDosTimeDate(uint32(v)).String()
-
-	case "rgb8":
-		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
-
-	case "vu32":
-		got, _, _, _ := value.ReadVariableLengthU32(bytes.NewReader(b))
-		return fmt.Sprintf("%d", got)
-
-	case "vu64":
-		got, _, _, _ := value.ReadVariableLengthU64(bytes.NewReader(b))
-		return fmt.Sprintf("%d", got)
+	case "i8", "i16", "i32", "i64",
+		"ascii", "asciiz", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
+		"rgb8", "vu32", "vu64":
+		return fl.GetFieldValue(field).(string)
 	}
 
 	log.Fatal().Msgf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
@@ -418,7 +385,7 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 
 	res := ""
 	if !showRaw {
-		res = fmt.Sprintf("  [%06x] %-30s %-16s %-21s",
+		res = fmt.Sprintf("  [%06x] %-30s %-16s %-30s",
 			field.Offset, field.Format.Label, kind, fieldValue)
 	} else {
 		hexValue := ""
@@ -427,7 +394,7 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 		} else {
 			hexValue = fmt.Sprintf("% 02x ...", field.Value[0:maxHexDisplayLength])
 		}
-		res = fmt.Sprintf("  [%06x] %-30s %-16s %-21s %-20s",
+		res = fmt.Sprintf("  [%06x] %-30s %-16s %-30s %-20s",
 			field.Offset, field.Format.Label, kind, fieldValue, hexValue)
 	}
 	res = strings.TrimRight(res, " ") + "\n"
@@ -505,6 +472,9 @@ func (fl *FileLayout) presentStruct(layout *Struct, showRaw bool) string {
 }
 
 func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
+	if fl == nil {
+		panic("Probably input yaml error, look for properly escaped strings and \" characters")
+	}
 	fl.inUTC = cfg.InUTC
 	res = "# " + fl.BaseName + "\n"
 	for _, layout := range fl.Structs {
@@ -859,6 +829,7 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 			// XXX permanently store and reuse the calculated range length. faster lookup & avoid bug with changing offset value... ?!
 			// XXX FIXME TODO! !!! REFACTOR THIS:
 			// STORES CACHED RESULT OF CALCULATION
+			log.Debug().Msgf("Calculating initial value for df.Range: %s", df.Range)
 			val, err := fl.EvaluateExpression(df.Range, df)
 			if err != nil {
 				panic(err)

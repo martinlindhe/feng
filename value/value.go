@@ -321,6 +321,8 @@ func SingleUnitSize(kind string) uint64 {
 		return 4
 	case "u64", "i64", "filetime":
 		return 8
+	case "xyzm32":
+		return 16
 	}
 	panic(fmt.Sprintf("SingleUnitSize cant handle kind '%s'", kind))
 }
@@ -542,7 +544,26 @@ func AsciiZString(b []byte, maxLength int) (string, uint64) {
 		if v >= 0x20 && v < 0x7f {
 			decoded += string(v)
 		} else {
-			decoded += "."
+			decoded += "·"
+		}
+		if maxLength > 0 && length >= uint64(maxLength) {
+			break
+		}
+	}
+	return decoded, length
+}
+
+// ascii text encoding (non-printable is replaced by "·")
+// returns decoded string and length in bytes
+func AsciiPrintableString(b []byte, maxLength int) (string, uint64) {
+	length := uint64(0)
+	decoded := ""
+	for _, v := range b {
+		length++
+		if v >= 0x20 && v < 0x7f {
+			decoded += string(v)
+		} else {
+			decoded += "·"
 		}
 		if maxLength > 0 && length >= uint64(maxLength) {
 			break

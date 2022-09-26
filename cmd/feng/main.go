@@ -16,14 +16,14 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/alecthomas/kong"
+	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/mapper"
 	"github.com/pierrec/lz4/v4"
 )
 
 var args struct {
-	Filename   string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
-	ExtractDir string `help:"Extract files to this directory."`
-	//Verbose    bool   `short:"v" help:"Be more verbose."`
+	Filename    string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
+	ExtractDir  string `help:"Extract files to this directory."`
 	Raw         bool   `help:"Show raw values"`
 	Unmapped    bool   `help:"Print a report on unmapped bytes."`
 	Overlapping bool   `help:"Print a report on overlapping bytes."`
@@ -41,18 +41,10 @@ func main() {
 		kong.Name("feng"),
 		kong.Description("A binary template reader and data presenter."))
 
-	/*
-		if args.Verbose {
-			panic("TODO implement better logging")
-		}
-	*/
-
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	feng.InitLogging()
 	if args.Debug {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
-
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr}).With().Caller().Logger()
 
 	if args.CPUProfile != "" {
 		f, err := os.Create(args.CPUProfile)
@@ -78,7 +70,6 @@ func main() {
 		}
 
 		for _, layout := range fl.Structs {
-			//log.Println("--- extracting", layout.Label)
 			for _, field := range layout.Fields {
 				switch field.Format.Kind {
 				case "compressed:lz4":

@@ -113,7 +113,6 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 				df.Label = baseLabel
 				return err
 			}
-			df.Label = baseLabel
 		}
 		return nil
 	}
@@ -280,9 +279,8 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
-	if DEBUG_MAPPER {
-		log.Debug().Msgf("expandChildren: %06x working with struct %s\n", fl.offset, dfParent.Label)
-	}
+
+	log.Info().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
 
 	// track iterator index while parsing
 	fs.Index = dfParent.Index
@@ -353,10 +351,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				//return fmt.Errorf("too many offset changes from template")
 			}
 			previousOffset := fl.pushOffset()
-			fl.offset, err = fl.GetInt(es.Pattern.Value, dfParent)
-			if DEBUG_OFFSET {
-				log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
-			}
+
+			fl.offset, err = fl.EvaluateExpression(es.Pattern.Value, dfParent)
+			log.Debug().Msgf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
 			if err != nil {
 				return err
 			}
@@ -416,12 +413,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
 			"f32",
+			"xyzm32",
 			"ascii", "utf16",
 			"rgb8",
 			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 			"compressed:deflate", "compressed:lz4", "compressed:zlib",
 			"raw:u8":
 			// internal data types
+			log.Info().Msgf("expandChildren type %s: %s", es.Field.Kind, dfParent.Label)
 			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 
@@ -579,27 +578,57 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			// find custom struct with given name
 			customStruct, err := fl.GetStruct(es.Field.Kind)
 			if err != nil {
+				log.Error().Err(err).Msg("custom struct")
 				found := false
 				for _, ev := range fl.DS.EvaluatedStructs {
 					if ev.Name == es.Field.Kind {
 						found = true
-						if DEBUG_MAPPER {
-							log.Printf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
-						}
+
 						subEs, err := ds.FindStructure(es.Field.Kind)
 						if err != nil {
 							return err
 						}
 
-						// add this as child node to current struct (fs)
-						child := Struct{Name: es.Field.Label}
-						err = fl.expandChildren(r, &child, &es.Field, ds, subEs.Expressions)
-						if err != nil {
-							if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-								feng.Red("expanding custom struct '%s %s' error: %s\n", es.Field.Kind, es.Field.Label, err.Error())
+						log.Debug().Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
+
+						es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
+						if es.Field.Range != "" {
+
+							parsedRange, err := fl.EvaluateExpression(es.Field.Range, &es.Field)
+							if err != nil {
+								return err
 							}
+
+							log.Info().Msgf("appending ranged %s[%d]", es.Field.Kind, parsedRange)
+
+							for i := uint64(0); i < parsedRange; i++ {
+
+								// add this as child node to current struct (fs)
+								old := es.Field.Label
+								name := fmt.Sprintf("%s_%d", es.Field.Label, i)
+								child := Struct{Name: name}
+								es.Field.Label = name
+								err = fl.expandChildren(r, &child, &es.Field, ds, subEs.Expressions)
+								es.Field.Label = old // HACK
+								if err != nil {
+									if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+										feng.Red("expanding custom struct '%s %s' error: %s\n", es.Field.Kind, es.Field.Label, err.Error())
+									}
+								}
+								fs.Children = append(fs.Children, child)
+							}
+						} else {
+
+							// add this as child node to current struct (fs)
+							child := Struct{Name: es.Field.Label}
+							err = fl.expandChildren(r, &child, &es.Field, ds, subEs.Expressions)
+							if err != nil {
+								if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+									feng.Red("expanding custom struct '%s %s' error: %s\n", es.Field.Kind, es.Field.Label, err.Error())
+								}
+							}
+							fs.Children = append(fs.Children, child)
 						}
-						fs.Children = append(fs.Children, child)
 						break
 					}
 				}
@@ -612,7 +641,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 			log.Printf("%#v", customStruct)
 
-			log.Printf("unhandled field '%#v'", es.Field)
+			log.Error().Msgf("unhandled field '%#v'", es.Field)
 			return fmt.Errorf("unhandled field kind '%s'", es.Field.Kind)
 		}
 	}

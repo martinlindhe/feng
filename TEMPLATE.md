@@ -139,6 +139,9 @@ colors
 
     rgb8                3 byte values for R, G, B
 
+3d data
+
+    xyzm32              x,y,z,m matrix of f32 values
 
 data tagging (for extraction feature)
 
@@ -158,6 +161,16 @@ variable length encoding
 pattern matching data types
 
   until: u8 scanData ff d9            maps all bytes to scanData until marker is seen (images/jpeg)
+
+
+# Evaluate string keys to labels
+
+```yaml
+label: >
+  "FILE_OR_DIR " + self.FileName
+
+label: self.FileName + " (FILE_OR_DIR)"
+```
 
 
 # Constants

@@ -76,6 +76,8 @@ layout:
 		expected string
 	}{
 		{"Header.Name", "Hi"},
+		{`Header.Name + " there"`, "Hi there"},
+		{`"Hello " + Header.Name`, "Hello Hi"},
 	}
 	for _, h := range test {
 		a, err := fl.EvaluateStringExpression(h.expr, &value.DataField{})
