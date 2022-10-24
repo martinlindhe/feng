@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"math/bits"
+	"reflect"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -72,7 +73,7 @@ func findStructConstants(c *yaml.MapItem) ([]Constant, error) {
 	res := []Constant{}
 
 	if _, ok := c.Value.([]yaml.MapItem); !ok {
-		panic("findStructConstants c.Value is unexpected type. probably input yaml structs data is malformed (check indentation)")
+		panic(fmt.Sprintf("findStructConstants c.Value is unexpected type '%v'. probably input yaml structs data is malformed (check indentation), or struct has no body", reflect.TypeOf(c.Value)))
 	}
 
 	for _, v := range c.Value.([]yaml.MapItem) {

@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"runtime/pprof"
 
+	"github.com/rasky/go-lzo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
@@ -76,21 +77,30 @@ func main() {
 					filename = field.Filename
 				}
 				switch field.Format.Kind {
-				case "compressed:lz4", "compressed:zlib", "compressed:deflate", "raw:u8":
+				case "compressed:lzo1x", "compressed:lz4", "compressed:zlib", "compressed:deflate", "raw:u8":
 					if filename == "" {
 						filename = fmt.Sprintf("stream_%08x", field.Offset)
 					}
 					fullName := filepath.Join(args.ExtractDir, filename)
-					log.Info().Msgf("%s.%s %s: extracting data stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
+					log.Info().Msgf("%s.%s %s: Extracting data stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
 
 					var b bytes.Buffer
 
 					switch field.Format.Kind {
+					case "compressed:lzo1x":
+						expanded, err := lzo.Decompress1X(bytes.NewReader(field.Value), 0, 0)
+						if err != nil {
+							log.Error().Err(err).Msgf("Extraction failed")
+							continue
+						}
+						b.Write(expanded)
+
 					case "compressed:lz4":
 						expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
 						n, err := lz4.UncompressBlock(field.Value, expanded)
 						if err != nil {
-							panic(err)
+							log.Error().Err(err).Msgf("Extraction failed")
+							continue
 						}
 						b.Write(expanded[0:n])
 					case "compressed:zlib":
@@ -102,7 +112,8 @@ func main() {
 						defer reader.Close()
 
 						if _, err = io.Copy(&b, reader); err != nil {
-							log.Fatal().Err(err)
+							log.Error().Err(err).Msgf("Extraction failed")
+							continue
 						}
 					case "compressed:deflate":
 						reader := flate.NewReader(bytes.NewReader(field.Value))
@@ -110,7 +121,8 @@ func main() {
 
 						var b bytes.Buffer
 						if _, err = io.Copy(&b, reader); err != nil {
-							log.Fatal().Err(err)
+							log.Error().Err(err).Msgf("Extraction failed")
+							continue
 						}
 
 					case "raw:u8":
@@ -124,7 +136,7 @@ func main() {
 
 					err = os.WriteFile(fullName, b.Bytes(), 0644)
 					if err != nil {
-						log.Fatal().Err(err)
+						log.Error().Err(err).Msgf("Write failed")
 					}
 
 				}

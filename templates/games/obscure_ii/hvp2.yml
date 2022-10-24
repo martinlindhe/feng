@@ -1,0 +1,51 @@
+# STATUS: 1%
+
+# Archive format used in ObsCure II (2009), aka ObsCure: The Aftermath,
+# released for Windows, PS2, Wii, PSP.
+
+# XXX check versions
+
+resources:
+  - http://wiki.xentax.com/index.php/Obscure_HVP
+
+kind: archive
+name: Hydravision PackFile v2
+extensions: [.hvp]
+endian: little # XXX little for ps2 version.
+
+magic:
+  - offset: 0000
+    match: 00 00 04 00 # XXX very weak magic, should not be enabled
+
+structs:
+  header:
+    u32 Magic: 00 04 00 00
+    u32 Reserved: ??    # always 0
+    u32 EntryCount: ??
+    u32 Checksum: ??    # XXX looks like a checksum
+
+  entry:
+    u32 NameCRC: ?? # 0 for the root entry
+    u32 Flags: ??
+    if self.Flags == 4: # XXX flags bit 2 means directory ?
+      label: Directory
+      u32 Zero1: ??
+      u32 Zero2: ??
+      u32 FileCount: ??
+      u32 StartIndex: ??  # START_IDX
+    if self.Flags != 4:
+      label: File
+      u32 SomeCRC: ??
+      u32 UncompressedSize: ??
+      u32 Offset: ??
+      u32 CompressedSize: ??
+      offset: self.Offset
+      if self.Flags == 0: # uncompressed
+        raw:u8[self.UncompressedSize] Data: ??
+      if self.Flags == 1: # compressed
+        compressed:lzo1x[self.CompressedSize] Data: ??
+      offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

@@ -285,7 +285,7 @@ func presentStringValue(v string) string {
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
 
-	log.Info().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
+	log.Debug().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
 
 	// track iterator index while parsing
 	fs.Index = dfParent.Index
@@ -430,7 +430,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			"ascii", "utf16",
 			"rgb8",
 			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
-			"compressed:deflate", "compressed:lz4", "compressed:zlib",
+			"compressed:deflate", "compressed:lzo1x", "compressed:lz4", "compressed:zlib",
 			"raw:u8":
 			// internal data types
 			log.Debug().Msgf("expandChildren type %s: %s", es.Field.Kind, dfParent.Label)

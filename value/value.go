@@ -307,6 +307,7 @@ func (df *DataField) SingleUnitSize() uint64 {
 func SingleUnitSize(kind string) uint64 {
 	switch kind {
 	case "u8", "i8", "ascii", "asciiz",
+		"compressed:lzo1x",
 		"compressed:lz4",
 		"compressed:zlib",
 		"compressed:deflate",
