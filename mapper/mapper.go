@@ -331,9 +331,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		case "endian":
 			// change endian
 			fl.endian = es.Pattern.Value
-			if DEBUG_MAPPER {
-				feng.Yellow("endian set to '%s' at %06x\n", fl.endian, fl.offset)
-			}
+			log.Debug().Msgf("Endian set to '%s' at %06x", fl.endian, fl.offset)
 
 		case "filename":
 			// record filename to use for the next data output operation
@@ -341,7 +339,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			if err != nil {
 				return err
 			}
-			log.Info().Msgf("Output filename set to '%s'", fl.filename)
+			log.Debug().Msgf("Output filename set to '%s' at %06x", fl.filename, fl.offset)
 
 		case "offset":
 			// set/restore current offset
@@ -359,7 +357,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 
 			fl.offsetChanges++
-			if fl.offsetChanges > 1000 {
+			if fl.offsetChanges > 2000 {
 				panic("debug recursion: too many offset changes from template")
 				//return fmt.Errorf("too many offset changes from template")
 			}

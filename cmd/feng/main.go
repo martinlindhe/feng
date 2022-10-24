@@ -76,87 +76,57 @@ func main() {
 					filename = field.Filename
 				}
 				switch field.Format.Kind {
-				case "compressed:lz4":
-					log.Info().Msgf("%s.%s %s: extracting lz4 stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
-
-					expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
-					n, err := lz4.UncompressBlock(field.Value, expanded)
-					if err != nil {
-						panic(err)
-					}
-					expanded = expanded[0:n]
-
+				case "compressed:lz4", "compressed:zlib", "compressed:deflate", "raw:u8":
 					if filename == "" {
 						filename = fmt.Sprintf("stream_%08x", field.Offset)
 					}
 					fullName := filepath.Join(args.ExtractDir, filename)
-					log.Info().Msgf("Extracted %d bytes to %s", len(expanded), fullName)
-
-					err = os.WriteFile(fullName, expanded, 0644)
-					if err != nil {
-						log.Fatal().Err(err)
-					}
-
-				case "compressed:zlib":
-					if filename == "" {
-						filename = fmt.Sprintf("stream_%08x", field.Offset)
-					}
-					fullName := filepath.Join(args.ExtractDir, filename)
-					log.Info().Msgf("%s.%s %s: extracting zlib stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
-
-					reader, err := zlib.NewReader(bytes.NewReader(field.Value))
-					if err != nil {
-						log.Fatal().Err(err)
-					}
-					defer reader.Close()
+					log.Info().Msgf("%s.%s %s: extracting data stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
 
 					var b bytes.Buffer
-					if _, err = io.Copy(&b, reader); err != nil {
-						log.Fatal().Err(err)
+
+					switch field.Format.Kind {
+					case "compressed:lz4":
+						expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
+						n, err := lz4.UncompressBlock(field.Value, expanded)
+						if err != nil {
+							panic(err)
+						}
+						b.Write(expanded[0:n])
+					case "compressed:zlib":
+						reader, err := zlib.NewReader(bytes.NewReader(field.Value))
+						if err != nil {
+							log.Error().Err(err).Msgf("Extraction failed")
+							continue
+						}
+						defer reader.Close()
+
+						if _, err = io.Copy(&b, reader); err != nil {
+							log.Fatal().Err(err)
+						}
+					case "compressed:deflate":
+						reader := flate.NewReader(bytes.NewReader(field.Value))
+						defer reader.Close()
+
+						var b bytes.Buffer
+						if _, err = io.Copy(&b, reader); err != nil {
+							log.Fatal().Err(err)
+						}
+
+					case "raw:u8":
+						if len(field.Value) <= 1 {
+							continue
+						}
+						b.Write(field.Value)
 					}
-					log.Debug().Msgf("Extracted %d bytes", b.Len())
+
+					log.Debug().Msgf("Extracted %d bytes to %s", b.Len(), fullName)
 
 					err = os.WriteFile(fullName, b.Bytes(), 0644)
 					if err != nil {
 						log.Fatal().Err(err)
 					}
 
-				case "compressed:deflate":
-					if filename == "" {
-						filename = fmt.Sprintf("stream_%08x", field.Offset)
-					}
-					fullName := filepath.Join(args.ExtractDir, filename)
-					log.Info().Msgf("%s.%s %s: extracting DEFLATE stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
-
-					reader := flate.NewReader(bytes.NewReader(field.Value))
-					defer reader.Close()
-
-					var b bytes.Buffer
-					if _, err = io.Copy(&b, reader); err != nil {
-						log.Fatal().Err(err)
-					}
-
-					log.Debug().Msgf("Extracted %d bytes", b.Len())
-
-					err = os.WriteFile(fullName, b.Bytes(), 0644)
-					if err != nil {
-						log.Fatal().Err(err)
-					}
-
-				case "raw:u8":
-					if len(field.Value) <= 1 {
-						continue
-					}
-					if filename == "" {
-						filename = fmt.Sprintf("stream_%08x", field.Offset)
-					}
-					fullName := filepath.Join(args.ExtractDir, filename)
-					log.Info().Msgf("%s.%s %s: extracting raw data stream from %08x (%d bytes) to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, len(field.Value), fullName)
-
-					err = os.WriteFile(fullName, field.Value, 0644)
-					if err != nil {
-						log.Fatal().Err(err)
-					}
 				}
 			}
 		}
