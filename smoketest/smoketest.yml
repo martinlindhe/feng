@@ -487,6 +487,7 @@ input:
   - folder: systems/ps3/ps3_sfo
     files:
       - ps3_PARAM.SFO
+      - psp_PARAM.SFO
       - psvita_param.sfo
 
   - folder: systems/ps4/ps4_pkg

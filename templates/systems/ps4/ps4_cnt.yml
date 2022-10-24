@@ -13,7 +13,7 @@ software:
   - https://github.com/SKFU/ps5tools/blob/main/cnt.py
 
 kind: system
-name:  Sony PS4/PS5 PKG file
+name: Sony PS4/PS5 PKG file
 extensions: [.pkg]
 endian: big
 
@@ -28,10 +28,10 @@ structs:
     u32 pkg_0x008: ??
     u32 pkg_file_count: ??
     u32 pkg_entry_count: ??       # XXX "file_count". extract this many entries PS5.
-    
+
     u16 pkg_sc_entry_count: ??
     u16 pkg_entry_count_2: ??
-  
+
     u32 pkg_table_offset: ??      # XXX "toc_offset"
     u32 pkg_entry_data_size: ??
     u64 pkg_body_offset: ??       # XXX "offset_1"
