@@ -6,6 +6,10 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/CAB.bt
   - https://github.com/google/go-cabfile
 
+software:
+  - https://github.com/twogood/unshield (installshield installers)
+  - https://github.com/Bioruebe/UniExtract2
+
 kind: archive
 name: Microsoft Cabinet Archive
 extensions: [.cab]
@@ -60,7 +64,7 @@ structs:
   CFFOLDER:
     u32 CFDATA_Offset: ??
     u16 DataBlocks: ??
-    u16 Compression: 
+    u16 Compression:
       eq 0000: none
       eq 0001: MSZIP
       eq 0002: Quantum

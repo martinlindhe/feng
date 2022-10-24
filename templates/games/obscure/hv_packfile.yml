@@ -3,12 +3,7 @@
 # Archive format used in ObsCure (2004), developed by Hydravision Entertainment
 # and released for Windows, PS2 and Xbox.
 #
-# A similar format is used in
-# - ObsCure II (2009), aka ObsCure: The Aftermath, released for Windows, PS2, Wii, PSP.
-#
-# Format is verified to match the PS2 and XBox version of ObsCure.
-
-# TODO: only tested with PS2 version of the game, check with PC version too.
+# This template is verified to match the PS2, XBox and Windows version of ObsCure.
 
 # TODO max: nested parsing is broken
 # TODO extraction: combine filename with parent directory part to form a full file path (need nested parsing first)
@@ -20,7 +15,7 @@ resources:
 kind: archive
 name: Hydravision PackFile
 extensions: [.hvp]
-endian: big # verified big for PS2 and XBox versions.
+endian: big
 
 magic:
   - offset: 0000

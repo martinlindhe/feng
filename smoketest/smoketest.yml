@@ -370,6 +370,11 @@ input:
       - asf_002.wmv
       - launcherloop.wma
 
+  - folder: media/bik
+    files:
+      - logo_legal.bik
+      - Snd0a4a1331.dee
+
   - folder: systems/android/dex
     files:
       - classes.dex
