@@ -83,8 +83,7 @@ func main() {
 					expanded = expanded[0:n]
 
 					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
-
-					log.Printf("extracted %d bytes to %s", len(expanded), filename)
+					log.Info().Msgf("Extracted %d bytes to %s", len(expanded), filename)
 
 					err = ioutil.WriteFile(filename, expanded, 0644)
 					if err != nil {
@@ -92,7 +91,7 @@ func main() {
 					}
 
 				case "compressed:zlib":
-					log.Printf("%s.%s %s: extracting zlib stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					log.Info().Msgf("%s.%s %s: extracting zlib stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					reader, err := zlib.NewReader(bytes.NewReader(field.Value))
 					if err != nil {
@@ -106,8 +105,7 @@ func main() {
 					}
 
 					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
-
-					log.Printf("extracted %d bytes to %s", b.Len(), filename)
+					log.Info().Msgf("Extracted %d bytes to %s", b.Len(), filename)
 
 					err = ioutil.WriteFile(filename, b.Bytes(), 0644)
 					if err != nil {
@@ -115,7 +113,7 @@ func main() {
 					}
 
 				case "compressed:deflate":
-					log.Printf("%s.%s %s: extracting DEFLATE stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					log.Info().Msgf("%s.%s %s: extracting DEFLATE stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					reader := flate.NewReader(bytes.NewReader(field.Value))
 					defer reader.Close()
@@ -126,8 +124,7 @@ func main() {
 					}
 
 					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
-
-					log.Printf("extracted %d bytes to %s", b.Len(), filename)
+					log.Info().Msgf("Extracted %d bytes to %s", b.Len(), filename)
 
 					err = ioutil.WriteFile(filename, b.Bytes(), 0644)
 					if err != nil {
@@ -138,19 +135,15 @@ func main() {
 					if len(field.Value) <= 1 {
 						continue
 					}
-					log.Printf("%s.%s %s: extracting raw data stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					log.Info().Msgf("%s.%s %s: extracting raw data stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
 
 					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
-
-					log.Printf("extracted %d bytes to %s", len(field.Value), filename)
+					log.Info().Msgf("Extracted %d bytes to %s", len(field.Value), filename)
 
 					err = ioutil.WriteFile(filename, field.Value, 0644)
 					if err != nil {
 						log.Fatal().Err(err)
 					}
-
-				default:
-					//log.Println("skipping", field.Format.Kind)
 				}
 			}
 		}

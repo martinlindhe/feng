@@ -58,9 +58,8 @@ structs:
  #   ascii[155] FilenamePrefix: ??
     u8[167] Reserved: ??    # XXX?
 
-    # BODY XXX:
-    u8[ceil(otoi(self.OctalFileSize) / 512.0) * 512] File data: ??
-    # XXX pad to 512-byte align
+    u8[otoi(self.OctalFileSize)] File data: ??
+    u8[alignment(otoi(self.OctalFileSize), 512)] Padding: ??
 
 layout:
   - header[] Header

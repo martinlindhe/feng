@@ -362,7 +362,8 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 	case "i8", "i16", "i32", "i64",
 		"ascii", "asciiz", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 		"rgb8", "vu32", "vu64":
-		return fl.GetFieldValue(field).(string)
+		res := fl.GetFieldValue(field).(string)
+		return presentStringValue(res)
 	}
 
 	log.Fatal().Msgf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
@@ -428,7 +429,7 @@ func (fl *FileLayout) presentStructureTreeNode(layout Struct, indent int) string
 	res := ""
 	heading := prefix + layout.Name
 	if layout.Label != "" {
-		heading += " " + layout.Label
+		heading += ` "` + layout.Label + `"`
 	}
 	if len(layout.Fields) == 0 {
 		res += "   empty struct"
@@ -655,13 +656,11 @@ func (fl *FileLayout) MatchedValue(s string, df *value.DataField) (string, error
 		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
-	if DEBUG {
-		log.Printf("MatchedValue: searching for '%s'", s)
-	}
+	log.Trace().Msgf("MatchedValue: searching for '%s'", s)
 
 	parts := strings.SplitN(s, ".", 3)
 	if len(parts) < 2 {
-		//feng.Red("MatchedValue: unexpected format '%s'", s)
+		log.Debug().Msgf("MatchedValue: unexpected format '%s'", s)
 		return s, nil
 	}
 	structName := parts[0]
@@ -678,14 +677,12 @@ func (fl *FileLayout) MatchedValue(s string, df *value.DataField) (string, error
 				return fl.PresentFieldValue(&field), nil
 			}
 			for _, child := range field.MatchedPatterns {
-				if DEBUG {
-					log.Printf("MatchedValue: %s => %s", fieldName, child.Label)
-				}
+				log.Trace().Msgf("MatchedValue: %s => %s", fieldName, child.Label)
 				return child.Label, nil
 			}
 		}
 	}
-	log.Printf("MatchedValue: '%s' not found", s)
+	log.Trace().Msgf("MatchedValue: '%s' not found", s)
 	return s, nil
 }
 
@@ -696,9 +693,7 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
-	if DEBUG {
-		log.Printf("GetValue: searching for '%s'", s)
-	}
+	log.Trace().Msgf("GetValue: searching for '%s'", s)
 
 	parts := strings.SplitN(s, ".", 3)
 	if len(parts) < 2 {
@@ -717,9 +712,8 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 	}
 
 	for _, field := range str.Fields {
-		if DEBUG {
-			log.Printf("GetValue: want %s, got %s", fieldName, field.Format.Label)
-		}
+		log.Trace().Msgf("GetValue: want %s, got %s", fieldName, field.Format.Label)
+
 		if field.Format.Label == fieldName {
 			switch childName {
 			case "offset":
@@ -753,9 +747,7 @@ func (fl *FileLayout) GetOffset(query string, df *value.DataField) (int, error) 
 		query = strings.ReplaceAll(query, "self.", df.Label+".")
 	}
 
-	if DEBUG {
-		log.Printf("GetOffset: searching for '%s'", query)
-	}
+	log.Trace().Msgf("GetOffset: searching for '%s'", query)
 
 	parts := strings.SplitN(query, ".", 3)
 	if len(parts) < 2 {
@@ -770,9 +762,8 @@ func (fl *FileLayout) GetOffset(query string, df *value.DataField) (int, error) 
 	}
 
 	for _, field := range str.Fields {
-		if DEBUG {
-			log.Printf("GetOffset: want %s, got %s", fieldName, field.Format.Label)
-		}
+		log.Trace().Msgf("GetOffset: want %s, got %s", fieldName, field.Format.Label)
+
 		if field.Format.Label == fieldName {
 			return int(field.Offset), nil
 		}
@@ -789,9 +780,7 @@ func (fl *FileLayout) GetLength(s string, df *value.DataField) (int, error) {
 		s = strings.ReplaceAll(s, "self.", df.Label+".")
 	}
 
-	if DEBUG {
-		log.Printf("GetLength: searching for '%s'", s)
-	}
+	log.Trace().Msgf("GetLength: searching for '%s'", s)
 
 	parts := strings.SplitN(s, ".", 3)
 	if len(parts) < 2 {
@@ -806,9 +795,8 @@ func (fl *FileLayout) GetLength(s string, df *value.DataField) (int, error) {
 	}
 
 	for _, field := range str.Fields {
-		if DEBUG {
-			log.Printf("GetLength: want %s, got %s", fieldName, field.Format.Label)
-		}
+		log.Trace().Msgf("GetLength: want %s, got %s", fieldName, field.Format.Label)
+
 		if field.Format.Label == fieldName {
 			return int(field.Length), nil
 		}
@@ -843,9 +831,8 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 		}
 	}
 	totalLength := unitLength * uint64(rangeLength)
-	if DEBUG {
-		log.Printf("GetAddressLengthPair: unitLength %d * rangeLength %d = totalLength %d", unitLength, rangeLength, totalLength)
-	}
+	log.Trace().Msgf("GetAddressLengthPair: unitLength %d * rangeLength %d = totalLength %d", unitLength, rangeLength, totalLength)
+
 	return unitLength, totalLength
 }
 
@@ -866,9 +853,7 @@ func (fl *FileLayout) PresentType(df *value.DataField) string {
 // replace variables with their values
 func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, error) {
 
-	if DEBUG {
-		log.Printf("ExpandVariables: %s", s)
-	}
+	log.Trace().Msgf("ExpandVariables: %s", s)
 
 	for {
 		expanded, err := fl.expandVariable(s, df)
@@ -878,9 +863,8 @@ func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, er
 		if expanded == s {
 			break
 		}
-		if DEBUG {
-			log.Printf("ExpandVariables: %s => %s", s, expanded)
-		}
+		log.Trace().Msgf("ExpandVariables: %s => %s", s, expanded)
+
 		s = expanded
 	}
 
@@ -888,14 +872,11 @@ func (fl *FileLayout) ExpandVariables(s string, df *value.DataField) (string, er
 }
 
 func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, error) {
-	if DEBUG {
-		log.Printf("expandVariable: %s", s)
-	}
+	log.Trace().Msgf("expandVariable: %s", s)
+
 	matches := variableExpressionRE.FindAllStringSubmatch(s, -1)
 	if len(matches) == 0 {
-		if DEBUG {
-			log.Printf("expandVariable: NO MATCH")
-		}
+		log.Trace().Msgf("expandVariable: NO MATCH")
 		return s, nil
 	}
 
@@ -913,16 +894,12 @@ func (fl *FileLayout) expandVariable(s string, df *value.DataField) (string, err
 		if err != nil {
 			s, err := fl.EvaluateExpression(key, df)
 
-			if DEBUG {
-				log.Printf("expandVariable: evaluated expression '%s' to %s == %d", key, kind, s)
-			}
+			log.Trace().Msgf("expandVariable: evaluated expression '%s' to %s == %d", key, kind, s)
 
 			return fmt.Sprintf("%d", s), err
 		}
 
-		if DEBUG {
-			log.Printf("expandVariable: MATCHED %s to %s %v", key, kind, val)
-		}
+		log.Trace().Msgf("expandVariable: MATCHED %s to %s %v", key, kind, val)
 
 		i := value.AsUint64(kind, val)
 

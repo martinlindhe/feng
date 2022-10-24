@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"io/ioutil"
 	"math"
 	"os"
 	"path/filepath"
@@ -139,7 +138,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: ds.Endian, Extension: ext}
 
 	// read all data to get the total length
-	b, _ := ioutil.ReadAll(r)
+	b, _ := io.ReadAll(r)
 	fileLayout.rawData = b
 	fileLayout.size = uint64(len(b))
 	rr := bytes.NewReader(b)
@@ -277,6 +276,12 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 	return err
 }
 
+func presentStringValue(v string) string {
+	v = strings.TrimRight(v, "·")
+	v = strings.TrimRight(v, " ")
+	return v
+}
+
 func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
 
@@ -305,7 +310,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				if err != nil {
 					panic(err)
 				}
-				fs.Label = strings.TrimSpace(val)
+				fs.Label = presentStringValue(val)
 			} else {
 				val, err := fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
 				if err != nil {
@@ -420,7 +425,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			"compressed:deflate", "compressed:lz4", "compressed:zlib",
 			"raw:u8":
 			// internal data types
-			log.Info().Msgf("expandChildren type %s: %s", es.Field.Kind, dfParent.Label)
+			log.Debug().Msgf("expandChildren type %s: %s", es.Field.Kind, dfParent.Label)
 			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 
@@ -604,15 +609,20 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 							for i := uint64(0); i < parsedRange; i++ {
 
 								// add this as child node to current struct (fs)
-								old := es.Field.Label
+
 								name := fmt.Sprintf("%s_%d", es.Field.Label, i)
-								child := Struct{Name: name}
-								es.Field.Label = name
-								err = fl.expandChildren(r, &child, &es.Field, ds, subEs.Expressions)
-								es.Field.Label = old // HACK
+								parent := es.Field
+								parent.Label = name
+								log.Info().Msgf("-- Appending %s", name)
+
+								// XXX issue happens when child node uses self.VARIABLE and it is expanded, when self node is not yet added to fs.Structs
+
+								child := Struct{Name: name, Index: int(i)}
+								err = fl.expandChildren(r, &child, &parent, ds, subEs.Expressions)
 								if err != nil {
 									if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-										feng.Red("expanding custom struct '%s %s' error: %s\n", es.Field.Kind, es.Field.Label, err.Error())
+										panic(err)
+										log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
 									}
 								}
 								fs.Children = append(fs.Children, child)
@@ -624,7 +634,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 							err = fl.expandChildren(r, &child, &es.Field, ds, subEs.Expressions)
 							if err != nil {
 								if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-									feng.Red("expanding custom struct '%s %s' error: %s\n", es.Field.Kind, es.Field.Label, err.Error())
+									log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
 								}
 							}
 							fs.Children = append(fs.Children, child)
@@ -711,9 +721,8 @@ func readBytesUntilMarker(r *bytes.Reader, chunkSize int64, search []byte) ([]by
 			res = append(res, chunk[:idx]...)
 
 			// rewind to before marker
-			r.Seek(int64(-(n - idx)), io.SeekCurrent)
-
-			return res, nil
+			_, err = r.Seek(int64(-(n - idx)), io.SeekCurrent)
+			return res, err
 		} else {
 			//log.Printf("appended %d bytes: % 02x, res is %d len", len(chunk[:chunkSize]), chunk[:4], len(res))
 			res = append(res, chunk[:chunkSize]...)

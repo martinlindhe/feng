@@ -42,8 +42,8 @@ structs:
       bit b1000_0000: UncompressedSizeFieldPresent
 
     if self.Flags & Reserved:
-      # non-zero reserved indicates error or file format changes
-      data: unseen
+      data: unseen # non-zero reserved indicates error or file format changes
+
     if self.Flags & CompressedSizeFieldPresent:
       vu64 CompressedSize: ??
 
@@ -62,7 +62,7 @@ structs:
   filter:
     vu64 FilterID: ??
     vu64 SizeOfProperties: ??
-    u8[self.SizeOfProperties] FilterProperties: ??
+    u8[self.SizeOfProperties] FilterProperties: ?? # XXX here, "self.SizeOfProperties" must expand to the "Filter_1" name, rather than base name "Filter". might be due to parent expanding bug rather than here....
 
   footer:
     # XXX TODO MAP STREAM FOOTER (0x0C bytes):

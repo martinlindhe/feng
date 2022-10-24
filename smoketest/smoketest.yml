@@ -172,6 +172,19 @@ input:
       - glyphicons.woff2
       - lato-v22-latin-regular.woff2
 
+  - folder: games/crash_bandicoot_woc/hgo/hgo
+    files:
+      - AnglFish.hgo
+      - Bee.hgo
+      - ButtrFly.hgo
+      - ButtrFly2.hgo
+
+  - folder: games/crash_bandicoot_woc/hgo/nus
+    files:
+      - Plane.nus
+      - test.nus
+      - TitleSpl.nus
+
   - folder: games/everquest_pfs
     files:
       - butcher2_chr.s3d

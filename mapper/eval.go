@@ -200,7 +200,7 @@ func (fl *FileLayout) evalOtoi(args ...interface{}) (interface{}, error) {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
 	if v, ok := args[0].(string); ok {
-		v = strings.TrimRight(v, " ")
+		v = presentStringValue(v)
 		if v == "" {
 			return 0, nil
 		}
@@ -385,9 +385,14 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 			}
 		}
 
+		mapped["index"] = int(layout.Index)
+		evalVariables[layout.Name] = mapped
+
 		for _, child := range layout.Children {
+			mapped = make(map[string]interface{})
+
 			for _, field := range child.Fields {
-				//log.Debug().Msgf("Adding child node %s to %s", field.Format.Label, layout.Name)
+				log.Debug().Msgf("Adding child node %s to %s", field.Format.Label, layout.Name)
 				if !field.Format.Slice && field.Format.Range == "" {
 					switch field.Format.Kind {
 					case "u8", "u16", "u32", "u64":
@@ -407,10 +412,10 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 					mapped[field.Format.Label] = fl.GetFieldValue(&field)
 				}
 			}
-		}
 
-		mapped["index"] = int(layout.Index)
-		evalVariables[layout.Name] = mapped
+			mapped["index"] = int(child.Index)
+			evalVariables[child.Name] = mapped
+		}
 
 		fl.Structs[idx].evaluated = true
 	}
@@ -423,7 +428,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	evalVariables["FILE_SIZE"] = int(fl.size)
 
 	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
-	spew.Dump(evalVariables)
 
 	functions := make(map[string]goval.ExpressionFunction)
 	functions["peek_i32"] = fl.evalPeekI32
@@ -440,6 +444,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["either"] = fl.evalEither
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
+		//spew.Dump(evalVariables)
 		return 0, EvaluateError{input: in, msg: err.Error()}
 	}
 
