@@ -6,7 +6,6 @@ import (
 	"compress/zlib"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -70,7 +69,12 @@ func main() {
 		}
 
 		for _, layout := range fl.Structs {
+
 			for _, field := range layout.Fields {
+				filename := ""
+				if field.Filename != "" {
+					filename = field.Filename
+				}
 				switch field.Format.Kind {
 				case "compressed:lz4":
 					log.Info().Msgf("%s.%s %s: extracting lz4 stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
@@ -82,16 +86,23 @@ func main() {
 					}
 					expanded = expanded[0:n]
 
-					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
-					log.Info().Msgf("Extracted %d bytes to %s", len(expanded), filename)
+					if filename == "" {
+						filename = fmt.Sprintf("stream_%08x", field.Offset)
+					}
+					fullName := filepath.Join(args.ExtractDir, filename)
+					log.Info().Msgf("Extracted %d bytes to %s", len(expanded), fullName)
 
-					err = ioutil.WriteFile(filename, expanded, 0644)
+					err = os.WriteFile(fullName, expanded, 0644)
 					if err != nil {
 						log.Fatal().Err(err)
 					}
 
 				case "compressed:zlib":
-					log.Info().Msgf("%s.%s %s: extracting zlib stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					if filename == "" {
+						filename = fmt.Sprintf("stream_%08x", field.Offset)
+					}
+					fullName := filepath.Join(args.ExtractDir, filename)
+					log.Info().Msgf("%s.%s %s: extracting zlib stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
 
 					reader, err := zlib.NewReader(bytes.NewReader(field.Value))
 					if err != nil {
@@ -103,17 +114,19 @@ func main() {
 					if _, err = io.Copy(&b, reader); err != nil {
 						log.Fatal().Err(err)
 					}
+					log.Debug().Msgf("Extracted %d bytes", b.Len())
 
-					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
-					log.Info().Msgf("Extracted %d bytes to %s", b.Len(), filename)
-
-					err = ioutil.WriteFile(filename, b.Bytes(), 0644)
+					err = os.WriteFile(fullName, b.Bytes(), 0644)
 					if err != nil {
 						log.Fatal().Err(err)
 					}
 
 				case "compressed:deflate":
-					log.Info().Msgf("%s.%s %s: extracting DEFLATE stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					if filename == "" {
+						filename = fmt.Sprintf("stream_%08x", field.Offset)
+					}
+					fullName := filepath.Join(args.ExtractDir, filename)
+					log.Info().Msgf("%s.%s %s: extracting DEFLATE stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
 
 					reader := flate.NewReader(bytes.NewReader(field.Value))
 					defer reader.Close()
@@ -123,10 +136,9 @@ func main() {
 						log.Fatal().Err(err)
 					}
 
-					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
-					log.Info().Msgf("Extracted %d bytes to %s", b.Len(), filename)
+					log.Debug().Msgf("Extracted %d bytes", b.Len())
 
-					err = ioutil.WriteFile(filename, b.Bytes(), 0644)
+					err = os.WriteFile(fullName, b.Bytes(), 0644)
 					if err != nil {
 						log.Fatal().Err(err)
 					}
@@ -135,12 +147,13 @@ func main() {
 					if len(field.Value) <= 1 {
 						continue
 					}
-					log.Info().Msgf("%s.%s %s: extracting raw data stream from %08x", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset)
+					if filename == "" {
+						filename = fmt.Sprintf("stream_%08x", field.Offset)
+					}
+					fullName := filepath.Join(args.ExtractDir, filename)
+					log.Info().Msgf("%s.%s %s: extracting raw data stream from %08x (%d bytes) to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, len(field.Value), fullName)
 
-					filename := filepath.Join(args.ExtractDir, fmt.Sprintf("stream_%08x", field.Offset))
-					log.Info().Msgf("Extracted %d bytes to %s", len(field.Value), filename)
-
-					err = ioutil.WriteFile(filename, field.Value, 0644)
+					err = os.WriteFile(fullName, field.Value, 0644)
 					if err != nil {
 						log.Fatal().Err(err)
 					}

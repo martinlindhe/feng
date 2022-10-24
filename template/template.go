@@ -269,14 +269,11 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 
 		case string:
 			switch field.Kind {
-			case "endian", "data", "label", "offset", "parse", "until":
+			case "endian", "data", "label", "offset", "filename", "parse", "until":
 				pattern := value.DataPattern{Known: true, Value: val}
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 
 			default:
-				if val == `GIF87a` {
-					//	panic("1st")
-				}
 				pattern, err := value.ParseDataPattern(val) // XXX evaluate only once
 				if err != nil {
 					log.Printf("%#v", field)

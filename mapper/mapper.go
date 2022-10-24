@@ -335,6 +335,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				feng.Yellow("endian set to '%s' at %06x\n", fl.endian, fl.offset)
 			}
 
+		case "filename":
+			// record filename to use for the next data output operation
+			fl.filename, err = fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
+			if err != nil {
+				return err
+			}
+			log.Info().Msgf("Output filename set to '%s'", fl.filename)
+
 		case "offset":
 			// set/restore current offset
 			if es.Pattern.Value == "restore" {
@@ -408,11 +416,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				es.Field.Range = fmt.Sprintf("%d", len)
 				es.Field.Label = label
 				fs.Fields = append(fs.Fields, Field{
-					Offset: fl.offset,
-					Length: len,
-					Value:  val,
-					Format: es.Field,
-					Endian: fl.endian})
+					Offset:   fl.offset,
+					Length:   len,
+					Value:    val,
+					Format:   es.Field,
+					Endian:   fl.endian,
+					Filename: fl.filename,
+				})
 				fl.offset += len
 			}
 
@@ -474,7 +484,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				Value:           val,
 				Format:          es.Field,
 				Endian:          endian,
-				MatchedPatterns: matchPatterns})
+				Filename:        fl.filename,
+				MatchedPatterns: matchPatterns,
+			})
 			fl.offset += totalLength
 
 		case "vu32":
@@ -484,11 +496,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  raw,
-				Format: es.Field,
-				Endian: fl.endian})
+				Offset:   fl.offset,
+				Length:   len,
+				Value:    raw,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
 			fl.offset += len
 
 		case "vu64":
@@ -498,11 +512,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  raw,
-				Format: es.Field,
-				Endian: fl.endian})
+				Offset:   fl.offset,
+				Length:   len,
+				Value:    raw,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
 			fl.offset += len
 
 		case "asciiz":
@@ -512,11 +528,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 			len := uint64(len(val))
 			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  val,
-				Format: es.Field,
-				Endian: fl.endian})
+				Offset:   fl.offset,
+				Length:   len,
+				Value:    val,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
 			fl.offset += len
 
 		case "utf16z":
@@ -529,11 +547,13 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 			len := uint64(len(val))
 			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  val,
-				Format: es.Field,
-				Endian: fl.endian})
+				Offset:   fl.offset,
+				Length:   len,
+				Value:    val,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
 			fl.offset += len
 
 		case "if":

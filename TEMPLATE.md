@@ -152,6 +152,9 @@ data tagging (for extraction feature)
     compressed:lz4[self.Size]       mark area as LZ4-compressed data
     compressed:deflate[self.Size]   mark area as DEFLATE compressed data
 
+    filename: self.Filename         set the filename to use while extracting for the next data area
+
+
 
 variable length encoding
 

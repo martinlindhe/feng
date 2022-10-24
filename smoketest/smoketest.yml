@@ -195,7 +195,10 @@ input:
     files:
       - sample1.ab
 
-  # TODO finish this format
+  - folder: games/obscure/hvp
+    files:
+      - ps2_DATALOAD.HVP
+
   - folder: games/xbox_mx_unleashed/res
     files:
       - appstart.res

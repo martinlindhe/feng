@@ -27,6 +27,9 @@ type FileLayout struct {
 	// current endian ("big", "little")
 	endian string
 
+	// current output data filename
+	filename string
+
 	// current offset
 	offset uint64
 
@@ -109,6 +112,9 @@ type Field struct {
 
 	// matched patterns
 	MatchedPatterns []value.MatchedPattern
+
+	// filename for the next output data
+	Filename string
 }
 
 func (field *Field) Present() string {
