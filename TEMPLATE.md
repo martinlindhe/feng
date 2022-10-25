@@ -160,7 +160,8 @@ data tagging (for extraction feature)
 variable length encoding
 
     vu32                        variable-length u32 (fonts/woff2, images/bpg)
-    vu64                        variable-length u32 (archives/xz, archives/7zip)
+    vu64                        variable-length u64 (archives/xz, archives/7zip)
+    vs64                        variable-length u64 (systems/macos/nibarchive) where sign bit denotes end of stream
 
 pattern matching data types
 

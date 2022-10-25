@@ -6,7 +6,11 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/MachO.bt
   - https://github.com/thetlk/Mach-O/tree/master/pymacho
   - https://raw.githubusercontent.com/synalysis/Grammars/master/mach-o.grammar
+  - https://h3adshotzz.github.io/2020/01/macho-file-format/
   - on MacOS, there is C headers in /usr/include/mach-o
+
+software:
+  - https://github.com/h3adshotzz/libhelper
 
 kind: executable
 name:  Mach-O executable
@@ -33,7 +37,7 @@ structs:
       eq FE ED FA CF: MH_MAGIC_64
       eq CE FA ED FE: MH_CIGAM
       eq CF FA ED FE: MH_CIGAM_64
-    
+
     u32 CPU type:
       eq 00000001: vax
       eq 00000002: romp
@@ -52,9 +56,11 @@ structs:
       eq 00000011: rs6000
       eq 00000012: PowerPC
       eq 000000ff: veo
-      eq 01000000: ABI64
+      # 01xxxxxx: ABI64
       eq 01000007: x86-64
       eq 01000008: PowerPC64
+      eq 0100000c: ARM64
+      # 02xxxxxx: ABI64_32
     u32 CPU subtype: ?? # XXX
     u32 File type:
       eq 00000001: object         # relocatable object file

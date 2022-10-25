@@ -1,0 +1,98 @@
+# STATUS: 25%
+
+# Used on macOS and iOS.
+
+# TODO: need f64 data type
+
+references:
+  - https://github.com/matsmattsson/nibsqueeze/blob/master/NibArchive.md
+
+kind: system
+name: Apple NIB Archive
+extensions: [.nib]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'NIBArchive'
+
+structs:
+  header:
+    ascii[10] Signature: c'NIBArchive'
+    u32 Version: ?? # always 1
+    u32 Unknown: ?? # always 9
+
+    u32 ObjectCount: ??
+    u32 ObjectDataOffset: ??
+    #offset: self.ObjectDataOffset
+    #object[self.ObjectCount] Object: ??
+    #offset: restore
+
+    u32 KeyCount: ??
+    u32 KeyDataOffset: ??
+    #offset: self.KeyDataOffset
+    #key[self.KeyCount] Key: ?? # XXX errors due to bug in feng, Key_0 is not yet available in ast
+    #offset: restore
+
+    u32 ValueCount: ??
+    u32 ValueDataOffset: ??
+    #offset: self.ValueDataOffset
+    #value[self.ValueCount] Value: ??
+    #offset: restore
+
+    u32 ClassNameCount: ??
+    u32 ClassNameDataOffset: ??
+    #offset: self.ClassNameDataOffset
+    #classname[self.ClassNameCount] Value: ??
+    #offset: restore
+
+  object:
+    vs64 ClassNameIndex: ??
+    vs64 ValuesIndex: ??
+    vs64 ValueCount: ??
+
+  key:
+    vs64 KeyNameLength: ??
+    ascii[self.KeyNameLength] KeyName: ??  # XXX utf8
+
+  value:
+    vs64 KeyIndex: ??
+    u8 Type:
+      eq 00: U8
+      eq 01: U16
+      eq 02: U32
+      eq 03: U64
+      eq 04: "TRUE"
+      eq 05: "FALSE"
+      eq 06: FLOAT32
+      eq 07: FLOAT64
+      eq 09: NIL
+      eq 08: DATA
+      eq 0a: OBJECT
+      default: invalid # XXX
+    # XXX doesn't evaluate due to bug in feng parsing, parts not available yet in ast
+    if self.Type == U8:
+      u8 Value: ??
+    if self.Type == U16:
+      u16 Value: ??
+    if self.Type == U32:
+      u32 Value: ??
+    if self.Type == U64:
+      u64 Value: ??
+    if self.Type == FLOAT32:
+      f32 Value: ??
+    if self.Type == FLOAT64:
+      u64 Value: ??        # TODO f64 data type
+    if self.Type == DATA:
+      vs64 ByteCount: ??
+      u8[self.ByteCount] Value: ??
+    if self.Type == OBJECT:
+      u32 Offset: ??
+
+  classname:
+    vs64 ClassNameStringLength: ??
+    vs64 ExtraValues: ??
+    ascii[self.ClassNameStringLength] ClassNameString: ??
+
+layout:
+  - header Header

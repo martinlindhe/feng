@@ -142,7 +142,7 @@ func shortFloat(f float32) string {
 	return fmt.Sprintf("%.04f", f)
 }
 
-// returns the value of the data type (field.Format.Kind)
+// returns a presentation of the value in the data type (field.Format.Kind)
 func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	b := field.Value
 	switch field.Format.Kind {
@@ -269,9 +269,13 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	case "vu64":
 		got, _, _, _ := value.ReadVariableLengthU64(bytes.NewReader(b))
 		return got
+
+	case "vs64":
+		got, _, _, _ := value.ReadVariableLengthS64(bytes.NewReader(b))
+		return got
 	}
 
-	log.Fatal().Msgf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
+	log.Fatal().Msgf("GetFieldValue: unhandled %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)
 	return ""
 }
 
@@ -367,9 +371,13 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 
 	case "i8", "i16", "i32", "i64",
 		"ascii", "asciiz", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
-		"rgb8", "vu32", "vu64":
+		"rgb8":
 		res := fl.GetFieldValue(field).(string)
 		return presentStringValue(res)
+
+	case "vu64", "vs64":
+		res := fl.GetFieldValue(field).(uint64)
+		return fmt.Sprintf("%d", res)
 	}
 
 	log.Fatal().Msgf("don't know how to present %s (slice:%v, range:%s): %v", field.Format.Kind, field.Format.Slice, field.Format.Range, b)

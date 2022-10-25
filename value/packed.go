@@ -3,6 +3,8 @@ package value
 import (
 	"bytes"
 	"fmt"
+
+	"github.com/rs/zerolog/log"
 )
 
 // this encoding is used by fonts/woff2 (UIntBase128)
@@ -58,26 +60,24 @@ func ReadVariableLengthU64(r *bytes.Reader) (uint64, []byte, uint64, error) {
 	return 0, nil, 0, fmt.Errorf("exceeds 9 bytes")
 }
 
-/*
-size_t
-decode(const uint8_t buf[], size_t size_max, uint64_t *num)
-{
-	if (size_max == 0)
-		return 0;
+// Codes integers in 7-bit chunks, little-endian order. The high-bit in each byte signifies if it is the last byte.
+// used by system/macos/nibarchive
+func ReadVariableLengthS64(r *bytes.Reader) (uint64, []byte, uint64, error) {
 
-	if (size_max > 9)
-		size_max = 9;
+	accum := uint64(0)
+	raw := []byte{}
 
-	*num = buf[0] & 0x7F;
-	size_t i = 0;
-
-	while (buf[i++] & 0x80) {
-		if (i >= size_max || buf[i] == 0x00)
-			return 0;
-
-		*num |= (uint64_t)(buf[i] & 0x7F) << (i * 7);
+	for i := 0; i < 9; i++ {
+		v, err := r.ReadByte()
+		if err != nil {
+			return 0, nil, 0, err
+		}
+		raw = append(raw, v)
+		accum |= (uint64(v) & 0x7F) << (i * 7)
+		log.Info().Msgf("Read %02x (byte %d)", v, i)
+		if (v & 0x80) != 0 {
+			return accum, raw, uint64(i + 1), nil
+		}
 	}
-
-	return i;
+	return 0, nil, 0, fmt.Errorf("exceeds 9 bytes")
 }
-*/
