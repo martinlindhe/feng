@@ -166,16 +166,18 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[12:16])))),
 		)
 
-	case "u8", "u16", "u32", "u64":
+	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
 		if field.Format.Slice && field.Format.Range == "" {
 			panic("FIXME present slice " + field.Format.Kind)
 		}
 		if !field.Format.Slice && field.Format.Range != "" {
+			log.Info().Msgf("GetFieldValue %s", field.Format.Label)
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
 			values := []interface{}{}
 			switch field.Format.Kind {
-			case "u8":
+			case "u8", "i8":
 				return field.Value
+
 			case "u16":
 				for i := uint64(0); i < totalLength; i += unitLength {
 					if field.Endian == "big" {
@@ -197,12 +199,6 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			}
 			return values
 		}
-		return int(value.AsUint64Raw(b))
-
-	case "i8", "i16", "i32", "i64":
-		if field.Format.Slice || field.Format.Range != "" {
-			return ""
-		}
 		switch field.Format.Kind {
 		case "i8":
 			return fmt.Sprintf("%d", int8(value.AsUint64Raw(b)))
@@ -212,6 +208,8 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			return fmt.Sprintf("%d", int32(value.AsUint64Raw(b)))
 		case "i64":
 			return fmt.Sprintf("%d", int64(value.AsUint64Raw(b)))
+		default:
+			return int(value.AsUint64Raw(b))
 		}
 
 	case "ascii":
@@ -318,7 +316,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 		}
 		return shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
 
-	case "u8", "u16", "u32", "u64":
+	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
 		if field.Format.Slice && field.Format.Range == "" {
 			panic("FIXME present slice")
 		}
@@ -331,7 +329,15 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 
 			switch field.Format.Kind {
 			case "u8":
-				return ""
+				for i := uint64(0); i < totalLength; i += unitLength {
+					val++
+					values = append(values, fmt.Sprintf("%d", b[i]))
+					if val >= 4 {
+						skipRest = true
+						break
+					}
+				}
+
 			case "u16":
 				for i := uint64(0); i < totalLength; i += unitLength {
 					val++
@@ -345,6 +351,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 						break
 					}
 				}
+
 			case "u32":
 				for i := uint64(0); i < totalLength; i += unitLength {
 					val++
@@ -352,6 +359,72 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint32(b[i:])))
 					} else {
 						values = append(values, fmt.Sprintf("%d", binary.LittleEndian.Uint32(b[i:])))
+					}
+					if val >= 3 {
+						skipRest = true
+						break
+					}
+				}
+
+			case "u64":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					val++
+					if field.Endian == "big" {
+						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint64(b[i:])))
+					} else {
+						values = append(values, fmt.Sprintf("%d", binary.LittleEndian.Uint64(b[i:])))
+					}
+					if val >= 3 {
+						skipRest = true
+						break
+					}
+				}
+
+			case "i8":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					val++
+					values = append(values, fmt.Sprintf("%d", int8(b[i])))
+					if val >= 4 {
+						skipRest = true
+						break
+					}
+				}
+
+			case "i16":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					val++
+					if field.Endian == "big" {
+						values = append(values, fmt.Sprintf("%d", int16(binary.BigEndian.Uint16(b[i:]))))
+					} else {
+						values = append(values, fmt.Sprintf("%d", int16(binary.LittleEndian.Uint16(b[i:]))))
+					}
+					if val >= 3 {
+						skipRest = true
+						break
+					}
+				}
+
+			case "i32":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					val++
+					if field.Endian == "big" {
+						values = append(values, fmt.Sprintf("%d", int32(binary.BigEndian.Uint32(b[i:]))))
+					} else {
+						values = append(values, fmt.Sprintf("%d", int32(binary.LittleEndian.Uint32(b[i:]))))
+					}
+					if val >= 3 {
+						skipRest = true
+						break
+					}
+				}
+
+			case "i64":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					val++
+					if field.Endian == "big" {
+						values = append(values, fmt.Sprintf("%d", int64(binary.BigEndian.Uint64(b[i:]))))
+					} else {
+						values = append(values, fmt.Sprintf("%d", int64(binary.LittleEndian.Uint64(b[i:]))))
 					}
 					if val >= 3 {
 						skipRest = true
@@ -369,8 +442,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 		}
 		return fmt.Sprintf("%d", value.AsUint64Raw(b))
 
-	case "i8", "i16", "i32", "i64",
-		"ascii", "asciiz", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
+	case "ascii", "asciiz", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 		"rgb8":
 		res := fl.GetFieldValue(field).(string)
 		return presentStringValue(res)

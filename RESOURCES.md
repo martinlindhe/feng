@@ -30,6 +30,13 @@
 ### winhex templates
 - https://www.x-ways.net/winhex/templates/index.html
 
+### TRiD - file identifier
+- TrID is an utility designed to identify file types from their binary signatures.
+- https://mark0.net/soft-trid-e.html
+
+### GNU file
+- https://github.com/file/file
+
 ### Noesis
 - Noesis is a tool for previewing and converting between hundreds of model, image, and animation formats.
 - http://richwhitehouse.com/index.php?content=inc_projects.php&showproject=91
