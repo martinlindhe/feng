@@ -440,7 +440,18 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 			}
 			return "[" + strings.Join(values, ", ") + "]"
 		}
-		return fmt.Sprintf("%d", value.AsUint64Raw(b))
+		switch field.Format.Kind {
+		case "i8":
+			return fmt.Sprintf("%d", int8(value.AsUint64Raw(b)))
+		case "i16":
+			return fmt.Sprintf("%d", int16(value.AsUint64Raw(b)))
+		case "i32":
+			return fmt.Sprintf("%d", int32(value.AsUint64Raw(b)))
+		case "i64":
+			return fmt.Sprintf("%d", int64(value.AsUint64Raw(b)))
+		default:
+			return fmt.Sprintf("%d", value.AsUint64Raw(b))
+		}
 
 	case "ascii", "asciiz", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 		"rgb8":
