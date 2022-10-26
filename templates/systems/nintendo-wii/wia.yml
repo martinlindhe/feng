@@ -1,0 +1,46 @@
+# STATUS: 10%
+#
+# Unofficial format(?) used by homebrew.
+
+resources:
+  - https://wit.wiimm.de/info/wia.html
+  - https://github.com/file/file/blob/a962dff5ff2ebd0ff84814dea37346602f67b562/magic/Magdir/console#L940
+
+software:
+  - https://wit.wiimm.de/   # wit extract <file.wia> <outdir>
+
+kind: archive
+name: Nintendo Wii disc image (WIA)
+extensions: [.wia]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'WIA' 01
+
+structs:
+  header:
+    ascii[4] Signature: c'WIA' 01
+    u32 Version: ?? # always 1, XXX guessing version
+    u32 Unknown1: ??
+    u32 Unknown2: ??
+    u8[56] Unknown3: ??
+    u8[16] Unknown4: ??
+    ascii[6] GameID: ??
+    u8 DiscID:
+      eq 00: Disc 1
+      eq 01: Disc 2
+      eq 02: Disc 3
+      eq 03: Disc 4
+    u8 Revision: ??
+    u8[16] Unknown5: ??
+    u32 UnknownConstant: a39e1c5d # gnu file suggest it must be this value
+    u32 Unknown6: ??
+    ascii[64] GameName: ??
+    u16 EncryptionFlags:
+      eq 0101: Unencrypted # XXX guesswork from gnu file
+
+    # XXX also, from gnu file: offset 0x258 string NKIT (NKit compressed)
+
+layout:
+  - header Header

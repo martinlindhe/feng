@@ -7,7 +7,7 @@ software:
   - https://wit.wiimm.de/   # wit extract <file.wbfs> <outdir>
 
 kind: archive
-name: Wii Backup File System
+name: Nintendo Wii Backup File System
 extensions: [.wbfs]
 endian: big # XXX
 
