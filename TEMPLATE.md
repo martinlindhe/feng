@@ -129,7 +129,7 @@ text
 
 date / time
 
-    time_t_32           32-bit unix timestamp, in UTC
+    time_t_32           32-bit timestamp of seconds since 00:00 January 1, 1970, in UTC
     filetime            64-bit windows timestamp, in UTC
     dosdate             16-bit MS-DOS datestamp, in UTC
     dostime             16-bit MS-DOS timestamp, in UTC

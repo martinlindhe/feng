@@ -113,6 +113,7 @@
         "linearsize",
         "luac",
         "Lzexe",
+        "lzfse",
         "Lzham",
         "LZMA",
         "maja",
@@ -203,6 +204,7 @@
         "ZIPDIRENTRY",
         "ZIPENDLOCATOR",
         "ZIPFILERECORD",
-        "zipx"
+        "zipx",
+        "zstd"
     ]
 }

@@ -9,6 +9,7 @@ require (
 	github.com/maja42/goval v1.2.1
 	github.com/pierrec/lz4/v4 v4.1.15
 	github.com/pkg/errors v0.9.1
+	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/rs/zerolog v1.28.0
 	github.com/stretchr/testify v1.7.2
 	golang.org/x/text v0.3.7
@@ -19,7 +20,6 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e // indirect
-	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
