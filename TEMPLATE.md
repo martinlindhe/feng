@@ -149,8 +149,9 @@ data tagging (for extraction feature)
 
     u32 Size: ??
     compressed:zlib[self.Size]      mark area as zlib compressed data
-    compressed:lzo1x[self.Size]     mark area as LZO1x-compatible data
-    compressed:lz4[self.Size]       mark area as LZ4-compressed data
+    compressed:lzo1x[self.Size]     mark area as Lzo1x-compatible data
+    compressed:lzss[self.Size]     mark area as Lzss-compatible data
+    compressed:lz4[self.Size]       mark area as Lz4-compressed data
     compressed:deflate[self.Size]   mark area as DEFLATE compressed data
 
     filename: self.Filename         set the filename to use while extracting for the next data area

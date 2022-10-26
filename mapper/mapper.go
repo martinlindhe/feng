@@ -339,7 +339,8 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			if err != nil {
 				return err
 			}
-			log.Debug().Msgf("Output filename set to '%s' at %06x", fl.filename, fl.offset)
+			fl.filename = presentStringValue(fl.filename)
+			log.Info().Msgf("Output filename set to '%s' at %06x", fl.filename, fl.offset)
 
 		case "offset":
 			// set/restore current offset
@@ -430,7 +431,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			"ascii", "utf16",
 			"rgb8",
 			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
-			"compressed:deflate", "compressed:lzo1x", "compressed:lz4", "compressed:zlib",
+			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib",
 			"raw:u8":
 			// internal data types
 			log.Debug().Msgf("expandChildren type %s: %s", es.Field.Kind, dfParent.Label)

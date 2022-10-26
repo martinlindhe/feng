@@ -1,0 +1,40 @@
+# STATUS: 5%
+
+# The BRSTM format, which is the music format used by Mario Kart Wii and other
+# games such as Super Smash Bros. Brawl.
+
+resources:
+  - https://wiki.tockdom.com/wiki/BRSTM_(File_Format)
+
+kind: audio
+name: Nintendo Wii "Binary Revolution STreaM"
+extensions: [.brstm]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'RSTM'
+
+structs:
+  header:
+    ascii[4] Signature: c'RSTM'
+    u16 ByteOrderMark:
+      eq feff: BIG
+      eq fffe: LITTLE
+      default: invalid
+    if self.ByteOrderMark == LITTLE:
+      endian: little
+    u16 Version: ?? # 01 00 ... XXX VersionMajorMinor8
+    u32 FileSize: ??
+    u16 HeaderSize: ?? # always 0040
+    u16 SectionCount: ?? # XXX Unknown in notes, usually 2
+    u32 HEAD_Offset: ??
+    u32 HEAD_Size: ??
+    u32 ADPC_Offset: ??
+    u32 ADPC_Size: ??
+    u32 DATA_Offset: ??
+    u32 DATA_Size: ??
+    u8[24] Padding: ??
+
+layout:
+  - header Header

@@ -1,0 +1,61 @@
+# STATUS: 10%
+
+# BRLYT files (Binary Revolution LaYouT) are the files used as layout in the Wii system.
+# They manage how the UI TPL images show in the game, with specified flags such as material
+# settings, colors, positions, size, rotations and more. BRLYT files are used with BRLAN
+# animations, BRFNT fonts and also with BRCTR files in Mario Kart Wii.
+
+resources:
+  - https://wiki.tockdom.com/wiki/BRLYT_(File_Format)
+
+kind: audio
+name: Nintendo Wii "Binary Revolution LaYouT"
+extensions: [.brlyt]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'RLYT'
+
+structs:
+  header:
+    ascii[4] Signature: c'RLYT'
+    u16 ByteOrderMark:
+      eq feff: BIG
+      eq fffe: LITTLE
+      default: invalid
+    if self.ByteOrderMark == LITTLE:
+      endian: little
+    u16 Version: ??
+    u32 FileSize: ??
+    u16 HeaderSize: ??
+    u16 SectionCount: ??
+
+  section:
+    ascii[4] SectionID: ?? # XXX select on ascii[4]
+    #u32 SectionID:
+    #  eq
+    # lyt1,usd1,txl1 etc
+    u32 SectionSize: ??
+    if self.SectionID == "lyt1":
+      u8 IsCentered: ??
+      u8[3] Unknown: ??
+      f32 LayoutWidth: ??
+      f32 LayoutHeight: ??
+
+    if self.SectionID == "txl1":
+      u16 TPLFilenameCount: ??
+      u16 Unknown: ?? # always 0
+      u32[self.TPLFilenameCount * 2] TPLFilenameOffsets: ?? # XXX decode better, need nested structs
+      # XXX what follows is the actual filename table. XXX decode
+      ascii[self.SectionSize - 12 - (self.TPLFilenameCount * 2 * 4)] FilenameTableData: ??
+
+    if self.SectionID == "mat1":
+      u16 MaterialCount: ??
+      u16 Unknown: ?? # always 0
+      u32[self.MaterialCount] MaterialOffsets: ??
+      # XXX unfinished
+
+layout:
+  - header Header
+  - section[Header.SectionCount] Section

@@ -11,6 +11,8 @@ github.com/fatih/color v1.13.0/go.mod h1:kLAiJbzzSOZDVNGyDpeOxJ47H46qBXwg5ILebYF
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/maja42/goval v1.2.1 h1:fyEgzddqPgCZsKcFLk4C6SdCHyEaAHYvtZG4mGzQOHU=
 github.com/maja42/goval v1.2.1/go.mod h1:42LU+BQXL/veE9jnTTUOSj38GRmOTSThYSXRVodI5J4=
+github.com/martinlindhe/LZSS v0.0.0-20221025204446-acc47c959dfe h1:3CfBT4bBSMucKFhPmljy8mte8x/sekluzF2Al8EzNvQ=
+github.com/martinlindhe/LZSS v0.0.0-20221025204446-acc47c959dfe/go.mod h1:w+lBCdnOBTrplK7ed0f/s5XZQb/dP0GMaVpIf7b5kG4=
 github.com/mattn/go-colorable v0.1.9/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-colorable v0.1.12/go.mod h1:u5H1YNBxpqRaxsYJYSkiCWKzEfiAb1Gb520KVy5xxl4=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=

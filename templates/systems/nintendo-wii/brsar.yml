@@ -1,0 +1,40 @@
+# STATUS: 5%
+
+# The BRSAR (Binary Revolution Sound ARchive) format is used to store sound effects and some music.
+# It is used in Mario Kart Wii, Super Smash Bros. Brawl, The Legend of Zelda: Skyward Sword and other games.
+
+resources:
+  - https://wiki.tockdom.com/wiki/BRSAR_(File_Format)
+
+kind: audio
+name: Nintendo Wii "Binary Revolution Sound ARchive"
+extensions: [.brsar]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'RSAR'
+
+structs:
+  header:
+    ascii[4] Signature: c'RSAR'
+    u16 ByteOrderMark:
+      eq feff: BIG
+      eq fffe: LITTLE
+      default: invalid
+    if self.ByteOrderMark == LITTLE:
+      endian: little
+    u16 Version: ?? # 01 04, or 01 01 ... XXX VersionMajorMinor8
+    u32 FileSize: ??
+    u16 HeaderSize: ?? # always 0040
+    u16 SectionCount: ??
+    u32 SYMB_Offset: ??
+    u32 SYMB_Size: ??
+    u32 INFO_Offset: ??
+    u32 INFO_Size: ??
+    u32 FILE_Offset: ??
+    u32 FILE_Size: ??
+    u8[24] Padding: ??
+
+layout:
+  - header Header

@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"runtime/pprof"
 
+	lzss "github.com/fbonhomm/LZSS/source"
 	"github.com/rasky/go-lzo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -77,7 +78,7 @@ func main() {
 					filename = field.Filename
 				}
 				switch field.Format.Kind {
-				case "compressed:lzo1x", "compressed:lz4", "compressed:zlib", "compressed:deflate", "raw:u8":
+				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:deflate", "raw:u8":
 					if filename == "" {
 						filename = fmt.Sprintf("stream_%08x", field.Offset)
 					}
@@ -95,6 +96,15 @@ func main() {
 						}
 						b.Write(expanded)
 
+					case "compressed:lzss":
+						lzssMode0 := lzss.LZSS{}
+						expanded, err := lzssMode0.Decompress(field.Value)
+						if err != nil {
+							log.Error().Err(err).Msgf("Extraction failed")
+							continue
+						}
+						b.Write(expanded)
+
 					case "compressed:lz4":
 						expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
 						n, err := lz4.UncompressBlock(field.Value, expanded)
@@ -103,6 +113,7 @@ func main() {
 							continue
 						}
 						b.Write(expanded[0:n])
+
 					case "compressed:zlib":
 						reader, err := zlib.NewReader(bytes.NewReader(field.Value))
 						if err != nil {
@@ -115,6 +126,7 @@ func main() {
 							log.Error().Err(err).Msgf("Extraction failed")
 							continue
 						}
+
 					case "compressed:deflate":
 						reader := flate.NewReader(bytes.NewReader(field.Value))
 						defer reader.Close()
@@ -130,6 +142,9 @@ func main() {
 							continue
 						}
 						b.Write(field.Value)
+
+					default:
+						panic(field.Format.Kind) // unreachable
 					}
 
 					log.Debug().Msgf("Extracted %d bytes to %s", b.Len(), fullName)

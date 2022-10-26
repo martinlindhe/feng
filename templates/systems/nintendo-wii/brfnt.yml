@@ -1,0 +1,70 @@
+# STATUS: 10%
+
+# BRFNT files contain bitmap fonts for use in Wii games.
+
+resources:
+  - https://wiki.tockdom.com/wiki/BRFNT_(File_Format)
+
+kind: audio
+name: Nintendo Wii "Binary Revolution FoNT"
+extensions: [.brfnt]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'RFNT'
+
+structs:
+  header:
+    ascii[4] Signature: c'RFNT'
+    u16 ByteOrderMark:
+      eq feff: BIG
+      eq fffe: LITTLE
+      default: invalid
+    if self.ByteOrderMark == LITTLE:
+      endian: little
+    u16 Version: ??
+    u32 FileSize: ??
+    u16 HeaderSize: ??
+    u16 SectionCount: ??
+
+  section:
+    ascii[4] SectionID: ?? # XXX select on ascii[4]
+    #u32 SectionID:
+    #  eq
+    # lyt1,usd1,txl1 etc
+    u32 SectionSize: ??
+    if self.SectionID == "FINF":
+      u8 FontType: ?? # XXX map
+      u8 Leading: ??
+      u16 GlyphIndex: ??
+      u8 LeftSpacing: ??
+      u8 GlyphWidth: ??
+      u8 CharacterWidth: ??
+      u8 FontEncoding: ?? # XXX map
+      u32 TGLP data offset: ??
+      u32 CWDH data offset: ??
+      u32 CMAP data offset: ??
+      u8 FontHeight: ??
+      u8 FontWidth: ??
+      u8 Ascent: ??
+      u8 Padding: ??
+
+    if self.SectionID == "TGLP":
+      u8 GlyphCellWidth: ??
+      u8 GlyphCellHeight: ??
+      u8 BaselinePosition: ??
+      u8 MaximumCharacterWidth: ??
+      u32 ImageSize: ??
+      u16 ImageCount: ??
+      u16 ImageFormat: ??  # XXX map
+      u16 GlyphCellsPerRow: ??
+      u16 GlyphCellsPerColumn: ??
+      u16 ImageWidth: ??
+      u16 ImageHeight: ??
+      u32 TextureDataPosition: ?? # XXX offset?
+      #u8[self.ImageSize] ImageData: ??  # XXX this is wrong
+
+layout:
+  - header Header
+  - section[Header.SectionCount] Section

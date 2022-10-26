@@ -1,0 +1,32 @@
+# STATUS: 5%
+
+# BRRES Files are used to make objects. They contain models, textures and animations.
+
+resources:
+  - https://wiki.tockdom.com/wiki/BRRES_(File_Format)
+
+kind: audio
+name: Nintendo Wii "Binary Revolution Sound ARchive"
+extensions: [.brsar]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'bres'
+
+structs:
+  header:
+    ascii[4] Signature: c'bres'
+    u16 ByteOrderMark:
+      eq feff: BIG
+      eq fffe: LITTLE
+      default: invalid
+    if self.ByteOrderMark == LITTLE:
+      endian: little
+    u16 Padding: ?? # other similar formats use this for Version
+    u32 FileSize: ??
+    u16 RootSectionOffset: ?? # relative to start (usually 0x0010)
+    u16 SectionCount: ??
+
+layout:
+  - header Header
