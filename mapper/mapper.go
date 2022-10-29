@@ -192,7 +192,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		}
 		ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, tpl)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s: %s", tpl, err.Error())
 		}
 
 		if ds.NoMagic {

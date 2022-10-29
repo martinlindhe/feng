@@ -194,6 +194,14 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 						values = append(values, uint64(binary.LittleEndian.Uint32(b[i:])))
 					}
 				}
+			case "u64":
+				for i := uint64(0); i < totalLength; i += unitLength {
+					if field.Endian == "big" {
+						values = append(values, binary.BigEndian.Uint64(b[i:]))
+					} else {
+						values = append(values, binary.LittleEndian.Uint64(b[i:]))
+					}
+				}
 			default:
 				panic("handle " + field.Format.Kind)
 			}
@@ -571,7 +579,7 @@ func (fl *FileLayout) presentStruct(layout *Struct, showRaw bool) string {
 
 func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	if fl == nil {
-		panic("Probably input yaml error, look for properly escaped strings and \" characters")
+		panic(fmt.Sprintf("Probably input yaml error, look for properly escaped strings and \" characters"))
 	}
 	fl.inUTC = cfg.InUTC
 	res = "# " + fl.BaseName + "\n"
