@@ -1,10 +1,14 @@
-# STATUS: 10%
+# STATUS: 30%
 #
 # File format used by Microsoft XNA Game Studio.
 # Extract images from one with XNB Extract, or convert to audio with XNB to WAV.
 
+# MAX: nested structs. dont assume LevelCount == 1
+
 references:
+  - https://github.com/MonoGame/MonoGame/blob/develop/MonoGame.Framework/Content/ContentReaders/Texture2DReader.cs
   - https://github.com/Pyroglyph/XNBLib/blob/master/XNBLib/Exporter.cs
+  - https://stardewvalleywiki.com/Modding:Editing_XNB_files
 
 software:
   - https://github.com/LeonBlade/xnbcli
@@ -43,18 +47,93 @@ structs:
 
     u32 FileSize: ??
 
-    # XXX if compressed, next field is "u32 CompressedSize"
+    # XXX if compressed, next field is "u32 CompressedSize" XXX NEED SAMPLE
 
     # assuming uncompressed data:
-    vu64 StringCount: ??  # XXX is max size 32 or 64-bit value?
+    vu64 StreamCount: ??  # XXX is max size 32 or 64-bit value?
 
 #    u8 sharedResources: ?? # XXX 7-bit number?   XXX need sample.
 
-  string:
-    vu64 StringLength: ?? # XXX is max size 32 or 64-bit value?
-    ascii[self.StringLength] String: ??
+  stream_header:
+    vu64 TypeLength: ?? # XXX is max size 32 or 64-bit value?
+    ascii[self.TypeLength] Type: ??
     u32 Version: ?? # XXX 0
+
+  stream:
+    u8[2] Unknown: ?? # 00 01
+    # XXX use current index field to access StreamHeader[n].Type and adapt stream struct parsing
+    # XXX assumes "Microsoft.Xna.Framework.Content.Texture2DReader, Microsoft.Xna.Framework.Graphics, Version=4.0.0.0"
+
+    # numbers derived from https://github.com/MonoGame/MonoGame/blob/a9e5ae6befc40d7c86320ffdcfcd9d9b66f786a8/MonoGame.Framework/Graphics/SurfaceFormat.cs
+    u32 SurfaceFormat:
+      # 0-19
+      eq 00000000: Color
+      eq 00000001: Bgr565
+      eq 00000002: Bgra5551
+      eq 00000003: Bgra4444
+      eq 00000004: Dxt1
+      eq 00000005: Dxt3
+      eq 00000006: Dxt5
+      eq 00000007: NormalizedByte2
+      eq 00000008: NormalizedByte4
+      eq 00000009: Rgba1010102
+      eq 0000000a: Rg32
+      eq 0000000b: Rgba64
+      eq 0000000c: Alpha8
+      eq 0000000d: Single
+      eq 0000000e: Vector2
+      eq 0000000f: Vector4
+      eq 00000010: HalfSingle
+      eq 00000011: HalfVector2
+      eq 00000012: HalfVector4
+      eq 00000013: HdrBlendable
+
+      # 20-21: For compatibility with WPF D3DImage
+      eq 00000014: Bgr32        # B8G8R8X8
+      eq 00000015: Bgra32       # B8G8R8A8
+
+      # 30-35
+      eq 0000001e: ColorSRgb
+      eq 0000001f: Bgr32SRgb
+      eq 00000020: Bgra32SRgb
+      eq 00000021: Dxt1SRgb
+      eq 00000022: Dxt3SRgb
+      eq 00000023: Dxt5SRgb
+
+      # 50-53: PowerVR texture compression format (iOS and Android)
+      eq 00000032: RgbPvrtc2Bpp
+      eq 00000033: RgbPvrtc4Bpp
+      eq 00000034: RgbaPvrtc2Bpp
+      eq 00000035: RgbaPvrtc4Bpp
+
+      # 60: Ericsson Texture Compression (Android)
+      eq 0000003c: RgbEtc1
+
+      # 70
+      eq 00000046: Dxt1a
+
+      # 80-81: ATC/ATITC compression (Android)
+      eq 00000050: RgbaAtcExplicitAlpha
+      eq 00000051: RgbaAtcInterpolatedAlpha
+
+      # 90-95: Etc2 (Android/iOS with OpenGL ES 3.0)
+      eq 0000005a: Rgb8Etc2
+      eq 0000005b: Srgb8Etc2
+      eq 0000005c: Rgb8A1Etc2
+      eq 0000005d: Srgb8A1Etc2
+      eq 0000005e: Rgba8Etc2
+      eq 0000005f: SRgb8A8Etc2
+      default: invalid
+
+    u32 Width: ??
+    u32 Height: ??
+    u32 LevelCount: ??
+
+    # XXX ASSUMES LevelCount 1, do for each LevelCount : TODO need nested structs to work here
+    u32 LevelDataSizeInBytes: ??
+    u8[self.LevelDataSizeInBytes] LevelData: ??
 
 layout:
   - header Header
-  - string[Header.StringCount] String
+  - stream_header[Header.StreamCount] StreamHeader
+  - stream[Header.StreamCount] Stream
