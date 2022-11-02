@@ -1,0 +1,25 @@
+# STATUS: 5%
+
+# Archive format that contains multiple .adx audio files, used in some PS2 games (Persona 3, Persona 4).
+
+references:
+  - xxx
+
+software:
+  - https://forum.xentax.com/viewtopic.php?t=22502 (AFS Explorer, can extract .afs)
+
+kind: audio
+name: Criware AFS Audio archive
+extensions: [.afs]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'AFS' 00
+
+structs:
+  header:
+    u8[4] Magic: c'AFS' 00
+
+layout:
+  - header Header

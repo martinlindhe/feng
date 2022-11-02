@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+references:
+  - https://github.com/JasonL663/RMDEditor/blob/master/RMDEditor/Pac/PacData.cs
+
+software:
+  - https://github.com/JasonL663/RMDEditor/
+
+kind: archive
+name: Persona 3 PAC archive
+extensions: [.pac]
+endian: little
+
+no_magic: true
+
+#magic:
+#  - offset: 0100
+#    match: f0 00 f0 f0 # XXX ???
+
+structs:
+  header:
+    ascii[256 - 4] Filename: ??
+    u32 Size: ??
+    u8[self.Size] Data: ??
+
+layout:
+  - header Header

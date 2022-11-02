@@ -1,0 +1,49 @@
+# STATUS: 5%
+
+references:
+  - https://switchbrew.org/wiki/NSO
+
+kind: executable
+name: Nintendo Switch executable
+extensions: [.nso] # XXX often no extension
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'NSO0'
+
+structs:
+  header:
+    ascii[4] Signature: c'NSO0'
+    u32 Version: ??
+    u32 Reserved: ??
+    u32 Flags:
+      bit b00000000_00000000_00000000_00100000: DataHash
+      bit b00000000_00000000_00000000_00010000: RoHash
+      bit b00000000_00000000_00000000_00001000: TextHash
+      bit b00000000_00000000_00000000_00000100: DataCompress
+      bit b00000000_00000000_00000000_00000010: RoCompress
+      bit b00000000_00000000_00000000_00000001: TextCompress
+
+    u8[12] SegmentHeader for .text: ??
+    u32 ModuleNameOffset: ??
+    u8[12] SegmentHeader for .rodata: ??
+    u32 ModuleNameSize: ??
+    u8[12] SegmentHeader for .data: ??
+    u32 BssSize: ??
+    u8[32] ModuleId: ?? # XXX
+    u32 TextFileSize: ?? # .text compressed size
+    u32 RoFileSize: ?? # .rodata compressed size
+    u32 DataFileSize: ?? # .data compressed size
+    u8[28] Reserved: ??
+    u8[8] SegmentHeaderRelative for .api_info: ??
+    u8[8] SegmentHeaderRelative for .dynstr: ??
+    u8[8] SegmentHeaderRelative for .dynsym: ??
+    u8[32] TextHash: ??
+    u8[32] RoHash: ??
+    u8[32] DataHash: ??
+
+    # XXX compressed sections follows (lz4 compression)
+
+layout:
+  - header Header

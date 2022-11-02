@@ -1,0 +1,34 @@
+# STATUS: 5%
+
+# Enhanced VOB (or EVO; Enhanced Video Object) is a video file format associated with HD-DVDs.
+# It is apparently a subformat and extension of the MPEG-2 version of MPEG Program Stream.
+
+references:
+  - https://github.com/file/file/blob/22685445490b91a878c8aea0a4a879aa41705dc2/magic/Magdir/animation#L320
+  - https://samples.ffmpeg.org/evob/
+
+software:
+  - ffmpeg (mpeg1video, adpcm_adx)
+
+kind: video
+name: MPEG sequence ("EVOB")
+extensions: [.vob, .evo, .mpg, .mpeg, .sfd] # .sfd is used on PS2
+mime: video/mpeg
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: 00 00 01 ba
+
+structs:
+  header:
+    u8[4] Magic: 00 00 01 ba
+    u8 Flags:
+      bit b1000_0000: Unknown
+      bit b0100_0000: ProgramMultiplex # 0 = System multiplex, 1 = Program multiplex
+      bit b0011_1111: Unknown
+    u8 Unknown: ?? # 00
+    u16 Unknown: ?? # 01 00
+
+layout:
+  - header Header

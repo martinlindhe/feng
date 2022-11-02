@@ -9,10 +9,10 @@
 references:
   - https://github.com/SciresM/hactool/blob/master/pfs0.h
 
-# XXX find existing tool that extracts files ! (NSZ ???)
 software:
-  - https://github.com/SciresM/hactool
-  - https://github.com/jakcron/nstool
+  - https://github.com/nicoboss/nsz   # nsz -D file.nsp -x -o outdir
+  - https://github.com/jakcron/nstool # decrypt, etc
+  # decrypt nca:  nstool -tik file.tik file.nca
 
 kind: system
 name: Nintendo Submission Package
@@ -29,7 +29,7 @@ structs:
     u32 num_files: ??
     u32 StringTableSize: ??
     u32 Reserved: ??
-  
+
   file_entry:
     u64 Offset: ??
     u64 Size: ??
@@ -38,7 +38,7 @@ structs:
     offset: 16 + (Header.num_files * 24) + Header.StringTableSize + self.Offset
     u8[self.Size] Data: ??
     offset: restore
-  
+
   string_table:
     ascii[Header.StringTableSize] String table: ??
 
