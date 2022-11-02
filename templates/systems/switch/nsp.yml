@@ -10,9 +10,9 @@ references:
   - https://github.com/SciresM/hactool/blob/master/pfs0.h
 
 software:
-  - https://github.com/nicoboss/nsz   # nsz -D file.nsp -x -o outdir
-  - https://github.com/jakcron/nstool # decrypt, etc
-  # decrypt nca:  nstool -tik file.tik file.nca
+  # extract nsp: nstool -x out file.nsp
+  # decrypt nca: nstool -x out -tik file.tik file.nca
+  - https://github.com/jakcron/nstool
 
 kind: system
 name: Nintendo Submission Package

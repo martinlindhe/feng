@@ -1,0 +1,60 @@
+# STATUS: 10%
+#
+# File format used by Microsoft XNA Game Studio.
+# Extract images from one with XNB Extract, or convert to audio with XNB to WAV.
+
+references:
+  - https://github.com/Pyroglyph/XNBLib/blob/master/XNBLib/Exporter.cs
+
+software:
+  - https://github.com/LeonBlade/xnbcli
+  - https://github.com/Pyroglyph/XNBExporter
+  - https://github.com/Pyroglyph/XNBLib
+
+kind: archive
+name: Microsoft XNA Game Studio binary file
+extensions: [.xnb]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XNB'
+
+structs:
+  header:
+    ascii[3] Signature: c'XNB'
+    u8 TargetPlatform:
+      eq c'w': Windows
+      eq c'm': Windows Phone 7
+      eq c'x': Xbox 360
+      eq c'a': Android
+      eq c'i': iOS
+      default: invalid
+    u8 FormatVersion:
+      eq 03: XNA Game Studio 3.0
+      eq 04: XNA Game Studio 3.1
+      eq 05: XNA Game Studio 4.0
+      default: invalid # XXX unknown
+
+    u8 Flags:
+      bit b1000_0000: LZX
+      bit b0100_0000: LZ4
+      bit b0000_0001: HiDef
+
+    u32 FileSize: ??
+
+    # XXX if compressed, next field is "u32 CompressedSize"
+
+    # assuming uncompressed data:
+    vu64 StringCount: ??  # XXX is max size 32 or 64-bit value?
+
+#    u8 sharedResources: ?? # XXX 7-bit number?   XXX need sample.
+
+  string:
+    vu64 StringLength: ?? # XXX is max size 32 or 64-bit value?
+    ascii[self.StringLength] String: ??
+    u32 Version: ?? # XXX 0
+
+layout:
+  - header Header
+  - string[Header.StringCount] String

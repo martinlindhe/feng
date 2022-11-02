@@ -1,0 +1,22 @@
+# STATUS: 5%
+
+references:
+  - https://docs.monogame.net/articles/tools/mgfxc.html
+
+kind: system
+name: MonoGame Effects
+extensions: [.nxef, .mgfx]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'MGFX'
+
+structs:
+  header:
+    ascii[4] Signature: c'MGFX'
+    u16 Unknown: ?? # 05 05. "version" ?
+    u32 Unknown: ??
+
+layout:
+  - header Header
