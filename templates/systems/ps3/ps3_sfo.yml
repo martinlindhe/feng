@@ -1,6 +1,7 @@
-# STATUS: 50%
+# STATUS: 80%
 #
 # SFO (System File Object)
+# PSF (Playstation System File?)
 #
 # used on PSP, PSVita, PS3, PS4 and PS5.
 
@@ -11,9 +12,9 @@ software:
   - https://github.com/wargio/vitatool/
 
 kind: system
-name: Sony System File Object file
+name: Playstation System File Object
 extensions: [.sfo]  # only used in param.sfo
-endian: little      # XXX: psvita and ps5 is confirmed little endian
+endian: little      # XXX: psvita, ps3 and ps5 is confirmed little endian
 
 magic:
   - offset: 0000

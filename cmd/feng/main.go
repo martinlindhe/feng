@@ -62,6 +62,7 @@ func main() {
 	fl, err := mapper.MapFileToTemplate(args.Filename)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to map input file.")
+
 		return
 	}
 	if args.ExtractDir != "" {

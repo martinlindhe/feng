@@ -1,0 +1,37 @@
+# STATUS: 50%
+#
+# used on PS3
+
+# HI: decode DiscContent values
+
+references:
+  - https://psdevwiki.com/ps3/PS3_DISC.SFB
+
+kind: system
+name: Sony PS3 SFB file
+extensions: [.sfb]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 2e c'SFB'
+
+structs:
+  header:
+    ascii[4] Signature: 2e c'SFB'
+    u32 Version: ??
+    u8[24] Reserved: ??
+    ascii[16] HYBRID_FLAG: ??
+    u32 Disc Content Data Offset: ?? # 0x200
+    u32 Disc Content Data Length: ?? # 0x20
+    u8[8] Reserved: ??
+    ascii[16] TITLE_ID: ??
+    u32 Disc Title Data Offset: ?? # 0x220
+    u32 Disc Title Data Length: ??  # 0x10
+    u8[424] Reserved: ??
+    ascii[32] DiscContent: ?? # XXX "gu" or "gVu". some flags
+    ascii[16] DiscTitle: ??
+    u8[976] Reserved: ??
+
+layout:
+  - header Header

@@ -1,0 +1,52 @@
+# STATUS: 20%
+
+# The Resource Interchange File Format (RIFF) is a generic file container format for storing data in tagged
+# chunks. It is primarily used to store multimedia such as sound and video, though it may also be used to
+# store any arbitrary data.
+#
+# The Microsoft implementation is mostly known through container formats like AVI, ANI and WAV, which use
+# RIFF as their basis.
+
+references:
+  - https://en.wikipedia.org/wiki/Resource_Interchange_File_Format
+  - https://en.wikipedia.org/wiki/WebP
+  - https://en.wikipedia.org/wiki/Audio_Video_Interleave
+  - https://en.wikipedia.org/wiki/WAV
+
+kind: media
+name: Resource Interchange File Format
+extensions: [.webp, .wav, .avi, .ani, .rmi]
+endian: little
+
+# XXX mime types:
+# "WEBP": "image/webp"
+# "WAVE": "audio/x-wav"
+# "AVI ": "video/avi"
+# "ACON": "application/octet-stream"
+# "RMID": "audio/mid"
+
+magic:
+  - offset: 0000
+    match: c'RIFF'
+
+structs:
+  header:
+    ascii[4] Signature: c'RIFF'
+    u32 Length: ??
+    ascii[4] Content: ?? # XXX switch on ascii[4]
+    #  eq c'WAVE': Wave
+    #  eq c'WEBP': WebP
+    #  eq c'AVI ': AVI
+    #  eq c'ACON': AnimatedCursor
+    #  eq c'RMID': MIDI
+
+  chunk:
+    ascii[4] Type: ?? # XXX switch on ascii[4]
+    label: self.Type
+    u32 Length: ??
+    u8[self.Length] Data: ??
+    u8[alignment(self.Length, 2)] Padding: ??
+
+layout:
+  - header Header
+  - chunk[] Chunk

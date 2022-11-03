@@ -1,12 +1,13 @@
-# STATUS: 0% draft
+# STATUS: 1%
 
-# Custom compression format used by Nintendo on 3DS and Wii-U
+# Custom compression format used by Nintendo on 3DS, Wii-U and Switch
 
 references:
   - http://www.amnoid.de/gc/yaz0.txt
 
 software:
-  - https://github.com/gcnhax/yaz0-rs
+  - https://github.com/gcnhax/yaz0-rs  # cargo install yaz0 --features=yaztool
+  # $ yaztool decompress file.szs
 
 kind: archive
 name: xxx

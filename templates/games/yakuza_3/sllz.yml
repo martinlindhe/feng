@@ -1,0 +1,23 @@
+# STATUS: 1%
+
+# SLLZ files is found inside parc archives. TODO merge this into parc.yml ??? are they used alone ?
+# XXX the filename is found in the container parc archive
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=5061
+
+kind: archive
+name: Yakuza 3 SLLZ compressed file
+#extensions: [.xxx] # no known extension
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'SLLZ'
+
+structs:
+  header:
+    ascii[4] Signature: c'SLLZ'
+
+layout:
+  - header Header

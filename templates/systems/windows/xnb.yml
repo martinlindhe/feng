@@ -61,8 +61,9 @@ structs:
 
   stream:
     u8[2] Unknown: ?? # 00 01
-    # XXX use current index field to access StreamHeader[n].Type and adapt stream struct parsing
-    # XXX assumes "Microsoft.Xna.Framework.Content.Texture2DReader, Microsoft.Xna.Framework.Graphics, Version=4.0.0.0"
+    # XXX use current index field to access StreamHeader[n].Type and adapt stream struct parsing, need fixed nested structs
+    #if StreamHeader[idx].Type == "Microsoft.Xna.Framework.Content.Texture2DReader, Microsoft.Xna.Framework.Graphics, Version=4.0.0.0":
+    #  u8 XXX: ??
 
     # numbers derived from https://github.com/MonoGame/MonoGame/blob/a9e5ae6befc40d7c86320ffdcfcd9d9b66f786a8/MonoGame.Framework/Graphics/SurfaceFormat.cs
     u32 SurfaceFormat:

@@ -171,7 +171,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			panic("FIXME present slice " + field.Format.Kind)
 		}
 		if !field.Format.Slice && field.Format.Range != "" {
-			log.Info().Msgf("GetFieldValue %s", field.Format.Label)
+			log.Debug().Msgf("GetFieldValue %s", field.Format.Label)
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
 			values := []interface{}{}
 			switch field.Format.Kind {

@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"bytes"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"io/fs"
@@ -168,7 +169,7 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	r := bytes.NewReader(data)
@@ -248,6 +249,13 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 	}
 
 	if fl == nil {
+		// dump hex of first bytes for unknown files
+		end := 0x40
+		if len(data) < end {
+			end = len(data)
+		}
+		fmt.Print(hex.Dump(data[0:end]))
+
 		return nil, fmt.Errorf("no match")
 	}
 	return fl, nil
@@ -340,7 +348,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				return err
 			}
 			fl.filename = presentStringValue(fl.filename)
-			log.Info().Msgf("Output filename set to '%s' at %06x", fl.filename, fl.offset)
+			log.Debug().Msgf("Output filename set to '%s' at %06x", fl.filename, fl.offset)
 
 		case "offset":
 			// set/restore current offset
