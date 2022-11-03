@@ -1,11 +1,13 @@
 # STATUS: 5%
 # format used on ps3 and psvita
 
+# XXX MAX: mark up ELF file and allow to extract it
+
 references:
   - https://www.psdevwiki.com/ps3/Certified_File#Header
 
 kind: system
-name: Sony SCE file
+name: Sony Certified File
 extensions: [.dat, .bin, .ppu.self]
 endian: big # XXX PS3 uses big-endian while PSVita uses little-endian
 
@@ -22,7 +24,7 @@ structs:
       default: invalid
     u16 Attribute: ??
     u16 Category:
-      eq 0001: SELF_SPRX  # signed-elf / signed-prx. Used for storing ELF and PRX. Both PS3 and PSVita. 
+      eq 0001: SELF_SPRX  # signed-elf / signed-prx. Used for storing ELF and PRX. Both PS3 and PSVita.
       eq 0002: SRVK       # signed-revoke-list
       eq 0003: SPKG       # signed-package
       eq 0004: SSPP       # signed-security-policy-profile
@@ -33,8 +35,9 @@ structs:
     u32 Extended header size: ??
     u64 File offset: ??
     u64 File size: ??
-    u64 CF file size: ??  # XXX
-    u64 Padding: ?? # XXX
+    if self.Version == PSVita:
+      u64 CF file size: ??  # XXX
+      u64 Padding: ?? # XXX
 
 layout:
   - header Header

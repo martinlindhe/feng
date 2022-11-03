@@ -13,6 +13,9 @@ references:
   - https://en.wikipedia.org/wiki/Audio_Video_Interleave
   - https://en.wikipedia.org/wiki/WAV
 
+software:
+  - ffmpeg or vlc for WAVE, AVI
+
 kind: media
 name: Resource Interchange File Format
 extensions: [.webp, .wav, .avi, .ani, .rmi]

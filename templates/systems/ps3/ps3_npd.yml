@@ -12,7 +12,7 @@ references:
   - https://github.com/RPCS3/rpcs3/blob/a00f9e42115527aa9654870f194cf2c64329f2ef/rpcs3/Crypto/unedat.cpp
 
 software:
-  - https://github.com/ErikPshat/make_npdata-hykem
+  - https://github.com/inaina/sdata-tool
 
 kind: system
 name: Sony PS3 NPD file

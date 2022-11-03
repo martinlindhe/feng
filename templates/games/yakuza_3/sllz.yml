@@ -3,6 +3,8 @@
 # SLLZ files is found inside parc archives. TODO merge this into parc.yml ??? are they used alone ?
 # XXX the filename is found in the container parc archive
 
+# for PS3 version of the game
+
 references:
   - https://forum.xentax.com/viewtopic.php?t=5061
 

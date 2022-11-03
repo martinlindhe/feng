@@ -1,0 +1,32 @@
+# STATUS: 1%
+
+# Audio format used on PS3 (maybe PS2?)
+
+references:
+  - xxx
+
+software:
+  - ffmpeg
+
+kind: archive
+name: Sony AIXF audio file
+extensions: [.aix]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'AIXF'
+
+structs:
+  header:
+    ascii[4] Signature: c'AIXF'
+    u32 Unk1: ?? # XXX size or offset?
+    u32 Unk2: ?? # 01 00 00 14
+    u32 Unk3: ?? # 00 00 08 00 = 2048
+
+    # XXX some more values ...
+
+    # ... alot of padding until 17fa: (c)CRIAIXP
+
+layout:
+  - header Header
