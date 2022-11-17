@@ -42,6 +42,8 @@ structs:
     #  eq c'AVI ': AVI
     #  eq c'ACON': AnimatedCursor
     #  eq c'RMID': MIDI
+    #  eq c'WBNK': Wave bank (Nintendo Switch)
+    #  eq c'FONT': Font (Nintendo Switch)
 
   chunk:
     ascii[4] Type: ?? # XXX switch on ascii[4]
