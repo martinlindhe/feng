@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"bytes"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"io/fs"
@@ -254,6 +255,12 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 	}
 
 	if fl == nil {
+		// show hex dump of first 0x40 bytes
+		_, _ = r.Seek(0, io.SeekStart)
+		b := make([]byte, 0x40)
+		_, _ = r.Read(b)
+		fmt.Printf("%s", hex.Dump(b))
+
 		return nil, fmt.Errorf("no match")
 	}
 	return fl, nil
