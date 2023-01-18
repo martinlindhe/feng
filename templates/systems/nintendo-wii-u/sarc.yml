@@ -25,7 +25,7 @@ structs:
     ascii[4] Magic: c'SARC'
     u16 HeaderLength: ??      # always 0x14
     u16 ByteOrderMark:
-      eq feff: BigEndian
+      eq feff: BigEndian      # Wii-U
       eq fffe: LittleEndian
     if self.ByteOrderMark == LittleEndian:
       endian: little
@@ -54,7 +54,7 @@ structs:
     ascii[4] Magic: c'SFNT'
     u16 HeaderLength: ??      # always 8
     u16 Reserved: ??
-  
+
   filename_table:
     asciiz FileName: ??
     u8[alignment(len("self.FileName"), 4)] Padding: ??
