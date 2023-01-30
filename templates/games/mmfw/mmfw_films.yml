@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+# Usually accompanied with "MMFW Sounds", "MMFW Pictures" and "MMScript File" files.
+
+# Used in games:
+# Candy Land (1998, Windows) ImageBuilder Software
+
+# MAX: calc data length / file size for data extraction
+
+kind: game
+name: MMFW Films
+extensions: [.mmf]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'MMFW Films' 00 00 00 00 00 00
+
+structs:
+  header:
+    ascii[16] Signature: c'MMFW Films' 00 00 00 00 00 00
+    ascii[2] MaybeEndian: ?? # XXX unsure: "MM" = big endian, "II" = little endian ???
+    u8[2] MaybeVersion: ??
+
+layout:
+  - header Header
