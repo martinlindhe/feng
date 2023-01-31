@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+references:
+  - https://github.com/Microsoft/microsoft-pdb
+  - https://en.wikipedia.org/wiki/Program_database
+
+kind: debug
+name: Microsoft Program Database
+extensions: [.pdb]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BSJB'
+
+structs:
+  header:
+    ascii[4] Signature: c'BSJB'
+    u32 Unknown: ?? # 65537
+    u32 Unknown: ?? # 0
+    u32 Unknown: ?? # 12
+    ascii[8] Signature2: c'PDB v1.0'
+    u32 Unknown: ?? # 0
+    u32 Unknown: ?? # 393216
+
+layout:
+  - header Header

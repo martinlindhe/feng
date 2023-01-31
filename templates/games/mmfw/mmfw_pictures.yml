@@ -34,13 +34,20 @@ structs:
     u8[14] Unknown: ??    # XXX
     u16 FileCount: ??
 
-    u32 MMFW_SIZE: ??     # XXX  might point to some extra entry ??????
+    #u32 MMFW_SIZE: ??     # XXX  might point to some extra entry ??????
 
   # TODO calculate data length, see mmfw_pictures.bms
   entry:
     u32 DataOffset: ??
+    u32 NextDataOffset: ?? # XXX calc length using these 2 fields
     offset: 0x28 + (Header.FileCount * 4) + (self.index * 0x20) + 2
     ascii[30] Filename: ??
+
+    #offset: self.DataOffset
+    # XXX LEN
+    #raw:u8[self.NextDataOffset - self.DataOffset] Data: ??
+    #offset: restore
+
     offset: restore
 
 layout:
