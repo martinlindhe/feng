@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"runtime/pprof"
+	"strings"
 
 	lzss "github.com/fbonhomm/LZSS/source"
 	"github.com/rasky/go-lzo"
@@ -83,8 +84,20 @@ func main() {
 				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:deflate", "raw:u8":
 					if filename == "" {
 						filename = fmt.Sprintf("stream_%08x", field.Offset)
+					} else {
+						// remove "res://" prefix
+						filename = strings.Replace(filename, "res://", "", 1)
 					}
 					fullName := filepath.Join(args.ExtractDir, filename)
+
+					// TODO security: make sure that dirname is inside extractdir
+
+					fullDirName := filepath.Dir(fullName)
+					err = os.MkdirAll(fullDirName, 0755)
+					if err != nil {
+						log.Fatal().Err(err)
+					}
+
 					log.Info().Msgf("%s.%s %s: Extracting data stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
 
 					var b bytes.Buffer
