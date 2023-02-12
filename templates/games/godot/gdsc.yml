@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+software:
+  - https://github.com/bruvzg/gdsdecomp
+
+kind: game
+name: Godot compiled script
+extensions: [.gdc]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'GDSC'
+
+structs:
+  header:
+    ascii[4] Signature: c'GDSC'
+    u32 MaybeHeaderSize: ??   # 0d
+    u32 MaybeCount: ?? # 17
+    u32 MaybeOtherCount: ??  # 09
+    u32 MaybeThirdCount: ?? # 23
+    u32 MaybeForthCount: ?? # af
+    u32 MaybeFifthCount: ?? # 08
+
+layout:
+  - header Header
