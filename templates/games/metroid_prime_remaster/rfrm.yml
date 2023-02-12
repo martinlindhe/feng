@@ -1,0 +1,41 @@
+# STATUS: 1%
+
+# Container used in Metroid Prime Remastered (Switch)
+
+kind: game
+name: rfrm
+extensions: [.pak, .arc]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'RFRM'
+
+structs:
+  header:
+    ascii[4] Signature: c'RFRM'
+    u32 MaybeSize: ?? # KernelMPRT.pak   :   4352 size, value is 4308   = 44
+                      # MiscData.pak     : 62528 size, value is 62483   = 45 ...
+    u32[3] Unknown: ?? # 0
+
+  # chunk start (?)
+  pack_chunk:
+    ascii[4] ChunkID: ??  # PACK (in files ending in .pak), MTRL (in MaterialArchive.arc)
+    u32 Flags1: ?? # 1
+    u32 Flags2: ?? # 1
+
+  rfrm_chunk: # XXX same as header chunk
+    ascii[4] ChunkID: ?? # RFRM
+    u32 MaybeSize: ??
+    u32[3] Unknown: ?? # 0
+
+  tocc_chunk:
+    ascii[4] ChunkID: ?? # TOCC
+    u32[2] Unknown: ?? # 3, 3
+
+
+layout:
+  - header Header
+  - pack_chunk PACK_Chunk
+  - rfrm_chunk RFRM_Chunk  # XXX second "header" chunk? compressed this time?
+  - tocc_chunk TOCC_Chunk
