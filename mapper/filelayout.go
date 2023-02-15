@@ -146,7 +146,7 @@ func shortFloat(f float32) string {
 func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	b := field.Value
 	switch field.Format.Kind {
-	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "raw:u8":
+	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:gzip", "raw:u8":
 		return ""
 
 	case "f32":
@@ -290,7 +290,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 	// XXX a lot of stuff is re-evaluated here, should reuse data from parsing
 	b := field.Value
 	switch field.Format.Kind {
-	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "raw:u8":
+	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:gzip", "raw:u8":
 		return ""
 
 	case "f32":
@@ -611,6 +611,7 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 		unmapped := fl.size - mappedBytes
 		unmappedPct := (float64(unmapped) / float64(fl.size)) * 100
 		res += fmt.Sprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
+		res += fmt.Sprintf("Total file size 0x%04x (%d)\n", fl.size, fl.size)
 	} else if mappedBytes > fl.size {
 		overflow := mappedBytes - fl.size
 		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)

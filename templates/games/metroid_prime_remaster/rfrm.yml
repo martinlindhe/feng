@@ -7,6 +7,9 @@ name: rfrm
 extensions: [.pak, .arc]
 endian: little
 
+resources:
+  - https://github.com/encounter/retrotool
+
 magic:
   - offset: 0000
     match: c'RFRM'
@@ -14,9 +17,17 @@ magic:
 structs:
   header:
     ascii[4] Signature: c'RFRM'
-    u32 MaybeSize: ?? # KernelMPRT.pak   :   4352 size, value is 4308   = 44
-                      # MiscData.pak     : 62528 size, value is 62483   = 45 ...
-    u32[3] Unknown: ?? # 0
+    u64 Size: ??
+    u64 Unknown: ??       # 0
+    ascii[4] FourCC: ??
+    u32 Version: ??       # 1
+    u32 OtherVersion: ??  # 1
+
+  chunk:
+    ascii[4] FourCC: ??
+    u64 Size: ??
+    #u32 Unknown: ??
+    u64 Skip: ?? # XXX pad amount ???
 
   # chunk start (?)
   pack_chunk:
@@ -31,11 +42,15 @@ structs:
 
   tocc_chunk:
     ascii[4] ChunkID: ?? # TOCC
-    u32[2] Unknown: ?? # 3, 3
+    u32 Unknown: ??   # 3
+    u32 Unknown2: ??  # 3
 
 
 layout:
   - header Header
-  - pack_chunk PACK_Chunk
-  - rfrm_chunk RFRM_Chunk  # XXX second "header" chunk? compressed this time?
-  - tocc_chunk TOCC_Chunk
+  - chunk Chunk
+  #- chunk Chunk
+
+  #- pack_chunk PACK_Chunk
+  #- rfrm_chunk RFRM_Chunk  # XXX second "header" chunk? compressed this time?
+  #- tocc_chunk TOCC_Chunk

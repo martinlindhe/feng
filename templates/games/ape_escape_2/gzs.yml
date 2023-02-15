@@ -1,0 +1,37 @@
+# STATUS: 90%
+
+# Used in Ape Escape 2 (PS2): APE2_USA/PACKED/*
+
+# TODO make use of Header.ExpandedSize value to allow gzip decompression without errors
+
+kind: game
+name: Ape Escape 2 Packed file
+extensions: [.gzs]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'gzs' 00
+
+structs:
+  header:
+    ascii[4] Signature: c'gzs' 00
+    u32[3] Unknown: ?? # 0
+    u32 EntryCount: ??
+    u32[3] Unknown: ?? # 0
+
+  entry:
+    ascii[16] Name: ??
+    u32 StartSegment: ??
+    u32 SegmentCount: ??
+    u32 ExpandedSize: ??    # XXX can it be used for decompression?
+    u32 Unknown: ?? # 0
+
+    filename: self.Name
+    offset: self.StartSegment * 2048
+    compressed:gzip[self.SegmentCount * 2048] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

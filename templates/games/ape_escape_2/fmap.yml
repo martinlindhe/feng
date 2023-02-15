@@ -1,0 +1,49 @@
+# STATUS: 80%
+
+# Used in APE2_USA/FILEMAP.DAT, Ape Escape 2 (PS2)
+
+# TODO MAX: learn wether this is a game-specific format or if it is used elsewhere,
+#    and learn of it's purpose better
+
+kind: game
+name: Ape Escape 2 Filemap
+extensions: [.dat]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'FMAP'
+
+structs:
+  header:
+    ascii[4] Signature: c'FMAP'
+    u32 ProcCount: ??
+    u32 UnkCount: ??    # XXX unknown name
+    u32 LastCount: ??   # XXX unknown name
+    ascii[64] Name: ??  # XXX
+
+  proc_name:
+    ascii[16] Name: ??  # PROC_IMG, PROC_VMS, etc
+
+  unk_block:
+    ascii[16] Alias: ?? # SYS_SYS
+    ascii[64] Name: ??  # SYSTEM/SYS_SYS.BIN
+    u32 Unk: ??   # 00 09 00 00
+    u32 Unk2: ??  #
+    u32 Unk3: ??  #
+    u32[5] Unk4: ??  # 0
+
+  # starting at a880
+  last_block:
+    ascii[16] Alias: ??
+    ascii[64] Name: ?? # system/tex/system.img
+    u32 Unk: ?? # 0
+    u32 Some: ?? # 28c0
+    u32 Som2: ?? # 1
+    u32 MaybeIndex: ??
+
+layout:
+  - header Header
+  - proc_name[Header.ProcCount] Proc
+  - unk_block[Header.UnkCount] Unk
+  - last_block[Header.LastCount] Last

@@ -1,0 +1,35 @@
+# STATUS: 90%
+
+# Used in Ape Escape 2 (PS2), contained in a compressed file in APE2_USA/PACKED/*.GZS
+
+kind: game
+name: Ape Escape 2 IDP
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'IDP' 00
+
+structs:
+  header:
+    ascii[4] Signature: c'IDP' 00
+    u32 Unk: ?? # 0
+    u32 EntryCount: ?? # 3
+    u32 Unk: ?? # 0
+
+  entry:
+    ascii[16] Name: ??
+    u32 StartOffset: ?? # XXX
+    ascii[4] FourCC: ?? # IMG (image), CMS (?), ANM (animation)
+    u32 DataLength: ?? # XXX
+    u32 Unk: ??  # 0
+
+    filename: self.Name
+    offset: self.StartOffset
+    raw:u8[self.DataLength] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry
+

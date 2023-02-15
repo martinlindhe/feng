@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"compress/flate"
+	"compress/gzip"
 	"compress/zlib"
 	"fmt"
 	"io"
@@ -13,6 +14,7 @@ import (
 	"strings"
 
 	lzss "github.com/fbonhomm/LZSS/source"
+	"github.com/pierrec/lz4/v4"
 	"github.com/rasky/go-lzo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -20,7 +22,6 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/mapper"
-	"github.com/pierrec/lz4/v4"
 )
 
 var args struct {
@@ -81,7 +82,7 @@ func main() {
 					filename = field.Filename
 				}
 				switch field.Format.Kind {
-				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:deflate", "raw:u8":
+				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:gzip", "compressed:deflate", "raw:u8":
 					if filename == "" {
 						filename = fmt.Sprintf("stream_%08x", field.Offset)
 					} else {
@@ -140,6 +141,22 @@ func main() {
 						if _, err = io.Copy(&b, reader); err != nil {
 							log.Error().Err(err).Msgf("Extraction failed")
 							continue
+						}
+
+					case "compressed:gzip":
+						reader, err := gzip.NewReader(bytes.NewReader(field.Value))
+						if err != nil {
+							log.Error().Err(err).Msgf("Extraction failed1")
+							continue
+						}
+						defer reader.Close()
+
+						if n, err := io.Copy(&b, reader); err != nil {
+							// IMPORTANT: gzip decompressor errors out when input buffer is not exactly proper size, while extraction succeeds.
+							if n == 0 {
+								log.Error().Err(err).Msgf("Extraction failed, only %d written", n)
+								continue
+							}
 						}
 
 					case "compressed:deflate":
