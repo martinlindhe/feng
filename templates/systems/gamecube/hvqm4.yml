@@ -1,0 +1,77 @@
+# STATUS: 50%
+
+# H4M is game format that uses AOT (Adaptive Orthogonalized Transform)
+# based vector quantization image compression.
+
+# Used in:
+# Spider-Man 2 (GameCube), "HVQM4 1.3"
+
+# UNCONFIRMED:
+# HVQM3 is used on N64 Mario Party series games
+# HVQM4 Resident Evil 0 (GameCube), v1.5
+# HVQM4 Resident Evil (GameCube), v1.3
+
+# TODO: decode FrameData chunks
+
+references:
+  - https://wiki.multimedia.cx/index.php/H4M
+  - https://github.com/Tilka/hvqm4
+
+kind: system
+name:  Nintendo GameCube movie
+extensions: [.h4m]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'HVQM4 '
+
+structs:
+  header:
+    ascii[6] Signature: ?? c'HVQM4 '
+    ascii[3] Version: ??
+    u8[7] Padding: ?? # 0
+    u32 HeaderSize: ??
+    u32 DataSize: ??
+    u32 BlockCount: ??
+    u32 TotalVideoFrameCount: ??
+    u32 TotalAudioFrameCount: ??
+    u32 FrameDurationInMicroseconds: ??
+    u32 MaybeMaximumVideoFrameSize: ??
+    u32 Unknown: ??
+    u32 MaybeMaximumAudioFrameSize: ??
+    u16 Width: ??
+    u16 Height: ??
+    u8 HorizontalSubsampling: ??
+    u8 VerticalSubsampling: ??
+    u8 VideoMode: ?? # XXX decode
+    u8 Unknown: ??
+    u8 ChannelCount: ??
+    u8 BitsPerAudioSample: ??
+    u8 AudioFormat: ?? # XXX map
+    u8 AudioTrackCountMinusOne: ??
+    u32 SamplingRate: ??
+
+  block:
+    u32 PreviousBlockSize: ??
+    u32 BlockSize: ??
+    u32 VideoFrameCount: ??
+    u32 AudioFrameCount: ??
+    u32 Flags: ?? # XXX last block flag?
+
+    # Frame data header:
+    u16 FrameDataType:
+      eq 0000: Audio
+      eq 0001: Video
+      default: invalid
+    u16 FrameType:
+      # video:
+      eq 0010: I-frame
+      eq 0020: P-frame
+      eq 0030: B-frame
+    u32 FrameSize: ??
+    u8[self.BlockSize - 8] FrameData: ?? # XXX
+
+layout:
+  - header Header
+  - block[Header.BlockCount] Block
