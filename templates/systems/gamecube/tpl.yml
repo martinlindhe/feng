@@ -80,8 +80,6 @@ structs:
         eq 00000001: PAL_RGB565
         eq 00000002: PAL_RGB5A3
         default: invalid
-      if self.PaletteFormat == PAL_RGB5A3:
-        data: unseen
       u32 PaletteDataOffset: ??
       offset: self.PaletteDataOffset
       u16[256] Palette: ??  # XXX map

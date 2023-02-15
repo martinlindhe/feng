@@ -1,0 +1,64 @@
+# STATUS: 50%
+
+# Used in:
+# Spider-Man 2 (GameCube)      TODO verify with xbox and ps2 version
+
+# TODO MAX: decode content of the data blocks (mark as raw wave frame), see TOIMAWAV in wavebk_wbk.bms
+
+references:
+  - https://zenhax.com/viewtopic.php?t=675
+  - http://aluigi.org/papers/bms/others/wavebk_wbk.bms
+
+kind: audio
+name:  Spider-Man 2 Wave bank
+extensions: [.wbk]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'WAVEBK11'
+
+structs:
+  header:
+    ascii[8] Signature: c'WAVEBK11'
+    u32[2] Padding: ??
+    u32 Unk1: ?? # 0100
+    u32 Unk2: ??
+    u32 Unk3: ??
+    u32 Unk4: ?? # 0
+    ascii[32] Name: ??
+    u32 FileCount: ??
+    u32 FileEntryStartOffset: ??
+    u32[2] Padding: ??
+    u32 Unknown: ?? # DUMMY_SIZE
+    u32 Unknown: ?? # DUMMY_OFF
+    u32[2] Padding: ??
+    u32 NamesSize: ??
+    u32 NamesOffset: ??
+    offset: self.FileEntryStartOffset
+
+  file:
+    u32 NameOffset: ??
+    u32 Unknown2: ??
+    u32 DataSize: ??
+    u32 Unknown4: ??
+    u32 Unknown5: ??
+    u32 Unknown6: ??
+    i32 Unknown7: ?? # -1
+    u32 DataOffset: ??
+    u32 Frequency: ??
+    u32 Zero: ??
+
+    offset: Header.NamesOffset + self.NameOffset
+    asciiz Name: ??
+    offset: restore
+
+    filename: self.Name
+
+    offset: 0x1000 + self.DataOffset # XXX verify is it 0x1000 base?
+    raw:u8[self.DataSize] Data: ?? # TODO
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

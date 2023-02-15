@@ -19,7 +19,7 @@ references:
 
 kind: system
 name:  Nintendo GameCube movie
-extensions: [.h4m]
+extensions: [.h4m, .str]
 endian: big
 
 magic:
@@ -28,7 +28,7 @@ magic:
 
 structs:
   header:
-    ascii[6] Signature: ?? c'HVQM4 '
+    ascii[6] Signature: c'HVQM4 '
     ascii[3] Version: ??
     u8[7] Padding: ?? # 0
     u32 HeaderSize: ??
