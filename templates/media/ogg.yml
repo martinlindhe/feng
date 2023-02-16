@@ -1,0 +1,36 @@
+# STATUS: 5%
+
+# Ogg is a container format, that can contain multiple audio and video streams.
+
+references:
+  - https://www.file-recovery.com/ogg-signature-format.htm
+  - https://en.wikipedia.org/wiki/Ogg
+  - https://www.sweetscape.com/010editor/repository/files/OGG.bt
+
+software:
+  - ffmpeg
+
+kind: audio
+name: Ogg container
+extensions: [.ogg, .oga, .ogv, .ogx]
+mime: audio/ogg # XXX or video/ogg
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'OggS'
+
+structs:
+  header:
+    ascii[4] Signature: c'OggS'
+    u8 Version: ??
+    u8 Flags: ?? # XXX map
+    u64 GranulePosition: ??
+    u32 SerialNumber: ??
+    u32 SequenceNumber: ??
+    u32 Checksum: ??  # XXX algo?
+    u8 PageSegments: ??
+    u8[self.PageSegments] SegmentLength: ?? # the lengths of the segments that follow
+
+layout:
+  - header Header

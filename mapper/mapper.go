@@ -250,13 +250,11 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 
 	if fl == nil {
 		// dump hex of first bytes for unknown files
-		end := 0x40
+		end := 0x10
 		if len(data) < end {
 			end = len(data)
 		}
-		fmt.Print(hex.Dump(data[0:end]))
-
-		return nil, fmt.Errorf("no match")
+		return nil, fmt.Errorf("no match '%s'", hex.EncodeToString(data[0:end]))
 	}
 	return fl, nil
 }
@@ -274,9 +272,12 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 
 	err := fl.expandChildren(r, fs, dfParent, ds, expressions)
 	if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
-		log.Error().Msgf("expandStruct error: [%08x] failed reading data for '%s' (err:%v)", fl.offset, dfParent.Label, err)
+
+		// NOTE: if we try to expand a slice of chunks, reaching EOF is expected and not an error
 
 		if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
+			log.Error().Msgf("expandStruct error: [%08x] failed reading data for '%s' (err:%v)", fl.offset, dfParent.Label, err)
+
 			return fmt.Errorf("eof and no structs mapped")
 		}
 	}
@@ -626,7 +627,6 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			// find custom struct with given name
 			customStruct, err := fl.GetStruct(es.Field.Kind)
 			if err != nil {
-				log.Error().Err(err).Msg("custom struct")
 				found := false
 				for _, ev := range fl.DS.EvaluatedStructs {
 					if ev.Name == es.Field.Kind {

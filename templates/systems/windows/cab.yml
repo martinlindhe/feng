@@ -64,12 +64,13 @@ structs:
   CFFOLDER:
     u32 CFDATA_Offset: ??
     u16 DataBlocks: ??
-    u16 Compression:
-      eq 0000: none
-      eq 0001: MSZIP
-      eq 0002: Quantum
-      eq 0003: LZX
+    u8 Compression:
+      eq 00: none
+      eq 01: MSZIP
+      eq 02: Quantum
+      eq 03: LZX
       default: invalid
+    u8 Unknown: ?? # hi 8 bits of "Compression" field, usually 0
 
     offset: self.CFDATA_Offset
     u32 Checksum: ??

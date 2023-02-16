@@ -2,6 +2,11 @@
 
 # Audio format used in some PS2 games.
 
+# Confirmed:
+# XXX
+
+# TODO: improve magic check with additional conditional MUST (either value 01 or 02 at offset 0007)
+
 references:
   - https://web.archive.org/web/20060818165032/http://ku-www.ss.titech.ac.jp/~yatsushi/adx.html
 
@@ -16,7 +21,7 @@ endian: big
 
 magic:
   - offset: 0000
-    match: 80 00 # XXX weak magic
+    match: 80 00 # FIXME weak magic !!!   in addition to this check, 0x0007 MUST be 01 or 02
 
 structs:
   header:
@@ -26,6 +31,7 @@ structs:
     u8 Channels:
       eq 01: Mono
       eq 02: Stereo
+      default: invalid
     u32 Frequency: ?? # 24000
     u32 SampleCount: ??
 

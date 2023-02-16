@@ -12,9 +12,15 @@ references:
   - https://en.wikipedia.org/wiki/WebP
   - https://en.wikipedia.org/wiki/Audio_Video_Interleave
   - https://en.wikipedia.org/wiki/WAV
+  - https://zenhax.com/viewtopic.php?p=6506#p6506 # FMOD FSB5 extractor script
+  - http://wiki.xentax.com/index.php/FMOD_Audio_FSB # FMOD FSB format details
+  - http://web.archive.org/web/20160622000928/https://www.fmod.org/questions/question/forum-4928/  # FMod FSB4 format
 
 software:
   - ffmpeg or vlc for WAVE, AVI
+  - https://github.com/gdawg/fsbext   # FMOD sound bank extractor
+  - https://gitlab.com/lukasjuhrich/riffinfo
+  - http://aezay.dk/aezay/fsbextractor/
 
 kind: media
 name: Resource Interchange File Format
@@ -44,6 +50,7 @@ structs:
     #  eq c'RMID': MIDI
     #  eq c'WBNK': Wave bank (Nintendo Switch)
     #  eq c'FONT': Font (Nintendo Switch)
+    #  eq c'FEV ': FMod sound bank (FSB5?)
 
   chunk:
     ascii[4] Type: ?? # XXX switch on ascii[4]
