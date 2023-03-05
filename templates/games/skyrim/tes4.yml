@@ -1,0 +1,29 @@
+# STATUS: 5%
+
+# TES4 is the header record for the mod file. It contains info like author, description, file type, and masters list.
+
+# Used in:
+# Skyrim - Special Edition (PC)
+
+references:
+  - https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format/TES4
+  - https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format#Records
+  - https://modding.wiki/en/skyrim/developers/plugin-differences # differences in Special Edition file format
+
+kind: xxx
+name: Skyrim data file
+extensions: [.esl, .esm]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'TES4'
+
+structs:
+  header:
+    ascii[4] Signature: c'TES4'
+    u32 Size: ??
+    u32 Flags: ?? # XXX https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format#Records
+
+layout:
+  - header Header

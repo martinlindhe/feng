@@ -440,7 +440,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			"ascii", "utf16",
 			"rgb8",
 			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
-			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:gzip",
+			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip",
 			"raw:u8":
 			// internal data types
 			log.Debug().Msgf("expandChildren type %s: %s", es.Field.Kind, dfParent.Label)

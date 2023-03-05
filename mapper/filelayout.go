@@ -146,7 +146,7 @@ func shortFloat(f float32) string {
 func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	b := field.Value
 	switch field.Format.Kind {
-	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:gzip", "raw:u8":
+	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "raw:u8":
 		return ""
 
 	case "f32":
@@ -290,7 +290,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 	// XXX a lot of stuff is re-evaluated here, should reuse data from parsing
 	b := field.Value
 	switch field.Format.Kind {
-	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:gzip", "raw:u8":
+	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "raw:u8":
 		return ""
 
 	case "f32":

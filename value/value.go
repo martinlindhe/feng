@@ -310,6 +310,7 @@ func SingleUnitSize(kind string) uint64 {
 		"vs64",
 		"compressed:lzo1x",
 		"compressed:lz4",
+		"compressed:lzf",
 		"compressed:lzss",
 		"compressed:zlib",
 		"compressed:gzip",

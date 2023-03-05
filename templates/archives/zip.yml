@@ -8,6 +8,7 @@ references:
   - https://en.wikipedia.org/wiki/ZIP_(file_format)
   - https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
   # other implementations:
+  - https://github.com/zip-rs/zip
   - https://golang.org/pkg/archive/zip/
   - https://www.sweetscape.com/010editor/repository/files/ZIP.bt
   - https://github.com/HexFiend/HexFiend/blob/master/templates/Archives/ZIP.tcl
@@ -43,7 +44,11 @@ structs:
         eq 0000: Stored
         eq 0001: Shrunk
         eq 0006: Imploded
-        eq 0008: Deflated
+        eq 0008: Deflate
+        eq 0009: Deflate64
+        eq 000c: BZip2
+        eq 000e: LZMA
+        # TODO more compression methods: https://docs.rs/zip/latest/src/zip/compression.rs.html#44
         default: invalid
       dostimedate Modification time: ??
       u32 CRC32 of uncompressed data: ??

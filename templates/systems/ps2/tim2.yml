@@ -1,0 +1,50 @@
+# STATUS: 20%
+
+# Image archive format used on PS2 and PSP
+
+# Confirmed use in games:
+# Jade Cocoon 2 (PS2)
+
+references:
+  - https://wiki.xentax.com/index.php/TM2_TIM2_Image
+
+software:
+  - https://github.com/marco-calautti/Rainbow/
+
+kind: image
+name: TIM2 image archive
+extensions: [.000]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'TIM2'
+
+structs:
+  header:
+    u8[4] Magic: c'TIM2'
+    u16 Version: ??
+    u16 ImageCount: ??
+
+  image:
+    u32 TotalImageLength: ??
+    u32 PaletteLength: ??
+    u32 ImageDataLength: ??
+    u16 HeaderLength: ??
+    u16 ColorEntries: ??
+    u8 ImageFormat: ?? # (0=8bpp paletted?)
+    u8 MipmapCount: ??
+    u8 CLUTFormat: ??
+    u8 BitsPerPixel: ?? # (1=16bbp, 2=24bpp, 3=32bbp, 4=4bbp, 5=8bpp)
+    u16 ImageWidth: ??
+    u16 ImageHeight: ??
+    u64 GsTEX0: ??
+    u64 GsTEX1: ??
+    u32 GsRegs: ??
+    u32 GsTexClut: ??
+    #X - User Data (optional) (length = HeaderLength-48)
+    u8[self.HeaderLength - 48] UserData: ??
+
+layout:
+  - header Header
+  - image[Header.ImageCount] Image

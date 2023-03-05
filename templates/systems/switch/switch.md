@@ -25,4 +25,4 @@ xxx
 
 # decrypt nca
 
-$ nstool -x out --tik file.tik file.nca
+$ nstool -x dec --tik file.tik file.nca

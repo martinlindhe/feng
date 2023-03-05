@@ -1,0 +1,55 @@
+# STATUS: 50%
+
+# Used in:
+# The Witcher 2 - Assassin of Kings (PC)
+
+# TODO MAX: decompress content
+
+references:
+  - https://witcher.fandom.com/wiki/Extracting_The_Witcher_2_files
+  - https://forum.xentax.com/viewtopic.php?f=10&t=6634
+  - https://www.gog.com/forum/the_witcher_2/how_to_unpack_the_pack0_dzip_for_modders/page1
+  - https://github.com/yole/Gibbed.RED/blob/master/Gibbed.RED.FileFormats/PackageFile.cs # Deserialize()
+
+software:
+  - https://www.nexusmods.com/witcher2/mods/768  # "Gibbed RED Tools", can extract dzip
+  - https://github.com/yole/Gibbed.RED  # unpacker and packer in C#
+
+kind: archive
+name: The Witcher 2 DZIP archive
+extensions: [.dzip]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'DZIP'
+
+structs:
+  header:
+    ascii[4] Signature: c'DZIP'
+    u32 Version:
+      eq 00000002: v2
+      # TODO allow "default: unseen", should work like "data: unseen" marker
+      default: invalid # XXX only seen v2
+    u32 EntryCount: ??
+    u32 Unknown: ??
+    u64 EntryTableOffset: ??
+    u64 Hash: ?? # XXX algo ?
+    offset: self.EntryTableOffset
+
+  entry:
+    u16 Length: ??
+    ascii[self.Length] Name: ??
+    be:filetime Timestamp: ?? # seems to decode correctly as "2011-11-09T15:28:09Z"
+    u64 UncompressedSize: ??
+    u64 Offset: ??
+    u64 CompressedSize: ??
+    filename: self.Name
+    # TODO: set timestamp on output file from self.Timestamp //feb 2023
+    offset: self.Offset
+    compressed:lzf[self.CompressedSize] Data: ??  # TODO MAX PRIO: we need to set compressed AND uncompressed size for successful extraction
+    offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

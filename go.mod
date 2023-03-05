@@ -18,12 +18,19 @@ require (
 )
 
 require (
+	github.com/alecthomas/assert v1.0.0 // indirect
+	github.com/alecthomas/colour v0.1.0 // indirect
+	github.com/alecthomas/repr v0.0.0-20210801044451-80ca428c5142 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
+	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade // indirect
 	golang.org/x/sys v0.1.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 // https://github.com/fbonhomm/LZSS/pull/1
 replace github.com/fbonhomm/LZSS v0.0.0-20200907090355-ba1a01a92989 => github.com/martinlindhe/LZSS v0.0.0-20221025204446-acc47c959dfe
+
+replace github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade => ../golzf

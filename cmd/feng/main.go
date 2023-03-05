@@ -18,6 +18,7 @@ import (
 	"github.com/rasky/go-lzo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	lzf "github.com/zhuyie/golzf"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -82,18 +83,23 @@ func main() {
 					filename = field.Filename
 				}
 				switch field.Format.Kind {
-				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:zlib", "compressed:gzip", "compressed:deflate", "raw:u8":
+				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "compressed:deflate", "raw:u8":
 					if filename == "" {
 						filename = fmt.Sprintf("stream_%08x", field.Offset)
 					} else {
 						// remove "res://" prefix
 						filename = strings.Replace(filename, "res://", "", 1)
 					}
+
+					// handle windows path separators
+					filename = strings.ReplaceAll(filename, "\\", string(os.PathSeparator))
+
 					fullName := filepath.Join(args.ExtractDir, filename)
 
-					// TODO security: make sure that dirname is inside extractdir
+					// TODO security: make sure that dirname is inside extract dir
 
 					fullDirName := filepath.Dir(fullName)
+
 					err = os.MkdirAll(fullDirName, 0755)
 					if err != nil {
 						log.Fatal().Err(err)
@@ -124,6 +130,15 @@ func main() {
 					case "compressed:lz4":
 						expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
 						n, err := lz4.UncompressBlock(field.Value, expanded)
+						if err != nil {
+							log.Error().Err(err).Msgf("Extraction failed")
+							continue
+						}
+						b.Write(expanded[0:n])
+
+					case "compressed:lzf":
+						expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
+						n, err := lzf.Decompress(field.Value, expanded)
 						if err != nil {
 							log.Error().Err(err).Msgf("Extraction failed")
 							continue

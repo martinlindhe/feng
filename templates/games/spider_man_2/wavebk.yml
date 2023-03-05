@@ -10,7 +10,7 @@ references:
   - http://aluigi.org/papers/bms/others/wavebk_wbk.bms
 
 kind: audio
-name:  Spider-Man 2 Wave bank
+name: Spider-Man 2 Wave bank
 extensions: [.wbk]
 endian: little
 

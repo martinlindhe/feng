@@ -15,6 +15,7 @@ software:
   - https://github.com/SeriousCache/UABE
   - https://github.com/Perfare/AssetStudio
   - https://github.com/sinai-dev/UnityExplorer
+  - https://github.com/HearthSim/UnityPack
 
 kind: system
 name: UnityFS
@@ -47,7 +48,7 @@ structs:
     #  blocksInfoBytes = reader.ReadBytes((int)m_Header.compressedBlocksInfoSize);
     #  reader.Position = position;
     #}else { //0x40 BlocksAndDirectoryInfoCombined
-  
+
     # XXX contains a lz4 frame data. does not have lz4 header and no crc
     #compressed:lz4[self.compressedSize] Compressed data: ??
     raw:u8[self.compressedSize] Compressed data: ??

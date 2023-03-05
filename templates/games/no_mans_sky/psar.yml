@@ -1,0 +1,39 @@
+# STATUS: 5%
+
+# Used in No Man's Sky (PC)
+
+# TODO MAX: finish converting http://aluigi.org/bms/brink.bms
+
+# TODO: "PSAR" archive is used in various ps3 games: https://forum.xentax.com/viewtopic.php?p=91717#p91717
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=14846
+  - http://aluigi.org/bms/brink.bms # XXX
+  - https://forum.xentax.com/viewtopic.php?p=91717#p91717 # PS3 format, similar/same ???
+
+software:
+  - http://nomansskymods.com/mods/psarc-decompile-tool/
+
+kind: game
+name: No Man's Sky PSAR archive
+extensions: [.pak]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'PSAR'
+
+structs:
+  header:
+    ascii[4] Signature: c'PSAR'
+    u16 MajorVersion: ??    # 1
+    u16 MinorVersion: ??    # 4
+    ascii[4] CompressionFormat: ??        # "zlib"
+    u32 HeaderSize: ??
+    u32 EntrySize: ??
+    u32 EntryCount: ??
+    u32 DataBlockSize: ??
+    u32 Flags: ?? # XXX map
+
+layout:
+  - header Header
