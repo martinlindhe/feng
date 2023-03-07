@@ -618,6 +618,11 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	} else {
 		res += "EOF\n"
 	}
+
+	if len(fl.previousOffsets) != 0 {
+		res += fmt.Sprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
+	}
+
 	return res
 }
 
