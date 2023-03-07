@@ -81,6 +81,12 @@ layout:
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, &DataStructure{
+		Constants: []Constant{
+			{Name: "No units", Value: []byte{0x00}},
+			{Name: "Pixels per inch", Value: []byte{0x01}},
+			{Name: "B0", Value: []byte{0x01}},
+			{Name: "Rest", Value: []byte{0x06}},
+		},
 		EvaluatedStructs: []evaluatedStruct{
 			{Name: "header", Expressions: []Expression{
 				{Field: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Signature"}, Pattern: value.DataPattern{Known: true, Pattern: []uint8{0xff, 0xd8}, Value: ""}, Children: []Expression{}, MatchPatterns: []MatchPattern{}}},
