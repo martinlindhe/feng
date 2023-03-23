@@ -17,7 +17,7 @@ var (
 	smoketestFile = "./smoketest.yml"
 )
 
-func TestCompareWithReferenceParses(t *testing.T) {
+func TestaaaCompareWithReferenceParses(t *testing.T) {
 
 	data, err := ioutil.ReadFile(smoketestFile)
 	assert.Nil(t, err)

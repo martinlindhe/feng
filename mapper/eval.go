@@ -444,7 +444,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["either"] = fl.evalEither
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
-		//spew.Dump(evalVariables)
+		if DEBUG_EVAL {
+			spew.Dump(evalVariables)
+		}
 		return 0, EvaluateError{input: in, msg: err.Error()}
 	}
 

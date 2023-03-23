@@ -3,7 +3,7 @@
 # TrueType Collection (TTC) is an extension of TrueType format that
 # allows combining multiple fonts into a single file.
 #
-# MAX: allow to concat data areas for data extraction. needed to produce a ttc2ttf feature from this template (can we extract ttf fonts from a ttc file without much extra effort?)
+# MAX: allow to concat data areas for data extraction ("data: concat" directive to append next data block to the last one). needed to produce a ttc2ttf feature from this template (can we extract ttf fonts from a ttc file without much extra effort?)
 # HI:  want sample with DSIG block
 
 references:
@@ -30,7 +30,7 @@ structs:
     u16 EntrySelector: ??
     u16 RangeShift: ??
     u32 Unknown: ??
-    #table[self.EntrySelector] Table: ?? # XXX expansion dont work due to bug
+    table[self.EntrySelector] Table: ?? # XXX expansion dont work due to bug
     offset: restore
 
   table:
@@ -49,7 +49,7 @@ structs:
     u16 MinorVersion: ??
     u32 NumFonts: ??
     u32[self.NumFonts] Offsets: ??            # offsets to table headers
-    #font_table[self.NumFonts] FontTable: ??  # XXX expansion dont work due to bug
+    font_table[self.NumFonts] FontTable: ??  # XXX expansion dont work due to bug
 
   v2_header:
     if V1Header.MajorVersion == 2:

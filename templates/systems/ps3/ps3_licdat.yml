@@ -28,9 +28,8 @@ structs:
     u32 Checksum: ?? # crc32
     u8[2012] Padding: ?? # seen zeroed
 
-    offset: self.LicenseTableStart
-
   license:
+    offset: Header.LicenseTableStart
     u8 Type:
       eq 01: Title
       eq 02: SKU
@@ -42,6 +41,7 @@ structs:
       ascii[42] SKU: ??
     if self.Type == Content:
       ascii[37] Content: ??
+    offset: restore
 
 layout:
   - header Header

@@ -582,7 +582,9 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 		panic(fmt.Sprintf("Probably input yaml error, look for properly escaped strings and \" characters"))
 	}
 	fl.inUTC = cfg.InUTC
-	res = "# " + fl.BaseName + "\n"
+	if fl.BaseName != "" {
+		res = "# " + fl.BaseName + "\n"
+	}
 	for _, layout := range fl.Structs {
 		res += fl.presentStruct(&layout, cfg.ShowRaw)
 	}

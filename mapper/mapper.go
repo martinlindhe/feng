@@ -443,7 +443,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip",
 			"raw:u8":
 			// internal data types
-			log.Debug().Msgf("expandChildren type %s: %s", es.Field.Kind, dfParent.Label)
+			log.Debug().Msgf("expandChildren type %s: %s (child of %s)", es.Field.Kind, es.Field.Label, dfParent.Label)
 			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 
@@ -658,17 +658,19 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 								parent.Label = name
 								log.Info().Msgf("-- Appending %s", name)
 
-								// XXX issue happens when child node uses self.VARIABLE and it is expanded, when self node is not yet added to fs.Structs
+								// XXX issue happens when child node uses self.VARIABLE and it is expanded,
+								//     when self node is not yet added to fs.Structs
 
 								child := Struct{Name: name, Index: int(i)}
+								fs.Children = append(fs.Children, child)
 								err = fl.expandChildren(r, &child, &parent, ds, subEs.Expressions)
 								if err != nil {
 									if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-										panic(err)
+										//panic(err)
 										log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
 									}
 								}
-								fs.Children = append(fs.Children, child)
+
 							}
 						} else {
 
