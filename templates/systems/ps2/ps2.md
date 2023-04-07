@@ -26,3 +26,10 @@ formats:
 Can use binwalk on the .iso directly to extract some,
 otherwise the custom format is usually tied to a specific game.
 
+
+
+# Resources
+
+PS23DFormat (3d model extraction wiki): https://web.archive.org/web/20180120163132/http://ps23dformat.wikispaces.com/
+
+

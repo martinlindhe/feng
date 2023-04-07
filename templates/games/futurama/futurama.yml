@@ -1,0 +1,32 @@
+
+# STATUS: 1%
+#
+# Used in Futurama (2003 by Unique Development Studios) PS2, XBox
+
+references:
+  - http://wiki.xentax.com/index.php/Futurama_XBox_IMG
+  - https://web.archive.org/web/20171230084331/http://ps23dformat.wikispaces.com/Futurama
+
+software:
+  - https://github.com/JayFoxRox/futurama-tools
+  - https://web.archive.org/web/20180724233625/https://ps23dformat.wikispaces.com/file/view/FutureramaPS2IMG.bms/485367210/FutureramaPS2IMG.bms
+
+kind: archive
+name: Futurama (ps2) archive
+extensions: [.img]
+endian: little
+no_magic: true  # XXX need to force use this template
+
+structs:
+  header:
+    u32 End: ??
+
+  entry:
+    asciiz Filename: ??
+    u8[alignment(len("self.Filename"), 4)] Padding: ??
+    u32 DataSize: ??
+    u32 DataOffset: ??
+
+layout:
+  - header Header
+  - entry Entry

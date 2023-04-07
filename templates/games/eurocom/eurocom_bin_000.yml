@@ -1,0 +1,36 @@
+# STATUS: 5%
+
+# Used in old Eurocom games:
+#
+# Verified:
+# G-Force (2009), PS3 + more platforms
+#
+# Unverified:
+# Spyro, Sphinx, Ice Age: Dawn of the Dinosaurs, Pirates of the Caribbean: At World's End (2007) and so on
+
+# TODO MAX: file names is encoded
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=3614
+  - https://aluigi.altervista.org/bms/gforce.bms
+
+kind: game
+name: Eurocom BIN/000 resource
+extensions: [.bin]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: 00 00 # XXX weak magic.
+
+structs:
+  header:
+    u32 Version: ?? # if first two bytes is not 0, then it is BIG ENDIAN (?)
+    u32 Binsz: ??
+    u32 Files: ??
+    u16 Dummy: ??
+    u16 Packs: ??
+    u32 NamesOffset: ?? # XXX if nonzero, add 0x10 ???
+
+layout:
+  - header Header
