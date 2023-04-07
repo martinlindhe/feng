@@ -29,4 +29,5 @@ structs:
 
 layout:
   - header Header
-  - entry Entry
+#  - entry Entry
+

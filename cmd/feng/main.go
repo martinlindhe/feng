@@ -27,16 +27,17 @@ import (
 
 var args struct {
 	Filename    string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
+	Template    string `type:"existingfile" help:"Parse file using this template."`
 	ExtractDir  string `help:"Extract files to this directory."`
 	Raw         bool   `help:"Show raw values"`
-	Unmapped    bool   `help:"Dev: Print a report on unmapped bytes."`
-	Overlapping bool   `help:"Dev: Print a report on overlapping bytes."`
 	LocalTime   bool   `help:"Show timestamps in local timezone. Default is UTC."`
 	Brief       bool   `help:"Show brief file information."`
 	Tree        bool   `help:"Show parsed file structure tree."`
-	CPUProfile  string `name:"cpu-profile" help:"Dev: Create CPU profile."`
-	MemProfile  string `name:"mem-profile" help:"Dev: Create memory profile."`
-	Debug       bool   `help:"Enable debug logging"`
+	Unmapped    bool   `help:"Print a report on unmapped bytes."`
+	Overlapping bool   `help:"Print a report on overlapping bytes."`
+	Debug       bool   `help:"[Dev] Enable debug logging"`
+	CPUProfile  string `name:"cpu-profile" help:"[Dev] Create CPU profile."`
+	MemProfile  string `name:"mem-profile" help:"[Dev] Create memory profile."`
 }
 
 func main() {
@@ -62,12 +63,19 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	fl, err := mapper.MapFileToTemplate(args.Filename)
+	var fl *mapper.FileLayout
+	var err error
+
+	if args.Template != "" {
+		fl, err = mapper.MapFileToGivenTemplate(args.Filename, args.Template)
+	} else {
+		fl, err = mapper.MapFileToMatchingTemplate(args.Filename)
+	}
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to map %s.", args.Filename)
-
 		return
 	}
+
 	if args.ExtractDir != "" {
 		// write data streams to specified dir
 		err = os.MkdirAll(args.ExtractDir, os.ModePerm)

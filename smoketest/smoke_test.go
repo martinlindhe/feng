@@ -29,7 +29,7 @@ func TestaaaCompareWithReferenceParses(t *testing.T) {
 
 	for _, entry := range filenames {
 		assert.NotEqual(t, "", entry.In)
-		fl, err := mapper.MapFileToTemplate(entry.In)
+		fl, err := mapper.MapFileToMatchingTemplate(entry.In)
 		assert.Nil(t, err, entry.In)
 
 		log.Printf("Parsed %s with template %v", entry.In, fl.BaseName)

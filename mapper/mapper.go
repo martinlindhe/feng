@@ -165,7 +165,39 @@ var (
 	mapFileMatchedError = errors.New("matched file")
 )
 
-func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
+func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileLayout, err error) {
+
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	r := bytes.NewReader(data)
+
+	rawTemplate, err := os.ReadFile(templateFileName)
+	if err != nil {
+		return nil, err
+	}
+	ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, templateFileName)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", templateFileName, err.Error())
+	}
+
+	fl, err = MapReader(r, ds)
+	fl.DataFileName = filename
+	if err != nil {
+		feng.Red("MapReader: %s: %s\n", templateFileName, err.Error())
+
+	}
+	if len(fl.Structs) > 0 {
+		log.Printf("Parsed %s as %s", filename, templateFileName)
+		return fl, nil
+	}
+	return nil, nil
+}
+
+// maps input file to a matching template
+func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 
 	data, err := os.ReadFile(filename)
 	if err != nil {

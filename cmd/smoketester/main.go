@@ -56,7 +56,7 @@ func main() {
 
 		started := time.Now()
 
-		fl, err := mapper.MapFileToTemplate(entry.In)
+		fl, err := mapper.MapFileToMatchingTemplate(entry.In)
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(mapper.EvaluateError); ok {
