@@ -911,6 +911,7 @@ func (fl *FileLayout) GetLength(s string, df *value.DataField) (int, error) {
 		log.Trace().Msgf("GetLength: want %s, got %s", fieldName, field.Format.Label)
 
 		if field.Format.Label == fieldName {
+			log.Debug().Msgf("Read length %d from %s.%s", int(field.Length), structName, fieldName)
 			return int(field.Length), nil
 		}
 	}

@@ -124,7 +124,6 @@ layout:
 		0x04, 0x05, // Number
 		0x07,       // ID
 		0xff, 0xfe, // Padding
-
 	}
 
 	fl, err := MapReader(bytes.NewReader(data), ds)

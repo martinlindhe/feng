@@ -14,7 +14,7 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-var DEBUG_EVAL = true
+var DEBUG_EVAL = false
 
 // an expression failed to evaluate
 type EvaluateError struct {
@@ -293,6 +293,29 @@ func (fl *FileLayout) evalLen(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+func (fl *FileLayout) evalSevenBitString(args ...interface{}) (interface{}, error) {
+	// 1 arg: name of variable. return manipulated string value
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if s, ok := args[0].(string); ok {
+		_, val, err := fl.GetValue(s, nil)
+		if err != nil {
+			panic(err)
+		}
+
+		// for each byte, remove high bit.
+		out := ""
+		for _, c := range val {
+			b := byte(c)
+			out += string(b & 0x7f)
+		}
+
+		return out, nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
 func (fl *FileLayout) evalEither(args ...interface{}) (interface{}, error) {
 	// 2-n arg: reference value, list of values. returns true if 1st number is in the others
 	if len(args) < 2 {
@@ -442,6 +465,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["len"] = fl.evalLen
 	functions["not"] = fl.evalNot
 	functions["either"] = fl.evalEither
+	functions["sevenbitstring"] = fl.evalSevenBitString
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
 		if DEBUG_EVAL {

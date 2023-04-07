@@ -1,5 +1,5 @@
 
-# STATUS: 1%
+# STATUS: 5%
 #
 # Used in Futurama (2003 by Unique Development Studios) PS2, XBox
 
@@ -24,10 +24,15 @@ structs:
   entry:
     asciiz Filename: ??
     u8[alignment(len("self.Filename"), 4)] Padding: ??
+    label: sevenbitstring("self.Filename")
+
+    # TODO: in order to parse directory entries correctly: if bit 7 of first byte in self.Filename is 1, then next value is "u32 FilesInDirectory", not offset+size.
     u32 DataSize: ??
     u32 DataOffset: ??
 
+
 layout:
   - header Header
-#  - entry Entry
-
+  - entry Entry1
+  - entry Entry2
+  - entry Entry3
