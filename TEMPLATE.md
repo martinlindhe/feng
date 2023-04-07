@@ -102,6 +102,7 @@ alignment(3,4) = 1      returns the number of bytes needed to align the first ar
 not(self.Value, 4, 5) = true   returns true if self.Value is neither 4 or 5
 either(self.Value, 4, 5) = false   returns true if self.Value is either 4 or 5
 sevenbitstring(self.Filename) = "chars"  returns string value of input field as 7bit ascii (masking off bit7)
+bitset(self.Value, 7) = true   returns true if bit 7 of self.Value is set
 ```
 
 # Data types
@@ -124,6 +125,7 @@ text
 
     ascii[5]            ascii string
     asciiz              zero terminated ascii string
+    asciinl             newline-terminated (\n) ascii string
     utf16[5]            utf16 string    (utf16 le == wchar_t)
     utf16z              zero terminated utf16 string
 

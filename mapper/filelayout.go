@@ -220,7 +220,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			return int(value.AsUint64Raw(b))
 		}
 
-	case "ascii":
+	case "ascii", "asciinl":
 		v, _ := value.AsciiPrintableString(b, len(b))
 		return v
 
@@ -461,7 +461,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 			return fmt.Sprintf("%d", value.AsUint64Raw(b))
 		}
 
-	case "ascii", "asciiz", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
+	case "ascii", "asciiz", "asciinl", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 		"rgb8":
 		res := fl.GetFieldValue(field).(string)
 		return presentStringValue(res)
@@ -629,16 +629,17 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 }
 
 func (fl *FileLayout) reportOverlappingData() string {
-	// XXX report overlapping bytes.
-
-	return ""
+	return "TODO: report overlapping bytes"
 }
 
 func (fl *FileLayout) reportUnmappedData() string {
+
 	res := ""
 	unmappedRanges := []dataRange{}
 	r := dataRange{offset: -1}
+	log.Info().Msgf("reportUnmappedData start")
 	for i := 0; i < int(fl.size); i++ {
+		// FIXME: isMappedByte is extremely slow !!!
 		if !fl.isMappedByte(uint64(i)) {
 			if r.offset == -1 {
 				r.offset = i
@@ -654,6 +655,7 @@ func (fl *FileLayout) reportUnmappedData() string {
 	if r.offset != -1 {
 		unmappedRanges = append(unmappedRanges, r)
 	}
+	log.Info().Msgf("reportUnmappedData unmappedRanges len %d", len(unmappedRanges))
 
 	maxBytesShown := 32
 	for _, ur := range unmappedRanges {

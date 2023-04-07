@@ -446,7 +446,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 			feng.Yellow("Reading until marker from %06x: marker % 02x\n", fl.offset, needle)
 
-			val, err := readBytesUntilMarker(r, 4096, needle)
+			val, err := readBytesUntilMarkerSequence(r, 4096, needle)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", label, fl.offset)
 			}
@@ -578,7 +578,23 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			fl.offset += len
 
 		case "asciiz":
-			val, err := readBytesUntilZero(r)
+			val, err := readBytesUntilMarkerByte(r, 0)
+			if err != nil {
+				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
+			}
+			len := uint64(len(val))
+			fs.Fields = append(fs.Fields, Field{
+				Offset:   fl.offset,
+				Length:   len,
+				Value:    val,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
+			fl.offset += len
+
+		case "asciinl":
+			val, err := readBytesUntilMarkerByte(r, '\n')
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -594,7 +610,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			fl.offset += len
 
 		case "utf16z":
-			val, err := readBytesUntilMarker(r, 2, []byte{0, 0})
+			val, err := readBytesUntilMarkerSequence(r, 2, []byte{0, 0})
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -760,7 +776,7 @@ func readBytes(r io.ReadSeeker, totalLength, unitLength uint64, endian string) (
 }
 
 // reads bytes from reader until 0x00 is found. returned data includes the terminating 0x00
-func readBytesUntilZero(r io.Reader) ([]byte, error) {
+func readBytesUntilMarkerByte(r io.Reader, marker byte) ([]byte, error) {
 
 	b := make([]byte, 1)
 
@@ -771,7 +787,7 @@ func readBytesUntilZero(r io.Reader) ([]byte, error) {
 			return nil, err
 		}
 		res = append(res, b[0])
-		if b[0] == 0x00 {
+		if b[0] == marker {
 			break
 		}
 	}
@@ -780,7 +796,7 @@ func readBytesUntilZero(r io.Reader) ([]byte, error) {
 
 // reads bytes from reader until the marker byte sequence is found. returned data excludes the marker
 // FIXME: won't find patterns overlapping chunks
-func readBytesUntilMarker(r *bytes.Reader, chunkSize int64, search []byte) ([]byte, error) {
+func readBytesUntilMarkerSequence(r *bytes.Reader, chunkSize int64, search []byte) ([]byte, error) {
 
 	if int(chunkSize) < len(search) {
 		panic("unlikely")

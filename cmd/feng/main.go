@@ -28,7 +28,7 @@ import (
 var args struct {
 	Filename    string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
 	Template    string `type:"existingfile" help:"Parse file using this template."`
-	ExtractDir  string `help:"Extract files to this directory."`
+	OutputDir   string `help:"Write files to this directory."`
 	Raw         bool   `help:"Show raw values"`
 	LocalTime   bool   `help:"Show timestamps in local timezone. Default is UTC."`
 	Brief       bool   `help:"Show brief file information."`
@@ -76,9 +76,9 @@ func main() {
 		return
 	}
 
-	if args.ExtractDir != "" {
+	if args.OutputDir != "" {
 		// write data streams to specified dir
-		err = os.MkdirAll(args.ExtractDir, os.ModePerm)
+		err = os.MkdirAll(args.OutputDir, os.ModePerm)
 		if err != nil {
 			log.Fatal().Err(err)
 		}
@@ -102,7 +102,7 @@ func main() {
 					// handle windows path separators
 					filename = strings.ReplaceAll(filename, "\\", string(os.PathSeparator))
 
-					fullName := filepath.Join(args.ExtractDir, filename)
+					fullName := filepath.Join(args.OutputDir, filename)
 
 					// TODO security: make sure that dirname is inside extract dir
 

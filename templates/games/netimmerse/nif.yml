@@ -1,0 +1,37 @@
+
+# STATUS: 5%
+#
+# NIF stands for "NetImmerse Format", which is a file type that was
+# created for the NetImmerse engine in 1997. This later morphed into
+# the Gamebryo Engine (used for Morrowind, Oblivion, and Fallout 3),
+# which in turn was the basis for the Creation Engine, used by games
+# such as Skyrim, Fallout 4, and Fallout 76.
+
+
+references:
+  - https://github.com/niftools/nifxml/blob/master/nif.xml
+
+kind: archive
+name: NetImmerse Format
+extensions: [.nif]
+endian: little
+
+magic: # XXX very weak magic, should not be enabled
+  - offset: 0000
+    match: c'NetImmerse File Format, Version '
+
+structs:
+  header:
+    ascii[32] Magic: ??
+    asciinl Version: ??
+      # 4.2.1.0: Futurama PS2
+    u8 Endian: ??
+    if self.Endian == 0:
+      endian: big
+
+    # TODO: some code for header is here:
+    # https://github.com/niftools/pyffi/blob/develop/pyffi/formats/nif/__init__.py#L1176
+    # https://github.com/niftools/niflib/blob/develop/src/gen/Header.cpp#L45
+
+layout:
+  - header Header

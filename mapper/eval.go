@@ -305,15 +305,44 @@ func (fl *FileLayout) evalSevenBitString(args ...interface{}) (interface{}, erro
 		}
 
 		// for each byte, remove high bit.
-		out := ""
+		out := []byte{}
 		for _, c := range val {
-			b := byte(c)
-			out += string(b & 0x7f)
+			out = append(out, c&0x7f)
 		}
 
-		return out, nil
+		return string(out), nil
 	}
 	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalBitSet(args ...interface{}) (interface{}, error) {
+	// 2 args: 1) field name 2) bit
+	// returns bool true if bit is set
+
+	if len(args) != 2 {
+		return nil, fmt.Errorf("expected exactly 2 argument")
+	}
+
+	v2, ok := args[1].(int)
+	if !ok {
+		return nil, fmt.Errorf("2nd arg: expected int, got %T", args[1])
+	}
+
+	if v2 > 7 {
+		return nil, fmt.Errorf("TODO: bitset() over bit 7")
+	}
+
+	if s, ok := args[0].(string); ok {
+		_, val, err := fl.GetValue(s, nil)
+		if err != nil {
+			panic(err)
+		}
+
+		res := (val[0])&(1<<(v2)) != 0
+		return res, nil
+	}
+
+	return nil, fmt.Errorf("1st arg: expected string, got %T", args[0])
 }
 
 func (fl *FileLayout) evalEither(args ...interface{}) (interface{}, error) {
@@ -466,6 +495,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["not"] = fl.evalNot
 	functions["either"] = fl.evalEither
 	functions["sevenbitstring"] = fl.evalSevenBitString
+	functions["bitset"] = fl.evalBitSet
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
 		if DEBUG_EVAL {
