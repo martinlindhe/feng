@@ -315,6 +315,30 @@ func (fl *FileLayout) evalSevenBitString(args ...interface{}) (interface{}, erro
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+func (fl *FileLayout) evalCleanString(args ...interface{}) (interface{}, error) {
+	// 1 arg: name of variable. return cleaned string value
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if s, ok := args[0].(string); ok {
+		_, val, err := fl.GetValue(s, nil)
+		if err != nil {
+			panic(err)
+		}
+
+		out := []byte{}
+		for _, c := range val {
+			if c == 0 {
+				break
+			}
+			out = append(out, c)
+		}
+
+		return string(out), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
 func (fl *FileLayout) evalBitSet(args ...interface{}) (interface{}, error) {
 	// 2 args: 1) field name 2) bit
 	// returns bool true if bit is set
@@ -496,6 +520,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["either"] = fl.evalEither
 	functions["sevenbitstring"] = fl.evalSevenBitString
 	functions["bitset"] = fl.evalBitSet
+	functions["cleanstring"] = fl.evalCleanString
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
 		if DEBUG_EVAL {

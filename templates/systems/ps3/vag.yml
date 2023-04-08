@@ -3,6 +3,7 @@
 # Audio format used on PS3
 #
 # Used in (confirmed):
+# - Futurama (2003, PS2): inside futurama.img: tons of .vag files
 # - God of War III (2010, PS3): inside PS3_GAME/USRDIR/STREAMS.PSARC
 
 references:

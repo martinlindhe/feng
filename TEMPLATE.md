@@ -103,7 +103,8 @@ not(self.Value, 4, 5) = true   returns true if self.Value is neither 4 or 5
 either(self.Value, 4, 5) = false   returns true if self.Value is either 4 or 5
 sevenbitstring(self.Filename) = "chars"  returns string value of input field as 7bit ascii (masking off bit7)
 bitset(self.Value, 7) = true   returns true if bit 7 of self.Value is set
-```
+cleanstring("self.Value") = "chars" cleans input ascii string, terminates at first nul byte
+
 
 # Data types
 

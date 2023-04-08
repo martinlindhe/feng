@@ -11,12 +11,12 @@
 references:
   - https://github.com/niftools/nifxml/blob/master/nif.xml
 
-kind: archive
+kind: game
 name: NetImmerse Format
-extensions: [.nif]
+extensions: [.nif, .ucf]
 endian: little
 
-magic: # XXX very weak magic, should not be enabled
+magic:
   - offset: 0000
     match: c'NetImmerse File Format, Version '
 
@@ -31,7 +31,6 @@ structs:
 
     # TODO: some code for header is here:
     # https://github.com/niftools/pyffi/blob/develop/pyffi/formats/nif/__init__.py#L1176
-    # https://github.com/niftools/niflib/blob/develop/src/gen/Header.cpp#L45
 
 layout:
   - header Header

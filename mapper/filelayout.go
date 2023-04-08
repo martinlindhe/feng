@@ -340,7 +340,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				for i := uint64(0); i < totalLength; i += unitLength {
 					val++
 					values = append(values, fmt.Sprintf("%d", b[i]))
-					if val >= 4 {
+					if i+unitLength < totalLength && val >= 4 {
 						skipRest = true
 						break
 					}
@@ -354,7 +354,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 					} else {
 						values = append(values, fmt.Sprintf("%d", binary.LittleEndian.Uint16(b[i:])))
 					}
-					if val >= 3 {
+					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
 						break
 					}
@@ -368,7 +368,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 					} else {
 						values = append(values, fmt.Sprintf("%d", binary.LittleEndian.Uint32(b[i:])))
 					}
-					if val >= 3 {
+					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
 						break
 					}
@@ -382,7 +382,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 					} else {
 						values = append(values, fmt.Sprintf("%d", binary.LittleEndian.Uint64(b[i:])))
 					}
-					if val >= 3 {
+					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
 						break
 					}
@@ -392,7 +392,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				for i := uint64(0); i < totalLength; i += unitLength {
 					val++
 					values = append(values, fmt.Sprintf("%d", int8(b[i])))
-					if val >= 4 {
+					if i+unitLength < totalLength && val >= 4 {
 						skipRest = true
 						break
 					}
@@ -406,7 +406,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 					} else {
 						values = append(values, fmt.Sprintf("%d", int16(binary.LittleEndian.Uint16(b[i:]))))
 					}
-					if val >= 3 {
+					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
 						break
 					}
@@ -420,7 +420,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 					} else {
 						values = append(values, fmt.Sprintf("%d", int32(binary.LittleEndian.Uint32(b[i:]))))
 					}
-					if val >= 3 {
+					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
 						break
 					}
@@ -434,7 +434,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 					} else {
 						values = append(values, fmt.Sprintf("%d", int64(binary.LittleEndian.Uint64(b[i:]))))
 					}
-					if val >= 3 {
+					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
 						break
 					}
@@ -921,7 +921,7 @@ func (fl *FileLayout) GetLength(s string, df *value.DataField) (int, error) {
 	return 0, fmt.Errorf("GetLength: '%s' not found", s)
 }
 
-// returns unitLength, totalLength
+// returns unitLength, totalLength (in bytes)
 func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64) {
 
 	unitLength := df.SingleUnitSize()
