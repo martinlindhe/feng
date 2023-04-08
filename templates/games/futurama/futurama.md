@@ -27,4 +27,10 @@ Contains text dialogues in different languages.
 
 ## .ful files
 
-Map related. TODO
+Level script file. TODO
+
+
+## .dbg files
+
+Map related. TODO see https://github.com/JayFoxRox/futurama-tools/blob/f879f533f6169c97d7ba5b8fcbd27a9666d9141e/disassemble_ful.py#L249
+

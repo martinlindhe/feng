@@ -1,0 +1,69 @@
+# STATUS: 5%
+#
+# Used in Futurama (2003 by Unique Development Studios) PS2, XBox
+
+references:
+  - https://github.com/JayFoxRox/futurama-tools/blob/master/disassemble_ful.py
+
+kind: game
+name: Futurama (ps2) ful
+extensions: [.ful]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'L2iM'
+
+structs:
+  header:
+    ascii[4] Magic: c'L2iM'
+
+    u32 Unk1: ?? # 0x012c (300 decimal)
+    u32 Model:
+      eq 00001401: PS2
+      eq 00001A0A: XBox
+    u32 Variable space size: ??
+    u32 Unk2: ?? # 0x0190 (400 decimal)
+    u32 Res1: ?? # 0
+    u32 Res2: ?? # 0
+    u32 Res3: ?? # 0
+    u32 ExitPoint address: ?? #
+    u32 Res4: ?? # 0
+
+  operation:
+    u8 unk1: ?? # Something to do with branching?
+    u8 unk2: ?? # Source line?
+    u8 unk3: ?? # Source file?
+    u8 OperationType:
+      eq 06: OP_06
+      eq 0b: OP_11
+      eq 12: OP_18
+      eq 16: OP_22
+      eq 1b: OP_27
+    if self.OperationType == OP_06:
+      label: '"OP_06"' # 1 args
+      u32 unk1_op06: ??
+    if self.OperationType == OP_11:
+      label: '"OP_11"' # 1 args
+      u32 unk1_op11: ??
+    if self.OperationType == OP_18:
+      label: '"OP_18"' # 2 args
+      u32 offset_op18: ??
+      u32 size_op18: ??
+    if self.OperationType == OP_22:
+      label: '"OP_22"' # 0 args
+    if self.OperationType == OP_27:
+      label: '"OP_27"' # 2 args
+      u32 unk1_op27: ??
+      u32 unk2_op27: ??
+
+
+
+layout:
+  - header Header
+  - operation Op1
+  - operation Op2
+  - operation Op3
+  - operation Op4
+  - operation Op5
+  - operation Op6
