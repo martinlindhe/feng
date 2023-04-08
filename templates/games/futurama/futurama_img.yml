@@ -15,12 +15,13 @@ software:
   - https://web.archive.org/web/20180724233625/https://ps23dformat.wikispaces.com/file/view/FutureramaPS2IMG.bms/485367210/FutureramaPS2IMG.bms
 
 kind: archive
-name: Futurama (ps2) archive
+name: Futurama (game) archive
 extensions: [.img]
 endian: little
 no_magic: true
 filenames: [ # TODO implement and auto match if no magic matches and exact filename match (case insensitive)
-  futurama.img, ntsc.img, ntsc0.img, # PS2 (US)
+  futurama.img, ntsc.img, ntsc0.img,  # PS2 (US)
+  FutNTSC0*.img, SysNTSC.img,         # XBox (US)   XXX FIXME allow wildcard in filename
 ]
 
 structs:
@@ -46,7 +47,7 @@ structs:
       #u8[alignment(len("self.DataSize"), 2048)] Padding: ??
       offset: restore
 
-    if OFFSET >= Header.End:
+    if OFFSET >= Header.EntryListSize:
       parse: stop
 
 layout:

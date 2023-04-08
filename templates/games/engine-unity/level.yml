@@ -1,0 +1,34 @@
+# STATUS: 1%
+#
+# the "level0" etc files
+# Files containing game scenes data, each scene has its own file
+
+# TODO MAX: need more samples
+
+kind: game
+name: Unity (engine) level
+endian: big # XXX
+
+filenames: [
+  level0, level1, globalgamemanagers
+]
+
+magic:
+  - offset: 0000
+    match: 00 00 11 5b # XXX guessing
+
+structs:
+  header:
+    u32 Magic: ??
+    u32 Unk: ??
+    u32 Unk: ?? # 20
+    u32 Unk: ??
+    u32 Unk: ?? # 0
+    ascii[12] Version: ?? # 2019.2.18f1
+    u16[2] Unk: ??
+    u16[2] Unk: ??
+    u16[2] Unk: ??
+    u16[2] Unk: ??
+
+layout:
+  - header Header

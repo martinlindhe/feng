@@ -1,0 +1,29 @@
+# STATUS: 5%
+#
+# Audio&Video format used in XBox
+
+references:
+  - https://wiki.multimedia.cx/index.php/XACT
+  - http://wiki.xentax.com/index.php/XACT_XWB_XSB_XGS_Audio#XSB
+
+software:
+  - ffmpeg
+
+kind: media
+name: XBox XMV media file
+extensions: [.xmv]
+endian: little
+
+magic:
+  - offset: 000c
+    match: c'xobX'
+
+structs:
+  header:
+    u16[2] Unk1: ??
+    u16[2] Unk2: ??
+    u16[2] Unk3: ??
+    ascii[4] Signature: c'xobX'
+
+layout:
+  - header Header

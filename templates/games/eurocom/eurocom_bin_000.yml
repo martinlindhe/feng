@@ -19,9 +19,7 @@ name: Eurocom BIN/000 resource
 extensions: [.bin]
 endian: big # XXX
 
-magic:
-  - offset: 0000
-    match: 00 00 # XXX weak magic.
+no_magic: true
 
 structs:
   header:

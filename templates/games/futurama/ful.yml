@@ -9,7 +9,7 @@ references:
   - https://github.com/JayFoxRox/futurama-tools/blob/master/disassemble_ful.py
 
 kind: game
-name: Futurama (ps2) Mi2L file
+name: Futurama (game) Mi2L file
 extensions: [.ful]
 endian: little
 
@@ -48,12 +48,12 @@ structs:
       eq 0a: OP_10
       eq 0b: OP_11
       eq 0e: OP_14
-      eq 0f: OP_15
-      eq 10: OP_16
-      eq 11: OP_17
-      eq 12: OP_18
+      eq 0f: OP_15 # branch?
+      eq 10: OP_16 # branch?
+      eq 11: OP_17 # branch?
+      eq 12: OP_18 # branch?
       eq 13: OP_19
-      eq 14: OP_20
+      eq 14: OP_20 # branch?
       eq 15: OP_21
       eq 16: OP_22
       eq 17: OP_23

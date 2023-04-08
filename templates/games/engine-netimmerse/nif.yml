@@ -24,7 +24,7 @@ structs:
   header:
     ascii[32] Magic: ??
     asciinl Version: ??
-      # 4.2.1.0: Futurama PS2
+      # 4.2.1.0: Futurama
     u8 Endian: ??
     if self.Endian == 0:
       endian: big

@@ -6,7 +6,7 @@ references:
   - https://github.com/JayFoxRox/futurama-tools/blob/master/inspect_ldb.py
 
 kind: game
-name: Futurama (ps2) ldb
+name: Futurama (game) ldb
 extensions: [.ldb]
 endian: little
 

@@ -3,7 +3,7 @@
 
 ## .fnt files
 
-Fonts: PS2 (US) version has fonttool.exe, readme.txt (fonttool doc), raw2bit.exe and input images such as latin1.tga inside futurama.img.
+Fonts: PS2 (US) and XBox (US) version has fonttool.exe, readme.txt (fonttool doc), raw2bit.exe and input images such as latin1.tga inside futurama.img or SysNTSC.img.
 
 .fnt format code here: https://github.com/JayFoxRox/futurama-tools/blob/master/inspect_fnt.py
 
@@ -27,7 +27,7 @@ Contains text dialogues in different languages.
 
 ## .ful files
 
-Level script file. TODO
+Level script file.
 
 
 ## .dbg files
