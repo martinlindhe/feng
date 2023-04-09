@@ -12,7 +12,7 @@ references:
 kind: game
 name: Snowdrop file archive TOC
 endian: little
-extension: [.sdftoc]
+extensions: [.sdftoc]
 
 magic:
   - offset: 0000

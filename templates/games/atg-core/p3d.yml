@@ -11,17 +11,16 @@ references:
   - https://forum.xentax.com/viewtopic.php?t=3537
 
 kind: game archive
-name: Prototype p3d archive
-#endian: big
-extension: [.p3d]
+name: p3d archive
+extensions: [.p3d]
 
 magic:
   - offset: 0000
-    match: ff c'D3P'
-    endian: big
-  - offset: 0000
     match: c'P3D' ff
     endian: little
+  - offset: 0000
+    match: ff c'D3P'
+    endian: big
 
 structs:
   header:

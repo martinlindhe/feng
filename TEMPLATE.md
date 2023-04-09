@@ -65,6 +65,17 @@ structs:
       endian: little
 ```
 
+You can also set endianness in the magic match block:
+
+```yaml
+magic:
+  - offset: 0000
+    match: c'P3D' ff
+    endian: little
+  - offset: 0000
+    match: ff c'D3P'
+    endian: big
+```
 
 
 # Pre-defined values

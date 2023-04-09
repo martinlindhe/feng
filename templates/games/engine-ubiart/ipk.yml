@@ -1,0 +1,73 @@
+# STATUS: 50%
+# EXTRACTS files but don't handle compression
+
+# Internal file from UbiArt Framework engine
+#
+# Used in:
+# Child of Light (2014)
+# Rayman Legends?
+# Rayman Origins
+
+# TODO MAX: what compression is used?
+# TODO MAX: combine folder + filename to output name
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=11475
+
+kind: game
+name: UbiArt Framework engine archive
+extensions: [.ipk]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'P' ec 12 ba
+
+structs:
+  header:
+    ascii[4] Magic: ??
+    u32 Unk1: ?? # 7
+    u32 Unk2: ?? # 4
+    u32 BASE_OFF: ??
+    u32 Unk3: ?? # maybe offset
+    u32 Unk4: ?? # 0
+    u32 Unk5: ?? # 1
+    u32 Unk6: ?? # 1
+    u32 Unk7: ?? # 0
+    u32 Unk8: ?? # checksum ?
+    u32 Unk9: ??  # 0
+    u32 Unk10: ?? # 0
+    u32 Unk11: ?? # 0
+    u32 FilesCount: ??
+
+  file:
+    u32 Type: # XXX maybe flags
+      eq 01: TYPE_01
+      eq 02: TYPE_02
+    u32 Size: ??
+    u32 CompressedSize: ??
+    u64 Timestamp: ??
+    u64 Offset: ??
+    if self.Type == TYPE_02:
+      u32 Unk4: ??
+      u32 Unk5: ??
+    u32 FolderNameSize: ??
+    ascii[self.FolderNameSize] FolderName: ??
+    u32 NameSize: ??
+    ascii[self.NameSize] Name: ??
+    u32 Unk6: ?? # checksum?
+    u32 Unk7: ?? # 0
+
+    filename: self.Name
+
+    offset: self.Offset
+    if self.CompressedSize == 0:
+      raw:u8[self.Size] Data: ??
+    else:
+      # TODO XXX what compression form?
+      raw:u8[self.CompressedSize] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - file[] File

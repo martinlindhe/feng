@@ -21,7 +21,7 @@ references:
 kind: game archive
 name: ATG Core Cement Library
 endian: big
-extension: [.rcf]
+extensions: [.rcf]
 
 magic:
   - offset: 0000

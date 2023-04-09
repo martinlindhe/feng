@@ -16,7 +16,7 @@ references:
 kind: game
 name: Snowdrop file archive
 endian: little
-extension: [.sdfdata]
+extensions: [.sdfdata]
 
 magic:
   - offset: 0000

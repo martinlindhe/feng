@@ -14,7 +14,7 @@ software:
 
 kind: executable
 name:  Mach-O executable
-extension: [.o, .dylib]
+extensions: [.o, .dylib]
 endian: little
 
 magic:
