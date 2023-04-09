@@ -1,0 +1,75 @@
+# STATUS: 60%
+
+# Used in:
+
+# Scarface: The World is Yours
+# Prototype (PS3)
+# Crash Tag Team Racing
+# The Simpsons: Road Rage
+# The Incredible Hulk: Ultimate Destruction (XBOX / PS2)
+# Crash Mind Over Mutant (PSP)
+# Crash Tag Team Racing (PSP)
+
+# TODO MAX: map names table with files table to set output filenames
+# TODO: fix alignment block to mark data padding for 100% mapping
+
+references:
+  - https://wiki.xentax.com/index.php/ATG_Core_Cement_Library_RCF
+  - http://aluigi.zenhax.com/bms/atg_core_cement.bms
+  - SIMILAR https://wiki.xentax.com/index.php/Radcore_Cement_Library_RCF
+
+kind: game archive
+name: ATG Core Cement Library
+endian: big
+extension: [.rcf]
+
+magic:
+  - offset: 0000
+    match: c'ATG CORE CEMENT LIBRARY' 00
+
+structs:
+  header:
+    ascii[24] Magic: c'ATG CORE CEMENT LIBRARY' 00
+    u32 Unk1: ??  # 0
+    u32 Unk2: ??  # 0
+    u32 Unk3: ?? 02 01 01 01
+    u32 FilesOffset: ??
+
+    u32 Infoz: ??
+    u32 NamesOffset: ??
+    u32 NamesSize: ??
+    u32 Reserved: ?? # 0
+    u32 FilesCount: ??
+    offset: self.FilesOffset
+
+  file:
+    u32 Checksum: ?? # crc ?
+    u32 Offset: ??
+    u32 DataSize: ??
+    offset: self.Offset
+    raw:u8[self.DataSize] Data: ??
+    #u8[alignment(self.DataSize, 2048)] Padding: ?? # XXX dont work??
+    offset: restore
+
+  jump_to_names:
+    offset: Header.NamesOffset
+
+  name_header:
+    endian: little
+    u32 Unk1: ?? # 2048
+    u32 Unk2: ?? # 0
+
+  name:
+    u32 Unk1: ?? # checksum?
+    u32 Unk2: ?? # flag?       2048
+    u32 Unk3: ?? # 0
+    u32 NameLength: ??
+    ascii[self.NameLength - 1] Name: ??
+    u32 Unk4: ?? # 0
+
+layout:
+  - header Header
+  - file[Header.FilesCount] File
+  - jump_to_names Hack1
+  - name_header NameHeader
+  - name[Header.FilesCount] Name
