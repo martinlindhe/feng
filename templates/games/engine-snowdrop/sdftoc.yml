@@ -21,11 +21,11 @@ magic:
 structs:
   header:
     ascii[4] Magic: c'WEST'
-    u32 Version: ?? # 0x16 in South Park: The Fractured But Whole
+    u32 Version: ?? # 0x16 in South Park: The Fractured But Whole, Tom Clancy's The Division (steam trial)
     u32 UncompressedSize: ??
     if self.Version >= 0x17:
       u32 OFFSET: ??
-      data: unseen # XXX need sample from The Division
+      data: unseen # XXX need sample
     u32 CompressedSize: ??
 
     offset: FILE_SIZE - 0x30 - self.CompressedSize

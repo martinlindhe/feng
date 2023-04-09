@@ -27,7 +27,7 @@ const (
 )
 
 var (
-	ParseStopError = errors.New("manual parse stop")
+	ErrParseStop = errors.New("manual parse stop")
 )
 
 func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
@@ -70,7 +70,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 				}
 				df.Label = baseLabel
 
-				if errors.Is(err, ParseStopError) {
+				if errors.Is(err, ErrParseStop) {
 					if DEBUG_MAPPER {
 						log.Print("reached ParseStop")
 					}
@@ -129,14 +129,18 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 }
 
 // produces a list of fields with offsets and sizes from input reader based on data structure
-func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
+func MapReader(r io.Reader, ds *template.DataStructure, endian string) (*FileLayout, error) {
 
 	ext := ""
 	if len(ds.Extensions) > 0 {
 		ext = ds.Extensions[0]
 	}
 
-	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: ds.Endian, Extension: ext}
+	if endian == "" {
+		endian = ds.Endian
+	}
+
+	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext}
 
 	// read all data to get the total length
 	b, _ := io.ReadAll(r)
@@ -162,7 +166,7 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 }
 
 var (
-	mapFileMatchedError = errors.New("matched file")
+	errMapFileMatched = errors.New("matched file")
 )
 
 func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileLayout, err error) {
@@ -183,7 +187,7 @@ func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileL
 		return nil, fmt.Errorf("%s: %s", templateFileName, err.Error())
 	}
 
-	fl, err = MapReader(r, ds)
+	fl, err = MapReader(r, ds, "")
 	fl.DataFileName = filename
 	if err != nil {
 		feng.Red("MapReader: %s: %s\n", templateFileName, err.Error())
@@ -237,6 +241,7 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 
 		// skip if no magic bytes matches
 		found := false
+		endian := ""
 		for _, m := range ds.Magic {
 			_, err = r.Seek(int64(m.Offset), io.SeekStart)
 			if err != nil {
@@ -246,6 +251,8 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 			_, _ = r.Read(b)
 			if bytes.Equal(m.Match, b) {
 				found = true
+				endian = m.Endian
+				break
 			}
 		}
 		if !found {
@@ -257,7 +264,7 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 
 		r.Reset(data)
 
-		fl, err = MapReader(r, ds)
+		fl, err = MapReader(r, ds, endian)
 		fl.DataFileName = filename
 		if err != nil {
 			// template don't match, try another
@@ -269,11 +276,11 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 		}
 		if len(fl.Structs) > 0 {
 			log.Printf("Parsed %s as %s", filename, tpl)
-			return mapFileMatchedError
+			return errMapFileMatched
 		}
 		return nil
 	})
-	if errors.Is(err, mapFileMatchedError) {
+	if errors.Is(err, errMapFileMatched) {
 		return fl, nil
 	}
 	if err != nil {
@@ -367,7 +374,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				log.Fatal().Msgf("invalid parse value '%s'", es.Pattern.Value)
 			}
 			//log.Println("-- PARSE STOP --")
-			return ParseStopError
+			return ErrParseStop
 
 		case "endian":
 			// change endian
@@ -399,7 +406,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 
 			fl.offsetChanges++
-			if fl.offsetChanges > 5000 {
+			if fl.offsetChanges > 20000 {
 				panic("debug recursion: too many offset changes from template")
 				//return fmt.Errorf("too many offset changes from template")
 			}

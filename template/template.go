@@ -363,6 +363,7 @@ func (t *Template) evaluateLayout() ([]value.DataField, error) {
 type Magic struct {
 	Offset HexStringU64
 	Match  HexString
+	Endian string
 }
 type HexString []byte
 
