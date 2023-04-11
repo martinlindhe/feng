@@ -69,7 +69,7 @@ layout:
 		0xef, 0x65, 0x5e, 0x52, // TimeT_32_LE
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -158,7 +158,7 @@ layout:
 	}
 
 	for _, tt := range test {
-		fl, err := MapReader(bytes.NewReader(tt.in), ds)
+		fl, err := MapReader(bytes.NewReader(tt.in), ds, "")
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -185,7 +185,7 @@ layout:
 	data := []byte{
 		0b1100_0111, // Bitfield
 	}
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -223,7 +223,7 @@ layout:
 	data := []byte{
 		0xff, 0xff, // Bitfield
 	}
-	ff, err := MapReader(bytes.NewReader(data), ds)
+	ff, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -286,7 +286,7 @@ layout:
 	}
 
 	for _, tt := range test {
-		fl, err := MapReader(bytes.NewReader(tt.in), ds)
+		fl, err := MapReader(bytes.NewReader(tt.in), ds, "")
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -313,7 +313,7 @@ layout:
 		0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, // Data
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	s, err := fl.ExpandVariables("Header.Field.Size", &fl.Structs[0].Fields[0].Format)
@@ -350,7 +350,7 @@ layout:
 		0x44, 0x55, // Data
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -395,7 +395,7 @@ layout:
 		0xee, // FourConstant
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -472,7 +472,7 @@ layout:
 	}
 
 	for _, tt := range test {
-		fl, err := MapReader(bytes.NewReader(tt.in), ds)
+		fl, err := MapReader(bytes.NewReader(tt.in), ds, "")
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -505,7 +505,7 @@ layout:
 		0xbb, // HighSet
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -541,7 +541,7 @@ layout:
 		'f', 'o', 'o', 0x00, // Name
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -573,7 +573,7 @@ layout:
 		'f', 0x00, 'o', 0x00, 'o', 0x00, // Name
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -607,7 +607,7 @@ layout:
 		0x90, 0x91, // Block #2
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,

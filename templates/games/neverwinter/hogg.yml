@@ -38,12 +38,21 @@ structs:
     u8[self.operationJournalSize] OperationJournal: ??
     u8[self.dataListJournalSize] DataListJournal: ??
 
-    u8[self.fileListSize] fileList: ?? # XXX contains all of the file entries
+#    u8[self.fileListSize] fileList: ?? # XXX contains all of the file entries
 
-    u8[self.attributeListSize] attributeList: ?? # XXX contains all the attribute entries
+#    u8[self.attributeListSize] attributeList: ?? # XXX contains all the attribute entries
 
-
+  file:
+    u64 Offset: ??
+    u32 Size: ??
+    u32 Timestamp: ??
+    u32 Checksum: ??
+    u32 Unknown4: ??
+    u16 Unknown5: ??
+    u16 Unknown6: ??
+    u32 AttributeId: ??
 
 layout:
   - header Header
+  - file File
 

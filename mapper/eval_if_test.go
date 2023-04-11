@@ -28,7 +28,7 @@ layout:
 		0xff, // TypeOne
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -59,7 +59,7 @@ layout:
 		0xff, // data
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -92,7 +92,7 @@ layout:
 		0xff, // TypeOne
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -124,7 +124,7 @@ layout:
 		0xff, // TypeOne
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -161,7 +161,7 @@ layout:
 		0xff, // TypeOne
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header

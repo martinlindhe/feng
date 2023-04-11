@@ -36,7 +36,7 @@ func TestFieldPresent(t *testing.T) {
 		{"  [000000] Signed                         i64 le           -1                             ff ff ff ff ff ff ff ff\n", Field{Length: 0x8, Value: []uint8{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}, Endian: "little", Format: value.DataField{Kind: "i64", Slice: false, Label: "Signed"}}},
 	}
 	for _, h := range test {
-		assert.Equal(t, h.expected, fl.presentField(&h.field, true))
+		assert.Equal(t, h.expected, fl.presentField(&h.field, &PresentFileLayoutConfig{ShowRaw: true}))
 	}
 }
 
@@ -69,7 +69,7 @@ layout:
 		0xbb, 0xaa, // Extra
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	// Header
@@ -98,7 +98,7 @@ layout:
 	assert.Equal(t, []byte{5}, val)
 
 	// assert that "u8[FILE_SIZE - OFFSET]" evaluates to u8[6-4] == u8[2] (all remaining bytes)
-	assert.Equal(t, "  [000004] Extra                          u8[2]                                  bb aa\n", fl.presentField(&fl.Structs[1].Fields[2], false))
+	assert.Equal(t, "  [000004] Extra                          u8[2]                                  bb aa\n", fl.presentField(&fl.Structs[1].Fields[2], &PresentFileLayoutConfig{}))
 	_, val, err = fl.GetValue("self.Extra", &ds.Layout[1])
 	assert.Equal(t, nil, err)
 	assert.Equal(t, []byte{0xbb, 0xaa}, val)
@@ -126,7 +126,7 @@ layout:
 		0xff, 0xfe, // Padding
 	}
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(bytes.NewReader(data), ds, "")
 	assert.Equal(t, nil, err)
 
 	// Header
