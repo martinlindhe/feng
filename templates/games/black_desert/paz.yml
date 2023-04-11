@@ -1,0 +1,53 @@
+# STATUS: 20%
+
+# Used in Black Desert Online
+#
+# This file type is related to a pad0000.meta file too
+
+# TODO: decrypt the string table?
+
+references:
+  - http://aluigi.org/papers/bms/others/blackdesert.bms
+  - https://forum.xentax.com/viewtopic.php?t=10879
+
+software:
+  - https://github.com/kukdh1/PAZ-Unpacker
+
+kind: game
+name: Black Desert paz
+extensions: [.paz]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 ID: ?? # unique hash, can be found in index for directories and file names
+    u32 EntryCount: ??
+    u32 StringTableSize: ?? # 88
+
+  entry:
+    u32 FileHash: ?? # ID
+    u32 Reserved: ?? # 0
+    u32 FileNum: ??
+    u32 Offset: ??
+    u32 Size: ??
+    u32 UncompressedSize: ??
+
+    offset: self.Offset
+    # XXX add support for this: use to decrypt !
+    # TODO: uses "ice" encryption, see https://github.com/kukdh1/PAZ-Unpacker/blob/master/Crypt.cpp
+
+    # old encryption:
+    #encryption: aes_128_cbc F3 A1 0D F2 47 CC 30 C5 EB 11 12 AE 07 01 52 13
+
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+  string_table:
+    u8[Header.StringTableSize] Data: ?? # XXX encrypted
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry
+  - string_table StringTable

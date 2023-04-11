@@ -190,6 +190,15 @@ pattern matching data types
   until: u8 scanData ff d9            maps all bytes to scanData until marker is seen (images/jpeg)
 
 
+# Encryption
+Mark an area to be decrypted.
+
+```yaml
+    u32 Size: ??
+    encryption: aes_128_cbc 00 11 22 33 44 55 66 77 00 11 22 33 44 55 66 77
+    encrypted:u8[self.Size] Data: ??
+```
+
 # Evaluate string keys to labels
 
 ```yaml

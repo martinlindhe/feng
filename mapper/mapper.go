@@ -381,6 +381,34 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			fl.endian = es.Pattern.Value
 			log.Debug().Msgf("Endian set to '%s' at %06x", fl.endian, fl.offset)
 
+		case "encryption":
+			matches := strings.SplitN(es.Pattern.Value, " ", 2)
+			if len(matches) != 2 {
+				log.Fatal().Msgf("encryption: invalid value '%s'", es.Pattern.Value)
+			}
+
+			key, err := value.ParseHexString(matches[1])
+			if err != nil {
+				log.Fatal().Err(err).Msgf("can't parse encryption key hex string '%s'", matches[1])
+			}
+
+			hashSize := map[string]byte{
+				"aes_128_cbc": 16,
+			}
+
+			fl.encryptionMethod = matches[0]
+			fl.encryptionKey = key
+
+			if val, ok := hashSize[fl.encryptionMethod]; ok {
+				if len(key) != int(val) {
+					log.Fatal().Err(err).Msgf("encryption: key for %s must be %d bytes long, %d found", fl.encryptionMethod, val, len(key))
+				}
+			} else {
+				log.Fatal().Msgf("encryption: unknown method '%s'", fl.encryptionMethod)
+			}
+
+			log.Info().Msgf("Encryption set to '%s' at %06x", fl.encryptionMethod, fl.offset)
+
 		case "filename":
 			// record filename to use for the next data output operation
 			fl.filename, err = fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
@@ -479,8 +507,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			"ascii", "utf16",
 			"rgb8",
 			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
-			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip",
-			"raw:u8":
+			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
+			"compressed:lzf", "compressed:zlib", "compressed:gzip",
+			"raw:u8", "encrypted:u8":
 			// internal data types
 			log.Debug().Msgf("expandChildren type %s: %s (child of %s)", es.Field.Kind, es.Field.Label, dfParent.Label)
 			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")

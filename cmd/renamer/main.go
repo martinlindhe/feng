@@ -53,7 +53,7 @@ func main() {
 				return err
 			}
 
-			fl, err := mapper.MapReader(r, ds)
+			fl, err := mapper.MapReader(r, ds, "")
 			r.Close()
 			if err != nil {
 				// template don't match, try another
@@ -67,7 +67,7 @@ func main() {
 			return nil
 		})
 		if err != nil {
-			log.Fatal().Err(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 
 		ext := filepath.Ext(tpl)
@@ -81,14 +81,14 @@ func main() {
 				feng.Red("RENAMING %s => %s\n", tpl, newName)
 				oldName, err := filepath.Abs(tpl)
 				if err != nil {
-					log.Fatal().Err(err)
+					log.Fatal().Err(err).Msgf("failed")
 				}
 				newName, err = filepath.Abs(newName)
 				if err != nil {
-					log.Fatal().Err(err)
+					log.Fatal().Err(err).Msgf("failed")
 				}
 				if err := os.Rename(oldName, newName); err != nil {
-					log.Fatal().Err(err)
+					log.Fatal().Err(err).Msgf("failed")
 				}
 			} else {
 				feng.Red("WRONG EXT %s: %s\n", tpl, extensions[0])
@@ -104,6 +104,6 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msgf("failed")
 	}
 }

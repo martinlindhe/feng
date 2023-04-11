@@ -1,15 +1,16 @@
-# STATUS: 5%
+# STATUS: 70%
 
 # In-house format used by Cryptic Studios
 
 # Used in:
 # Star Trek Online
-# Neverwinter (PC MMORPG), version 10
+# Neverwinter (PC MMORPG), version 10. confirmed works
 # Magic: Legends
 # Pirates of the Burning Sea
 
+# TODO: improve output names
+
 references:
-  - http://aluigi.org/papers/bms/hogg.bms
   - https://github.com/gibbed/Gibbed.Cryptic/blob/main/projects/Gibbed.Cryptic.FileFormats/HogFile.cs
 
 software:
@@ -38,21 +39,37 @@ structs:
     u8[self.operationJournalSize] OperationJournal: ??
     u8[self.dataListJournalSize] DataListJournal: ??
 
-#    u8[self.fileListSize] fileList: ?? # XXX contains all of the file entries
-
-#    u8[self.attributeListSize] attributeList: ?? # XXX contains all the attribute entries
-
   file:
     u64 Offset: ??
-    u32 Size: ??
-    u32 Timestamp: ??
+    i32 Size: ??
+    time_t_32 Timestamp: ??
     u32 Checksum: ??
-    u32 Unknown4: ??
-    u16 Unknown5: ??
-    u16 Unknown6: ??
-    u32 AttributeId: ??
+    u32 Unknown4: ??  # 0
+    i16 Unknown5: ??  # -2
+    u16 Unknown6: ??  # 0
+    u32 Attribute: ?? # 0 = uncompressed. 1 = compressed?
+    if self.Offset != 0:
+      offset: self.Offset
+      if self.Attribute == 0:
+        raw:u8[self.Size] Data: ??
+      else:
+        compressed:zlib[self.Size] Data: ??
+      offset: restore
+
+    if OFFSET >= (0x18 + Header.operationJournalSize + Header.dataListJournalSize + Header.fileListSize):
+      parse: stop
+
+  attribute:
+    u32 NameId: ??
+    i32 HeaderDataId: ??
+    u32 UncompressedSize: ??
+    u32 Flags: ??
+
+    if OFFSET >= (0x18 + Header.operationJournalSize + Header.dataListJournalSize + Header.fileListSize + Header.attributeListSize):
+      parse: stop
 
 layout:
   - header Header
-  - file File
+  - file[] File
+  - attribute[] Attribute
 

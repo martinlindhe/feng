@@ -33,19 +33,19 @@ func main() {
 
 	data, err := ioutil.ReadFile(args.Filename)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msgf("failed")
 	}
 
 	referenceRoot := "./smoketest/reference"
 
 	err = os.RemoveAll(referenceRoot)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msgf("failed")
 	}
 
 	smoketests, err := smoketest.UnmarshalData(data)
 	if err != nil {
-		log.Fatal().Err(err)
+		log.Fatal().Err(err).Msgf("failed")
 	}
 	filenames := smoketests.GenerateFilenames(filepath.Dir(args.Filename))
 
@@ -91,12 +91,12 @@ func main() {
 
 		err = os.MkdirAll(path, os.ModePerm)
 		if err != nil {
-			log.Fatal().Err(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 		feng.Green("WRITE ROOT %s, out %s, full %s\n", referenceRoot, entry.Out, filename)
 		err = ioutil.WriteFile(filename, []byte(data), 0644)
 		if err != nil {
-			log.Fatal().Err(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 	}
 

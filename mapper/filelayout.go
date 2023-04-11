@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"bytes"
+	"crypto/aes"
 	"encoding/binary"
 	"fmt"
 	"math"
@@ -59,6 +60,12 @@ type FileLayout struct {
 
 	// present datetimes in UTC
 	inUTC bool
+
+	// current encryption method
+	encryptionMethod string
+
+	// current encryption key
+	encryptionKey []byte
 }
 
 // pop last offset from previousOffsets list
@@ -75,6 +82,40 @@ func (fl *FileLayout) popLastOffset() (v uint64) {
 func (fl *FileLayout) pushOffset() uint64 {
 	fl.previousOffsets = append(fl.previousOffsets, fl.offset)
 	return fl.offset
+}
+
+func (fl *FileLayout) DecryptData(encData []byte) ([]byte, error) {
+	switch fl.encryptionMethod {
+	case "aes_128_cbc":
+		return decryptCBC(fl.encryptionKey, encData)
+	}
+	return nil, fmt.Errorf("unknown encryption method '%s'", fl.encryptionMethod)
+}
+
+func decryptCBC(key, cipherText []byte) (plaintext []byte, err error) {
+
+	c, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	decrypted := make([]byte, len(cipherText))
+	c.Decrypt(decrypted, cipherText)
+
+	/*
+
+		iv := make([]byte, 16) // 0:s
+
+		//if len(cipherText)%aes.BlockSize != 0 {
+		//	panic("cipherText is not a multiple of the block size")
+		//}
+
+		decrypted := make([]byte, aes.BlockSize+len(cipherText))
+
+		mode := cipher.NewCBCDecrypter(block, iv)
+		mode.CryptBlocks(decrypted, cipherText)
+	*/
+	return cipherText, nil
+
 }
 
 // parsed file data section from a template "struct"
@@ -146,7 +187,9 @@ func shortFloat(f float32) string {
 func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	b := field.Value
 	switch field.Format.Kind {
-	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "raw:u8":
+	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
+		"compressed:lzf", "compressed:zlib", "compressed:gzip",
+		"raw:u8", "encrypted:u8":
 		return ""
 
 	case "f32":
@@ -290,7 +333,9 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 	// XXX a lot of stuff is re-evaluated here, should reuse data from parsing
 	b := field.Value
 	switch field.Format.Kind {
-	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "raw:u8":
+	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
+		"compressed:lzf", "compressed:zlib", "compressed:gzip",
+		"raw:u8", "encrypted:u8":
 		return ""
 
 	case "f32":
@@ -949,7 +994,7 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 		rangeLength = uint64(df.RangeVal)
 
 		if err != nil {
-			log.Fatal().Err(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 	}
 	totalLength := unitLength * uint64(rangeLength)

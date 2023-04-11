@@ -28,7 +28,7 @@ import (
 var args struct {
 	Filename    string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
 	Template    string `type:"existingfile" help:"Parse file using this template."`
-	OutputDir   string `help:"Write files to this directory."`
+	OutDir      string `help:"Write files to this directory."`
 	Raw         bool   `help:"Show raw values"`
 	LocalTime   bool   `help:"Show timestamps in local timezone. Default is UTC."`
 	Brief       bool   `help:"Show brief file information."`
@@ -55,7 +55,7 @@ func main() {
 	if args.CPUProfile != "" {
 		f, err := os.Create(args.CPUProfile)
 		if err != nil {
-			log.Fatal().Err(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 		defer f.Close()
 		if err := pprof.StartCPUProfile(f); err != nil {
@@ -77,11 +77,11 @@ func main() {
 		return
 	}
 
-	if args.OutputDir != "" {
+	if args.OutDir != "" {
 		// write data streams to specified dir
-		err = os.MkdirAll(args.OutputDir, os.ModePerm)
+		err = os.MkdirAll(args.OutDir, os.ModePerm)
 		if err != nil {
-			log.Fatal().Err(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 
 		for _, layout := range fl.Structs {
@@ -92,7 +92,7 @@ func main() {
 					filename = field.Filename
 				}
 				switch field.Format.Kind {
-				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "compressed:deflate", "raw:u8":
+				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "compressed:deflate", "raw:u8", "encrypted:u8":
 					if filename == "" {
 						filename = fmt.Sprintf("stream_%08x", field.Offset)
 					} else {
@@ -103,7 +103,7 @@ func main() {
 					// handle windows path separators
 					filename = strings.ReplaceAll(filename, "\\", string(os.PathSeparator))
 
-					fullName := filepath.Join(args.OutputDir, filename)
+					fullName := filepath.Join(args.OutDir, filename)
 
 					// TODO security: make sure that dirname is inside extract dir
 
@@ -111,7 +111,7 @@ func main() {
 
 					err = os.MkdirAll(fullDirName, 0755)
 					if err != nil {
-						log.Fatal().Err(err)
+						log.Fatal().Err(err).Msgf("failed to create directory '%s'", fullDirName)
 					}
 
 					log.Info().Msgf("%s.%s %s: Extracting data stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
@@ -198,6 +198,13 @@ func main() {
 							continue
 						}
 						b.Write(field.Value)
+
+					case "encrypted:u8":
+						dec, err := fl.DecryptData(field.Value)
+						if err != nil {
+							log.Error().Err(err).Msgf("decryption failed")
+						}
+						b.Write(dec)
 
 					default:
 						panic(field.Format.Kind) // unreachable

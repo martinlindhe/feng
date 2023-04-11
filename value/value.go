@@ -316,7 +316,7 @@ func SingleUnitSize(kind string) uint64 {
 		"compressed:zlib",
 		"compressed:gzip",
 		"compressed:deflate",
-		"raw:u8":
+		"raw:u8", "encrypted:u8":
 		return 1
 	case "u16", "i16", "utf16", "utf16z",
 		"dostime", "dosdate":
@@ -428,7 +428,8 @@ func AsInt64(kind string, b []byte) int64 {
 func (format DataField) Present(b []byte, endian string) string {
 	// TODO DEPRECATE. instead use fl.PresentFieldValue()
 	switch format.Kind {
-	case "compressed:deflate", "compressed:lz4", "compressed:lzss", "compressed:zlib", "raw:u8":
+	case "compressed:deflate", "compressed:lz4", "compressed:lzss", "compressed:zlib",
+		"raw:u8", "encrypted:u8":
 		return ""
 
 	case "u8", "u16", "u32", "u64":
