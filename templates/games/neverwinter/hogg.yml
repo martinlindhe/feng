@@ -1,0 +1,49 @@
+# STATUS: 5%
+
+# In-house format used by Cryptic Studios
+
+# Used in:
+# Star Trek Online
+# Neverwinter (PC MMORPG), version 10
+# Magic: Legends
+# Pirates of the Burning Sea
+
+references:
+  - http://aluigi.org/papers/bms/hogg.bms
+  - https://github.com/gibbed/Gibbed.Cryptic/blob/main/projects/Gibbed.Cryptic.FileFormats/HogFile.cs
+
+software:
+  - https://github.com/gibbed/Gibbed.Cryptic
+
+kind: media
+name: Neverwinter hogg archive
+extensions: [.hogg]
+
+magic:
+  - offset: 0000
+    match: 0d f0 ad de
+    endian: little
+
+structs:
+  header:
+    u8[4] Signature: 0d f0 ad de
+    u16 Version: ?? # 10 or 11
+
+    u16 operationJournalSize: ??
+    u32 fileListSize: ??
+    u32 attributeListSize: ??
+    u32 dataListFileNumber: ??
+    u32 dataListJournalSize: ??
+
+    u8[self.operationJournalSize] OperationJournal: ??
+    u8[self.dataListJournalSize] DataListJournal: ??
+
+    u8[self.fileListSize] fileList: ?? # XXX contains all of the file entries
+
+    u8[self.attributeListSize] attributeList: ?? # XXX contains all the attribute entries
+
+
+
+layout:
+  - header Header
+

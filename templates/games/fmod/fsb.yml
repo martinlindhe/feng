@@ -1,0 +1,79 @@
+# STATUS: 10%
+
+# FMOD FSB audio format used in many games
+
+# Used in for example:
+# Crysis (PS3), FSB4
+# Dark Souls III
+
+# TODO MAX: file data comes after file entries, need to match together somehow
+
+references:
+  - https://wiki.xentax.com/index.php/FMOD_Audio_FSB
+  - http://aluigi.altervista.org/bms/dump_fsbs.bms
+
+software:
+  - https://github.com/gdawg/fsbext
+  - http://aezay.dk/aezay/fsbextractor/
+
+kind: audio
+name: FMOD sample bank
+extensions: [.fsb]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'FSB'
+
+structs:
+  header:
+    ascii[3] Magic: ??
+    u8 Version:
+      eq c'4': V4
+      eq c'5': V5
+
+    if self.Version == V4:
+      u32 FileCount: ??
+      u32 DirectoryLength: ??
+      u32 DataLength: ??
+      u32 ExtendedVersion: ??
+      u32 Flags: ??
+      u8[8] MaybeTimestamp: ??
+      u8[16] MaybeHash: ??
+
+    if self.Version == V5: # XXX incorrect
+      u32 ExtendedVersion: ?? # ?
+      u32 FileCount: ??
+      u32 DirectoryLength: ??
+      u32 NameSize: ??
+      u32 DataLength: ??
+      u32 Flags: ??
+      u8[8] MaybeTimestamp: ??
+      u8[16] MaybeHash: ??
+      u8[8] Unknown: ??
+
+  file:
+    u16 EntrySize: ??
+    ascii[30] Name: ??
+    u32 SamplesLength: ??
+    u32 CompressedSize: ??
+    u32 LoopStart: ??
+    u32 LoopEnd: ??
+    u32 Mode: ??
+    u32 Frequency: ??
+    u16 Volume: ??
+    u16 Pan: ??
+    u16 Pri: ??
+    u16 Channels: ??
+    u32 MinimumDistance: ??
+    u32 MaximumDistance: ??
+    u32 VariableFrequency: ??
+    u16 VariableVolume: ??
+    u16 VariablePan: ??
+    label: self.Name
+
+layout:
+  - header Header
+  - file[Header.FileCount] File
+  # TODO map file data directly after File entries
+
