@@ -476,7 +476,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 }
 
 // renders lines of ascii to present the data field for humans
-func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
+func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) string {
 	kind := fl.PresentType(&field.Format)
 	if (field.Format.Kind != "vu32" && field.Format.Kind != "vu64") && field.Format.SingleUnitSize() > 1 {
 		// XXX hacky way of skipping variable length fields
@@ -490,9 +490,14 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 	fieldValue := strings.TrimRight(fl.PresentFieldValue(field), " ")
 
 	res := ""
-	if !showRaw {
-		res = fmt.Sprintf("  [%06x] %-30s %-16s %-30s",
-			field.Offset, field.Format.Label, kind, fieldValue)
+	if !cfg.ShowInDecimal {
+		res = fmt.Sprintf("  [%06x] ", field.Offset)
+	} else {
+		res = fmt.Sprintf("  [%06d] ", field.Offset)
+	}
+	if !cfg.ShowRaw {
+		res += fmt.Sprintf("%-30s %-16s %-30s",
+			field.Format.Label, kind, fieldValue)
 	} else {
 		hexValue := ""
 		if len(field.Value) <= maxHexDisplayLength {
@@ -500,8 +505,8 @@ func (fl *FileLayout) presentField(field *Field, showRaw bool) string {
 		} else {
 			hexValue = fmt.Sprintf("% 02x ...", field.Value[0:maxHexDisplayLength])
 		}
-		res = fmt.Sprintf("  [%06x] %-30s %-16s %-30s %-20s",
-			field.Offset, field.Format.Label, kind, fieldValue, hexValue)
+		res += fmt.Sprintf("%-30s %-16s %-30s %-20s",
+			field.Format.Label, kind, fieldValue, hexValue)
 	}
 	res = strings.TrimRight(res, " ") + "\n"
 
@@ -548,12 +553,13 @@ func (fl *FileLayout) presentStructureTreeNode(layout Struct, indent int) string
 
 type PresentFileLayoutConfig struct {
 	ShowRaw           bool
+	ShowInDecimal     bool
 	ReportUnmapped    bool
 	ReportOverlapping bool
 	InUTC             bool
 }
 
-func (fl *FileLayout) presentStruct(layout *Struct, showRaw bool) string {
+func (fl *FileLayout) presentStruct(layout *Struct, cfg *PresentFileLayoutConfig) string {
 	if len(layout.Fields) == 0 {
 		if DEBUG {
 			feng.Yellow("skip empty struct '%s'\n", layout.Name)
@@ -566,12 +572,12 @@ func (fl *FileLayout) presentStruct(layout *Struct, showRaw bool) string {
 	}
 	res := heading + "\n"
 	for _, field := range layout.Fields {
-		res += fl.presentField(&field, showRaw)
+		res += fl.presentField(&field, cfg)
 	}
 	res += "\n"
 
 	for _, child := range layout.Children {
-		res += fl.presentStruct(&child, showRaw)
+		res += fl.presentStruct(&child, cfg)
 	}
 
 	return res
@@ -586,7 +592,7 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 		res = "# " + fl.BaseName + "\n"
 	}
 	for _, layout := range fl.Structs {
-		res += fl.presentStruct(&layout, cfg.ShowRaw)
+		res += fl.presentStruct(&layout, cfg)
 	}
 
 	res += fl.reportUnmappedByteCount()

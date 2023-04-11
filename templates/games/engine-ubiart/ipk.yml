@@ -14,7 +14,7 @@
 references:
   - https://forum.xentax.com/viewtopic.php?t=11475
 
-kind: game
+kind: archive
 name: UbiArt Framework engine archive
 extensions: [.ipk]
 endian: big

@@ -33,6 +33,7 @@ var args struct {
 	LocalTime   bool   `help:"Show timestamps in local timezone. Default is UTC."`
 	Brief       bool   `help:"Show brief file information."`
 	Tree        bool   `help:"Show parsed file structure tree."`
+	Decimal     bool   `help:"Show offsets in decimal (default is 'hex')."`
 	Unmapped    bool   `help:"Print a report on unmapped bytes."`
 	Overlapping bool   `help:"Print a report on overlapping bytes."`
 	Debug       bool   `help:"[Dev] Enable debug logging"`
@@ -223,6 +224,7 @@ func main() {
 		} else {
 			fmt.Print(fl.Present(&mapper.PresentFileLayoutConfig{
 				ShowRaw:           args.Raw,
+				ShowInDecimal:     args.Decimal,
 				ReportUnmapped:    args.Unmapped,
 				ReportOverlapping: args.Overlapping,
 				InUTC:             !args.LocalTime,
