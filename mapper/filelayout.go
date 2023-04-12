@@ -142,7 +142,7 @@ type Field struct {
 	Offset uint64
 	Length uint64
 
-	// value in network byte order (big)
+	// value in network byte order (big)    TODO: REMOVE THIS FIELD AND READ ON DEMAND
 	Value []byte
 
 	// on-disk endianness
@@ -549,7 +549,7 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 			field.Format.Label, kind, fieldValue)
 	} else {
 		hexValue := ""
-		if len(field.Value) <= maxHexDisplayLength {
+		if field.Length <= maxHexDisplayLength {
 			hexValue = fmt.Sprintf("% 02x", field.Value)
 		} else {
 			hexValue = fmt.Sprintf("% 02x ...", field.Value[0:maxHexDisplayLength])

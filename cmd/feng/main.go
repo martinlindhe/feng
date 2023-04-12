@@ -1,24 +1,13 @@
 package main
 
 import (
-	"bytes"
-	"compress/flate"
-	"compress/gzip"
-	"compress/zlib"
 	"fmt"
-	"io"
 	"os"
-	"path/filepath"
 	"runtime"
 	"runtime/pprof"
-	"strings"
 
-	lzss "github.com/fbonhomm/LZSS/source"
-	"github.com/pierrec/lz4/v4"
-	"github.com/rasky/go-lzo"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	lzf "github.com/zhuyie/golzf"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -79,147 +68,8 @@ func main() {
 
 	if args.OutDir != "" {
 		// write data streams to specified dir
-		err = os.MkdirAll(args.OutDir, os.ModePerm)
-		if err != nil {
-			log.Fatal().Err(err).Msgf("failed")
-		}
 
-		for _, layout := range fl.Structs {
-
-			for _, field := range layout.Fields {
-				filename := ""
-				if field.Filename != "" {
-					filename = field.Filename
-				}
-				switch field.Format.Kind {
-				case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "compressed:deflate", "raw:u8", "encrypted:u8":
-					if filename == "" {
-						filename = fmt.Sprintf("stream_%08x", field.Offset)
-					} else {
-						// remove "res://" prefix
-						filename = strings.Replace(filename, "res://", "", 1)
-					}
-
-					// handle windows path separators
-					filename = strings.ReplaceAll(filename, "\\", string(os.PathSeparator))
-
-					fullName := filepath.Join(args.OutDir, filename)
-
-					// TODO security: make sure that dirname is inside extract dir
-
-					fullDirName := filepath.Dir(fullName)
-
-					err = os.MkdirAll(fullDirName, 0755)
-					if err != nil {
-						log.Fatal().Err(err).Msgf("failed to create directory '%s'", fullDirName)
-					}
-
-					log.Info().Msgf("%s.%s %s: Extracting data stream from %08x to %s", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
-
-					var b bytes.Buffer
-
-					switch field.Format.Kind {
-					case "compressed:lzo1x":
-						expanded, err := lzo.Decompress1X(bytes.NewReader(field.Value), 0, 0)
-						if err != nil {
-							log.Error().Err(err).Msgf("Extraction failed")
-							continue
-						}
-						b.Write(expanded)
-
-					case "compressed:lzss":
-						lzssMode0 := lzss.LZSS{}
-						expanded, err := lzssMode0.Decompress(field.Value)
-						if err != nil {
-							log.Error().Err(err).Msgf("Extraction failed")
-							continue
-						}
-						b.Write(expanded)
-
-					case "compressed:lz4":
-						expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
-						n, err := lz4.UncompressBlock(field.Value, expanded)
-						if err != nil {
-							log.Error().Err(err).Msgf("Extraction failed")
-							continue
-						}
-						b.Write(expanded[0:n])
-
-					case "compressed:lzf":
-						expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
-						n, err := lzf.Decompress(field.Value, expanded)
-						if err != nil {
-							log.Error().Err(err).Msgf("Extraction failed")
-							continue
-						}
-						b.Write(expanded[0:n])
-
-					case "compressed:zlib":
-						reader, err := zlib.NewReader(bytes.NewReader(field.Value))
-						if err != nil {
-							log.Error().Err(err).Msgf("Extraction failed")
-							continue
-						}
-						defer reader.Close()
-
-						if _, err = io.Copy(&b, reader); err != nil {
-							log.Error().Err(err).Msgf("Extraction failed")
-							continue
-						}
-
-					case "compressed:gzip":
-						reader, err := gzip.NewReader(bytes.NewReader(field.Value))
-						if err != nil {
-							log.Error().Err(err).Msgf("Extraction failed1")
-							continue
-						}
-						defer reader.Close()
-
-						if n, err := io.Copy(&b, reader); err != nil {
-							// IMPORTANT: gzip decompressor errors out when input buffer is not exactly proper size, while extraction succeeds.
-							if n == 0 {
-								log.Error().Err(err).Msgf("Extraction failed, only %d written", n)
-								continue
-							}
-						}
-
-					case "compressed:deflate":
-						reader := flate.NewReader(bytes.NewReader(field.Value))
-						defer reader.Close()
-
-						var b bytes.Buffer
-						if _, err = io.Copy(&b, reader); err != nil {
-							log.Error().Err(err).Msgf("Extraction failed")
-							continue
-						}
-
-					case "raw:u8":
-						if len(field.Value) <= 1 {
-							continue
-						}
-						b.Write(field.Value)
-
-					case "encrypted:u8":
-						dec, err := fl.DecryptData(field.Value)
-						if err != nil {
-							log.Error().Err(err).Msgf("decryption failed")
-						}
-						b.Write(dec)
-
-					default:
-						panic(field.Format.Kind) // unreachable
-					}
-
-					log.Debug().Msgf("Extracted %d bytes to %s", b.Len(), fullName)
-
-					err = os.WriteFile(fullName, b.Bytes(), 0644)
-					if err != nil {
-						log.Error().Err(err).Msgf("Write failed")
-					}
-
-				}
-			}
-		}
+		fl.Extract(args.OutDir)
 
 	} else {
 		if args.Tree {
