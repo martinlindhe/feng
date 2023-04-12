@@ -56,7 +56,8 @@ structs:
       u32 Uncompressed size: ??
       u16 FileNameLength: ??
       u16 ExtraFieldLength: ??
-      ascii[self.FileNameLength] File name: ??
+      ascii[self.FileNameLength] FileName: ??
+      filename: self.FileName
       u8[self.ExtraFieldLength] Extra field: ??
       if self.Compression == Deflated:
         compressed:deflate[self.CompressedSize] Data: ??
@@ -84,7 +85,7 @@ structs:
       u16 Internal attributes: ??
       u32 External attributes: ??
       u32 Header offset: ??
-      ascii[self.FileNameLength] File name: ??
+      ascii[self.FileNameLength] FileName: ??
       u8[self.ExtraFieldLength] Extra field: ??
       ascii[self.CommentLength] Comment: ??
 

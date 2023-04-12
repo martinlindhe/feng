@@ -1,19 +1,23 @@
 package value
 
 import (
-	"bytes"
 	"fmt"
+	"os"
 
 	"github.com/rs/zerolog/log"
 )
 
 // this encoding is used by fonts/woff2 (UIntBase128)
 // returns decoded value, raw bytes, byte length, error
-func ReadVariableLengthU32(r *bytes.Reader) (uint32, []byte, uint64, error) {
+func ReadVariableLengthU32(r *os.File) (uint32, []byte, uint64, error) {
 	accum := uint32(0)
 	raw := []byte{}
 	for i := 0; i < 5; i++ {
-		v, err := r.ReadByte()
+
+		buf := make([]byte, 1)
+		_, err := r.Read(buf)
+		v := buf[0]
+
 		if err != nil {
 			return 0, nil, 0, err
 		}
@@ -35,13 +39,17 @@ func ReadVariableLengthU32(r *bytes.Reader) (uint32, []byte, uint64, error) {
 
 // this encoding is used by archive/xz
 // returns decoded value, raw bytes, byte length, error
-func ReadVariableLengthU64(r *bytes.Reader) (uint64, []byte, uint64, error) {
+func ReadVariableLengthU64(r *os.File) (uint64, []byte, uint64, error) {
 
 	accum := uint64(0)
 	raw := []byte{}
 
 	for i := 0; i < 9; i++ {
-		v, err := r.ReadByte()
+
+		buf := make([]byte, 1)
+		_, err := r.Read(buf)
+		v := buf[0]
+
 		if err != nil {
 			return 0, nil, 0, err
 		}
@@ -62,13 +70,17 @@ func ReadVariableLengthU64(r *bytes.Reader) (uint64, []byte, uint64, error) {
 
 // Codes integers in 7-bit chunks, little-endian order. The high-bit in each byte signifies if it is the last byte.
 // used by system/macos/nibarchive
-func ReadVariableLengthS64(r *bytes.Reader) (uint64, []byte, uint64, error) {
+func ReadVariableLengthS64(r *os.File) (uint64, []byte, uint64, error) {
 
 	accum := uint64(0)
 	raw := []byte{}
 
 	for i := 0; i < 9; i++ {
-		v, err := r.ReadByte()
+
+		buf := make([]byte, 1)
+		_, err := r.Read(buf)
+		v := buf[0]
+
 		if err != nil {
 			return 0, nil, 0, err
 		}

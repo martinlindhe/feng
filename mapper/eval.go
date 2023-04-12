@@ -3,6 +3,7 @@ package mapper
 import (
 	"encoding/binary"
 	"fmt"
+	"io"
 	"math"
 	"strconv"
 	"strings"
@@ -98,17 +99,70 @@ func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		offset := int(v)
-		if offset >= len(fl.rawData) {
+		offset := int64(v)
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := binary.LittleEndian.Uint32(fl.rawData[offset:]) // XXX endianness
+
+		val, _ := fl.peekU32(offset)
+
 		if DEBUG_EVAL {
-			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
+			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, int(val))
 		}
 		return int(val), nil
 	}
 	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) peekU32(offset int64) (uint32, error) {
+	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
+	if err != nil {
+		return 0, err
+	}
+
+	_, _ = fl._f.Seek(offset, io.SeekStart)
+	buf := make([]byte, 4)
+	_, _ = fl._f.Read(buf)
+	val := binary.LittleEndian.Uint32(buf)
+	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
+	return val, nil
+}
+
+func (fl *FileLayout) peekU16(offset int64) (uint16, error) {
+	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
+	if err != nil {
+		return 0, err
+	}
+	_, _ = fl._f.Seek(offset, io.SeekStart)
+	buf := make([]byte, 2)
+	_, _ = fl._f.Read(buf)
+	val := binary.LittleEndian.Uint16(buf)
+	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
+	return val, nil
+}
+
+func (fl *FileLayout) peekU8(offset int64) (uint8, error) {
+	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
+	if err != nil {
+		return 0, err
+	}
+	_, _ = fl._f.Seek(offset, io.SeekStart)
+	buf := make([]byte, 1)
+	_, _ = fl._f.Read(buf)
+	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
+	return buf[0], nil
+}
+
+func (fl *FileLayout) peekBytes(offset int64, size int64) ([]uint8, error) {
+	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
+	if err != nil {
+		return nil, err
+	}
+	_, _ = fl._f.Seek(offset, io.SeekStart)
+	buf := make([]byte, size)
+	_, _ = fl._f.Read(buf)
+	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
+	return buf, nil
 }
 
 func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
@@ -121,21 +175,24 @@ func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		offset := int(v)
-		if offset >= len(fl.rawData) {
+		offset := int64(v)
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
+
+		val, _ := fl.peekU16(offset)
+
 		if DEBUG_EVAL {
 			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
 		}
 		return int(val), nil
 	}
-	if offset, ok := args[0].(int); ok {
-		if offset >= len(fl.rawData) {
+	if offset, ok := args[0].(int64); ok {
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
+		val, _ := fl.peekU16(offset)
+
 		if DEBUG_EVAL {
 			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
 		}
@@ -154,21 +211,22 @@ func (fl *FileLayout) evalPeekI8(args ...interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		offset := int(v)
-		if offset >= len(fl.rawData) {
+		offset := int64(v)
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := fl.rawData[offset]
+		val, _ := fl.peekU8(offset)
+
 		if DEBUG_EVAL {
 			log.Printf("peek_i8 AT OFFSET %06x: %04x", offset, val)
 		}
 		return int(val), nil
 	}
-	if offset, ok := args[0].(int); ok {
-		if offset >= len(fl.rawData) {
+	if offset, ok := args[0].(int64); ok {
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := fl.rawData[offset]
+		val, _ := fl.peekU8(offset)
 		if DEBUG_EVAL {
 			log.Printf("peek_i8 AT OFFSET %06x: %02x", offset, val)
 		}

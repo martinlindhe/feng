@@ -14,10 +14,12 @@ import (
 	lzss "github.com/fbonhomm/LZSS/source"
 	"github.com/pierrec/lz4/v4"
 	"github.com/rasky/go-lzo"
-	"github.com/rs/zerolog/log"
 	lzf "github.com/zhuyie/golzf"
+
+	"github.com/rs/zerolog/log"
 )
 
+// Write data streams to outDir
 func (fl *FileLayout) Extract(outDir string) error {
 
 	err := os.MkdirAll(outDir, os.ModePerm)

@@ -30,7 +30,7 @@ var (
 	ErrParseStop = errors.New("manual parse stop")
 )
 
-func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
+func (fl *FileLayout) mapLayout(rr *os.File, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
 
 	if df.Kind == "offset" {
 		// evaluate offset directive in top-level layout (needed by ps3_pkg)
@@ -127,8 +127,16 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 	return nil
 }
 
+func fileSize(file *os.File) uint64 {
+	fi, err := file.Stat()
+	if err != nil {
+		log.Fatal().Err(err).Msg("stat failed")
+	}
+	return uint64(fi.Size())
+}
+
 // produces a list of fields with offsets and sizes from input reader based on data structure
-func MapReader(r io.Reader, ds *template.DataStructure, endian string) (*FileLayout, error) {
+func MapReader(f *os.File, ds *template.DataStructure, endian string) (*FileLayout, error) {
 
 	ext := ""
 	if len(ds.Extensions) > 0 {
@@ -139,20 +147,15 @@ func MapReader(r io.Reader, ds *template.DataStructure, endian string) (*FileLay
 		endian = ds.Endian
 	}
 
-	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext}
-
-	// read all data to get the total length
-	b, _ := io.ReadAll(r)
-	fileLayout.rawData = b
-	fileLayout.size = uint64(len(b))
-	rr := bytes.NewReader(b)
+	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext, _f: f}
+	fileLayout.size = fileSize(f)
 
 	if DEBUG {
 		log.Printf("mapping ds '%s'", ds.BaseName)
 	}
 
 	for _, df := range ds.Layout {
-		err := fileLayout.mapLayout(rr, nil, ds, &df)
+		err := fileLayout.mapLayout(f, nil, ds, &df)
 		if err != nil {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 				log.Error().Err(err).Msgf("mapLayout error processing %s", df.Label)
@@ -170,12 +173,11 @@ var (
 
 func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileLayout, err error) {
 
-	data, err := os.ReadFile(filename)
+	f, err := os.Open(filename)
+	defer f.Close()
 	if err != nil {
 		return nil, err
 	}
-
-	r := bytes.NewReader(data)
 
 	rawTemplate, err := os.ReadFile(templateFileName)
 	if err != nil {
@@ -186,7 +188,7 @@ func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileL
 		return nil, fmt.Errorf("%s: %s", templateFileName, err.Error())
 	}
 
-	fl, err = MapReader(r, ds, "")
+	fl, err = MapReader(f, ds, "")
 	fl.DataFileName = filename
 	if err != nil {
 		feng.Red("MapReader: %s: %s\n", templateFileName, err.Error())
@@ -202,12 +204,14 @@ func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileL
 // maps input file to a matching template
 func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 
-	data, err := os.ReadFile(filename)
+	f, err := os.Open(filename)
+	defer f.Close()
+
 	if err != nil {
 		return nil, err
 	}
 
-	r := bytes.NewReader(data)
+	//r := bytes.NewReader(data)
 
 	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
@@ -242,12 +246,12 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 		found := false
 		endian := ""
 		for _, m := range ds.Magic {
-			_, err = r.Seek(int64(m.Offset), io.SeekStart)
+			_, err = f.Seek(int64(m.Offset), io.SeekStart)
 			if err != nil {
 				return err
 			}
 			b := make([]byte, len(m.Match))
-			_, _ = r.Read(b)
+			_, _ = f.Read(b)
 			if bytes.Equal(m.Match, b) {
 				found = true
 				endian = m.Endian
@@ -261,9 +265,9 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 			return nil
 		}
 
-		r.Reset(data)
+		_, _ = f.Seek(0, io.SeekStart)
 
-		fl, err = MapReader(r, ds, endian)
+		fl, err = MapReader(f, ds, endian)
 		fl.DataFileName = filename
 		if err != nil {
 			// template don't match, try another
@@ -288,16 +292,17 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 
 	if fl == nil {
 		// dump hex of first bytes for unknown files
-		end := 0x10
-		if len(data) < end {
-			end = len(data)
-		}
-		return nil, fmt.Errorf("no match '%s'", hex.EncodeToString(data[0:end]))
+		_, _ = f.Seek(0, io.SeekStart)
+		buf := make([]byte, 10)
+		n, _ := f.Read(buf)
+		buf = buf[:n]
+
+		return nil, fmt.Errorf("no match '%s'", hex.EncodeToString(buf[:n]))
 	}
 	return fl, nil
 }
 
-func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandStruct(r *os.File, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG_MAPPER {
 		log.Printf("expandStruct: adding struct %s", dfParent.Label)
@@ -331,7 +336,7 @@ func presentStringValue(v string) string {
 	return v
 }
 
-func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
 
 	log.Debug().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
@@ -832,7 +837,7 @@ func readBytesUntilMarkerByte(r io.Reader, marker byte) ([]byte, error) {
 
 // reads bytes from reader until the marker byte sequence is found. returned data excludes the marker
 // FIXME: won't find patterns overlapping chunks
-func readBytesUntilMarkerSequence(r *bytes.Reader, chunkSize int64, search []byte) ([]byte, error) {
+func readBytesUntilMarkerSequence(r *os.File, chunkSize int64, search []byte) ([]byte, error) {
 
 	if int(chunkSize) < len(search) {
 		panic("unlikely")

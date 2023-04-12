@@ -67,10 +67,11 @@ func main() {
 	}
 
 	if args.OutDir != "" {
-		// write data streams to specified dir
-
-		fl.Extract(args.OutDir)
-
+		err = fl.Extract(args.OutDir)
+		if err != nil {
+			log.Fatal().Err(err).Msgf("Extraction failed.")
+			return
+		}
 	} else {
 		if args.Tree {
 			fmt.Print(fl.PresentStructureTree(fl.Structs))

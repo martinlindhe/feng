@@ -1,11 +1,11 @@
 package mapper
 
 import (
-	"bytes"
 	"crypto/aes"
 	"encoding/binary"
 	"fmt"
 	"math"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -52,9 +52,6 @@ type FileLayout struct {
 	// the file that was processed to produce this FileLayout struct
 	DataFileName string
 
-	// the raw data underlying the structure. used for peek()
-	rawData []byte
-
 	// if unseen, ask user to submit a sample
 	unseen bool
 
@@ -66,6 +63,9 @@ type FileLayout struct {
 
 	// current encryption key
 	encryptionKey []byte
+
+	// file handle
+	_f *os.File
 }
 
 // pop last offset from previousOffsets list
@@ -312,15 +312,15 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
 
 	case "vu32":
-		got, _, _, _ := value.ReadVariableLengthU32(bytes.NewReader(b))
+		got, _, _, _ := value.ReadVariableLengthU32(fl._f)
 		return got
 
 	case "vu64":
-		got, _, _, _ := value.ReadVariableLengthU64(bytes.NewReader(b))
+		got, _, _, _ := value.ReadVariableLengthU64(fl._f)
 		return got
 
 	case "vs64":
-		got, _, _, _ := value.ReadVariableLengthS64(bytes.NewReader(b))
+		got, _, _, _ := value.ReadVariableLengthS64(fl._f)
 		return got
 	}
 
@@ -693,7 +693,7 @@ func (fl *FileLayout) reportUnmappedData() string {
 	unmappedRanges := []dataRange{}
 	r := dataRange{offset: -1}
 	log.Info().Msgf("reportUnmappedData start")
-	for i := 0; i < int(fl.size); i++ {
+	for i := int64(0); i < int64(fl.size); i++ {
 		// FIXME: isMappedByte is extremely slow !!!
 		if !fl.isMappedByte(uint64(i)) {
 			if r.offset == -1 {
@@ -712,27 +712,30 @@ func (fl *FileLayout) reportUnmappedData() string {
 	}
 	log.Info().Msgf("reportUnmappedData unmappedRanges len %d", len(unmappedRanges))
 
-	maxBytesShown := 32
+	maxBytesShown := int64(32)
 	for _, ur := range unmappedRanges {
-		end := ur.offset + ur.length
+		end := ur.length
 		trail := ""
 		if ur.length > maxBytesShown {
-			end = ur.offset + maxBytesShown
+			end = maxBytesShown
 			trail = " .."
 		}
 		lastOffset := ur.offset + ur.length - 1
+
+		rawData, _ := fl.peekBytes(ur.offset, end)
+
 		if lastOffset != ur.offset {
-			res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, fl.rawData[ur.offset:end], trail)
+			res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, rawData, trail)
 		} else {
-			res += fmt.Sprintf("  [%06x] u8 \t% 02x%s\n", ur.offset, fl.rawData[ur.offset:end], trail)
+			res += fmt.Sprintf("  [%06x] u8 \t% 02x%s\n", ur.offset, rawData, trail)
 		}
 	}
 	return res
 }
 
 type dataRange struct {
-	offset int
-	length int
+	offset int64
+	length int64
 }
 
 func (fl *FileLayout) isMappedByte(offset uint64) bool {
