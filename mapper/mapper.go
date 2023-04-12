@@ -33,7 +33,7 @@ var (
 func (fl *FileLayout) mapLayout(rr *os.File, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
 
 	if df.Kind == "offset" {
-		// evaluate offset directive in top-level layout (needed by ps3_pkg)
+		// offset directive in top-level layout
 		v, err := fl.EvaluateExpression(df.Label, df)
 		if err != nil {
 			return err
@@ -308,10 +308,8 @@ func (fl *FileLayout) expandStruct(r *os.File, dfParent *value.DataField, ds *te
 		log.Printf("expandStruct: adding struct %s", dfParent.Label)
 	}
 
-	fl.Structs = append(fl.Structs, Struct{Name: dfParent.Label})
-
-	idx := len(fl.Structs) - 1
-	fs := &fl.Structs[idx]
+	fs := &Struct{Name: dfParent.Label}
+	fl.Structs = append(fl.Structs, fs)
 
 	err := fl.expandChildren(r, fs, dfParent, ds, expressions)
 	if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
@@ -751,9 +749,9 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 								// XXX issue happens when child node uses self.VARIABLE and it is expanded,
 								//     when self node is not yet added to fs.Structs
 
-								child := Struct{Name: name, Index: int(i)}
+								child := &Struct{Name: name, Index: int(i)}
 								fs.Children = append(fs.Children, child)
-								err = fl.expandChildren(r, &child, &parent, ds, subEs.Expressions)
+								err = fl.expandChildren(r, child, &parent, ds, subEs.Expressions)
 								if err != nil {
 									//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 									log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
@@ -764,8 +762,8 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 						} else {
 
 							// add this as child node to current struct (fs)
-							child := Struct{Name: es.Field.Label}
-							err = fl.expandChildren(r, &child, &es.Field, ds, subEs.Expressions)
+							child := &Struct{Name: es.Field.Label}
+							err = fl.expandChildren(r, child, &es.Field, ds, subEs.Expressions)
 							if err != nil {
 								//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 								log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)

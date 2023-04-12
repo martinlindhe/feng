@@ -20,7 +20,7 @@ import (
 
 // parsed file data from a template "layout"
 type FileLayout struct {
-	Structs []Struct
+	Structs []*Struct
 
 	// pointer to its internal yaml representation, so we can access "constants"
 	DS *template.DataStructure
@@ -124,7 +124,7 @@ type Struct struct {
 	Name string
 
 	// child nodes
-	Children []Struct
+	Children []*Struct
 
 	// additional decoration
 	Label string
@@ -576,14 +576,14 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 	return res
 }
 
-func (fl *FileLayout) PresentStructureTree(structs []Struct) string {
+func (fl *FileLayout) PresentStructureTree(structs []*Struct) string {
 	res := fmt.Sprintf("# structure tree of %s\n", fl.DataFileName)
 	for _, layout := range structs {
 		res += fl.presentStructureTreeNode(layout, 0)
 	}
 	return res
 }
-func (fl *FileLayout) presentStructureTreeNode(layout Struct, indent int) string {
+func (fl *FileLayout) presentStructureTreeNode(layout *Struct, indent int) string {
 	prefix := strings.Repeat(" ", indent)
 	res := ""
 	heading := prefix + layout.Name
@@ -626,7 +626,7 @@ func (fl *FileLayout) presentStruct(layout *Struct, cfg *PresentFileLayoutConfig
 	res += "\n"
 
 	for _, child := range layout.Children {
-		res += fl.presentStruct(&child, cfg)
+		res += fl.presentStruct(child, cfg)
 	}
 
 	return res
@@ -641,7 +641,7 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 		res = "# " + fl.BaseName + "\n"
 	}
 	for _, layout := range fl.Structs {
-		res += fl.presentStruct(&layout, cfg)
+		res += fl.presentStruct(layout, cfg)
 	}
 
 	res += fl.reportUnmappedByteCount()
@@ -775,7 +775,7 @@ func (fl *FileLayout) MappedBytes() uint64 {
 func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 	for _, str := range fl.Structs {
 		if str.Name == name {
-			return &str, nil
+			return str, nil
 		}
 	}
 	return nil, fmt.Errorf("GetStruct: %s not found", name)
