@@ -9,7 +9,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/rs/zerolog/log"
 	"golang.org/x/text/encoding/unicode"
@@ -422,75 +421,6 @@ func AsInt64(kind string, b []byte) int64 {
 	}
 	log.Fatal().Msgf("AsInt64 unhandled kind %s", kind)
 	return 0
-}
-
-// presents the value of the data type (format.Kind) in a human-readable form
-func (format DataField) Present(b []byte, endian string) string {
-	// TODO DEPRECATE. instead use fl.PresentFieldValue()
-	switch format.Kind {
-	case "compressed:deflate", "compressed:lz4", "compressed:lzss", "compressed:zlib",
-		"raw:u8", "encrypted:u8":
-		return ""
-
-	case "u8", "u16", "u32", "u64":
-		if format.Slice || format.Range != "" {
-			return ""
-		}
-		return fmt.Sprintf("%d", AsUint64Raw(b))
-
-	case "i8", "i16", "i32", "i64":
-		if format.Slice || format.Range != "" {
-			return ""
-		}
-		switch format.Kind {
-		case "i8":
-			return fmt.Sprintf("%d", int8(AsUint64Raw(b)))
-		case "i16":
-			return fmt.Sprintf("%d", int16(AsUint64Raw(b)))
-		case "i32":
-			return fmt.Sprintf("%d", int32(AsUint64Raw(b)))
-		case "i64":
-			return fmt.Sprintf("%d", int64(AsUint64Raw(b)))
-		}
-
-	case "ascii", "asciiz":
-		v, _ := AsciiZString(b, len(b))
-		return v
-
-	case "utf16":
-		return Utf16String(b)
-
-	case "utf16z":
-		return Utf16zString(b)
-
-	case "time_t_32":
-		v := AsUint64Raw(b)
-		timestamp := time.Unix(int64(v), 0)
-		return timestamp.Format(time.RFC3339)
-
-	case "filetime":
-		// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601.
-		// Windows, XBox
-
-		filetimeDelta := time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
-		t := binary.LittleEndian.Uint64(b)
-		timestamp := time.Unix(0, int64(t)*100+filetimeDelta)
-		return timestamp.Format(time.RFC3339)
-
-	case "dostime":
-		v := AsUint64Raw(b)
-		return AsDosTime(uint16(v)).String()
-
-	case "dosdate":
-		v := AsUint64Raw(b)
-		return AsDosDate(uint16(v)).String()
-
-	case "rgb8":
-		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
-	}
-
-	log.Fatal().Msgf("don't know how to present %s (slice:%v, range:%s): %v", format.Kind, format.Slice, format.Range, b)
-	return ""
 }
 
 // text encoding used by Windows

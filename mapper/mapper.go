@@ -211,8 +211,6 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 		return nil, err
 	}
 
-	//r := bytes.NewReader(data)
-
 	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
 		if err != nil {

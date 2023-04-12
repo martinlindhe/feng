@@ -158,10 +158,6 @@ type Field struct {
 	Filename string
 }
 
-func (field *Field) Present() string {
-	return field.Format.Present(field.Value, field.Endian)
-}
-
 var (
 	variableExpressionRE = regexp.MustCompile(`([\w .+\-*/()<>"&]+)`)
 )

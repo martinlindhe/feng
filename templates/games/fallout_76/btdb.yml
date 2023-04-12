@@ -2,7 +2,6 @@
 
 # Used in Fallout 76 (PC)
 
-# TODO: really slow. 1.6MB sample EXM1PittWorldspace.btd = 53s
 # TODO: extract "terrain color" to PNG image
 
 references:
@@ -36,18 +35,19 @@ structs:
     u32[self.LandTextureCount] LandTextures: ?? # LTEX form IDs
 
   cell:
-    f32 MinHeight: ??
-    f32 MaxHeight: ??
+    # for each cell: f32 MinHeight, f32 MaxHeight
+    f32[(Header.ResolutionX/128) * (Header.ResolutionY/128) * 2] Data: ??
+
 
   cell_quadrant_land_texture:
-    u8[8] Data: ??
+    u8[((Header.ResolutionX/128) * 2) * ((Header.ResolutionY/128) * 2) * 8] Data: ??
 
   ground_cover:
     u32 Count: ??
     u32[self.Count] Data: ?? # GCVR form IDs
 
   cell_quadrant_ground_cover:
-    u8[8] Data: ?? # GCVR_table_index, or ff if none
+    u8[((Header.ResolutionX/128) * 2) * ((Header.ResolutionY/128) * 2) * 8] Data: ?? # GCVR_table_index, or ff if none
 
   height_map: # LOD4 height map
     u16[((Header.ResolutionX/128) * 8) * ((Header.ResolutionY/128) * 8)] Data: ??
@@ -66,12 +66,12 @@ structs:
 
 layout:
   - header Header
-  - cell[(Header.ResolutionX/128) * (Header.ResolutionY/128)] Cell
+  - cell Cell
 
-  - cell_quadrant_land_texture[((Header.ResolutionX/128) * 2) * ((Header.ResolutionY/128) * 2)] LandTex
+  - cell_quadrant_land_texture LandTex
   - ground_cover GroundCover
 
-  - cell_quadrant_ground_cover[((Header.ResolutionX/128) * 2) * ((Header.ResolutionY/128) * 2)] Ground
+  - cell_quadrant_ground_cover Ground
 
   - height_map HeightMap
   - land_textures LandTextures

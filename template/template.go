@@ -195,7 +195,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.Ma
 					Label:     mp.Label,
 					Operation: mp.Operation,
 					Value:     b,
-					Parsed:    es.Field.Present(b, endian)})
+				})
 			}
 
 		case "default":
