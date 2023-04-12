@@ -1,0 +1,81 @@
+# STATUS: 25%
+
+# Used in Fallout 76 (PC)
+
+# TODO: really slow
+# TODO: extract "terrain color" to PNG image
+
+references:
+  - https://github.com/fo76utils/fo76utils/blob/2a7498c5c639ad13fcd6678073218f061c81dd74/src/btdfile.cpp
+
+software:
+  - https://github.com/fo76utils/fo76utils
+
+kind: game
+name: Fallout 76 terrain data
+extensions: [.btd]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BTDB'
+
+structs:
+  header:
+    ascii[4] Signature: c'BTDB'
+    u32 Version: ?? # 6 = Fallout 76
+    f32 MinHeight: ??
+    f32 MaxHeight: ??
+    u32 ResolutionX: ??
+    u32 ResolutionY: ??
+    i32 MinCellX: ??
+    i32 MinCellY: ??
+    i32 MaxCellY: ??
+    i32 MaxCellY: ??
+    u32 LandTextureCount: ?? # LTEX records
+    u32[self.LandTextureCount] LandTextures: ?? # LTEX form IDs
+
+  cell:
+    f32 MinHeight: ??
+    f32 MaxHeight: ??
+
+  cell_quadrant_land_texture:
+    u8[8] Data: ??
+
+  ground_cover:
+    u32 Count: ??
+    u32[self.Count] Data: ?? # GCVR form IDs
+
+  cell_quadrant_ground_cover:
+    u8[8] Data: ?? # GCVR_table_index, or ff if none
+
+  height_map: # LOD4 height map
+    u16[((Header.ResolutionX/128) * 8) * ((Header.ResolutionY/128) * 8)] Data: ??
+
+  land_textures: # LOD4 land textures
+    # bits[N * 3 to N * 3 + 2] = opacity of texture N, texture 6 is the base texture
+    u16[((Header.ResolutionX/128) * 8) * ((Header.ResolutionY/128) * 8)] Data: ??
+
+  terrain_color: # LOD4 terrain color
+    # packed 16-bit format, 5 bits per channel
+    u16[((Header.ResolutionX/128) * 8) * ((Header.ResolutionY/128) * 8)] Data: ??
+
+  compressed_data:
+    u32 Offset: ?? # relative to end of this list, XXX need list size to calc it
+    u32 CompressedSize: ??
+
+layout:
+  - header Header
+  - cell[(Header.ResolutionX/128) * (Header.ResolutionY/128)] Cell
+
+  - cell_quadrant_land_texture[((Header.ResolutionX/128) * 2) * ((Header.ResolutionY/128) * 2)] LandTex
+  - ground_cover GroundCover
+
+  - cell_quadrant_ground_cover[((Header.ResolutionX/128) * 2) * ((Header.ResolutionY/128) * 2)] Ground
+
+  - height_map HeightMap
+  - land_textures LandTextures
+  - terrain_color TerrainColor
+
+  - compressed_data[(Header.ResolutionX/128) * (Header.ResolutionY/128) * 2] CompressedData # XXX how long is the list?
+

@@ -1,0 +1,1 @@
+Used by some Resident Evil games + other Capcom games.

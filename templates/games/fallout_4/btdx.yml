@@ -9,7 +9,7 @@ resources:
   - https://forum.xentax.com/viewtopic.php?f=32&t=13531  # extractor and repacker
 
 kind: archive
-name: Fallout 4 BA2-archive
+name: Fallout 4 BTDX archive
 extensions: [.ba2]
 endian: little
 

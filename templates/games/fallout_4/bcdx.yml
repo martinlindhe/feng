@@ -1,0 +1,29 @@
+# STATUS: 50%
+
+# Used in Fallout 4 (PC)
+
+# Holds some index. Is related to .esm files ("TES4" header)
+
+kind: xxx
+name: Fallout 4 BCDX archive
+extensions: [.cdx]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'bcdx'
+
+structs:
+  header:
+    ascii[4] Signature: c'bcdx'
+    u32 EntryCount: ??
+
+  entry:
+    u32 One: ??   # 0x80  or 0x86   XXX flag?
+    u32 Two: ??   # ?
+    u32 Three: ?? # XXX hash? sometimes 0
+    u32 Four: ??  # XXX hash? or timestamp?
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

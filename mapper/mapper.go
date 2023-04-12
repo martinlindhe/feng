@@ -325,6 +325,9 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 }
 
 func presentStringValue(v string) string {
+	if len(v) > 40 {
+		v = v[0:40] + " ..."
+	}
 	v = strings.TrimRight(v, "·")
 	v = strings.TrimRight(v, " ")
 	return v

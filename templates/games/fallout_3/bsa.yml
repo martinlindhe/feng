@@ -1,0 +1,64 @@
+# STATUS: 5%
+
+# Archive format used to store game assets in Gamebryo and Creation Engine games
+# (with the BA2 format replacing it in Fallout 4 and Fallout 76).
+
+# Used in:
+# Fallout 3
+# Fallout: New Vegas
+# The Elder Scrolls IV: Skyrim (?)
+
+# TODO MAX: nested structs is buggy
+
+references:
+  - https://geckwiki.com/index.php/BSA_Files
+  - https://github.com/TES5Edit/TES5Edit/blob/dev/Tools/BSArchive/wbBSArchive.pas
+
+software:
+  - https://github.com/pseudoh/BSAUnPacker
+  - https://www.nexusmods.com/fallout4/mods/78/ # Bethesda Archive Extractor
+
+kind: archive
+name: Bethesda Software archive
+extensions: [.bsa]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BSA' 00
+
+structs:
+  header: # TBSAHeader
+    ascii[4] Type: c'BSA' 00
+    u32 Version: ?? # 104 = Fallout NV
+    u32 FolderDataOffset: ??
+    u32 Flags: ??
+    u32 FolderCount: ??
+    u32 FileCount: ??
+    u32 FolderNamesLength: ??
+    u32 FileNamesLength: ??
+    u32 FileFlags: ??
+    offset: self.FolderDataOffset
+
+  folder:  # TBSAFolder
+    u64 NameHash: ??
+    u32 FileCount: ??
+    u32 Offset: ??
+
+  file:
+    u64 NameHash: ??
+    u32 Size: ??
+    u32 Offset: ??
+
+  folder_name: # TBSAFileBlock
+    u8 NameSize: ??
+    ascii[self.NameSize] Name: ??
+
+    file[37] File: ?? # TBSAFile[]   XXX read Folder[this.index].FileCount
+
+layout:
+  - header Header
+  - folder[Header.FolderCount] Folder
+
+  - folder_name FolderName  # XXX for each Header.FolderCount
+

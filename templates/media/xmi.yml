@@ -1,0 +1,34 @@
+# STATUS: 5%
+
+# Used by the Miles Sound System (MSS) for storing game music
+# Used in DOS and early Windows games.
+
+# Used in:
+# EverQuest
+# EverQuest 2
+
+references:
+  - https://moddingwiki.shikadi.net/wiki/XMI_Format
+  - http://www.vgmpf.com/Wiki/index.php?title=XMI#IFF_Tree_Structure
+
+kind: media
+name: eXtended MIDI file
+extensions: [.xmi]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'FORM'
+
+structs:
+  header:
+    ascii[4] Signature: c'FORM'
+    u32 ChunkSize: ??
+
+    ascii[4] Type: ?? # type "XDIR"
+    ascii[4] SubType: ?? # "INFO" chunk
+    u32 SubSize: ?? # "INFO"" size
+    u8[self.SubSize] Data: ?? # "INFO" data: u16 seqCount: ?? # Number of sequences (songs) in the file
+
+layout:
+  - header Header

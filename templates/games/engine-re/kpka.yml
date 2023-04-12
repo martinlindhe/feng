@@ -1,0 +1,57 @@
+# STATUS: 5%
+
+# Used in:
+# Devil May Cry 5
+# Monster Hunter Rise
+# Resident Evil 2
+# Resident Evil 3
+# Resident Evil 7 (version 4)
+# Resident Evil 8 (needs confirmation!)
+# Resistance
+# Exoprimal (version 4)
+
+# TODO MAX: exoprimal file is 30 gig, cant read it all need to stream read ...
+
+# TODO: version 4 of the format might differ a bit from xentax wiki
+
+references:
+  - http://wiki.xentax.com/index.php/RE_Engine_PAK
+
+kind: game
+name: RE Engine archive
+extensions: [.pak]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'KPKA'
+
+structs:
+  header:
+    ascii[4] Magic: c'KPKA'
+    u32 Version: ?? # 4  = Exoprimal
+    u32 FileCount: ??
+    u32 Unk: ??
+
+  file:
+    # < V4:
+    #u32 Offset: ??
+    #u32 Unk: ?? # nul ?
+    #u32 FileSize: ??
+    #hu32 Unk2: ?? # nul?
+    #u32 Hash1: ??
+    #u32 Hash2: ??
+
+    # v4, according to https://forum.xentax.com/viewtopic.php?p=125284#p125284
+    u32 lowerHash: ?? # Hash of filename in Lowercase
+    u32 upperHash: ?? # Hash of filename in Uppercase
+    u64 Offset: ??
+    u64 Size: ??
+    u64 UncompressedSize: ??
+    u64 Flag: ?? # 1 - if compressed / 0 - uncompressed
+    u32 Unknown2: ??
+    u32 Unknown3: ??
+
+layout:
+  - header Header
+  - file File
