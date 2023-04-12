@@ -77,9 +77,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 					break
 				}
 				if err == io.EOF {
-					if DEBUG_MAPPER {
-						log.Print("reached EOF")
-					}
+					log.Error().Msgf("reached EOF")
 					break
 				}
 				return err
@@ -120,6 +118,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 	if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
 		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 			// accept eof errors as valid parse for otherwise valid mapping
+			log.Error().Msgf("reached EOF")
 			return nil
 		}
 		feng.Yellow("%s errors out: %s\n", ds.BaseName, err.Error())
@@ -156,7 +155,7 @@ func MapReader(r io.Reader, ds *template.DataStructure, endian string) (*FileLay
 		err := fileLayout.mapLayout(rr, nil, ds, &df)
 		if err != nil {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-				feng.Red("mapLayout error processing %s: %s\n", df.Label, err.Error())
+				log.Error().Err(err).Msgf("mapLayout error processing %s", df.Label)
 			}
 			return &fileLayout, nil
 		}
@@ -319,15 +318,14 @@ func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, d
 
 			return fmt.Errorf("eof and no structs mapped")
 		}
+
+		log.Error().Msgf("reached EOF at %08x", fl.offset)
 	}
 
 	return err
 }
 
 func presentStringValue(v string) string {
-	if len(v) > 40 {
-		v = v[0:40] + " ..."
-	}
 	v = strings.TrimRight(v, "·")
 	v = strings.TrimRight(v, " ")
 	return v
@@ -752,10 +750,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 								fs.Children = append(fs.Children, child)
 								err = fl.expandChildren(r, &child, &parent, ds, subEs.Expressions)
 								if err != nil {
-									if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-										//panic(err)
-										log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
-									}
+									//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+									log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
+									//}
 								}
 
 							}
@@ -765,9 +762,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 							child := Struct{Name: es.Field.Label}
 							err = fl.expandChildren(r, &child, &es.Field, ds, subEs.Expressions)
 							if err != nil {
-								if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-									log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
-								}
+								//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+								log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
+								//}
 							}
 							fs.Children = append(fs.Children, child)
 						}
@@ -860,6 +857,7 @@ func readBytesUntilMarkerSequence(r *bytes.Reader, chunkSize int64, search []byt
 			res = append(res, chunk[:chunkSize]...)
 		}
 		if err == io.EOF {
+			log.Error().Msgf("reached EOF")
 			return nil, nil
 		} else if err != nil {
 			return nil, err

@@ -3,7 +3,9 @@
 # Used in:
 # The Witcher 2 - Assassin of Kings (PC)
 
-# TODO MAX: decompress content
+# TODO: dlc content need a cdkey (in format #####-#####-#####-#####) for decryption ???
+
+# TODO MAX: decompress content. XXX maybe need to concat all data before decompression ???
 
 references:
   - https://witcher.fandom.com/wiki/Extracting_The_Witcher_2_files
@@ -35,11 +37,11 @@ structs:
     u32 Unknown: ??
     u64 EntryTableOffset: ??
     u64 Hash: ?? # XXX algo ?
-    offset: self.EntryTableOffset
 
   entry:
     u16 Length: ??
     ascii[self.Length] Name: ??
+    label: self.Name
     be:filetime Timestamp: ?? # seems to decode correctly as "2011-11-09T15:28:09Z"
     u64 UncompressedSize: ??
     u64 Offset: ??
@@ -52,4 +54,6 @@ structs:
 
 layout:
   - header Header
+
+  - offset Header.EntryTableOffset
   - entry[Header.EntryCount] Entry

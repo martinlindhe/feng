@@ -509,6 +509,10 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 	case "ascii", "asciiz", "asciinl", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 		"rgb8":
 		res := fl.GetFieldValue(field).(string)
+		if len(res) > 100 {
+			res = res[0:100]
+			return presentStringValue(res) + "..."
+		}
 		return presentStringValue(res)
 
 	case "vu64", "vs64":

@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+# Used in:
+# The Witcher Enhanced Edition (PC)
+
+references:
+  - https://witcher.fandom.com/wiki/DLG_format
+  - https://github.com/kucik/nwn-docs/blob/master/Bioware_Aurora_Conversation_Format.pdf # DLG is backwards compatible with
+
+kind: game
+name: The Witcher DLG file
+extensions: [.dlg]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'DLG V3.3'
+
+structs:
+  header:
+    ascii[4] Signature: c'DLG '
+    ascii[4] Version: ?? # V3.3
+    u32 Unk1: ??
+    u32 Unk2: ??
+
+layout:
+  - header Header

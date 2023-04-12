@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+# Used in:
+# The Witcher Enhanced Edition (PC)
+
+references:
+  - https://witcher.fandom.com/wiki/File_format
+
+kind: game
+name: The Witcher TLK file
+extensions: [.tlk]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'TLK V3.0'
+
+structs:
+  header:
+    ascii[4] Signature: c'TLK '
+    ascii[4] Version: ?? # V3.0
+    u32 Unk1: ??
+    u32 Unk2: ??
+
+layout:
+  - header Header
