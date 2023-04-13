@@ -171,13 +171,7 @@ var (
 	errMapFileMatched = errors.New("matched file")
 )
 
-func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileLayout, err error) {
-
-	f, err := os.Open(filename)
-	defer f.Close()
-	if err != nil {
-		return nil, err
-	}
+func MapFileToGivenTemplate(f *os.File, startOffset int64, filename string, templateFileName string) (fl *FileLayout, err error) {
 
 	rawTemplate, err := os.ReadFile(templateFileName)
 	if err != nil {
@@ -187,6 +181,8 @@ func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileL
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", templateFileName, err.Error())
 	}
+
+	f.Seek(startOffset, os.SEEK_SET)
 
 	fl, err = MapReader(f, ds, "")
 	fl.DataFileName = filename
@@ -202,14 +198,7 @@ func MapFileToGivenTemplate(filename string, templateFileName string) (fl *FileL
 }
 
 // maps input file to a matching template
-func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
-
-	f, err := os.Open(filename)
-	defer f.Close()
-
-	if err != nil {
-		return nil, err
-	}
+func MapFileToMatchingTemplate(f *os.File, startOffset int64, filename string) (fl *FileLayout, err error) {
 
 	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
@@ -244,7 +233,7 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 		found := false
 		endian := ""
 		for _, m := range ds.Magic {
-			_, err = f.Seek(int64(m.Offset), io.SeekStart)
+			_, err = f.Seek(startOffset+int64(m.Offset), io.SeekStart)
 			if err != nil {
 				return err
 			}
@@ -263,7 +252,7 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 			return nil
 		}
 
-		_, _ = f.Seek(0, io.SeekStart)
+		_, _ = f.Seek(startOffset, io.SeekStart)
 
 		fl, err = MapReader(f, ds, endian)
 		fl.DataFileName = filename

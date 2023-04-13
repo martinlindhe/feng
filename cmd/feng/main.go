@@ -18,11 +18,12 @@ var args struct {
 	Filename    string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
 	Template    string `type:"existingfile" help:"Parse file using this template."`
 	OutDir      string `help:"Write files to this directory."`
+	Offset      int64  `help:"Starting offset (default is 0)."`
 	Raw         bool   `help:"Show raw values"`
-	LocalTime   bool   `help:"Show timestamps in local timezone. Default is UTC."`
+	LocalTime   bool   `help:"Show timestamps in local timezone (default is UTC)."`
 	Brief       bool   `help:"Show brief file information."`
 	Tree        bool   `help:"Show parsed file structure tree."`
-	Decimal     bool   `help:"Show offsets in decimal (default is 'hex')."`
+	Decimal     bool   `help:"Show offsets in decimal (default is hex)."`
 	Unmapped    bool   `help:"Print a report on unmapped bytes."`
 	Overlapping bool   `help:"Print a report on overlapping bytes."`
 	Debug       bool   `help:"[Dev] Enable debug logging"`
@@ -56,10 +57,16 @@ func main() {
 	var fl *mapper.FileLayout
 	var err error
 
+	f, err := os.Open(args.Filename)
+	defer f.Close()
+	if err != nil {
+		log.Fatal().Err(err).Msgf("Failed to open %s.", args.Filename)
+	}
+
 	if args.Template != "" {
-		fl, err = mapper.MapFileToGivenTemplate(args.Filename, args.Template)
+		fl, err = mapper.MapFileToGivenTemplate(f, args.Offset, args.Filename, args.Template)
 	} else {
-		fl, err = mapper.MapFileToMatchingTemplate(args.Filename)
+		fl, err = mapper.MapFileToMatchingTemplate(f, args.Offset, args.Filename)
 	}
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to map %s.", args.Filename)
