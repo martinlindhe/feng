@@ -295,7 +295,9 @@ func MapFileToMatchingTemplate(filename string) (fl *FileLayout, err error) {
 		n, _ := f.Read(buf)
 		buf = buf[:n]
 
-		return nil, fmt.Errorf("no match '%s'", hex.EncodeToString(buf[:n]))
+		s, _ := value.AsciiPrintableString(buf, len(buf))
+
+		return nil, fmt.Errorf("no match '%s' %s", hex.EncodeToString(buf[:n]), s)
 	}
 	return fl, nil
 }
