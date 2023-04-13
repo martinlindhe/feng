@@ -415,9 +415,14 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 		case "filename":
 			// record filename to use for the next data output operation
-			fl.filename, err = fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
-			if err != nil {
-				return err
+			if strings.Contains(es.Pattern.Value, ".png") {
+				// don't evaluate plain filenames
+				fl.filename = es.Pattern.Value
+			} else {
+				fl.filename, err = fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
+				if err != nil {
+					return err
+				}
 			}
 			fl.filename = presentStringValue(fl.filename)
 			log.Debug().Msgf("Output filename set to '%s' at %06x", fl.filename, fl.offset)
