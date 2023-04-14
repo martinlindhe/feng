@@ -499,24 +499,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		}
 		mapped := make(map[string]interface{})
 		for _, field := range layout.Fields {
-			if !field.Format.Slice && field.Format.Range == "" {
-				switch field.Format.Kind {
-				case "u8", "u16", "u32", "u64":
-					mapped[field.Format.Label] = fl.GetFieldValue(&field)
-				case "i8":
-					mapped[field.Format.Label] = int(uint64(int8(value.AsUint64Raw(field.Value))))
-				case "i16":
-					mapped[field.Format.Label] = int(uint64(int16(value.AsUint64Raw(field.Value))))
-				case "i32":
-					mapped[field.Format.Label] = int(uint64(int32(value.AsUint64Raw(field.Value))))
-				case "i64":
-					mapped[field.Format.Label] = int(uint64(int64(value.AsUint64Raw(field.Value))))
-				default:
-					mapped[field.Format.Label] = fl.GetFieldValue(&field)
-				}
-			} else {
-				mapped[field.Format.Label] = fl.GetFieldValue(&field)
-			}
+			mapped[field.Format.Label] = fl.GetFieldValue(&field)
 		}
 
 		mapped["index"] = int(layout.Index)
@@ -527,24 +510,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 
 			for _, field := range child.Fields {
 				log.Debug().Msgf("Adding child node %s to %s", field.Format.Label, layout.Name)
-				if !field.Format.Slice && field.Format.Range == "" {
-					switch field.Format.Kind {
-					case "u8", "u16", "u32", "u64":
-						mapped[field.Format.Label] = fl.GetFieldValue(&field)
-					case "i8":
-						mapped[field.Format.Label] = int(uint64(int8(value.AsUint64Raw(field.Value))))
-					case "i16":
-						mapped[field.Format.Label] = int(uint64(int16(value.AsUint64Raw(field.Value))))
-					case "i32":
-						mapped[field.Format.Label] = int(uint64(int32(value.AsUint64Raw(field.Value))))
-					case "i64":
-						mapped[field.Format.Label] = int(uint64(int64(value.AsUint64Raw(field.Value))))
-					default:
-						mapped[field.Format.Label] = fl.GetFieldValue(&field)
-					}
-				} else {
-					mapped[field.Format.Label] = fl.GetFieldValue(&field)
-				}
+				mapped[field.Format.Label] = fl.GetFieldValue(&field)
 			}
 
 			mapped["index"] = int(child.Index)

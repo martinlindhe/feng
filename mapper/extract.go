@@ -20,6 +20,7 @@ import (
 )
 
 // Write data streams to outDir
+// FIXME: dont evaluate if/else-blocks, so child values of them will not be extracted
 func (fl *FileLayout) Extract(outDir string) error {
 
 	err := os.MkdirAll(outDir, os.ModePerm)
@@ -34,6 +35,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 			if field.Filename != "" {
 				filename = field.Filename
 			}
+
 			switch field.Format.Kind {
 			case "compressed:lzo1x", "compressed:lzss", "compressed:lz4", "compressed:lzf", "compressed:zlib", "compressed:gzip", "compressed:deflate", "raw:u8", "encrypted:u8":
 				if filename == "" {

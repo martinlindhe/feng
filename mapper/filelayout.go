@@ -246,18 +246,8 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			}
 			return values
 		}
-		switch field.Format.Kind {
-		case "i8":
-			return fmt.Sprintf("%d", int8(value.AsUint64Raw(b)))
-		case "i16":
-			return fmt.Sprintf("%d", int16(value.AsUint64Raw(b)))
-		case "i32":
-			return fmt.Sprintf("%d", int32(value.AsUint64Raw(b)))
-		case "i64":
-			return fmt.Sprintf("%d", int64(value.AsUint64Raw(b)))
-		default:
-			return int(value.AsUint64Raw(b))
-		}
+
+		return int(value.AsUint64Raw(b))
 
 	case "ascii", "asciinl":
 		v, _ := value.AsciiPrintableString(b, len(b))
