@@ -9,7 +9,7 @@ import (
 
 // this encoding is used by fonts/woff2 (UIntBase128)
 // returns decoded value, raw bytes, byte length, error
-func ReadVariableLengthU32(r *os.File) (uint32, []byte, uint64, error) {
+func ReadVariableLengthU32(r *os.File) (uint32, []byte, int64, error) {
 	accum := uint32(0)
 	raw := []byte{}
 	for i := 0; i < 5; i++ {
@@ -31,7 +31,7 @@ func ReadVariableLengthU32(r *os.File) (uint32, []byte, uint64, error) {
 		raw = append(raw, v)
 		accum = (accum << 7) | (uint32(v) & 0x7F)
 		if v&0x80 == 0 {
-			return accum, raw, uint64(i + 1), nil
+			return accum, raw, int64(i + 1), nil
 		}
 	}
 	return 0, nil, 0, fmt.Errorf("exceeds 5 bytes")
@@ -39,7 +39,7 @@ func ReadVariableLengthU32(r *os.File) (uint32, []byte, uint64, error) {
 
 // this encoding is used by archive/xz
 // returns decoded value, raw bytes, byte length, error
-func ReadVariableLengthU64(r *os.File) (uint64, []byte, uint64, error) {
+func ReadVariableLengthU64(r *os.File) (uint64, []byte, int64, error) {
 
 	accum := uint64(0)
 	raw := []byte{}
@@ -61,7 +61,7 @@ func ReadVariableLengthU64(r *os.File) (uint64, []byte, uint64, error) {
 		}
 
 		if v&0x80 == 0 {
-			return accum, raw, uint64(i + 1), nil
+			return accum, raw, int64(i + 1), nil
 		}
 	}
 
@@ -70,7 +70,7 @@ func ReadVariableLengthU64(r *os.File) (uint64, []byte, uint64, error) {
 
 // Codes integers in 7-bit chunks, little-endian order. The high-bit in each byte signifies if it is the last byte.
 // used by system/macos/nibarchive
-func ReadVariableLengthS64(r *os.File) (uint64, []byte, uint64, error) {
+func ReadVariableLengthS64(r *os.File) (uint64, []byte, int64, error) {
 
 	accum := uint64(0)
 	raw := []byte{}
@@ -88,7 +88,7 @@ func ReadVariableLengthS64(r *os.File) (uint64, []byte, uint64, error) {
 		accum |= (uint64(v) & 0x7F) << (i * 7)
 		log.Info().Msgf("Read %02x (byte %d)", v, i)
 		if (v & 0x80) != 0 {
-			return accum, raw, uint64(i + 1), nil
+			return accum, raw, int64(i + 1), nil
 		}
 	}
 	return 0, nil, 0, fmt.Errorf("exceeds 9 bytes")

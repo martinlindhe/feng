@@ -58,7 +58,7 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 }
 
 // evaluates a math expression
-func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64, error) {
+func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (int64, error) {
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return 0, err
@@ -69,13 +69,13 @@ func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64
 		if DEBUG_EVAL {
 			log.Printf("EvaluateExpression: %s => %d", in, v)
 		}
-		return uint64(v), nil
+		return int64(v), nil
 
 	case uint64:
 		if DEBUG_EVAL {
 			log.Printf("EvaluateExpression: %s => %d", in, v)
 		}
-		return v, nil
+		return int64(v), nil
 
 	case bool:
 		if v {
@@ -153,6 +153,7 @@ func (fl *FileLayout) peekU8(offset int64) (uint8, error) {
 	return buf[0], nil
 }
 
+// returns a slice of bytes from file, otherwise unmodified
 func (fl *FileLayout) peekBytes(offset int64, size int64) ([]uint8, error) {
 	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
 	if err != nil {

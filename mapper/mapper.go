@@ -104,7 +104,7 @@ func (fl *FileLayout) mapLayout(rr *os.File, fs *Struct, ds *template.DataStruct
 		}
 
 		baseLabel := df.Label
-		for i := uint64(0); i < parsedRange; i++ {
+		for i := int64(0); i < parsedRange; i++ {
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
@@ -127,12 +127,12 @@ func (fl *FileLayout) mapLayout(rr *os.File, fs *Struct, ds *template.DataStruct
 	return nil
 }
 
-func fileSize(file *os.File) uint64 {
+func fileSize(file *os.File) int64 {
 	fi, err := file.Stat()
 	if err != nil {
 		log.Fatal().Err(err).Msg("stat failed")
 	}
-	return uint64(fi.Size())
+	return fi.Size()
 }
 
 // produces a list of fields with offsets and sizes from input reader based on data structure
@@ -432,7 +432,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			}
 
 			fl.offsetChanges++
-			if fl.offsetChanges > 20000 {
+			if fl.offsetChanges > 100_000 {
 				panic("debug recursion: too many offset changes from template")
 				//return fmt.Errorf("too many offset changes from template")
 			}
@@ -483,7 +483,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", label, fl.offset)
 			}
-			len := uint64(len(val))
+			len := int64(len(val))
 			if len > 0 {
 				es.Field.Kind = kind
 				es.Field.Range = fmt.Sprintf("%d", len)
@@ -491,7 +491,6 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 				fs.Fields = append(fs.Fields, Field{
 					Offset:   fl.offset,
 					Length:   len,
-					Value:    val,
 					Format:   es.Field,
 					Endian:   fl.endian,
 					Filename: fl.filename,
@@ -555,7 +554,6 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			fs.Fields = append(fs.Fields, Field{
 				Offset:          fl.offset,
 				Length:          totalLength,
-				Value:           val,
 				Format:          es.Field,
 				Endian:          endian,
 				Filename:        fl.filename,
@@ -565,14 +563,13 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 		case "vu32":
 			// variable-length u32
-			_, raw, len, err := value.ReadVariableLengthU32(r)
+			_, _, len, err := value.ReadVariableLengthU32(r)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
 				Offset:   fl.offset,
 				Length:   len,
-				Value:    raw,
 				Format:   es.Field,
 				Endian:   fl.endian,
 				Filename: fl.filename,
@@ -581,14 +578,13 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 		case "vu64":
 			// variable-length u64
-			_, raw, len, err := value.ReadVariableLengthU64(r)
+			_, _, len, err := value.ReadVariableLengthU64(r)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
 				Offset:   fl.offset,
 				Length:   len,
-				Value:    raw,
 				Format:   es.Field,
 				Endian:   fl.endian,
 				Filename: fl.filename,
@@ -597,14 +593,13 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 		case "vs64":
 			// variable-length u64
-			_, raw, len, err := value.ReadVariableLengthS64(r)
+			_, _, len, err := value.ReadVariableLengthS64(r)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
 				Offset:   fl.offset,
 				Length:   len,
-				Value:    raw,
 				Format:   es.Field,
 				Endian:   fl.endian,
 				Filename: fl.filename,
@@ -616,11 +611,10 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
-			len := uint64(len(val))
+			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{
 				Offset:   fl.offset,
 				Length:   len,
-				Value:    val,
 				Format:   es.Field,
 				Endian:   fl.endian,
 				Filename: fl.filename,
@@ -632,11 +626,10 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
-			len := uint64(len(val))
+			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{
 				Offset:   fl.offset,
 				Length:   len,
-				Value:    val,
 				Format:   es.Field,
 				Endian:   fl.endian,
 				Filename: fl.filename,
@@ -651,11 +644,10 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			// append terminator marker since readBytesUntilMarker() excludes it
 			val = append(val, []byte{0, 0}...)
 
-			len := uint64(len(val))
+			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{
 				Offset:   fl.offset,
 				Length:   len,
-				Value:    val,
 				Format:   es.Field,
 				Endian:   fl.endian,
 				Filename: fl.filename,
@@ -731,7 +723,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 							log.Info().Msgf("appending ranged %s[%d]", es.Field.Kind, parsedRange)
 
-							for i := uint64(0); i < parsedRange; i++ {
+							for i := int64(0); i < parsedRange; i++ {
 
 								// add this as child node to current struct (fs)
 
@@ -786,7 +778,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 }
 
 // reads bytes from reader and returns them in network byte order (big endian)
-func readBytes(r io.ReadSeeker, totalLength, unitLength uint64, endian string) ([]byte, error) {
+func readBytes(r io.ReadSeeker, totalLength, unitLength int64, endian string) ([]byte, error) {
 	if unitLength > 1 && endian == "" {
 		return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
 	}

@@ -299,11 +299,11 @@ type MatchedPattern struct {
 	Index int8
 }
 
-func (df *DataField) SingleUnitSize() uint64 {
+func (df *DataField) SingleUnitSize() int64 {
 	return SingleUnitSize(df.Kind)
 }
 
-func SingleUnitSize(kind string) uint64 {
+func SingleUnitSize(kind string) int64 {
 	switch kind {
 	case "u8", "i8",
 		"ascii", "asciiz", "asciinl",

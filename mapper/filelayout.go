@@ -32,16 +32,16 @@ type FileLayout struct {
 	filename string
 
 	// current offset
-	offset uint64
+	offset int64
 
 	// previous offset (restore it with "offset: restore")
-	previousOffsets []uint64
+	previousOffsets []int64
 
 	// counts how many times the offset was changed in order to stop recursion
-	offsetChanges uint64
+	offsetChanges int64
 
 	// total size of data (FILE_SIZE)
-	size uint64
+	size int64
 
 	// default extension
 	Extension string
@@ -69,7 +69,7 @@ type FileLayout struct {
 }
 
 // pop last offset from previousOffsets list
-func (fl *FileLayout) popLastOffset() (v uint64) {
+func (fl *FileLayout) popLastOffset() (v int64) {
 	if len(fl.previousOffsets) == 0 {
 		panic("cannot pop offset, no offsets have been pushed")
 	}
@@ -79,7 +79,7 @@ func (fl *FileLayout) popLastOffset() (v uint64) {
 }
 
 // push current offset to previousOffsets list
-func (fl *FileLayout) pushOffset() uint64 {
+func (fl *FileLayout) pushOffset() int64 {
 	fl.previousOffsets = append(fl.previousOffsets, fl.offset)
 	return fl.offset
 }
@@ -139,11 +139,8 @@ type Struct struct {
 }
 
 type Field struct {
-	Offset uint64
-	Length uint64
-
-	// value in network byte order (big)    TODO: REMOVE THIS FIELD AND READ ON DEMAND
-	Value []byte
+	Offset int64
+	Length int64
 
 	// on-disk endianness
 	Endian string
@@ -181,7 +178,15 @@ func shortFloat(f float32) string {
 
 // returns a presentation of the value in the data type (field.Format.Kind)
 func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
-	b := field.Value
+	b, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+	// convert to network byte order
+	unitLength, _ := fl.GetAddressLengthPair(&field.Format)
+	if unitLength > 1 && field.Endian == "little" {
+		b = value.ReverseBytes(b, int(unitLength))
+	}
+	if err != nil {
+		panic(err)
+	}
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 		"compressed:lzf", "compressed:zlib", "compressed:gzip",
@@ -215,10 +220,10 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			values := []interface{}{}
 			switch field.Format.Kind {
 			case "u8", "i8":
-				return field.Value
+				return b[0]
 
 			case "u16":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					if field.Endian == "big" {
 						values = append(values, uint64(binary.BigEndian.Uint16(b[i:])))
 					} else {
@@ -226,7 +231,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 					}
 				}
 			case "u32":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					if field.Endian == "big" {
 						values = append(values, uint64(binary.BigEndian.Uint32(b[i:])))
 					} else {
@@ -234,7 +239,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 					}
 				}
 			case "u64":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					if field.Endian == "big" {
 						values = append(values, binary.BigEndian.Uint64(b[i:]))
 					} else {
@@ -316,19 +321,21 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 
 // presents the value of the data type (field.Format.Kind) in a human-readable form
 func (fl *FileLayout) PresentFieldValue(field *Field) string {
-	// XXX a lot of stuff is re-evaluated here, should reuse data from parsing
-	b := field.Value
+
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 		"compressed:lzf", "compressed:zlib", "compressed:gzip",
 		"raw:u8", "encrypted:u8":
 		return ""
+	}
 
+	b, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+	if err != nil {
+		panic(err)
+	}
+
+	switch field.Format.Kind {
 	case "f32":
-		if field.Format.Slice && field.Format.Range == "" {
-			panic("FIXME present slice")
-		}
-
 		if !field.Format.Slice && field.Format.Range != "" {
 			values := []string{}
 			val := 0
@@ -336,7 +343,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
 
-			for i := uint64(0); i < totalLength; i += unitLength {
+			for i := int64(0); i < totalLength; i += unitLength {
 				val++
 				if field.Endian == "big" {
 					values = append(values, shortFloat(math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
@@ -356,9 +363,6 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 		return shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
 
 	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
-		if field.Format.Slice && field.Format.Range == "" {
-			panic("FIXME present slice")
-		}
 		if !field.Format.Slice && field.Format.Range != "" {
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
 
@@ -368,7 +372,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 
 			switch field.Format.Kind {
 			case "u8":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					val++
 					values = append(values, fmt.Sprintf("%d", b[i]))
 					if i+unitLength < totalLength && val >= 4 {
@@ -378,7 +382,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				}
 
 			case "u16":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					val++
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint16(b[i:])))
@@ -392,7 +396,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				}
 
 			case "u32":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					val++
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint32(b[i:])))
@@ -406,7 +410,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				}
 
 			case "u64":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					val++
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint64(b[i:])))
@@ -420,7 +424,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				}
 
 			case "i8":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					val++
 					values = append(values, fmt.Sprintf("%d", int8(b[i])))
 					if i+unitLength < totalLength && val >= 4 {
@@ -430,7 +434,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				}
 
 			case "i16":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					val++
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", int16(binary.BigEndian.Uint16(b[i:]))))
@@ -444,7 +448,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				}
 
 			case "i32":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					val++
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", int32(binary.BigEndian.Uint32(b[i:]))))
@@ -458,7 +462,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 				}
 
 			case "i64":
-				for i := uint64(0); i < totalLength; i += unitLength {
+				for i := int64(0); i < totalLength; i += unitLength {
 					val++
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", int64(binary.BigEndian.Uint64(b[i:]))))
@@ -522,6 +526,16 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 		}
 	}
 
+	// XXX only need to read up to 32 bytes ...
+	maxLen := int64(30)
+	if field.Length < maxLen {
+		maxLen = field.Length
+	}
+	data, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+	if err != nil {
+		panic(err)
+	}
+
 	fieldValue := strings.TrimRight(fl.PresentFieldValue(field), " ")
 
 	res := ""
@@ -536,9 +550,9 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 	} else {
 		hexValue := ""
 		if field.Length <= maxHexDisplayLength {
-			hexValue = fmt.Sprintf("% 02x", field.Value)
+			hexValue = fmt.Sprintf("% 02x", data)
 		} else {
-			hexValue = fmt.Sprintf("% 02x ...", field.Value[0:maxHexDisplayLength])
+			hexValue = fmt.Sprintf("% 02x ...", data[0:maxHexDisplayLength])
 		}
 		res += fmt.Sprintf("%-30s %-16s %-30s %-20s",
 			field.Format.Label, kind, fieldValue, hexValue)
@@ -681,7 +695,7 @@ func (fl *FileLayout) reportUnmappedData() string {
 	log.Info().Msgf("reportUnmappedData start")
 	for i := int64(0); i < int64(fl.size); i++ {
 		// FIXME: isMappedByte is extremely slow !!!
-		if !fl.isMappedByte(uint64(i)) {
+		if !fl.isMappedByte(i) {
 			if r.offset == -1 {
 				r.offset = i
 				r.length = 1
@@ -724,7 +738,7 @@ type dataRange struct {
 	length int64
 }
 
-func (fl *FileLayout) isMappedByte(offset uint64) bool {
+func (fl *FileLayout) isMappedByte(offset int64) bool {
 	for _, layout := range fl.Structs {
 		for _, field := range layout.Fields {
 			if offset >= field.Offset && offset < field.Offset+field.Length {
@@ -743,8 +757,8 @@ func (fl *FileLayout) isMappedByte(offset uint64) bool {
 }
 
 // return the number of mapped bytes
-func (fl *FileLayout) MappedBytes() uint64 {
-	count := uint64(0)
+func (fl *FileLayout) MappedBytes() int64 {
+	count := int64(0)
 	for _, layout := range fl.Structs {
 		for _, field := range layout.Fields {
 			count += field.Length
@@ -768,7 +782,7 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 }
 
 // finds the first field named `structName`.`fieldName`
-func (fl *FileLayout) GetInt(s string, df *value.DataField) (uint64, error) {
+func (fl *FileLayout) GetInt(s string, df *value.DataField) (int64, error) {
 	if DEBUG {
 		log.Printf("GetInt: searching for '%s'", s)
 	}
@@ -876,15 +890,19 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 		if field.Format.Label == fieldName {
 			switch childName {
 			case "offset":
-				val := value.U64toBytesBigEndian(field.Offset, 8)
+				val := value.U64toBytesBigEndian(uint64(field.Offset), 8)
 				return "u64", val, nil
 			case "len":
-				val := value.U64toBytesBigEndian(field.Length, 8)
+				val := value.U64toBytesBigEndian(uint64(field.Length), 8)
 				return "u64", val, nil
 			}
 
 			if !field.Format.IsSimpleUnit() || childName == "" {
-				return field.Format.Kind, field.Value, nil
+				data, err := fl.peekBytes(field.Offset, field.Length)
+				if err != nil {
+					return "", nil, err
+				}
+				return field.Format.Kind, data, nil
 			}
 
 			for _, child := range field.MatchedPatterns {
@@ -966,17 +984,14 @@ func (fl *FileLayout) GetLength(s string, df *value.DataField) (int, error) {
 }
 
 // returns unitLength, totalLength (in bytes)
-func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64) {
+func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (int64, int64) {
 
 	unitLength := df.SingleUnitSize()
-	rangeLength := uint64(1)
+	rangeLength := int64(1)
 	var err error
 
 	if df.Range != "" {
 		if df.RangeVal == 0 {
-			// XXX permanently store and reuse the calculated range length. faster lookup & avoid bug with changing offset value... ?!
-			// XXX FIXME TODO! !!! REFACTOR THIS:
-			// STORES CACHED RESULT OF CALCULATION
 			log.Debug().Msgf("Calculating initial value for df.Range: %s", df.Range)
 			val, err := fl.EvaluateExpression(df.Range, df)
 			if err != nil {
@@ -984,13 +999,13 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (uint64, uint64)
 			}
 			df.RangeVal = int64(val)
 		}
-		rangeLength = uint64(df.RangeVal)
+		rangeLength = int64(df.RangeVal)
 
 		if err != nil {
 			log.Fatal().Err(err).Msgf("failed")
 		}
 	}
-	totalLength := unitLength * uint64(rangeLength)
+	totalLength := unitLength * int64(rangeLength)
 	log.Trace().Msgf("GetAddressLengthPair: unitLength %d * rangeLength %d = totalLength %d", unitLength, rangeLength, totalLength)
 
 	return unitLength, totalLength

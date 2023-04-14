@@ -63,9 +63,11 @@ func (fl *FileLayout) Extract(outDir string) error {
 
 				var b bytes.Buffer
 
+				data, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+
 				switch field.Format.Kind {
 				case "compressed:lzo1x":
-					expanded, err := lzo.Decompress1X(bytes.NewReader(field.Value), 0, 0)
+					expanded, err := lzo.Decompress1X(bytes.NewReader(data), 0, 0)
 					if err != nil {
 						log.Error().Err(err).Msgf("Extraction failed")
 						continue
@@ -74,7 +76,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 
 				case "compressed:lzss":
 					lzssMode0 := lzss.LZSS{}
-					expanded, err := lzssMode0.Decompress(field.Value)
+					expanded, err := lzssMode0.Decompress(data)
 					if err != nil {
 						log.Error().Err(err).Msgf("Extraction failed")
 						continue
@@ -83,7 +85,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 
 				case "compressed:lz4":
 					expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
-					n, err := lz4.UncompressBlock(field.Value, expanded)
+					n, err := lz4.UncompressBlock(data, expanded)
 					if err != nil {
 						log.Error().Err(err).Msgf("Extraction failed")
 						continue
@@ -92,7 +94,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 
 				case "compressed:lzf":
 					expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
-					n, err := lzf.Decompress(field.Value, expanded)
+					n, err := lzf.Decompress(data, expanded)
 					if err != nil {
 						log.Error().Err(err).Msgf("Extraction failed")
 						continue
@@ -100,7 +102,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 					b.Write(expanded[0:n])
 
 				case "compressed:zlib":
-					reader, err := zlib.NewReader(bytes.NewReader(field.Value))
+					reader, err := zlib.NewReader(bytes.NewReader(data))
 					if err != nil {
 						log.Error().Err(err).Msgf("Extraction failed")
 						continue
@@ -113,7 +115,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 					}
 
 				case "compressed:gzip":
-					reader, err := gzip.NewReader(bytes.NewReader(field.Value))
+					reader, err := gzip.NewReader(bytes.NewReader(data))
 					if err != nil {
 						log.Error().Err(err).Msgf("Extraction failed1")
 						continue
@@ -129,7 +131,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 					}
 
 				case "compressed:deflate":
-					reader := flate.NewReader(bytes.NewReader(field.Value))
+					reader := flate.NewReader(bytes.NewReader(data))
 					defer reader.Close()
 
 					var b bytes.Buffer
@@ -142,10 +144,10 @@ func (fl *FileLayout) Extract(outDir string) error {
 					if field.Length <= 1 {
 						continue
 					}
-					b.Write(field.Value)
+					b.Write(data)
 
 				case "encrypted:u8":
-					dec, err := fl.DecryptData(field.Value)
+					dec, err := fl.DecryptData(data)
 					if err != nil {
 						log.Error().Err(err).Msgf("decryption failed")
 					}
