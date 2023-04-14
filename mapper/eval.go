@@ -1,9 +1,7 @@
 package mapper
 
 import (
-	"encoding/binary"
 	"fmt"
-	"io"
 	"math"
 	"strconv"
 	"strings"
@@ -112,58 +110,6 @@ func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
 		return int(val), nil
 	}
 	return nil, fmt.Errorf("expected string, got %T", args[0])
-}
-
-func (fl *FileLayout) peekU32(offset int64) (uint32, error) {
-	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
-	if err != nil {
-		return 0, err
-	}
-
-	_, _ = fl._f.Seek(offset, io.SeekStart)
-	buf := make([]byte, 4)
-	_, _ = fl._f.Read(buf)
-	val := binary.LittleEndian.Uint32(buf)
-	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
-	return val, nil
-}
-
-func (fl *FileLayout) peekU16(offset int64) (uint16, error) {
-	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
-	if err != nil {
-		return 0, err
-	}
-	_, _ = fl._f.Seek(offset, io.SeekStart)
-	buf := make([]byte, 2)
-	_, _ = fl._f.Read(buf)
-	val := binary.LittleEndian.Uint16(buf)
-	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
-	return val, nil
-}
-
-func (fl *FileLayout) peekU8(offset int64) (uint8, error) {
-	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
-	if err != nil {
-		return 0, err
-	}
-	_, _ = fl._f.Seek(offset, io.SeekStart)
-	buf := make([]byte, 1)
-	_, _ = fl._f.Read(buf)
-	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
-	return buf[0], nil
-}
-
-// returns a slice of bytes from file, otherwise unmodified
-func (fl *FileLayout) peekBytes(offset int64, size int64) ([]uint8, error) {
-	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
-	if err != nil {
-		return nil, err
-	}
-	_, _ = fl._f.Seek(offset, io.SeekStart)
-	buf := make([]byte, size)
-	_, _ = fl._f.Read(buf)
-	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
-	return buf, nil
 }
 
 func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {

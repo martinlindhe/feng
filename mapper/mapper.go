@@ -479,7 +479,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 			feng.Yellow("Reading until marker from %06x: marker % 02x\n", fl.offset, needle)
 
-			val, err := readBytesUntilMarkerSequence(r, 4096, needle)
+			val, err := fl.readBytesUntilMarkerSequence(4096, needle)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", label, fl.offset)
 			}
@@ -519,6 +519,10 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 				continue
 			}
 
+			if es.Pattern.Known {
+				log.Info().Msgf("KNOWN PATTERN FOR '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
+			}
+
 			endian := fl.endian
 			if es.Field.Endian != "" {
 				if DEBUG {
@@ -527,7 +531,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 				endian = es.Field.Endian
 			}
 
-			val, err := readBytes(r, totalLength, unitLength, endian)
+			val, err := fl.readBytes(totalLength, unitLength, endian)
 			if DEBUG {
 				log.Printf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, dfParent.Label, es.Field.Label, val, err)
 			}
@@ -535,8 +539,10 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 
+			var matchPatterns []value.MatchedPattern
 			// if known data pattern, see if it matches file data
 			if es.Pattern.Known {
+
 				if !bytes.Equal(es.Pattern.Pattern, val) {
 					if DEBUG {
 						log.Printf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'", fl.offset, es.Field.Label, es.Pattern.Pattern, val)
@@ -546,7 +552,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 				}
 			}
 
-			matchPatterns, err := es.EvaluateMatchPatterns(val, endian)
+			matchPatterns, err = es.EvaluateMatchPatterns(val, endian)
 			if err != nil {
 				return err
 			}
@@ -563,7 +569,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 		case "vu32":
 			// variable-length u32
-			_, _, len, err := value.ReadVariableLengthU32(r)
+			_, _, len, err := fl.ReadVariableLengthU32()
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -578,7 +584,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 		case "vu64":
 			// variable-length u64
-			_, _, len, err := value.ReadVariableLengthU64(r)
+			_, _, len, err := fl.ReadVariableLengthU64()
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -593,7 +599,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 
 		case "vs64":
 			// variable-length u64
-			_, _, len, err := value.ReadVariableLengthS64(r)
+			_, _, len, err := fl.ReadVariableLengthS64()
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -607,7 +613,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			fl.offset += len
 
 		case "asciiz":
-			val, err := readBytesUntilMarkerByte(r, 0)
+			val, err := fl.readBytesUntilMarkerByte(0)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -622,7 +628,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			fl.offset += len
 
 		case "asciinl":
-			val, err := readBytesUntilMarkerByte(r, '\n')
+			val, err := fl.readBytesUntilMarkerByte('\n')
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -637,7 +643,7 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 			fl.offset += len
 
 		case "utf16z":
-			val, err := readBytesUntilMarkerSequence(r, 2, []byte{0, 0})
+			val, err := fl.readBytesUntilMarkerSequence(2, []byte{0, 0})
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -775,87 +781,4 @@ func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.Dat
 	}
 
 	return nil
-}
-
-// reads bytes from reader and returns them in network byte order (big endian)
-func readBytes(r io.ReadSeeker, totalLength, unitLength int64, endian string) ([]byte, error) {
-	if unitLength > 1 && endian == "" {
-		return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
-	}
-
-	if totalLength > 1024*1024*1024 {
-		return nil, fmt.Errorf("readBytes: attempt to read unexpected amount of data %d", totalLength)
-	}
-
-	val := make([]byte, totalLength)
-	if _, err := io.ReadFull(r, val); err != nil {
-		return nil, err
-	}
-
-	// convert to network byte order
-	if unitLength > 1 && endian == "little" {
-		val = value.ReverseBytes(val, int(unitLength))
-	}
-
-	return val, nil
-}
-
-// reads bytes from reader until 0x00 is found. returned data includes the terminating 0x00
-func readBytesUntilMarkerByte(r io.Reader, marker byte) ([]byte, error) {
-
-	b := make([]byte, 1)
-
-	res := []byte{}
-
-	for {
-		if _, err := io.ReadFull(r, b); err != nil {
-			return nil, err
-		}
-		res = append(res, b[0])
-		if b[0] == marker {
-			break
-		}
-	}
-	return res, nil
-}
-
-// reads bytes from reader until the marker byte sequence is found. returned data excludes the marker
-// FIXME: won't find patterns overlapping chunks
-func readBytesUntilMarkerSequence(r *os.File, chunkSize int64, search []byte) ([]byte, error) {
-
-	if int(chunkSize) < len(search) {
-		panic("unlikely")
-	}
-
-	chunk := make([]byte, int(chunkSize)+len(search))
-	n, err := r.Read(chunk[:chunkSize])
-	res := []byte{}
-
-	var offset int64
-	idx := bytes.Index(chunk[:chunkSize], search)
-	for {
-		//log.Printf("Read a slice of len %d, Index %d: % 02x", n, idx, chunk[:4])
-		if idx >= 0 {
-			res = append(res, chunk[:idx]...)
-
-			// rewind to before marker
-			_, err = r.Seek(int64(-(n - idx)), io.SeekCurrent)
-			return res, err
-		} else {
-			//log.Printf("appended %d bytes: % 02x, res is %d len", len(chunk[:chunkSize]), chunk[:4], len(res))
-			res = append(res, chunk[:chunkSize]...)
-		}
-		if err == io.EOF {
-			log.Error().Msgf("reached EOF")
-			return nil, nil
-		} else if err != nil {
-			return nil, err
-		}
-
-		offset += chunkSize
-
-		n, err = r.Read(chunk[:chunkSize])
-
-		idx = bytes.Index(chunk[:chunkSize], search)
-	}
 }

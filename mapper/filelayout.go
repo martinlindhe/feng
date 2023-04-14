@@ -66,6 +66,9 @@ type FileLayout struct {
 
 	// file handle
 	_f *os.File
+
+	// bytes read, for debugging over-reading
+	bytesRead int
 }
 
 // pop last offset from previousOffsets list
@@ -178,21 +181,25 @@ func shortFloat(f float32) string {
 
 // returns a presentation of the value in the data type (field.Format.Kind)
 func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
-	b, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
-	// convert to network byte order
-	unitLength, _ := fl.GetAddressLengthPair(&field.Format)
-	if unitLength > 1 && field.Endian == "little" {
-		b = value.ReverseBytes(b, int(unitLength))
-	}
-	if err != nil {
-		panic(err)
-	}
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 		"compressed:lzf", "compressed:zlib", "compressed:gzip",
 		"raw:u8", "encrypted:u8":
 		return ""
+	}
 
+	b, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+	if err != nil {
+		panic(err)
+	}
+
+	// convert to network byte order
+	unitLength, _ := fl.GetAddressLengthPair(&field.Format)
+	if unitLength > 1 && field.Endian == "little" {
+		b = value.ReverseBytes(b, int(unitLength))
+	}
+
+	switch field.Format.Kind {
 	case "f32":
 		if field.Format.Slice || field.Format.Range != "" {
 			return ""
@@ -211,9 +218,6 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		)
 
 	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
-		if field.Format.Slice && field.Format.Range == "" {
-			panic("FIXME present slice " + field.Format.Kind)
-		}
 		if !field.Format.Slice && field.Format.Range != "" {
 			log.Debug().Msgf("GetFieldValue %s", field.Format.Label)
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
@@ -303,15 +307,15 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
 
 	case "vu32":
-		got, _, _, _ := value.ReadVariableLengthU32(fl._f)
+		got, _, _, _ := fl.ReadVariableLengthU32()
 		return got
 
 	case "vu64":
-		got, _, _, _ := value.ReadVariableLengthU64(fl._f)
+		got, _, _, _ := fl.ReadVariableLengthU64()
 		return got
 
 	case "vs64":
-		got, _, _, _ := value.ReadVariableLengthS64(fl._f)
+		got, _, _, _ := fl.ReadVariableLengthS64()
 		return got
 	}
 
@@ -526,12 +530,12 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 		}
 	}
 
-	// XXX only need to read up to 32 bytes ...
-	maxLen := int64(30)
+	// only read up to 32 bytes
+	maxLen := int64(32)
 	if field.Length < maxLen {
 		maxLen = field.Length
 	}
-	data, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+	data, err := fl.peekBytes(int64(field.Offset), maxLen)
 	if err != nil {
 		panic(err)
 	}
@@ -675,6 +679,7 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	} else {
 		res += "EOF\n"
 	}
+	res += fmt.Sprintf("TOTAL BYTES READ: %d\n", fl.bytesRead)
 
 	if len(fl.previousOffsets) != 0 {
 		res += fmt.Sprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
