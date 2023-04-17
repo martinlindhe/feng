@@ -1,0 +1,69 @@
+# STATUS: 40%
+
+# Used in Guild Wars II
+
+# TODO: improve output filenames
+
+software:
+  - https://github.com/kytulendu/Gw2Browser
+
+references:
+  - https://github.com/kytulendu/gw2browser/blob/8f06f75a64aab3d692332eec8b32379527cfadf7/src/ANetStructs.h#L231
+
+kind: game
+name: Guild Wars II dat file
+extensions: [.dat]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 97 c'AN' 1a # GW2
+
+structs:
+  header:
+    u8 Version: ?? # 97 = GW2
+    u8[3] Signature: c'AN' 1a
+    u32 HeaderSize: ??
+    u32 Unk1: ??          # ca ba 00 01
+    u32 SectorSize: ??    # 512
+    u32 CRC: ??
+    u32 Unk2: ??          # 0
+    u64 ManifestOffset: ??
+    u32 ManifestSize: ??
+    u32 Flags: ??
+
+  mft_header:
+    ascii[4] ID: c'Mft' 1a
+    u64 Unk1: ??
+    u32 EntryCount: ??
+    u64 Unk2: ??          # 0
+
+  # entry 0 covers the header
+  # entry 1 covers another low area, XXX what meaning is this? contains a data table
+  # entry 2 covers the Manifest header + all entries
+  mft_entry:
+    u64 Offset: ??
+    u32 Size: ??
+    u16 CompressionFlag:
+      eq 00: Uncompressed
+      eq 08: Compressed     # XXX what compression?
+
+    u16 Flags:
+      bit b0000_0000_0000_0001: InUse
+    u32 Unk: ??             # 0
+    u32 MaybeTimestamp: ??
+    #if self.index > 2:
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - offset Header.ManifestOffset
+  - mft_header ManifestHeader
+
+  # SUPER SLOW:
+  #- mft_entry[ManifestHeader.EntryCount] MftEntry  # crash on too many offsets after 15 min
+
+  - mft_entry[5] MftEntry

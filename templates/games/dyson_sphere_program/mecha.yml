@@ -1,0 +1,42 @@
+# STATUS: 10%
+
+# Used in:
+# Dyson Sphere Program (PC)
+
+# TODO: map rest of file
+
+kind: game
+name: Dyson Sphere Program mecha file
+extensions: [.mecha]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 12 c'DSPMechaAppearance' 00
+
+structs:
+  header:
+    ascii[20] Signature: 12 c'DSPMechaAppearance' 00
+    u32[3] Unknown: ??  # 0, 0, 0
+    u32 Unk1: ??        # 1 = maybe little endian marker
+    u32 NameLen: ??
+    ascii[self.NameLen] Name: ??
+    u8 Unk2: ??         # 0
+    endian: little
+    u32 Size: ??
+    filename: thumbnail.png
+    raw:u8[self.Size] Data: ?? # PNG image
+
+    u32 Unk3: ?? # 8
+
+    u32[520] SomeTable: ??     # 2080 bytes (70 x 32bit values) that has some pattern to it
+
+
+    be:u32 Huh1: ??   # XXX seems to be big endian
+    u32 Huh2: ??      # XXX seems to be little endian
+    u32 Huh3: ?? # 4
+    u32 Huh4: ?? # 0
+
+layout:
+  - header Header
+
