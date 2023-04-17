@@ -42,7 +42,9 @@ structs:
     u8 Aspect ratio: ??
 
     if self.ScreenDescriptor & GlobalColorTablePresent:
-      rgb[(2 << (self.ScreenDescriptor & 7))] Global color table: ??
+      u8[(2 << (self.ScreenDescriptor & GlobalColorTableSize)) * 3] GlobalColorTable: ??    # XXX don't work with sized custom struct !!!
+    #  rgb[2 << (self.ScreenDescriptor & GlobalColorTableSize)] GlobalColorTable: ??
+    #rgb[4] GlobalColorTable: ?? ## XXX dont work with 4 custom structs...
 
   block:
     u8 BlockType:
@@ -51,6 +53,9 @@ structs:
       eq 3b: BLOCK_TRAILER
 
     label: self.BlockType
+
+    if self.BlockType == BLOCK_TRAILER:
+      parse: stop
 
     if self.BlockType == BLOCK_EXTENSION:
       u8 ExtensionType:
@@ -95,11 +100,10 @@ structs:
 
   data_sub_block:
     u8 DataSize: ??
-    if self.DataSize == 0:
+    if self.DataSize == 0:    # XXX dont work?
       label: '"Terminator"'
       parse: stop
-
-    u8[self.DataSize] Data: ??
+    u8[self.DataSize] Data: ??    # XXX is always empty
 
 layout:
   - header Header

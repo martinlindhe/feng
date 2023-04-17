@@ -1,0 +1,83 @@
+# STATUS: 30%
+
+# Used in:
+# God of War III (PS3)
+# + many PS3 games
+# No Man's Sky (PC)
+
+# TODO MAX: map filenames to out files (parse compressed toc[0])
+
+references:
+  - https://www.psdevwiki.com/ps3/PlayStation_archive_(PSARC)
+  - https://forum.xentax.com/viewtopic.php?t=14846
+  - http://aluigi.org/bms/brink.bms # XXX
+  - https://forum.xentax.com/viewtopic.php?p=91717#p91717 # PS3 format
+  - https://github.com/cmkushnir/NMSPakViewer/blob/bb5a3dac7ce2b4b125a22c905731ef38ae7aa297/NMS/PAK/PAK_File.cs
+
+software:
+  - paru -S psarc  # arch linux
+  - http://nomansskymods.com/mods/psarc-decompile-tool/
+  - https://github.com/cmkushnir/NMSPakViewer
+
+kind: archive
+name: PlayStation archive
+extensions: [.pak, .psarc]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'PSAR'
+
+structs:
+  header:
+    ascii[4] Signature: c'PSAR'
+    u16 MajorVersion: ??    # 1
+    u16 MinorVersion: ??    # 4
+    ascii[4] CompressionFormat: ??
+    u32 HeaderSize: ??
+    u32 TocEntrySize: ??
+    u32 TocEntryCount: ??
+    u32 DataBlockSize: ??
+    u32 Flags:
+      bit b00000000_00000000_00000000_00000001: Relative paths
+      bit b00000000_00000000_00000000_00000010: Ignorecase paths
+      bit b00000000_00000000_00000000_00000100: Absolute paths
+      bit b11111111_11111111_11111111_11111000: Reserved
+
+    if self.TocEntrySize != 30:
+      data: unseen # TODO: verify it must always be 30
+
+  # TODO: the first toc entry contains a compressed \n-separated list of filenames,
+  # extract it and use it to name output files correctly
+  toc:
+
+    if self.index == 0:
+      label: filenames
+      filename: '"filenames"'
+    else:
+      filename: '""'
+    u8[16] Hash: ?? # md5
+    u32 Index: ??
+    u8 SizeHi: ?? # FIXME add u40 type (5 bytes)
+    u32 Size: ??      # XXX is this "expanded size" ?
+    u8 OffsetHi: ??
+    u32 Offset: ??
+
+    if self.Offset+self.Size < FILE_SIZE:
+      offset: self.Offset
+      if Header.CompressionFormat == "zlib":
+        compressed:zlib[self.Size] Data: ??
+      if Header.CompressionFormat == "lzma":
+        data: unseen # TODO: "lzma" exists, NEED SAMPLE !
+      offset: restore
+    else:
+      # XXX TOC_19 and TOC_22 of NMSARC.B12267DC.pak: Offset 0xa100, Size 0x4380 (out of range)
+      # 19: MODELS/PLANETS/DESERT/TREES/SMALLTREE.GEOMETRY.DATA.MBIN.PC
+      # seems to allow 6105   17 d9  bytes (?) value in file is 17280   43 80
+
+      # 22: MODELS/PLANETS/DESERT/TREES/TWISTEDTREE.GEOMETRY.DATA.MBIN.PC
+      label: ODD OFFSET
+
+layout:
+  - header Header
+  - toc[Header.TocEntryCount] TOC # starts at 0020

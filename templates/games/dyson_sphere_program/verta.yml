@@ -1,0 +1,25 @@
+# STATUS: 1%
+
+# Used in:
+# Dyson Sphere Program (PC)
+
+# TODO: map rest of file
+
+kind: game
+name: Dyson Sphere Program verta file
+extensions: [.verta]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 00 00 00 00 # XXX weak magic
+
+structs:
+  header:
+    u8[4] Signature: 00 00 00 00 # XXX or some value ?
+    u32 Unk1: ?? # 6 or 9 seen, some count ??
+    u32 Unk2: ?? # maybe offset
+    u32 Unk3: ?? # maybe a count
+
+layout:
+  - header Header

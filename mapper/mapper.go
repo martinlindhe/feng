@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"io/ioutil"
-	"log"
 	"math"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
@@ -28,32 +28,28 @@ const (
 )
 
 var (
-	ParseStopError = errors.New("manual parse stop")
+	ErrParseStop = errors.New("manual parse stop")
 )
 
-func init() {
-	log.SetFlags(log.Lshortfile)
-}
-
-func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
+func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
 
 	if df.Kind == "offset" {
-		// evaluate offset directive in top-level layout (needed by ps3_pkg)
+		// offset directive in top-level layout
 		v, err := fl.EvaluateExpression(df.Label, df)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		fl.offset = v
 		_, err = rr.Seek(int64(v), io.SeekStart)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		return nil
 	}
 
 	es, err := ds.FindStructure(df.Kind)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	if DEBUG_MAPPER {
 		log.Printf("mapping ds %s, df '%s' (kind %s)", ds.BaseName, df.Label, df.Kind)
@@ -75,16 +71,14 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 				}
 				df.Label = baseLabel
 
-				if errors.Is(err, ParseStopError) {
+				if errors.Is(err, ErrParseStop) {
 					if DEBUG_MAPPER {
-						log.Println("reached ParseStop")
+						log.Print("reached ParseStop")
 					}
 					break
 				}
 				if err == io.EOF {
-					if DEBUG_MAPPER {
-						log.Println("reached EOF")
-					}
+					log.Error().Msgf("reached EOF")
 					break
 				}
 				return err
@@ -103,7 +97,7 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 		}
 		parsedRange, err := fl.EvaluateExpression(rangeQ, df)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		if DEBUG {
@@ -111,22 +105,21 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 		}
 
 		baseLabel := df.Label
-		for i := uint64(0); i < parsedRange; i++ {
+		for i := int64(0); i < parsedRange; i++ {
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
 				df.Label = baseLabel
 				return err
 			}
-			df.Label = baseLabel
 		}
 		return nil
 	}
 
 	if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
-
 		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 			// accept eof errors as valid parse for otherwise valid mapping
+			log.Error().Msgf("reached EOF")
 			return nil
 		}
 		feng.Yellow("%s errors out: %s\n", ds.BaseName, err.Error())
@@ -135,31 +128,38 @@ func (fl *FileLayout) mapLayout(rr *bytes.Reader, fs *Struct, ds *template.DataS
 	return nil
 }
 
+func fileSize(f afero.File) int64 {
+	fi, err := f.Stat()
+	if err != nil {
+		log.Fatal().Err(err).Msg("stat failed")
+	}
+	return fi.Size()
+}
+
 // produces a list of fields with offsets and sizes from input reader based on data structure
-func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
+func MapReader(f afero.File, ds *template.DataStructure, endian string) (*FileLayout, error) {
 
 	ext := ""
 	if len(ds.Extensions) > 0 {
 		ext = ds.Extensions[0]
 	}
 
-	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: ds.Endian, Extension: ext}
+	if endian == "" {
+		endian = ds.Endian
+	}
 
-	// read all data to get the total length
-	b, _ := ioutil.ReadAll(r)
-	fileLayout.rawData = b
-	fileLayout.size = uint64(len(b))
-	rr := bytes.NewReader(b)
+	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext, _f: f}
+	fileLayout.size = fileSize(f)
 
 	if DEBUG {
 		log.Printf("mapping ds '%s'", ds.BaseName)
 	}
 
 	for _, df := range ds.Layout {
-		err := fileLayout.mapLayout(rr, nil, ds, &df)
+		err := fileLayout.mapLayout(f, nil, ds, &df)
 		if err != nil {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-				feng.Red("mapLayout error processing %s: %s\n", df.Label, err.Error())
+				log.Error().Err(err).Msgf("mapLayout error processing %s", df.Label)
 			}
 			return &fileLayout, nil
 		}
@@ -169,17 +169,37 @@ func MapReader(r io.Reader, ds *template.DataStructure) (*FileLayout, error) {
 }
 
 var (
-	mapFileMatchedError = errors.New("matched file")
+	errMapFileMatched = errors.New("matched file")
 )
 
-func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
+func MapFileToGivenTemplate(f afero.File, startOffset int64, filename string, templateFileName string) (fl *FileLayout, err error) {
 
-	data, err := os.ReadFile(filename)
+	rawTemplate, err := os.ReadFile(templateFileName)
 	if err != nil {
-		panic(err)
+		return nil, err
+	}
+	ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, templateFileName)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", templateFileName, err.Error())
 	}
 
-	r := bytes.NewReader(data)
+	f.Seek(startOffset, os.SEEK_SET)
+
+	fl, err = MapReader(f, ds, "")
+	fl.DataFileName = filename
+	if err != nil {
+		feng.Red("MapReader: %s: %s\n", templateFileName, err.Error())
+
+	}
+	if len(fl.Structs) > 0 {
+		log.Printf("Parsed %s as %s", filename, templateFileName)
+		return fl, nil
+	}
+	return nil, nil
+}
+
+// maps input file to a matching template
+func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string) (fl *FileLayout, err error) {
 
 	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
@@ -200,27 +220,30 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		}
 		ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, tpl)
 		if err != nil {
-			return err
+			return fmt.Errorf("%s: %s", tpl, err.Error())
 		}
 
 		if ds.NoMagic {
 			if DEBUG {
-				log.Println("skip no_magic template", tpl)
+				log.Print("skip no_magic template", tpl)
 			}
 			return nil
 		}
 
 		// skip if no magic bytes matches
 		found := false
+		endian := ""
 		for _, m := range ds.Magic {
-			_, err = r.Seek(int64(m.Offset), io.SeekStart)
+			_, err = f.Seek(startOffset+int64(m.Offset), io.SeekStart)
 			if err != nil {
 				return err
 			}
 			b := make([]byte, len(m.Match))
-			_, _ = r.Read(b)
+			_, _ = f.Read(b)
 			if bytes.Equal(m.Match, b) {
 				found = true
+				endian = m.Endian
+				break
 			}
 		}
 		if !found {
@@ -230,9 +253,10 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 			return nil
 		}
 
-		r.Reset(data)
+		_, _ = f.Seek(startOffset, io.SeekStart)
 
-		fl, err = MapReader(r, ds)
+		fl, err = MapReader(f, ds, endian)
+		fl.DataFileName = filename
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(EvaluateError); ok {
@@ -243,11 +267,11 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 		}
 		if len(fl.Structs) > 0 {
 			log.Printf("Parsed %s as %s", filename, tpl)
-			return mapFileMatchedError
+			return errMapFileMatched
 		}
 		return nil
 	})
-	if errors.Is(err, mapFileMatchedError) {
+	if errors.Is(err, errMapFileMatched) {
 		return fl, nil
 	}
 	if err != nil {
@@ -255,45 +279,55 @@ func MapFileToTemplate(filename string) (fl *FileLayout, err error) {
 	}
 
 	if fl == nil {
-		// show hex dump of first 0x40 bytes
-		_, _ = r.Seek(0, io.SeekStart)
-		b := make([]byte, 0x40)
-		_, _ = r.Read(b)
-		fmt.Printf("%s", hex.Dump(b))
+		// dump hex of first bytes for unknown files
+		_, _ = f.Seek(0, io.SeekStart)
+		buf := make([]byte, 10)
+		n, _ := f.Read(buf)
+		buf = buf[:n]
 
-		return nil, fmt.Errorf("no match")
+		s, _ := value.AsciiPrintableString(buf, len(buf))
+
+		return nil, fmt.Errorf("no match '%s' %s", hex.EncodeToString(buf[:n]), s)
 	}
 	return fl, nil
 }
 
-func (fl *FileLayout) expandStruct(r *bytes.Reader, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG_MAPPER {
 		log.Printf("expandStruct: adding struct %s", dfParent.Label)
 	}
 
-	fl.Structs = append(fl.Structs, Struct{Name: dfParent.Label})
-
-	idx := len(fl.Structs) - 1
-	fs := &fl.Structs[idx]
+	fs := &Struct{Name: dfParent.Label}
+	fl.Structs = append(fl.Structs, fs)
 
 	err := fl.expandChildren(r, fs, dfParent, ds, expressions)
 	if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
-		feng.Red("expandStruct error: [%08x] failed reading data for '%s' (err:%v)\n", fl.offset, dfParent.Label, err)
+
+		// NOTE: if we try to expand a slice of chunks, reaching EOF is expected and not an error
 
 		if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
+			log.Error().Msgf("expandStruct error: [%08x] failed reading data for '%s' (err:%v)", fl.offset, dfParent.Label, err)
+
 			return fmt.Errorf("eof and no structs mapped")
 		}
+
+		log.Error().Msgf("reached EOF at %08x", fl.offset)
 	}
 
 	return err
 }
 
-func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func presentStringValue(v string) string {
+	v = strings.TrimRight(v, "·")
+	v = strings.TrimRight(v, " ")
+	return v
+}
+
+func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
-	if DEBUG_MAPPER {
-		feng.Red("expandChildren: %06x working with struct %s\n", fl.offset, dfParent.Label)
-	}
+
+	log.Debug().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
 
 	// track iterator index while parsing
 	fs.Index = dfParent.Index
@@ -302,23 +336,27 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 	for _, es := range expressions {
 		if DEBUG_MAPPER {
-			log.Printf("expandChildren: working with field %s %s: %v", es.Field.Kind, es.Field.Label, es)
+			log.Printf("expandChildren: working with %s field '%s %s': %v", dfParent.Label, es.Field.Kind, es.Field.Label, es)
 		}
 		switch es.Field.Kind {
 		case "label":
-			// "label: APP0". augment node with extra info
+			// "label: Foo Bar". augment the node with extra info
 			// if it is a numeric field with patterns, return the string for the matched pattern,
 			// else evaluate expression as strings
+			if fs.Label != "" {
+				log.Warn().Msg("overwriting label " + fs.Label + " with '" + es.Pattern.Value + "'")
+			}
+
 			if fl.isPatternVariableName(es.Pattern.Value, dfParent) {
 				val, err := fl.MatchedValue(es.Pattern.Value, dfParent)
 				if err != nil {
 					panic(err)
 				}
-				fs.Label = strings.TrimSpace(val)
+				fs.Label = presentStringValue(val)
 			} else {
 				val, err := fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
 				if err != nil {
-					log.Println(err)
+					fs.Label = es.Pattern.Value
 				} else {
 					fs.Label = strings.TrimSpace(val)
 				}
@@ -327,17 +365,57 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 		case "parse":
 			// break parser
 			if es.Pattern.Value != "stop" {
-				log.Fatalf("invalid parse value '%s'", es.Pattern.Value)
+				log.Fatal().Msgf("invalid parse value '%s'", es.Pattern.Value)
 			}
 			//log.Println("-- PARSE STOP --")
-			return ParseStopError
+			return ErrParseStop
 
 		case "endian":
 			// change endian
 			fl.endian = es.Pattern.Value
-			if DEBUG_MAPPER {
-				feng.Yellow("endian set to '%s' at %06x\n", fl.endian, fl.offset)
+			log.Debug().Msgf("Endian set to '%s' at %06x", fl.endian, fl.offset)
+
+		case "encryption":
+			matches := strings.SplitN(es.Pattern.Value, " ", 2)
+			if len(matches) != 2 {
+				log.Fatal().Msgf("encryption: invalid value '%s'", es.Pattern.Value)
 			}
+
+			key, err := value.ParseHexString(matches[1])
+			if err != nil {
+				log.Fatal().Err(err).Msgf("can't parse encryption key hex string '%s'", matches[1])
+			}
+
+			hashSize := map[string]byte{
+				"aes_128_cbc": 16,
+			}
+
+			fl.encryptionMethod = matches[0]
+			fl.encryptionKey = key
+
+			if val, ok := hashSize[fl.encryptionMethod]; ok {
+				if len(key) != int(val) {
+					log.Fatal().Err(err).Msgf("encryption: key for %s must be %d bytes long, %d found", fl.encryptionMethod, val, len(key))
+				}
+			} else {
+				log.Fatal().Msgf("encryption: unknown method '%s'", fl.encryptionMethod)
+			}
+
+			log.Info().Msgf("Encryption set to '%s' at %06x", fl.encryptionMethod, fl.offset)
+
+		case "filename":
+			// record filename to use for the next data output operation
+			if strings.Contains(es.Pattern.Value, ".png") {
+				// don't evaluate plain filenames
+				fl.filename = es.Pattern.Value
+			} else {
+				fl.filename, err = fl.EvaluateStringExpression(es.Pattern.Value, dfParent)
+				if err != nil {
+					return err
+				}
+			}
+			fl.filename = presentStringValue(fl.filename)
+			log.Debug().Msgf("Output filename set to '%s' at %06x", fl.filename, fl.offset)
 
 		case "offset":
 			// set/restore current offset
@@ -355,15 +433,14 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 
 			fl.offsetChanges++
-			if fl.offsetChanges > 1000 {
+			if fl.offsetChanges > 100_000 {
 				panic("debug recursion: too many offset changes from template")
-				return fmt.Errorf("too many offset changes from template")
+				//return fmt.Errorf("too many offset changes from template")
 			}
 			previousOffset := fl.pushOffset()
-			fl.offset, err = fl.GetInt(es.Pattern.Value, dfParent)
-			if DEBUG_OFFSET {
-				log.Printf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
-			}
+
+			fl.offset, err = fl.EvaluateExpression(es.Pattern.Value, dfParent)
+			log.Debug().Msgf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
 			if err != nil {
 				return err
 			}
@@ -379,7 +456,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			case "unseen":
 				fl.unseen = true
 			default:
-				log.Fatalf("unhandled data value '%s'", es.Pattern.Value)
+				log.Fatal().Msgf("unhandled data value '%s'", es.Pattern.Value)
 			}
 
 		case "until":
@@ -403,31 +480,36 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 			feng.Yellow("Reading until marker from %06x: marker % 02x\n", fl.offset, needle)
 
-			val, err := readBytesUntilMarker(r, 4096, needle)
+			val, err := fl.readBytesUntilMarkerSequence(4096, needle)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", label, fl.offset)
 			}
-			len := uint64(len(val))
+			len := int64(len(val))
 			if len > 0 {
 				es.Field.Kind = kind
 				es.Field.Range = fmt.Sprintf("%d", len)
 				es.Field.Label = label
 				fs.Fields = append(fs.Fields, Field{
-					Offset: fl.offset,
-					Length: len,
-					Value:  val,
-					Format: es.Field,
-					Endian: fl.endian})
+					Offset:   fl.offset,
+					Length:   len,
+					Format:   es.Field,
+					Endian:   fl.endian,
+					Filename: fl.filename,
+				})
 				fl.offset += len
 			}
 
 		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
+			"f32",
+			"xyzm32",
 			"ascii", "utf16",
 			"rgb8",
 			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
-			"compressed:deflate", "compressed:lz4", "compressed:zlib",
-			"raw:u8":
+			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
+			"compressed:lzf", "compressed:zlib", "compressed:gzip",
+			"raw:u8", "encrypted:u8":
 			// internal data types
+			log.Debug().Msgf("expandChildren type %s: %s (child of %s)", es.Field.Kind, es.Field.Label, dfParent.Label)
 			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 
@@ -438,6 +520,10 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				continue
 			}
 
+			if es.Pattern.Known {
+				log.Info().Msgf("KNOWN PATTERN FOR '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
+			}
+
 			endian := fl.endian
 			if es.Field.Endian != "" {
 				if DEBUG {
@@ -446,7 +532,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				endian = es.Field.Endian
 			}
 
-			val, err := readBytes(r, totalLength, unitLength, endian)
+			val, err := fl.readBytes(totalLength, unitLength, endian)
 			if DEBUG {
 				log.Printf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, dfParent.Label, es.Field.Label, val, err)
 			}
@@ -454,8 +540,10 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 
+			var matchPatterns []value.MatchedPattern
 			// if known data pattern, see if it matches file data
 			if es.Pattern.Known {
+
 				if !bytes.Equal(es.Pattern.Pattern, val) {
 					if DEBUG {
 						log.Printf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'", fl.offset, es.Field.Label, es.Pattern.Pattern, val)
@@ -465,7 +553,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				}
 			}
 
-			matchPatterns, err := es.EvaluateMatchPatterns(val, endian)
+			matchPatterns, err = es.EvaluateMatchPatterns(val, endian)
 			if err != nil {
 				return err
 			}
@@ -473,69 +561,104 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			fs.Fields = append(fs.Fields, Field{
 				Offset:          fl.offset,
 				Length:          totalLength,
-				Value:           val,
 				Format:          es.Field,
 				Endian:          endian,
-				MatchedPatterns: matchPatterns})
+				Filename:        fl.filename,
+				MatchedPatterns: matchPatterns,
+			})
 			fl.offset += totalLength
 
 		case "vu32":
 			// variable-length u32
-			_, raw, len, err := value.ReadVariableLengthU32(r)
+			_, _, len, err := fl.ReadVariableLengthU32()
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  raw,
-				Format: es.Field,
-				Endian: fl.endian})
+				Offset:   fl.offset,
+				Length:   len,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
 			fl.offset += len
 
 		case "vu64":
 			// variable-length u64
-			_, raw, len, err := value.ReadVariableLengthU64(r)
+			_, _, len, err := fl.ReadVariableLengthU64()
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  raw,
-				Format: es.Field,
-				Endian: fl.endian})
+				Offset:   fl.offset,
+				Length:   len,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
+			fl.offset += len
+
+		case "vs64":
+			// variable-length u64
+			_, _, len, err := fl.ReadVariableLengthS64()
+			if err != nil {
+				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
+			}
+			fs.Fields = append(fs.Fields, Field{
+				Offset:   fl.offset,
+				Length:   len,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
 			fl.offset += len
 
 		case "asciiz":
-			val, err := readBytesUntilZero(r)
+			val, err := fl.readBytesUntilMarkerByte(0)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
-			len := uint64(len(val))
+			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  val,
-				Format: es.Field,
-				Endian: fl.endian})
+				Offset:   fl.offset,
+				Length:   len,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
+			fl.offset += len
+
+		case "asciinl":
+			val, err := fl.readBytesUntilMarkerByte('\n')
+			if err != nil {
+				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
+			}
+			len := int64(len(val))
+			fs.Fields = append(fs.Fields, Field{
+				Offset:   fl.offset,
+				Length:   len,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
 			fl.offset += len
 
 		case "utf16z":
-			val, err := readBytesUntilMarker(r, 2, []byte{0, 0})
+			val, err := fl.readBytesUntilMarkerSequence(2, []byte{0, 0})
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			// append terminator marker since readBytesUntilMarker() excludes it
 			val = append(val, []byte{0, 0}...)
 
-			len := uint64(len(val))
+			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{
-				Offset: fl.offset,
-				Length: len,
-				Value:  val,
-				Format: es.Field,
-				Endian: fl.endian})
+				Offset:   fl.offset,
+				Length:   len,
+				Format:   es.Field,
+				Endian:   fl.endian,
+				Filename: fl.filename,
+			})
 			fl.offset += len
 
 		case "if":
@@ -547,9 +670,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			lastIf = q
 			if DEBUG {
 				if a != 0 {
-					log.Println("IF EVALUATED TRUE: q=", q, ", a=", a)
+					log.Print("IF EVALUATED TRUE: q=", q, ", a=", a)
 				} else {
-					log.Println("IF EVALUATED FALSE: q=", q, ", a=", a)
+					log.Print("IF EVALUATED FALSE: q=", q, ", a=", a)
 				}
 			}
 			if a != 0 {
@@ -561,7 +684,7 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 
 		case "else":
 			if DEBUG {
-				log.Println("ELSE: evaluating", lastIf)
+				log.Print("ELSE: evaluating", lastIf)
 			}
 			a, err := fl.EvaluateExpression(lastIf, dfParent)
 			if err != nil {
@@ -569,9 +692,9 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 			}
 			if DEBUG {
 				if a == 0 {
-					log.Println("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
+					log.Print("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
 				} else {
-					log.Println("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
+					log.Print("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
 				}
 			}
 			if a == 0 {
@@ -589,111 +712,74 @@ func (fl *FileLayout) expandChildren(r *bytes.Reader, fs *Struct, dfParent *valu
 				for _, ev := range fl.DS.EvaluatedStructs {
 					if ev.Name == es.Field.Kind {
 						found = true
-						err = fl.mapLayout(r, fs, ds, &es.Field)
+
+						subEs, err := ds.FindStructure(es.Field.Kind)
 						if err != nil {
-							if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-								log.Println(err)
+							return err
+						}
+
+						log.Debug().Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
+
+						es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
+						if es.Field.Range != "" {
+
+							parsedRange, err := fl.EvaluateExpression(es.Field.Range, &es.Field)
+							if err != nil {
+								return err
 							}
+
+							log.Info().Msgf("appending ranged %s[%d]", es.Field.Kind, parsedRange)
+
+							for i := int64(0); i < parsedRange; i++ {
+
+								// add this as child node to current struct (fs)
+
+								name := fmt.Sprintf("%s_%d", es.Field.Label, i)
+								parent := es.Field
+								parent.Label = name
+								log.Info().Msgf("-- Appending %s", name)
+
+								// XXX issue happens when child node uses self.VARIABLE and it is expanded,
+								//     when self node is not yet added to fs.Structs
+
+								child := &Struct{Name: name, Index: int(i)}
+								fs.Children = append(fs.Children, child)
+								err = fl.expandChildren(r, child, &parent, ds, subEs.Expressions)
+								if err != nil {
+									//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+									log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
+									//}
+								}
+
+							}
+						} else {
+
+							// add this as child node to current struct (fs)
+							child := &Struct{Name: es.Field.Label}
+							err = fl.expandChildren(r, child, &es.Field, ds, subEs.Expressions)
+							if err != nil {
+								//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+								log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
+								//}
+							}
+							fs.Children = append(fs.Children, child)
 						}
 						break
 					}
 				}
 				if !found {
 					// this error is critical. it means the parsed template is not working.
-					log.Fatalf("error fetching struct '%s': %v", es.Field.Kind, err)
+					log.Fatal().Msgf("error fetching struct '%s': %v", es.Field.Kind, err)
 				}
 				continue
 			}
 
 			log.Printf("%#v", customStruct)
 
-			log.Printf("unhandled field '%#v'", es.Field)
+			log.Error().Msgf("unhandled field '%#v'", es.Field)
 			return fmt.Errorf("unhandled field kind '%s'", es.Field.Kind)
 		}
 	}
 
 	return nil
-}
-
-// reads bytes from reader and returns them in network byte order (big endian)
-func readBytes(r io.ReadSeeker, totalLength, unitLength uint64, endian string) ([]byte, error) {
-	if unitLength > 1 && endian == "" {
-		return nil, fmt.Errorf("endian is not set in file format template, don't know how to read data")
-	}
-
-	if totalLength > 1024*1024*1024 {
-		return nil, fmt.Errorf("readBytes: attempt to read unexpected amount of data %d", totalLength)
-	}
-
-	val := make([]byte, totalLength)
-	if _, err := io.ReadFull(r, val); err != nil {
-		return nil, err
-	}
-
-	// convert to network byte order
-	if unitLength > 1 && endian == "little" {
-		val = value.ReverseBytes(val, int(unitLength))
-	}
-
-	return val, nil
-}
-
-// reads bytes from reader until 0x00 is found. returned data includes the terminating 0x00
-func readBytesUntilZero(r io.Reader) ([]byte, error) {
-
-	b := make([]byte, 1)
-
-	res := []byte{}
-
-	for {
-		if _, err := io.ReadFull(r, b); err != nil {
-			return nil, err
-		}
-		res = append(res, b[0])
-		if b[0] == 0x00 {
-			break
-		}
-	}
-	return res, nil
-}
-
-// reads bytes from reader until the marker byte sequence is found. returned data excludes the marker
-// FIXME: won't find patterns overlapping chunks
-func readBytesUntilMarker(r *bytes.Reader, chunkSize int64, search []byte) ([]byte, error) {
-
-	if int(chunkSize) < len(search) {
-		panic("unlikely")
-	}
-
-	chunk := make([]byte, int(chunkSize)+len(search))
-	n, err := r.Read(chunk[:chunkSize])
-	res := []byte{}
-
-	var offset int64
-	idx := bytes.Index(chunk[:chunkSize], search)
-	for {
-		//log.Printf("Read a slice of len %d, Index %d: % 02x", n, idx, chunk[:4])
-		if idx >= 0 {
-			res = append(res, chunk[:idx]...)
-
-			// rewind to before marker
-			r.Seek(int64(-(n - idx)), io.SeekCurrent)
-
-			return res, nil
-		} else {
-			//log.Printf("appended %d bytes: % 02x, res is %d len", len(chunk[:chunkSize]), chunk[:4], len(res))
-			res = append(res, chunk[:chunkSize]...)
-		}
-		if err == io.EOF {
-			return nil, nil
-		} else if err != nil {
-			return nil, err
-		}
-
-		offset += chunkSize
-
-		n, err = r.Read(chunk[:chunkSize])
-
-		idx = bytes.Index(chunk[:chunkSize], search)
-	}
 }

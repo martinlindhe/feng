@@ -3,12 +3,14 @@ package template
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"math/bits"
+	"reflect"
 	"strings"
 
-	"github.com/martinlindhe/feng/value"
+	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v2"
+
+	"github.com/martinlindhe/feng/value"
 )
 
 const (
@@ -70,6 +72,10 @@ func (t *Template) evaluateConstants() ([]Constant, error) {
 func findStructConstants(c *yaml.MapItem) ([]Constant, error) {
 	res := []Constant{}
 
+	if _, ok := c.Value.([]yaml.MapItem); !ok {
+		panic(fmt.Sprintf("findStructConstants c.Value is unexpected type '%v'. probably input yaml structs data is malformed (check indentation), or struct has no body", reflect.TypeOf(c.Value)))
+	}
+
 	for _, v := range c.Value.([]yaml.MapItem) {
 		switch v.Value.(type) {
 		case []yaml.MapItem:
@@ -84,7 +90,7 @@ func findStructConstants(c *yaml.MapItem) ([]Constant, error) {
 					for _, sub := range t {
 						m, err := ParseMatchPattern(sub)
 						if err != nil {
-							log.Println("error (ignoring1):", err)
+							log.Print("error (ignoring1):", err)
 							continue
 						}
 						if m.Operation == "eq" || m.Operation == "bit" {
@@ -189,7 +195,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.Ma
 					Label:     mp.Label,
 					Operation: mp.Operation,
 					Value:     b,
-					Parsed:    es.Field.Present(b, endian)})
+				})
 			}
 
 		case "default":
@@ -199,7 +205,7 @@ func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.Ma
 			invalidIfNoMatch = true
 
 		default:
-			log.Fatalf("unhandled pattern match operation '%s'", mp.Operation)
+			log.Fatal().Msgf("unhandled pattern match operation '%s'", mp.Operation)
 		}
 	}
 	if invalidIfNoMatch && len(res) == 0 {
@@ -264,25 +270,22 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 
 		case string:
 			switch field.Kind {
-			case "endian", "data", "label", "offset", "parse", "until":
+			case "endian", "data", "label", "offset", "filename", "parse", "until", "encryption":
 				pattern := value.DataPattern{Known: true, Value: val}
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 
 			default:
-				if val == `GIF87a` {
-					//	panic("1st")
-				}
-				pattern, err := value.ParseDataPattern(val) // XXX evaluate only once
+				pattern, err := value.ParseDataPattern(val)
 				if err != nil {
 					log.Printf("%#v", field)
-					log.Fatalf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
+					log.Fatal().Msgf("TEMPLATE ERROR: cant parse pattern '%s': %v", val, err)
 					return es, err
 				}
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 			}
 
 		default:
-			log.Fatalf("cant handle type '%T' in '%#v'", val, v)
+			log.Fatal().Msgf("cant handle type '%T' in '%#v'", val, v)
 		}
 		es.Expressions = append(es.Expressions, expr)
 	}
@@ -306,7 +309,7 @@ func parseMatchPatterns(mi []yaml.MapItem) ([]MatchPattern, error) {
 	for _, item := range mi {
 		p, err := ParseMatchPattern(item)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 		res = append(res, *p)
 	}
@@ -336,7 +339,7 @@ func ParseMatchPattern(item yaml.MapItem) (*MatchPattern, error) {
 		p.Label = value
 
 	default:
-		log.Fatalf("evaluateMatchPatterns: unrecognized form '%s': %s", parts[0], key)
+		log.Fatal().Msgf("evaluateMatchPatterns: unrecognized form '%s': %s", parts[0], key)
 	}
 	return &p, nil
 }
@@ -360,6 +363,7 @@ func (t *Template) evaluateLayout() ([]value.DataField, error) {
 type Magic struct {
 	Offset HexStringU64
 	Match  HexString
+	Endian string
 }
 type HexString []byte
 

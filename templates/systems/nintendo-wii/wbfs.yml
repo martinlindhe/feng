@@ -1,0 +1,23 @@
+# STATUS: 1%
+
+resources:
+  - xxx
+
+software:
+  - https://wit.wiimm.de/   # wit extract <file.wbfs> <outdir>
+
+kind: archive
+name: Nintendo Wii Backup File System
+extensions: [.wbfs]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'WBFS'
+
+structs:
+  header:
+    ascii[4] Signature: c'WBFS'
+
+layout:
+  - header Header

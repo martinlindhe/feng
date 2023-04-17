@@ -1,0 +1,78 @@
+# STATUS: 10%
+
+# MAX: nested structs dont work in feng yet
+# HI: map rest of file, mark up compressed data areas in order to extract them
+
+resources:
+  - https://wiibrew.org/wiki/Opening.bnr#IMET
+  - https://wiibrew.org/wiki/User:Magicus/Magicus%27s_Tools/Parse-opening.c
+
+kind: executable
+name: Nintendo Wii Opening.bnr (IMET format)
+extensions: [.bnr]
+endian: big
+
+magic:
+  - offset: 0040
+    match: c'IMET'
+
+structs:
+  header:
+    u8[64] Padding: ??
+    ascii[4] Signature: c'IMET'
+    u32 HashSize: ??
+    u32 Unknown: ??
+    u32 IconBinSize: ??   # icon.bin
+    u32 BannerBinSize: ?? # banner.bin
+    u32 SoundBinSize: ??  # sound.bin
+    u32 Flags1: ??  # XXX
+    ascii[84] JapaneseName: ??
+    ascii[84] EnglishName: ??
+    ascii[84] GermanName: ??
+    ascii[84] FrenchName: ??
+    ascii[84] SpanishName: ??
+    ascii[84] ItalianName: ??
+    ascii[84] DutchName: ??
+    ascii[84] UnknownName1: ??
+    ascii[84] UnknownName2: ??
+    ascii[84] KoreanName: ??
+    u8[588] Padding: ??
+    u8[16] Checksum: ?? # MD5 of 0 to 'hashsize' in header
+
+  u8_archive_header: # starts at 0x600
+    u32 Magic: 55AA382D
+    u32 RootNodeOffset: ?? # xxx always 0x20
+    u32 HeaderSize: ?? # XXX size of header from root_node to end of string table.
+    u32 DataOffset: ?? # XXX offset to data -- this is rootnode_offset + header_size, aligned to 0x40.
+    u8[16] Padding: ??
+
+  u8_node:
+    u16 Type:
+      eq 0100: Directory
+      eq 0000: File
+      default: invalid
+    u16 NameOffset: ??
+    u32 DataOffset: ?? # XXX absolute offset from start of U.8- header
+    u32 DataSize: ??
+    u8_node[self.DataSize] Node: ?? # XXX    XXXX nesting is broken in feng !
+    u8[1] StringTable: ??  # XXX length is rest_size (Marcus)
+
+    # XXX the rest in Marcus' do_U8_archive(void)
+
+  imd5_header:
+    offset: "0x0680"   # XXX FIXME BUG: "0680" is parsed as a decimal number, should default to hex
+    ascii[4] Signature: c'IMD5'
+    u32 Size: ?? # size of the rest of part B, starting from next field.
+    u8[8] Padding: ??
+    u8[16] Checksum: ?? # md5.  XXXX u128 data type
+    u32 PayloadTag: # XXX match on ascii[4]
+      eq c'LZ77': Lz77
+      #default: unseen # XXX implement default: unseen
+    u8[1] PayloadData: ?? # XXX calc length + mark as "lz77wii" compressed data
+
+layout:
+  - header Header
+  - u8_archive_header U8Archive
+  #- u8_node U8RootNode
+  #- u8_more U8More     # XXX nested structs dont work with feng yet
+  - imd5_header IMD5Header # XXX

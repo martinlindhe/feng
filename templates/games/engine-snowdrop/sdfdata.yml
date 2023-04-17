@@ -1,0 +1,39 @@
+# STATUS: 5%
+
+# Used in:
+# South Park: The Fractured But Whole (2017)
+# Tom Clancy's The Division (2016) ??? need sample
+
+# TODO: The separator starts with "massive " and end with "ubisoft " (spaces being 0x00) in between there are 20
+# random characters, this separator is repeated multiple times in a file, and is always at the beginning
+# of the file at offset 0x1C and at the very end of the file.
+
+references:
+  - https://aluigi.altervista.org/bms/ubisoft_sdf.bms
+  - https://forum.xentax.com/viewtopic.php?p=116998#p116998
+  - https://forum.xentax.com/viewtopic.php?t=13882
+
+kind: game
+name: Snowdrop file archive
+endian: little
+extensions: [.sdfdata]
+
+magic:
+  - offset: 0000
+    match: c'BERG'
+
+structs:
+  header:
+    ascii[4] Magic: c'BERG'
+    u32 Version: ?? # 0x16 in South Park: The Fractured But Whole
+    ascii[8] Magic2: c'massive' 00
+    u32 Unk2: ??
+    u32 Unk3: ??
+    u32 Unk4: ??
+
+layout:
+  - header Header
+
+
+  # XXX end of file marker: c'ubisoft' 00
+

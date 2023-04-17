@@ -65,6 +65,17 @@ structs:
       endian: little
 ```
 
+You can also set endianness in the magic match block:
+
+```yaml
+magic:
+  - offset: 0000
+    match: c'P3D' ff
+    endian: little
+  - offset: 0000
+    match: ff c'D3P'
+    endian: big
+```
 
 
 # Pre-defined values
@@ -98,16 +109,19 @@ peek_i16("0100")        hex string offset
 peek_i32(123)  = -1     returns i32 value from offset
 atoi("123")    = 123    returns integer from alphanumeric string
 otoi("123")    = 83     returns integer from octal numeric string (archives/tar)
-alignment(3,4) = 1      returns the number of bytes needed to align the first arg to the second arg
+alignment(3,4) = 1      returns the number of bytes needed to align the first arg to the second arg (add padding bytes)
 not(self.Value, 4, 5) = true   returns true if self.Value is neither 4 or 5
 either(self.Value, 4, 5) = false   returns true if self.Value is either 4 or 5
-```
+sevenbitstring(self.Filename) = "chars"  returns string value of input field as 7bit ascii (masking off bit7)
+bitset(self.Value, 7) = true   returns true if bit 7 of self.Value is set
+cleanstring("self.Value") = "chars" cleans input ascii string, terminates at first nul byte
+
 
 # Data types
 
 numeric
 
-    u8, u16, u32, u64
+    u8, u16, u32, u64, f32
 
 
 numeric bit fields
@@ -123,13 +137,14 @@ text
 
     ascii[5]            ascii string
     asciiz              zero terminated ascii string
+    asciinl             newline-terminated (\n) ascii string
     utf16[5]            utf16 string    (utf16 le == wchar_t)
     utf16z              zero terminated utf16 string
 
 
 date / time
 
-    time_t_32           32-bit unix timestamp, in UTC
+    time_t_32           32-bit timestamp of seconds since 00:00 January 1, 1970, in UTC
     filetime            64-bit windows timestamp, in UTC
     dosdate             16-bit MS-DOS datestamp, in UTC
     dostime             16-bit MS-DOS timestamp, in UTC
@@ -139,25 +154,59 @@ colors
 
     rgb8                3 byte values for R, G, B
 
+3d data
 
-data (for extraction feature)
+    xyzm32              x,y,z,m matrix of f32 values
+
+data tagging (for extraction feature)
 
     raw:u8[40]                      mark area as raw data (extracted as-is)
 
     u32 Size: ??
     compressed:zlib[self.Size]      mark area as zlib compressed data
-    compressed:lz4[self.Size]       mark area as lz4-compressed data
+    compressed:gzip[self.Size]      mark area as gzip compressed data
     compressed:deflate[self.Size]   mark area as DEFLATE compressed data
+    compressed:lzo1x[self.Size]     mark area as Lzo1x-compatible data
+    compressed:lzss[self.Size]      mark area as Lzss-compatible data
+    compressed:lz4[self.Size]       mark area as Lz4-compressed data
+    compressed:lzf[self.Size]       mark area as LZF compressed data
+
+    filename: self.Filename         set the filename to use while extracting for the next data area
+
+TODO MAX PRIO for data tagging: need to set compressed AND uncompressed size for successful extraction of lzf
+
+
+
 
 
 variable length encoding
 
     vu32                        variable-length u32 (fonts/woff2, images/bpg)
-    vu64                        variable-length u32 (archives/xz, archives/7zip)
+    vu64                        variable-length u64 (archives/xz, archives/7zip)
+    vs64                        variable-length u64 (systems/macos/nibarchive) where sign bit denotes end of stream
 
 pattern matching data types
 
   until: u8 scanData ff d9            maps all bytes to scanData until marker is seen (images/jpeg)
+
+
+# Encryption
+Mark an area to be decrypted.
+
+```yaml
+    u32 Size: ??
+    encryption: aes_128_cbc 00 11 22 33 44 55 66 77 00 11 22 33 44 55 66 77
+    encrypted:u8[self.Size] Data: ??
+```
+
+# Evaluate string keys to labels
+
+```yaml
+label: >
+  "FILE_OR_DIR " + self.FileName
+
+label: self.FileName + " (FILE_OR_DIR)"
+```
 
 
 # Constants

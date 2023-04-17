@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+# Usually accompanied with "MMFW Sounds" and "MMFW Pictures" files.
+
+# Used in games:
+# Playskool Puzzles (1996)
+# Mr. Potato Head Activity Pack (1997, Win/Mac), ImageBuilder Software
+
+# MAX: calc data length / file size for data extraction
+
+kind: game
+name: MMScript File
+extensions: [.mms]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'MMScript File' 00 01 01
+
+structs:
+  header:
+    ascii[16] Signature: c'MMScript File' 00 01 01
+    ascii[2] MaybeEndian: ?? # XXX unsure: "MM" = big endian, "II" = little endian ???
+    u8[2] MaybeVersion: ??
+
+layout:
+  - header Header

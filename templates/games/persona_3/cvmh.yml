@@ -1,0 +1,63 @@
+# STATUS: 1%
+
+# CVM is an archive format used in the PS2 versions of Persona 3 and Persona 4.
+# It was developed by CRI Middleware and based on ISO9660. It is also known internally
+# as "ROFS" format. Essentially, they are ISO files with a special header. Due to this,
+# most programs that can normally extract ISOs can also extract CVMs.
+
+### Extract .CMV
+# Can extract .cmv from Persona 3 and Persona 4 with IsoBuster 5.
+# Errors with Persona 3 FES.
+
+references:
+  - https://amicitia.miraheze.org/wiki/CVM
+  - https://gamefaqs.gamespot.com/ps2/932312-shin-megami-tensei-persona-3/faqs/53672
+  - https://forum.xentax.com/viewtopic.php?f=16&t=3163&start=15 (details of contained formats)
+
+software:
+  - https://github.com/JayFoxRox/cvm_tool
+  - https://www.isobuster.com/  (can open and extract .CVM files)
+
+kind: archive
+name: Persona 3 FES cvm archive # XXX better name
+extensions: [.cvm]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'CVMH'
+
+structs:
+  header:
+    ascii[4] Signature: c'CVMH'
+    u64 BlockLength: ?? # without header
+    u64[2] Reserved: ??
+    u64 TotalCVMSize: ?? # XXX file size?
+    # XXX iso9660 9.1.5 format, should be a data type? is widely used on dvd and bluray media
+    u8 Iso9660_Year: ??
+    u8 Iso9660_Month: ??
+    u8 Iso9660_Day: ??
+    u8 Iso9660_Hour: ??
+    u8 Iso9660_Minute: ??
+    u8 Iso9660_Second: ??
+    u8 Iso9660_GMT_Offset: ??
+
+    u8 Padding: ?? # maybe
+    u32 MaybeVersion: ??
+    u32 Flags: ?? # 0x10 = encrypted TOC
+
+  rofs_header:
+    ascii[4] Signature: c'ROFS'
+    ascii[64] MakeToolID: ??
+    u32 MaybeVersion: ??
+    u16 Flag: ?? # XXX
+    u16 Padding: ?? # XXX
+    u32 SectorTableCount: ??
+    u32 ZoneInfoSectorIndex: ??
+    u32 ISOStartSector: ??
+    u8[116] Reserved: ??
+    u32[self.SectorTableCount] SectorTable: ??
+
+layout:
+  - header Header
+  - rofs_header RofsHeader

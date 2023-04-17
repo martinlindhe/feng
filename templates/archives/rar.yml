@@ -113,10 +113,10 @@ structs:
       u16 NameSize: ??
       u32 UnixStyleAttrs: ?? # XXX enum, 010 has mapping
       ascii[self.NameSize] FileName: ??
-      label: self.FileName
+      label: self.FileName + " (FILE_OR_DIR)"
       u8[self.HeaderSize - (OFFSET - offset("self.CRC"))] Reserved: ??
       u8[self.RawDataSize] Data: ??   # XXX not always present...
-    
+
     #if self.Type == COMM_HEAD:
     #  u16 UncompressedSize: ??
     #  u8 VersionToUnpack: ?? # XXX

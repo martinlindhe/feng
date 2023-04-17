@@ -1,6 +1,12 @@
 # STATUS: 30%
 
 # - HI: use file name data when extracting files (is in a zlib-compressed DIRENTRY block)
+#
+#    - need custom scripting:
+#    1. make parsed struct available to scripting lang
+# use go-lua: https://github.com/Shopify/go-lua (to avoid golang lock-in if we will rewrite project) or use goval more?
+#    2. find DIRENTRY. extract it's zlib block
+#   3. use extracted block to reconstruct filenames and write to disk
 
 references:
   - https://github.com/martinlindhe/eqformat_pfs
@@ -17,7 +23,7 @@ endian: little
 magic:
   - offset: 0004
     match: c'PFS '
-  
+
 structs:
   header:
     u32 BaseOffset: ??

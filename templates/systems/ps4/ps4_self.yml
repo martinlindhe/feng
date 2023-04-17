@@ -4,9 +4,10 @@
 
 references:
   - https://www.psdevwiki.com/ps4/SELF_File_Format
+  - https://gist.github.com/CelesteBlue-dev/ed8e5fa441792b3864b7509e609e8371
 
 kind: system
-name:  Sony PS4 Signed ELF program
+name: Sony PS4 Signed ELF program
 extensions: [.prx, .sprx]
 endian: little
 
@@ -17,8 +18,8 @@ magic:
 structs:
   header:
     u8[4] Signature: 4F 15 3D 1D
-    u32 Unknown: ??     # Always 00 01 01 12 
-    u8 Content type: ?? # XXX  	1 on Self, 4 on PUP Entry 
+    u32 Unknown: ??     # Always 00 01 01 12
+    u8 Content type: ?? # XXX  	1 on Self, 4 on PUP Entry
     u8 Program type:
       eq 00: PUP
       eq 08: NPDRM Application

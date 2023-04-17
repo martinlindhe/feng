@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"time"
+
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -26,25 +28,27 @@ type measuredExecution struct {
 
 func main() {
 
+	var fs = afero.NewOsFs()
+
 	_ = kong.Parse(&args,
 		kong.Name("feng"),
 		kong.Description("A binary template reader and data presenter."))
 
 	data, err := ioutil.ReadFile(args.Filename)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msgf("failed")
 	}
 
 	referenceRoot := "./smoketest/reference"
 
 	err = os.RemoveAll(referenceRoot)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msgf("failed")
 	}
 
 	smoketests, err := smoketest.UnmarshalData(data)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msgf("failed")
 	}
 	filenames := smoketests.GenerateFilenames(filepath.Dir(args.Filename))
 
@@ -55,14 +59,15 @@ func main() {
 
 		started := time.Now()
 
-		fl, err := mapper.MapFileToTemplate(entry.In)
+		f, _ := fs.Open(entry.In)
+		fl, err := mapper.MapFileToMatchingTemplate(f, 0, entry.In)
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(mapper.EvaluateError); ok {
-				log.Println(" failed to evaluate:", err)
+				log.Print(" failed to evaluate:", err)
 			}
 
-			log.Println("MapReader returned err:", err)
+			log.Print("MapReader returned err:", err)
 
 			continue
 		}
@@ -90,12 +95,12 @@ func main() {
 
 		err = os.MkdirAll(path, os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 		feng.Green("WRITE ROOT %s, out %s, full %s\n", referenceRoot, entry.Out, filename)
 		err = ioutil.WriteFile(filename, []byte(data), 0644)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err).Msgf("failed")
 		}
 	}
 

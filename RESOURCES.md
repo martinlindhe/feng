@@ -12,6 +12,9 @@
 ### quickbms
 - http://aluigi.altervista.org/quickbms.htm
 
+## multiex
+- http://multiex.xentax.com/
+
 ### Game Extractor by WATTO
  - http://www.watto.org/game_extractor.html
 
@@ -30,6 +33,13 @@
 ### winhex templates
 - https://www.x-ways.net/winhex/templates/index.html
 
+### TRiD - file identifier
+- TrID is an utility designed to identify file types from their binary signatures.
+- https://mark0.net/soft-trid-e.html
+
+### GNU file
+- https://github.com/file/file
+
 ### Noesis
 - Noesis is a tool for previewing and converting between hundreds of model, image, and animation formats.
 - http://richwhitehouse.com/index.php?content=inc_projects.php&showproject=91
@@ -37,8 +47,11 @@
 - https://github.com/RoadTrain/noesis-plugins-official
 
 ### Ninja ripper
-- extract individual models from games
+- extract individual models from DirectX 3D games, while they are running
 - https://ninjaripper.com/
+
+### Unpakke
+- http://www.nullsecurity.org/unpakke
 
 
 
@@ -72,3 +85,4 @@
 
 # SAMPLES
 - https://telparia.com/fileFormatSamples/
+- https://samples.ffmpeg.org/

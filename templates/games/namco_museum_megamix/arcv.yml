@@ -1,0 +1,44 @@
+# STATUS: 90%
+#
+# Format used in Namco Museum Megamix, developed by Namco Bandai Games
+# and released for Wii (2010).
+
+# TODO: see if it is also used in Namco Museum Remix (2007)
+
+resources:
+  - http://aluigi.altervista.org/bms/namco_museum.bms
+
+kind: archive
+name: Namco Museum Megamix ARCV archive
+extensions: [.arc]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'VCRA'
+
+structs:
+  header:
+    u8[4] Signature: c'VCRA'
+    u32 FileCount: ??
+    u32 ArchiveSize: ??
+
+    u32 Test: ?? # XXX  if not 0, seek ?
+    u32 Unknown: ??
+    u8[44] Unknown: ?? # zeroes in resident.arc
+
+    # 0040: list of files
+
+  file:
+    u32 Offset: ??
+    u32 Size: ??
+    # XXX optinal: there can be a u32 crc field here too, see .bms
+    ascii[56] Name: ??
+    filename: self.Name
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

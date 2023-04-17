@@ -1,0 +1,61 @@
+# STATUS: 25%
+
+# Video format by RAD Game Tools, common in games
+
+# Used in:
+# Fallout 4 (KB2g)
+
+references:
+  - https://wiki.multimedia.cx/index.php/Bink_Container
+  - https://wiki.multimedia.cx/index.php?title=Bink_Video
+
+software:
+  - ffmpeg
+
+kind: media
+name: Bink Video File
+extensions: [.bik]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BIK' # v1
+  - offset: 0000
+    match: c'KB2' # v2
+
+structs:
+  header:
+    ascii[3] Signature: ??
+    ascii VideoCodecRev: ?? # b,d,f,g,h,i respectively
+    u32 FileSize: ?? # total file size, excluding the first 8 bytes
+    u32 FrameCount: ??
+    u32 LargestFrameSize: ??
+    u32 FrameCountAgainMaybe: ?? # XXX
+    u32 Width: ??
+    u32 Height: ??
+    u32 Frames per second dividend: ??
+    u32 Frames per second divider: ??
+    u32 VideoFlags: ?? # XXX map
+    u32 AudioTracks: ??
+
+  audio_channels:
+    u16 Unk: ??  # flags?
+    u16 Channels: ??
+
+  audio_samples:
+    u16 SampleRate: ?? # Hz
+    u16 Flags:
+      bit b10000000_00000000: Unknown15
+      bit b01000000_00000000: Unknown14
+      bit b00100000_00000000: Stereo
+      bit b00010000_00000000: Bink Audio DCT  # if 0, then Bink Audio FFT
+
+  audio_tracks:
+    u32 TrackID: ??
+
+layout:
+  - header Header
+  - audio_channels[Header.AudioTracks] AudioChannel
+  - audio_samples[Header.AudioTracks] AudioSample
+  - audio_tracks[Header.AudioTracks] AudioTrack
+  # TODO decode frame index table

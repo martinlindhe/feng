@@ -1,0 +1,37 @@
+# STATUS: 5%
+
+references:
+  - https://en.wikipedia.org/wiki/MP4_file_format
+  - https://www.sweetscape.com/010editor/repository/files/MP4.bt
+
+software:
+  - ffmpeg
+
+kind: media
+name: MP4
+extensions: [.mp4, .m4a, .m4v]
+mime: video/mp4  # XXX or audio/mp4
+endian: big
+
+magic:
+  - offset: 0004
+    match: c'ftyp'
+
+structs:
+  box:
+    # boxheader:
+    u32 Size: ??
+    ascii[4] FourCC: ??           # "ftyp"
+    if self.FourCC == "ftyp":
+      ascii[4] MajorBrand: ??       # "mp42"
+      ascii[4] MinorVersion: ??     # 0
+      ascii[4] CompatibleBrand0: ?? # "mp42"
+      ascii[4] CompatibleBrand1: ?? # "mp42"
+
+layout:
+  # a mp4 file consists of box slices:
+  # - box[] Box
+
+  - box Box
+  - box Box
+

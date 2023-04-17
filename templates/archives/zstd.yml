@@ -1,0 +1,48 @@
+# STATUS: 1%
+
+references:
+  - https://github.com/facebook/zstd/blob/dev/doc/zstd_compression_format.md
+
+kind: archive
+name: ZStd compressed data stream
+extensions: [.zstd]
+endian: little # XXX ???
+
+magic:
+  - offset: 0001
+    match: b5 2f fd
+
+# NEED SAMPLES:
+#1e b5 2f fd    v0.1
+#22 b5 2f fd    v0.2
+#23 b5 2f fd    v0.3
+#24 b5 2f fd    v0.4
+#25 b5 2f fd    v0.5
+#26 b5 2f fd    v0.6
+#27 b5 2f fd    v0.7
+#28 b5 2f fd    v0.8
+
+
+structs:
+  frame_header:
+    u32 Magic: # XXX match on u8[4]
+      #eq FD2FB51e: v0.1
+      #eq FD2FB522: v0.2
+      #eq FD2FB523: v0.3
+      #eq FD2FB524: v0.4
+      #eq FD2FB525: v0.5
+      #eq FD2FB526: v0.6
+      #eq FD2FB527: v0.7
+      eq FD2FB528: v0.8
+      default: unseen   # XXX is "unseen" supported here? should be!
+
+    u8 Frame_Header_Descriptor:
+      bit b1100_0000: Frame_Content_Size_flag
+      bit b0010_0000: Single_Segment_flag
+      bit b0001_0000: Unused
+      bit b0000_1000: Reserved
+      bit b0000_0100: Content_Checksum_flag # XXX If this flag is set, a 32-bits Content_Checksum will be present at frame's end
+      bit b0000_0011: Dictionary_ID_flag
+
+layout:
+  - frame_header FrameHeader

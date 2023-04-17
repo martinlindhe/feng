@@ -1,7 +1,6 @@
 package mapper
 
 import (
-	"bytes"
 	"testing"
 
 	"github.com/martinlindhe/feng/template"
@@ -23,18 +22,17 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x01, 0x00, // Type
 		0xff, // TypeOne
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
-	assert.Equal(t, `# 
-Header
-  [000000] Type                           u16 le           1                     00 01
-  [000002] TypeOne                        u8               255                   ff
+	assert.Equal(t, `Header
+  [000000] Type                           u16 le           1
+  [000002] TypeOne                        u8               255
 
 EOF
 `, fl.Present(&PresentFileLayoutConfig{}))
@@ -55,19 +53,19 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x02, 0x00, // Type
 		0xff, // data
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
-	assert.Equal(t, `# 
-Header
-  [000000] Type                           u16 le           2                     00 02
+	assert.Equal(t, `Header
+  [000000] Type                           u16 le           2
 
-0x0001 (1) unmapped bytes
+0x0001 (1) unmapped bytes (33.3%)
+Total file size 0x0003 (3)
 `, fl.Present(&PresentFileLayoutConfig{}))
 }
 
@@ -88,18 +86,17 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x01, 0x00, // Type
 		0xff, // TypeOne
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
-	assert.Equal(t, `# 
-Header
-  [000000] Type                           u16 le           1                     00 01
-  [000002] TypeOne                        u8               255                   ff
+	assert.Equal(t, `Header
+  [000000] Type                           u16 le           1
+  [000002] TypeOne                        u8               255
 
 EOF
 `, fl.Present(&PresentFileLayoutConfig{}))
@@ -121,16 +118,15 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x01, 0x00, // Type
 		0xff, // TypeOne
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
-	assert.Equal(t, `# 
-Header
+	assert.Equal(t, `Header
   [000000] Type                           u16 le           1                     00 01
            - TYPE_ONE                     eq               1
   [000002] TypeOne                        u8               255                   ff
@@ -158,17 +154,16 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x01, 0x00, // Type
 		0xf0, // EXT_F0
 		0xff, // TypeOne
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
-	assert.Equal(t, `# 
-Header
+	assert.Equal(t, `Header
   [000000] Type                           u16 le           1                     00 01
            - TYPE_ONE                     eq               1
   [000002] Ext                            u8               240                   f0

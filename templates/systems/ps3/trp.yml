@@ -1,0 +1,58 @@
+# STATUS: 80%
+# EXTRACT: OK
+#
+# used on PS3, PS4, PSVita
+
+# HI: NEED SAMPLES v2,v3
+
+references:
+  - https://psdevwiki.com/ps3/TROPHY.TRP
+
+kind: system
+name: Playstation Trophy file
+extensions: [.trp]
+endian: big  # XXX
+
+magic:
+  - offset: 0000
+    match: dc a2 4d 00
+
+structs:
+  header:
+    u8[4] Signature: dc a2 4d 00
+    u32 Version:
+      eq 00000001: V1 # PS3
+      eq 00000002: V2 # PS3/PSVita
+      eq 00000003: V3 # PS4
+
+    u64 FileSize: ??
+    u32 FileCount: ??
+    u32 ElementSize: ??
+    u32 DevFlag: ?? # 1= dev
+
+    if self.Version == V1:
+      u8[36] Padding: ??
+
+    if self.Version == V2:
+      u8[20] Sha1: ??
+      u8[16] Padding: ??
+      data: unseen
+
+    if self.Version == V3:
+      data: unseen
+
+  trophy:
+    ascii[32] Name: ??
+    filename: self.Name
+    u64 Offset: ??
+    u64 DataSize: ??
+    u32 Unknown: ??         # XXX 0 for png:s, 1 for .sfm files
+    u32[3] Padding: ??
+    offset: self.Offset
+    raw:u8[self.DataSize] Data: ??
+    u8[alignment(self.DataSize, 16)] Padding: ??
+    offset: restore
+
+layout:
+  - header Header
+  - trophy[Header.FileCount] Trophy

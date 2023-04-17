@@ -6,12 +6,11 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 
+	"github.com/rs/zerolog/log"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 )
@@ -136,7 +135,7 @@ func replaceNextBitTag(s string) (string, error) {
 		res = fmt.Sprintf("% 02x", x)
 
 	default:
-		log.Fatalf("unhandled bit length %d", lm)
+		log.Fatal().Msgf("unhandled bit length %d", lm)
 	}
 
 	s = s[0:idx[0]] + res + s[idx[1]:]
@@ -162,12 +161,12 @@ func U64toBytesBigEndian(val uint64, unitSize uint64) []byte {
 	case 8:
 		return r
 	default:
-		log.Fatalf("unhandled unit size %d", unitSize)
+		log.Fatal().Msgf("unhandled unit size %d", unitSize)
 	}
 	return r
 }
 
-// find next ascii between c'' characters and replace with hex
+// find next ascii between c” characters and replace with hex
 func replaceNextASCIITag(s string) (string, error) {
 	p1 := strings.Index(s, "c'")
 	if p1 == -1 {
@@ -300,49 +299,42 @@ type MatchedPattern struct {
 	Index int8
 }
 
-func (df *DataField) SingleUnitSize() uint64 {
+func (df *DataField) SingleUnitSize() int64 {
 	return SingleUnitSize(df.Kind)
 }
 
-func SingleUnitSize(kind string) uint64 {
+func SingleUnitSize(kind string) int64 {
 	switch kind {
-	case "u8", "i8", "ascii", "asciiz",
+	case "u8", "i8",
+		"ascii", "asciiz", "asciinl",
+		"vs64",
+		"compressed:lzo1x",
 		"compressed:lz4",
+		"compressed:lzf",
+		"compressed:lzss",
 		"compressed:zlib",
+		"compressed:gzip",
 		"compressed:deflate",
-		"raw:u8":
+		"raw:u8", "encrypted:u8":
 		return 1
 	case "u16", "i16", "utf16", "utf16z",
 		"dostime", "dosdate":
 		return 2
 	case "rgb8":
 		return 3
-	case "u32", "i32", "time_t_32", "dostimedate":
+	case "u32", "i32", "f32", "time_t_32", "dostimedate":
 		return 4
 	case "u64", "i64", "filetime":
 		return 8
+	case "xyzm32":
+		return 16
 	}
 	panic(fmt.Sprintf("SingleUnitSize cant handle kind '%s'", kind))
 }
 
 // returns true if unit is a single u8, u16, u32 or u64 that can have eq/bit field as child
 func (df *DataField) IsPatternableUnit() bool {
-
-	if df.Slice {
-		return false
-	}
-
-	// only allow pattern matching on single values of simple units
-	if df.Range == "" && (df.Kind == "u8" || df.Kind == "i8" || df.Kind == "u16" || df.Kind == "i16" || df.Kind == "u32" || df.Kind == "i32" || df.Kind == "u64" || df.Kind == "i64") {
-		return true
-	}
-
-	// allow pattern matching on arbitrary length ascii
-	if df.Kind == "ascii" {
-		return true
-	}
-
-	return false
+	return df.IsSimpleUnit()
 }
 
 // returns true if unit is a single u8, u16, u32 or u64 that can be used in IF statements
@@ -351,7 +343,7 @@ func (df *DataField) IsSimpleUnit() bool {
 		return false
 	}
 	switch df.Kind {
-	case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64", "ascii":
+	case "u8", "i8", "u16", "i16", "u32", "i32", "f32", "u64", "i64", "ascii":
 		return true
 	}
 	return false
@@ -361,7 +353,7 @@ func (df *DataField) IsSimpleUnit() bool {
 func ReverseBytes(b []byte, unitLength int) []byte {
 
 	if len(b)%unitLength != 0 {
-		log.Fatalf("invalid input '%v', length %d", b, unitLength)
+		log.Fatal().Msgf("invalid input '%v', length %d", b, unitLength)
 	}
 
 	res := make([]byte, len(b))
@@ -385,12 +377,12 @@ func AsUint64(kind string, b []byte) uint64 {
 		return uint64(b[0])
 	case "u16", "i16", "dosdate", "dostime":
 		return uint64(binary.BigEndian.Uint16(b))
-	case "u32", "i32", "time_t_32":
+	case "u32", "i32", "f32", "time_t_32":
 		return uint64(binary.BigEndian.Uint32(b))
 	case "u64", "i64":
 		return binary.BigEndian.Uint64(b)
 	}
-	log.Fatalf("AsUint64 unhandled kind %s", kind)
+	log.Fatal().Msgf("AsUint64 unhandled kind %s", kind)
 	return 0
 }
 
@@ -427,76 +419,8 @@ func AsInt64(kind string, b []byte) int64 {
 	case "i64":
 		return int64(binary.BigEndian.Uint64(b))
 	}
-	log.Fatalf("AsInt64 unhandled kind %s", kind)
+	log.Fatal().Msgf("AsInt64 unhandled kind %s", kind)
 	return 0
-}
-
-// presents the value of the data type (format.Kind) in a human-readable form
-func (format DataField) Present(b []byte, endian string) string {
-	// TODO DEPRECATE. instead use fl.PresentFieldValue()
-	switch format.Kind {
-	case "compressed:deflate", "compressed:lz4", "compressed:zlib", "raw:u8":
-		return ""
-
-	case "u8", "u16", "u32", "u64":
-		if format.Slice || format.Range != "" {
-			return ""
-		}
-		return fmt.Sprintf("%d", AsUint64Raw(b))
-
-	case "i8", "i16", "i32", "i64":
-		if format.Slice || format.Range != "" {
-			return ""
-		}
-		switch format.Kind {
-		case "i8":
-			return fmt.Sprintf("%d", int8(AsUint64Raw(b)))
-		case "i16":
-			return fmt.Sprintf("%d", int16(AsUint64Raw(b)))
-		case "i32":
-			return fmt.Sprintf("%d", int32(AsUint64Raw(b)))
-		case "i64":
-			return fmt.Sprintf("%d", int64(AsUint64Raw(b)))
-		}
-
-	case "ascii", "asciiz":
-		v, _ := AsciiZString(b, len(b))
-		return v
-
-	case "utf16":
-		return Utf16String(b)
-
-	case "utf16z":
-		return Utf16zString(b)
-
-	case "time_t_32":
-		v := AsUint64Raw(b)
-		timestamp := time.Unix(int64(v), 0)
-		return timestamp.Format(time.RFC3339)
-
-	case "filetime":
-		// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601.
-		// Windows, XBox
-
-		filetimeDelta := time.Date(1970-369, 1, 1, 0, 0, 0, 0, time.UTC).UnixNano()
-		t := binary.LittleEndian.Uint64(b)
-		timestamp := time.Unix(0, int64(t)*100+filetimeDelta)
-		return timestamp.Format(time.RFC3339)
-
-	case "dostime":
-		v := AsUint64Raw(b)
-		return AsDosTime(uint16(v)).String()
-
-	case "dosdate":
-		v := AsUint64Raw(b)
-		return AsDosDate(uint16(v)).String()
-
-	case "rgb8":
-		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
-	}
-
-	log.Fatalf("don't know how to present %s (slice:%v, range:%s): %v", format.Kind, format.Slice, format.Range, b)
-	return ""
 }
 
 // text encoding used by Windows
@@ -557,7 +481,26 @@ func AsciiZString(b []byte, maxLength int) (string, uint64) {
 		if v >= 0x20 && v < 0x7f {
 			decoded += string(v)
 		} else {
-			decoded += "."
+			decoded += "·"
+		}
+		if maxLength > 0 && length >= uint64(maxLength) {
+			break
+		}
+	}
+	return decoded, length
+}
+
+// ascii text encoding (non-printable is replaced by "·")
+// returns decoded string and length in bytes
+func AsciiPrintableString(b []byte, maxLength int) (string, uint64) {
+	length := uint64(0)
+	decoded := ""
+	for _, v := range b {
+		length++
+		if v >= 0x20 && v < 0x7f {
+			decoded += string(v)
+		} else {
+			decoded += "·"
 		}
 		if maxLength > 0 && length >= uint64(maxLength) {
 			break

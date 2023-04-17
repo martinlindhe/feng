@@ -1,0 +1,72 @@
+# STATUS: 80%
+#
+# Archive format used in ObsCure (2004), developed by Hydravision Entertainment
+# and released for Windows, PS2 and Xbox.
+#
+# This template is verified to match the PS2, XBox and Windows version of ObsCure.
+
+# TODO max: nested parsing is broken
+# TODO extraction: combine filename with parent directory part to form a full file path (need nested parsing first)
+
+resources:
+  - http://wiki.xentax.com/index.php/Obscure_HVP
+  - https://github.com/bartlomiejduda/Tools/blob/f9e1afd9ffaab5af7cdffb61786dc443d95b1e17/NEW%20Tools/ObsCure/Obscure_HVP_script.bms
+
+kind: archive
+name: Hydravision PackFile
+extensions: [.hvp]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'HV PackFile'
+
+structs:
+  header:
+    u8[12] Signature: c'HV PackFile' 00
+    u32 ArchiveType:
+      eq 00030000: NO_CRC32
+      eq 00030001: CRC32
+      default: invalid
+    u32 MainLevelDirectoryCount: ??
+    u32 FileAndDirectoryCount: ??
+    u32 FileCount: ??
+    u32 DirectorySize: ??
+    if self.ArchiveType == CRC32:
+      u32 Header CRC: ??
+      u32 Directory CRC: ??
+
+  directory:
+    u32 EntrySize: ??
+    u8 EntryType:
+      eq 00: DIRECTORY
+      eq 01: FILE
+      default: invalid
+    u32 Compression:
+      eq 00000000: UNCOMPRESSED
+      eq 00000001: COMPRESSED
+      default: invalid
+    if self.EntryType == DIRECTORY:
+      u32 FileAndDirectoryCount: ??
+      u32 DirectoryNameLength: ??
+      ascii[self.DirectoryNameLength] DirectoryName: ??
+      #directory[self.FileAndDirectoryCount] DirectoryEntry: ??   # XXX nesting is broken in feng atm
+    if self.EntryType == FILE:
+      u32 CompressedSize: ??
+      u32 UncompressedSize: ??
+      u32 Hash: ?? # ???
+      u32 FileOffset: ??
+      u32 FilenameLength: ??
+      ascii[self.FilenameLength] Filename: ??
+      filename: self.Filename # XXX combine with parent directory part to form a full file path
+      offset: self.FileOffset
+      if self.Compression == UNCOMPRESSED:
+        raw:u8[self.CompressedSize] Data: ??
+      if self.Compression == COMPRESSED:
+        compressed:zlib[self.CompressedSize] Data: ??
+      offset: restore
+
+layout:
+  - header Header
+  #- directory[Header.MainLevelDirectoryCount] Directory   # this is the true way, list top level dirs + then recurse sub-dirs. needed to get full file paths
+  - directory[Header.FileAndDirectoryCount] Directory  # XXX hack that outputs a flat list of files

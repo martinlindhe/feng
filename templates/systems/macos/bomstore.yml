@@ -1,0 +1,30 @@
+# STATUS: 1%
+
+# Used on macOS and iOS.
+
+references:
+  - https://en.wikipedia.org/wiki/BOM_(file_format)
+  - https://blog.timac.org/2018/1018-reverse-engineering-the-car-file-format/
+  - https://github.com/hogliux/bomutils
+
+kind: system
+name: Apple Bill of Materials
+extensions: [.car]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'BOMStore'
+
+structs:
+  header:
+    ascii[8] Signature: c'BOMStore'
+    u32 Version: 00 00 00 01
+    u32 BlockCount: ??
+    u32 IndexOffset: ??
+    u32 IndexLength: ??
+    u32 VarsOffset: ??
+    u32 VarsLength: ??
+
+layout:
+  - header Header

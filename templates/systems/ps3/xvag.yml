@@ -1,0 +1,42 @@
+# STATUS: 1%
+#
+# Audio format used on PS3
+#
+# Used in (confirmed):
+# - God of War III (2010, PS3)
+#
+# Unconfirmed:
+# - Uncharted: Drake`s Fortune (2007, PS3)
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=5014
+  - https://zenhax.com/viewtopic.php?t=6951
+
+software:
+  - ffmpeg
+
+kind: archive
+name: Sony PlayStation 3 Audio File
+extensions: [.xvag]
+endian: big # XXX ???
+
+magic:
+  - offset: 0000
+    match: c'XVAG'
+
+structs:
+  header:
+    ascii[4] Signature: c'XVAG'
+    u32 Unknown: ?? # 84 00 00 00
+    u32 Unk1: ??    # 00 00 00 60
+    u32[5] Unknown: ?? # reserved?
+
+  block:
+    ascii[4] ID: c'fmat' # XXX
+    u32 Unknown: ??   # 1c 00 00 00
+    u32 Unknown2: ??  # 02 00 00 00
+    u32 Unknown3: ??  # 06 00 00 00
+
+layout:
+  - header Header
+  - block Block

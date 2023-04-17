@@ -1,0 +1,31 @@
+# STATUS: 10%
+#
+# Format used in Namco Museum Megamix, developed by Namco Bandai Games
+# and released for Wii (2010).
+
+# TODO: see if it is also used in Namco Museum Remix (2007)
+
+resources:
+  - http://aluigi.altervista.org/bms/namco_museum.bms
+
+kind: archive
+name: Namco Museum Megamix LZSS compressed data
+extensions: [.lzs]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'SSZL'    # XXX namco_museum.bms also recognized "LZSS", from where?
+
+structs:
+  header:
+    u8[4] Signature: c'SSZL'
+    u32 Unknown: ?? # always 0
+    u32 CompressedSize: ??
+    u32 ExpandedSize: ??
+    # XXX does not decompress correctly with the lzss decompressor we are using in feng
+    #compressed:lzss[self.CompressedSize] Data: ??
+    raw:u8[self.CompressedSize] Data: ??   # quickbms comtype lzss0
+
+layout:
+  - header Header

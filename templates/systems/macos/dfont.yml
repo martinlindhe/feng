@@ -13,9 +13,7 @@ extensions: [.dfont]
 mime: application/x-dfont
 endian: big # XXX
 
-magic:
-  - offset: 0000
-    match: 00 00 01 00 00 # XXX just guessing
+no_magic: true  # this format has no header
 
 structs:
   header:

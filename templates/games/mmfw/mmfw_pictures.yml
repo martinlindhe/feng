@@ -1,0 +1,55 @@
+# STATUS: 50%
+
+# Usually accompanied with "MMFW Sounds", "MMFW Films" and "MMScript File" files.
+
+# Used in games:
+# Playskool Puzzles (1996)
+# Mr. Potato Head Activity Pack (1997, Win/Mac), ImageBuilder Software
+# Candy Land (1998, Windows) ImageBuilder Software
+# Who Wants To Be A Millionaire 3rd Edition (2001, Win/PSX)
+# Scooby-Doo! Case File #1: The Glowing Bug Man (2002, Win)
+
+# MAX: calc data length / file size for data extraction
+
+references:
+  - http://aluigi.altervista.org/bms/millionaire3.bms
+  - http://aluigi.altervista.org/bms/mmfw_pictures.bms
+  - https://forum.xentax.com/viewtopic.php?t=17693
+  - http://wiki.xentax.com/index.php/Scooby_Doo_Case_Files_MMP_MMFW
+
+kind: game
+name: MMFW Pictures
+extensions: [.mmp, .pic]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'MMFW Pictures' 00 00 00
+
+structs:
+  header:
+    ascii[16] Signature: c'MMFW Pictures' 00 00 00
+    ascii[2] MaybeEndian: ?? # XXX unsure: "MM" = big endian, "II" = little endian ???
+    u8[2] MaybeVersion: ??   # 00 02  . .. version ??   found in Candy land = "00 02", in Mr. Potato = "00 00"
+    u8[14] Unknown: ??    # XXX
+    u16 FileCount: ??
+
+    #u32 MMFW_SIZE: ??     # XXX  might point to some extra entry ??????
+
+  # TODO calculate data length, see mmfw_pictures.bms
+  entry:
+    u32 DataOffset: ??
+    u32 NextDataOffset: ?? # XXX calc length using these 2 fields
+    offset: 0x28 + (Header.FileCount * 4) + (self.index * 0x20) + 2
+    ascii[30] Filename: ??
+
+    #offset: self.DataOffset
+    # XXX LEN
+    #raw:u8[self.NextDataOffset - self.DataOffset] Data: ??
+    #offset: restore
+
+    offset: restore
+
+layout:
+  - header Header
+  - entry[Header.FileCount] Entry

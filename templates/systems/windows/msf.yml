@@ -1,0 +1,29 @@
+# STATUS: 1%
+
+# The Microsoft PDB (Program DataBase) 7.0 is contained in a MSF (Multi-Stream Format) container.
+
+references:
+  - https://llvm.org/docs/PDB/MsfFile.html
+  - https://github.com/Microsoft/microsoft-pdb
+
+kind: debug
+name: Microsoft Program Database 7
+extensions: [.pdb]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'Microsoft C/C++ MSF 7.00' 0d 0a 1a 44 53 00 00 00
+
+structs:
+  header:
+    ascii[32] Signature: c'Microsoft C/C++ MSF 7.00' 0d 0a 1a 44 53 00 00 00
+    u32 BlockSize: ??   # valid values: 512, 1024, 2048, 4096
+    u32 FreeBlockMapBlock: ??
+    u32 NumBlocks: ??
+    u32 NumDirectoryBytes: ??
+    u32 Unknown: ??  # 0
+    u32 BlockMapAddr: ??
+
+layout:
+  - header Header

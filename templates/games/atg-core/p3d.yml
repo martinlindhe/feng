@@ -1,0 +1,42 @@
+# STATUS: 80%
+
+# Used in:
+
+# Prototype (PS3)
+# Scarface: The World is Yours ???
+
+# TODO: improved naming of output files
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=3537
+
+kind: game archive
+name: p3d archive
+extensions: [.p3d]
+
+magic:
+  - offset: 0000
+    match: c'P3D' ff
+    endian: little
+  - offset: 0000
+    match: ff c'D3P'
+    endian: big
+
+structs:
+  header:
+    ascii[4] Magic: ??
+    u32 HeaderSize: ??
+    u32 MaybeFileSize: ??
+
+  file:
+    u8 FolNum1: ??
+    u8 FolNum2: ??
+    u8 T1: ??
+    u8 T2: ??
+    u32 DataSize: ??
+    u32 Unk: ??
+    raw:u8[self.DataSize - 12] Data: ??
+
+layout:
+  - header Header
+  - file[] File

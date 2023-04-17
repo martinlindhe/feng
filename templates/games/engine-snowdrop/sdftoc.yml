@@ -1,0 +1,36 @@
+# STATUS: 60%
+
+# Used in:
+# South Park: The Fractured But Whole (2017)
+# Tom Clancy's The Division (2016) ??? need sample
+
+references:
+  - https://aluigi.altervista.org/bms/ubisoft_sdf.bms
+  - https://forum.xentax.com/viewtopic.php?p=116998#p116998
+  - https://forum.xentax.com/viewtopic.php?t=13882
+
+kind: game
+name: Snowdrop file archive TOC
+endian: little
+extensions: [.sdftoc]
+
+magic:
+  - offset: 0000
+    match: c'WEST'
+
+structs:
+  header:
+    ascii[4] Magic: c'WEST'
+    u32 Version: ?? # 0x16 in South Park: The Fractured But Whole, Tom Clancy's The Division (steam trial)
+    u32 UncompressedSize: ??
+    if self.Version >= 0x17:
+      u32 OFFSET: ??
+      data: unseen # XXX need sample
+    u32 CompressedSize: ??
+
+    offset: FILE_SIZE - 0x30 - self.CompressedSize
+    compressed:zlib[self.CompressedSize] Data: ?? # NOTE: Version 0x16 was zlib
+    offset: restore
+
+layout:
+  - header Header

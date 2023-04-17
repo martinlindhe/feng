@@ -1,0 +1,34 @@
+# STATUS: 1%
+
+# NIF file (NetImmerse File) is a format used by all Fallout games using engines derived
+# from the NetImmerse engine first used in
+
+# Used in games:
+# - Dark age of Camelot (2001, NetImmerse engine)
+# - The Elder Scrolls III: Morrowind (2002, NetImmerse engine)
+# - Fallout 3 (2008, Gamebryo Engine)
+# - Fallout: New Vegas (2010, Gamebryo Engine)
+# - Fallout 4 (2015, Creation Engine)
+# - Fallout 76 (2018, Creation Engine)
+
+references:
+  - https://github.com/niftools/nifxml/blob/master/nif.xml
+  - http://www.niftools.org/
+  - https://niftools.sourceforge.net/wiki/Dark_Age_of_Camelot
+
+kind: asset
+name: NetImmerse File
+extensions: [.nif, .kfa]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'NetImmerse File Format, Version '
+
+structs:
+  header:
+    ascii[32] Signature: c'NetImmerse File Format, Version '
+    ascii[8] Version: ??
+
+layout:
+  - header Header

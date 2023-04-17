@@ -1,0 +1,65 @@
+# STATUS: 5%
+
+# Ubisoft game engine format
+# Has a corresponding .DAT file without header
+
+# Used in:
+# Far Cry 2
+# Far Cry 3
+# Watch Dogs
+# Watch Dogs 2
+# The Crew
+# XXX + more far cry games
+
+# TODO map more
+
+references:
+  - http://svn.gib.me/public/dunia/trunk/ # far cry 2
+  - http://svn.gib.me/public/dunia2/trunk/ # far cry 3
+  - http://aluigi.org/papers/bms/fat2_fat3.bms # far cry 3
+  - https://www.zenhax.com/viewtopic.php?f=9&t=49 # Ubisoft engines overview
+  - https://forum.xentax.com/viewtopic.php?t=24572  # far cry 6
+
+kind: game
+name: Far Cry fat file
+extensions: [.fat]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'2TAF'
+
+structs:
+  header:
+    ascii[4] Signature: c'2TAF'
+    u32 Version: ??
+      # 5 = Far Cry 2 (PS3)
+      # 9 = Far Cry 3 (PS3), Far Cry 4 (PS3)
+    u32 Unk2: ?? # 1027
+    if self.Version >= 9:
+      u32 Unk1v9: ??
+      u32 Unk2v9: ??
+    u32 EntryCount: ??
+
+  entry:
+    if Header.Version >= 9:
+      u64 NameHash: ??
+    else:
+      u32 NameHash: ??
+
+    u32 Flags1:
+      bit b00000000_00000000_00000000_00000011: CompressionScheme # 1 = LZO1x, 2 = Unknown, 3 = Unknown
+      bit b11111111_11111111_11111111_11111100: UncompressedSize
+
+    u64 Flags2:
+      bit b00000000_00000000_00000000_00000000_00111111_11111111_11111111_11111111: CompressedSize
+      bit b11111111_11111111_11111111_11111111_11000000_00000000_00000000_00000000: Offset
+
+
+
+
+layout:
+  - header Header
+  #- entry[Header.EntryCount] Entry
+  - entry Entry
+

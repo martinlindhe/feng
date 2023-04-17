@@ -1,0 +1,59 @@
+# STATUS: 60%
+
+# In-house format developed by Data Design Interactive and used in games such as
+
+# CONFIRMED USERS:
+# - Nickelodeon Party Blast (2002), XBox/GameCube
+
+# UNCONFIRMED / MAY BE FORMAT DIFFERENCES:
+# - LEGO Rock Raiders (1999), PS1/Win
+# - Tonka Space Station (2001), PS1
+# - London Taxi: Rush Hour (2006), PS2/Win/Wii  - this template is very similar but not identical (wii ver checked)
+
+# TODO MAX: generate full paths
+
+references:
+  - http://wiki.xentax.com/index.php/London_Taxi_Rushour
+  - https://forum.xentax.com/viewtopic.php?t=17869
+
+kind: game
+name: Data Design Interactive WADH
+extensions: [.wad]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'WADH'
+
+structs:
+  header:
+    ascii[4] Signature: c'WADH'
+    u32 StartOffset: ??
+    u32 FileCount: ??
+    u32 Unknown: ??
+
+  directory:
+    i32 FilenameOffset: ?? # (relative to the start of the filename directory)
+    u32 FileOffset: ?? # relative to start offset
+    u32 DataLength: ??
+    u32 UnknownBoolean: ?? # (0/1)
+    i32 MaybeFilesInDirectory: ?? # (all 255's for files)
+    i32 MaybeIndex: ??
+
+    if self.FilenameOffset != -1:
+      offset: 0x10 + (Header.FileCount * 24) + self.FilenameOffset
+      asciiz Filename: ??
+      filename: self.Filename
+      offset: restore
+
+    if self.FileOffset != 0:
+      label: FILE
+      offset: Header.StartOffset + self.FileOffset
+      raw:u8[self.DataLength] Data: ??
+      offset: restore
+    else:
+      label: DIRECTORY
+
+layout:
+  - header Header
+  - directory[Header.FileCount] Dir

@@ -1,0 +1,45 @@
+# STATUS: 10%
+
+# BRLAN files (Binary Revolution Layout AnimatioN) are used to produce layout animations.
+
+resources:
+  - https://wiki.tockdom.com/wiki/BRLAN_(File_Format)
+
+kind: audio
+name: Nintendo Wii "Binary Revolution Layout AnimatioN"
+extensions: [.brlan]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'RLAN'
+
+structs:
+  header:
+    ascii[4] Signature: c'RLAN'
+    u16 ByteOrderMark:
+      eq feff: BIG
+      eq fffe: LITTLE
+      default: invalid
+    if self.ByteOrderMark == LITTLE:
+      endian: little
+    u16 Version: ??
+    u32 FileSize: ??
+    u16 HeaderSize: ??
+    u16 SectionCount: ??
+
+  section:
+    ascii[4] SectionID: ?? # XXX select on ascii[4]
+    # pat1, pai1, etc
+    u32 SectionSize: ??
+    u32 NumberOfFrames: ??
+    u8 Flags: ?? # XXX map
+    u8 Unknown: ??
+    u16 TPLFilenameCount: ??
+    u16 AnimationCount: ??
+    u32[self.TPLFilenameCount] TPLFilenameOffsets: ?? # XXX list of offsets
+    u32[self.AnimationCount] AnimationSectionOffsets: ??
+
+layout:
+  - header Header
+  - section[Header.SectionCount] Section

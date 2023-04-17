@@ -1,8 +1,27 @@
+# software
+
+Ghidra plugin: https://github.com/Cuyler36/Ghidra-GameCube-Loader
+
+
 # disc images
 
-.nkit.iso is compressed with NKit
+### nkit.iso
+
+nkit.iso is compressed with NKit. Can be extracted with GCRebuilder
+
+NKit format: https://wiki.gbatemp.net/wiki/NKit/NKitFormat
+GCRebuilder: https://gamebanana.com/tools/6410
 
 
+### ciso
+
+"CISO" header
+
+### RVZ
+
+a modern popular format developed by the dolphin-emu team
+
+Convert to iso using Dolphin: right click game and select "Convert ..."
 
 # various formats
 

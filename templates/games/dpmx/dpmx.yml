@@ -1,0 +1,46 @@
+# STATUS: 50%
+#
+# Used in (confirmed):
+# - Shadow Rine (Windows)
+#
+# TODO MAX: decrypt files, see https://github.com/Tsukihime/Hot-Soup-Processor-DPMX-unpacker---key-finder/blob/master/HSPExtract.rb
+
+references:
+  - https://zenhax.com/viewtopic.php?t=13265
+  - https://zenhax.com/viewtopic.php?t=11644
+  - https://old.reddit.com/r/GameRipping/comments/12946zy/help_with_ripping_gamedatadat_and_gamedata2dat/
+
+software:
+  - https://github.com/Tsukihime/Hot-Soup-Processor-DPMX-unpacker---key-finder
+  - http://asmodean.reverse.net/pages/exdpmx.html
+
+kind: archive
+name: Hot Soup Processor DPMX archive
+extensions: [.dat]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'DPMX'
+
+structs:
+  header:
+    ascii[4] Signature: c'DPMX'
+    u32 BaseOffset: ??
+    u32 EntryCount: ??
+    u32 Zero: ?? # 0
+
+  entry:
+    ascii[16] Filename: ??
+    u32 Reserved: ?? # -1
+    u32 MaybeChecksum: ?? # XXX decryption key ???
+    u32 Offset: ??
+    u32 Size: ??
+    filename: self.Filename
+    offset: Header.BaseOffset + self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

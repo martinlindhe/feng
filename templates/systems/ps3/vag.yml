@@ -1,0 +1,30 @@
+# STATUS: 1%
+#
+# Audio format used on PS3
+#
+# Used in (confirmed):
+# - Futurama (2003, PS2): inside futurama.img: tons of .vag files
+# - God of War III (2010, PS3): inside PS3_GAME/USRDIR/STREAMS.PSARC
+
+references:
+  - https://www.psdevwiki.com/ps3/Multimedia_Formats_and_Tools#VAG
+
+software:
+  - ffmpeg
+
+kind: archive
+name: Sony PlayStation 3 Audio File
+extensions: [.vag]
+endian: big # XXX ???
+
+magic:
+  - offset: 0000
+    match: c'VAGp'
+
+structs:
+  header:
+    ascii[4] Signature: c'VAGp'
+
+layout:
+  - header Header
+

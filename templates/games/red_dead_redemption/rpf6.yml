@@ -1,0 +1,30 @@
+# STATUS: 1%
+
+# Used in Red Dead Redemption (PS3)
+
+references:
+  - https://forum.xentax.com/viewtopic.php?p=61224#p61224
+
+software:
+  - https://github.com/Foxxyyy/AreDeAre-xPlorer-2
+  - https://archive.org/details/aredearexplorer
+
+kind: archive
+name: Red Dead Redemption RPF6 archive
+extensions: [.rpf]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'RPF6'
+
+structs:
+  header:
+    ascii[4] Signature: c'RPF6'
+    u32 EntryCount: ??
+    u16 Unknown1: ??
+    u16 Unknown2: ??
+    i32 EncryptedFlag: ??  # XXX map flag   usually -3  or ff ff ff fd
+
+layout:
+  - header Header

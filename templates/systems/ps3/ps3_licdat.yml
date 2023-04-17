@@ -1,0 +1,48 @@
+# STATUS: 10%
+#
+# used on PS3
+
+references:
+  - https://psdevwiki.com/ps3/LIC.DAT
+
+kind: system
+name: Sony PS3 LIC.DAT file
+extensions: [.dat] # only LIC.DAT is used
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'PS3LICDA'
+
+structs:
+  header:
+    ascii[8] Signature: c'PS3LICDA'
+    u32 Version: ??
+    u32 Flags:
+      bit b10000000_00000000_00000000_00000000: Retail
+
+    u32 LicenseTableEnd: ??
+    u32 LicenseTableStart: ??   # always 0x800 ?
+    u32 LicenseSize: ??
+    u32 LicenseCount: ??
+    u32 Checksum: ?? # crc32
+    u8[2012] Padding: ?? # seen zeroed
+
+  license:
+    offset: Header.LicenseTableStart
+    u8 Type:
+      eq 01: Title
+      eq 02: SKU
+      eq 03: Content
+      default: invalid
+    if self.Type == Title:
+      ascii[10] Title: ??
+    if self.Type == SKU:
+      ascii[42] SKU: ??
+    if self.Type == Content:
+      ascii[37] Content: ??
+    offset: restore
+
+layout:
+  - header Header
+  - license[Header.LicenseCount] License

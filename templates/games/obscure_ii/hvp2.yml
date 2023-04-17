@@ -1,0 +1,66 @@
+# STATUS: 80%
+
+# Archive format used in ObsCure II (2009), aka ObsCure: The Aftermath,
+# released for Windows, PS2, Wii, PSP.
+
+# This mapping is for the PS2/PSP version. The Wii version don't map correctly due to a feng bug (comment out the ps2 Flags definitions to fix)
+
+resources:
+  - http://wiki.xentax.com/index.php/Obscure_HVP
+
+kind: archive
+name: Hydravision PackFile v2
+extensions: [.hvp]
+endian: little # little = ps2/psp, big = wii
+
+magic: # XXX very weak magic, should not be enabled
+  - offset: 0000
+    match: 00 00 04 00 # ps2/psp
+  - offset: 0000
+    match: 00 04 00 00 # XXX for big endian WII
+
+structs:
+  header:
+    u32 Model:
+      eq 00000400: WII
+      eq 00040000: PS2
+      default: invalid
+
+    if self.Model == WII:
+      endian: big
+    u32 Reserved: ??
+    u32 EntryCount: ??
+    u32 Checksum: ??    # guessing, it looks like a checksum
+
+  entry:
+    u32 NameCRC: ?? # 0 for the root entry
+    if Header.Model == WII:
+      u32 Flags:
+        bit b00000000_00000001_00000000_00000000: COMPRESSED
+        bit b00000000_00000100_00000000_00000000: DIRECTORY
+    else:
+      u32 Flags:
+        bit b00000000_00000000_00000000_00000001: COMPRESSED
+        bit b00000000_00000000_00000000_00000100: DIRECTORY
+    if (self.Flags & DIRECTORY) != 0: # XXX this errors because all CONSTANTS got evaluated and DIRECTORY get the wrong value in the case of WII
+      label: Directory
+      u32 Zero1: ??
+      u32 Zero2: ??
+      u32 FileCount: ??
+      u32 StartIndex: ??
+    if (self.Flags & DIRECTORY) == 0:
+      label: File
+      u32 SomeCRC: ??
+      u32 UncompressedSize: ??
+      u32 Offset: ??
+      u32 CompressedSize: ??
+      offset: self.Offset
+      if (self.Flags & COMPRESSED) != 0:
+        compressed:lzo1x[self.CompressedSize] Data: ??
+      else:
+        raw:u8[self.UncompressedSize] Data: ??
+      offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

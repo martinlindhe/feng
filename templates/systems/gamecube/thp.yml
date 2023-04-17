@@ -1,0 +1,25 @@
+# STATUS: 1%
+
+# used for Gamecube and Wii videos
+
+references:
+  - xxx
+
+software:
+  - ffmpeg
+
+kind: video
+name:  Nintendo Gamecube/Wii THP video
+extensions: [.thp]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'THP' 00
+
+structs:
+  header:
+    ascii[4] Magic: c'THP' 00
+
+layout:
+  - header Header

@@ -1,0 +1,57 @@
+# STATUS: 50%
+# UNPACK: OK (raw)
+
+# An U8 file is an archive containing a hierarchical file system. In Mario Kart Wii
+# all U8 files are compressed using the YAZ0 format and stored as SZS files.
+
+# In Namco Museum Megamix, the content don't seem to be compressed.
+
+resources:
+  - https://wiki.tockdom.com/wiki/U8_(File_Format)
+  - https://github.com/Gericom/EveryFileExplorer/blob/master/GCNWii/U8.cs
+
+kind: archive
+name: Nintendo Wii U8 archive
+extensions: [.arc]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 55AA382D
+
+structs:
+  header:
+    u32 Signature: 55AA382D
+    u32 RootNodeOffset: ??
+    u32 TotalSize: ?? # Size of all nodes including the string table.
+    u32 DataOffset: ?? # XXX unsure if base
+    u32[4] Reserved: ??
+    offset: self.RootNodeOffset
+
+  node:
+    u32 InfoFlag:
+      bit b11111111_00000000_00000000_00000000: Type # 0 = file ,1=dir
+      bit b00000000_11111111_11111111_11111111: FileNameOffset # XXX u24 type would have been preferred here. Offset into the string pool for the file name
+
+    # XXX dont hard-code 0x554, calc it from RootNode.SkipToNodeIndex
+    offset: 0x554 + (self.InfoFlag & FileNameOffset)
+    asciiz[40] Filename: ??   # XXX BUG: asciiz[16] reads past 16 if no 0 terminator is seen
+    filename: self.Filename
+    offset: restore
+    if (self.InfoFlag & Type) == 0:
+      # File
+      u32 DataOffset: ??
+      u32 DataSize: ??
+      offset: self.DataOffset # XXX this is not correct
+      raw:u8[self.DataSize] Data: ??
+      offset: restore
+    else:
+      # Directory
+      u32 ParentDirectoryIndex: ??
+      u32 SkipToNodeIndex: ?? # Index of the first node that is not part of this directory, or total count for the root node
+
+layout:
+  - header Header
+  - node RootNode
+  - node[RootNode.SkipToNodeIndex] Node
+

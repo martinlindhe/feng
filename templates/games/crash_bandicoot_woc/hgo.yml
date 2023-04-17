@@ -1,0 +1,221 @@
+# STATUS: 50%
+#
+# Format used in Crash Bandicoot: The Wrath of Cortex (GameCube and XBox versions)
+#
+# The .hgo and .nus files have a companion .hgo.blk file, which just lists the block tags (in little endian) and offsets (high bit is some flag)
+# this mapping is based on the gamecube version of the game. TODO look more into the XBox version.
+
+# TODO MAX: cannot expand nested struct props, properly... bone offset calc with self.NameOffset fails /26 sep 2022
+# TODO HI: parse hbo_geom, which contains the actual 3d model data
+
+references:
+  - https://github.com/Open-Travelers/LibTWOC/blob/513ccfe2f829684feaf04dd1929cc4d8b0a439fb/Serializable%20Objects/DOCS.md
+  - https://github.com/TheBetaM/twinsanity-editor/blob/master/Twinsanity/Items/HGO_Model.cs
+  - https://web.archive.org/web/20210118193528/https://www.rockraidersunited.com/topic/3089-extreme110s-travellers-tales-game-research-blog/
+
+kind: container
+name: "Crash Bandicoot: The Wrath of Cortex HGO/NUS file"
+extensions: [.hgo, .nus]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'FOGH'    # GameCube version (.hgo)
+
+  - offset: 0000
+    match: c'0CSG'    # GameCube version (.nus)
+
+structs:
+  header:
+    ascii[4] Magic: ??
+    u32 FileSize: ??
+
+  matrix:
+    xyzm32 XYZM1: ??
+    xyzm32 XYZM2: ??
+    xyzm32 XYZM3: ??
+    xyzm32 XYZM4: ??
+
+  bone:
+    u8 Unknown1: ??
+    matrix Rotation: ??
+    matrix Position: ??
+    matrix Scale: ??
+    f32 Unknown2 : ??
+    f32 Unknown3 : ??
+    f32 Unknown4 : ??
+    i8 Parent : ??
+    u32 NameOffset: ??      # Bone name in the name table
+    # XXX TODO: "self." translates to "Bone_1", which is not yet available in middle of evaluateChild() ...
+    #offset: 0x14 + self.NameOffse
+    #asciiz Name: ??   # TODO: set as filename for exporter
+    #offset: restore
+
+  table_data:
+    asciiz Value: ??
+
+  block:
+    ascii[4] Tag: ??
+    u32 SectionSize: ??
+
+    if self.Tag == "NTBL" || self.Tag == "LBTN":  # TODO consider: endian-aware string functions?
+      label: Name Table
+      u32 TableSize: ??
+      ascii[self.TableSize] TableData: ?? # other parts uses byte-index into this table
+      u8[alignment(self.TableSize, 4)] Padding: ??
+
+    if self.Tag == "TST0" || self.Tag == "0TST":
+      label: Texture Set
+
+    if self.Tag == "TSH0" || self.Tag == "0HST":
+      label: Texture Set Count
+      u32 TextureCount: ??
+      #u8[self.SectionSize] Data: ??
+
+    if self.Tag == "TXM0" || self.Tag == "0MXT":
+      label: Texture Material # XXX label is not being shown
+      u32 BitmapType:
+        eq 00000080: DXT1
+        eq 00000081: RGB5A3
+        eq 00000082: unknown tiled format
+      u32 Width: ??
+      u32 Height: ??
+      u32 DataLength: ??
+      u8[self.DataLength] Data: ??
+
+    if self.Tag == "MS00" || self.Tag == "00SM":
+      label: Material Set
+      u32 Count: ??
+      # XXX holds self.Count * 0x54 bytes of data
+      #material_data[self.Count] MaterialData: ?? # XXX FIXME: this syntax length is ignored:
+      u8[self.SectionSize - 12] Data: ??
+
+    # XXX handle TAS0 - TexAnimSet. counter + N structs of size 0x20. then shorts_counter + N structs of size 2
+
+    if self.Tag == "GST0" || self.Tag == "0TSG": # seen in .nus, not in .hgo
+      label: GST # XXX
+      u32 GeometryCount: ??
+      u8[self.SectionSize - 12] Data: ?? # XXX map rest of struct
+
+    if self.Tag == "INST" || self.Tag == "TSNI": # seen in .nus, not in .hgo
+      label: INST # XXX
+      u8[self.SectionSize - 8] Data: ?? # XXX map rest of struct
+
+    if self.Tag == "SST0" || self.Tag == "0TSS": # seen in .nus, not in .hgo
+      label: SST # XXX
+      u8[self.SectionSize - 8] Data: ?? # XXX map rest of struct
+
+    if self.Tag == "SPEC" || self.Tag == "CEPS": # seen in .nus, not in .hgo
+      label: SPEC # XXX
+      u8[self.SectionSize - 8] Data: ?? # XXX map rest of struct
+
+    if self.Tag == "TAS0" || self.Tag == "0SAT": # seen in .nus, not in .hgo
+      label: TAS # XXX
+      u8[self.SectionSize - 8] Data: ?? # XXX map rest of struct
+
+    if self.Tag == "HGO0" || self.Tag == "0OGH":
+      label: HG Object # XXX
+      u8 BoneCount: ??
+
+      bone[self.BoneCount] Bone: ??
+
+      u8 UnkCount1: ??
+      u8[self.UnkCount1] UnkData1: ??
+
+      u8 UnkCount2: ??
+      u8[self.UnkCount2] UnkData2: ??
+
+      u8 LayerCount: ??
+      if self.LayerCount > 0:
+        #data: unseen # some code here https://github.com/TheBetaM/twinsanity-editor/blob/53c122e955bd26d213f13d7f170815b05fbeeb9e/Twinsanity/Items/HGO_Model.cs#L221
+        layer_data[self.LayerCount] LayerData: ??
+
+      u8 PointCount: ??
+      if self.PointCount > 0:
+        point_data[self.PointCount] PointData: ??
+        data: unseen # some code here https://github.com/TheBetaM/twinsanity-editor/blob/53c122e955bd26d213f13d7f170815b05fbeeb9e/Twinsanity/Items/HGO_Model.cs#L227
+
+      u8 UnknownCount: ??
+      unknown_hgo_data[self.UnknownCount] UnknownData: ??
+
+      f32 unknown_f0: ??
+      f32 unknown_f1: ??
+      f32 unknown_f2: ??
+      f32 unknown_f3: ??
+      f32 unknown_f4: ??
+      f32 unknown_f5: ??
+      f32 unknown_f6: ??
+      f32 unknown_f7: ??
+      f32 unknown_f8: ??
+      f32 unknown_f9: ??
+      f32 unknown_f10: ??
+
+      parse: stop
+
+  unknown_hgo_data:
+    i8 unknown0_n: ??
+    #i8 unknown0 [0x30] [unknown0_n]
+    #i8 unknown1_n
+    #i8 unknown1 [0x30] [unknown1_n]
+    #i8 unknown2_n
+    #for struct in [unknown2_n]
+    #  i32 unknown0_n
+    #  i8 unknown0 [0x10] [unknown0_n]
+    #  i32 unknown1_n
+    #  i8 unknown1 [0x10] [unknown1_n]
+    #endfor
+    #i8 unknown3
+
+  point_data:
+    i8 BoneID: ??
+    matrix Position: ??
+    u32 NameOffset: ?? # XXX Position in the name table
+
+  layer_data:
+    u32 NameOffset: ?? # XXX Layer name in the name table.
+    i8 PrimaryBoneMeshesPresent: ??
+    if self.PrimaryBoneMeshesPresent != 0:
+      # XXX need access to Block_5.BoneCount value (or whatever) ... !!!
+      data: unseen
+      # XXX hgo_geom struct in here...
+    i8 PrimaryMeshPresent: ??
+    if self.PrimaryMeshPresent != 0:
+      data: unseen
+      # XXX hgo_geom struct in here...
+    i8 SecondaryBoneMeshesPresent: ??
+    if self.SecondaryBoneMeshesPresent != 0:
+      # XXX need access to Block_5.BoneCount value (or whatever) ... !!!
+      data: unseen
+      # XXX list of hgo_geom:s in here ...
+    i8 SecondaryMeshPresent: ??
+    if self.SecondaryMeshPresent != 0:
+      data: unseen
+      # XXX hgo_geom struct in here...
+
+  material_data: # XXX make use of
+    i32 unknown0: ??
+    i32 unknown1: ??
+    i32 unknown2: ??
+    i32 unknown3: ??
+    i32 unknown4: ??
+    f32 diffuse_r: ??
+    f32 diffuse_g: ??
+    f32 diffuse_b: ??
+    f32 unknown8: ??
+    f32 unknown9: ??
+    i32 unknown10: ??
+    i32 unknown11: ??
+    f32 unknown12: ??
+    f32 unknown13: ??
+    i32 bitmap_id: ?? # Negative if no bitmap, and uses diffuse colours. Otherwise an index into the bitmaps.
+    f32 unknown15: ??
+    f32 unknown16: ??
+    f32 unknown17: ??
+    f32 unknown18: ??
+    f32 unknown19: ??
+    f32 unknown20: ??
+
+layout:
+  - header Header
+  - block[] Block
+

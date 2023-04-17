@@ -2,10 +2,11 @@ package template
 
 import (
 	"fmt"
-	"log"
+
+	"github.com/rs/zerolog/log"
+	"gopkg.in/yaml.v2"
 
 	"github.com/martinlindhe/feng/value"
-	"gopkg.in/yaml.v2"
 )
 
 // structure of a evaluated ./templates/ yaml file. see Template for the raw structure corresponding to the yaml file
@@ -55,7 +56,7 @@ func UnmarshalTemplateIntoDataStructure(b []byte, basename string) (*DataStructu
 
 func NewDataStructureFrom(template *Template, basename string) (*DataStructure, error) {
 	if DEBUG_PATTERNS {
-		log.Println("NewDataStructureFrom", basename)
+		log.Print("NewDataStructureFrom", basename)
 	}
 	constants, err := template.evaluateConstants()
 	if err != nil {

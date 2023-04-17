@@ -1,0 +1,23 @@
+# STATUS: 1%
+
+resources:
+  - http://www.wiibrew.org/wiki/LZ77
+
+kind: archive
+name: Nintendo Wii LZ77 Compressed Data
+extensions: [.xxx]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'LZ77'
+
+structs:
+  header:
+    ascii[4] Signature: c'LZ77'
+    u32 CompressionFlags: # TODO simplify with u24 data type (3 byte unsigned value read as u32)
+      bit b11111111_11111111_11111111_00000000: UncompressedSize
+      bit b00000000_00000000_00000000_11111111: CompressionMethod
+
+layout:
+  - header Header

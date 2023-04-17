@@ -172,6 +172,19 @@ input:
       - glyphicons.woff2
       - lato-v22-latin-regular.woff2
 
+  - folder: games/crash_bandicoot_woc/hgo/hgo
+    files:
+      - AnglFish.hgo
+      - Bee.hgo
+      - ButtrFly.hgo
+      - ButtrFly2.hgo
+
+  - folder: games/crash_bandicoot_woc/hgo/nus
+    files:
+      - Plane.nus
+      - test.nus
+      - TitleSpl.nus
+
   - folder: games/everquest_pfs
     files:
       - butcher2_chr.s3d
@@ -182,7 +195,10 @@ input:
     files:
       - sample1.ab
 
-  # TODO finish this format
+  - folder: games/obscure/hvp
+    files:
+      - ps2_DATALOAD.HVP
+
   - folder: games/xbox_mx_unleashed/res
     files:
       - appstart.res
@@ -354,6 +370,11 @@ input:
       - asf_002.wmv
       - launcherloop.wma
 
+  - folder: media/bik
+    files:
+      - logo_legal.bik
+      - Snd0a4a1331.dee
+
   - folder: systems/android/dex
     files:
       - classes.dex
@@ -380,6 +401,11 @@ input:
     files:
       - shadow-invitro.gba
 
+  - folder: systems/gamecube/tpl
+    files:
+      - crash-bandicoot-woc.banner.tpl
+      - crash-bandicoot-woc.icon.tpl
+
   - folder: systems/jvm/class
     files:
       - java_001_test.class
@@ -389,11 +415,6 @@ input:
     files:
       - example1-52.luac
       #- example2-52.luac     # XXX need to parse nested(?) proto block
-
-  - folder: systems/macos/dfont
-    files:
-      - CharcoalCY.dfont
-      - GenevaCY.dfont
 
   - folder: systems/macos/icns
     files:
@@ -471,6 +492,7 @@ input:
   - folder: systems/ps3/ps3_sfo
     files:
       - ps3_PARAM.SFO
+      - psp_PARAM.SFO
       - psvita_param.sfo
 
   - folder: systems/ps4/ps4_pkg

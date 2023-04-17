@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+# Used in:
+# The Witcher Enhanced Edition (PC)
+
+references:
+  - https://witcher.fandom.com/wiki/File_format
+
+kind: game
+name: The Witcher MMD file
+extensions: [.mmd]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'MMD V3.3'
+
+structs:
+  header:
+    ascii[4] Signature: c'MMD '
+    ascii[4] Version: ?? # V3.3
+    u32 Unk1: ??
+    u32 Unk2: ??
+
+layout:
+  - header Header

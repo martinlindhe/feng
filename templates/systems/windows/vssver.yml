@@ -1,0 +1,39 @@
+# STATUS: 50%
+
+# vssver.scc format used by Visual SourceSafe 6.0
+
+# TODO support vssver2.scc (vss 2005, need samples). vsssver2 has filenames at end o file
+
+references:
+  - https://web.archive.org/web/20170723045222if_/http://alinconstantin.dtdns.net:80/WebDocs/SCC/VssVerScc.htm
+
+kind: image
+name: Microsoft Visual SourceSafe data file
+extensions: [.scc]  # typically vssver.scc
+endian: little
+
+magic:
+  - offset: 0000
+    match: 34 12 01 00
+
+structs:
+  header:
+    u8[4] Magic: 34 12 01 00
+    u8[16] GUID: ?? # GUID identifying the VSS database associated with the vssver.scc file. TODO guid datatype
+    u32 Checksum: ??      # XXX crc32 ?
+    u32 Identifier: ??    # unique id corresponding to the directory where the file was placed
+    u32 FileEntries: ??
+    if self.FileEntries != 0:
+      data: unseen  # XXX
+
+    # XXX table follows
+
+  file_entry:
+    u32 FileID: ??
+    u32 FileChecksum: ??
+    u32 FileTimestamp: ??
+    u32 FileVersion: ??
+
+layout:
+  - header Header
+  - file_entry[Header.FileEntries] FileEntry

@@ -1,0 +1,31 @@
+# STATUS: 1%
+
+# "Lempel–Ziv Finite State Entropy" compression, by Apple.
+
+# Used on macOS and iOS.
+
+
+references:
+  - https://en.wikipedia.org/wiki/LZFSE
+
+software:
+  - https://github.com/lzfse/lzfse
+  - https://github.com/shampoofactory/lzfse_rust/
+
+kind: system
+name: Apple LZFSE compressed data
+extensions: [.lzfse]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 62 76 78 2d
+
+structs:
+  header:
+    u8[4] Signature: 62 76 78 2d
+
+    # XXX end of file is 62 76 78 24
+
+layout:
+  - header Header

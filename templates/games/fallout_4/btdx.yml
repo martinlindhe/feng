@@ -1,0 +1,61 @@
+# STATUS: 50%
+
+# BTDX container, Used in Fallout 4 (PC)
+# contains BGSM files (which in turn contains DDS textures)
+
+# MAX: allow calculation of correct filenames for extraction
+
+resources:
+  - https://forum.xentax.com/viewtopic.php?f=32&t=13531  # extractor and repacker
+
+kind: archive
+name: Fallout 4 BTDX archive
+extensions: [.ba2]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BTDX'
+
+structs:
+  header:
+    ascii[4] Signature: c'BTDX'
+    u32 Version: ?? # 01
+    ascii[4] Sig2: ??  # can be "GNRL" (General), or "DX10" (a texture format)
+    u32 FileCount: ??
+    u32 NamesTableOffset: ??
+    u32 Unknown: ?? # 0
+    offset: self.NamesTableOffset
+
+  file_name:
+    u16 NameLength: ??
+    ascii[self.NameLength] Name: ??
+
+  dummy:
+    offset: restore
+
+  file:
+    u32 Dummy: ??
+    ascii[4] Ext: ?? # XXX
+    u32 Dummy: ??
+    u32 Dummy: ??
+    u32 Offset: ??
+    u32 Null: ??
+    u32 ZSize: ??
+    u32 Size: ??
+    u32 Dummy: ??
+
+    # TODO calc offset for filename...
+    #filename: Filename[self.index].Name # XXX cannot access top level Filename struct
+
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+
+
+layout:
+  - header Header
+  - file_name[Header.FileCount] Filename
+  - dummy Dummy
+  - file[Header.FileCount] File

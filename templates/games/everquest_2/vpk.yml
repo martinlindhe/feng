@@ -1,0 +1,32 @@
+# STATUS: 5%
+
+# Used in Everquest 2
+
+# TODO MAX: need to process the decompressed data
+
+# TODO: Each block is its own file, with the exception of the last which is a filename block.
+
+# TODO: The filename block consists of an 8-byte header, made up of a long representing the length of the whole filename block and a long representing the number of files. After this header are the filenames, each with a 12-byte header consisting of a long that represents the beginning of the file's block, a long that represents the length of this block, and a long that represents the length of the filename, followed by the (non-null-terminated) filename itself.
+
+# TODO: The other blocks consist of an 8-byte header consisting of a long storing the length of the filename (null-terminated) and a long representing the length of the data in the block, followed by the filename and then the data.
+
+references:
+  - http://www.openrce.org/articles/full_view/16
+  - https://www.eq2interface.com/forums/showthread.php?t=570&page=2
+  - http://cutpon.com:3000/devn00b/EQ2EMu/src/master/EQ2/devtools/EQ2ModelViewer/EQ2ModelViewer/Eq2VpkTool
+
+kind: game
+name: Everquest 2 vpk archive
+extensions: [.vpk]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 Length: ??
+    compressed:zlib[self.Length] Data: ??
+    # TODO: need to parse the decompressed data
+
+layout:
+  - header[] Header

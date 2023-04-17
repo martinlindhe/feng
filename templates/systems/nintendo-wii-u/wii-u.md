@@ -1,14 +1,38 @@
 For decompilation of Wii-U apps, they first need to be decrypted.
 
-cdecrypt[1] can decrypt a folder with app/h3/cert/tik/tmd files.
 
-.szs files is Yaz0-compressed. Extract with xxx[2].
-
-Overview of Wii-U file formats[3]
-
+# software
+Switch-Toolbox viewer & extractor for various Wii-U/Switch formats.
+https://github.com/KillzXGaming/Switch-Toolbox
 
 
+# Overview of Wii-U file formats
 
-1: https://github.com/VitaSmith/cdecrypt "Decrypt Wii U NUS content"
-2: xxx
-3: https://www.retroreversing.com/WiiUFileFormats
+https://www.retroreversing.com/WiiUFileFormats
+
+
+# cdecrypt
+cdecrypt can decrypt a folder with app/h3/cert/tik/tmd files (Nintendo Update Server files).
+
+https://github.com/VitaSmith/cdecrypt
+
+    paru -S cdecrypt-git
+
+    cdecrypt folder
+
+
+
+# wux to wud
+WUX is a compressed format for Wii-U games (WUD)
+
+    paru -S wudcompress
+
+    wudcompress file.wux
+
+
+# extract wud files
+
+    https://github.com/martinlindhe/wud (fork that takes keys as hex strings, feb 2023)
+
+    wud extract game.wud commonKey gameKey
+

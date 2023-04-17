@@ -1,0 +1,39 @@
+# STATUS: 10%
+#
+# PSMF is a SONY proprietary format used for movies intended to be played on the PSP portable game console.
+# The format is based on MPEG, and contains H.264 video and Sony ATRAC audio.
+#
+# PSMF files start with a variable length header, followed by MPEG Program Stream data. The video data
+# is carried in PES packets using a stream_id of 0xE0, and audio data is carried in private_stream_1 PES packets.
+
+references:
+  - https://wiki.multimedia.cx/index.php/PSMF
+
+software:
+  - ffmpeg
+
+kind: multimedia
+name: PlayStation Portable Movie Format
+extensions: [.pmf]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'PSMF'
+
+structs:
+  header:
+    ascii[4] Signature: c'PSMF'
+    ascii[4] Version: ??
+    u32 DataOffset: ??
+    u32 DataSize: ??
+    u8[64] Reserved: ??
+    u32 TableSize: ??
+    u16 Unknown: ??
+    u32 TickFreq: ??
+    u16 Unknown: ??
+    u32 Duration: ?? # in ticks
+    u32 MuxRate: ??
+
+layout:
+  - header Header

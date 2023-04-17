@@ -1,0 +1,43 @@
+# STATUS: 70%
+
+# Used in:
+# The Witcher Enhanced Edition (PC)
+
+references:
+  - https://witcher.fandom.com/wiki/KEY_BIF_V1.1_format
+
+kind: game
+name: The Witcher BIFF file
+extensions: [.bif]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BIFFV1.1'
+
+structs:
+  header:
+    ascii[4] Signature: c'BIFF'
+    ascii[4] Version: ?? # V1.1
+    u32 ResourceCount: ??
+    u32 Reserved: ??
+    u32 ResourceTableOffset: ??
+
+  resource:
+    u32 ResourceID: ??
+    u32 Flags: ?? # (BIF index is now in this value, (flags & 0xFFF00000) >> 20). The rest appears to define 'fixed' index.
+    u32 Offset: ??
+    u32 Size: ??
+    u16 Type:
+      # types: https://witcher.fandom.com/wiki/KEY_BIF_V1.1_format#Resource_Types
+      eq 0817: say
+    u16 Reserved: ??
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - offset Header.ResourceTableOffset
+  - resource[Header.ResourceCount] Resource

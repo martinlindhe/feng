@@ -1,0 +1,32 @@
+# STATUS: 1%
+
+# Used in:
+# Far Cry 2 (PS3)
+# XXX + more far cry games
+
+references:
+  - https://github.com/JakubMarecek/FCBConverter
+  - https://github.com/Robmaister/FC2Tools
+
+kind: media
+name: Far Cry xbt texture
+extensions: [.xbt]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 00 c'XBT'
+
+structs:
+  header:
+    ascii[4] Signature: 00 c'XBT'
+    u32 DimX: ??
+    u32 DimY: ??
+    u32 MaybeEntryCount: ??
+    u64 MaybeTimestamp: ??
+    u32 MaybeChecksum: ??
+
+
+layout:
+  - header Header
+

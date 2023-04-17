@@ -12,7 +12,7 @@ software:
   - https://github.com/zeldamods/sarc
 
 kind: archive
-name: xxx
+name: Nintendo SARC archive
 extensions: [.arc, .sarc]
 endian: big
 
@@ -25,7 +25,7 @@ structs:
     ascii[4] Magic: c'SARC'
     u16 HeaderLength: ??      # always 0x14
     u16 ByteOrderMark:
-      eq feff: BigEndian
+      eq feff: BigEndian      # Wii-U
       eq fffe: LittleEndian
     if self.ByteOrderMark == LittleEndian:
       endian: little
@@ -46,7 +46,7 @@ structs:
     u32 FileOffset: ??
     u32 FileOffsetEnd: ??
 
-    offset: SArchHeader.DataOffset + self.FileOffset
+    offset: SArcHeader.DataOffset + self.FileOffset
     raw:u8[self.FileOffsetEnd - self.FileOffset] Data: ??
     offset: restore
 
@@ -54,13 +54,13 @@ structs:
     ascii[4] Magic: c'SFNT'
     u16 HeaderLength: ??      # always 8
     u16 Reserved: ??
-  
+
   filename_table:
     asciiz FileName: ??
     u8[alignment(len("self.FileName"), 4)] Padding: ??
 
 layout:
-  - sarc_header SArchHeader
+  - sarc_header SArcHeader
   - sfat_header SFatHeader
   - sfat_node[SFatHeader.NodeCount] SFatNode
   - sfnt_header SFntHeader

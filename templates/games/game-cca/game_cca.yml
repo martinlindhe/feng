@@ -1,0 +1,73 @@
+# STATUS: 5%
+
+# File format from Multimedia Fusion Express (1996-1999)
+
+# Used in games:
+# Yoshi: Dead and Loving It (2003, indie game, unknown engine)
+
+# MAX finish mapping and extraction. compare with CExtract
+
+resources:
+  - https://wiki.mfgg.net/index.php?title=Multimedia_Fusion_Express
+  - https://forums.sonicretro.org/index.php?threads/hacking-clickteam-games-basically-sonic-fangames.23997  # CExtract has Gam_Format.txt
+  - https://kippykip.com/index.php?threads/cextract-the-games-factory-multimedia-fusion-game-extractor-unprotector.498/ # mirror of CExtract
+
+kind: game
+name: Multimedia Fusion Express CCA file
+extensions: [.cca]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'GAME'      # "PAME" for protected files
+
+structs:
+  header:
+    ascii[4] Signature: c'GAME'
+    u8 VersionMinor: ?? # 7
+    u8 VersionMajor: ?? # 2
+    ascii[80] Name: ??
+    ascii[80] Author: ??
+    ascii[78] Comment: ??
+    u16 SaveCounter: ?? # 65
+    u16 ColorMode:
+      eq 0003: 8 Bit (256 Colors)
+      eq 0004: 24 Bit (16 million Colors)
+      eq 0005: 4 Bit (16 Colors)
+      eq 0006: 15 Bit (32768 Colors, Mask 5-5-5)
+      eq 0007: 16 Bit (65536 Colors, Mask 5-6-5)
+    u16 ScreenWidth: ??
+    u16 ScreenHeight: ??
+    u32 BorderColor: ??
+    u16 OptionsFlag: ?? # XXX decode, see Gam_Format.txt
+    u16 Unknown: ??
+    u16 Unknown: ?? # 0001
+    u16 Unknown: ?? # 0001
+    u16 Player1Control: ??
+    u16 Player2Control: ??
+    u16 Player3Control: ??
+    u16 Player4Control: ??
+    u8[12] Player1Keyboard: ??
+    u8[12] Player2Keyboard: ??
+    u8[12] Player3Keyboard: ??
+    u8[12] Player4Keyboard: ??
+    u32 LivesInitial: ??
+    u32 LivesMinimum: ??
+    u32 LivesMaximum: ??
+    u32 ScoreInitial: ??
+    u32 ScoreMinimum: ??
+    u32 ScoreMaximum: ??
+    u32 KnP - Address of Game Preview-Bitmap: ??
+    u32 TGF - Address of 1st Non-Game Data-Segment: ??
+    u16 LevelCount: ??
+    u16 Instructions:
+      eq 0000: No Instructions (default)
+      eq 0001: Text file (.TXT)
+      eq 0002: Write document (.WRI)
+      eq 0003: Help file (.HLP)
+      eq 0040: Unknown (Yoshi_Dead)
+    u16 Unknown: ??
+    u32 KnP - Icon Address (absolute, points to 4-Bit-Icon): ??
+
+layout:
+  - header Header

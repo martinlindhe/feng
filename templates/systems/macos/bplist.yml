@@ -1,0 +1,23 @@
+# STATUS: 1%
+
+# Used on macOS and iOS.
+
+
+references:
+  - https://www.sweetscape.com/010editor/repository/files/BPlist.bt
+
+kind: system
+name: Apple Binary Property List
+extensions: [.plist]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'bplist00'
+
+structs:
+  header:
+    ascii[8] Signature: c'bplist00'
+
+layout:
+  - header Header

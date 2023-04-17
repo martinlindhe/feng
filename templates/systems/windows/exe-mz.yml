@@ -8,7 +8,6 @@ references:
   - https://wiki.osdev.org/MZ
   - https://moddingwiki.shikadi.net/wiki/EXE_Format
   - https://www.sweetscape.com/010editor/repository/files/EXE.bt
-  - https://www.x-ways.net/winhex/templates/DOS_exe.tpl
 
   # MZ-LE format: Linear Executable (Win VxD:s, and OS/2)
   - http://fileformats.archiveteam.org/wiki/Linear_Executable
@@ -26,6 +25,9 @@ references:
   - https://en.wikibooks.org/wiki/X86_Disassembly/Windows_Executable_Files
   - https://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
   - https://raw.githubusercontent.com/synalysis/Grammars/master/pe.grammar
+
+  # general unpacker
+  - https://github.com/virginwidow/mz-explode
 
 kind: executable
 name: MS-DOS / OS-2 / Windows executable
@@ -88,7 +90,7 @@ structs:
         bit b0010_0000: Multi-segment file
         bit b1100_0000: Unknown
       ascii[52] Identifier: ??
-  
+
   tlink_header:
     # Borland TLINK
     if (peek_i32("001c") & 0x00FF00FF) == 0x00FB0001:
@@ -221,7 +223,7 @@ structs:
       u32 Iter map: ??
       u32 Rsrc tab: ??
       u32 Rsrc cnt: ??
-      u32 Res tab: ?? 
+      u32 Res tab: ??
       u32 Ent tab: ??
       u32 Dir tab: ??
       u32 Dir cnt: ??
@@ -401,7 +403,7 @@ structs:
         eq 9041: Mitsubishi M32R little endian
         eq c0ee: Clr pure MSIL
       u16 Sections: ??
-      u32 Timestamp: ?? # XXX parse.DOSDateTime
+      time_t_32 Timestamp: ??
       u32 SymbolTableOffset: ??
       u32 SymbolTableCount: ??
       u16 OptionalHeaderSize: ??

@@ -1,0 +1,65 @@
+# STATUS: 5%
+
+# for PS3 version of the game
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=5061
+  - https://forum.xentax.com/viewtopic.php?t=16860
+
+software:
+  - http://aluigi.altervista.org/bms/parc.bms
+
+kind: archive
+name: Yakuza 3 PARC archive
+extensions: [.par]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'PARC'
+
+structs:
+  header:
+    ascii[4] Signature: c'PARC'
+    u32 Unk1: ??            # 02 01 00 00
+    u32 Unk2: ??            # 00 02 00 01
+    u32 Zero1: ??           # 0
+    u32 numFolders: ??      # 1         XXX unused
+    u32 foldersOffset: ??   # 1f 20     XXX unused
+    u32 FolderCount: ??
+    u32 NameOffset: ??      # 1f 40  = 8000   XXX unused
+    ascii[64] FileName: ??  # archive name without ".par" extension
+
+  folder:
+    ascii[32] Name: ??
+    u32[8] Unknown: ??      # 0
+
+  table_header:
+    u32 Unk: ??             # 0
+    u32 Unk1: ??            # 1
+    u32 Count: ??           # same as Header.NameCount ?
+    u32 Unk3: ??            # 0
+    u32 Unk4: ??            # 16
+    u32[3] Unk: ??          # 0, 0, 0
+
+  fileinfo:
+    u32 Flags: ??           # XXX map
+    u32 ExpandedSize: ??
+    u32 CompressedSize: ??
+    u32 DataOffset: ??
+    u32 Unk1: ??            # 20
+    u32 Unk2: ??            # 0
+    u32 Unk3: ??            # 0
+    time_t_32 ModifiedTime: ??  # 4b 04 a5 62 = "2009-11-19T01:54:42Z", which matches the Feb 2010 release of the US version
+
+    offset: self.DataOffset
+    raw:u8[self.CompressedSize] Data: ??
+    u8[alignment(self.CompressedSize, 512)] Padding: ?? # XXX pad size ?
+    offset: restore
+
+layout:
+  - header Header
+  - folder[Header.FolderCount] Folder
+
+  - table_header TableHeader
+  - fileinfo[TableHeader.Count] FileInfo

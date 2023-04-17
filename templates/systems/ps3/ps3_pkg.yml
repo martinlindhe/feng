@@ -14,6 +14,7 @@ software:
   - https://github.com/qwikrazor87/pkgrip   # ONLY SUPPORTS PS3 .pkg
   - https://github.com/st4rk/PkgDecrypt     # ONLY SUPPORTS PSVita .pkg
   - https://sites.google.com/site/theleecherman/psnpkgdecryptor-extractor
+  - for ps4, run "App Dumper" on a hacked console
 
 kind: system
 name: Sony PS3/PSVita PKG file

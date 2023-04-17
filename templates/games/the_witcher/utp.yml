@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+# Used in:
+# The Witcher Enhanced Edition (PC)
+
+references:
+  - https://witcher.fandom.com/wiki/File_format
+
+kind: game
+name: The Witcher UTP file
+extensions: [.utp]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'UTP V3.2'
+
+structs:
+  header:
+    ascii[4] Signature: c'UTP '
+    ascii[4] Version: ?? # V3.2
+    u32 ResourceCount: ??  # XXX maybe offset
+    u32 Unk: ??
+
+layout:
+  - header Header

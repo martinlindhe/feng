@@ -1,0 +1,36 @@
+# STATUS: 90%
+
+# Container used in Godot games
+
+resources:
+  - http://aluigi.org/bms/gdpc.bms
+
+kind: game
+name: Godot asset
+extensions: [.pck]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'GDPC'
+
+structs:
+  header:
+    ascii[4] Signature: c'GDPC'
+    u8[80] Unknown: ??
+    u32 FileCount: ??
+
+  file:
+    u32 NameLength: ??
+    ascii[self.NameLength] Name: ??
+    u64 Offset: ??
+    u64 DataSize: ??
+    u8[16] Hash: ??         # what hash algo is used?
+    offset: self.Offset
+    filename: self.Name
+    raw:u8[self.DataSize] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

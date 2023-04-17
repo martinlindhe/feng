@@ -1,0 +1,133 @@
+# STATUS: 10%
+
+# PlayStation 2 BD HD Audio
+
+# Used in various PS2 games, such as:
+# Gregory Horror Show: Soul Collector (2003): ngysnd.bin
+
+# MAX need more samples
+# MAX FIXME parse chunks like gif/png/jpeg parsers
+# XXX chunks are aligned at 0x800 ???
+
+references:
+  - http://wiki.xentax.com/index.php/PlayStation_2_BD_HD_Audio
+
+software:
+  - Awave Studio
+  - VGMTrans
+
+kind: audio
+name: PlayStation 2 BD HD Audio
+extensions: [.bin]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'IECS'
+
+structs:
+
+  chunk_Vers:
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'sreV'   # version chunk
+    u32 ChunkSize: ?? # version block = 16 bytes
+    u16 Reserved: ??
+    u8 MajorVersion: ?? # XXX Major, Minor.
+    u8 MinorVersion: ??
+
+  chunk_Sequ: # Sequence ???
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'uqeS'   # Sequence ???
+    u32 ChunkSize: ??  # Sequence block = 32 bytes
+    u32 Unknown: ??  # 00 00 06 f0 (1776)
+    u32 Unknown2: ?? # 00 00 06 d0 (1744)
+    u32 Unknown3: ?? # 00 00 00 30 (48)
+    u32[2] Reserved: ?? # -1
+
+  chunk_Midi:
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'idiM'   # Midi ???
+    u32 ChunkSize: ??  # 1696
+    u8[self.ChunkSize - 4 - 4 - 4] Data: ?? # XXX decode
+
+  chunk_Song:
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'gnoS'
+    u32 ChunkSize: ??
+    u8[0x124] Reserved: ?? # XXX hack for GREGORY_HORROR_SHOW/ngysnd.bin, due to 0x800 alignment???
+
+  chunk_Head:
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'daeH'
+    u32 ChunkSize: ??
+    u32 TotalHeaderSize: ??
+    u32 BodySize: ??
+    u32 ProgramChunkOffset: ??
+    u32 SampleSetChunkOffset: ??
+    u32 SampleChunkOffset: ??
+    u32 VAG_infoChunkOffset: ??
+    u32[7] Padding: ?? # -1
+
+  chunk_Vagi: # VAG info block
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'igaV'
+    u32 ChunkSize: ??
+    u32 MaxVAGinfoNumber: ?? # XXX count ?
+    u8[self.ChunkSize - 4 - 4 - 4 - 4] VAG info param offsets: ?? # XXX decode
+    # x bytes - VAG info param offsets
+    #num_of_params * {
+    #   4 bytes (uint32) - VAG offset
+    #   2 bytes (uint16) - sampling rate
+    #   1 byte (uint8) - loop flag
+    #   1 byte (uint8) - reserved // "0xFF"
+    #}
+    #u32[self.MaxVAGinfoNumber] vagiInfoOffsets: ??
+
+  Vagi_info:
+    u32 VAG_offset: ??
+    u16 SamplingRate: ?? # XXX map?
+    u8 LoopFlag: ?? # XXX bool ?
+    u8 Reserved: ?? # FF
+
+  chunk_Smpl: # Sample
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'lpmS'
+    u32 ChunkSize: ??
+    u32 MaxSampleNumber: ??
+    # TODO decode this:
+    #x bytes - sample param offsets
+    #x bytes - sample params
+    u8[self.ChunkSize - 4 - 4 - 4 - 4] Data: ?? # XXX
+
+  chunk_Sset: # Sample set
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'tesS'
+    u32 ChunkSize: ??
+    u32 MaxSampleSetNumber: ??
+    # TODO decode this:
+    # x bytes - sample set param offsets
+    # x bytes - sample set params
+    u8[self.ChunkSize - 4 - 4 - 4 - 4] Data: ?? # XXX
+
+  chunk_Prog: # Program
+    ascii[4] Magic: c'IECS'
+    ascii[4] ChunkType: c'gorP'
+    u32 ChunkSize: ??
+    u32 MaxProgramNumber: ??
+    # TODO decode this:
+    # x bytes - program param offsets
+    # x bytes - program params
+    u8[self.ChunkSize - 4 - 4 - 4 - 4] Data: ?? # XXX
+
+
+layout:
+  - chunk_Vers Version
+  - chunk_Sequ Sequence
+  - chunk_Midi Midi
+  - chunk_Song Song
+  - chunk_Vers Version2
+  - chunk_Head Head
+  - chunk_Vagi Vagi
+  - chunk_Smpl Sample
+  - chunk_Sset SampleSet
+  - chunk_Prog Program

@@ -1,0 +1,33 @@
+# STATUS: 50%
+#
+# used on PS3
+
+# HI: parse chunk data
+
+references:
+  - http://wiki.xentax.com/index.php/USM_Video
+
+software:
+  - https://github.com/esterTion/UsmDemuxer
+
+kind: system
+name: Sony PS3 USM video
+extensions: [.usm]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'CRID'
+
+structs:
+  chunk:
+    u32 Signature: # XXX switch on ascii[4] or u8[4]
+      eq c'CRID': CRID
+      eq c'@SFV': SFV  # video?
+      eq c'@SFA': SFA  # audio?
+      default: invalid
+    u32 ChunkSize: ??
+    u8[self.ChunkSize] Data: ??
+
+layout:
+  - chunk[] Chunk

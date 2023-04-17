@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+# Used in Fallout 4 (PC)
+
+kind: xxx
+name: Fallout 4 BCSG archive
+extensions: [.csg]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'bcsg'
+
+structs:
+  header:
+    ascii[4] Signature: c'bcsg'
+    u32 Count1: ??
+    u32 Count2: ??
+
+layout:
+  - header Header

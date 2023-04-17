@@ -1,7 +1,6 @@
 package mapper
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -45,7 +44,7 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		// bytes
 		0xfb,       // u8 single
 		0xff, 0xd8, // u8[2] array
@@ -67,30 +66,30 @@ layout:
 		0x17, 0x16, 0x15, 0x14, 0x13, 0x12, 0x11, 0x10, 0x27, 0x26, 0x25, 0x24, 0x23, 0x22, 0x21, 0x20, // u64[2] U64LE array
 
 		0xef, 0x65, 0x5e, 0x52, // TimeT_32_LE
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{Name: "Header", Fields: []Field{
-					{Offset: 0x0, Length: 0x1, Value: []uint8{0xfb}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "U8 single"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x1, Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", RangeVal: 2, Slice: false, Label: "U8 array"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x3, Length: 0x2, Value: []uint8{0xaa, 0xf0}, Endian: "big", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "U16BE single"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x5, Length: 0x4, Value: []uint8{0x10, 0x11, 0x20, 0x21}, Endian: "big", Format: value.DataField{Kind: "u16", Range: "2", RangeVal: 2, Slice: false, Label: "U16BE array"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x9, Length: 0x4, Value: []uint8{0x11, 0x22, 0x33, 0x44}, Endian: "big", Format: value.DataField{Kind: "u32", Range: "", Slice: false, Label: "U32BE single"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0xd, Length: 0x8, Value: []uint8{0x10, 0x11, 0x12, 0x13, 0x20, 0x21, 0x22, 0x23}, Endian: "big", Format: value.DataField{Kind: "u32", Range: "2", RangeVal: 2, Slice: false, Label: "U32BE array"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x15, Length: 0x8, Value: []uint8{0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88}, Endian: "big", Format: value.DataField{Kind: "u64", Range: "", Slice: false, Label: "U64BE single"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x1d, Length: 0x10, Value: []uint8{0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27}, Endian: "big", Format: value.DataField{Kind: "u64", Range: "2", RangeVal: 2, Slice: false, Label: "U64BE array"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x2d, Length: 0x2, Value: []uint8{0xaa, 0xf0}, Endian: "little", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "U16LE single"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x2f, Length: 0x4, Value: []uint8{0x10, 0x11, 0x20, 0x21}, Endian: "little", Format: value.DataField{Kind: "u16", Range: "2", RangeVal: 2, Slice: false, Label: "U16LE array"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x33, Length: 0x4, Value: []uint8{0x11, 0x22, 0x33, 0x44}, Endian: "little", Format: value.DataField{Kind: "u32", Range: "", Slice: false, Label: "U32LE single"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x37, Length: 0x8, Value: []uint8{0x10, 0x11, 0x12, 0x13, 0x20, 0x21, 0x22, 0x23}, Endian: "little", Format: value.DataField{Kind: "u32", Range: "2", RangeVal: 2, Slice: false, Label: "U32LE array"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x3f, Length: 0x8, Value: []uint8{0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88}, Endian: "little", Format: value.DataField{Kind: "u64", Range: "", Slice: false, Label: "U64LE single"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x47, Length: 0x10, Value: []uint8{0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27}, Endian: "little", Format: value.DataField{Kind: "u64", Range: "2", RangeVal: 2, Slice: false, Label: "U64LE array"}, MatchedPatterns: []value.MatchedPattern{}},
-					{Offset: 0x57, Length: 0x04, Value: []uint8{0x52, 0x5e, 0x65, 0xef}, Endian: "little", Format: value.DataField{Kind: "time_t_32", Range: "", Slice: false, Label: "TimeT_32_LE"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x0, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "U8 single"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x1, Length: 0x2, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", RangeVal: 2, Slice: false, Label: "U8 array"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x3, Length: 0x2, Endian: "big", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "U16BE single"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x5, Length: 0x4, Endian: "big", Format: value.DataField{Kind: "u16", Range: "2", RangeVal: 2, Slice: false, Label: "U16BE array"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x9, Length: 0x4, Endian: "big", Format: value.DataField{Kind: "u32", Range: "", Slice: false, Label: "U32BE single"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0xd, Length: 0x8, Endian: "big", Format: value.DataField{Kind: "u32", Range: "2", RangeVal: 2, Slice: false, Label: "U32BE array"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x15, Length: 0x8, Endian: "big", Format: value.DataField{Kind: "u64", Range: "", Slice: false, Label: "U64BE single"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x1d, Length: 0x10, Endian: "big", Format: value.DataField{Kind: "u64", Range: "2", RangeVal: 2, Slice: false, Label: "U64BE array"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x2d, Length: 0x2, Endian: "little", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "U16LE single"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x2f, Length: 0x4, Endian: "little", Format: value.DataField{Kind: "u16", Range: "2", RangeVal: 2, Slice: false, Label: "U16LE array"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x33, Length: 0x4, Endian: "little", Format: value.DataField{Kind: "u32", Range: "", Slice: false, Label: "U32LE single"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x37, Length: 0x8, Endian: "little", Format: value.DataField{Kind: "u32", Range: "2", RangeVal: 2, Slice: false, Label: "U32LE array"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x3f, Length: 0x8, Endian: "little", Format: value.DataField{Kind: "u64", Range: "", Slice: false, Label: "U64LE single"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x47, Length: 0x10, Endian: "little", Format: value.DataField{Kind: "u64", Range: "2", RangeVal: 2, Slice: false, Label: "U64LE array"}, MatchedPatterns: []value.MatchedPattern{}},
+					{Offset: 0x57, Length: 0x04, Endian: "little", Format: value.DataField{Kind: "time_t_32", Range: "", Slice: false, Label: "TimeT_32_LE"}, MatchedPatterns: []value.MatchedPattern{}},
 				}}},
 			endian: "little", offset: 0x5b, size: 0x5b}, fl)
 }
@@ -130,14 +129,14 @@ layout:
 			0x22, 0x22, 0x33, 0x33, 0x44, 0x44, 0x55, 0x55, // u32[2] array
 		},
 			&FileLayout{
-				Structs: []Struct{
+				Structs: []*Struct{
 					{Name: "Header", Fields: []Field{
-						{Offset: 0x0, Length: 0x1, Value: []uint8{0xfb}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Sig8a"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x1, Length: 0x2, Value: []uint8{0xff, 0xd8}, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Sig8b"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x3, Length: 0x2, Value: []uint8{0x4a, 0xf0}, Endian: "big", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Sig16be"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x5, Length: 0x4, Value: []uint8{0x16, 0x17, 0x16, 0x17}, Endian: "big", Format: value.DataField{Kind: "u16", Range: "2", Slice: false, Label: "Sig16be_array"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x9, Length: 0x4, Value: []uint8{0x12, 0x34, 0x56, 0x78}, Endian: "big", Format: value.DataField{Kind: "u32", Range: "", Slice: false, Label: "U32BE single"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0xd, Length: 0x8, Value: []uint8{0x22, 0x22, 0x33, 0x33, 0x44, 0x44, 0x55, 0x55}, Endian: "big", Format: value.DataField{Kind: "u32", Range: "2", Slice: false, Label: "U32BE array"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x0, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Sig8a"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x1, Length: 0x2, Endian: "", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Sig8b"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x3, Length: 0x2, Endian: "big", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Sig16be"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x5, Length: 0x4, Endian: "big", Format: value.DataField{Kind: "u16", Range: "2", Slice: false, Label: "Sig16be_array"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x9, Length: 0x4, Endian: "big", Format: value.DataField{Kind: "u32", Range: "", Slice: false, Label: "U32BE single"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0xd, Length: 0x8, Endian: "big", Format: value.DataField{Kind: "u32", Range: "2", Slice: false, Label: "U32BE array"}, MatchedPatterns: []value.MatchedPattern{}},
 					}}},
 				offset: 0x15, size: 0x15, endian: "big"}, nil},
 
@@ -158,7 +157,8 @@ layout:
 	}
 
 	for _, tt := range test {
-		fl, err := MapReader(bytes.NewReader(tt.in), ds)
+		f := mockFile(t, "in", tt.in)
+		fl, err := MapReader(f, ds, "")
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -182,25 +182,25 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0b1100_0111, // Bitfield
-	}
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	})
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{Name: "Header", Fields: []Field{
 					{
-						Offset: 0x0, Length: 0x1, Value: []uint8{0xc7}, Endian: "",
+						Offset: 0x0, Length: 0x1, Endian: "",
 						Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bitfield"},
 						MatchedPatterns: []value.MatchedPattern{
-							{Operation: "bit", Label: "LocalColorTable", Value: 1},
-							{Operation: "bit", Label: "Interlace", Value: 1},
-							{Operation: "bit", Label: "Sort", Value: 1},
-							{Operation: "bit", Label: "Reserved", Value: 0},
-							{Operation: "bit", Label: "Size", Value: 6},
+							{Operation: "bit", Label: "LocalColorTable", Value: []byte{1}},
+							{Operation: "bit", Label: "Interlace", Value: []byte{1}},
+							{Operation: "bit", Label: "Sort", Value: []byte{1}},
+							{Operation: "bit", Label: "Reserved", Value: []byte{0}},
+							{Operation: "bit", Label: "Size", Value: []byte{6}},
 						}},
 				}}}, offset: 0x1, size: 1}, fl)
 }
@@ -220,23 +220,23 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0xff, 0xff, // Bitfield
-	}
-	ff, err := MapReader(bytes.NewReader(data), ds)
+	})
+	ff, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{Name: "Header", Fields: []Field{
 					{
-						Offset: 0x0, Length: 0x2, Value: []uint8{0xff, 0xff}, Endian: "little",
+						Offset: 0x0, Length: 0x2, Endian: "little",
 						Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Bitfield"},
 						MatchedPatterns: []value.MatchedPattern{
-							{Operation: "bit", Label: "Lo", Value: 0x7f},
-							{Operation: "bit", Label: "B3", Value: 0x1f},
-							{Operation: "bit", Label: "Hi", Value: 0xf},
+							{Operation: "bit", Label: "Lo", Value: []byte{0x7f}},
+							{Operation: "bit", Label: "B3", Value: []byte{0x1f}},
+							{Operation: "bit", Label: "Hi", Value: []byte{0xf}},
 						}},
 				}}},
 			offset: 0x2, size: 0x2, endian: "little"}, ff)
@@ -267,11 +267,11 @@ layout:
 				0x01, // field
 			},
 			&FileLayout{
-				Structs: []Struct{
+				Structs: []*Struct{
 					{Name: "Header", Fields: []Field{
-						{Offset: 0x0, Length: 0x1, Value: []uint8{0x01}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"},
+						{Offset: 0x0, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"},
 							MatchedPatterns: []value.MatchedPattern{
-								{Operation: "eq", Label: "One", Value: 1},
+								{Operation: "eq", Label: "One", Value: []byte{1}},
 							}},
 					}}}, offset: 0x1, size: 1},
 			nil,
@@ -286,7 +286,8 @@ layout:
 	}
 
 	for _, tt := range test {
-		fl, err := MapReader(bytes.NewReader(tt.in), ds)
+		f := mockFile(t, "in", tt.in)
+		fl, err := MapReader(f, ds, "")
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -308,12 +309,12 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0xff,                                           // Field
 		0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, // Data
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	s, err := fl.ExpandVariables("Header.Field.Size", &fl.Structs[0].Fields[0].Format)
@@ -322,11 +323,11 @@ layout:
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{Name: "Header",
 					Fields: []Field{
-						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"}, MatchedPatterns: []value.MatchedPattern{{Label: "Size", Operation: "bit", Value: 0x3}}},
-						{Offset: 0x1, Length: 0x8, Value: []uint8{0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7}, Endian: "", Format: value.DataField{Kind: "u8", Range: "8", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x0, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Field"}, MatchedPatterns: []value.MatchedPattern{{Label: "Size", Operation: "bit", Value: []byte{0x3}}}},
+						{Offset: 0x1, Length: 0x8, Endian: "", Format: value.DataField{Kind: "u8", Range: "8", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 				}}, offset: 0x9, size: 9}, fl)
 }
@@ -345,21 +346,21 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x02, 0x00, // Length
 		0x44, 0x55, // Data
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{Name: "Header",
 					Fields: []Field{
-						{Offset: 0x0, Length: 0x2, Value: []uint8{0x0, 0x2}, Endian: "little", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Length"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x2, Length: 0x2, Value: []uint8{0x44, 0x55}, Endian: "little", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x0, Length: 0x2, Endian: "little", Format: value.DataField{Kind: "u16", Range: "", Slice: false, Label: "Length"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x2, Length: 0x2, Endian: "little", Format: value.DataField{Kind: "u8", Range: "2", Slice: false, Label: "Data"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 				}}, offset: 0x4, size: 4, endian: "little"}, fl)
 }
@@ -388,26 +389,26 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x04, // Number
 		0xff, // Four
 		0xaa, // NotSix
 		0xee, // FourConstant
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{
 					Name: "Header",
 					Fields: []Field{
-						{Offset: 0x0, Length: 0x1, Value: []uint8{0x4}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Number"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x1, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Four"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x2, Length: 0x1, Value: []uint8{0xaa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "NotSix"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x3, Length: 0x1, Value: []uint8{0xee}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "FourConstant"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x0, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Number"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x1, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Four"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x2, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "NotSix"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x3, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "FourConstant"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 				}}, offset: 0x4, size: 4}, fl)
 }
@@ -446,11 +447,11 @@ layout:
 		// BIG
 		{[]byte{'M', 'M'},
 			&FileLayout{
-				Structs: []Struct{
+				Structs: []*Struct{
 					{
 						Name: "Header",
 						Fields: []Field{
-							{Offset: 0x0, Length: 0x2, Value: []uint8{'M', 'M'}, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
+							{Offset: 0x0, Length: 0x2, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
 						},
 					}}, offset: 0x2, size: 2, endian: "big"},
 			nil},
@@ -458,11 +459,11 @@ layout:
 		// LITTLE
 		{[]byte{'I', 'I'},
 			&FileLayout{
-				Structs: []Struct{
+				Structs: []*Struct{
 					{
 						Name: "Header",
 						Fields: []Field{
-							{Offset: 0x0, Length: 0x2, Value: []uint8{'I', 'I'}, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
+							{Offset: 0x0, Length: 0x2, Endian: "", Format: value.DataField{Kind: "ascii", Range: "2", Slice: false, Label: "Signature"}, MatchedPatterns: []value.MatchedPattern{}},
 						},
 					}}, offset: 0x2, size: 2, endian: "little"},
 			nil},
@@ -472,7 +473,8 @@ layout:
 	}
 
 	for _, tt := range test {
-		fl, err := MapReader(bytes.NewReader(tt.in), ds)
+		f := mockFile(t, "in", tt.in)
+		fl, err := MapReader(f, ds, "")
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -499,26 +501,26 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0xff, // Bit field
 		0xaa, // HighExact
 		0xbb, // HighSet
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{
 					Name: "Header",
 					Fields: []Field{
-						{Offset: 0x0, Length: 0x1, Value: []uint8{0xff}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bit field"},
-							MatchedPatterns: []value.MatchedPattern{{Label: "High bit", Operation: "bit", Value: 1}}},
-						{Offset: 0x1, Length: 0x1, Value: []uint8{0xaa}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "HighExact"},
+						{Offset: 0x0, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Bit field"},
+							MatchedPatterns: []value.MatchedPattern{{Label: "High bit", Operation: "bit", Value: []byte{1}}}},
+						{Offset: 0x1, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "HighExact"},
 							MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x2, Length: 0x1, Value: []uint8{0xbb}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "HighSet"},
+						{Offset: 0x2, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "HighSet"},
 							MatchedPatterns: []value.MatchedPattern{}},
 					},
 				}},
@@ -537,20 +539,20 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		'f', 'o', 'o', 0x00, // Name
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{
 					Name: "Header",
 					Fields: []Field{
-						{Offset: 0x0, Length: 0x4, Value: []uint8{'f', 'o', 'o', 0x00}, Endian: "", Format: value.DataField{Kind: "asciiz", Range: "", Slice: false, Label: "Name"}},
+						{Offset: 0x0, Length: 0x4, Endian: "", Format: value.DataField{Kind: "asciiz", Range: "", Slice: false, Label: "Name"}},
 					},
 				}},
 			offset: 0x4, size: 0x4}, fl)
@@ -569,19 +571,19 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		'f', 0x00, 'o', 0x00, 'o', 0x00, // Name
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{
 					Name:   "Header",
-					Fields: []Field{{Offset: 0x0, Length: 0x6, Value: []uint8{0x00, 'f', 0x00, 'o', 0x00, 'o'}, Endian: "little", Format: value.DataField{Kind: "utf16", Range: "3", Slice: false, Label: "Name"}, MatchedPatterns: []value.MatchedPattern{}}}}},
+					Fields: []Field{{Offset: 0x0, Length: 0x6, Endian: "little", Format: value.DataField{Kind: "utf16", Range: "3", Slice: false, Label: "Name"}, MatchedPatterns: []value.MatchedPattern{}}}}},
 			endian: "little", offset: 0x6, size: 0x6}, fl)
 }
 
@@ -601,30 +603,30 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x02,       // Size
 		0x80, 0x81, // Block #1
 		0x90, 0x91, // Block #2
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds)
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
 		&FileLayout{
-			Structs: []Struct{
+			Structs: []*Struct{
 				{
 					Name: "Header",
 					Fields: []Field{
-						{Offset: 0x0, Length: 0x1, Value: []uint8{0x02}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "ID"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x0, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "ID"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 				},
 
 				{
 					Name: "Unsized block_0",
 					Fields: []Field{
-						{Offset: 0x1, Length: 0x1, Value: []uint8{0x80}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x2, Length: 0x1, Value: []uint8{0x81}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x1, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x2, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 					Index: 0,
 				},
@@ -632,8 +634,8 @@ layout:
 				{
 					Name: "Unsized block_1",
 					Fields: []Field{
-						{Offset: 0x3, Length: 0x1, Value: []uint8{0x90}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
-						{Offset: 0x4, Length: 0x1, Value: []uint8{0x91}, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x3, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "First"}, MatchedPatterns: []value.MatchedPattern{}},
+						{Offset: 0x4, Length: 0x1, Endian: "", Format: value.DataField{Kind: "u8", Range: "", Slice: false, Label: "Second"}, MatchedPatterns: []value.MatchedPattern{}},
 					},
 					Index: 1,
 				},

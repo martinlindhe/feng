@@ -1,0 +1,42 @@
+# STATUS: 25%
+
+# TES4 is the header record for the mod file.
+# It contains info like author, description, file type, and masters list.
+
+# Used in:
+# Skyrim - Special Edition (PC)
+# Fallout 4 (PC)
+
+references:
+  - https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format/TES4
+  - https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format#Records
+  - https://modding.wiki/en/skyrim/developers/plugin-differences # differences in Special Edition file format
+  - https://github.com/TESnip-Skyrim-Edition/TESV_Snip/blob/a4b5732563c37a984d515d1e231e8993b0521843/Model/Plugin.cs#L208
+
+software:
+  - https://github.com/TESnip-Skyrim-Edition/TESV_Snip
+
+kind: game
+name: Bethesda TES4 data file
+extensions: [.esl, .esm]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'TES4'
+
+structs:
+  chunk:
+    ascii[4] Type: ??
+    u32 Size: ??
+    u32 Flags: ?? # https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format#Records
+    u32 RecordID: ??
+    u16 Timestamp: ??
+    u16 VersionControlInfo: ??
+    u16 RecordVersion: ??
+    u16 Unknown: ?? # values between 0-15
+
+    u8[self.Size] Data: ?? # XXX decode this as a list of chunks, too
+
+layout:
+  - chunk[] Chunk

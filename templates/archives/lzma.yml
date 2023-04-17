@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+references:
+  - https://git.tukaani.org/?p=xz.git;a=blob_plain;f=doc/lzma-file-format.txt;hb=HEAD
+  - https://github.com/file/file/blob/a962dff5ff2ebd0ff84814dea37346602f67b562/magic/Magdir/compress#L261
+
+kind: archive
+name: LZMA Archive
+extensions: [.lzma]
+mime: application/x-lzma
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: 5d 00 00 # XXX not proper magic
+  #- offset: 000d   # TODO can use this match check too but must be inclusive with the first match check
+  #  match: ff
+
+structs:
+  header:
+    # header is 13 bytes, then follows compressed data
+    u8 Magic: 5d
+    u32 DictionarySize: ?? # XXX unsure
+    i32 UncompressedSize: ?? # XXX: in some versions of this format, this field may be not present
+
+layout:
+  - header Header

@@ -1,0 +1,100 @@
+# STATUS: 10%
+
+# Maybe used in games:
+#   The Walking Dead Survival Instinct
+#   Country Dance 2
+#   Silent Hill Book of Memories
+#   Ghostbusters: The Video Game (2009)
+
+# Confirmed used in:
+# - Nickelodeon Victorious: Taking the Lead (2012): Wii
+
+# MAX: need more samples
+
+resources:
+  - https://forum.xentax.com/viewtopic.php?f=18&t=25718
+  - https://github.com/gibbed/Gibbed.Ghostbusters
+
+kind: archive
+name: Pod5 archive
+extensions: [.pod]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'POD5'
+
+structs:
+  header:
+    ascii[4] Signature: c'POD5'
+    u32 Checksum: ??    # XXX what algo?
+    ascii[80] Description: ??
+    u32 FileCount: ??
+    u32 Val2: ??  # XXX same as FileCount ?
+    u32 Val3: ??
+    u32 Val4: ??  # XXX same as Val3 ?
+    u8[160] Reserved: ?? # 00
+    u32 InfoOffset: ?? # XXX INFO_OFF
+    u32 Unknown: ?? # XXX
+    u32 NamesSize: ?? # XXX NAMES_SIZE
+
+  file_entry:
+    offset: Header.InfoOffset
+    u32 NameOffset: ?? # NAME_OFF
+    u32 CompressedSize: ??
+    u32 Offset: ?? # XXX
+    u32 ExpandedSize: ?? # XXX
+
+    offset: FILE_SIZE - (Header.FileCount * 312) # start of names table.
+    ascii[16] Identifier: c'johnsanderson' 00 00 00
+    u8[16] Reserved: ??
+    u32 UnknownValue: ?? # XXX
+    u32 Unknown: ?? # 0
+    ascii[256] Name: ??
+    offset: restore
+
+
+    # XXX hela nametable är 84864 bytes ( 0x14b80 )
+    # varje entry är 312 bytes ( 0x138 )
+    # 84864 / 312 = 272
+
+layout:
+  - header Header
+  - file_entry FileEntry # XXX multiple
+  - file_entry FileEntry # XXX multiple
+
+
+
+
+
+# goto 0x108
+# get INFO_OFF long
+# get ZERO long
+# get NAMES_SIZE long
+#
+# get NAMES_OFF asize                 # asize = size of opened file ...
+# math NAMES_OFF - NAMES_SIZE
+#
+# math ENTRY_SIZE = NAMES_OFF
+# math ENTRY_SIZE - INFO_OFF
+# math ENTRY_SIZE / FILES
+#
+# for i = 0 < FILES
+#    goto INFO_OFF
+#    get NAME_OFF long
+#    get ZSIZE long
+#    get OFFSET long
+#    get SIZE long
+#    math INFO_OFF + ENTRY_SIZE
+#
+#    math NAME_OFF + NAMES_OFF
+#    goto NAME_OFF
+#    get NAME string
+#
+#    if ZSIZE == SIZE
+#        log NAME OFFSET SIZE
+#    else
+#        clog NAME OFFSET ZSIZE SIZE
+#    endif
+# next i
+

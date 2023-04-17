@@ -1,0 +1,46 @@
+# STATUS: 90%
+#
+# Used in Futurama (2003 by Unique Development Studios) PS2, XBox
+
+references:
+  - https://github.com/JayFoxRox/futurama-tools/blob/master/inspect_ldb.py
+
+kind: game
+name: Futurama (game) ldb
+extensions: [.ldb]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'0BDL'
+
+structs:
+  header:
+    ascii[4] Magic: c'0BDL'
+    u32 EntryCount: ??
+    u32 HeaderSize: ??
+    u32 EntryTableSize: ??
+
+  language:
+    u32 DataOffset: ??
+    u32 MaybeSize: ??
+    ascii[24] Language: ??
+    label: cleanstring("self.Language") # Language contains garbage past null byte
+
+    offset: self.DataOffset
+    utf16[self.MaybeSize / 2] Data: ??
+    offset: restore
+
+    if OFFSET >= Header.HeaderSize:
+      parse: stop
+
+  entry:
+    asciiz Key: ??
+    asciiz Database: ??
+    asciiz Path1: ??
+    asciiz Path2: ??
+
+layout:
+  - header Header
+  - language[] Language
+  - entry[Header.EntryCount] Entry

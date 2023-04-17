@@ -1,16 +1,15 @@
 package mapper
 
 import (
-	"encoding/binary"
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/maja42/goval"
-	"github.com/martinlindhe/feng"
+	"github.com/rs/zerolog/log"
+
 	"github.com/martinlindhe/feng/value"
 )
 
@@ -31,9 +30,9 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 	if in == df.Label {
 		return "", fmt.Errorf("nothing to eval")
 	}
-	if DEBUG_EVAL {
-		log.Println("EVAL STR EXPR", in)
-	}
+
+	log.Debug().Msgf("EVAL STR EXPR %s", in)
+
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return "", err
@@ -57,7 +56,7 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 }
 
 // evaluates a math expression
-func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64, error) {
+func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (int64, error) {
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return 0, err
@@ -68,13 +67,13 @@ func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (uint64
 		if DEBUG_EVAL {
 			log.Printf("EvaluateExpression: %s => %d", in, v)
 		}
-		return uint64(v), nil
+		return int64(v), nil
 
 	case uint64:
 		if DEBUG_EVAL {
 			log.Printf("EvaluateExpression: %s => %d", in, v)
 		}
-		return v, nil
+		return int64(v), nil
 
 	case bool:
 		if v {
@@ -98,13 +97,15 @@ func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		offset := int(v)
-		if offset >= len(fl.rawData) {
+		offset := int64(v)
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := binary.LittleEndian.Uint32(fl.rawData[offset:]) // XXX endianness
+
+		val, _ := fl.peekU32(offset)
+
 		if DEBUG_EVAL {
-			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
+			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, int(val))
 		}
 		return int(val), nil
 	}
@@ -121,21 +122,24 @@ func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		offset := int(v)
-		if offset >= len(fl.rawData) {
+		offset := int64(v)
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
+
+		val, _ := fl.peekU16(offset)
+
 		if DEBUG_EVAL {
 			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
 		}
 		return int(val), nil
 	}
-	if offset, ok := args[0].(int); ok {
-		if offset >= len(fl.rawData) {
+	if offset, ok := args[0].(int64); ok {
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := binary.LittleEndian.Uint16(fl.rawData[offset:]) // XXX endianness
+		val, _ := fl.peekU16(offset)
+
 		if DEBUG_EVAL {
 			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
 		}
@@ -154,21 +158,22 @@ func (fl *FileLayout) evalPeekI8(args ...interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		offset := int(v)
-		if offset >= len(fl.rawData) {
+		offset := int64(v)
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := fl.rawData[offset]
+		val, _ := fl.peekU8(offset)
+
 		if DEBUG_EVAL {
 			log.Printf("peek_i8 AT OFFSET %06x: %04x", offset, val)
 		}
 		return int(val), nil
 	}
-	if offset, ok := args[0].(int); ok {
-		if offset >= len(fl.rawData) {
+	if offset, ok := args[0].(int64); ok {
+		if offset >= int64(fl.size) {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val := fl.rawData[offset]
+		val, _ := fl.peekU8(offset)
 		if DEBUG_EVAL {
 			log.Printf("peek_i8 AT OFFSET %06x: %02x", offset, val)
 		}
@@ -200,7 +205,7 @@ func (fl *FileLayout) evalOtoi(args ...interface{}) (interface{}, error) {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
 	if v, ok := args[0].(string); ok {
-		v = strings.TrimRight(v, " ")
+		v = presentStringValue(v)
 		if v == "" {
 			return 0, nil
 		}
@@ -293,6 +298,82 @@ func (fl *FileLayout) evalLen(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+func (fl *FileLayout) evalSevenBitString(args ...interface{}) (interface{}, error) {
+	// 1 arg: name of variable. return manipulated string value
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if s, ok := args[0].(string); ok {
+		_, val, err := fl.GetValue(s, nil)
+		if err != nil {
+			panic(err)
+		}
+
+		// for each byte, remove high bit.
+		out := []byte{}
+		for _, c := range val {
+			out = append(out, c&0x7f)
+		}
+
+		return string(out), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalCleanString(args ...interface{}) (interface{}, error) {
+	// 1 arg: name of variable. return cleaned string value
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if s, ok := args[0].(string); ok {
+		_, val, err := fl.GetValue(s, nil)
+		if err != nil {
+			panic(err)
+		}
+
+		out := []byte{}
+		for _, c := range val {
+			if c == 0 {
+				break
+			}
+			out = append(out, c)
+		}
+
+		return string(out), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+func (fl *FileLayout) evalBitSet(args ...interface{}) (interface{}, error) {
+	// 2 args: 1) field name 2) bit
+	// returns bool true if bit is set
+
+	if len(args) != 2 {
+		return nil, fmt.Errorf("expected exactly 2 argument")
+	}
+
+	v2, ok := args[1].(int)
+	if !ok {
+		return nil, fmt.Errorf("2nd arg: expected int, got %T", args[1])
+	}
+
+	if v2 > 7 {
+		return nil, fmt.Errorf("TODO: bitset() over bit 7")
+	}
+
+	if s, ok := args[0].(string); ok {
+		_, val, err := fl.GetValue(s, nil)
+		if err != nil {
+			panic(err)
+		}
+
+		res := (val[0])&(1<<(v2)) != 0
+		return res, nil
+	}
+
+	return nil, fmt.Errorf("1st arg: expected string, got %T", args[0])
+}
+
 func (fl *FileLayout) evalEither(args ...interface{}) (interface{}, error) {
 	// 2-n arg: reference value, list of values. returns true if 1st number is in the others
 	if len(args) < 2 {
@@ -357,35 +438,31 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		if layout.evaluated {
 			if idx+2 < len(fl.Structs) {
 				// must not skip the struct currently being parsed when evaluateExpr() is invoked
-				if DEBUG_EVAL {
-					log.Println("skipping", layout.Name, "while evaluating", df.Label, ". idx", idx+1, "len", len(fl.Structs))
-				}
+				log.Debug().Msgf("Skipping %s while evaluating %s. idx %d, len %d",
+					layout.Name, df.Label, idx+1, len(fl.Structs))
+
 				continue
 			}
 		}
 		mapped := make(map[string]interface{})
 		for _, field := range layout.Fields {
-			if !field.Format.Slice && field.Format.Range == "" {
-				switch field.Format.Kind {
-				case "u8", "u16", "u32", "u64":
-					mapped[field.Format.Label] = fl.GetFieldValue(&field)
-				case "i8":
-					mapped[field.Format.Label] = int(uint64(int8(value.AsUint64Raw(field.Value))))
-				case "i16":
-					mapped[field.Format.Label] = int(uint64(int16(value.AsUint64Raw(field.Value))))
-				case "i32":
-					mapped[field.Format.Label] = int(uint64(int32(value.AsUint64Raw(field.Value))))
-				case "i64":
-					mapped[field.Format.Label] = int(uint64(int64(value.AsUint64Raw(field.Value))))
-				default:
-					mapped[field.Format.Label] = fl.GetFieldValue(&field)
-				}
-			} else {
-				mapped[field.Format.Label] = fl.GetFieldValue(&field)
-			}
+			mapped[field.Format.Label] = fl.GetFieldValue(&field)
 		}
+
 		mapped["index"] = int(layout.Index)
 		evalVariables[layout.Name] = mapped
+
+		for _, child := range layout.Children {
+			mapped = make(map[string]interface{})
+
+			for _, field := range child.Fields {
+				log.Debug().Msgf("Adding child node %s to %s", field.Format.Label, layout.Name)
+				mapped[field.Format.Label] = fl.GetFieldValue(&field)
+			}
+
+			mapped["index"] = int(child.Index)
+			evalVariables[child.Name] = mapped
+		}
 
 		fl.Structs[idx].evaluated = true
 	}
@@ -397,10 +474,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	}
 	evalVariables["FILE_SIZE"] = int(fl.size)
 
-	if DEBUG_EVAL {
-		feng.Yellow("--- EVALUATING --- %s at %06x (block %s)\n", in, fl.offset, df.Label)
-		spew.Dump(evalVariables)
-	}
+	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
 
 	functions := make(map[string]goval.ExpressionFunction)
 	functions["peek_i32"] = fl.evalPeekI32
@@ -415,9 +489,14 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["len"] = fl.evalLen
 	functions["not"] = fl.evalNot
 	functions["either"] = fl.evalEither
-
+	functions["sevenbitstring"] = fl.evalSevenBitString
+	functions["bitset"] = fl.evalBitSet
+	functions["cleanstring"] = fl.evalCleanString
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
+		if DEBUG_EVAL {
+			spew.Dump(evalVariables)
+		}
 		return 0, EvaluateError{input: in, msg: err.Error()}
 	}
 

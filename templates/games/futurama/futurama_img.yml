@@ -1,0 +1,55 @@
+
+# STATUS: 75%
+#
+# Used in Futurama (2003 by Unique Development Studios) PS2, XBox
+
+# TODO MAX: use directory name to rebuild file structure
+# TODO: map padding bytes better, the --unmapped is SUPER SLOW (30+ minutes) on the 800MB files
+
+references:
+  - http://wiki.xentax.com/index.php/Futurama_XBox_IMG
+  - https://web.archive.org/web/20171230084331/http://ps23dformat.wikispaces.com/Futurama
+
+software:
+  - https://github.com/JayFoxRox/futurama-tools
+  - https://web.archive.org/web/20180724233625/https://ps23dformat.wikispaces.com/file/view/FutureramaPS2IMG.bms/485367210/FutureramaPS2IMG.bms
+
+kind: archive
+name: Futurama (game) archive
+extensions: [.img]
+endian: little
+no_magic: true
+filenames: [ # TODO implement and auto match if no magic matches and exact filename match (case insensitive)
+  futurama.img, ntsc.img, ntsc0.img,  # PS2 (US)
+  FutNTSC0*.img, SysNTSC.img,         # XBox (US)   XXX FIXME allow wildcard in filename
+]
+
+structs:
+  header:
+    u32 EntryListSize: ??
+
+  entry:
+
+    asciiz Filename: ??
+    u8[alignment(len("self.Filename"), 4)] Padding: ??
+
+    # Bit 7 marks a DIRECTORY entry
+    label: sevenbitstring("self.Filename")
+
+    if bitset("self.Filename", 7):
+      u32 FilesInDirectory: ??
+    else:
+      filename: self.Filename
+      u32 DataSize: ??
+      u32 DataOffset: ??
+      offset: self.DataOffset
+      raw:u8[self.DataSize] Data: ??
+      #u8[alignment(len("self.DataSize"), 2048)] Padding: ??
+      offset: restore
+
+    if OFFSET >= Header.EntryListSize:
+      parse: stop
+
+layout:
+  - header Header
+  - entry[] Entry
