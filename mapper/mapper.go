@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -199,7 +200,10 @@ func MapFileToGivenTemplate(f afero.File, startOffset int64, filename string, te
 }
 
 // maps input file to a matching template
-func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string) (fl *FileLayout, err error) {
+func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string, measureTime bool) (fl *FileLayout, err error) {
+
+	started := time.Now()
+	processed := 0
 
 	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
@@ -222,6 +226,7 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string)
 		if err != nil {
 			return fmt.Errorf("%s: %s", tpl, err.Error())
 		}
+		processed++
 
 		if ds.NoMagic {
 			if DEBUG {
@@ -248,14 +253,16 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string)
 		}
 		if !found {
 			if DEBUG {
-				log.Printf("%s magic bytes don't match", tpl)
+				log.Info().Msgf("%s magic bytes don't match", tpl)
 			}
 			return nil
 		}
 
 		_, _ = f.Seek(startOffset, io.SeekStart)
 
+		parseStart := time.Now()
 		fl, err = MapReader(f, ds, endian)
+		parseTime := time.Since(parseStart)
 		fl.DataFileName = filename
 		if err != nil {
 			// template don't match, try another
@@ -266,6 +273,11 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string)
 			}
 		}
 		if len(fl.Structs) > 0 {
+			if measureTime {
+				passed := time.Since(started)
+				log.Warn().Msgf("MEASURE: evaluation of %d templates until a match was found: %v, template parsed in %v", processed, passed, parseTime)
+			}
+
 			log.Printf("Parsed %s as %s", filename, tpl)
 			return errMapFileMatched
 		}

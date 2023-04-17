@@ -27,6 +27,7 @@ var args struct {
 	Unmapped    bool   `help:"Print a report on unmapped bytes."`
 	Overlapping bool   `help:"Print a report on overlapping bytes."`
 	Debug       bool   `help:"[Dev] Enable debug logging"`
+	Time        bool   `help:"[Dev] Measure where processing time is spent."`
 	CPUProfile  string `name:"cpu-profile" help:"[Dev] Create CPU profile."`
 	MemProfile  string `name:"mem-profile" help:"[Dev] Create memory profile."`
 }
@@ -68,7 +69,7 @@ func main() {
 	if args.Template != "" {
 		fl, err = mapper.MapFileToGivenTemplate(f, args.Offset, args.Filename, args.Template)
 	} else {
-		fl, err = mapper.MapFileToMatchingTemplate(f, args.Offset, args.Filename)
+		fl, err = mapper.MapFileToMatchingTemplate(f, args.Offset, args.Filename, args.Time)
 	}
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to map %s.", args.Filename)
