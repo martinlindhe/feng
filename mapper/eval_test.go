@@ -1,7 +1,6 @@
 package mapper
 
 import (
-	"bytes"
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
@@ -24,13 +23,13 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		// Header
 		0x06, // Val1
 		0x03, // Len1
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds, "")
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	test := []struct {
@@ -62,13 +61,13 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		// Header
 		'H', 'i', // Name
 		0x01, // Val
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds, "")
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	test := []struct {
@@ -102,14 +101,14 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		// Header
 		0x02, 0x01, // CRC
 		0x08, 0x00, // HeaderSize
 		0xf0, 0xf1, 0xf2, 0xf3, // Reserved
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds, "")
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	// Header

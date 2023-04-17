@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"runtime"
 	"runtime/pprof"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -33,6 +33,8 @@ var args struct {
 
 func main() {
 
+	var fs = afero.NewOsFs()
+
 	_ = kong.Parse(&args,
 		kong.Name("feng"),
 		kong.Description("A binary template reader and data presenter."))
@@ -43,7 +45,7 @@ func main() {
 	}
 
 	if args.CPUProfile != "" {
-		f, err := os.Create(args.CPUProfile)
+		f, err := fs.Create(args.CPUProfile)
 		if err != nil {
 			log.Fatal().Err(err).Msgf("failed")
 		}
@@ -57,7 +59,7 @@ func main() {
 	var fl *mapper.FileLayout
 	var err error
 
-	f, err := os.Open(args.Filename)
+	f, err := fs.Open(args.Filename)
 	defer f.Close()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to open %s.", args.Filename)
@@ -98,7 +100,7 @@ func main() {
 	}
 
 	if args.MemProfile != "" {
-		f, err := os.Create(args.MemProfile)
+		f, err := fs.Create(args.MemProfile)
 		if err != nil {
 			log.Fatal().Err(err).Msg("could not create memory profile")
 		}

@@ -12,6 +12,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
 	github.com/rs/zerolog v1.29.0
+	github.com/spf13/afero v1.9.5
 	github.com/stretchr/testify v1.8.1
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade
 	golang.org/x/text v0.9.0
@@ -19,7 +20,6 @@ require (
 )
 
 require (
-	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

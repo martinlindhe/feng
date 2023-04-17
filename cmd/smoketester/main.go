@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -26,6 +27,8 @@ type measuredExecution struct {
 }
 
 func main() {
+
+	var fs = afero.NewOsFs()
 
 	_ = kong.Parse(&args,
 		kong.Name("feng"),
@@ -56,7 +59,8 @@ func main() {
 
 		started := time.Now()
 
-		fl, err := mapper.MapFileToMatchingTemplate(entry.In)
+		f, _ := fs.Open(entry.In)
+		fl, err := mapper.MapFileToMatchingTemplate(f, 0, entry.In)
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(mapper.EvaluateError); ok {

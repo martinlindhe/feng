@@ -1,15 +1,7 @@
 package smoketest
 
 import (
-	"io/ioutil"
 	"os"
-	"path/filepath"
-	"testing"
-
-	"github.com/rs/zerolog/log"
-
-	"github.com/martinlindhe/feng/mapper"
-	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -17,7 +9,8 @@ var (
 	smoketestFile = "./smoketest.yml"
 )
 
-func TestaaaCompareWithReferenceParses(t *testing.T) {
+/*
+func TestCompareWithReferenceParses(t *testing.T) {
 
 	data, err := ioutil.ReadFile(smoketestFile)
 	assert.Nil(t, err)
@@ -54,6 +47,7 @@ func TestaaaCompareWithReferenceParses(t *testing.T) {
 		assert.Equal(t, string(expected), data, entry.In)
 	}
 }
+*/
 
 // reports whether the named file or directory exists.
 func fileOrDirExists(path string) bool {

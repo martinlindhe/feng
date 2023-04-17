@@ -5,13 +5,13 @@ import (
 	"encoding/binary"
 	"fmt"
 	"math"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
@@ -65,7 +65,7 @@ type FileLayout struct {
 	encryptionKey []byte
 
 	// file handle
-	_f *os.File
+	_f afero.File
 
 	// bytes read, for debugging over-reading
 	bytesRead int

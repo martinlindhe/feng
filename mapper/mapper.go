@@ -13,6 +13,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 
 	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
@@ -30,7 +31,7 @@ var (
 	ErrParseStop = errors.New("manual parse stop")
 )
 
-func (fl *FileLayout) mapLayout(rr *os.File, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
+func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
 
 	if df.Kind == "offset" {
 		// offset directive in top-level layout
@@ -127,8 +128,8 @@ func (fl *FileLayout) mapLayout(rr *os.File, fs *Struct, ds *template.DataStruct
 	return nil
 }
 
-func fileSize(file *os.File) int64 {
-	fi, err := file.Stat()
+func fileSize(f afero.File) int64 {
+	fi, err := f.Stat()
 	if err != nil {
 		log.Fatal().Err(err).Msg("stat failed")
 	}
@@ -136,7 +137,7 @@ func fileSize(file *os.File) int64 {
 }
 
 // produces a list of fields with offsets and sizes from input reader based on data structure
-func MapReader(f *os.File, ds *template.DataStructure, endian string) (*FileLayout, error) {
+func MapReader(f afero.File, ds *template.DataStructure, endian string) (*FileLayout, error) {
 
 	ext := ""
 	if len(ds.Extensions) > 0 {
@@ -171,7 +172,7 @@ var (
 	errMapFileMatched = errors.New("matched file")
 )
 
-func MapFileToGivenTemplate(f *os.File, startOffset int64, filename string, templateFileName string) (fl *FileLayout, err error) {
+func MapFileToGivenTemplate(f afero.File, startOffset int64, filename string, templateFileName string) (fl *FileLayout, err error) {
 
 	rawTemplate, err := os.ReadFile(templateFileName)
 	if err != nil {
@@ -198,7 +199,7 @@ func MapFileToGivenTemplate(f *os.File, startOffset int64, filename string, temp
 }
 
 // maps input file to a matching template
-func MapFileToMatchingTemplate(f *os.File, startOffset int64, filename string) (fl *FileLayout, err error) {
+func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string) (fl *FileLayout, err error) {
 
 	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
@@ -291,7 +292,7 @@ func MapFileToMatchingTemplate(f *os.File, startOffset int64, filename string) (
 	return fl, nil
 }
 
-func (fl *FileLayout) expandStruct(r *os.File, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 
 	if DEBUG_MAPPER {
 		log.Printf("expandStruct: adding struct %s", dfParent.Label)
@@ -323,7 +324,7 @@ func presentStringValue(v string) string {
 	return v
 }
 
-func (fl *FileLayout) expandChildren(r *os.File, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
 
 	log.Debug().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)

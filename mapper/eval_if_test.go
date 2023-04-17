@@ -1,7 +1,6 @@
 package mapper
 
 import (
-	"bytes"
 	"testing"
 
 	"github.com/martinlindhe/feng/template"
@@ -23,12 +22,12 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x01, 0x00, // Type
 		0xff, // TypeOne
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds, "")
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -54,12 +53,12 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x02, 0x00, // Type
 		0xff, // data
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds, "")
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -87,12 +86,12 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x01, 0x00, // Type
 		0xff, // TypeOne
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds, "")
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -119,12 +118,12 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x01, 0x00, // Type
 		0xff, // TypeOne
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds, "")
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -155,13 +154,13 @@ layout:
 	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
 	assert.Equal(t, nil, err)
 
-	data := []byte{
+	f := mockFile(t, "in", []byte{
 		0x01, 0x00, // Type
 		0xf0, // EXT_F0
 		0xff, // TypeOne
-	}
+	})
 
-	fl, err := MapReader(bytes.NewReader(data), ds, "")
+	fl, err := MapReader(f, ds, "")
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
