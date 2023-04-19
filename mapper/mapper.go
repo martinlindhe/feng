@@ -324,7 +324,7 @@ func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *
 			return fmt.Errorf("eof and no structs mapped")
 		}
 
-		log.Error().Msgf("reached EOF at %08x", fl.offset)
+		log.Error().Err(err).Msgf("reached EOF at %08x", fl.offset)
 	}
 
 	return err
@@ -339,7 +339,7 @@ func presentStringValue(v string) string {
 func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
 
-	log.Info().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
+	log.Debug().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
 
 	// track iterator index while parsing
 	fs.Index = dfParent.Index

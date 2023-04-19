@@ -116,6 +116,7 @@ sevenbitstring(self.Filename) = "chars"  returns string value of input field as 
 bitset(self.Value, 7) = true   returns true if bit 7 of self.Value is set
 cleanstring("self.Value") = "chars" cleans input ascii string, terminates at first nul byte
 no_ext("hello.ext")    = "hello", return input string (filename) without extension
+basename("path/to/file.ext") = "file.ext", returns basename without file path
 
 # Data types
 
