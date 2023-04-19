@@ -1,0 +1,45 @@
+# STATUS: 30%
+
+# Used in:
+# Attack on Titan (PS3)
+# Attack on Titan 2 (PSVita)
+
+references:
+  - http://aluigi.altervista.org/bms/attack_on_titan.bms
+
+kind: game
+name: Attack on Titan .bin file
+extensions: [.bin]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 00 07 7d f9
+    endian: big # PS3
+  - offset: 0000
+    match: f9 7d 07 00
+    endian: little # PSVita
+
+structs:
+  header:
+    u8[4] Signature: ??
+    u32 FileCount: ??
+    u32 Align: ?? # 00 00 08 00 00 00 00 00
+    u32 Unknown: ?? # 0
+
+  file:
+    u64 Offset: ??
+    u32 Size: ??
+    u32 CompressedSize: ??
+    if self.CompressedSize == 0:
+      offset: self.Offset * Header.Align
+      raw:u8[self.Size] Data: ??
+      offset: restore
+    else:
+      data: unseen
+
+layout:
+  - header Header
+  - file[Header.FileCount] File
+
+

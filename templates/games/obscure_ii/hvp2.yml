@@ -1,23 +1,27 @@
-# STATUS: 80%
+# STATUS: 60%
 
-# Archive format used in ObsCure II (2009), aka ObsCure: The Aftermath,
-# released for Windows, PS2, Wii, PSP.
+# In-house format developed by Hydravision Entertainment
 
-# This mapping is for the PS2/PSP version. The Wii version don't map correctly due to a feng bug (comment out the ps2 Flags definitions to fix)
+# Used in:
+# ObsCure II (2009), aka ObsCure: The Aftermath (Win, PS2, Wii, PSP)
+# Alone in the Dark (2008) (Win, PS2, PS3, Wii, Xbox360)
 
 resources:
   - http://wiki.xentax.com/index.php/Obscure_HVP
+  - https://aluigi.altervista.org/bms/obscure_hvp.bms
 
 kind: archive
 name: Hydravision PackFile v2
 extensions: [.hvp]
-endian: little # little = ps2/psp, big = wii
 
-magic: # XXX very weak magic, should not be enabled
+
+magic:
   - offset: 0000
-    match: 00 00 04 00 # ps2/psp
+    match: 00 00 04 00 00 00 00 00 # ps2/psp
+    endian: little
   - offset: 0000
-    match: 00 04 00 00 # XXX for big endian WII
+    match: 00 04 00 00 00 00 00 00 # XXX for big endian WII
+    endian: big
 
 structs:
   header:
@@ -26,41 +30,36 @@ structs:
       eq 00040000: PS2
       default: invalid
 
-    if self.Model == WII:
-      endian: big
-    u32 Reserved: ??
+    u32 Reserved: ?? # 0
     u32 EntryCount: ??
-    u32 Checksum: ??    # guessing, it looks like a checksum
+    u32 MaybeChecksum: ??    # XXX
 
   entry:
     u32 NameCRC: ?? # 0 for the root entry
-    if Header.Model == WII:
-      u32 Flags:
-        bit b00000000_00000001_00000000_00000000: COMPRESSED
-        bit b00000000_00000100_00000000_00000000: DIRECTORY
-    else:
-      u32 Flags:
-        bit b00000000_00000000_00000000_00000001: COMPRESSED
-        bit b00000000_00000000_00000000_00000100: DIRECTORY
-    if (self.Flags & DIRECTORY) != 0: # XXX this errors because all CONSTANTS got evaluated and DIRECTORY get the wrong value in the case of WII
+    u32 Flags: ??
+
+    if self.Flags == 4:
       label: Directory
       u32 Zero1: ??
       u32 Zero2: ??
       u32 FileCount: ??
       u32 StartIndex: ??
-    if (self.Flags & DIRECTORY) == 0:
+    else:
       label: File
       u32 SomeCRC: ??
       u32 UncompressedSize: ??
       u32 Offset: ??
       u32 CompressedSize: ??
       offset: self.Offset
-      if (self.Flags & COMPRESSED) != 0:
+      if self.Flags == 1:
         compressed:lzo1x[self.CompressedSize] Data: ??
+        u8[alignment(self.CompressedSize, 32)] Padding: ?? # XXX pad size ?
       else:
         raw:u8[self.UncompressedSize] Data: ??
+
       offset: restore
 
 layout:
   - header Header
   - entry[Header.EntryCount] Entry
+

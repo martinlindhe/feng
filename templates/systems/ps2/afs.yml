@@ -1,6 +1,13 @@
 # STATUS: 5%
 
-# Archive format that contains multiple .adx audio files, used in some PS2 games (Persona 3, Persona 4).
+# XXX "Criware AFS" ???
+
+# Archive format that contains multiple .adx audio files
+
+# Used in:
+# Monster Hunter (2004, PS2) by Capcom
+# Persona 3 (2006, PS2) by Atlus
+# Persona 4 (2008, PS2) by Atlus
 
 references:
   - xxx
@@ -8,8 +15,8 @@ references:
 software:
   - https://forum.xentax.com/viewtopic.php?t=22502 (AFS Explorer, can extract .afs)
 
-kind: audio
-name: Criware AFS Audio archive
+kind: archive
+name: AFS archive
 extensions: [.afs]
 endian: big # XXX
 
@@ -20,6 +27,8 @@ magic:
 structs:
   header:
     u8[4] Magic: c'AFS' 00
+    u32 MaybeCount: ??      # ab 00 00 00
+    u32 Unk1: ??            # 00 00 08 00
 
 layout:
   - header Header

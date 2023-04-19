@@ -166,7 +166,7 @@ const (
 	maxHexDisplayLength = 0x20
 )
 
-func shortFloat(f float32) string {
+func prettyFloat(f float32) string {
 	if f == 1. {
 		return "1."
 	}
@@ -204,17 +204,17 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		if field.Format.Slice || field.Format.Range != "" {
 			return ""
 		}
-		return shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
+		return prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
 
 	case "xyzm32":
 		if field.Format.Slice || field.Format.Range != "" {
 			return ""
 		}
 		return fmt.Sprintf("%s, %s, %s, %s",
-			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[:4])))),
-			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[4:8])))),
-			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[8:12])))),
-			shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[12:16])))),
+			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[:4])))),
+			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[4:8])))),
+			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[8:12])))),
+			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[12:16])))),
 		)
 
 	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
@@ -338,6 +338,12 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 		panic(err)
 	}
 
+	// convert to network byte order
+	unitLength, _ := fl.GetAddressLengthPair(&field.Format)
+	if unitLength > 1 && field.Endian == "little" {
+		b = value.ReverseBytes(b, int(unitLength))
+	}
+
 	switch field.Format.Kind {
 	case "f32":
 		if !field.Format.Slice && field.Format.Range != "" {
@@ -350,9 +356,9 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 			for i := int64(0); i < totalLength; i += unitLength {
 				val++
 				if field.Endian == "big" {
-					values = append(values, shortFloat(math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
+					values = append(values, prettyFloat(math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
 				} else {
-					values = append(values, shortFloat(math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
+					values = append(values, prettyFloat(math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
 				}
 				if val >= 3 {
 					skipRest = true
@@ -364,7 +370,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 			}
 			return "[" + strings.Join(values, ", ") + "]"
 		}
-		return shortFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
+		return prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
 
 	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
 		if !field.Format.Slice && field.Format.Range != "" {
@@ -523,10 +529,10 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 	kind := fl.PresentType(&field.Format)
 	if (field.Format.Kind != "vu32" && field.Format.Kind != "vu64") && field.Format.SingleUnitSize() > 1 {
 		// XXX hacky way of skipping variable length fields
-		if field.Endian == "little" {
-			kind += " le"
-		} else {
+		if field.Endian == "big" {
 			kind += " be"
+		} else {
+			kind += " le"
 		}
 	}
 
@@ -538,6 +544,12 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 	data, err := fl.peekBytes(int64(field.Offset), maxLen)
 	if err != nil {
 		panic(err)
+	}
+
+	// convert to network byte order
+	unitLength, _ := fl.GetAddressLengthPair(&field.Format)
+	if unitLength > 1 && field.Endian == "little" {
+		data = value.ReverseBytes(data, int(unitLength))
 	}
 
 	fieldValue := strings.TrimRight(fl.PresentFieldValue(field), " ")

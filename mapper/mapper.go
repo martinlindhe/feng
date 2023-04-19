@@ -533,7 +533,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			}
 
 			if es.Pattern.Known {
-				log.Info().Msgf("KNOWN PATTERN FOR '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
+				log.Debug().Msgf("KNOWN PATTERN FOR '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
 			}
 
 			endian := fl.endian

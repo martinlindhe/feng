@@ -10,6 +10,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const DEBUG_READ = false
+
 func (fl *FileLayout) peekU32(offset int64) (uint32, error) {
 	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
 	if err != nil {
@@ -54,7 +56,9 @@ func (fl *FileLayout) peekU8(offset int64) (uint8, error) {
 
 // returns a slice of bytes from file, otherwise unmodified
 func (fl *FileLayout) peekBytes(offset int64, size int64) ([]uint8, error) {
-	log.Info().Msgf("Reading % 2d from %06x (PEEK)", size, offset)
+	if DEBUG_READ {
+		log.Info().Msgf("Reading % 2d from %06x (PEEK)", size, offset)
+	}
 	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
 	if err != nil {
 		return nil, err
@@ -78,7 +82,9 @@ func (fl *FileLayout) readBytes(totalLength, unitLength int64, endian string) ([
 	}
 
 	val := make([]byte, totalLength)
-	log.Info().Msgf("Reading % 2d from %06x (READ)", totalLength, fl.offset)
+	if DEBUG_READ {
+		log.Info().Msgf("Reading % 2d from %06x (READ)", totalLength, fl.offset)
+	}
 	if _, err := io.ReadFull(fl._f, val); err != nil {
 		return nil, err
 	}

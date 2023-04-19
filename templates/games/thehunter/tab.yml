@@ -1,0 +1,32 @@
+# STATUS: 5%
+
+# File pair: .tab (ToC) and .arc (data)
+
+# Used in:
+# theHunter Classic (PC)
+
+# TODO MAX: open,seek & extract from the corresponding .arc file
+
+references:
+  - xxx
+
+kind: archive
+name: theHunter Classic tab
+extensions: [.tab]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 Unk1: ?? # 2048
+
+  entry:
+    u32 Checksum: ?? # XXX algo
+    u32 Offset: ?? # XXX offset in the .arc file
+    u32 Size: ??
+    u32 Unk2: ?? # 0 or 1.  1 = maybe encrypted?
+
+layout:
+  - header Header
+  - entry[] Entry

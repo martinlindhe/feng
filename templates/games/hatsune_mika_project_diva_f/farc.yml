@@ -1,0 +1,92 @@
+# STATUS: 1%
+
+# Used in:
+# Hatsune Miku: Project DIVA F (PS3)
+# Hatsune Miku: Project DIVA F 2nd (PS3)
+
+kind: archive
+name: "Hatsune Miku: Project DIVA F archive"
+extensions: [.farc]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'FArc'
+
+structs:
+  header:
+    ascii[4] Magic: c'FArc'
+    u32 FilenameLen: ?? # 37, 36
+    u32 MaybeVersion: ?? # 0x20 = Diva F, 0x40 = Diva F 2nd
+    ascii[self.FilenameLen - 12] Filename: ?? # XXX - 12 is guesswork
+    filename: self.Filename
+    u32 Unk2: ?? # 64
+    u32 MaybeCount1: ?? # 1580, 0240, 01a0   size related ?
+
+    u8[20 + alignment(self.FilenameLen, 4)] MaybePadding: ?? # XXX, 0x78 is fill byte in Diva F 2nd, 0x0 in Diva F
+
+    ascii[4] SomeText: ?? # c'A3DA'  or c'A3DC'
+    if self.SomeText == "A3DC":
+      u32[3] Unknown: ?? # "__________" in Diva F (filler), but some meaning in 2nd
+      ## ---
+      u32 Unk4: ?? # 00 20 00 00
+      #u32 Unk5: ?? # 0
+      #u32 Unk6: ?? # 32
+      #u32 Unk7: ?? # 00 02 00 10
+      #u32 Unk8: ?? # 50 00 00 00
+      #u32 Unk9: ?? # 64
+      #u32 DataSize: ??
+      #u32 Unk10: ?? # 1
+      #ascii[4] MaybeSomeTag: ?? c'BL' 00 00
+      #u32 MaybeCount2: ?? # 01c0, 09c0    XXX some size?
+      #u32 MaybeCount3: ?? # 0080, 0bc0    XXX some size ?
+      #u32 Unk14: ?? # 32
+      #u8[self.DataSize] Data: ??
+      #u32 MaybeReserved2: ?? # 0
+
+      # XXX what follows is some table of 32-bit values.
+
+      # HAIR_TWIN_DRFRE071.farc
+      # 214 x 32bit... 856 bytes
+
+    if self.SomeText == "A3DA":
+      u32 DaUnk1: ?? # 40 01 00 00
+      u32 DaUnk2: ?? # 40 00 00 00
+      u32 DaUnk3: ?? # 0x10
+      u32 DaUnk4: ?? # 0
+      u32 DaUnk5: ?? # 40 01 00 00
+      u32 DaUnk6: ?? # 0
+      u32 DaUnk7: ?? # 0
+      u32 DaMaybeChecksum: ?? # 58 3b 33 e6
+
+      u32 DaUnk9: ?? # 0
+      u32 DaUnk10: ?? # 0
+      u32 DaUnk11: ?? # 0
+
+
+
+layout:
+  - header Header
+
+# 2nd effstgns214.farc
+#  [000000] Magic                          ascii[4]         FArc                           46 41 72 63
+#  [000004] FilenameLen                    u32 be           34                             00 00 00 22
+#  [000008] Unk1                           u32 be           64                             00 00 00 40
+#  [00000c] Filename                       ascii[22]        stgns214_eff_001.a3da          73 74 67 6e 73 32 31 34 5f 65 66 66 5f 30 30 31 2e 61 33 64 61 00
+#  [000022] Unk2                           u32 be           64                             00 00 00 40
+#  [000026] Unk3                           u32 be           416                            00 00 01 a0
+#  [00002a] Zeroes                         u8[15]           [120, 120, 120, 120 ... ]      78 78 78 78 78 78 78 78 78 78 78 78 78 78 78
+#  [000039] SomeTextLen                    u32 be           2021161080                     78 78 78 78
+
+# EFFDROBJ401.farc:
+#  [000000] Magic                          ascii[4]         FArc                           46 41 72 63
+#  [000004] FilenameLen                    u32 be           37                             00 00 00 25
+#  [000008] Unk1                           u32 be           32                             00 00 00 20
+#  [00000c] Filename                       ascii[25]        EFFDROBJ401_TBL_000.a3da       45 46 46 44 52 4f 42 4a 34 30 31 5f 54 42 4c 5f 30 30 30 2e 61 33 64 61 00
+#  [000025] Unk2                           u32 be           64                             00 00 00 40
+#  [000029] Unk3                           u32 be           576                            00 00 02 40
+#  [00002d] Zeroes                         u8[15]           [0, 0, 0, 0 ... ]              00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+#  [00003c] Padding                        u8[1]            [0]                            00
+#  [00003d] SomeTextLen                    u32 be           35                             00 00 00 23
+#  [000041] SomeText                       ascii[15]        A3DC__________                 41 33 44 43 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 0a
+#  [000050] Unk4                           u32 be           2097152                        00 20 00 00

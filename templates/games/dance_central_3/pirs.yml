@@ -1,0 +1,22 @@
+# STATUS: 1%
+#
+# "New Xbox Experience Game Assets"
+#
+# Used in:
+# - Dance Central 3 (XBox360)
+
+kind: archive
+name: Dance Central 3 PIRS archive
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'PIRS'
+
+structs:
+  header:
+    ascii[4] Signature: c'PIRS'
+
+layout:
+  - header Header
+

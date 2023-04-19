@@ -10,16 +10,14 @@ name: Dyson Sphere Program verta file
 extensions: [.verta]
 endian: little
 
-magic:
-  - offset: 0000
-    match: 00 00 00 00 # XXX weak magic
+no_magic: true
 
 structs:
   header:
-    u8[4] Signature: 00 00 00 00 # XXX or some value ?
-    u32 Unk1: ?? # 6 or 9 seen, some count ??
-    u32 Unk2: ?? # maybe offset
-    u32 Unk3: ?? # maybe a count
+    u32 Unk1: ?? # 0
+    u32 Unk2: ?? # 6 or 9 seen, some count ??
+    u32 Unk3: ?? # maybe offset
+    u32 Unk4: ?? # maybe a count
 
 layout:
   - header Header

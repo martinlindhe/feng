@@ -1,0 +1,39 @@
+# STATUS: 25%
+
+# Used in Unreal Engine 4 games
+
+# Can be encrypted
+
+software:
+  - https://github.com/allcoolthingsatoneplace/UnrealPakTool
+
+kind: archive
+name: "Unreal Engine PAK archive"
+extensions: [.pak]
+endian: little
+
+no_magic: true
+
+structs:
+  entry:
+    u32 Unk1: ?? # 0
+    u32 Unk2: ?? # 0
+    u32 DataSize: ??
+    u32 Unk4: ?? # 0
+    u32 Unk5: ?? # 3070
+    u32 Unk6: ?? # 0
+    u32 Unk7: ?? # 1
+    u8[20] Unk: ?? # hash and/or timestamp?
+    u32 Unk8: ?? # 1
+    u32 MaybeHeaderSize: ?? # 73
+    u32 Unk10: ?? # 0
+    u32 Unk11: ?? #
+    u32 Unk12: ?? # 0
+    u32 Unk13: ?? # 00 0b fe 00 = 785920
+    u8 Unk: ?? # 0
+
+    compressed:zlib[self.DataSize] Data: ??
+
+layout:
+  - entry[] Entry
+

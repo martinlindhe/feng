@@ -50,7 +50,7 @@ structs:
     else:
       # compressed
       compressed:zlib[self.CompressedLength] Data: ??
-    u8[alignment(self.CompressedLength, 4)] Padding: ??
+    u8[ent(self.CompressedLength, 4)] Padding: ??
     offset: restore
 
 layout:

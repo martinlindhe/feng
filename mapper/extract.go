@@ -104,14 +104,14 @@ func (fl *FileLayout) Extract(outDir string) error {
 				case "compressed:zlib":
 					reader, err := zlib.NewReader(bytes.NewReader(data))
 					if err != nil {
-						log.Error().Err(err).Msgf("Extraction failed")
-						continue
-					}
-					defer reader.Close()
-
-					if _, err = io.Copy(&b, reader); err != nil {
-						log.Error().Err(err).Msgf("Extraction failed")
-						continue
+						log.Error().Err(err).Msgf("Extraction failed, writing untouched stream")
+						b.Write(data) // write uncompressed stream
+					} else {
+						defer reader.Close()
+						if _, err = io.Copy(&b, reader); err != nil {
+							log.Error().Err(err).Msgf("Extraction failed")
+							continue
+						}
 					}
 
 				case "compressed:gzip":

@@ -1,0 +1,33 @@
+# STATUS: 1%
+
+# Used in:
+# Hatsune Miku: Project DIVA F 2nd (PS3)
+
+
+kind: archive
+name: "Hatsune Miku: Project DIVA F archive"
+extensions: [.farc]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'FARC'
+
+structs:
+  header:
+    ascii[4] Magic: c'FARC'
+    u32 Unk1: ?? # 5a
+    u32 MaybeVersion: ?? # 0x06
+    u32 Unk2: ?? # 0
+    u32 Unk3: ?? # 0x40
+    u32 Unk4: ?? # 0
+    u32 Unk5: ?? # 0
+
+    ascii[22] Filename: ?? # XXX length
+
+    # XXX data from 0080 seem to be encrypted
+
+
+
+layout:
+  - header Header

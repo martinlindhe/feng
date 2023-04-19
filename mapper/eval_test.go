@@ -7,6 +7,7 @@ import (
 	"github.com/maja42/goval"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -129,4 +130,73 @@ func TestGovalStrings(t *testing.T) {
 	assert.Nil(t, err)
 
 	spew.Dump(result)
+}
+
+func TestEvalAlignment4(t *testing.T) {
+	templateData := `
+structs:
+  header:
+    u8 Len: ??
+    ascii[self.Len] Name: ??
+    u8[alignment(self.Len, 4)] Padding: ??
+
+layout:
+  - header Header
+`
+	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
+	assert.Equal(t, nil, err)
+
+	var alignmentTests = []struct {
+		data []byte
+		len  int
+	}{
+		{[]byte{
+			1,       // Len
+			'a',     // Name
+			0, 0, 0, // Padding
+		}, 3},
+		{[]byte{
+			2,        // Len
+			'a', 'b', // Name
+			0, 0, // Padding
+		}, 2},
+		{[]byte{
+			3,             // Len
+			'a', 'b', 'c', // Name
+			0, // Padding
+		}, 1},
+		{[]byte{
+			4,                  // Len
+			'a', 'b', 'c', 'd', // Name
+		}, 0},
+		{[]byte{
+			5,                       // Len
+			'a', 'b', 'c', 'd', 'e', // Name
+			0, 0, 0,
+		}, 3},
+
+		{[]byte{
+			25,
+			'8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
+			'8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '8',
+			0, 0, 0,
+		}, 3},
+	}
+
+	for _, tt := range alignmentTests {
+
+		f := mockFile(t, "in", tt.data)
+
+		fl, err := MapReader(f, ds, "")
+		assert.Equal(t, nil, err)
+
+		if tt.len > 0 {
+			_, val, err := fl.GetValue("Header.Padding", &ds.Layout[0])
+			assert.Equal(t, nil, err)
+			assert.Equal(t, tt.len, len(val))
+		} else {
+			_, _, err := fl.GetValue("Header.Padding", &ds.Layout[0])
+			assert.Error(t, errors.New("GetValue: 'Header.Padding' not found"), err)
+		}
+	}
 }
