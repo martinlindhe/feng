@@ -1,11 +1,9 @@
-# STATUS: 5%
-
-# File pair: .tab (ToC) and .arc (data)
+# STATUS: 40%
 
 # Used in:
 # theHunter Classic (PC)
 
-# TODO MAX: open,seek & extract from the corresponding .arc file
+# TODO MAX: some files are zlib compressed. detect them!
 
 references:
   - xxx
@@ -15,22 +13,21 @@ name: theHunter Classic tab archive
 extensions: [.tab]
 endian: little
 
+multi_file: true # File pair: .tab (entry list) and .arc (data)
 no_magic: true
 
 structs:
   header:
     u32 Unk1: ?? # 2048
-
-    # XXX 1: open "basename.arc" as 2nd file. need filename available as script constant
-    # XXX 2: special tag to read X data from 2nd file...
-
   entry:
     u32 Checksum: ?? # XXX algo
     u32 Offset: ?? # XXX offset in the .arc file
-    u32 Size: ??
+    u32 Size: ?? # XXX size of data in the .arc file
     u32 Unk2: ?? # 0 or 1.  1 = maybe encrypted?
-    label: no_ext(FILE_NAME) + ".arc"
+
+    import: raw:u8, self.Offset, self.Size, no_ext(FILE_NAME) + ".arc"
 
 layout:
   - header Header
-  - entry[6] Entry
+  - entry[4] Entry # XXX slice of entries
+

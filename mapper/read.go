@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/martinlindhe/feng/value"
 	"github.com/rs/zerolog/log"
@@ -55,7 +56,33 @@ func (fl *FileLayout) peekU8(offset int64) (uint8, error) {
 }
 
 // returns a slice of bytes from file, otherwise unmodified
-func (fl *FileLayout) peekBytes(offset int64, size int64) ([]uint8, error) {
+func (fl *FileLayout) peekBytes(field *Field) ([]uint8, error) {
+
+	if field.ImportFile != "" {
+		size := field.Format.RangeVal
+		log.Info().Msgf("IMPORT: reading %d bytes from %06x in %s", size, field.Offset, field.ImportFile)
+
+		f, err := os.Open(field.ImportFile) // XXX use afero
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+
+		_, err = f.Seek(field.Offset, io.SeekStart)
+		if err != nil {
+			return nil, err
+		}
+
+		data := make([]byte, size)
+		n, err := f.Read(data)
+		fl.bytesImported += n
+
+		return data, err
+	}
+	return fl.peekBytesMainFile(field.Offset, field.Length)
+}
+
+func (fl *FileLayout) peekBytesMainFile(offset int64, size int64) ([]uint8, error) {
 	if DEBUG_READ {
 		log.Info().Msgf("Reading % 2d from %06x (PEEK)", size, offset)
 	}
@@ -64,11 +91,11 @@ func (fl *FileLayout) peekBytes(offset int64, size int64) ([]uint8, error) {
 		return nil, err
 	}
 	_, _ = fl._f.Seek(offset, io.SeekStart)
-	buf := make([]byte, size)
-	n, _ := fl._f.Read(buf)
+	data := make([]byte, size)
+	n, _ := fl._f.Read(data)
 	fl.bytesRead += n
 	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
-	return buf, nil
+	return data, nil
 }
 
 // reads bytes from reader and returns them in network byte order (big endian)

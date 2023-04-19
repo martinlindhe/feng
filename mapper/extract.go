@@ -32,8 +32,8 @@ func (fl *FileLayout) Extract(outDir string) error {
 
 		for _, field := range layout.Fields {
 			filename := ""
-			if field.Filename != "" {
-				filename = field.Filename
+			if field.Outfile != "" {
+				filename = field.Outfile
 			}
 
 			switch field.Format.Kind {
@@ -63,7 +63,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 
 				var b bytes.Buffer
 
-				data, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+				data, err := fl.peekBytes(&field)
 
 				switch field.Format.Kind {
 				case "compressed:lzo1x":

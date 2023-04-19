@@ -4,7 +4,9 @@ import (
 	"crypto/aes"
 	"encoding/binary"
 	"fmt"
+	"io"
 	"math"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -69,6 +71,9 @@ type FileLayout struct {
 
 	// bytes read, for debugging over-reading
 	bytesRead int
+
+	// bytes imported from external files, for debugging over-reading
+	bytesImported int
 }
 
 // pop last offset from previousOffsets list
@@ -155,7 +160,10 @@ type Field struct {
 	MatchedPatterns []value.MatchedPattern
 
 	// filename for the next output data
-	Filename string
+	Outfile string
+
+	// if set, data is imported from external file
+	ImportFile string
 }
 
 var (
@@ -188,7 +196,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		return ""
 	}
 
-	b, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+	b, err := fl.peekBytes(field)
 	if err != nil {
 		panic(err)
 	}
@@ -333,7 +341,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 		return ""
 	}
 
-	b, err := fl.peekBytes(int64(field.Offset), int64(field.Length))
+	b, err := fl.peekBytes(field)
 	if err != nil {
 		panic(err)
 	}
@@ -526,6 +534,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field) string {
 
 // renders lines of ascii to present the data field for humans
 func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) string {
+
 	kind := fl.PresentType(&field.Format)
 	if (field.Format.Kind != "vu32" && field.Format.Kind != "vu64") && field.Format.SingleUnitSize() > 1 {
 		// XXX hacky way of skipping variable length fields
@@ -541,9 +550,36 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 	if field.Length < maxLen {
 		maxLen = field.Length
 	}
-	data, err := fl.peekBytes(int64(field.Offset), maxLen)
-	if err != nil {
-		panic(err)
+
+	var data []byte
+	var err error
+
+	if field.ImportFile != "" {
+		size := field.Format.RangeVal
+		log.Info().Msgf("IMPORT: reading %d bytes from %06x in %s", size, field.Offset, field.ImportFile)
+
+		f, err := os.Open(field.ImportFile) // XXX use afero
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+
+		_, err = f.Seek(field.Offset, io.SeekStart)
+		if err != nil {
+			panic(err)
+		}
+
+		data = make([]byte, size)
+		_, err = f.Read(data)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+
+		data, err = fl.peekBytesMainFile(int64(field.Offset), maxLen)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	// convert to network byte order
@@ -692,7 +728,9 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 		res += "EOF\n"
 	}
 	res += fmt.Sprintf("TOTAL BYTES READ: %d\n", fl.bytesRead)
-
+	if fl.bytesImported > 0 {
+		res += fmt.Sprintf("TOTAL BYTES IMPORTED: %d\n", fl.bytesImported)
+	}
 	if len(fl.previousOffsets) != 0 {
 		res += fmt.Sprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
 	}
@@ -739,7 +777,7 @@ func (fl *FileLayout) reportUnmappedData() string {
 		}
 		lastOffset := ur.offset + ur.length - 1
 
-		rawData, _ := fl.peekBytes(ur.offset, end)
+		rawData, _ := fl.peekBytesMainFile(ur.offset, end)
 
 		if lastOffset != ur.offset {
 			res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, rawData, trail)
@@ -778,11 +816,15 @@ func (fl *FileLayout) MappedBytes() int64 {
 	count := int64(0)
 	for _, layout := range fl.Structs {
 		for _, field := range layout.Fields {
-			count += field.Length
+			if field.ImportFile == "" {
+				count += field.Length
+			}
 		}
 		for _, child := range layout.Children {
 			for _, field := range child.Fields {
-				count += field.Length
+				if field.ImportFile == "" {
+					count += field.Length
+				}
 			}
 		}
 	}
@@ -915,7 +957,7 @@ func (fl *FileLayout) GetValue(s string, df *value.DataField) (string, []byte, e
 			}
 
 			if !field.Format.IsSimpleUnit() || childName == "" {
-				data, err := fl.peekBytes(field.Offset, field.Length)
+				data, err := fl.peekBytes(&field)
 				if err != nil {
 					return "", nil, err
 				}

@@ -339,7 +339,7 @@ func presentStringValue(v string) string {
 func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
 
-	log.Debug().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
+	log.Info().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
 
 	// track iterator index while parsing
 	fs.Index = dfParent.Index
@@ -388,12 +388,12 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			log.Debug().Msgf("Endian set to '%s' at %06x", fl.endian, fl.offset)
 
 		case "encryption":
-			matches := strings.SplitN(es.Pattern.Value, " ", 2)
+			matches := strings.SplitN(es.Pattern.Value, ",", 2)
 			if len(matches) != 2 {
 				log.Fatal().Msgf("encryption: invalid value '%s'", es.Pattern.Value)
 			}
 
-			key, err := value.ParseHexString(matches[1])
+			key, err := value.ParseHexString(strings.TrimSpace(matches[1]))
 			if err != nil {
 				log.Fatal().Err(err).Msgf("can't parse encryption key hex string '%s'", matches[1])
 			}
@@ -402,7 +402,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				"aes_128_cbc": 16,
 			}
 
-			fl.encryptionMethod = matches[0]
+			fl.encryptionMethod = strings.TrimSpace(matches[0])
 			fl.encryptionKey = key
 
 			if val, ok := hashSize[fl.encryptionMethod]; ok {
@@ -414,6 +414,40 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			}
 
 			log.Info().Msgf("Encryption set to '%s' at %06x", fl.encryptionMethod, fl.offset)
+
+		case "import":
+			// import data block from another file
+			// syntax: import: type, offset, size, filename
+			matches := strings.SplitN(es.Pattern.Value, ",", 4)
+			kind := matches[0]
+			if kind != "raw:u8" { // TODO: handle more formats / refactor "import" with standard data types
+				log.Fatal().Msgf("import: unknown type '%s'", kind)
+			}
+
+			offset, err := fl.EvaluateExpression(matches[1], dfParent)
+			if err != nil {
+				return err
+			}
+			size, err := fl.EvaluateExpression(matches[2], dfParent)
+			if err != nil {
+				return err
+			}
+
+			filename, err := fl.EvaluateStringExpression(matches[3], dfParent)
+
+			es.Field.Kind = kind
+			es.Field.Range = fmt.Sprintf("%d", size)
+			es.Field.RangeVal = size
+			es.Field.Label = "import"
+
+			fs.Fields = append(fs.Fields, Field{
+				Offset:     offset,
+				Length:     size,
+				Format:     es.Field,
+				Endian:     fl.endian,
+				Outfile:    fl.filename,
+				ImportFile: filename,
+			})
 
 		case "filename":
 			// record filename to use for the next data output operation
@@ -502,11 +536,11 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				es.Field.Range = fmt.Sprintf("%d", len)
 				es.Field.Label = label
 				fs.Fields = append(fs.Fields, Field{
-					Offset:   fl.offset,
-					Length:   len,
-					Format:   es.Field,
-					Endian:   fl.endian,
-					Filename: fl.filename,
+					Offset:  fl.offset,
+					Length:  len,
+					Format:  es.Field,
+					Endian:  fl.endian,
+					Outfile: fl.filename,
 				})
 				fl.offset += len
 			}
@@ -575,7 +609,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				Length:          totalLength,
 				Format:          es.Field,
 				Endian:          endian,
-				Filename:        fl.filename,
+				Outfile:         fl.filename,
 				MatchedPatterns: matchPatterns,
 			})
 			fl.offset += totalLength
@@ -587,11 +621,11 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
-				Offset:   fl.offset,
-				Length:   len,
-				Format:   es.Field,
-				Endian:   fl.endian,
-				Filename: fl.filename,
+				Offset:  fl.offset,
+				Length:  len,
+				Format:  es.Field,
+				Endian:  fl.endian,
+				Outfile: fl.filename,
 			})
 			fl.offset += len
 
@@ -602,11 +636,11 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
-				Offset:   fl.offset,
-				Length:   len,
-				Format:   es.Field,
-				Endian:   fl.endian,
-				Filename: fl.filename,
+				Offset:  fl.offset,
+				Length:  len,
+				Format:  es.Field,
+				Endian:  fl.endian,
+				Outfile: fl.filename,
 			})
 			fl.offset += len
 
@@ -617,11 +651,11 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
 			fs.Fields = append(fs.Fields, Field{
-				Offset:   fl.offset,
-				Length:   len,
-				Format:   es.Field,
-				Endian:   fl.endian,
-				Filename: fl.filename,
+				Offset:  fl.offset,
+				Length:  len,
+				Format:  es.Field,
+				Endian:  fl.endian,
+				Outfile: fl.filename,
 			})
 			fl.offset += len
 
@@ -632,11 +666,11 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			}
 			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{
-				Offset:   fl.offset,
-				Length:   len,
-				Format:   es.Field,
-				Endian:   fl.endian,
-				Filename: fl.filename,
+				Offset:  fl.offset,
+				Length:  len,
+				Format:  es.Field,
+				Endian:  fl.endian,
+				Outfile: fl.filename,
 			})
 			fl.offset += len
 
@@ -647,11 +681,11 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			}
 			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{
-				Offset:   fl.offset,
-				Length:   len,
-				Format:   es.Field,
-				Endian:   fl.endian,
-				Filename: fl.filename,
+				Offset:  fl.offset,
+				Length:  len,
+				Format:  es.Field,
+				Endian:  fl.endian,
+				Outfile: fl.filename,
 			})
 			fl.offset += len
 
@@ -665,11 +699,11 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 
 			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{
-				Offset:   fl.offset,
-				Length:   len,
-				Format:   es.Field,
-				Endian:   fl.endian,
-				Filename: fl.filename,
+				Offset:  fl.offset,
+				Length:  len,
+				Format:  es.Field,
+				Endian:  fl.endian,
+				Outfile: fl.filename,
 			})
 			fl.offset += len
 

@@ -39,7 +39,7 @@ structs:
     # TODO: uses "ice" encryption, see https://github.com/kukdh1/PAZ-Unpacker/blob/master/Crypt.cpp
 
     # old encryption:
-    #encryption: aes_128_cbc F3 A1 0D F2 47 CC 30 C5 EB 11 12 AE 07 01 52 13
+    #encryption: aes_128_cbc, F3 A1 0D F2 47 CC 30 C5 EB 11 12 AE 07 01 52 13
 
     raw:u8[self.Size] Data: ??
     offset: restore

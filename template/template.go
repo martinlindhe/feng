@@ -40,6 +40,9 @@ type Template struct {
 	// if template lacks magic bytes
 	NoMagic bool `yaml:"no_magic"`
 
+	// the format uses more than one data file
+	MultiFile bool `yaml:"multi_file"`
+
 	// magic id:s
 	Magic []Magic
 
@@ -270,7 +273,7 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 
 		case string:
 			switch field.Kind {
-			case "endian", "data", "label", "offset", "filename", "parse", "until", "encryption":
+			case "endian", "data", "label", "offset", "filename", "parse", "until", "encryption", "import":
 				pattern := value.DataPattern{Known: true, Value: val}
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 

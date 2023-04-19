@@ -98,7 +98,6 @@ ascii[2] Magic:    c'PK'
 u16 TYPE: 00 01 ff
 ```
 
-Hex byte strings is always expressed in network byte order
 
 
 # Built-in functions
@@ -196,7 +195,7 @@ Mark an area to be decrypted.
 
 ```yaml
     u32 Size: ??
-    encryption: aes_128_cbc 00 11 22 33 44 55 66 77 00 11 22 33 44 55 66 77
+    encryption: aes_128_cbc, 00 11 22 33 44 55 66 77 00 11 22 33 44 55 66 77
     encrypted:u8[self.Size] Data: ??
 ```
 
@@ -281,4 +280,15 @@ u16 Flags:
 
 if self.Flags & ReservePresent:
   u16 cbCFHeader: ??
+```
+
+
+# Multi-file formats
+
+You can import data from external files like this:
+
+```yaml
+u32 Offset: ??
+u32 Size: ??
+import: raw:u8, self.Offset, self.Size, no_ext(FILE_NAME) + ".arc"
 ```

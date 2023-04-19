@@ -20,8 +20,6 @@
 
 HI: ability to parse and use additional templates in a user folder
 
-HI: for no_magic formats: match on input file extension, or force by cli arg
-
 feng printout: show complete printout of all hex values in long arrays with an cli option (default to show only 1st)
 
 logging: use something better
