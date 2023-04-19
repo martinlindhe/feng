@@ -3,6 +3,7 @@ package mapper
 import (
 	"fmt"
 	"math"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -344,6 +345,17 @@ func (fl *FileLayout) evalCleanString(args ...interface{}) (interface{}, error) 
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+func (fl *FileLayout) evalNoExt(args ...interface{}) (interface{}, error) {
+	// 1 arg: name of variable. return filename without extension
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if s, ok := args[0].(string); ok {
+		return strings.TrimSuffix(s, filepath.Ext(s)), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
 func (fl *FileLayout) evalBitSet(args ...interface{}) (interface{}, error) {
 	// 2 args: 1) field name 2) bit
 	// returns bool true if bit is set
@@ -473,6 +485,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		}
 	}
 	evalVariables["FILE_SIZE"] = int(fl.size)
+	evalVariables["FILE_NAME"] = fl._f.Name()
 
 	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
 
@@ -492,6 +505,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["sevenbitstring"] = fl.evalSevenBitString
 	functions["bitset"] = fl.evalBitSet
 	functions["cleanstring"] = fl.evalCleanString
+	functions["no_ext"] = fl.evalNoExt
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
 		if DEBUG_EVAL {

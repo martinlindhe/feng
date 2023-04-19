@@ -11,7 +11,7 @@ references:
   - xxx
 
 kind: archive
-name: theHunter Classic tab
+name: theHunter Classic tab archive
 extensions: [.tab]
 endian: little
 
@@ -21,12 +21,16 @@ structs:
   header:
     u32 Unk1: ?? # 2048
 
+    # XXX 1: open "basename.arc" as 2nd file. need filename available as script constant
+    # XXX 2: special tag to read X data from 2nd file...
+
   entry:
     u32 Checksum: ?? # XXX algo
     u32 Offset: ?? # XXX offset in the .arc file
     u32 Size: ??
     u32 Unk2: ?? # 0 or 1.  1 = maybe encrypted?
+    label: no_ext(FILE_NAME) + ".arc"
 
 layout:
   - header Header
-  - entry[] Entry
+  - entry[6] Entry

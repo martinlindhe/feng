@@ -28,7 +28,7 @@ type FileLayout struct {
 	// current endian ("big", "little")
 	endian string
 
-	// current output data filename
+	// filename for the current output data
 	filename string
 
 	// current offset

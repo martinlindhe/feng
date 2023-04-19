@@ -78,11 +78,12 @@ magic:
 ```
 
 
-# Pre-defined values
+# Pre-defined constants
 
 ```yaml
-FILE_SIZE           # the file size in bytes
-OFFSET              # current offset
+FILE_SIZE           # int: the file size in bytes
+FILE_NAME           # string: the opened filename, with full path
+OFFSET              # int: current offset
 self                # evaluates to the current struct
 self.index          # slice-based iteration index, 0-based
 ```
@@ -115,7 +116,7 @@ either(self.Value, 4, 5) = false   returns true if self.Value is either 4 or 5
 sevenbitstring(self.Filename) = "chars"  returns string value of input field as 7bit ascii (masking off bit7)
 bitset(self.Value, 7) = true   returns true if bit 7 of self.Value is set
 cleanstring("self.Value") = "chars" cleans input ascii string, terminates at first nul byte
-
+no_ext("hello.ext")    = "hello", return input string (filename) without extension
 
 # Data types
 
