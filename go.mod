@@ -11,7 +11,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.17
 	github.com/pkg/errors v0.9.1
 	github.com/rasky/go-lzo v0.0.0-20200203143853-96a758eda86e
-	github.com/rs/zerolog v1.29.0
+	github.com/rs/zerolog v1.29.1
 	github.com/spf13/afero v1.9.5
 	github.com/stretchr/testify v1.8.1
 	github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade

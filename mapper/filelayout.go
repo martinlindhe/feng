@@ -171,7 +171,7 @@ var (
 )
 
 const (
-	maxHexDisplayLength = 0x20
+	maxHexDisplayLength = 10
 )
 
 func prettyFloat(f float32) string {
@@ -199,12 +199,6 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	b, err := fl.peekBytes(field)
 	if err != nil {
 		panic(err)
-	}
-
-	// convert to network byte order
-	unitLength, _ := fl.GetAddressLengthPair(&field.Format)
-	if unitLength > 1 && field.Endian == "little" {
-		b = value.ReverseBytes(b, int(unitLength))
 	}
 
 	switch field.Format.Kind {
@@ -332,24 +326,13 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 }
 
 // presents the value of the data type (field.Format.Kind) in a human-readable form
-func (fl *FileLayout) PresentFieldValue(field *Field) string {
+func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 		"compressed:lzf", "compressed:zlib", "compressed:gzip",
 		"raw:u8", "encrypted:u8":
 		return ""
-	}
-
-	b, err := fl.peekBytes(field)
-	if err != nil {
-		panic(err)
-	}
-
-	// convert to network byte order
-	unitLength, _ := fl.GetAddressLengthPair(&field.Format)
-	if unitLength > 1 && field.Endian == "little" {
-		b = value.ReverseBytes(b, int(unitLength))
 	}
 
 	switch field.Format.Kind {
@@ -545,8 +528,7 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 		}
 	}
 
-	// only read up to 32 bytes
-	maxLen := int64(32)
+	maxLen := int64(maxHexDisplayLength)
 	if field.Length < maxLen {
 		maxLen = field.Length
 	}
@@ -555,8 +537,7 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 	var err error
 
 	if field.ImportFile != "" {
-		size := field.Format.RangeVal
-		log.Info().Msgf("IMPORT: reading %d bytes from %06x in %s", size, field.Offset, field.ImportFile)
+		log.Info().Msgf("IMPORT PEEK: reading %d bytes from %06x in %s", maxLen, field.Offset, field.ImportFile)
 
 		f, err := os.Open(field.ImportFile) // XXX use afero
 		if err != nil {
@@ -569,8 +550,9 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 			panic(err)
 		}
 
-		data = make([]byte, size)
-		_, err = f.Read(data)
+		data = make([]byte, maxLen)
+		n, err := f.Read(data)
+		fl.bytesImported += n
 		if err != nil {
 			panic(err)
 		}
@@ -587,8 +569,7 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 	if unitLength > 1 && field.Endian == "little" {
 		data = value.ReverseBytes(data, int(unitLength))
 	}
-
-	fieldValue := strings.TrimRight(fl.PresentFieldValue(field), " ")
+	fieldValue := strings.TrimRight(fl.PresentFieldValue(field, data), " ")
 
 	res := ""
 	if !cfg.ShowInDecimal {
@@ -906,7 +887,12 @@ func (fl *FileLayout) MatchedValue(s string, df *value.DataField) (string, error
 	for _, field := range str.Fields {
 		if field.Format.Label == fieldName {
 			if len(field.MatchedPatterns) == 0 {
-				return fl.PresentFieldValue(&field), nil
+				b, err := fl.peekBytes(&field)
+				if err != nil {
+					panic(err)
+				}
+
+				return fl.PresentFieldValue(&field, b), nil
 			}
 			for _, child := range field.MatchedPatterns {
 				log.Trace().Msgf("MatchedValue: %s => %s", fieldName, child.Label)

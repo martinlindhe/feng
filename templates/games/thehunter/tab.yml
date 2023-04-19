@@ -21,13 +21,12 @@ structs:
     u32 Unk1: ?? # 2048
   entry:
     u32 Checksum: ?? # XXX algo
-    u32 Offset: ?? # XXX offset in the .arc file
-    u32 Size: ?? # XXX size of data in the .arc file
+    u32 Offset: ??
+    u32 Size: ??
     u32 Unk2: ?? # 0 or 1.  1 = maybe encrypted?
 
     import: raw:u8, self.Offset, self.Size, no_ext(FILE_NAME) + ".arc"
 
 layout:
   - header Header
-  - entry[4] Entry # XXX slice of entries
-
+  - entry[] Entry

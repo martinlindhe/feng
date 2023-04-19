@@ -56,11 +56,11 @@ func (fl *FileLayout) peekU8(offset int64) (uint8, error) {
 }
 
 // returns a slice of bytes from file, otherwise unmodified
-func (fl *FileLayout) peekBytes(field *Field) ([]uint8, error) {
+func (fl *FileLayout) peekBytes(field *Field) (b []byte, err error) {
 
 	if field.ImportFile != "" {
 		size := field.Format.RangeVal
-		log.Info().Msgf("IMPORT: reading %d bytes from %06x in %s", size, field.Offset, field.ImportFile)
+		log.Info().Msgf("IMPORT % 2d bytes from %06x in %s", size, field.Offset, field.ImportFile)
 
 		f, err := os.Open(field.ImportFile) // XXX use afero
 		if err != nil {
@@ -73,18 +73,24 @@ func (fl *FileLayout) peekBytes(field *Field) ([]uint8, error) {
 			return nil, err
 		}
 
-		data := make([]byte, size)
-		n, err := f.Read(data)
+		b = make([]byte, size)
+		n, err := f.Read(b)
 		fl.bytesImported += n
-
-		return data, err
+	} else {
+		b, err = fl.peekBytesMainFile(field.Offset, field.Length)
 	}
-	return fl.peekBytesMainFile(field.Offset, field.Length)
+
+	// convert to network byte order
+	unitLength, _ := fl.GetAddressLengthPair(&field.Format)
+	if unitLength > 1 && field.Endian == "little" {
+		b = value.ReverseBytes(b, int(unitLength))
+	}
+	return b, nil
 }
 
 func (fl *FileLayout) peekBytesMainFile(offset int64, size int64) ([]uint8, error) {
 	if DEBUG_READ {
-		log.Info().Msgf("Reading % 2d from %06x (PEEK)", size, offset)
+		log.Info().Msgf("PEEK % 2d from %06x", size, offset)
 	}
 	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
 	if err != nil {
@@ -110,7 +116,7 @@ func (fl *FileLayout) readBytes(totalLength, unitLength int64, endian string) ([
 
 	val := make([]byte, totalLength)
 	if DEBUG_READ {
-		log.Info().Msgf("Reading % 2d from %06x (READ)", totalLength, fl.offset)
+		log.Info().Msgf("READ % 2d from %06x", totalLength, fl.offset)
 	}
 	if _, err := io.ReadFull(fl._f, val); err != nil {
 		return nil, err

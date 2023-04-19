@@ -437,7 +437,6 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 
 			es.Field.Kind = kind
 			es.Field.Range = fmt.Sprintf("%d", size)
-			es.Field.RangeVal = size
 			es.Field.Label = "import"
 
 			fs.Fields = append(fs.Fields, Field{
