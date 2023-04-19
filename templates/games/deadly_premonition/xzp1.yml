@@ -1,0 +1,25 @@
+# STATUS: 100%
+
+# Used in:
+# Deadly Premonition DC (PS3)
+
+kind: game
+name: Deadly Premonition XZP1 file
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XZP1'
+
+structs:
+  header:
+    ascii[4] Signature: c'XZP1'
+    u32 FileSize: ??
+    u32 CompressedSize: ??
+    u32 ExpandedSize: ??
+    filename: 'basename(FILE_NAME)'
+    compressed:zlib[self.CompressedSize] Data: ??
+
+layout:
+  - header Header
+

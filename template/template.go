@@ -287,6 +287,9 @@ func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 			}
 
+		case nil:
+			continue
+
 		default:
 			log.Fatal().Msgf("cant handle type '%T' in '%#v'", val, v)
 		}

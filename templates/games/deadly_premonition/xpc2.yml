@@ -1,0 +1,41 @@
+# STATUS: 80%
+
+# Used in:
+# Deadly Premonition DC (PS3)
+
+kind: game
+name: Deadly Premonition XPC2 file
+extensions: [.xpc]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XPC2'
+
+structs:
+  header:
+    ascii[4] Signature: c'XPC2'
+    u32 MaybeCount: ?? # some count or size
+    u32 Unk1: ?? #
+    u32 Unk2: ?? # 1
+    u32 Unk3: ?? # 1
+    u32[2] Unk4: ?? # 0, 0
+    u32 Unk5: ?? # 0
+    u32 Unk6: ?? # 64
+    u32 Unk7: ?? # 96
+    u64 Unk8: ?? # 0
+    u64 Unk9: ?? # 0
+    u64 Unk10: ?? # 0
+    ascii[16] Filename: ??
+    filename: self.Filename
+
+    u32 Huh1: ??
+    u32 CompressedSize: ??
+    u32 Huh2: ??
+    u32 ExpandedSize: ??
+
+    compressed:zlib[self.CompressedSize] Data: ??
+
+layout:
+  - header Header
+

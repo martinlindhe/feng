@@ -35,12 +35,29 @@ var (
 func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
 
 	if df.Kind == "offset" {
+
+		if df.Label == "restore" {
+			previousOffset := fl.popLastOffset()
+			if DEBUG_OFFSET {
+				log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, previousOffset)
+			}
+			fl.offset = previousOffset
+			_, err := rr.Seek(int64(fl.offset), io.SeekStart)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+
 		// offset directive in top-level layout
 		v, err := fl.EvaluateExpression(df.Label, df)
 		if err != nil {
 			return err
 		}
+		previousOffset := fl.pushOffset()
+
 		fl.offset = v
+		log.Debug().Msgf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, df.Label)
 		_, err = rr.Seek(int64(v), io.SeekStart)
 		if err != nil {
 			return err

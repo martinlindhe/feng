@@ -1,0 +1,50 @@
+# STATUS: 70%
+
+# Used in:
+# Castlevania: Harmony of Despair (PS3)
+
+# TODO MAX: map filenames to output entries
+
+kind: archive
+name: "Castlevania: Harmony of Despair archive"
+extensions: [.arc]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 19 75 11 20
+
+structs:
+  header:
+    u8[4] Signature: 19 75 11 20
+    u32 MaybeVersion: ?? # 1
+    u32 EntryCount: ??
+    u32 Reserved: ?? # 0
+
+    u32 NameTableOffset: ??
+
+  entry:
+    u32 Offset: ??
+    u32 ExpandedSize: ??
+    u32 Size: ??
+    if self.index < Header.EntryCount - 1:
+      # This field is absent on the last entry in sample files (overlaps with name table start)
+      u32 Unknown: ??
+
+    offset: self.Offset
+    compressed:zlib[self.Size] Data: ??
+    u8[alignment(self.Size, 16)] Padding: ??
+    offset: restore
+
+  name:
+    asciiz Name: ??
+
+layout:
+  - header Header
+
+  - offset Header.NameTableOffset
+  - name[Header.EntryCount] Name
+  - offset restore
+
+  - entry[Header.EntryCount] Entry
+

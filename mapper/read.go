@@ -223,7 +223,9 @@ func (fl *FileLayout) readBytesUntilMarkerByte(marker byte) ([]byte, error) {
 	res := []byte{}
 
 	for {
-		log.Info().Msgf("Reading % 2d (READ UNTIL MARKER %02x)", len(b), marker)
+		if DEBUG_READ {
+			log.Info().Msgf("Reading % 2d (READ UNTIL MARKER %02x)", len(b), marker)
+		}
 
 		n, err := io.ReadFull(fl._f, b)
 		if err != nil {

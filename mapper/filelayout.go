@@ -708,9 +708,11 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	} else {
 		res += "EOF\n"
 	}
-	res += fmt.Sprintf("TOTAL BYTES READ: %d\n", fl.bytesRead)
+
+	res += "\n---\n"
+	res += fmt.Sprintf("BYTES READ: %d\n", fl.bytesRead)
 	if fl.bytesImported > 0 {
-		res += fmt.Sprintf("TOTAL BYTES IMPORTED: %d\n", fl.bytesImported)
+		res += fmt.Sprintf("BYTES IMPORTED: %d\n", fl.bytesImported)
 	}
 	if len(fl.previousOffsets) != 0 {
 		res += fmt.Sprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)

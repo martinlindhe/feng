@@ -1,0 +1,25 @@
+# STATUS: 100%
+
+# Used in:
+# Deadly Premonition DC (PS3) _FLINK/DPSERIAL.*
+
+kind: archive
+name: Deadly Premonition flink
+extensions: [.001, .002, .003]
+endian: little
+
+no_magic: true
+
+structs:
+  entry:
+    ascii[256] Filename: ?? # zero-terminated and filled with 0xCC
+    filename: self.Filename
+    u32 Length: ??
+    raw:u8[self.Length] Data: ??
+    if alignment(self.Length, 16) == 0:
+      u8[16] Padding: ??
+    else:
+      u8[alignment(self.Length, 16)] Padding: ??
+
+layout:
+  - entry[] Entry
