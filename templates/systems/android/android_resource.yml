@@ -46,7 +46,7 @@ structs:
       eq 0201: TYPE_TABLE_TYPE
       eq 0202: TYPE_TABLE_TYPE_SPEC
       eq 0203: TYPE_TABLE_LIBRARY
-      default: invalid
+      #default: invalid
     u16 Header size: ??
     u32 Size: ??
 

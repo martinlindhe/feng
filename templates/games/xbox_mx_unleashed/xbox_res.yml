@@ -37,8 +37,8 @@ structs:
     u32 FilenameCount: ??
 
   filename_entry:
-    u32 DataOffset: ?? # XXX Offset of file data start from right after this variable's position 
-    
+    u32 DataOffset: ?? # XXX Offset of file data start from right after this variable's position
+
     u32 FilenameSize: ??
     ascii[self.FilenameSize] FileName: ??
 

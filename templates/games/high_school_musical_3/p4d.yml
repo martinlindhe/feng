@@ -1,0 +1,70 @@
+# STATUS: 1%
+
+# Used in:
+# Disney High School Musical 3: Senior Year Dance (2008) PS2
+
+# Unconfirmed:
+# Disney Channel All-Star Party
+
+references:
+  - https://old.reddit.com/r/REGames/comments/mbom1h/trying_to_edit_files_from_a_ps2_disk_please_help/
+  - https://forum.xentax.com/viewtopic.php?t=7272
+
+software:
+  - offzip
+
+kind: game
+name: "Disney High School Musical 3: Senior Year Dance p4d file"
+extensions: [.p4d]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 01 b6 40 02
+
+structs:
+  header:
+    u8[4] Signature: 01 b6 40 02
+    u32 u1: ?? # various
+    u32 u2: ?? # 1
+    u32 u3: ?? # 0x16 or 0x14
+
+    u32 u4: ?? # 03 or 2b
+    u32 u5: ?? # 5
+    u32 u6: ?? # 6
+    u32 u7: ?? # 0
+
+    u32 u8: ?? # 00 00 08 00
+    u32 u9: ?? # 00 00 80 00
+
+    # XXX what follows is some table with text
+
+
+layout:
+  - header Header
+
+# XXX
+# loc_ls.p4d has 855 zlib blocks according to binwalk
+
+
+#binwalk loc_ls.p4d
+#8256          0x2040          Zlib compressed data, default compression
+#90176         0x16040         Zlib compressed data, default compression
+#172096        0x2A040         Zlib compressed data, default compression
+#260160        0x3F840         Zlib compressed data, default compression
+#348224        0x55040         Zlib compressed data, default compression
+#...
+
+#binwalk wrap.p4d
+#90176         0x16040         Zlib compressed data, default compression
+#114752        0x1C040         Zlib compressed data, default compression
+#129088        0x1F840         Zlib compressed data, default compression
+#217152        0x35040         Zlib compressed data, default compression
+#299072        0x49040         Zlib compressed data, default compression
+#477248        0x74840         Zlib compressed data, default compression
+#479296        0x75040         Zlib compressed data, default compression
+#481344        0x75840         Zlib compressed data, default compression
+#483392        0x76040         Zlib compressed data, default compression
+#485440        0x76840         Zlib compressed data, default compression
+#487488        0x77040         Zlib compressed data, default compression
+#489536        0x77840         Zlib compressed data, default compression

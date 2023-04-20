@@ -171,7 +171,7 @@ var (
 )
 
 const (
-	maxHexDisplayLength = 10
+	maxHexDisplayLength = 12
 )
 
 func prettyFloat(f float32) string {
@@ -701,7 +701,6 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 		unmapped := fl.size - mappedBytes
 		unmappedPct := (float64(unmapped) / float64(fl.size)) * 100
 		res += fmt.Sprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
-		res += fmt.Sprintf("Total file size 0x%04x (%d)\n", fl.size, fl.size)
 	} else if mappedBytes > fl.size {
 		overflow := mappedBytes - fl.size
 		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
@@ -710,7 +709,11 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	}
 
 	res += "\n---\n"
-	res += fmt.Sprintf("BYTES READ: %d\n", fl.bytesRead)
+	res += fmt.Sprintf("FILE SIZE : %d (%06x)\n", fl.size, fl.size)
+
+	pctRead := (float64(fl.bytesRead) / float64(fl.size)) * 100
+
+	res += fmt.Sprintf("BYTES READ: %d (%.1f%%)\n", fl.bytesRead, pctRead) // XXX show bytes read in % of file size
 	if fl.bytesImported > 0 {
 		res += fmt.Sprintf("BYTES IMPORTED: %d\n", fl.bytesImported)
 	}

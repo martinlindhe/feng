@@ -1,0 +1,39 @@
+# STATUS: 1%
+
+# Used in:
+# Ultimate Spider-Man (2005) PS2
+
+# TODO MAX: figure out format
+
+references:
+  - http://aluigi.altervista.org/bms/ultimate_spider_man.bms
+  - https://forum.xentax.com/viewtopic.php?f=10&t=1765
+  - https://zenhax.com/viewtopic.php?t=8352
+  - https://zenhax.com/viewtopic.php?f=9&t=8352
+
+kind: archive
+name: Ultimate Spider-Man archive
+extensions: [.pak]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 0E 00 00 00 4D 02 00 00 2D 01 00 00 49 02 00 # XXX
+
+structs:
+  header:
+    # the first 20 bytes is same in all samples:
+    u32 u1: ?? #   0e
+    u32 u2: ?? # 024d
+    u32 u3: ?? # 012d
+    u32 u4: ?? # 0249
+    u32 u5: ?? # 0115
+    u32 u6: ?? # 0 or a value
+
+    u32 HeaderSize: ??        # 30
+    u32 DataOffset: ??        # XXX
+
+layout:
+  - header Header
+
+

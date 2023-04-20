@@ -166,24 +166,24 @@ func MapReader(f afero.File, ds *template.DataStructure, endian string) (*FileLa
 		endian = ds.Endian
 	}
 
-	fileLayout := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext, _f: f}
-	fileLayout.size = fileSize(f)
+	fl := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext, _f: f}
+	fl.size = fileSize(f)
 
 	if DEBUG {
 		log.Printf("mapping ds '%s'", ds.BaseName)
 	}
 
 	for _, df := range ds.Layout {
-		err := fileLayout.mapLayout(f, nil, ds, &df)
+		err := fl.mapLayout(f, nil, ds, &df)
 		if err != nil {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-				log.Error().Err(err).Msgf("mapLayout error processing %s", df.Label)
+				log.Error().Err(err).Msgf("mapLayout error processing %s at %06x", df.Label, fl.offset)
 			}
-			return &fileLayout, nil
+			return &fl, nil
 		}
 	}
 
-	return &fileLayout, nil
+	return &fl, nil
 }
 
 var (

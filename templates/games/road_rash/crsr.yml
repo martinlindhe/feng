@@ -1,0 +1,33 @@
+# STATUS: 1%
+#
+# Contain the sprites for the cars.
+#
+# Used in:
+# Road Rash (1996) Windows
+
+kind: game
+name: Road Rash car file
+extensions: [.car]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'CRSR'
+
+structs:
+  header:
+    ascii[4] Signature: c'CRSR'
+    u32 u1: ?? # 0x30
+    u32 u2: ?? # 2
+
+  tag:
+    ascii[4] ID: ?? # XXX c'LBTR
+    u32 MaybeNextOffset: ?? # 0x38   ... XXX offset at start of next block
+    u32 v2: ?? # 560
+    offset: self.MaybeNextOffset
+
+layout:
+  - header Header
+
+  - tag[2] Tag
+

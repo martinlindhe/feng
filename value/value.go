@@ -353,7 +353,7 @@ func (df *DataField) IsSimpleUnit() bool {
 func ReverseBytes(b []byte, unitLength int) []byte {
 
 	if len(b)%unitLength != 0 {
-		log.Fatal().Msgf("invalid input '%v', length %d", b, unitLength)
+		log.Fatal().Msgf("invalid input '%v' (len %d), unitLength %d", b, len(b), unitLength)
 	}
 
 	res := make([]byte, len(b))
