@@ -1,0 +1,52 @@
+# STATUS: 25%
+
+# Used in:
+# Castlevania: Harmony of Despair (PS3, XBox360) data/enemy/EnemyParam.dat
+
+kind: game
+name: "Castlevania: Harmony of Despair enemy param"
+extensions: [.dat]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'ENEM'
+
+structs:
+  header:
+    ascii[4] Signature: c'ENEM'
+    u32 MaybeVersion: ?? # 1
+    u32 EntryCount: ?? # 53
+
+  entry:
+    u32 u0: ?? # 4
+    u32 u1: ?? # 8
+    u32 Res1: ?? # 0
+    u32 u3: ?? # 8
+
+    u32 u4: ?? # 0, 6
+    u32 Res3: ?? # 0
+    u32 u6: ?? # 50
+    u32 u7: ?? # 00 04 00 c7
+
+    u32 Res4: ?? # 0
+    u32 u9: ?? # 00 06 00 1b
+    u32 uA: ?? # 4
+    u32 uB: ?? # 00 14 ff ff
+
+    u32 uC: ?? # ff f6 ff f6
+    u32 uD: ?? # ff f6 00 00
+    u32 Res5: ?? # 0
+    u32 uF: ?? # ff f6 00 32, 0
+
+    u32 v0: ?? # 00 00 ff 9c
+    u32 v1: ?? # 0x28
+    u32 v2: ?? # 00 14 00 00
+    u32 v3: ?? # 00 01 00 01
+
+    ascii[16] name: ??          # XXX len
+
+layout:
+  - header Header
+
+  - entry[Header.EntryCount] Entry

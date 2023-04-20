@@ -53,6 +53,12 @@
 ### Unpakke
 - http://www.nullsecurity.org/unpakke
 
+### Camoto
+online-only universal game modding tool
+- https://moddingwiki.shikadi.net/wiki/Camoto
+- https://camoto.shikadi.net/
+
+
 
 
 ### TODO evaluate rust relatives mentioned here

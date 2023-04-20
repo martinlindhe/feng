@@ -23,7 +23,7 @@ magic:
 
 structs:
   cnt_header:
-    u8[4] Signature: 7f c'CNT'
+    ascii[4] Signature: 7f c'CNT'
     u32 pkg_type: ??
     u32 pkg_0x008: ??
     u32 pkg_file_count: ??

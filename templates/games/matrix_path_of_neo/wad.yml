@@ -1,0 +1,38 @@
+# STATUS: 1%
+
+# Used in:
+# The Matrix: Path of Neo (PS2)
+
+references:
+  - https://wiki.xentax.com/index.php/The_Matrix_Path_Of_Neo_WAD
+  - https://forum.xentax.com/viewtopic.php?t=5608
+
+kind: game
+name: "The Matrix: Path of Neo WAD"
+extensions: [.wad]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 u0: ?? # ff ff ff ff
+    u32 FileListOffset: ?? # xxx
+
+  file:
+    i32 FileID: ?? # incremental from 0
+    i32 FileSize: ?? # XXX
+    u32 u0: ??
+    u32 u1: ??
+    #u8[1] Data: ??  # XXX
+    #u8[1] Padding: ?? # XXX
+
+    #if self.FileID == -1:     # XXX FIXME signed comparison fails ???
+    if self.FileID == 0xFFFFFFFF:
+      u8[0x8000 - 0x10] U: ??
+
+layout:
+  - header Header
+
+  - offset Header.FileListOffset
+  - file[2] File      # XXX parse all entries correctly

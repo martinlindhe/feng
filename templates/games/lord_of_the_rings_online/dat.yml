@@ -1,0 +1,61 @@
+# STATUS: 1%
+
+# In-house format by Turbine
+
+# Used in:
+# Lord of the Rings Online
+# Dungeons & Dragons Online
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=2944
+
+software:
+  - https://lotrounpacker.ucoz.com/load/dat_unpacker_tool/1-1-0-3
+
+kind: game
+name: "Lord of the Rings Online DAT archive"
+extensions: [.dat, .datx]
+endian: little
+
+magic:
+  - offset: 0100
+    match: 00 c'PL' 00  # XXX unsure if magic marker
+  - offset: 0140
+    match: c'BT' 00 00
+
+structs:
+  header:
+    u8[0x100] u0: ?? # 0
+    ascii[4] Signature: 00 c'PL' 00 # XXX unsure if signature
+    u8[0x3c] u1: ?? # 0
+    ascii[4] Signature2: c'BT' 00 00 # XXX unsure if signature
+
+    u32 v1: ??
+    u32 v2: ??
+    u32 v3: ??
+    u32 v4: ?? # 1
+    u32 MaybeChecksum: ?? # XXX
+    u32 v5: ?? # 0
+    u32 v6: ?? # 1
+    u32 MaybeChecksum2: ?? # XXX
+    u32 z0: ?? # 0
+    u32 z1: ?? # 0
+    u32 z2: ?? # 0
+    u32 z3: ?? # 0
+    u32 v7: ?? # 0x70
+    u32 z4: ?? # 0
+    u8[16] MaybeChecksum3: ?? # XXX
+    u32 v8: ??
+    u32 v9: ?? # 0x68
+    u32 vA: ?? # 0x20
+    u32 vB: ?? # 8
+    u32 vC: ?? #
+    u32 vD: ??
+    u32 vF: ??
+
+    u8[0x450] MaybePadding: ?? # 0
+
+    # follows is more data.. looks like a table
+
+layout:
+  - header Header

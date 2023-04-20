@@ -61,10 +61,10 @@ func main() {
 	var err error
 
 	f, err := fs.Open(args.Filename)
-	defer f.Close()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to open %s.", args.Filename)
 	}
+	defer f.Close()
 
 	if args.Template != "" {
 		fl, err = mapper.MapFileToGivenTemplate(f, args.Offset, args.Filename, args.Template)

@@ -1,0 +1,166 @@
+# STATUS: 20%
+
+# Format used on XBox 360 for XBLA titles
+
+# TODO MAX: continue parsing, see https://free60.org/System-Software/Formats/STFS/#live-pirs
+
+# TODO:
+# read v2 fields, need sample:
+#  0x541A 	0x300 (each 0x80 = different locale) 	image 	Additional Display Names
+#  0x941A 	0x300 (each 0x80 = different locale) 	image 	Additional Display Descriptions
+
+references:
+  - https://free60.org/System-Software/Formats/STFS/#live-pirs
+  - https://github.com/rene0/xbox360/blob/master/extract360.py
+
+software:
+  - https://github.com/Gualdimar/Velocity  # paru -S velocity-xbox360-git
+  - http://gael360.free.fr/wxPirs.php
+
+kind: system
+name: XBox 360 LIVE file
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'LIVE'
+
+  # XXX 'PIRS' header also exists, need sample
+
+structs:
+  header:
+    ascii[4] Signature: c'LIVE'
+    u8[0x100] Package Signature: ??
+    u8[0x128] Padding: ??
+
+    u8[0x100] License entries: ?? # XXX
+    u8[0x14] Header SHA1 Hash: ?? # XXX from 0x344 to first hash table
+    u32 HeaderSize: ??
+    u32 ContentType:
+      eq 00000001: 	Saved Game
+      eq 00000002: Marketplace Content
+      eq 00000003: Publisher
+      eq 00001000: Xbox 360 Title
+      eq 00002000: IPTV Pause Buffer
+      eq 00004000: Installed Game
+      eq 00005000: Xbox Original Game
+      eq 00005000: Xbox Title
+      eq 00007000: Game on Demand
+      eq 00009000: Avatar Item
+      eq 00010000: Profile
+      eq 00020000: Gamer Picture
+      eq 00030000: Theme
+      eq 00040000: Cache File
+      eq 00050000: Storage Download
+      eq 00060000: Xbox Saved Game
+      eq 00070000: Xbox Download
+      eq 00080000: Game Demo
+      eq 00090000: Video
+      eq 000A0000: Game Title
+      eq 000B0000: Installer
+      eq 000C0000: Game Trailer
+      eq 000D0000: Arcade Title
+      eq 000E0000: XNA
+      eq 000F0000: License Store
+      eq 00100000: Movie
+      eq 00200000: TV
+      eq 00300000: Music Video
+      eq 00400000: Game Video
+      eq 00500000: Podcast Video
+      eq 00600000: Viral Video
+      eq 02000000: Community Game
+
+    u32 MetadataVersion: ?? # XXX 1 or 2 ...
+
+    u64 ContentSize: ??
+    u32 MediaID: ??
+    u32 Version: ?? # system/title updates
+    u32 BaseVersion: ?? # system/title updates
+    u32 TitleID: ??
+    u8 Platform:
+      eq 02: Xbox 360
+      eq 04: PC
+      #default: unseen    XXX make work
+    u8 Executable Type: ?? # XXX map
+    u8 Disc number: ??
+    u8 Disc in set: ??
+    u32 SaveGameID: ??
+    u8[5] ConsoleID: ??
+    u8[8] ProfileID: ??
+    u8[0x24] Volume descriptor: ??
+    u32 FileCount: ??  # XXX
+    u64 FileCombinedSize: ??
+    u32 DescriptorType:
+      eq 00: STFS
+      eq 01: SVOD
+    u32 Reserved: ??
+    if self.MetadataVersion == 1:
+      u8[0x4c] Padding: ??
+    else:
+      u8[0x10] SeriesID: ??
+      u8[0x10] SeasonID: ??
+      u16 SeasonNumber: ??
+      u16 EpisodeNumber: ??
+      u8[0x28] Padding: ??
+
+    u8[0x14] DeviceID: ??
+    utf16[0x480] DisplayName: ??
+    utf16[0x480] DisplayDescription: ??
+    utf16[0x40] PublisherName: ??
+    utf16[0x40] TitleName: ??
+    u8 TransferFlags: ?? # XXX
+    u32 ThumbnailSize: ??
+    u32 TitleThumbnailSize: ??
+
+    filename: thumbnail.png
+    raw:u8[self.ThumbnailSize] ThumbnailData: ??
+    u8[alignment(self.ThumbnailSize, 8192)] Padding: ??
+
+    filename: title_thumbnail.png
+    raw:u8[self.TitleThumbnailSize] TitleThumbnailData: ??
+    u8[alignment(self.TitleThumbnailSize, 8192)] Padding: ??
+
+
+
+
+
+
+  detect:
+    offset: "0xc030"
+    u32 Num: ??
+
+    # default:
+    #pirs_offset = 0x2000
+    #pirs_start = 0xb000 + 0x2000
+
+    if self.Num == 0x434f4e20: # c'CON' 20
+      # PIRS TYPE 2:
+      #pirs_offset = 0x2000
+      #pirs_start = 0xc000
+
+    if self.Num == 65535:
+      # PIRS TYPE 1:
+      #pirs_offset = 0x1000
+      offset: 0xb000 + 0x1000
+
+
+  file:
+    ascii[32] Filename: ??
+    u32 u1: ??
+    u32 u2: ??
+    u32 u3: ?? # x
+    u32 u4: ?? # x
+    u32 u5: ?? # x
+    u32 u6: ?? #
+    u32 u7: ??
+
+layout:
+  - header Header
+
+  - detect Detect
+
+  - file File
+
+
+# Microsoft Xbox 360 package (Xbox Live) (XA-2682, media ID: 6480C08F), content type: Arcade Title
+

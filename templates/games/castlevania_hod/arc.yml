@@ -1,7 +1,7 @@
 # STATUS: 70%
 
 # Used in:
-# Castlevania: Harmony of Despair (PS3)
+# Castlevania: Harmony of Despair (PS3, XBox360)
 
 # TODO MAX: map filenames to output entries
 
@@ -33,7 +33,7 @@ structs:
 
     offset: self.Offset
     compressed:zlib[self.Size] Data: ??
-    u8[alignment(self.Size, 16)] Padding: ??
+    u8[alignment(self.Size, 64)] Padding: ??
     offset: restore
 
   name:
