@@ -1,0 +1,32 @@
+# STATUS: 1%
+
+# Used in:
+# Fury 3 (1995) Win95
+
+kind: game
+name: Fury 3 archive
+extensions: [.pod]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 FileCount: ??
+    ascii[0x50] Title: ??
+
+  file:
+    asciiz Filename: ??
+    asciiz VgaAct: ??
+    u8[32 - len("self.Filename") - len("self.VgaAct")] Padding: ??
+    u32 Size: ??
+    u32 Offset: ??
+
+    filename: self.Filename
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

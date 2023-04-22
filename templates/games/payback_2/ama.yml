@@ -1,0 +1,23 @@
+# STATUS: 1%
+
+# Used in:
+# Payback 2: The Battle Sandbox (2017) Android
+
+# TODO: figure out encryption
+
+kind: game
+name: "Payback 2: The Battle Sandbox sound"
+extensions: [.amct]
+endian: little
+
+magic:
+  - offset: 0000
+    match: D4 76 8E 4B
+
+structs:
+  header:
+    ascii[4] Signature: ??
+
+layout:
+  - header Header
+

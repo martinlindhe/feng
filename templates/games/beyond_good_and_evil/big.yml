@@ -1,0 +1,41 @@
+# STATUS: 1%
+
+# Used in:
+# Beyond Good and Evil (2003) PS2
+# Beyond Good and Evil HD (2011) PS3
+
+# TODO MAX: finish
+# TODO: maybe is a dual-file format with jade.spe being a index file
+
+kind: game
+name: Beyond Good and Evil archive
+extensions: [.bf]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BIG' 00
+
+structs:
+  header:
+    ascii[4] Signature: c'BIG' 00
+    u32 MaybeVersion: ?? # 0x22 = PS2 version, 0x25 = PS3 version
+    u32 MaybeSize1: ?? # XXX
+    u32 MaybeSize2: ?? # XXX
+    u32 u1: ?? # 0
+    u32 u2: ?? # 0
+    i32 u3: ?? # -1
+    i32 u4: ?? # -1
+
+    u32 MaybeSize3: ?? # XXX
+    u32 u6: ?? # 1
+
+  entry:
+    u32 o1: ?? # segment ?
+    u32 o2: ?? # offset ?
+
+layout:
+  - header Header
+
+  - offset 0x0040
+  - entry[4] Entry # XXX continue mapping

@@ -157,7 +157,7 @@ func (fl *FileLayout) Extract(outDir string) error {
 					log.Fatal().Msgf("unhandled type '%T'", field.Format.Kind) // unreachable
 				}
 
-				log.Debug().Msgf("Extracted %d bytes to %s", b.Len(), fullName)
+				log.Info().Msgf("Extracted %d bytes to %s", b.Len(), fullName)
 
 				err = os.WriteFile(fullName, b.Bytes(), 0644)
 				if err != nil {

@@ -252,7 +252,9 @@ func (fl *FileLayout) readBytesUntilMarkerSequence(chunkSize int64, search []byt
 
 	chunk := make([]byte, int(chunkSize)+len(search))
 
-	log.Info().Msgf("Reading % 2d (READ #1 UNTIL MARKER %02x)", len(chunk), search)
+	if DEBUG_READ {
+		log.Info().Msgf("Reading % 2d (READ #1 UNTIL MARKER %02x)", len(chunk), search)
+	}
 	n, err := fl._f.Read(chunk[:chunkSize])
 	fl.bytesRead += int(n)
 

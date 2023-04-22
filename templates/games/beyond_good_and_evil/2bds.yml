@@ -1,0 +1,43 @@
+# STATUS: 25%
+
+# Used in:
+# Beyond Good and Evil HD (2011) PS3   USRDIR/Shaders/ps3shaders.bin
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=10581
+
+kind: game
+name: Beyond Good and Evil HD archive
+extensions: [.bin]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'2BDS'
+
+structs:
+  header:
+    ascii[4] Signature: c'2BDS'
+    u32 u1: ?? # 09
+    u32 EntryCount: ??
+    u32 u3: ?? # 7f
+
+    u32 u4: ?? # 18
+    u32 u5: ?? # 00 01 60 a6        some offset or size XXX
+
+  entry:
+    ascii[64] Name: ??
+    u32 MaybeHash: ??
+    i32 u6: ?? # -1
+    u32 u7: ?? # 3
+    u32 Size: ??
+    raw:u8[self.Size] Data: ??
+
+layout:
+  - header Header
+
+  # these entries are .h and .hlsl source files
+  - entry[Header.EntryCount] Entry
+
+
+  # XXX more data follows

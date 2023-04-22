@@ -1,0 +1,59 @@
+# STATUS: 20%
+
+# Used in:
+# Rogue Galaxy (2005) PS2
+
+# TODO MAX: finish
+
+references:
+  - https://github.com/piorrro33/HD6Tools/blob/33473a6c7d2c9a5948c085e0ea57ff94f42d6fbf/src/main/java/com/github/piorrro33/hd6tools/operation/Extraction.java#L81
+
+software:
+  - https://github.com/piorrro33/HD6Tools
+  - http://asmodean.reverse.net/pages/exhd6.html
+
+kind: game
+name: Rogue Galaxy hd6 archive
+extensions: [.hd6]
+endian: little
+
+multi_file: true # File pair: .hd6 (entry list) and .dat (data)
+
+magic:
+  - offset: 0000
+    match: c'HD6' 00
+
+structs:
+  header:
+    ascii[4] Signature: c'HD6' 00
+    u32 NameChunkDataOffset: ??
+    u32 NameChunkDataSize: ??
+    u32 NameChunkCount: ??
+    u32 u1: ?? # 0
+    u32 FilenameTableOffset: ??
+    u32 FilenameTableSize: ??
+    u32 u2: ?? # 0
+    u32 u3: ?? # 16
+    u32 FileCount: ??
+    u32 FileOffset: ??
+    u32 u4: ?? # 0
+    u32 FileSize: ??
+
+  file_entry:
+    u32 MaybeChecksum: ??
+    u32 MaybeSize: ??
+    #import: raw:u8, self.Offset, self.Size, no_ext(FILE_NAME) + ".dat"
+
+layout:
+  - header Header
+
+  - offset Header.NameChunkDataOffset
+  #u8[self.NameChunkDataSize] NameChunkData: ?? # XXX map up
+
+  - offset Header.FilenameTableOffset
+  #u8[self.FilenameTableSize] FilenameTable: ?? # XXX map up
+
+  - offset Header.FileOffset
+  #- file_entry[Header.FileCount] FileEntry   # XXX very slow
+  - file_entry[30] FileEntry
+

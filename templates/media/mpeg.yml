@@ -12,7 +12,7 @@ software:
 
 kind: video
 name: MPEG sequence ("EVOB")
-extensions: [.vob, .evo, .mpg, .mpeg, .sfd] # .sfd is used on PS2
+extensions: [.vob, .evo, .mpg, .mpeg, .sfd, .m2v]
 mime: video/mpeg
 endian: big # XXX
 
@@ -20,9 +20,12 @@ magic:
   - offset: 0000
     match: 00 00 01 ba
 
+  - offset: 0000
+    match: 00 00 01 b3
+
 structs:
   header:
-    u8[4] Magic: 00 00 01 ba
+    u8[4] Magic: ??
     u8 Flags:
       bit b1000_0000: Unknown
       bit b0100_0000: ProgramMultiplex # 0 = System multiplex, 1 = Program multiplex

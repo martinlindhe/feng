@@ -12,14 +12,16 @@ endian: little # XXX
 
 magic:
   - offset: 0000
+    match: 5a 00 00 # XXX not proper magic
+  - offset: 0000
+    match: 5c 00 00 # XXX
+  - offset: 0000
     match: 5d 00 00 # XXX not proper magic
-  #- offset: 000d   # TODO can use this match check too but must be inclusive with the first match check
-  #  match: ff
 
 structs:
   header:
     # header is 13 bytes, then follows compressed data
-    u8 Magic: 5d
+    u8 Magic: ??
     u32 DictionarySize: ?? # XXX unsure
     i32 UncompressedSize: ?? # XXX: in some versions of this format, this field may be not present
 
