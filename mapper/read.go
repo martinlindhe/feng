@@ -9,9 +9,12 @@ import (
 
 	"github.com/martinlindhe/feng/value"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 )
 
 const DEBUG_READ = false
+
+var fs1 = afero.NewOsFs()
 
 func (fl *FileLayout) peekU32(offset int64) (uint32, error) {
 	prevOffset, err := fl._f.Seek(0, io.SeekCurrent)
@@ -55,8 +58,29 @@ func (fl *FileLayout) peekU8(offset int64) (uint8, error) {
 	return buf[0], nil
 }
 
+// returns a reader pointing to start of data for the given `Field`.
+func (fl *FileLayout) readerToField(field *Field) (r afero.File, err error) {
+
+	if field.ImportFile != "" {
+		size := field.Format.RangeVal
+		log.Info().Msgf("IMPORT % 2d bytes from %06x in %s", size, field.Offset, field.ImportFile)
+
+		f, err := fs1.Open(field.ImportFile)
+		if err != nil {
+			return nil, err
+		}
+		//		defer f.Close()
+
+		_, err = f.Seek(field.Offset, io.SeekStart)
+		return f, err
+	}
+
+	_, err = fl._f.Seek(field.Offset, io.SeekStart)
+	return fl._f, err
+}
+
 // returns a slice of bytes from file, otherwise unmodified
-func (fl *FileLayout) peekBytes(field *Field) (b []byte, err error) {
+func (fl *FileLayout) peekBytes(field *Field) (b []byte, err error) { // XXX deprecate, use readerToField and use io.Reader all over
 
 	if field.ImportFile != "" {
 		size := field.Format.RangeVal

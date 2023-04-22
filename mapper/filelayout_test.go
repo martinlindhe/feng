@@ -111,6 +111,7 @@ func mockFile(t *testing.T, filename string, data []byte) afero.File {
 	assert.Nil(t, err)
 	return f
 }
+
 func TestGetFieldOffset(t *testing.T) {
 	templateData := `
 structs:
