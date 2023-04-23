@@ -709,7 +709,7 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	}
 
 	res += "\n---\n"
-	res += fmt.Sprintf("FILE SIZE : %d (%06x)\n", fl.size, fl.size)
+	res += fmt.Sprintf("FILE SIZE : %d (%06x) %s\n", fl.size, fl.size, ByteCountSI(fl.size))
 
 	pctRead := (float64(fl.bytesRead) / float64(fl.size)) * 100
 
@@ -722,6 +722,19 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	}
 
 	return res
+}
+
+func ByteCountSI(b int64) string {
+	const unit = 1000
+	if b < unit {
+		return fmt.Sprintf("%d B", b)
+	}
+	div, exp := int64(unit), 0
+	for n := b / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "kMGTPE"[exp])
 }
 
 func (fl *FileLayout) reportOverlappingData() string {
