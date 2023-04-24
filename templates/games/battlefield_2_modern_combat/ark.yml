@@ -1,0 +1,35 @@
+# STATUS: 5%
+
+# Used in:
+# Battlefield 2: Modern Combat (2005) PS2
+
+# TODO MAX: finish
+
+reference:
+  - https://aluigi.altervista.org/bms/battlefield_2_modern_combat.bms
+
+kind: game
+name: "Battlefield 2: Modern Combat ARK archive"
+extensions: [.ark]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'ARK '
+
+structs:
+  header:
+    ascii[4] Signature: c'ARK '
+    u32 Version: ?? # 1
+
+    offset: FILE_SIZE - 0x800
+    u32 Offset: ??
+    u32 Size: ??
+
+    offset: self.Offset * 0x800
+    u32 FileCount: ??
+
+
+layout:
+  - header Header
+

@@ -1,0 +1,23 @@
+# STATUS: 1%
+
+# Used in:
+# Battlefield 2: Modern Combat (2005) PS2
+
+kind: game
+name: "Battlefield 2: Modern Combat snr1 file"
+extensions: [.rel]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'SNR1'
+
+structs:
+  header:
+    ascii[4] Signature: c'SNR1'
+    u32 u1: ?? # XXX
+    u32 u2: ?? # XXX
+    u32 u3: ?? # XXX
+
+layout:
+  - header Header

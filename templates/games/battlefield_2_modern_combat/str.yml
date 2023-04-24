@@ -1,0 +1,24 @@
+# STATUS: 1%
+
+# Used in:
+# Battlefield 2: Modern Combat (2005) PS2
+
+kind: game
+name: "Battlefield 2: Modern Combat str file"
+extensions: [.str]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'Str '
+
+structs:
+  header:
+    ascii[4] Signature: c'Str '
+    u32 u1: ?? # 1
+    u32 u2: ?? # XXX
+    u32 u3: ?? # XXX
+    u32 u4: ?? # XXX
+
+layout:
+  - header Header

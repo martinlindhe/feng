@@ -709,7 +709,7 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	}
 
 	res += "\n---\n"
-	res += fmt.Sprintf("FILE SIZE : %d (%06x) %s\n", fl.size, fl.size, ByteCountSI(fl.size))
+	res += fmt.Sprintf("FILE SIZE : %d / 0x%06x / %s\n", fl.size, fl.size, ByteCountSI(fl.size))
 
 	pctRead := (float64(fl.bytesRead) / float64(fl.size)) * 100
 
@@ -748,7 +748,6 @@ func (fl *FileLayout) reportUnmappedData() string {
 	r := dataRange{offset: -1}
 	log.Info().Msgf("reportUnmappedData start")
 	for i := int64(0); i < int64(fl.size); i++ {
-		// FIXME: isMappedByte is extremely slow !!!
 		if !fl.isMappedByte(i) {
 			if r.offset == -1 {
 				r.offset = i
@@ -792,6 +791,7 @@ type dataRange struct {
 	length int64
 }
 
+// TODO FIXME: isMappedByte is extremely slow on a large file (300 mb) !!! it could take advantage of sizes of known structs and just skip ahead ???
 func (fl *FileLayout) isMappedByte(offset int64) bool {
 	for _, layout := range fl.Structs {
 		for _, field := range layout.Fields {

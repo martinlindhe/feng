@@ -1,0 +1,45 @@
+# STATUS: 80%
+
+# Used in:
+# Battlefield 2: Modern Combat (2005) PS2
+
+# These games also use this file format:
+# 007: Everything or Nothing (GameCube) *.viv
+# Medal Of Honor: European Assault (XBox) *.ast
+# Need For Speed Underground 2 *.viv
+# The Lord of the Rings: The Battle for Middle-Earth
+# The Lord of the Rings: The Battle for Middle-Earth II
+
+references:
+  - https://wiki.xentax.com/index.php/EA_VIV_BIG4
+
+kind: game
+name: "Battlefield 2: Modern Combat big4 archive"
+extensions: [.viv]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'BIG4'
+
+structs:
+  header:
+    ascii[4] Signature: c'BIG4'
+    u32 ArchiveSize: ?? # XXX
+    u32 FileCount: ?? #
+    u32 FileDataOffset: ?? # XXX First File Offset / Directory Size
+
+  file:
+    u32 Offset: ??
+    u32 Size: ??
+    asciiz Filename: ??
+    filename: self.Filename
+
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    u8[alignment(self.Size, 2048)] Padding: ??
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

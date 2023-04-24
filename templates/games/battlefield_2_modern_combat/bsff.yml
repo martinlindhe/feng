@@ -1,0 +1,31 @@
+# STATUS: 10%
+
+# Used in:
+# Battlefield 2: Modern Combat (2005) PS2
+
+kind: game
+name: "Battlefield 2: Modern Combat BSFF file"
+extensions: [.bsf]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BSFF'
+
+structs:
+  header:
+    ascii[4] Signature: c'BSFF'
+    u32 u1: ?? # 1
+    u32 EntryCount: ?? # XXX
+    u32 EntryListSize: ??
+
+  entry:
+    u32 u1: ??
+    ascii[0x78] Name: ?? # XXX name? and size ???
+    u32 u2: ??
+
+
+layout:
+  - header Header
+
+  - entry[Header.EntryCount] Entry

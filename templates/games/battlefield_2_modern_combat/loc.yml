@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+# Subtitles text file
+
+# Used in:
+# Battlefield 2: Modern Combat (2005) PS2
+
+
+kind: game
+name: "Battlefield 2: Modern Combat subtitles"
+extensions: [.loc]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'UCOL'
+
+structs:
+  header:
+    ascii[4] Signature: c'UCOL'
+    u32 u1: ?? # XXX
+    u32 u2: ?? # XXX
+    u32 u3: ?? # XXX
+
+layout:
+  - header Header
