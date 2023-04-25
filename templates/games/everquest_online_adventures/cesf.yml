@@ -1,0 +1,37 @@
+# STATUS: 70%
+
+# Used in:
+# EverQuest: Online Adventures (PS2)
+
+# TODO: content might also be xor encrypted ?
+
+kind: archive
+name: "EverQuest: Online Adventures CESF archive"
+extensions: [.csf]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'CESF'
+
+structs:
+  header:
+    ascii[4] Magic: c'CESF'
+    u32 EntryCount: ??
+    u32 u2: ?? # maybe content size minus header?
+    u32 u3: ?? # 0
+
+    u64 u4: ?? # 00 00 00 00 00 00 4f c2
+    u64 u5: ?? # 0x40
+
+    u32 u6: ?? # size of first entry ... ?
+    u32 MaybeTimestamp: ?? # 77 f5 34 ac
+
+  entry:
+    u32 CompressedSize: ??
+    u32 ExpandedSize: ??
+    compressed:zlib[self.CompressedSize] Data: ??
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

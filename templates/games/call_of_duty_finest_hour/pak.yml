@@ -1,0 +1,46 @@
+# STATUS: 10%
+
+# Used in:
+# Call of Duty: Finest Hour (PS2)
+
+# TODO finish mapping data & allow extraction
+
+kind: archive
+name: "Call of Duty: Finest Hour archive"
+extensions: [.pak]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'Spark Pack (C)2004 Spark Unlimited, Inc. Author Jim Schuler'
+
+structs:
+  header:
+    ascii[59] Magic: c'Spark Pack (C)2004 Spark Unlimited, Inc. Author Jim Schuler'
+    u8 unk: ?? # 2e
+    u32[15] MaybeReserved: ?? # 0
+    u32 u1: ?? # 1
+    u32 EntryCount: ??
+
+  entry:
+    u32 MaybeSize: ??
+    u32 MaybeOffset: ??
+    u64 MaybeChecksum: ??
+
+    offset: self.MaybeOffset
+    u32 MaybeBlockSize: ??   # 07 d0  ... ???
+    u32 u2: ??   # XXX
+    u32 StringCount: ?? # XXX number of zero terminated strings
+    u32 TotalStringSize: ?? # XXX 0x43 XXXX total string size ?
+    u32 u5: ?? # 0
+
+    # XXX what follows is multipe zero terminated strings ...
+
+    u32 MaybeStringize: ?? # XXX
+    raw:u8[self.TotalStringSize] Strings: ??
+
+    offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

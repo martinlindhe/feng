@@ -1,0 +1,35 @@
+# STATUS: 70%
+
+# Used in:
+# Harry Potter and the Goblet of Fire (PS2)
+
+kind: archive
+name: Harry Potter and the Goblet of Fire archive
+extensions: [.big]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'BIGF'
+
+structs:
+  header:
+    ascii[4] Magic: c'BIGF'
+    u32 MaybeChecksum: ??
+    u32 EntryCount: ??
+    u32 EntryTableSize: ?? # header + entry table size, including terminating 8-byte entry (c'L234')
+
+  entry:
+    u32 Offset: ??
+    u32 Size: ??
+    asciiz Name: ??
+    filename: self.Name
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+  # XXX after entry list, there is a  c'L234'. possibly used as a nil value?
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

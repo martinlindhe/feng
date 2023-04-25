@@ -1,0 +1,26 @@
+# STATUS: 5%
+
+# Used in:
+# EverQuest: Online Adventures (PS2)
+
+kind: game
+name: "EverQuest: Online Adventures object file"
+extensions: [.esf]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'FJBO' # OBJF
+
+structs:
+  header:
+    ascii[4] Magic: c'FJBO'
+    u32 u1: ?? # 2 or 3
+    u32 u2: ??
+    u32 u3: ?? # 0
+    u32 u4: ?? # 0x20
+    u32 u5: ?? # 0
+    i64 u6: ?? # -1
+
+layout:
+  - header Header

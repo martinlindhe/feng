@@ -1,0 +1,36 @@
+# STATUS: 20%
+#
+# Used in:
+# - Batman: Vengeance (PS2)
+
+# TODO: map rest of file
+
+kind: archive
+name: "Batman: Vengeance SM1 file"
+endian: little
+
+no_magic: true 
+
+structs:
+  header:
+    u32 v1: ?? # 3
+    u32 EntryOffset: ??
+    u32 EntryCount: ??
+
+  entry:
+    u32 u1: ?? # 0
+    u32 u2: ?? # 0
+    u32 MaybeOffset: ??
+    u32 MaybeSize: ??
+    asciiz Name: ??
+    u8[32 - len("self.Name")] UnknownData: ??
+
+    offset: self.MaybeOffset
+    raw:u8[self.MaybeSize] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - offset Header.EntryOffset
+  - entry[Header.EntryCount] Entry

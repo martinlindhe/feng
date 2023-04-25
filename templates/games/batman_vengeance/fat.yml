@@ -1,0 +1,42 @@
+# STATUS: 10%
+
+# Ubisoft game engine format (older than fat2.yml)
+
+# Used in:
+# Batman: Vengeance (PS2)
+
+
+# TODO: import data from .000 file
+
+kind: game
+name: "Batman: Vengeance fat file"
+extensions: [.fat]
+endian: little
+
+multi_file: true # File pair: .fat (entry list) and .000 (data)
+
+no_magic: true
+
+structs:
+  header:
+    u32 v1: ??
+    u32 EntryCount: ??
+    u8 v3: ??
+
+  entry:
+    u32 MaybeExpandedSize: ?? # xxx expanded size? 
+    u32 MaybeCompressedSize: ?? # xxx compressed size??? 
+    u32 u2: ?? # timestamp ??
+    u32 u3: ?? # timestamp ??
+
+    u32 NameSize: ??
+    ascii[self.NameSize] Name: ??
+    u32 u4: ??
+
+    u32 u5: ?? # XXX maybe size?
+    u32 MaybeOffset: ?? # maybe offset
+
+layout:
+  - header Header
+
+  - entry[] Entry

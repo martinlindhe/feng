@@ -1,0 +1,25 @@
+# STATUS: 5%
+
+# Related to system icons
+
+# Used in:
+# Call of Duty: Finest Hour (PS2)
+
+kind: system
+name: Playstation 2 PS2D file
+extensions: [.sys]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'PS2D'
+
+structs:
+  header:
+    ascii[4] Magic: c'PS2D'
+    u16 u1: ?? # 4
+    u16 u2: ?? # 24
+    u32 u3: ?? # 0
+
+layout:
+  - header Header

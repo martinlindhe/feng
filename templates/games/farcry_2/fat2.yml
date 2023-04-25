@@ -25,6 +25,8 @@ name: Far Cry fat file
 extensions: [.fat]
 endian: little
 
+multi_file: true # File pair: .fat (entry list) and .000 (data)
+
 magic:
   - offset: 0000
     match: c'2TAF'
