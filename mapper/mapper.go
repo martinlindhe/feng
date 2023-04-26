@@ -83,7 +83,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 		for i := uint64(0); i < math.MaxUint64; i++ {
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
-			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
+			if err := fl.expandStruct(rr, df, ds, es.Expressions, true); err != nil {
 				if DEBUG_LABEL {
 					log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
 				}
@@ -126,7 +126,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 		for i := int64(0); i < parsedRange; i++ {
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
-			if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
+			if err := fl.expandStruct(rr, df, ds, es.Expressions, false); err != nil {
 				df.Label = baseLabel
 				return err
 			}
@@ -134,7 +134,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 		return nil
 	}
 
-	if err := fl.expandStruct(rr, df, ds, es.Expressions); err != nil {
+	if err := fl.expandStruct(rr, df, ds, es.Expressions, false); err != nil {
 		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 			// accept eof errors as valid parse for otherwise valid mapping
 			log.Error().Msgf("reached EOF")
@@ -321,7 +321,7 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 	return fl, nil
 }
 
-func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression, isSlice bool) error {
 
 	if DEBUG_MAPPER {
 		log.Printf("expandStruct: adding struct %s", dfParent.Label)
@@ -333,15 +333,17 @@ func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *
 	err := fl.expandChildren(r, fs, dfParent, ds, expressions)
 	if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 
-		// NOTE: if we try to expand a slice of chunks, reaching EOF is expected and not an error
-
 		if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
 			log.Error().Msgf("expandStruct error: [%08x] failed reading data for '%s' (err:%v)", fl.offset, dfParent.Label, err)
 
 			return fmt.Errorf("eof and no structs mapped")
 		}
 
-		log.Error().Err(err).Msgf("reached EOF at %08x", fl.offset)
+		// NOTE: if we try to expand a slice of chunks, reaching EOF is expected and not an error
+		if !isSlice {
+			log.Error().Err(err).Msgf("reached EOF at %08x", fl.offset)
+		}
+
 	}
 
 	return err

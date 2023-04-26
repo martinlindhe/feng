@@ -1,24 +1,27 @@
-# STATUS: 5%
+# STATUS: 50%
 
 # XXX "Criware AFS" ???
 
 # Archive format that contains multiple .adx audio files
 
 # Used in:
-# Monster Hunter (2004, PS2) by Capcom
-# Persona 3 (2006, PS2) by Atlus
-# Persona 4 (2008, PS2) by Atlus
+# Devil May Cry 2 (2003, PS2) - no file names ???
+# Monster Hunter (2004, PS2)
+# Persona 3 (2006, PS2)
+# Persona 4 (2008, PS2)
+# + many more PS2 titles
 
 references:
-  - xxx
+  - https://wiki.xentax.com/index.php/GRAF:AFS_AFS
 
 software:
-  - https://forum.xentax.com/viewtopic.php?t=22502 (AFS Explorer, can extract .afs)
+  - https://forum.xentax.com/viewtopic.php?t=22502 # AFS Explorer, can extract .afs
+  - https://forum.xentax.com/viewtopic.php?p=184916 # AFS Tool
 
 kind: archive
 name: AFS archive
 extensions: [.afs]
-endian: big # XXX
+endian: little
 
 magic:
   - offset: 0000
@@ -26,9 +29,21 @@ magic:
 
 structs:
   header:
-    u8[4] Magic: c'AFS' 00
-    u32 MaybeCount: ??      # ab 00 00 00
-    u32 Unk1: ??            # 00 00 08 00
+    ascii[4] Magic: c'AFS' 00
+    u32 FileCount: ??
+
+  file:
+    u32 Offset: ??
+    u32 Size: ??  # 0 == end of list marker
+
+    offset: self.Offset
+    # XXX some header here ... not exactly right but:
+    u32 FilenameDirectoryOffset: ??
+    u32 FilenameDirectoryLength: ??
+    raw:u8[self.Size] Data: ?? # XXX with dmc2, Data is misaligned
+    u8[alignment(len("self.Size"), 1024)] Padding: ??
+    offset: restore
 
 layout:
   - header Header
+  - file[Header.FileCount] File

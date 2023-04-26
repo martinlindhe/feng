@@ -231,17 +231,17 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			case "u16":
 				for i := int64(0); i < totalLength; i += unitLength {
 					if field.Endian == "big" {
-						values = append(values, uint64(binary.BigEndian.Uint16(b[i:])))
+						values = append(values, uint16(binary.BigEndian.Uint16(b[i:])))
 					} else {
-						values = append(values, uint64(binary.LittleEndian.Uint16(b[i:])))
+						values = append(values, uint16(binary.LittleEndian.Uint16(b[i:])))
 					}
 				}
 			case "u32":
 				for i := int64(0); i < totalLength; i += unitLength {
 					if field.Endian == "big" {
-						values = append(values, uint64(binary.BigEndian.Uint32(b[i:])))
+						values = append(values, uint32(binary.BigEndian.Uint32(b[i:])))
 					} else {
-						values = append(values, uint64(binary.LittleEndian.Uint32(b[i:])))
+						values = append(values, uint32(binary.LittleEndian.Uint32(b[i:])))
 					}
 				}
 			case "u64":
@@ -250,6 +250,14 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 						values = append(values, binary.BigEndian.Uint64(b[i:]))
 					} else {
 						values = append(values, binary.LittleEndian.Uint64(b[i:]))
+					}
+				}
+			case "i32":
+				for i := int64(0); i < totalLength; i += unitLength {
+					if field.Endian == "big" {
+						values = append(values, int32(binary.BigEndian.Uint32(b[i:])))
+					} else {
+						values = append(values, int32(binary.LittleEndian.Uint32(b[i:])))
 					}
 				}
 			default:
