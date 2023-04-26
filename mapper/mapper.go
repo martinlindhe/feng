@@ -192,34 +192,41 @@ var (
 	errMapFileMatched = errors.New("matched file")
 )
 
-func MapFileToGivenTemplate(f afero.File, startOffset int64, filename string, templateFileName string) (fl *FileLayout, err error) {
+type MapperConfig struct {
+	F                afero.File
+	StartOffset      int64
+	TemplateFilename string
+	MeasureTime      bool
+}
 
-	rawTemplate, err := os.ReadFile(templateFileName)
+func MapFileToGivenTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
+
+	rawTemplate, err := os.ReadFile(cfg.TemplateFilename)
 	if err != nil {
 		return nil, err
 	}
-	ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, templateFileName)
+	ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, cfg.TemplateFilename)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %s", templateFileName, err.Error())
+		return nil, fmt.Errorf("%s: %s", cfg.TemplateFilename, err.Error())
 	}
 
-	f.Seek(startOffset, os.SEEK_SET)
+	cfg.F.Seek(cfg.StartOffset, os.SEEK_SET)
 
-	fl, err = MapReader(f, ds, "")
-	fl.DataFileName = filename
+	fl, err = MapReader(cfg.F, ds, "")
+	fl.DataFileName = cfg.F.Name()
 	if err != nil {
-		log.Error().Msgf("MapReader: %s: %s\n", templateFileName, err.Error())
+		log.Error().Msgf("MapReader: %s: %s\n", cfg.TemplateFilename, err.Error())
 
 	}
 	if len(fl.Structs) > 0 {
-		log.Printf("Parsed %s as %s", filename, templateFileName)
+		log.Printf("Parsed %s as %s", cfg.F.Name(), cfg.TemplateFilename)
 		return fl, nil
 	}
 	return nil, nil
 }
 
 // maps input file to a matching template
-func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string, measureTime bool) (fl *FileLayout, err error) {
+func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 
 	started := time.Now()
 	processed := 0
@@ -256,12 +263,12 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 		found := false
 		endian := ""
 		for _, m := range ds.Magic {
-			_, err = f.Seek(startOffset+int64(m.Offset), io.SeekStart)
+			_, err = cfg.F.Seek(cfg.StartOffset+int64(m.Offset), io.SeekStart)
 			if err != nil {
 				return err
 			}
 			b := make([]byte, len(m.Match))
-			_, _ = f.Read(b)
+			_, _ = cfg.F.Read(b)
 			if bytes.Equal(m.Match, b) {
 				found = true
 				endian = m.Endian
@@ -273,12 +280,12 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 			return nil
 		}
 
-		_, _ = f.Seek(startOffset, io.SeekStart)
+		_, _ = cfg.F.Seek(cfg.StartOffset, io.SeekStart)
 
 		parseStart := time.Now()
-		fl, err = MapReader(f, ds, endian)
+		fl, err = MapReader(cfg.F, ds, endian)
 		parseTime := time.Since(parseStart)
-		fl.DataFileName = filename
+		fl.DataFileName = cfg.F.Name()
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(EvaluateError); ok {
@@ -288,12 +295,12 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 			}
 		}
 		if len(fl.Structs) > 0 {
-			if measureTime {
+			if cfg.MeasureTime {
 				passed := time.Since(started)
 				log.Warn().Msgf("MEASURE: evaluation of %d templates until a match was found: %v, template parsed in %v", processed, passed, parseTime)
 			}
 
-			log.Printf("Parsed %s as %s", filename, tpl)
+			log.Printf("Parsed %s as %s", cfg.F.Name(), tpl)
 			return errMapFileMatched
 		}
 		return nil
@@ -307,9 +314,9 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 
 	if fl == nil {
 		// dump hex of first bytes for unknown files
-		_, _ = f.Seek(0, io.SeekStart)
+		_, _ = cfg.F.Seek(0, io.SeekStart)
 		buf := make([]byte, 10)
-		n, _ := f.Read(buf)
+		n, _ := cfg.F.Read(buf)
 		buf = buf[:n]
 
 		s, _ := value.AsciiPrintableString(buf, len(buf))

@@ -66,10 +66,17 @@ func main() {
 	}
 	defer f.Close()
 
+	cfg := &mapper.MapperConfig{
+		F:                f,
+		StartOffset:      args.Offset,
+		TemplateFilename: args.Template,
+		MeasureTime:      args.Time,
+	}
+
 	if args.Template != "" {
-		fl, err = mapper.MapFileToGivenTemplate(f, args.Offset, args.Filename, args.Template)
+		fl, err = mapper.MapFileToGivenTemplate(cfg)
 	} else {
-		fl, err = mapper.MapFileToMatchingTemplate(f, args.Offset, args.Filename, args.Time)
+		fl, err = mapper.MapFileToMatchingTemplate(cfg)
 	}
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to map %s.", args.Filename)
