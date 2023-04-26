@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/afero"
 
 	"github.com/alecthomas/kong"
 	"github.com/martinlindhe/feng"
@@ -22,6 +23,8 @@ var args struct {
 }
 
 func main() {
+
+	var fs1 = afero.NewOsFs()
 
 	_ = kong.Parse(&args,
 		kong.Name("feng"),
@@ -48,12 +51,17 @@ func main() {
 				return err
 			}
 
-			r, err := os.Open(tpl)
+			r, err := fs1.Open(tpl)
 			if err != nil {
 				return err
 			}
 
-			fl, err := mapper.MapReader(r, ds, "")
+			cfg := &mapper.MapReaderConfig{
+				F:  r,
+				DS: ds,
+			}
+
+			fl, err := mapper.MapReader(cfg)
 			r.Close()
 			if err != nil {
 				// template don't match, try another

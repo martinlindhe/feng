@@ -34,7 +34,7 @@ var args struct {
 
 func main() {
 
-	var fs = afero.NewOsFs()
+	var fs1 = afero.NewOsFs()
 
 	_ = kong.Parse(&args,
 		kong.Name("feng"),
@@ -46,7 +46,7 @@ func main() {
 	}
 
 	if args.CPUProfile != "" {
-		f, err := fs.Create(args.CPUProfile)
+		f, err := fs1.Create(args.CPUProfile)
 		if err != nil {
 			log.Fatal().Err(err).Msgf("failed")
 		}
@@ -60,7 +60,7 @@ func main() {
 	var fl *mapper.FileLayout
 	var err error
 
-	f, err := fs.Open(args.Filename)
+	f, err := fs1.Open(args.Filename)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to open %s.", args.Filename)
 	}
@@ -108,7 +108,7 @@ func main() {
 	}
 
 	if args.MemProfile != "" {
-		f, err := fs.Create(args.MemProfile)
+		f, err := fs1.Create(args.MemProfile)
 		if err != nil {
 			log.Fatal().Err(err).Msg("could not create memory profile")
 		}

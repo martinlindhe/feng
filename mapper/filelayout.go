@@ -32,6 +32,9 @@ type FileLayout struct {
 	// filename for the current output data
 	filename string
 
+	// adjust the starting position with this value
+	startOffset int64
+
 	// current offset
 	offset int64
 

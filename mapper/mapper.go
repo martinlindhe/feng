@@ -33,24 +33,36 @@ var (
 	ErrParseContinue = errors.New("manual parse continue")
 )
 
+type MapReaderConfig struct {
+	F afero.File
+
+	DS *template.DataStructure
+
+	// initial endianness
+	Endian string
+
+	// base offset
+	StartOffset int64
+}
+
 // produces a list of fields with offsets and sizes from input reader based on data structure
-func MapReader(f afero.File, ds *template.DataStructure, endian string) (*FileLayout, error) {
+func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 
 	ext := ""
-	if len(ds.Extensions) > 0 {
-		ext = ds.Extensions[0]
+	if len(cfg.DS.Extensions) > 0 {
+		ext = cfg.DS.Extensions[0]
 	}
 
-	if endian == "" {
-		endian = ds.Endian
+	if cfg.Endian == "" {
+		cfg.Endian = cfg.DS.Endian
 	}
 
-	fl := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext, _f: f}
-	fl.size = fileSize(f)
-	log.Debug().Msgf("mapping ds '%s'", ds.BaseName)
+	fl := FileLayout{DS: cfg.DS, BaseName: cfg.DS.BaseName, startOffset: cfg.StartOffset, endian: cfg.Endian, Extension: ext, _f: cfg.F}
+	fl.size = fileSize(cfg.F)
+	log.Debug().Msgf("mapping ds '%s'", cfg.DS.BaseName)
 
-	for _, df := range ds.Layout {
-		err := fl.mapLayout(f, nil, ds, &df)
+	for _, df := range cfg.DS.Layout {
+		err := fl.mapLayout(cfg.F, nil, cfg.DS, &df)
 		if err != nil {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 				log.Error().Err(err).Msgf("mapLayout error processing %s at %06x", df.Label, fl.offset)
@@ -199,6 +211,7 @@ type MapperConfig struct {
 	MeasureTime      bool
 }
 
+// maps input file to template specified in cfg.TemplateFilename
 func MapFileToGivenTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 
 	rawTemplate, err := os.ReadFile(cfg.TemplateFilename)
@@ -212,7 +225,11 @@ func MapFileToGivenTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 
 	cfg.F.Seek(cfg.StartOffset, os.SEEK_SET)
 
-	fl, err = MapReader(cfg.F, ds, "")
+	fl, err = MapReader(&MapReaderConfig{
+		F:           cfg.F,
+		DS:          ds,
+		StartOffset: cfg.StartOffset,
+	})
 	fl.DataFileName = cfg.F.Name()
 	if err != nil {
 		log.Error().Msgf("MapReader: %s: %s\n", cfg.TemplateFilename, err.Error())
@@ -283,7 +300,12 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 		_, _ = cfg.F.Seek(cfg.StartOffset, io.SeekStart)
 
 		parseStart := time.Now()
-		fl, err = MapReader(cfg.F, ds, endian)
+		fl, err = MapReader(&MapReaderConfig{
+			F:           cfg.F,
+			DS:          ds,
+			StartOffset: cfg.StartOffset,
+			Endian:      endian,
+		})
 		parseTime := time.Since(parseStart)
 		fl.DataFileName = cfg.F.Name()
 		if err != nil {

@@ -22,7 +22,7 @@ func (fl *FileLayout) peekU32(offset int64) (uint32, error) {
 		return 0, err
 	}
 
-	_, _ = fl._f.Seek(offset, io.SeekStart)
+	_, _ = fl._f.Seek(fl.startOffset+offset, io.SeekStart)
 	buf := make([]byte, 4)
 	n, _ := fl._f.Read(buf)
 	fl.bytesRead += n
@@ -36,7 +36,7 @@ func (fl *FileLayout) peekU16(offset int64) (uint16, error) {
 	if err != nil {
 		return 0, err
 	}
-	_, _ = fl._f.Seek(offset, io.SeekStart)
+	_, _ = fl._f.Seek(fl.startOffset+offset, io.SeekStart)
 	buf := make([]byte, 2)
 	n, _ := fl._f.Read(buf)
 	fl.bytesRead += n
@@ -50,7 +50,7 @@ func (fl *FileLayout) peekU8(offset int64) (uint8, error) {
 	if err != nil {
 		return 0, err
 	}
-	_, _ = fl._f.Seek(offset, io.SeekStart)
+	_, _ = fl._f.Seek(fl.startOffset+offset, io.SeekStart)
 	buf := make([]byte, 1)
 	n, _ := fl._f.Read(buf)
 	fl.bytesRead += n
@@ -71,11 +71,11 @@ func (fl *FileLayout) readerToField(field *Field) (r afero.File, err error) {
 		}
 		//		defer f.Close()
 
-		_, err = f.Seek(field.Offset, io.SeekStart)
+		_, err = f.Seek(fl.startOffset+field.Offset, io.SeekStart)
 		return f, err
 	}
 
-	_, err = fl._f.Seek(field.Offset, io.SeekStart)
+	_, err = fl._f.Seek(fl.startOffset+field.Offset, io.SeekStart)
 	return fl._f, err
 }
 
@@ -120,7 +120,7 @@ func (fl *FileLayout) peekBytesMainFile(offset int64, size int64) ([]uint8, erro
 	if err != nil {
 		return nil, err
 	}
-	_, _ = fl._f.Seek(offset, io.SeekStart)
+	_, _ = fl._f.Seek(fl.startOffset+offset, io.SeekStart)
 	data := make([]byte, size)
 	n, _ := fl._f.Read(data)
 	fl.bytesRead += n
@@ -140,7 +140,7 @@ func (fl *FileLayout) readBytes(totalLength, unitLength int64, endian string) ([
 
 	val := make([]byte, totalLength)
 	if DEBUG_READ {
-		log.Info().Msgf("READ % 2d from %06x", totalLength, fl.offset)
+		log.Info().Msgf("READ % 2d from %06x", totalLength, fl.startOffset+fl.offset)
 	}
 	if _, err := io.ReadFull(fl._f, val); err != nil {
 		return nil, err
