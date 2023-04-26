@@ -73,12 +73,12 @@ func main() {
 		ext := filepath.Ext(tpl)
 		if len(extensions) == 1 && ext == extensions[0] {
 			if args.Verbose {
-				feng.Green("OK %s: %v\n", tpl, extensions)
+				log.Info().Msgf("OK %s: %v\n", tpl, extensions)
 			}
 		} else if len(extensions) == 1 {
 			if args.Fix {
 				newName := strings.TrimSuffix(tpl, filepath.Ext(tpl)) + extensions[0]
-				feng.Red("RENAMING %s => %s\n", tpl, newName)
+				log.Warn().Msgf("RENAMING %s => %s\n", tpl, newName)
 				oldName, err := filepath.Abs(tpl)
 				if err != nil {
 					log.Fatal().Err(err).Msgf("failed")
@@ -91,13 +91,13 @@ func main() {
 					log.Fatal().Err(err).Msgf("failed")
 				}
 			} else {
-				feng.Red("WRONG EXT %s: %s\n", tpl, extensions[0])
+				log.Error().Msgf("WRONG EXT %s: %s\n", tpl, extensions[0])
 			}
 
 		} else if len(extensions) == 0 {
-			feng.Yellow("NO MATCH %s\n", tpl)
+			log.Warn().Msgf("NO MATCH %s\n", tpl)
 		} else {
-			feng.Red("MULTI MATCH %s: %v\n", tpl, extensions)
+			log.Warn().Msgf("MULTI MATCH %s: %v\n", tpl, extensions)
 		}
 
 		return nil

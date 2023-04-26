@@ -16,7 +16,8 @@ label: self.Key + " = " self.Value      # evaluate strings
 
 offset: self.BaseOffset                 # set offset to evaluated struct field
 
-parse: stop                             # stops parsing. used to signal custom end-of-stream conditions
+parse: stop                             # stops parsing. used to signal the shape of a slice to the parser
+parse: continue                         # continue to next slice. used to signal the shape of a slice to the parser
 ```
 
 # Endianness

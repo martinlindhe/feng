@@ -15,7 +15,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/afero"
 
-	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
 )
@@ -344,34 +343,8 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 	}
 
 	switch field.Format.Kind {
-	case "f32":
-		if !field.Format.Slice && field.Format.Range != "" {
-			values := []string{}
-			val := 0
-			skipRest := false
 
-			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
-
-			for i := int64(0); i < totalLength; i += unitLength {
-				val++
-				if field.Endian == "big" {
-					values = append(values, prettyFloat(math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
-				} else {
-					values = append(values, prettyFloat(math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
-				}
-				if val >= 3 {
-					skipRest = true
-					break
-				}
-			}
-			if skipRest {
-				return "[" + strings.Join(values, ", ") + " ... ]"
-			}
-			return "[" + strings.Join(values, ", ") + "]"
-		}
-		return prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
-
-	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
+	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64", "f32":
 		if !field.Format.Slice && field.Format.Range != "" {
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
 
@@ -380,6 +353,20 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 			skipRest := false
 
 			switch field.Format.Kind {
+			case "f32":
+				for i := int64(0); i < totalLength; i += unitLength {
+					val++
+					if field.Endian == "big" {
+						values = append(values, prettyFloat(math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
+					} else {
+						values = append(values, prettyFloat(math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
+					}
+					if val >= 3 {
+						skipRest = true
+						break
+					}
+				}
+
 			case "u8":
 				for i := int64(0); i < totalLength; i += unitLength {
 					val++
@@ -501,6 +488,8 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 			return fmt.Sprintf("%d", int32(value.AsUint64Raw(b)))
 		case "i64":
 			return fmt.Sprintf("%d", int64(value.AsUint64Raw(b)))
+		case "f32":
+			return prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b))))
 		default:
 			return fmt.Sprintf("%d", value.AsUint64Raw(b))
 		}
@@ -651,9 +640,7 @@ type PresentFileLayoutConfig struct {
 
 func (fl *FileLayout) presentStruct(layout *Struct, cfg *PresentFileLayoutConfig) string {
 	if len(layout.Fields) == 0 {
-		if DEBUG {
-			feng.Yellow("skip empty struct '%s'\n", layout.Name)
-		}
+		log.Debug().Msgf("skip empty struct '%s'\n", layout.Name)
 		return ""
 	}
 	heading := layout.Name
@@ -849,18 +836,14 @@ func (fl *FileLayout) GetStruct(name string) (*Struct, error) {
 
 // finds the first field named `structName`.`fieldName`
 func (fl *FileLayout) GetInt(s string, df *value.DataField) (int64, error) {
-	if DEBUG {
-		log.Printf("GetInt: searching for '%s'", s)
-	}
+	log.Debug().Msgf("GetInt: searching for '%s'", s)
 
 	n, err := fl.EvaluateExpression(s, df)
 	if err != nil {
 		// XXX this is critical error and template must be fixed
 		log.Fatal().Err(err).Msg("GetInt FAILURE on '" + s + "'")
 	}
-	if DEBUG {
-		log.Printf("GetInt: %s => %d", s, n)
-	}
+	log.Debug().Msgf("GetInt: %s => %d", s, n)
 	return n, err
 }
 

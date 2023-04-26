@@ -12,7 +12,6 @@ import (
 	"github.com/spf13/afero"
 
 	"github.com/alecthomas/kong"
-	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/mapper"
 	"github.com/martinlindhe/feng/smoketest"
 )
@@ -55,7 +54,7 @@ func main() {
 	measures := []measuredExecution{}
 
 	for _, entry := range filenames {
-		feng.Green("Start entry %s\n", entry.In)
+		log.Info().Msgf("Start entry %s\n", entry.In)
 
 		started := time.Now()
 
@@ -77,7 +76,7 @@ func main() {
 			continue
 		}
 
-		feng.Green("Parsed %s as %s\n\n", entry.In, fl.BaseName)
+		log.Info().Msgf("Parsed %s as %s\n\n", entry.In, fl.BaseName)
 
 		data := fl.Present(&mapper.PresentFileLayoutConfig{
 			ShowRaw:           true,
@@ -97,7 +96,7 @@ func main() {
 		if err != nil {
 			log.Fatal().Err(err).Msgf("failed")
 		}
-		feng.Green("WRITE ROOT %s, out %s, full %s\n", referenceRoot, entry.Out, filename)
+		log.Info().Msgf("WRITE ROOT %s, out %s, full %s\n", referenceRoot, entry.Out, filename)
 		err = ioutil.WriteFile(filename, []byte(data), 0644)
 		if err != nil {
 			log.Fatal().Err(err).Msgf("failed")

@@ -29,8 +29,38 @@ const (
 )
 
 var (
-	ErrParseStop = errors.New("manual parse stop")
+	ErrParseStop     = errors.New("manual parse stop")
+	ErrParseContinue = errors.New("manual parse continue")
 )
+
+// produces a list of fields with offsets and sizes from input reader based on data structure
+func MapReader(f afero.File, ds *template.DataStructure, endian string) (*FileLayout, error) {
+
+	ext := ""
+	if len(ds.Extensions) > 0 {
+		ext = ds.Extensions[0]
+	}
+
+	if endian == "" {
+		endian = ds.Endian
+	}
+
+	fl := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext, _f: f}
+	fl.size = fileSize(f)
+	log.Debug().Msgf("mapping ds '%s'", ds.BaseName)
+
+	for _, df := range ds.Layout {
+		err := fl.mapLayout(f, nil, ds, &df)
+		if err != nil {
+			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+				log.Error().Err(err).Msgf("mapLayout error processing %s at %06x", df.Label, fl.offset)
+			}
+			return &fl, nil
+		}
+	}
+
+	return &fl, nil
+}
 
 func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
 
@@ -75,9 +105,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 
 	if df.Slice {
 		// like ranged layout but keep reading until EOF
-		if DEBUG {
-			log.Printf("appending sliced %s[] %s", df.Kind, df.Label)
-		}
+		log.Debug().Msgf("appending sliced %s[] %s", df.Kind, df.Label)
 
 		baseLabel := df.Label
 		for i := uint64(0); i < math.MaxUint64; i++ {
@@ -91,10 +119,15 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 
 				if errors.Is(err, ErrParseStop) {
 					if DEBUG_MAPPER {
-						log.Print("reached ParseStop")
+						log.Info().Msgf("reached ParseStop")
 					}
 					break
 				}
+
+				if errors.Is(err, ErrParseContinue) {
+					continue
+				}
+
 				if err == io.EOF {
 					log.Error().Msgf("reached EOF")
 					break
@@ -118,15 +151,16 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 			return err
 		}
 
-		if DEBUG {
-			log.Printf("appending ranged %s[%d]", df.Kind, parsedRange)
-		}
+		log.Debug().Msgf("appending ranged %s[%d]", df.Kind, parsedRange)
 
 		baseLabel := df.Label
 		for i := int64(0); i < parsedRange; i++ {
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
 			if err := fl.expandStruct(rr, df, ds, es.Expressions, false); err != nil {
+				if errors.Is(err, ErrParseContinue) {
+					continue
+				}
 				df.Label = baseLabel
 				return err
 			}
@@ -140,7 +174,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 			log.Error().Msgf("reached EOF")
 			return nil
 		}
-		feng.Yellow("%s errors out: %s\n", ds.BaseName, err.Error())
+		log.Error().Msgf("%s errors out: %s\n", ds.BaseName, err.Error())
 		return err
 	}
 	return nil
@@ -152,38 +186,6 @@ func fileSize(f afero.File) int64 {
 		log.Fatal().Err(err).Msg("stat failed")
 	}
 	return fi.Size()
-}
-
-// produces a list of fields with offsets and sizes from input reader based on data structure
-func MapReader(f afero.File, ds *template.DataStructure, endian string) (*FileLayout, error) {
-
-	ext := ""
-	if len(ds.Extensions) > 0 {
-		ext = ds.Extensions[0]
-	}
-
-	if endian == "" {
-		endian = ds.Endian
-	}
-
-	fl := FileLayout{DS: ds, BaseName: ds.BaseName, endian: endian, Extension: ext, _f: f}
-	fl.size = fileSize(f)
-
-	if DEBUG {
-		log.Printf("mapping ds '%s'", ds.BaseName)
-	}
-
-	for _, df := range ds.Layout {
-		err := fl.mapLayout(f, nil, ds, &df)
-		if err != nil {
-			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
-				log.Error().Err(err).Msgf("mapLayout error processing %s at %06x", df.Label, fl.offset)
-			}
-			return &fl, nil
-		}
-	}
-
-	return &fl, nil
 }
 
 var (
@@ -206,7 +208,7 @@ func MapFileToGivenTemplate(f afero.File, startOffset int64, filename string, te
 	fl, err = MapReader(f, ds, "")
 	fl.DataFileName = filename
 	if err != nil {
-		feng.Red("MapReader: %s: %s\n", templateFileName, err.Error())
+		log.Error().Msgf("MapReader: %s: %s\n", templateFileName, err.Error())
 
 	}
 	if len(fl.Structs) > 0 {
@@ -246,9 +248,7 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 		processed++
 
 		if ds.NoMagic {
-			if DEBUG {
-				log.Print("skip no_magic template", tpl)
-			}
+			log.Debug().Msgf("skip no_magic template", tpl)
 			return nil
 		}
 
@@ -269,9 +269,7 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 			}
 		}
 		if !found {
-			if DEBUG {
-				log.Info().Msgf("%s magic bytes don't match", tpl)
-			}
+			log.Debug().Msgf("%s magic bytes don't match", tpl)
 			return nil
 		}
 
@@ -284,7 +282,7 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(EvaluateError); ok {
-				feng.Red("MapReader EvaluateError: %s: %s\n", tpl, err.Error())
+				log.Error().Msgf("MapReader EvaluateError: %s: %s\n", tpl, err.Error())
 			} else {
 				return nil
 			}
@@ -394,12 +392,18 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			}
 
 		case "parse":
-			// break parser
-			if es.Pattern.Value != "stop" {
-				log.Fatal().Msgf("invalid parse value '%s'", es.Pattern.Value)
+			switch es.Pattern.Value {
+			case "stop":
+				// break parser
+				//log.Println("-- PARSE STOP --")
+				return ErrParseStop
+
+			case "continue":
+				// iterate to next expression
+				//log.Info().Msgf("-- PARSE CONTINUE --")
+				return ErrParseContinue
 			}
-			//log.Println("-- PARSE STOP --")
-			return ErrParseStop
+			log.Fatal().Msgf("invalid parse value '%s'", es.Pattern.Value)
 
 		case "endian":
 			// change endian
@@ -542,7 +546,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				panic(err)
 			}
 
-			feng.Yellow("Reading until marker from %06x: marker % 02x\n", fl.offset, needle)
+			log.Info().Msgf("Reading until marker from %06x: marker % 02x\n", fl.offset, needle)
 
 			val, err := fl.readBytesUntilMarkerSequence(4096, needle)
 			if err != nil {
@@ -578,9 +582,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
 
 			if totalLength == 0 {
-				if DEBUG {
-					log.Printf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
-				}
+				log.Debug().Msgf("SKIPPING ZERO-LENGTH FIELD '%s' %s", es.Field.Label, fl.PresentType(&es.Field))
 				continue
 			}
 
@@ -590,16 +592,13 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 
 			endian := fl.endian
 			if es.Field.Endian != "" {
-				if DEBUG {
-					feng.Yellow("-- endian override on field %s to %s\n", es.Field.Label, es.Field.Endian)
-				}
+				log.Debug().Msgf("-- endian override on field %s to %s\n", es.Field.Label, es.Field.Endian)
 				endian = es.Field.Endian
 			}
 
 			val, err := fl.readBytes(totalLength, unitLength, endian)
-			if DEBUG {
-				log.Printf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, dfParent.Label, es.Field.Label, val, err)
-			}
+			log.Debug().Msgf("[%08x] reading %d bytes for '%s.%s': %02x (err:%v)", fl.offset, totalLength, dfParent.Label, es.Field.Label, val, err)
+
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
@@ -609,9 +608,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			if es.Pattern.Known {
 
 				if !bytes.Equal(es.Pattern.Pattern, val) {
-					if DEBUG {
-						log.Printf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'", fl.offset, es.Field.Label, es.Pattern.Pattern, val)
-					}
+					log.Debug().Msgf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'", fl.offset, es.Field.Label, es.Pattern.Pattern, val)
 					return fmt.Errorf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'",
 						fl.offset, es.Field.Label, es.Pattern.Pattern, val)
 				}
@@ -732,12 +729,10 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				return err
 			}
 			lastIf = q
-			if DEBUG {
-				if a != 0 {
-					log.Print("IF EVALUATED TRUE: q=", q, ", a=", a)
-				} else {
-					log.Print("IF EVALUATED FALSE: q=", q, ", a=", a)
-				}
+			if a != 0 {
+				log.Debug().Msgf("IF EVALUATED TRUE: q=", q, ", a=", a)
+			} else {
+				log.Debug().Msgf("IF EVALUATED FALSE: q=", q, ", a=", a)
 			}
 			if a != 0 {
 				err := fl.expandChildren(r, fs, dfParent, ds, es.Children)
@@ -747,19 +742,15 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			}
 
 		case "else":
-			if DEBUG {
-				log.Print("ELSE: evaluating", lastIf)
-			}
+			log.Debug().Msgf("ELSE: evaluating", lastIf)
 			a, err := fl.EvaluateExpression(lastIf, dfParent)
 			if err != nil {
 				return err
 			}
-			if DEBUG {
-				if a == 0 {
-					log.Print("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
-				} else {
-					log.Print("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
-				}
+			if a == 0 {
+				log.Debug().Msgf("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
+			} else {
+				log.Debug().Msgf("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
 			}
 			if a == 0 {
 				err := fl.expandChildren(r, fs, dfParent, ds, es.Children)

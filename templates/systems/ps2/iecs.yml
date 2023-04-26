@@ -4,7 +4,7 @@
 
 # Used in various PS2 games, such as:
 # Monster Hunter (2004): eff.hd
-# Gregory Horror Show: Soul Collector (2003): ngysnd.bin
+# Gregory Horror Show: Soul Collector (2003): ngysnd.bin (has two IECS files with 2048 byte padding, then some other data in the rest of the file)
 
 # MAX need more samples
 
@@ -35,8 +35,15 @@ structs:
 #    u8 Reserved: ?? # FF
 
   chunk:
-    ascii[4] Magic: c'IECS'
-    u32 Type: # XXX eq on ascii work does not work !
+    u32 Magic: ?? # c'IECS'  # XXX if it is 00000000, then we should pad instead
+    if self.Magic == 0:
+      label: Padding
+      u8[alignment(OFFSET, 2048)] Padding: ?? # XXX
+      parse: continue
+    if self.Magic != 0x53434549:
+      data: invalid
+
+    u32 Type: # XXX eq on ascii does not work
       eq c'Vers': Version
       eq c'Head': Head
       eq c'Vagi': VagInfo
@@ -47,7 +54,8 @@ structs:
       eq c'Midi': Midi
       eq c'Song': Song
 
-    label: self.ChunkType
+
+    label: self.Type
     u32 Size: ??
 
     if self.Type == Version:
@@ -62,7 +70,7 @@ structs:
       u32 SampleSetChunkOffset: ??
       u32 SampleChunkOffset: ??
       u32 VAG_infoChunkOffset: ??
-      u32[7] Padding: ?? # -1
+      i32[7] Padding: ?? # -1
 
     if self.Type == VagInfo:
       u32 MaxVAGinfoNumber: ?? # XXX count ?

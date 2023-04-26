@@ -15,10 +15,6 @@ import (
 	"golang.org/x/text/transform"
 )
 
-const (
-	DEBUG = false
-)
-
 var (
 	bitExpressionRE = regexp.MustCompile(`b([01_]+)`)
 )
@@ -36,9 +32,7 @@ func ParseDataPattern(in string) (DataPattern, error) {
 	} else {
 		dp.Value = in
 	}
-	if DEBUG {
-		log.Printf("ParseDataPattern: '%s' => '%s'", in, value)
-	}
+	log.Debug().Msgf("ParseDataPattern: '%s' => '%s'", in, value)
 	return dp, nil
 }
 
@@ -107,9 +101,7 @@ func replaceNextBitTag(s string) (string, error) {
 		return "", err
 	}
 
-	if DEBUG {
-		log.Printf("replaceNextBitTag(%s): %d", m, i)
-	}
+	log.Debug().Msgf("replaceNextBitTag(%s): %d", m, i)
 
 	// XXX fix bit sizing
 	lm := len(m)
@@ -369,9 +361,8 @@ func ReverseBytes(b []byte, unitLength int) []byte {
 // decodes value in network byte order (big) to unsigned integer
 func AsUint64(kind string, b []byte) uint64 {
 
-	if DEBUG {
-		log.Printf("AsUint64 converting [%02x] to %s", b, kind)
-	}
+	log.Debug().Msgf("AsUint64 converting [%02x] to %s", b, kind)
+
 	switch kind {
 	case "u8", "i8", "ascii":
 		return uint64(b[0])
@@ -398,17 +389,17 @@ func AsUint64Raw(b []byte) (v uint64) {
 	} else {
 		v = binary.BigEndian.Uint64(b)
 	}
-	if DEBUG {
-		//log.Printf("AsUint6Raw converting [%02x] to %d", b, v)
-	}
+
+	//log.Debug().Msgf("AsUint6Raw converting [%02x] to %d", b, v)
+
 	return
 }
 
 // decodes value in network byte order (big) to signed integer
 func AsInt64(kind string, b []byte) int64 {
-	if DEBUG {
-		//log.Printf("AsInt64 converting [%02x] to %s", b, kind)
-	}
+
+	//log.Debug().Msgf("AsInt64 converting [%02x] to %s", b, kind)
+
 	switch kind {
 	case "i8":
 		return int64(int8(b[0]))
