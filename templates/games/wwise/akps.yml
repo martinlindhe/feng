@@ -1,0 +1,50 @@
+# STATUS: 1%
+
+# Used in games using the Wwise sound engine
+
+# Used in:
+# Exoprimal (2023, PC)
+
+# Unconfirmed:
+# Kinect Rush: A Disney Pixar Adventure (X360, 2012)
+# Assassin's Creed III (PC, 2012)
+# Dishonored (PC, 2012)
+# Warhammer 40,000: Space Marine (PC, 2012)
+# Halo 4 (X360, 2012)
+# Assassin 's Creed: Revelations (PC, 2011)
+# BioShock: Infinite (PC/PS3/X360, 2013)
+
+# TODO "1KCP" is used for The Saboteur (PC)
+
+# TODO MAX: finish parsing
+# TODO MAX: need big endian sample
+
+references:
+  - https://forum.xentax.com/viewtopic.php?f=13&p=80192#p80192
+  - https://wiki.xentax.com/index.php/Wwise_Audio_PCK
+
+kind: game
+name: Wwise Audio Package
+extensions: [.pck]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'AKPK'
+
+structs:
+  header:
+    ascii[4] Magic: ??
+    u32 SizeHeader: ?? # data start offset
+    u32 Endian: ?? # 1 = big, XXX need sample
+    #if self.Endian != 1:
+    #  endian: big
+
+    u32 IDENT: ?? # 3c
+    u32 u2: ?? # 4
+    u32 u3: ?? # cc
+    u32 u4: ?? # 4
+    u32 u5: ?? # 2
+
+layout:
+  - header Header

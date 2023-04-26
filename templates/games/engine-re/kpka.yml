@@ -10,12 +10,11 @@
 # Resistance
 # Exoprimal (version 4)
 
-# TODO MAX: exoprimal file is 30 gig, cant read it all need to stream read ...
-
 # TODO: version 4 of the format might differ a bit from xentax wiki
 
 references:
   - http://wiki.xentax.com/index.php/RE_Engine_PAK
+  - https://forum.xentax.com/viewtopic.php?p=125284
 
 kind: game
 name: RE Engine archive
@@ -52,6 +51,11 @@ structs:
     u32 Unknown2: ??
     u32 Unknown3: ??
 
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
 layout:
   - header Header
-  - file File
+  - file[Header.FileCount] File
+  #- file[2000] File

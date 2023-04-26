@@ -1,0 +1,39 @@
+# STATUS: 1%
+
+# Used in games using the Wwise sound engine
+
+# Used in:
+# Exoprimal (PC)
+
+# TODO MAX: finish parsing
+
+references:
+  - https://wiki.xentax.com/index.php/Wwise_SoundBank_(*.bnk)
+
+software:
+  - https://github.com/bnnm/wwiser
+  - https://github.com/Vextil/Wwise-Unpacker
+
+kind: game
+name: Wwise Soundbank
+extensions: [.bnk]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BKHD'
+
+structs:
+  header:
+    ascii[4] Magic: c'BKHD'
+    u32 SectionSize: ??
+
+    # where SectionSize == 20:
+    u32 SoundbankVersion: ?? # 135
+    u32 SoundbankID: ?? # csum / ts xxx
+    u32 u4: ?? # csum / ts xxx
+    u32 u5: ??
+    u32 u6: ??
+
+layout:
+  - header Header
