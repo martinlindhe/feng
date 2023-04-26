@@ -7,7 +7,6 @@ import (
 	"github.com/maja42/goval"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -133,70 +132,25 @@ func TestGovalStrings(t *testing.T) {
 }
 
 func TestEvalAlignment4(t *testing.T) {
-	templateData := `
-structs:
-  header:
-    u8 Len: ??
-    ascii[self.Len] Name: ??
-    u8[alignment(self.Len, 4)] Padding: ??
-
-layout:
-  - header Header
-`
-	ds, err := template.UnmarshalTemplateIntoDataStructure([]byte(templateData), "")
-	assert.Equal(t, nil, err)
-
 	var alignmentTests = []struct {
-		data []byte
-		len  int
+		dataLen         int
+		alignment       int
+		expectedPadding int
 	}{
-		{[]byte{
-			1,       // Len
-			'a',     // Name
-			0, 0, 0, // Padding
-		}, 3},
-		{[]byte{
-			2,        // Len
-			'a', 'b', // Name
-			0, 0, // Padding
-		}, 2},
-		{[]byte{
-			3,             // Len
-			'a', 'b', 'c', // Name
-			0, // Padding
-		}, 1},
-		{[]byte{
-			4,                  // Len
-			'a', 'b', 'c', 'd', // Name
-		}, 0},
-		{[]byte{
-			5,                       // Len
-			'a', 'b', 'c', 'd', 'e', // Name
-			0, 0, 0,
-		}, 3},
-
-		{[]byte{
-			25,
-			'8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
-			'8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '8',
-			0, 0, 0,
-		}, 3},
+		{2, 4, 2},
+		{3, 4, 1},
+		{4, 4, 0},
+		{5, 4, 3},
+		{6, 4, 2},
+		{26, 4, 2},
+		{0x6800, 0x800, 0},
+		{0x67FF, 0x800, 1},
+		{0x6001, 0x800, 0x7FF},
 	}
 
 	for _, tt := range alignmentTests {
-
-		f := mockFile(t, "in", tt.data)
-
-		fl, err := MapReader(f, ds, "")
+		i, err := evalAlignment(tt.dataLen, tt.alignment)
 		assert.Equal(t, nil, err)
-
-		if tt.len > 0 {
-			_, val, err := fl.GetValue("Header.Padding", &ds.Layout[0])
-			assert.Equal(t, nil, err)
-			assert.Equal(t, tt.len, len(val))
-		} else {
-			_, _, err := fl.GetValue("Header.Padding", &ds.Layout[0])
-			assert.Error(t, errors.New("GetValue: 'Header.Padding' not found"), err)
-		}
+		assert.Equal(t, tt.expectedPadding, i)
 	}
 }

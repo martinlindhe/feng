@@ -248,7 +248,7 @@ func MapFileToMatchingTemplate(f afero.File, startOffset int64, filename string,
 		processed++
 
 		if ds.NoMagic {
-			log.Debug().Msgf("skip no_magic template", tpl)
+			log.Debug().Msgf("skip no_magic template %s", tpl)
 			return nil
 		}
 
@@ -730,9 +730,9 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			}
 			lastIf = q
 			if a != 0 {
-				log.Debug().Msgf("IF EVALUATED TRUE: q=", q, ", a=", a)
+				log.Debug().Msgf("IF EVALUATED TRUE: q=%s, a=%d", q, a)
 			} else {
-				log.Debug().Msgf("IF EVALUATED FALSE: q=", q, ", a=", a)
+				log.Debug().Msgf("IF EVALUATED FALSE: q=%s, a=%d", q, a)
 			}
 			if a != 0 {
 				err := fl.expandChildren(r, fs, dfParent, ds, es.Children)
@@ -742,15 +742,15 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			}
 
 		case "else":
-			log.Debug().Msgf("ELSE: evaluating", lastIf)
+			log.Debug().Msgf("ELSE: evaluating %s", lastIf)
 			a, err := fl.EvaluateExpression(lastIf, dfParent)
 			if err != nil {
 				return err
 			}
 			if a == 0 {
-				log.Debug().Msgf("ELSE EVALUATED TRUE: lastIf=", lastIf, ", a=", a)
+				log.Debug().Msgf("ELSE EVALUATED TRUE: lastIf=%s, a=%d", lastIf, a)
 			} else {
-				log.Debug().Msgf("ELSE EVALUATED FALSE: lastIf=", lastIf, ", a=", a)
+				log.Debug().Msgf("ELSE EVALUATED FALSE: lastIf=%s, a=%d", lastIf, a)
 			}
 			if a == 0 {
 				err := fl.expandChildren(r, fs, dfParent, ds, es.Children)

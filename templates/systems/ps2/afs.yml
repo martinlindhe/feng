@@ -1,26 +1,26 @@
-# STATUS: 50%
-
-# XXX "Criware AFS" ???
+# STATUS: 80%, extract: ok
 
 # Archive format that contains multiple .adx audio files
 
 # Used in:
-# Devil May Cry 2 (2003, PS2) - no file names ???
-# Monster Hunter (2004, PS2)
+# Devil May Cry 2 (2003, PS2) - has filename_header, but no filename entries
+# Monster Hunter (2004, PS2) - has filename table
 # Persona 3 (2006, PS2)
 # Persona 4 (2008, PS2)
 # + many more PS2 titles
+
+# TODO MAX: map filenames to the file entries
 
 references:
   - https://wiki.xentax.com/index.php/GRAF:AFS_AFS
 
 software:
-  - https://forum.xentax.com/viewtopic.php?t=22502 # AFS Explorer, can extract .afs
+  - https://forum.xentax.com/viewtopic.php?t=22502  # AFS Explorer
   - https://forum.xentax.com/viewtopic.php?p=184916 # AFS Tool
 
 kind: archive
-name: AFS archive
-extensions: [.afs]
+name: Playstation 2 AFS archive
+extensions: [.afs, .bin]
 endian: little
 
 magic:
@@ -37,13 +37,30 @@ structs:
     u32 Size: ??  # 0 == end of list marker
 
     offset: self.Offset
-    # XXX some header here ... not exactly right but:
-    u32 FilenameDirectoryOffset: ??
-    u32 FilenameDirectoryLength: ??
-    raw:u8[self.Size] Data: ?? # XXX with dmc2, Data is misaligned
-    u8[alignment(len("self.Size"), 1024)] Padding: ??
+    raw:u8[self.Size] Data: ??
+    u8[alignment(self.Size , 2048)] Padding: ??
     offset: restore
+
+  filename_header:
+    offset: "0x7FFF8"
+    u32 DirectoryOffset: ??
+    u32 DirectoryLength: ?? # 0 == no filename entries
+
+  filename:
+    ascii[32] Filename: ??
+    u16 Year: ??
+    u16 Month: ??
+    u16 Day: ??
+    u16 Hour: ??
+    u16 Minute: ??
+    u16 Second: ??
+    u32 FileSize: ?? # same as file.Size
 
 layout:
   - header Header
   - file[Header.FileCount] File
+
+  - filename_header FilenameHeader
+  - offset FilenameHeader.DirectoryOffset
+
+  - filename[Header.FileCount] Filename

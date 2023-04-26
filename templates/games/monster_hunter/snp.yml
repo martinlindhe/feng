@@ -1,0 +1,29 @@
+# STATUS: 90%
+
+# Used in:
+# Monster Hunter (2004, PS2)
+
+kind: archive
+name: Monster Hunter MOMO archive
+extensions: [.snp]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'MOMO'
+
+structs:
+  header:
+    ascii[4] Magic: c'MOMO'
+    u32 EntryCount: ??
+
+  entry:
+    u32 Offset: ??
+    u32 Size: ??
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

@@ -88,8 +88,8 @@ func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (int64,
 	}
 }
 
+// 1 arg: hex string
 func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
-	// 1 arg: hex string
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -113,8 +113,8 @@ func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: hex string
 func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
-	// 1 arg: hex string
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -149,8 +149,8 @@ func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: hex string
 func (fl *FileLayout) evalPeekI8(args ...interface{}) (interface{}, error) {
-	// 1 arg: hex string
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -183,9 +183,9 @@ func (fl *FileLayout) evalPeekI8(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// convert alphanumeric string to int
+// 1 arg: string. return integer value
 func (fl *FileLayout) evalAtoi(args ...interface{}) (interface{}, error) {
-	// convert alphanumeric string to int
-	// 1 arg: string. return integer value
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -199,9 +199,9 @@ func (fl *FileLayout) evalAtoi(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// convert octal numeric string to int
+// 1 arg: string. return integer value
 func (fl *FileLayout) evalOtoi(args ...interface{}) (interface{}, error) {
-	// convert octal numeric string to int
-	// 1 arg: string. return integer value
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -219,9 +219,9 @@ func (fl *FileLayout) evalOtoi(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: int. return integer value
+// returns ceil of float64
 func (fl *FileLayout) evalCeil(args ...interface{}) (interface{}, error) {
-	// returns ceil of float64
-	// 1 arg: int. return integer value
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -243,10 +243,10 @@ func (fl *FileLayout) evalAbs(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected int, got %T", args[0])
 }
 
-func (fl *FileLayout) evalAlignment(args ...interface{}) (interface{}, error) {
-	// 2 args: 1) size value, 2) alignment. return the alignment needed for size value to fit into "alignment"
-	// example: value 4, align 4. returns 0
-	// example: value 4, align 8. returns 4
+// 2 args: 1) size value, 2) alignment. return the alignment needed for size value to fit into "alignment"
+// example: value 4, align 4. returns 0
+// example: value 4, align 8. returns 4
+func evalAlignment(args ...interface{}) (interface{}, error) {
 	if len(args) != 2 {
 		return nil, fmt.Errorf("expected exactly 2 argument")
 	}
@@ -261,13 +261,13 @@ func (fl *FileLayout) evalAlignment(args ...interface{}) (interface{}, error) {
 
 	i := (v2 - (v1 % v2)) % v2
 	if DEBUG_EVAL {
-		log.Printf("aligned %d, %d => %d", v1, v2, i)
+		log.Info().Msgf("aligned %d, %d => %d", v1, v2, i)
 	}
 	return i, nil
 }
 
+// 1 arg: name of variable. return its offset as int
 func (fl *FileLayout) evalOffset(args ...interface{}) (interface{}, error) {
-	// 1 arg: name of variable. return its offset as int
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -277,15 +277,15 @@ func (fl *FileLayout) evalOffset(args ...interface{}) (interface{}, error) {
 			panic(err)
 		}
 		if DEBUG_EVAL {
-			log.Printf("eval offset('%s') => %06x", s, i)
+			log.Info().Msgf("eval offset('%s') => %06x", s, i)
 		}
 		return i, nil
 	}
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: name of variable. return its data length as int
 func (fl *FileLayout) evalLen(args ...interface{}) (interface{}, error) {
-	// 1 arg: name of variable. return its data length as int
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -299,8 +299,8 @@ func (fl *FileLayout) evalLen(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: name of variable. return manipulated string value
 func (fl *FileLayout) evalSevenBitString(args ...interface{}) (interface{}, error) {
-	// 1 arg: name of variable. return manipulated string value
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -321,8 +321,8 @@ func (fl *FileLayout) evalSevenBitString(args ...interface{}) (interface{}, erro
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: name of variable. return cleaned string value
 func (fl *FileLayout) evalCleanString(args ...interface{}) (interface{}, error) {
-	// 1 arg: name of variable. return cleaned string value
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -345,8 +345,8 @@ func (fl *FileLayout) evalCleanString(args ...interface{}) (interface{}, error) 
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: name of variable. return filename without extension
 func (fl *FileLayout) evalNoExt(args ...interface{}) (interface{}, error) {
-	// 1 arg: name of variable. return filename without extension
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -356,8 +356,8 @@ func (fl *FileLayout) evalNoExt(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: name of variable. return filename without path
 func (fl *FileLayout) evalBasename(args ...interface{}) (interface{}, error) {
-	// 1 arg: name of variable. return filename without path
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
 	}
@@ -367,10 +367,9 @@ func (fl *FileLayout) evalBasename(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 2 args: 1) field name 2) bit
+// returns bool true if bit is set
 func (fl *FileLayout) evalBitSet(args ...interface{}) (interface{}, error) {
-	// 2 args: 1) field name 2) bit
-	// returns bool true if bit is set
-
 	if len(args) != 2 {
 		return nil, fmt.Errorf("expected exactly 2 argument")
 	}
@@ -379,7 +378,6 @@ func (fl *FileLayout) evalBitSet(args ...interface{}) (interface{}, error) {
 	if !ok {
 		return nil, fmt.Errorf("2nd arg: expected int, got %T", args[1])
 	}
-
 	if v2 > 7 {
 		return nil, fmt.Errorf("TODO: bitset() over bit 7")
 	}
@@ -389,7 +387,6 @@ func (fl *FileLayout) evalBitSet(args ...interface{}) (interface{}, error) {
 		if err != nil {
 			panic(err)
 		}
-
 		res := (val[0])&(1<<(v2)) != 0
 		return res, nil
 	}
@@ -397,8 +394,8 @@ func (fl *FileLayout) evalBitSet(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("1st arg: expected string, got %T", args[0])
 }
 
+// 2-n arg: reference value, list of values. returns true if 1st number is in the others
 func (fl *FileLayout) evalEither(args ...interface{}) (interface{}, error) {
-	// 2-n arg: reference value, list of values. returns true if 1st number is in the others
 	if len(args) < 2 {
 		return nil, fmt.Errorf("expected at least 2 arguments")
 	}
@@ -419,8 +416,8 @@ func (fl *FileLayout) evalEither(args ...interface{}) (interface{}, error) {
 	return false, nil
 }
 
+// 2-n arg: reference value, list of values. returns true if 1st number is not any of the others
 func (fl *FileLayout) evalNot(args ...interface{}) (interface{}, error) {
-	// 2-n arg: reference value, list of values. returns true if 1st number is not any of the others
 	if len(args) < 2 {
 		return nil, fmt.Errorf("expected at least 2 arguments")
 	}
@@ -508,7 +505,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["otoi"] = fl.evalOtoi
 	functions["ceil"] = fl.evalCeil
 	functions["abs"] = fl.evalAbs
-	functions["alignment"] = fl.evalAlignment
+	functions["alignment"] = evalAlignment
 	functions["offset"] = fl.evalOffset
 	functions["len"] = fl.evalLen
 	functions["not"] = fl.evalNot
