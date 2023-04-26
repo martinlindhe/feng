@@ -343,7 +343,6 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 	}
 
 	switch field.Format.Kind {
-
 	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64", "f32":
 		if !field.Format.Slice && field.Format.Range != "" {
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
@@ -352,34 +351,18 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 			val := 0
 			skipRest := false
 
-			switch field.Format.Kind {
-			case "f32":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
-					if field.Endian == "big" {
-						values = append(values, prettyFloat(math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
-					} else {
-						values = append(values, prettyFloat(math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
-					}
-					if val >= 3 {
-						skipRest = true
-						break
-					}
-				}
+			for i := int64(0); i < totalLength; i += unitLength {
+				val++
 
-			case "u8":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
+				switch field.Format.Kind {
+
+				case "u8":
 					values = append(values, fmt.Sprintf("%d", b[i]))
-					if i+unitLength < totalLength && val >= 4 {
+					if i+unitLength < totalLength && val >= 5 {
 						skipRest = true
-						break
 					}
-				}
 
-			case "u16":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
+				case "u16":
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint16(b[i:])))
 					} else {
@@ -387,13 +370,9 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 					}
 					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
-						break
 					}
-				}
 
-			case "u32":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
+				case "u32":
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint32(b[i:])))
 					} else {
@@ -401,13 +380,9 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 					}
 					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
-						break
 					}
-				}
 
-			case "u64":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
+				case "u64":
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", binary.BigEndian.Uint64(b[i:])))
 					} else {
@@ -415,23 +390,15 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 					}
 					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
-						break
 					}
-				}
 
-			case "i8":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
+				case "i8":
 					values = append(values, fmt.Sprintf("%d", int8(b[i])))
 					if i+unitLength < totalLength && val >= 4 {
 						skipRest = true
-						break
 					}
-				}
 
-			case "i16":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
+				case "i16":
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", int16(binary.BigEndian.Uint16(b[i:]))))
 					} else {
@@ -439,13 +406,9 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 					}
 					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
-						break
 					}
-				}
 
-			case "i32":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
+				case "i32":
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", int32(binary.BigEndian.Uint32(b[i:]))))
 					} else {
@@ -453,13 +416,9 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 					}
 					if i+unitLength < totalLength && val >= 3 {
 						skipRest = true
-						break
 					}
-				}
 
-			case "i64":
-				for i := int64(0); i < totalLength; i += unitLength {
-					val++
+				case "i64":
 					if field.Endian == "big" {
 						values = append(values, fmt.Sprintf("%d", int64(binary.BigEndian.Uint64(b[i:]))))
 					} else {
@@ -469,9 +428,23 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 						skipRest = true
 						break
 					}
+
+				case "f32":
+					if field.Endian == "big" {
+						values = append(values, prettyFloat(math.Float32frombits(binary.BigEndian.Uint32(b[i:]))))
+					} else {
+						values = append(values, prettyFloat(math.Float32frombits(binary.LittleEndian.Uint32(b[i:]))))
+					}
+					if val >= 3 {
+						skipRest = true
+					}
+
+				default:
+					panic("FIXME handle " + field.Format.Kind)
 				}
-			default:
-				panic("FIXME handle " + field.Format.Kind)
+				if skipRest {
+					break
+				}
 			}
 
 			if skipRest {
