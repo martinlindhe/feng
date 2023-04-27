@@ -327,7 +327,7 @@ func SingleUnitSize(kind string) int64 {
 		return 4
 	case "u64", "i64", "filetime":
 		return 8
-	case "xyzm32":
+	case "rgba32", "xyzm32":
 		return 16
 	}
 	panic(fmt.Sprintf("SingleUnitSize cant handle kind '%s'", kind))

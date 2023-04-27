@@ -168,7 +168,9 @@ date / time
 
 colors
 
-    rgb8              3 byte values for R, G, B
+    rgb8              3 x 8-bit values for R, G, B
+
+    rgba32            4 x 32-bit values for R, G, B, A
 
 3d data
 

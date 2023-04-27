@@ -1,12 +1,11 @@
-# STATUS: 5%
+# STATUS: 70%
 
 # Related to system icons
 
 # Used in:
 # Call of Duty: Finest Hour (PS2)
 
-# TODO MAX: recode rgb values
-# TODO MAX: S-JIS text string decode
+# NOTE: Alpha value is set to 0 and is ignored
 
 references:
   - https://www.ps2savetools.com/documents/iconsys-format/
@@ -24,28 +23,28 @@ structs:
   header:
     ascii[4] Magic: c'PS2D'
     u16 u1: ?? # 4
-    u16 u2: ?? # 24    offset of 2nd line in titlename
-    u32 MaybeReserved: ?? # 0
+    u16 u2: ?? # 24    XXX offset of 2nd line in title name
+    u32 Reserved: ?? # 0
 
-    u32 background transparency when save is selected in ps2 browser: ?? # XXX . 0x00(transparent) to 0x80(opaque)
-    u8[16] background color upper left: ?? # XXX decode (RGB-) 0x00 – 0x80
-    u8[16] background color upper right: ?? # XXX decode (RGB-) 0x00 – 0x80
-    u8[16] background color lower left: ?? # XXX decode (RGB-) 0x00 – 0x80
-    u8[16] background color lower right: ?? # XXX decode (RGB-) 0x00 – 0x80
+    u32 Selection transparency: ?? # background transparency when save is selected in ps2 browser.    XXX  value between 0x00(transparent) to 0x80(opaque)
+    rgba32 Background color upper left: ??
+    rgba32 Background color upper right: ??
+    rgba32 Background color lower left: ??
+    rgba32 Background color lower right: ??
 
-    u8[16] light 1 direction: ??
-    u8[16] light 2 direction: ??
-    u8[16] light 3 direction: ??
+    u32[4] Light 1 direction: ?? # XXX decode
+    u32[4] Light 2 direction: ?? # XXX decode
+    u32[4] Light 3 direction: ?? # XXX decode
 
-    u8[16] light 1 rgb: ?? # XXX decode
-    u8[16] light 2 rgb: ?? # XXX decode
-    u8[16] light 3 rgb: ?? # XXX decode
-    u8[16] ambient light rgb: ?? # XXX decode
+    rgba32 Light 1 rgb: ??
+    rgba32 Light 2 rgb: ??
+    rgba32 Light 3 rgb: ??
+    rgba32 Ambient light rgb: ??
 
-    sjis[68] title name of savegame: ?? # XXX (null terminated, S-JIS format)
-    ascii[64] filename of normal icon: ??
-    ascii[64] filename of icon file displayed when copying: ??
-    ascii[64] filename of icon file displayed when deleting: ??
+    sjis[68] Title name of savegame: ??
+    ascii[64] Filename of icon: ??
+    ascii[64] Filename of icon when copying: ??
+    ascii[64] Filename of icon when deleting: ??
 
     u8[512] Empty: ?? # 0
 

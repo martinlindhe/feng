@@ -176,7 +176,7 @@ var (
 )
 
 const (
-	maxHexDisplayLength = 12
+	maxHexDisplayLength = 16
 )
 
 func prettyFloat(f float32) string {
@@ -217,12 +217,11 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		if field.Format.Slice || field.Format.Range != "" {
 			return ""
 		}
-		return fmt.Sprintf("%s, %s, %s, %s",
+		return fmt.Sprintf("[%s, %s, %s, %s]",
 			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[:4])))),
 			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[4:8])))),
 			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[8:12])))),
-			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[12:16])))),
-		)
+			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[12:16])))))
 
 	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
 		if !field.Format.Slice && field.Format.Range != "" {
@@ -322,7 +321,14 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		return timestamp.Format(time.RFC3339)
 
 	case "rgb8":
-		return fmt.Sprintf("(%d, %d, %d)", b[0], b[1], b[2])
+		return fmt.Sprintf("[%d, %d, %d]", b[0], b[1], b[2])
+
+	case "rgba32":
+		return fmt.Sprintf("[%d, %d, %d, %d]",
+			uint32(value.AsUint64Raw(b[:4])),
+			uint32(value.AsUint64Raw(b[4:8])),
+			uint32(value.AsUint64Raw(b[8:12])),
+			uint32(value.AsUint64Raw(b[12:16])))
 
 	case "vu32":
 		got, _, _, _ := fl.ReadVariableLengthU32()
@@ -477,10 +483,10 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 		}
 
 	case "ascii", "asciiz", "asciinl", "xyzm32", "utf16", "utf16z", "sjis", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
-		"rgb8":
+		"rgb8", "rgba32":
 		res := fl.GetFieldValue(field).(string)
 		if len(res) > 100 {
-			res = res[0:100]
+			res = res[0:100] // XXX cut better, respect rune widths
 			return presentStringValue(res) + "..."
 		}
 		return presentStringValue(res)
