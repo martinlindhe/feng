@@ -3,11 +3,13 @@
 # Used in old Eurocom games:
 #
 # Verified:
+# Ice Age: Dawn of the Dinosaurs (2009), PS2 + more
 # G-Force (2009), PS3 + more platforms
 #
 # Unverified:
-# Spyro, Sphinx, Ice Age: Dawn of the Dinosaurs, Pirates of the Caribbean: At World's End (2007) and so on
+# Spyro, Sphinx, Pirates of the Caribbean: At World's End (2007) and so on
 
+# TODO: need big endian sample file
 # TODO MAX: file names is encoded
 
 references:
@@ -17,13 +19,21 @@ references:
 kind: game
 name: Eurocom BIN/000 resource
 extensions: [.bin]
-endian: big # XXX
 
-no_magic: true
+multi_file: true # File pair: .bin (entry list) and .000 (data)
+
+magic:
+  - offset: 0000
+    match: 00 00
+    endian: big
+
+  - offset: 0002
+    match: 00 00
+    endian: little
 
 structs:
   header:
-    u32 Version: ?? # if first two bytes is not 0, then it is BIG ENDIAN (?)
+    u32 Version: ??
     u32 Binsz: ??
     u32 Files: ??
     u16 Dummy: ??

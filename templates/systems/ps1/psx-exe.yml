@@ -1,0 +1,37 @@
+# STATUS: 30%
+
+# TODO: file size should be multiple of 2048 bytes
+
+references:
+  - https://www.retroreversing.com/ps1-exe
+  - https://github.com/cetygamer/psxsdk/blob/master/tools/elf2exe.c
+
+kind: system
+name: Playstation executable
+endian: little
+extensions: [.exe]
+
+magic:
+  - offset: 0000
+    match: c'PS-X EXE'
+
+structs:
+  header:
+    ascii[8] Signature: c'PS-X EXE'
+    u32[2] Reserved: ?? # 0, 0
+    u32 Initial Program Counter: ?? # IP
+    u32 u1: ?? # 0
+    u32 TextSectionOffset: ??
+    u32 TextSectionSize: ??
+    u32[4] u2: ?? # 0, 0, 0, 0
+    u32 Initial Stack Pointer: ?? # SP
+    u32[6] u3: ?? # 0, 0, 0, 0, 0, 0
+    ascii[64] RegionText: ?? # Sony Computer Entertainment Inc. for North America area
+    u8[1908] Padding: ?? # 0
+
+    offset: "0x800"
+    raw:u8[self.TextSectionSize] TextSection Data: ??
+    offset: restore
+
+layout:
+  - header Header

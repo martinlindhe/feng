@@ -253,6 +253,10 @@ func MapFileToGivenTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 // returns true if magic bytes and optionally file extension matches
 func (cfg *MapperConfig) MatchesMagic(ds *template.DataStructure) (bool, string) {
 
+	if ds.NoMagic && len(ds.Magic) > 0 {
+		log.Fatal().Msgf("error in template: no_magic and magic is set")
+	}
+
 	if ds.NoMagic {
 		log.Debug().Msgf("MatchesMagic skip no_magic, template %s", ds.BaseName)
 		return false, ""
@@ -267,17 +271,23 @@ func (cfg *MapperConfig) MatchesMagic(ds *template.DataStructure) (bool, string)
 		b := make([]byte, len(m.Match))
 		_, _ = cfg.F.Read(b)
 		if bytes.Equal(m.Match, b) {
-			if len(m.Extensions) > 0 {
+			extensions := m.Extensions
+			if len(extensions) == 0 {
+				extensions = ds.Extensions
+			}
+
+			if len(extensions) > 0 {
 
 				found := false
 				actualExtension := strings.ToLower(filepath.Ext(cfg.F.Name()))
-				for _, knownExt := range m.Extensions {
+
+				for _, knownExt := range extensions {
 					if knownExt == actualExtension {
 						found = true
 					}
 				}
 				if !found {
-					log.Debug().Msgf("MatchesMagic skip match, wrong extension '%s', expected '%s", actualExtension, m.Extensions)
+					log.Debug().Msgf("MatchesMagic skip match, wrong extension '%s', expected '%s", actualExtension, extensions)
 					return false, ""
 				}
 			}
