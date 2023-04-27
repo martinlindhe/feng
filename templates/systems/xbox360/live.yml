@@ -104,10 +104,10 @@ structs:
       u8[0x28] Padding: ??
 
     u8[0x14] DeviceID: ??
-    utf16[0x480] DisplayName: ??
-    utf16[0x480] DisplayDescription: ??
-    utf16[0x40] PublisherName: ??
-    utf16[0x40] TitleName: ??
+    utf16[0x900] DisplayName: ??
+    utf16[0x900] DisplayDescription: ??
+    utf16[0x80] PublisherName: ??
+    utf16[0x80] TitleName: ??
     u8 TransferFlags: ?? # XXX
     u32 ThumbnailSize: ??
     u32 TitleThumbnailSize: ??

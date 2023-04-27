@@ -5,9 +5,15 @@
 # Used in:
 # Call of Duty: Finest Hour (PS2)
 
+# TODO MAX: recode rgb values
+# TODO MAX: S-JIS text string decode
+
+references:
+  - https://www.ps2savetools.com/documents/iconsys-format/
+
 kind: system
 name: Playstation 2 PS2D file
-extensions: [.sys]
+extensions: [.sys] # names like "icon.sys", "icon_en.sys"
 endian: little
 
 magic:
@@ -18,8 +24,30 @@ structs:
   header:
     ascii[4] Magic: c'PS2D'
     u16 u1: ?? # 4
-    u16 u2: ?? # 24
-    u32 u3: ?? # 0
+    u16 u2: ?? # 24    offset of 2nd line in titlename
+    u32 MaybeReserved: ?? # 0
+
+    u32 background transparency when save is selected in ps2 browser: ?? # XXX . 0x00(transparent) to 0x80(opaque)
+    u8[16] background color upper left: ?? # XXX decode (RGB-) 0x00 – 0x80
+    u8[16] background color upper right: ?? # XXX decode (RGB-) 0x00 – 0x80
+    u8[16] background color lower left: ?? # XXX decode (RGB-) 0x00 – 0x80
+    u8[16] background color lower right: ?? # XXX decode (RGB-) 0x00 – 0x80
+
+    u8[16] light 1 direction: ??
+    u8[16] light 2 direction: ??
+    u8[16] light 3 direction: ??
+
+    u8[16] light 1 rgb: ?? # XXX decode
+    u8[16] light 2 rgb: ?? # XXX decode
+    u8[16] light 3 rgb: ?? # XXX decode
+    u8[16] ambient light rgb: ?? # XXX decode
+
+    ascii[68] title name of savegame: ?? # XXX (null terminated, S-JIS format)
+    ascii[64] filename of normal icon: ??
+    ascii[64] filename of icon file displayed when copying: ??
+    ascii[64] filename of icon file displayed when deleting: ??
+
+    u8[512] Empty: ?? # 0
 
 layout:
   - header Header

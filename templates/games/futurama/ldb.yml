@@ -28,7 +28,7 @@ structs:
     label: cleanstring("self.Language") # Language contains garbage past null byte
 
     offset: self.DataOffset
-    utf16[self.MaybeSize / 2] Data: ??
+    utf16[self.MaybeSize] Data: ??
     offset: restore
 
     if OFFSET >= Header.HeaderSize:

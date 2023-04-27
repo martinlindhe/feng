@@ -298,8 +298,15 @@ func (df *DataField) SingleUnitSize() int64 {
 func SingleUnitSize(kind string) int64 {
 	switch kind {
 	case "u8", "i8",
+
+		// all string types are counted in bytes
 		"ascii", "asciiz", "asciinl",
+		"utf16", "utf16z",
+
+		// all variable size number types are counted in bytes
 		"vs64",
+
+		// all compressed types are counted in bytes
 		"compressed:lzo1x",
 		"compressed:lz4",
 		"compressed:lzf",
@@ -309,7 +316,7 @@ func SingleUnitSize(kind string) int64 {
 		"compressed:deflate",
 		"raw:u8", "encrypted:u8":
 		return 1
-	case "u16", "i16", "utf16", "utf16z",
+	case "u16", "i16",
 		"dostime", "dosdate":
 		return 2
 	case "rgb8":

@@ -153,8 +153,9 @@ text
     ascii[5]            ascii string
     asciiz              zero terminated ascii string
     asciinl             newline-terminated (\n) ascii string
-    utf16[5]            utf16 string    (utf16 le == wchar_t)
+    utf16[6]            utf16 string    (utf16 le == wchar_t)
     utf16z              zero terminated utf16 string
+    shiftjis[4]         4-byte long area with ShiftJIS encoded string
 
 
 date / time

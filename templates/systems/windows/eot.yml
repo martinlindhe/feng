@@ -52,19 +52,19 @@ structs:
     u16 Padding1: ??
 
     u16 FamilyNameSize: ??
-    utf16[self.FamilyNameSize >> 1] FamilyName: ??
+    utf16[self.FamilyNameSize] FamilyName: ??
     u16 Padding2: ??
 
     u16 StyleNameSize: ??
-    utf16[self.StyleNameSize >> 1] StyleName: ??
+    utf16[self.StyleNameSize] StyleName: ??
     u16 Padding3: ??
 
     u16 VersionNameSize: ??
-    utf16[self.VersionNameSize >> 1] VersionName: ??
+    utf16[self.VersionNameSize] VersionName: ??
     u16 Padding4: ??
 
     u16 FullNameSize: ??
-    utf16[self.FullNameSize >> 1] FullName: ??
+    utf16[self.FullNameSize] FullName: ??
     u16 Padding5: ??
 
     u16 RootStringSize: ??

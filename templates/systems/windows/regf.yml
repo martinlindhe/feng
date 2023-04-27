@@ -41,13 +41,13 @@ structs:
     u32 Root cell offset: ??
     u32 Hive bins data size: ??
     u32 Clustering factor: ??
-    utf16[32] File name: ??
+    utf16[64] File name: ??
     u8[396] Reserved: ??
     u32 Checksum: ??          # xor-32 of the previous 508 bytes
     u8[3576] Reserved: ??
     u32 Boot type: ??
     u32 Boot recover: ??
-  
+
   hive_bin:
     ascii[4] Signature: c'hbin'
     u32 Offset: ??   # XXX relative offset to after header. XXX make use of

@@ -74,7 +74,7 @@ structs:
     # These fields only exists on XBEs built with an XDK version >= 5028
     u64 Unknown1: ??
     u32 Unknown2: ??
-  
+
   cert:
     offset: Header.CertificateAddress - 0x10000
     u32 Size of Certificate: ??
@@ -85,7 +85,7 @@ structs:
     u16 Title ID: ??
     ascii[2] Publisher ID: ??
 
-    utf16[40] Title Name: ??
+    utf16[80] Title Name: ??
     u32[16] Alternate Title IDs: ??
     u32 Allowed Media:
       bit b00000000_00000000_00000000_00000001: HARD_DISK
