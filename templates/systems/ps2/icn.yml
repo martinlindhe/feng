@@ -1,6 +1,9 @@
-# STATUS: 1%
+# STATUS: 10%
+
+# TODO MAX: need RLE compression sample
 
 references:
+  - https://github.com/ticky/ps2iconsys/blob/develop/src/ps2_ps2icon.cpp
   - https://www.ps2-home.com/forum/viewtopic.php?t=7073 # how to change icon guide
 
 software:
@@ -12,17 +15,24 @@ endian: little
 
 magic:
   - offset: 0000
-    match: 00 00 01 00 01 00 00 00 # XXX
+    match: 00 00 01 00
     extensions: [.icn]
 
 structs:
   header:
-    u32 u1: ??
-    u32 u2: ?? # 1
-    u32 u3: ?? # 7 ???
+    u32 u1: ?? # 00 01 00 00
+    u32 AnimationShapeCount: ??
+    u32 TextureType:
+      #eq 00000006: Uncompressed06   # XXX need sample
+      eq 00000007: Uncompressed07
+      #eq 0000000F: RLE  # XXX need sample
+      #default: invalid  # XXX
+    u32 u4: ?? # 3f 80 00 00
 
-    u32 u4: ??
-    u32 u5: ??
+    u32 VertexCount: ??
+    if self.VertexCount % 3 != 0:
+      # must be multiple of 3
+      data: invalid
 
 layout:
   - header Header

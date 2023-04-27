@@ -7,7 +7,10 @@
 
 # NOTE: Alpha value is set to 0 and is ignored
 
+# TODO MAX: rgba32 and f32[4] values gets reversed.. it is flipped with ReverseBytes for some reason
+
 references:
+  - https://github.com/ticky/ps2iconsys/blob/develop/src/ps2_iconsys.cpp
   - https://www.ps2savetools.com/documents/iconsys-format/
 
 kind: system
@@ -26,20 +29,20 @@ structs:
     u16 u2: ?? # 24    XXX offset of 2nd line in title name
     u32 Reserved: ?? # 0
 
-    u32 Selection transparency: ?? # background transparency when save is selected in ps2 browser.    XXX  value between 0x00(transparent) to 0x80(opaque)
+    u32 Selection opacity: ?? # when save is selected in ps2 browser.    XXX  value between 0x00(transparent) to 0x80(opaque)
     rgba32 Background color upper left: ??
     rgba32 Background color upper right: ??
     rgba32 Background color lower left: ??
     rgba32 Background color lower right: ??
 
-    u32[4] Light 1 direction: ?? # XXX decode
-    u32[4] Light 2 direction: ?? # XXX decode
-    u32[4] Light 3 direction: ?? # XXX decode
+    f32[4] Light 1 direction: ??
+    f32[4] Light 2 direction: ??
+    f32[4] Light 3 direction: ??
 
-    rgba32 Light 1 rgb: ??
-    rgba32 Light 2 rgb: ??
-    rgba32 Light 3 rgb: ??
-    rgba32 Ambient light rgb: ??
+    f32[4] Light 1 rgb: ??
+    f32[4] Light 2 rgb: ??
+    f32[4] Light 3 rgb: ??
+    f32[4] Ambient light rgb: ??
 
     sjis[68] Title name of savegame: ??
     ascii[64] Filename of icon: ??
