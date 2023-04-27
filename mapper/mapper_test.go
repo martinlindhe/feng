@@ -68,7 +68,10 @@ layout:
 		0xef, 0x65, 0x5e, 0x52, // TimeT_32_LE
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -158,7 +161,10 @@ layout:
 
 	for _, tt := range test {
 		f := mockFile(t, "in", tt.in)
-		fl, err := MapReader(f, ds, "")
+		fl, err := MapReader(&MapReaderConfig{
+			F:  f,
+			DS: ds,
+		})
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -185,7 +191,10 @@ layout:
 	f := mockFile(t, "in", []byte{
 		0b1100_0111, // Bitfield
 	})
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -223,7 +232,10 @@ layout:
 	f := mockFile(t, "in", []byte{
 		0xff, 0xff, // Bitfield
 	})
-	ff, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -239,7 +251,7 @@ layout:
 							{Operation: "bit", Label: "Hi", Value: []byte{0xf}},
 						}},
 				}}},
-			offset: 0x2, size: 0x2, endian: "little"}, ff)
+			offset: 0x2, size: 0x2, endian: "little"}, fl)
 }
 
 func TestEvaluateEqFieldU8(t *testing.T) {
@@ -287,7 +299,10 @@ layout:
 
 	for _, tt := range test {
 		f := mockFile(t, "in", tt.in)
-		fl, err := MapReader(f, ds, "")
+		fl, err := MapReader(&MapReaderConfig{
+			F:  f,
+			DS: ds,
+		})
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -314,7 +329,10 @@ layout:
 		0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, // Data
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	s, err := fl.ExpandVariables("Header.Field.Size", &fl.Structs[0].Fields[0].Format)
@@ -351,7 +369,10 @@ layout:
 		0x44, 0x55, // Data
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -396,7 +417,10 @@ layout:
 		0xee, // FourConstant
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -474,7 +498,10 @@ layout:
 
 	for _, tt := range test {
 		f := mockFile(t, "in", tt.in)
-		fl, err := MapReader(f, ds, "")
+		fl, err := MapReader(&MapReaderConfig{
+			F:  f,
+			DS: ds,
+		})
 		assert.Equal(t, tt.err, err)
 		if tt.err == nil {
 			assert.Equal(t, tt.out, fl)
@@ -507,7 +534,10 @@ layout:
 		0xbb, // HighSet
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -543,7 +573,10 @@ layout:
 		'f', 'o', 'o', 0x00, // Name
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -575,7 +608,10 @@ layout:
 		'f', 0x00, 'o', 0x00, 'o', 0x00, // Name
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,
@@ -609,7 +645,10 @@ layout:
 		0x90, 0x91, // Block #2
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t,

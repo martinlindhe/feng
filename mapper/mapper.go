@@ -251,6 +251,44 @@ func MapFileToGivenTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 	return nil, nil
 }
 
+// returns true if magic bytes and optionally file extension matches
+func (cfg *MapperConfig) MatchesMagic(ds *template.DataStructure) (bool, string) {
+
+	if ds.NoMagic {
+		log.Debug().Msgf("MatchesMagic skip no_magic, template %s", ds.BaseName)
+		return false, ""
+	}
+
+	for _, m := range ds.Magic {
+		_, err := cfg.F.Seek(cfg.StartOffset+int64(m.Offset), io.SeekStart)
+		if err != nil {
+			log.Error().Err(err).Msgf("seek failed")
+			return false, ""
+		}
+		b := make([]byte, len(m.Match))
+		_, _ = cfg.F.Read(b)
+		if bytes.Equal(m.Match, b) {
+			if len(m.Extensions) > 0 {
+
+				found := false
+				actualExtension := strings.ToLower(filepath.Ext(cfg.F.Name()))
+				for _, knownExt := range m.Extensions {
+					if knownExt == actualExtension {
+						found = true
+					}
+				}
+				if !found {
+					log.Warn().Msgf("MatchesMagic skip match, wrong extension '%s', expected '%s", actualExtension, m.Extensions)
+					return false, ""
+				}
+			}
+
+			return true, m.Endian
+		}
+	}
+	return false, ""
+}
+
 // maps input file to a matching template
 func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 
@@ -280,28 +318,8 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 		}
 		processed++
 
-		if ds.NoMagic {
-			log.Debug().Msgf("skip no_magic template %s", tpl)
-			return nil
-		}
-
-		// skip if no magic bytes matches
-		found := false
-		endian := ""
-		for _, m := range ds.Magic {
-			_, err = cfg.F.Seek(cfg.StartOffset+int64(m.Offset), io.SeekStart)
-			if err != nil {
-				return err
-			}
-			b := make([]byte, len(m.Match))
-			_, _ = cfg.F.Read(b)
-			if bytes.Equal(m.Match, b) {
-				found = true
-				endian = m.Endian
-				break
-			}
-		}
-		if !found {
+		matched, endian := cfg.MatchesMagic(ds)
+		if !matched {
 			log.Debug().Msgf("%s magic bytes don't match", tpl)
 			return nil
 		}

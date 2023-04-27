@@ -59,7 +59,10 @@ func main() {
 		started := time.Now()
 
 		f, _ := fs.Open(entry.In)
-		fl, err := mapper.MapFileToMatchingTemplate(f, 0, entry.In, false)
+
+		fl, err := mapper.MapFileToMatchingTemplate(&mapper.MapperConfig{
+			F: f,
+		})
 		if err != nil {
 			// template don't match, try another
 			if _, ok := err.(mapper.EvaluateError); ok {

@@ -69,7 +69,10 @@ layout:
 		0xbb, 0xaa, // Extra
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	// Header
@@ -134,7 +137,10 @@ layout:
 		0xff, 0xfe, // Padding
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	// Header

@@ -1,9 +1,8 @@
 # STATUS: 90% - all samples are fully mapped
 
-# - LOW: map "image data" area: BITMAPINFOHEADER and then IMAGEDATA 
+# - LOW: map "image data" area: BITMAPINFOHEADER and then IMAGEDATA
 #   this is an embedded DIB bitmap... OR, an embedded PNG. so able to refer to a separate template might be helpful?
 #     - or just allow to tag and extract opaque "PNG" data, and allow processing on the resulting extracted file (XXX could work with a binwalk like clone too to find the PNG header...)
-# TODO: some false matches. for example Gamecube DOL format incorrectly matches this ICO template. Maybe solve by having to match by extension?
 
 references:
   - https://en.wikipedia.org/wiki/ICO_(file_format)
@@ -11,11 +10,13 @@ references:
 
 kind: image
 name: Microsoft Windows icon and cursor files
-extensions: [.ico, .cur]
 mime: image/x-icon
 endian: little
 
-no_magic: true  # this format has no header
+magic:
+  - offset: 0000
+    match: 00 00
+    extensions: [.ico, .cur]
 
 structs:
   icon_dir:
@@ -43,9 +44,9 @@ structs:
     u32 DataSize: ??
     u32 DataOffset: ??
 
-    # TODO: the "image data" area contains a DIB header and data, or a PNG - could be parsed recursively? or just mark for extraction
+    # TODO: the "image data" area contains a DIB header and data, or a PNG - could be parsed recursively?
     offset: self.DataOffset
-    u8[self.DataSize] Image data: ??
+    raw:u8[self.DataSize] Image data: ??
 
 layout:
   - icon_dir ICONDIR

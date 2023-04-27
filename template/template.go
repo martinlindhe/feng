@@ -370,6 +370,9 @@ type Magic struct {
 	Offset HexStringU64
 	Match  HexString
 	Endian string
+
+	// Optional: if set, a list of extensions that must match in addition to the magic signature.
+	Extensions []string
 }
 type HexString []byte
 

@@ -79,6 +79,19 @@ magic:
 ```
 
 
+# Magic bytes matching
+
+For weak matches, you can also enforce matching file extension (case insensitive):
+
+```yaml
+magic:
+  - offset: 0000
+    match: 0a
+    extensions: [.pcx]
+```
+This will not match a file unless both magic bytes and file extension matches.
+
+
 # Pre-defined constants
 
 ```yaml

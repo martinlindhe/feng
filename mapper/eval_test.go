@@ -29,7 +29,10 @@ layout:
 		0x03, // Len1
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	test := []struct {
@@ -67,7 +70,10 @@ layout:
 		0x01, // Val
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	test := []struct {
@@ -108,7 +114,10 @@ layout:
 		0xf0, 0xf1, 0xf2, 0xf3, // Reserved
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	// Header

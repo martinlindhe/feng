@@ -27,7 +27,10 @@ layout:
 		0xff, // TypeOne
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -58,7 +61,10 @@ layout:
 		0xff, // data
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -91,7 +97,10 @@ layout:
 		0xff, // TypeOne
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -123,7 +132,10 @@ layout:
 		0xff, // TypeOne
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header
@@ -160,7 +172,10 @@ layout:
 		0xff, // TypeOne
 	})
 
-	fl, err := MapReader(f, ds, "")
+	fl, err := MapReader(&MapReaderConfig{
+		F:  f,
+		DS: ds,
+	})
 	assert.Equal(t, nil, err)
 
 	assert.Equal(t, `Header

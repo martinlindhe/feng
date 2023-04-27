@@ -6,12 +6,17 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/PCX.bt
   - https://raw.githubusercontent.com/synalysis/Grammars/master/pcx.grammar
 
+software:
+  - imagemagick
+
 kind: image
-extensions: [.pcx]
 mime: image/x-pcx
 endian: little
 
-no_magic: true
+magic:
+  - offset: 0000
+    match: 0a
+    extensions: [.pcx]
 
 structs:
   header:
