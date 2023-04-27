@@ -9,6 +9,8 @@ software:
 ```
 $ hactool -t pfs0 --outdir=out file.nsp      # paru -S hactool-git
 
+$ nsz -x file.{nsp,nsz,xci} -o out           # pacman -S nsz
+
 $ nstool -x out file.{nsp,xci}
 ```
 

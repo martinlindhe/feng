@@ -1,0 +1,23 @@
+# STATUS: 1%
+
+# SFT = Sprite File Text ???
+
+# Used in:
+# Magic & Mayhem (PC)
+
+kind: game
+name: "Magic & Mayhem SFT file"
+extensions: [.sft]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'SFT' 00
+
+
+structs:
+  header:
+    ascii[4] Signature: c'SFT' 00
+
+layout:
+  - header Header

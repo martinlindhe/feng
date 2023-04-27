@@ -278,7 +278,7 @@ func (cfg *MapperConfig) MatchesMagic(ds *template.DataStructure) (bool, string)
 					}
 				}
 				if !found {
-					log.Warn().Msgf("MatchesMagic skip match, wrong extension '%s', expected '%s", actualExtension, m.Extensions)
+					log.Debug().Msgf("MatchesMagic skip match, wrong extension '%s', expected '%s", actualExtension, m.Extensions)
 					return false, ""
 				}
 			}

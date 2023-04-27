@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+# Used in:
+# Silver (1999, PC, Dreamcast)
+
+references:
+  - https://github.com/othias/silvie/blob/8f1c7ebba417b6b6e59cc15f1088e7c76b7d4a4b/dernc.c
+
+software:
+  - https://github.com/othias/silvie
+
+kind: game
+name: Silver RNC archive
+extensions: [.pak]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'RNC' 01  # PC version
+
+
+structs:
+  header:
+    ascii[4] Signature: c'RNC' 01
+
+layout:
+  - header Header

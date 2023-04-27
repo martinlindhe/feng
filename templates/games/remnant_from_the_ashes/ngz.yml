@@ -1,0 +1,17 @@
+# STATUS: 90%
+
+kind: game
+name: "Remnant: From The Ashes NGZ file"
+extensions: [.ngz]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 ExpandedSize: ??
+    u32 Size: ??
+    compressed:zlib[self.Size] Data: ??
+
+layout:
+  - header Header

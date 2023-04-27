@@ -1,0 +1,18 @@
+# STATUS: 1%
+
+kind: system
+name: Nintendo Switch NPDM file
+
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'META'
+    extensions: [.npdm]
+
+structs:
+  header:
+    ascii[4] Signature: c'META'
+
+layout:
+  - header Header

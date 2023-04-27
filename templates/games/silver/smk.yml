@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+# Used in:
+# Silver (1999, PC, Dreamcast)
+
+kind: game
+name: Silver SMK file
+extensions: [.smk]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'SMK2'
+
+
+structs:
+  header:
+    ascii[4] Signature: c'SMK2'
+
+layout:
+  - header Header
