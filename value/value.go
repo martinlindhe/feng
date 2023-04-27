@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/rs/zerolog/log"
+	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 )
@@ -302,6 +303,7 @@ func SingleUnitSize(kind string) int64 {
 		// all string types are counted in bytes
 		"ascii", "asciiz", "asciinl",
 		"utf16", "utf16z",
+		"sjis",
 
 		// all variable size number types are counted in bytes
 		"vs64",
@@ -464,6 +466,13 @@ func Utf16zString(b []byte) string {
 		panic(err)
 	}
 	return string(decoded)
+}
+
+// decodes ShiftJIS into a utf8 string
+func ShiftJISString(b []byte) string {
+	decoder := transform.NewReader(bytes.NewReader(b), japanese.ShiftJIS.NewDecoder())
+	decBytes, _ := ioutil.ReadAll(decoder)
+	return string(decBytes)
 }
 
 // ascii text encoding (00-terminated)

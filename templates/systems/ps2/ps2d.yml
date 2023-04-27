@@ -42,7 +42,7 @@ structs:
     u8[16] light 3 rgb: ?? # XXX decode
     u8[16] ambient light rgb: ?? # XXX decode
 
-    ascii[68] title name of savegame: ?? # XXX (null terminated, S-JIS format)
+    sjis[68] title name of savegame: ?? # XXX (null terminated, S-JIS format)
     ascii[64] filename of normal icon: ??
     ascii[64] filename of icon file displayed when copying: ??
     ascii[64] filename of icon file displayed when deleting: ??

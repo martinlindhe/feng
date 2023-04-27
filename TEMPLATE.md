@@ -150,29 +150,29 @@ u16 Type:
 
 text
 
-    ascii[5]            ascii string
-    asciiz              zero terminated ascii string
-    asciinl             newline-terminated (\n) ascii string
-    utf16[6]            utf16 string    (utf16 le == wchar_t)
-    utf16z              zero terminated utf16 string
-    shiftjis[4]         4-byte long area with ShiftJIS encoded string
+    ascii[5]          ascii string
+    asciiz            zero terminated ascii string
+    asciinl           newline-terminated (\n) ascii string
+    utf16[6]          6-byte area with utf16 encoded string data (utf16 le == wchar_t)
+    utf16z            zero terminated utf16 string
+    sjis[4]           4-byte area with ShiftJIS encoded string data
 
 
 date / time
 
-    time_t_32           32-bit timestamp of seconds since 00:00 January 1, 1970, in UTC
-    filetime            64-bit windows timestamp, in UTC
-    dosdate             16-bit MS-DOS datestamp, in UTC
-    dostime             16-bit MS-DOS timestamp, in UTC
-    dostimedate         32-bit MS-DOS (dostime, dosdate)
+    time_t_32         32-bit timestamp of seconds since 00:00 January 1, 1970, in UTC
+    filetime          64-bit windows timestamp, in UTC
+    dosdate           16-bit MS-DOS datestamp, in UTC
+    dostime           16-bit MS-DOS timestamp, in UTC
+    dostimedate       32-bit MS-DOS (dostime, dosdate)
 
 colors
 
-    rgb8                3 byte values for R, G, B
+    rgb8              3 byte values for R, G, B
 
 3d data
 
-    xyzm32              x,y,z,m matrix of f32 values
+    xyzm32            x,y,z,m matrix of f32 values
 
 data tagging (for extraction feature)
 
@@ -189,17 +189,11 @@ data tagging (for extraction feature)
 
     filename: self.Filename         set the filename to use while extracting for the next data area
 
-TODO MAX PRIO for data tagging: need to set compressed AND uncompressed size for successful extraction of lzf
-
-
-
-
-
 variable length encoding
 
-    vu32                        variable-length u32 (fonts/woff2, images/bpg)
-    vu64                        variable-length u64 (archives/xz, archives/7zip)
-    vs64                        variable-length u64 (systems/macos/nibarchive) where sign bit denotes end of stream
+    vu32              variable-length u32 (fonts/woff2, images/bpg)
+    vu64              variable-length u64 (archives/xz, archives/7zip)
+    vs64              variable-length u64 (systems/macos/nibarchive) where sign bit denotes end of stream
 
 pattern matching data types
 

@@ -287,6 +287,9 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	case "utf16z":
 		return value.Utf16zString(b)
 
+	case "sjis":
+		return value.ShiftJISString(b)
+
 	case "time_t_32":
 		v := value.AsUint64Raw(b)
 		timestamp := time.Unix(int64(v), 0)
@@ -473,7 +476,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 			return fmt.Sprintf("%d", value.AsUint64Raw(b))
 		}
 
-	case "ascii", "asciiz", "asciinl", "xyzm32", "utf16", "utf16z", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
+	case "ascii", "asciiz", "asciinl", "xyzm32", "utf16", "utf16z", "sjis", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 		"rgb8":
 		res := fl.GetFieldValue(field).(string)
 		if len(res) > 100 {

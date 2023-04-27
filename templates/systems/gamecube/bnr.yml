@@ -1,6 +1,9 @@
-# STATUS: 100%
+# STATUS: 90%
 
 # This file is the little image that is displayed in the cube menu when inserting a disc into the gamecube, when in menu mode.
+
+# TODO MAX: decode shift-jis text with region check (NEED SAMPLES)
+# TODO MAX: extract raw pixel data
 
 references:
   - http://hitmen.c02.at/files/yagcd/yagcd/chap14.html
@@ -22,9 +25,9 @@ structs:
       eq c'2': EU
     u8[0x1c] Reserved: ??
 
-    u8[0x1800] Graphical Data: ?? #  (Pixel-format is RGB5A1)
+    u8[0x1800] Graphical Data: ?? # XXX pixel format is RGB5A1
 
-    # Text is all stored in either SHIFT-JIS or ASCII, depending on the region of the Game
+    # XXX Text is all stored in either SHIFT-JIS or ASCII, depending on the region of the Game
     ascii[0x20] Game name: ??
     ascii[0x20] Company name: ??
     ascii[0x40] Full game title: ??

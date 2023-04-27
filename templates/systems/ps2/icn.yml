@@ -1,0 +1,28 @@
+# STATUS: 1%
+
+references:
+  - https://www.ps2-home.com/forum/viewtopic.php?t=7073 # how to change icon guide
+
+software:
+  - https://github.com/ticky/ps2iconsys
+
+kind: system
+name: Playstation 2 memory card icon
+endian: little
+
+magic:
+  - offset: 0000
+    match: 00 00 01 00 01 00 00 00 # XXX
+    extensions: [.icn]
+
+structs:
+  header:
+    u32 u1: ??
+    u32 u2: ?? # 1
+    u32 u3: ?? # 7 ???
+
+    u32 u4: ??
+    u32 u5: ??
+
+layout:
+  - header Header
