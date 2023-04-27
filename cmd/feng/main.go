@@ -94,8 +94,6 @@ func main() {
 		if args.Tree {
 			fmt.Print(fl.PresentStructureTree(fl.Structs))
 		} else if args.Brief {
-			// TODO: if brief, only do magic match + if no match do attempted fuzzy match.
-			//       don't evaluate full struct (fast mode for scanning many files)
 			fmt.Println(args.Filename+":", fl.BaseName)
 		} else {
 			fmt.Print(fl.Present(&mapper.PresentFileLayoutConfig{

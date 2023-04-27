@@ -239,16 +239,14 @@ func MapFileToGivenTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 		StartOffset: cfg.StartOffset,
 		Brief:       cfg.Brief,
 	})
-	fl.DataFileName = cfg.F.Name()
 	if err != nil {
 		log.Error().Msgf("MapReader: %s: %s\n", cfg.TemplateFilename, err.Error())
 
 	}
 	if len(fl.Structs) > 0 {
-		log.Printf("Parsed %s as %s", cfg.F.Name(), cfg.TemplateFilename)
-		return fl, nil
+		log.Info().Msgf("Parsed %s as %s", cfg.F.Name(), cfg.TemplateFilename)
 	}
-	return nil, nil
+	return fl, nil
 }
 
 // returns true if magic bytes and optionally file extension matches
@@ -301,6 +299,31 @@ func mapTemplateIntoDataStructure(templateFilename string) (*template.DataStruct
 	return ds, nil
 }
 
+func (cfg *MapperConfig) mapFileToReader(ds *template.DataStructure, endian string) (*FileLayout, error) {
+	_, _ = cfg.F.Seek(cfg.StartOffset, io.SeekStart)
+
+	fl, err := MapReader(&MapReaderConfig{
+		F:           cfg.F,
+		DS:          ds,
+		StartOffset: cfg.StartOffset,
+		Endian:      endian,
+		Brief:       cfg.Brief,
+	})
+	if err != nil {
+		// template don't match, try another
+		if _, ok := err.(EvaluateError); ok {
+			log.Error().Msgf("MapReader EvaluateError: %s: %s\n", fl.BaseName, err.Error())
+		} else {
+			return nil, nil
+		}
+	}
+	if len(fl.Structs) > 0 {
+		log.Printf("Parsed %s as %s", cfg.F.Name(), fl.BaseName)
+		return fl, errMapFileMatched
+	}
+	return fl, err
+}
+
 // maps input file to a matching template
 func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 
@@ -332,36 +355,16 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 			return nil
 		}
 
-		_, _ = cfg.F.Seek(cfg.StartOffset, io.SeekStart)
-
 		parseStart := time.Now()
-		fl, err = MapReader(&MapReaderConfig{
-			F:           cfg.F,
-			DS:          ds,
-			StartOffset: cfg.StartOffset,
-			Endian:      endian,
-			Brief:       cfg.Brief,
-		})
+		fl, err = cfg.mapFileToReader(ds, endian)
 		parseTime := time.Since(parseStart)
-		fl.DataFileName = cfg.F.Name()
-		if err != nil {
-			// template don't match, try another
-			if _, ok := err.(EvaluateError); ok {
-				log.Error().Msgf("MapReader EvaluateError: %s: %s\n", tpl, err.Error())
-			} else {
-				return nil
-			}
-		}
-		if len(fl.Structs) > 0 {
+		if err == nil {
 			if cfg.MeasureTime {
 				passed := time.Since(started)
 				log.Warn().Msgf("MEASURE: evaluation of %d templates until a match was found: %v, template parsed in %v", processed, passed, parseTime)
 			}
-
-			log.Printf("Parsed %s as %s", cfg.F.Name(), tpl)
-			return errMapFileMatched
 		}
-		return nil
+		return err
 	})
 	if errors.Is(err, errMapFileMatched) {
 		return fl, nil
@@ -371,17 +374,75 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 	}
 
 	if fl == nil {
-		// dump hex of first bytes for unknown files
-		_, _ = cfg.F.Seek(0, io.SeekStart)
-		buf := make([]byte, 10)
-		n, _ := cfg.F.Read(buf)
-		buf = buf[:n]
+		// if no magic match, try to find a filename extension match on any template with no_magic = true
+		fl, err = mapFileToNoMagicMatchingExtension(cfg)
+		if err != nil {
+			// dump hex of first bytes for unknown files
+			_, _ = cfg.F.Seek(0, io.SeekStart)
+			buf := make([]byte, 10)
+			n, _ := cfg.F.Read(buf)
+			buf = buf[:n]
 
-		s, _ := value.AsciiPrintableString(buf, len(buf))
-
-		return nil, fmt.Errorf("no match '%s' %s", hex.EncodeToString(buf[:n]), s)
+			s, _ := value.AsciiPrintableString(buf, len(buf))
+			return nil, fmt.Errorf("no match '%s' %s", hex.EncodeToString(buf[:n]), s)
+		}
 	}
+
 	return fl, nil
+}
+
+// try to find a filename extension match on any template with no_magic = true
+func mapFileToNoMagicMatchingExtension(cfg *MapperConfig) (fl *FileLayout, err2 error) {
+
+	err2 = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
+		// cannot happen
+		if err != nil {
+			panic(err)
+		}
+		if d.IsDir() {
+			return nil
+		}
+
+		if filepath.Ext(tpl) != ".yml" {
+			return nil
+		}
+
+		ds, err := mapTemplateIntoDataStructure(tpl)
+		if err != nil {
+			return err
+		}
+
+		if !ds.NoMagic {
+			// only process no_magic templates
+			return nil
+		}
+
+		// match on extension
+		actualExtension := strings.ToLower(filepath.Ext(cfg.F.Name()))
+		matched := 0
+		for _, wantedExt := range ds.Extensions {
+			if wantedExt == actualExtension {
+				matched++
+			}
+		}
+
+		if matched == 0 || matched != 1 {
+			log.Debug().Msgf("%s no_magic extension don't match (count %d)", tpl, matched)
+			return nil
+		}
+
+		fl, err = cfg.mapFileToReader(ds, ds.Endian)
+		return err
+	})
+	if errors.Is(err2, errMapFileMatched) {
+		return fl, nil
+	}
+
+	if fl == nil {
+		return nil, fmt.Errorf("no no_magic match")
+	}
+
+	return fl, err2
 }
 
 func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression, isSlice bool) error {

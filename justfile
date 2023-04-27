@@ -5,3 +5,6 @@ gen_smoketest:
 # verify current output vs the pre-generated smoketest files, in order to spot regressions
 verify_smoketest:
 	go test ./smoketest -run TestCompareWithReferenceParse
+
+install:
+	go install ./cmd/feng

@@ -53,9 +53,6 @@ type FileLayout struct {
 	// lastpath/filename-without-ext, eg "archives/zip"
 	BaseName string
 
-	// the file that was processed to produce this FileLayout struct
-	DataFileName string
-
 	// if unseen, ask user to submit a sample
 	unseen bool
 
@@ -589,7 +586,7 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 }
 
 func (fl *FileLayout) PresentStructureTree(structs []*Struct) string {
-	res := fmt.Sprintf("# structure tree of %s\n", fl.DataFileName)
+	res := fmt.Sprintf("# structure tree of %s\n", fl._f.Name())
 	for _, layout := range structs {
 		res += fl.presentStructureTreeNode(layout, 0)
 	}
