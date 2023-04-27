@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/maja42/goval"
@@ -58,10 +59,15 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 
 // evaluates a math expression
 func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (int64, error) {
+	fl.evaluatedExpressions++
+
+	started := time.Now()
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return 0, err
 	}
+
+	fl.evaluatedExpressionTime += time.Since(started)
 
 	switch v := result.(type) {
 	case int:

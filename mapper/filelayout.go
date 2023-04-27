@@ -76,6 +76,12 @@ type FileLayout struct {
 
 	// bytes imported from external files, for debugging over-reading
 	bytesImported int
+
+	// number of times fl.EvaluateExpressions() was called during parsing
+	evaluatedExpressions int
+
+	// time spent evaluating expressions during parsing
+	evaluatedExpressionTime time.Duration
 }
 
 // pop last offset from previousOffsets list
@@ -685,9 +691,15 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	pctRead := (float64(fl.bytesRead) / float64(fl.size)) * 100
 
 	res += fmt.Sprintf("BYTES READ: %d (%.1f%%)\n", fl.bytesRead, pctRead) // XXX show bytes read in % of file size
+
 	if fl.bytesImported > 0 {
 		res += fmt.Sprintf("BYTES IMPORTED: %d\n", fl.bytesImported)
 	}
+
+	if fl.evaluatedExpressions > 0 {
+		res += fmt.Sprintf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
+	}
+
 	if len(fl.previousOffsets) != 0 {
 		res += fmt.Sprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
 	}

@@ -34,7 +34,7 @@ structs:
       #eq FD2FB526: v0.6
       #eq FD2FB527: v0.7
       eq FD2FB528: v0.8
-      default: unseen   # XXX is "unseen" supported here? should be!
+      #default: unseen   # XXX is "unseen" supported here? should be!
 
     u8 Frame_Header_Descriptor:
       bit b1100_0000: Frame_Content_Size_flag

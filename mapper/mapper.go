@@ -43,6 +43,8 @@ type MapReaderConfig struct {
 
 	// base offset
 	StartOffset int64
+
+	Brief bool
 }
 
 // produces a list of fields with offsets and sizes from input reader based on data structure
@@ -59,6 +61,9 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 
 	fl := FileLayout{DS: cfg.DS, BaseName: cfg.DS.BaseName, startOffset: cfg.StartOffset, endian: cfg.Endian, Extension: ext, _f: cfg.F}
 	fl.size = fileSize(cfg.F)
+	if cfg.Brief {
+		return &fl, nil
+	}
 	log.Debug().Msgf("mapping ds '%s'", cfg.DS.BaseName)
 
 	for _, df := range cfg.DS.Layout {
@@ -209,6 +214,9 @@ type MapperConfig struct {
 	StartOffset      int64
 	TemplateFilename string
 	MeasureTime      bool
+
+	// only detect by magic, don't map
+	Brief bool
 }
 
 // maps input file to template specified in cfg.TemplateFilename
@@ -229,6 +237,7 @@ func MapFileToGivenTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 		F:           cfg.F,
 		DS:          ds,
 		StartOffset: cfg.StartOffset,
+		Brief:       cfg.Brief,
 	})
 	fl.DataFileName = cfg.F.Name()
 	if err != nil {
@@ -305,6 +314,7 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 			DS:          ds,
 			StartOffset: cfg.StartOffset,
 			Endian:      endian,
+			Brief:       cfg.Brief,
 		})
 		parseTime := time.Since(parseStart)
 		fl.DataFileName = cfg.F.Name()

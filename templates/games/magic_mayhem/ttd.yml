@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+# Used in:
+# Magic & Mayhem (PC)
+
+kind: game
+name: "Magic & Mayhem TTD file"
+extensions: [.ttd]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'TTD' 00
+
+
+structs:
+  header:
+    ascii[4] Signature: c'TTD' 00
+
+layout:
+  - header Header

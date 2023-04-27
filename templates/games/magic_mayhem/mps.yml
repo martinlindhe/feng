@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+# Used in:
+# Magic & Mayhem (PC)
+
+kind: game
+name: "Magic & Mayhem MPS file"
+extensions: [.evt]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'MPS' 00
+
+
+structs:
+  header:
+    ascii[4] Signature: c'MPS' 00
+
+layout:
+  - header Header

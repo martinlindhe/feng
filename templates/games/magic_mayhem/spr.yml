@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+# Used in:
+# Magic & Mayhem (PC)
+
+kind: game
+name: "Magic & Mayhem SPR file"
+extensions: [.spr]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'SPR' 00
+
+
+structs:
+  header:
+    ascii[4] Signature: c'SPR' 00
+
+layout:
+  - header Header

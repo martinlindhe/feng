@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+# Used in:
+# Magic & Mayhem (PC)
+
+kind: game
+name: "Magic & Mayhem NOD file"
+extensions: [.nod]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'NOD' 00
+
+
+structs:
+  header:
+    ascii[4] Signature: c'NOD' 00
+
+layout:
+  - header Header

@@ -71,6 +71,7 @@ func main() {
 		StartOffset:      args.Offset,
 		TemplateFilename: args.Template,
 		MeasureTime:      args.Time,
+		Brief:            args.Brief,
 	}
 
 	if args.Template != "" {

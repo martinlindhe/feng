@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+# Used in:
+# Magic & Mayhem (1998, PC)
+
+kind: game
+name: "Magic & Mayhem ANI file"
+extensions: [.ani]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'ANI' 00
+
+
+structs:
+  header:
+    ascii[4] Signature: c'ANI' 00
+
+layout:
+  - header Header
