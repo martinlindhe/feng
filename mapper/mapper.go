@@ -9,6 +9,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -417,17 +418,32 @@ func mapFileToNoMagicMatchingExtension(cfg *MapperConfig) (fl *FileLayout, err2 
 			return nil
 		}
 
-		// match on extension
-		actualExtension := strings.ToLower(filepath.Ext(cfg.F.Name()))
+		// match on filenames
 		matched := 0
-		for _, wantedExt := range ds.Extensions {
-			if wantedExt == actualExtension {
-				matched++
+		if len(ds.Filenames) > 0 {
+			actualName := filepath.Base(cfg.F.Name())
+
+			for _, wantedName := range ds.Filenames {
+				re := regexp.MustCompile("(?i)" + wantedName)
+				matches := re.MatchString(actualName)
+
+				if matches {
+					log.Info().Msgf("%s: no_magic filename match %s == %v", tpl, wantedName, actualName)
+					matched++
+				}
 			}
 		}
-
+		if matched == 0 {
+			// match on extension
+			actualExtension := strings.ToLower(filepath.Ext(cfg.F.Name()))
+			for _, wantedExt := range ds.Extensions {
+				if wantedExt == actualExtension {
+					matched++
+				}
+			}
+		}
 		if matched == 0 || matched != 1 {
-			log.Debug().Msgf("%s no_magic extension don't match (count %d)", tpl, matched)
+			log.Debug().Msgf("%s: no_magic extension don't match (count %d)", tpl, matched)
 			return nil
 		}
 

@@ -28,8 +28,11 @@ type DataStructure struct {
 	// if template lacks magic bytes
 	NoMagic bool
 
-	// extensions
+	// extensions, used to match if no_magic is true
 	Extensions []string
+
+	// used to match if no_magic is true
+	Filenames []string
 
 	// lastpath/filename-without-ext, eg "archives/zip"
 	BaseName string
@@ -79,6 +82,7 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 		NoMagic:          template.NoMagic,
 		Endian:           template.Endian,
 		Extensions:       template.Extensions,
+		Filenames:        template.Filenames,
 		BaseName:         basename,
 	}, nil
 }

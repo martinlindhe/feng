@@ -1,7 +1,9 @@
 
 # STATUS: 75%
 #
-# Used in Futurama (2003 by Unique Development Studios) PS2, XBox
+# Used in:
+# Futurama (2003 by Unique Development Studios) PS2, XBox
+# Hitman: Blood Money (2006 by IO Interactive) PS2
 
 # TODO MAX: use directory name to rebuild file structure
 # TODO: map padding bytes better, the --unmapped is SUPER SLOW (30+ minutes) on the 800MB files
@@ -16,12 +18,13 @@ software:
 
 kind: archive
 name: Futurama (game) archive
-extensions: [.img]
 endian: little
+
 no_magic: true
-filenames: [ # TODO implement and auto match if no magic matches and exact filename match (case insensitive)
-  futurama.img, ntsc.img, ntsc0.img,  # PS2 (US)
-  FutNTSC0*.img, SysNTSC.img,         # XBox (US)   XXX FIXME allow wildcard in filename
+
+filenames: [
+  futurama.img, "ntsc[0-9]?",
+  "FutNTSC[0-9]*.img", SysNTSC.img,
 ]
 
 structs:

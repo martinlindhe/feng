@@ -1,6 +1,6 @@
 # STATUS: 30%
 
-# - HI: use file name data when extracting files (is in a zlib-compressed DIRENTRY block)
+# TODO MAX: use file name data when extracting files (is in a zlib-compressed DIRENTRY block)
 #
 #    - need custom scripting:
 #    1. make parsed struct available to scripting lang
@@ -29,7 +29,7 @@ structs:
     u32 BaseOffset: ??
     ascii[4] Signature: c'PFS '
 
-    offset: self.BaseOffset
+  block_header:
     u32 Count: ??
 
   block:
@@ -43,12 +43,19 @@ structs:
     u32 CompressedSize: ??
     u32 ExpandedSize: ??
     compressed:zlib[self.CompressedSize] Data: ??
+    offset: restore
 
     if self.CRC == DIRENTRY:
       label: '"DIRENTRY"'
     else:
       label: '"FILEENTRY"'
 
+    offset: restore
+
 layout:
   - header Header
-  - block[Header.Count] Block
+
+  - offset Header.BaseOffset
+  - block_header BlockHeader
+
+  - block[BlockHeader.Count] Block

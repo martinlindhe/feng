@@ -25,6 +25,9 @@ type Template struct {
 	// list of common extensions
 	Extensions []string
 
+	// used to match if no_magic is true
+	Filenames []string
+
 	// kind of file (archive, image ...)
 	Kind string
 
