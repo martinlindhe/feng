@@ -289,6 +289,18 @@ func (cfg *MapperConfig) MatchesMagic(ds *template.DataStructure) (bool, string)
 	return false, ""
 }
 
+func mapTemplateIntoDataStructure(templateFilename string) (*template.DataStructure, error) {
+	rawTemplate, err := fs.ReadFile(feng.Templates, templateFilename)
+	if err != nil {
+		return nil, err
+	}
+	ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, templateFilename)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", templateFilename, err.Error())
+	}
+	return ds, nil
+}
+
 // maps input file to a matching template
 func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 
@@ -308,13 +320,9 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 			return nil
 		}
 
-		rawTemplate, err := fs.ReadFile(feng.Templates, tpl)
+		ds, err := mapTemplateIntoDataStructure(tpl)
 		if err != nil {
-			return err // or panic or ignore
-		}
-		ds, err := template.UnmarshalTemplateIntoDataStructure(rawTemplate, tpl)
-		if err != nil {
-			return fmt.Errorf("%s: %s", tpl, err.Error())
+			return err
 		}
 		processed++
 
