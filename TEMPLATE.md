@@ -132,6 +132,9 @@ cleanstring("self.Value") = "chars" cleans input ascii string, terminates at fir
 no_ext("hello.ext")    = "hello", return input string (filename) without extension
 basename("path/to/file.ext") = "file.ext", returns basename without file path
 
+list_val(self.index, "Filename", "Name")  = reads a value from a field in another struct slice
+
+
 # Data types
 
 numeric

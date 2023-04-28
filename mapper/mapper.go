@@ -268,6 +268,10 @@ func (cfg *MapperConfig) MatchesMagic(ds *template.DataStructure) (bool, string)
 			log.Error().Err(err).Msgf("seek failed")
 			return false, ""
 		}
+		weakMagic := false
+		if len(m.Match) < 4 {
+			weakMagic = true
+		}
 		b := make([]byte, len(m.Match))
 		_, _ = cfg.F.Read(b)
 		if bytes.Equal(m.Match, b) {
@@ -287,7 +291,11 @@ func (cfg *MapperConfig) MatchesMagic(ds *template.DataStructure) (bool, string)
 					}
 				}
 				if !found {
-					log.Debug().Msgf("MatchesMagic skip match, wrong extension '%s', expected '%s", actualExtension, extensions)
+					if weakMagic {
+						log.Debug().Msgf("MatchesMagic skip match for %s, wrong extension '%s', expected '%s", ds.BaseName, actualExtension, extensions)
+					} else {
+						log.Warn().Msgf("MatchesMagic skip match for %s, wrong extension '%s', expected '%s", ds.BaseName, actualExtension, extensions)
+					}
 					return false, ""
 				}
 			}

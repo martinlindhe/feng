@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 	"runtime/pprof"
 
@@ -80,6 +81,10 @@ func main() {
 		fl, err = mapper.MapFileToMatchingTemplate(cfg)
 	}
 	if err != nil {
+		if args.Brief {
+			fmt.Printf("%s: %s\n", err, args.Filename)
+			os.Exit(1)
+		}
 		log.Fatal().Err(err).Msgf("Failed to map %s.", args.Filename)
 		return
 	}

@@ -362,7 +362,7 @@ func (fl *FileLayout) evalNoExt(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
-// 1 arg: name of variable. return filename without path
+// 2 arg: name of variable. return filename without path
 func (fl *FileLayout) evalBasename(args ...interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("expected exactly 1 argument")
@@ -371,6 +371,62 @@ func (fl *FileLayout) evalBasename(args ...interface{}) (interface{}, error) {
 		return filepath.Base(s), nil
 	}
 	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
+// 3 args: 1) struct index 2) struct name 3) field name
+func (fl *FileLayout) evalListVal(args ...interface{}) (interface{}, error) {
+	if len(args) != 3 {
+		return nil, fmt.Errorf("expected exactly 2 argument")
+	}
+
+	v1, ok := args[0].(int)
+	if !ok {
+		return nil, fmt.Errorf("2nd arg: expected int, got %T", args[1])
+	}
+	v2, ok := args[1].(string)
+	if !ok {
+		return nil, fmt.Errorf("1st arg: expected string, got %T", args[1])
+	}
+	v3, ok := args[2].(string)
+	if !ok {
+		return nil, fmt.Errorf("1st arg: expected string, got %T", args[1])
+	}
+
+	st, err := fl.findStruct(fmt.Sprintf("%s_%d", v2, v1)) // File_3
+	if err != nil {
+		return nil, err
+	}
+
+	field, err := st.findField(v3)
+	if err != nil {
+		return nil, err
+	}
+
+	return fl.GetFieldValue(field), nil
+}
+
+func (st *Struct) findField(name string) (*Field, error) {
+	for _, field := range st.Fields {
+		if field.Format.Label == name {
+			return &field, nil
+		}
+	}
+	return nil, fmt.Errorf("not found")
+}
+
+// returns the struct from the parsed layout by name
+func (fl *FileLayout) findStruct(name string) (*Struct, error) {
+	for _, layout := range fl.Structs {
+		if layout.Name == name {
+			return layout, nil
+		}
+		for _, child := range layout.Children {
+			if child.Name == name {
+				return child, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("not found")
 }
 
 // 2 args: 1) field name 2) bit
@@ -521,6 +577,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["cleanstring"] = fl.evalCleanString
 	functions["no_ext"] = fl.evalNoExt
 	functions["basename"] = fl.evalBasename
+	functions["list_val"] = fl.evalListVal
 	result, err := eval.Evaluate(in, evalVariables, functions)
 	if err != nil {
 		if DEBUG_EVAL {
