@@ -116,6 +116,17 @@ func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
 		}
 		return int(val), nil
 	}
+	if offset, ok := args[0].(int); ok {
+		if int64(offset) >= fl.size {
+			return 0, fmt.Errorf("out of range %06x", offset)
+		}
+		val, _ := fl.peekU32(int64(offset))
+
+		if DEBUG_EVAL {
+			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
+		}
+		return int(val), nil
+	}
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
@@ -141,11 +152,11 @@ func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
 		}
 		return int(val), nil
 	}
-	if offset, ok := args[0].(int64); ok {
-		if offset >= int64(fl.size) {
+	if offset, ok := args[0].(int); ok {
+		if int64(offset) >= fl.size {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val, _ := fl.peekU16(offset)
+		val, _ := fl.peekU16(int64(offset))
 
 		if DEBUG_EVAL {
 			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
@@ -176,11 +187,11 @@ func (fl *FileLayout) evalPeekI8(args ...interface{}) (interface{}, error) {
 		}
 		return int(val), nil
 	}
-	if offset, ok := args[0].(int64); ok {
-		if offset >= int64(fl.size) {
+	if offset, ok := args[0].(int); ok {
+		if int64(offset) >= fl.size {
 			return 0, fmt.Errorf("out of range %06x", offset)
 		}
-		val, _ := fl.peekU8(offset)
+		val, _ := fl.peekU8(int64(offset))
 		if DEBUG_EVAL {
 			log.Printf("peek_i8 AT OFFSET %06x: %02x", offset, val)
 		}

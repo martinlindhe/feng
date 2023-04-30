@@ -118,6 +118,7 @@ u16 TYPE: 00 01 ff
 
 ```
 abs(-95)       = 95     returns absolute value
+peek_i8(123)   = -1     returns i8 value from offset
 peek_i16(123)  = -1     returns i16 value from offset
 peek_i16("0100")        hex string offset
 peek_i32(123)  = -1     returns i32 value from offset
