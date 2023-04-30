@@ -1,16 +1,14 @@
 # STATUS: 10%
 #
-# used on PS3
+# Used on PS3.
 
-# convert to video like this:
-#
-# $ feng icon1.pam --extract-dir icon1
-# $ cd icon1 && ffmpeg -i <file> out.mp4
-
-# HI: find sample with audio track
+# Contains a single mpeg data video stream.
 
 references:
   - https://forum.xentax.com/viewtopic.php?t=5116
+
+software:
+  - ffmpeg
 
 kind: system
 name: Sony PS3 PAM video file

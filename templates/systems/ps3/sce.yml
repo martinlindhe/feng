@@ -8,7 +8,7 @@ references:
 
 kind: system
 name: Sony Certified File
-extensions: [.dat, .bin, .ppu.self]
+extensions: [.dat, .bin, .self]
 endian: big # XXX PS3 uses big-endian while PSVita uses little-endian
 
 magic:

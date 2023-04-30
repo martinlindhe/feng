@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+# Used in:
+# Naruto: Ultimate Ninja Storm (2008) PS3
+# Naruto Shippuden: Ultimate Ninja Storm Generations (2012) PS3
+
+# TODO: finish mapping
+
+kind: game
+name: "Naruto: Ultimate Ninja Storm nub file"
+endian: big
+
+magic:
+  - offset: 0000
+    match: 00 02 01 00
+    extensions: [.nub]
+
+structs:
+  header:
+    u32 Signature: ??
+    u32 u2: ?? # 0
+    u32 u3: ?? # 20 XXX some count
+    u32 u4: ?? # 1 XXX some count
+
+layout:
+  - header Header
+

@@ -1,0 +1,63 @@
+# STATUS: 10%
+
+# Used in:
+# Naruto: Ultimate Ninja Storm (2008) PS3
+# Naruto Shippuden - Ultimate Ninja Storm 2 (2010) PS3
+# Naruto Shippuden: Ultimate Ninja Storm Generations (2012) PS3
+# Naruto Shippuden: Ultimate Ninja Storm Revolution (2014) PS3
+
+# TODO: finish mapping
+
+references:
+  - https://zenhax.com/viewtopic.php?t=7406 # for PC version, uses some encryption
+  - https://forum.xentax.com/viewtopic.php?t=13925 # related? NARUTO SHIPPUDEN Ultimate Ninja STORM 4 (*.xfbin)
+
+  - https://aluigi.altervista.org/bms/naruto_ultimate_ninja.bms # not for the same game
+
+kind: archive
+name: "Naruto: Ultimate Ninja Storm archive"
+extensions: [.xfbin]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'NUCC'
+
+structs:
+  header:
+    ascii[4] Signature: c'NUCC'
+    u32 v1: ?? # 0079
+    u32 v2: ?? # 0
+    u32 v3: ?? # 0
+
+    u32 v4: ?? # 0128
+    u32 v5: ?? # 3
+    u32 v6: ?? # 00793e00
+    u32 MaybeNameCount: ??
+
+    u32 v8: ?? # 003c
+    u32 MaybeFilenameCount: ?? # XXX
+    u32 vA: ?? # 0045
+    u32 MaybeName2Count: ?? # 5
+
+    u32 vC: ?? # 0023
+    u32 vD: ?? # 5
+    u32 vE: ?? # 003c
+    u32 vF: ?? # 9
+
+    u32 vG: ?? # 2
+
+  name:
+    asciiz Name: ??
+
+  filename:
+    asciiz Name: ??
+
+layout:
+  - header Header
+
+  - name[Header.MaybeNameCount + 1] Name # +1 to include nil entry
+
+  - filename[Header.MaybeFilenameCount] Filename # last one is a 00 entry
+
+  - name[Header.MaybeName2Count] Name2 # last one is a 00 entry

@@ -12,7 +12,7 @@ references:
   - https://raw.githubusercontent.com/synalysis/Grammars/master/png.grammar
 
 kind: image
-extensions: [.png]
+#extensions: [.png]
 mime: image/png
 endian: big
 
