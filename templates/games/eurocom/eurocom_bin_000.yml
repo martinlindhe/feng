@@ -24,11 +24,11 @@ multi_file: true # File pair: .bin (entry list) and .000 (data)
 
 magic:
   - offset: 0000
-    match: 00 00
+    match: 00 00 00 07
     endian: big
 
   - offset: 0002
-    match: 00 00
+    match: 07 00 00 00
     endian: little
 
 structs:

@@ -16,7 +16,7 @@ endian: little
 magic:
   - offset: 0000
     match: 00 00 01 00
-    extensions: [.icn]
+    extensions: [.icn, .ico]
 
 structs:
   header:

@@ -26,7 +26,7 @@ software:
 
 kind: media
 name: Resource Interchange File Format
-extensions: [.webp, .wav, .avi, .ani, .rmi]
+#extensions: [.webp, .wav, .avi, .ani, .rmi, .psf]
 endian: little
 
 # XXX mime types:

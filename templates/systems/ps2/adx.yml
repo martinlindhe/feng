@@ -1,9 +1,11 @@
 # STATUS: 5%
 
-# Audio format used in some PS2 games.
+# Audio format used on the PS2
 
-# Confirmed:
-# XXX
+# Used in:
+# Pro Evolution Soccer 2 (PS2)
+# Pro Evolution Soccer 3 (PS2)
+# + more PS2 games
 
 # TODO: improve magic check with additional conditional MUST (either value 01 or 02 at offset 0007)
 
@@ -16,12 +18,14 @@ software:
 
 kind: audio
 name: Criware ADX Audio
-extensions: [.adx]
+extensions: [.adx, .bin]
 endian: big
 
 magic:
-  - offset: 0000
-    match: 80 00 # FIXME weak magic !!!   in addition to this check, 0x0007 MUST be 01 or 02
+  #- offset: 0000
+  #  match: 80 00 # FIXME weak magic !!!   in addition to this check, 0x0007 MUST be 01 or 02
+  - offset: 001e
+    match: c'(c)CRI'
 
 structs:
   header:

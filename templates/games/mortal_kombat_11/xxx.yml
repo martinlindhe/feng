@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+# Used in:
+# Mortal Kombat 11
+
+# TODO MAX: oodle compression
+
+references:
+  - https://zenhax.com/viewtopic.php?t=11330#p47248
+  - https://forum.xentax.com/viewtopic.php?t=20126 # Mortal Kombat 11 tool
+  - https://zenhax.com/viewtopic.php?t=11359 # Mortal Kombat 11 tool
+
+kind: game
+name: Mortal Kombat 11 xxx file
+endian: little
+extensions: [.xxx]
+
+magic:
+  - offset: 0000
+    match: c1 83 2a 9e 00 03 9d 00 # XXX similar to .psf type
+
+structs:
+  header:
+    u8[8] Signature: ??
+
+layout:
+  - header Header

@@ -1,0 +1,45 @@
+# STATUS: 20%
+
+# Used in:
+# Ace Combat Zero (PS1) radiousa.pac (WORKS), bgm.pac (FAILS)
+
+# NOTE: there is also .pac files in Ace Combat Zero using a different format
+
+# TODO fix bgm.pac mapping
+
+references:
+  - https://www.moddb.com/games/ace-combat-zero-the-belkan-war/downloads/ace-combat-zero-the-belkan-war-media-files-extractor
+
+kind: archive
+name: Ace Combat Zero NPSF archive
+extensions: [.pac]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'NPSF'
+
+structs:
+  entry:
+    ascii[4] Signature: c'NPSF'
+    u32 u1: ?? # 4096
+    u32 Size: ?? # data size
+    u32 u3: ?? # 1
+    u32 u4: ?? # 2048    xxx offset from header start to data start ... ?
+    i32 u5: ?? # -1
+    u32 u6: ?? # 22050    sample rate?
+    u32 u7: ?? # 1000
+    u32 u8: ?? # 10
+    u32 u9: ?? # 1
+    u32 uA: ?? # 0
+    u32 uB: ?? # 0
+    u32 MaybeNameSize: ?? # 64  XXX max length of filename? nil padded?
+    ascii[self.MaybeNameSize] Filename: ??
+    filename: self.Filename
+
+    offset: offset("self.Signature") + self.u4
+    raw:u8[self.Size] Data: ??
+    u8[alignment(self.Size, 2048)] Padding: ??
+
+layout:
+  - entry[] Entry

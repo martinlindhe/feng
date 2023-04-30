@@ -1,0 +1,37 @@
+# STATUS: 5%
+#
+# Used in:
+# Spyro: Enter the Dragonfly PS2
+
+references:
+  - https://zenhax.com/viewtopic.php?t=9106
+
+kind: game
+name: "Spyro: Enter the Dragonfly chunk file"
+extensions: [.cnk]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 01 00 00 00 01 00 00 00 00 00 00 00 # le:u32 1,1,0
+
+structs:
+  header:
+    u32 One:  00 00 00 01
+    u32 One2: 00 00 00 01
+    u32 Zero: 00 00 00 00
+    u32 FileCount: ??
+
+  file:
+    u32 MaybeChecksum: ??
+    u32 Offset: ??
+    u32 Size: ??
+    u32 Flags: ?? # 2 = file?
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    u8[alignment(self.Size, 2048)] Padding: ??
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

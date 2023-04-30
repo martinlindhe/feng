@@ -1,0 +1,21 @@
+# STATUS: 1%
+
+# Used in:
+# Apex Legends (PC)
+
+kind: game
+name: Apex Legends rpak file
+endian: big
+extensions: [.rpak]
+
+magic:
+  - offset: 0000
+    match: c'RPak'
+structs:
+  header:
+    ascii[4] Signature: c'RPak'
+    u32 MaybeFlags: ?? # 08 00 00 01
+
+
+layout:
+  - header Header

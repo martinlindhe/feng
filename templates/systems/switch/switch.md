@@ -7,9 +7,9 @@ software:
 
 # extract nsp, xci
 ```
-$ hactool -t pfs0 --outdir=out file.nsp      # paru -S hactool-git
-
 $ nsz -x file.{nsp,nsz,xci} -o out           # pacman -S nsz
+
+$ hactool -t pfs0 --outdir=out file.nsp      # paru -S hactool-git
 
 $ nstool -x out file.{nsp,xci}
 ```
@@ -27,7 +27,6 @@ xxx
 
 # decrypt nca
 
-$ hactool -t nca file.nca
-
 $ nstool -x dec --tik file.tik file.nca
 
+$ hactool -t nca file.nca

@@ -1,0 +1,20 @@
+# STATUS: 1%
+
+# Used in:
+# Apex Legends (PC)
+
+kind: game
+name: Apex Legends starpak file
+endian: big
+extensions: [.starpak]
+
+magic:
+  - offset: 0000
+    match: c'SRPk'
+structs:
+  header:
+    ascii[4] Signature: c'SRPk'
+    u32 MaybeFlags: ?? # 01 00 00 00
+
+layout:
+  - header Header

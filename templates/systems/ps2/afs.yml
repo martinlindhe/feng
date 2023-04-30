@@ -1,20 +1,37 @@
-# STATUS: 80%, extract: ok
+# STATUS: 90%, extract: ok
 
-# Archive format that contains multiple .adx audio files
+# Archive format commonly used on the PS2
 
 # Used in:
+# Pro Evolution Soccer 2 (2002, PS2) - has filename table
 # Devil May Cry 2 (2003, PS2) - has filename_header, but no filename entries
+
 # Monster Hunter (2004, PS2) - has filename table
 # Persona 3 (2006, PS2)
 # Persona 4 (2008, PS2)
 # + many more PS2 titles
 
-# TODO MAX: map filenames to the file entries
+
+# specials:
+#
+# Pro Evolution Soccer 3 (2003, PS2)
+# - data_e.afs has filename_header at 0x000090, file table at 21ea6801
+#   value at 0090 may be filename_header
+# - pes3 embedded in data_e.afs: 010test.afs - has no filename_header ... but file table at 0b7801
+#   filename_header starts at [B771Eh]
+# - pes3 embedded n data_e.afs: 160game.afs: filename header at 00278, file table at bb13801
+
+# Pro Evolution Soccer 4 (2004, PS2)
+# -  offset 0x00498 # Pro Evolution Soccer 4: e_text.afs ... DIRECTLY AFTER file entries
+
+# TODO: figure out how to auto find the correct filename_header offset
+
 
 references:
   - https://wiki.xentax.com/index.php/GRAF:AFS_AFS
 
 software:
+  - https://github.com/MaikelChan/AFSPacker
   - https://forum.xentax.com/viewtopic.php?t=22502  # AFS Explorer
   - https://forum.xentax.com/viewtopic.php?p=184916 # AFS Tool
 
@@ -32,9 +49,11 @@ structs:
     ascii[4] Magic: c'AFS' 00
     u32 FileCount: ??
 
-  file:
+  file: # file entries start at 0008
     u32 Offset: ??
     u32 Size: ??  # 0 == end of list marker
+
+    filename: list_val(self.index, "Filename", "Name")
 
     offset: self.Offset
     raw:u8[self.Size] Data: ??
@@ -42,12 +61,11 @@ structs:
     offset: restore
 
   filename_header:
-    offset: "0x7FFF8"
     u32 DirectoryOffset: ??
     u32 DirectoryLength: ?? # 0 == no filename entries
 
   filename:
-    ascii[32] Filename: ??
+    ascii[32] Name: ??
     u16 Year: ??
     u16 Month: ??
     u16 Day: ??
@@ -58,9 +76,16 @@ structs:
 
 layout:
   - header Header
-  - file[Header.FileCount] File
 
+  - offset 0x07FFF8
+  # - offset 0x000090  # Pro Evolution Soccer 3: data_e.afs  ... DIRECTLY AFTER file entries
+  #- offset 0x00278   # Pro Evolution Soccer 3: 160game.afs  ... DIRECTLY AFTER file entries
+  #- offset 0x00498 # Pro Evolution Soccer 4: e_text.afs ... DIRECTLY AFTER file entries
   - filename_header FilenameHeader
-  - offset FilenameHeader.DirectoryOffset
 
+  - offset FilenameHeader.DirectoryOffset
+  #- offset 0x0b7801  # Pro Evolution Soccer 3: embedded in data_e.afs: 010test.afs - has no filename_header???
   - filename[Header.FileCount] Filename
+
+  - offset 0x000008
+  - file[Header.FileCount] File

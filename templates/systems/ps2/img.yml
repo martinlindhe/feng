@@ -1,0 +1,30 @@
+# STATUS: 5%
+
+# System-related file that is common on PS2 discs.
+#
+# Can also contain game-specific data.
+
+resources:
+  - https://github.com/israpps/ROMIMG
+
+kind: system
+name: Playstation 2 IOP image file
+endian: little
+
+# seen names: ioprp243.img, ioprp271.img, ioprp300.img
+filenames: ["ioprp*.img"]
+
+magic:
+  - offset: 0000
+    match: c'RESET'
+
+structs:
+  entry:
+    ascii[8] Signature: ?? # RESET, ROMDIR etc
+    u32 u1: ??
+    u32 u2: ??
+    if self.u1 == 0 && self.u2 == 0:
+      parse: stop
+
+layout:
+  - entry[] Entry

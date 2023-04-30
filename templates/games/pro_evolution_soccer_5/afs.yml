@@ -1,0 +1,35 @@
+# STATUS: 1%
+
+# NOT the same format (maybe similar?) as the one with 'AFS' header magic
+
+# Used in:
+# Pro Evolution Soccer 5 (PS2)
+
+resources:
+  - https://wiki.xentax.com/index.php/AFS_AFS
+
+kind: game
+name: Pro Evolution Soccer 5 afs file
+endian: little
+extensions: [.afs]
+
+no_magic: true
+
+structs:
+  header:
+    u32 v1: ??
+    u32 v2: ??
+
+  entry:
+    u32 Offset: ?? # XXX
+    u32 Size: ?? # XXX
+    if self.Size == 0:
+      parse: stop # XXX
+
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - entry Entry

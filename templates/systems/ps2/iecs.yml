@@ -19,7 +19,7 @@ software:
 
 kind: audio
 name: PlayStation 2 BD HD Audio
-extensions: [.bin, .hd]
+extensions: [.bin, .hd, .cat]
 endian: little
 
 magic:

@@ -1,0 +1,39 @@
+# STATUS: 20%
+
+# Used in MediEvil (1998, PS1)
+
+resources:
+  - http://aluigi.altervista.org/bms/medievil.bms
+  - https://wiki.xentax.com/index.php/MediEvil_MWD
+
+kind: game
+name: MediEvil mwd archive
+endian: little
+extension: [.mwd]
+
+magic:
+  - offset: 0000
+    match: c'DAWM'
+
+structs:
+  header:
+    ascii[4] Signature: c'DAWM'
+    u32 Reserved: ?? # 0
+    ascii[128] Text: ??
+    u8[1912] Reserved: ?? # 0
+
+  tag:
+    ascii[4] Tag: c'2GRV'
+    u32 FileCount: ??
+    u32 u1: ?? # 00 00 00 14   xxx size of header (without files data) ???
+    u32 ElementCount: ??
+    u32 u2: ?? # 00 00 0f 44     size of Tag + files data
+
+    u8[self.FileCount * 24] FileData: ?? # XXX decode
+
+    u8[self.ElementCount * 12] ElementData: ?? # XXX decode
+
+layout:
+  - header Header
+
+  - tag Tag

@@ -9,7 +9,6 @@ references:
 kind: system
 name: Playstation executable
 endian: little
-extensions: [.exe]
 
 magic:
   - offset: 0000

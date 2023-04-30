@@ -1,0 +1,25 @@
+# STATUS: 10%
+
+kind: system
+name: Playstation 2 system configuration file
+endian: little
+
+# TODO PARSE rest:
+
+# BOOT2=xxx;1
+# VER = 1.02
+# VMODE = PAL
+
+filenames: [system.cnf]
+
+magic:
+  - offset: 0000
+    match: c'BOOT2'
+
+structs:
+  header:
+    ascii[8] Signature: c'BOOT2 = '
+    asciinl BootFile: ??
+
+layout:
+  - header Header

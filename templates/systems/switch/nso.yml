@@ -5,7 +5,6 @@ references:
 
 kind: executable
 name: Nintendo Switch executable
-extensions: [.nso] # XXX often no extension
 endian: little
 
 magic:

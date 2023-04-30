@@ -1,0 +1,20 @@
+# STATUS: 1%
+
+# Used in:
+# Apex Legends (PC)
+
+kind: game
+name: Apex Legends ekv file
+endian: little
+extensions: [.ekv]
+
+magic:
+  - offset: 0000
+    match: dc ee a9 f5 91 76 52 3b
+
+structs:
+  header:
+    u8[8] Signature: ??
+
+layout:
+  - header Header

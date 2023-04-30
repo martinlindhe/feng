@@ -1,0 +1,20 @@
+# STATUS: 1%
+
+# Used in:
+# Mortal Kombat 11
+
+kind: game
+name: Mortal Kombat 11 psf file
+endian: little
+extensions: [.psf]
+
+magic:
+  - offset: 0000
+    match: c1 83 2a 9e 00 00 00 00 # XXX similar to .xxx type
+
+structs:
+  header:
+    u8[8] Signature: ??
+
+layout:
+  - header Header

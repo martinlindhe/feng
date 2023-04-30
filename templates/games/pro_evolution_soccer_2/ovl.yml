@@ -1,0 +1,35 @@
+# STATUS: 1%
+
+# Used in:
+# Pro Evolution Soccer 2 (PS2)
+
+resources:
+  - https://wiki.xentax.com/index.php/AFS_AFS
+
+kind: game
+name: Pro Evolution Soccer 2 ovl file
+endian: little
+extensions: [.ovl]
+
+magic:
+  - offset: 0000
+    match: c'MWo3'
+
+structs:
+  header:
+    ascii[4] Signature: c'MWo3'
+    u32 u1: ?? # 9, 4
+    u32 u2: ??
+    u32 u3: ??   # maybe some data size ?
+
+    u32 u4: ??
+    u32 u5: ??
+    u32 u6: ??
+    u32 u7: ??
+
+    ascii[96] Name: ?? # filename
+
+    # XXX
+
+layout:
+  - header Header

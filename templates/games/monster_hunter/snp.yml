@@ -5,7 +5,7 @@
 
 kind: archive
 name: Monster Hunter MOMO archive
-extensions: [.snp]
+extensions: [.snp, .snd]
 endian: little
 
 magic:

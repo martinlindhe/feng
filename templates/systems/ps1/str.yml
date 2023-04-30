@@ -1,0 +1,38 @@
+# STATUS: 5%
+#
+# Audio/video format developed by Sony for use on the PlayStation 1.
+# Used in many PS1 games
+
+references:
+  - https://github.com/m35/jpsxdec/blob/51b43e59363872e2d4a21cd2d22413cc154689ed/jpsxdec/PlayStation1_STR_format.txt
+
+software:
+  - https://github.com/m35/jpsxdec # java software
+
+kind: media
+name: Playstation 1 Video file
+extensions: [.str, .mov, .bin]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 60 01 01 80 # video frame marker
+
+structs:
+  header:
+    u8[4] Signature: 60 01 01 80
+
+    u16 Multiplexed chunk number of this video frame: ?? # 0 to (Number of multiplexed chunks) - 1
+    u16 MultiplexedChunkCount: ?? # Number of multiplexed chunks in this frame
+    u32 FrameNumber: ?? # Starts at 1
+    u32 Bytes of data used in demuxed frame: ?? # rounded up to a  multiple of 4 (if not already a multiple of 4)
+    u16 FrameWidth: ?? # in pixels
+    u16 FrameHeight: ??
+    u16 UncompressedBlockCount: ?? # The number of 32-byte blocks it would take to hold the uncompressed MDEC codes
+    u16 Unknown: ?? # Always 0x3800
+    u16 Frame's quantization scale: ??
+    u16 VideoFrameVersion: ?? # XXX (see next section for details)     2
+    u16 Reserved: ?? # 0
+
+layout:
+  - header Header

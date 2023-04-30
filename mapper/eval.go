@@ -381,20 +381,22 @@ func (fl *FileLayout) evalListVal(args ...interface{}) (interface{}, error) {
 
 	v1, ok := args[0].(int)
 	if !ok {
-		return nil, fmt.Errorf("2nd arg: expected int, got %T", args[1])
+		return nil, fmt.Errorf("1st arg: expected int, got %T", args[1])
 	}
 	v2, ok := args[1].(string)
 	if !ok {
-		return nil, fmt.Errorf("1st arg: expected string, got %T", args[1])
+		return nil, fmt.Errorf("2nd arg: expected string, got %T", args[1])
 	}
 	v3, ok := args[2].(string)
 	if !ok {
-		return nil, fmt.Errorf("1st arg: expected string, got %T", args[1])
+		return nil, fmt.Errorf("3rd arg: expected string, got %T", args[1])
 	}
 
 	st, err := fl.findStruct(fmt.Sprintf("%s_%d", v2, v1)) // File_3
 	if err != nil {
-		return nil, err
+		//return nil, errr
+		log.Warn().Err(err).Msgf("field %s[%d].%s not found", v2, v1, v3)
+		return "", nil
 	}
 
 	field, err := st.findField(v3)

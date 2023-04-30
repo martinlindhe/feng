@@ -1,34 +1,44 @@
 # STATUS: 80%
 #
 # SFO (System File Object)
-# PSF (Playstation System File?)
+# PSF (Playstation Sound Format)
 #
-# used on PSP, PSVita, PS3, PS4 and PS5.
+# used on PS1??, PS2??, PSP, PSVita, PS3, PS4 and PS5.
+
+# TODO: need samples: ps4 and ps5
 
 references:
+  - https://gist.github.com/SaxxonPike/a0b47f8579aad703b842001b24d40c002 # XXX not sure this maps the PS3/PSP/Vita version ???
   - https://www.psdevwiki.com/ps4/Param.sfo#Internal_Structure
 
 software:
   - https://github.com/wargio/vitatool/
 
 kind: system
-name: Playstation System File Object
+name: Playstation Sound Format
 extensions: [.sfo]  # only used in param.sfo
 endian: little      # XXX: psvita, ps3 and ps5 is confirmed little endian
 
 magic:
   - offset: 0000
-    match: 00 c'PSF'
+    match: 00 c'PSF' # magic on PS3 ... TODO need more samples
 
 structs:
   header:
     u8[4] Signature: 00 c'PSF'
-    u32 Version: ??
+    u32 Version:
+      # XXX unsure if PS1/PS2 format is the same, need samples
+      #eq 00000001: PS1
+      #eq 00000002: PS2
+      #eq 00000011: Saturn # (SSF) XXX unconfirmed
+      #eq 00000012: Dreamcast # (DSF) XXX unconfirmed
+      eq 00000101: PS3/PSP/PSVita
+
     u32 keyTableOffset: ??    # Key table start offset
     u32 dataTableOffset: ??   # Data table start offset
     u32 indexTableEntries: ?? # Number of entries in index table
 
-  sfo_n:
+  sfo:
     u16 keyOffset: ??         # Key table offset
     u16 param_fmt:            # type of data. XXX flags?!
       eq 0204: unknown        #  SEEN ON PSVita/PS5
@@ -50,4 +60,4 @@ structs:
 
 layout:
   - header Header
-  - sfo_n[Header.indexTableEntries] SFO
+  - sfo[Header.indexTableEntries] SFO

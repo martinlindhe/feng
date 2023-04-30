@@ -9,7 +9,7 @@ software:
 
 kind: system
 name: Executable and Linkable Format
-extensions: [., .axf, .bin, .elf, .o, .out, .prx, .puff, .ko, .mod, .so]
+#extensions: [., .axf, .irx, .bin, .elf, .o, .out, .prx, .puff, .ko, .mod, .so]
 endian: little
 
 magic:

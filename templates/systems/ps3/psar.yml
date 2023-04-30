@@ -21,7 +21,7 @@ software:
 
 kind: archive
 name: PlayStation archive
-extensions: [.pak, .psarc]
+extensions: [.psarc, .pak, .bin]
 endian: big
 
 magic:
@@ -50,7 +50,6 @@ structs:
   # TODO: the first toc entry contains a compressed \n-separated list of filenames,
   # extract it and use it to name output files correctly
   toc:
-
     if self.index == 0:
       label: filenames
       filename: '"filenames"'
