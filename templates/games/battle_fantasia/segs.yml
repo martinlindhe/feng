@@ -1,0 +1,35 @@
+# STATUS: 10%
+
+# Used in:
+# Battle Fantasia (2008) PS3
+
+# TODO MAX: finish mapping
+# TODO MAX: identify compression
+
+kind: archive
+name: Battle Fantasia segs file
+extensions: [.bin]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'segs'
+
+structs:
+  header:
+    ascii[4] Signature: c'segs'
+    u16 u1: ?? # 4
+    u16 EntryCount: ??
+    u32 u3: ??
+    u32 u4: ??
+
+  entry:
+    le:u32 Size: ?? # XXX is this even little endian?
+    u32 Offset: ?? # XXX
+    offset: self.Offset
+    u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - entry[Header.EntryCount] Entry

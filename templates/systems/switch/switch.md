@@ -5,13 +5,18 @@ software:
   - dump switch games to nsp https://github.com/DarkMatterCore/nxdumptool
 
 
-# extract nsp, xci
+# decompress nsz to nsp
+
+$ nsz -D file.nsz -o .
+
+
+# extract nsp, nsz, xci
 ```
 $ nsz -x file.{nsp,nsz,xci} -o out           # pacman -S nsz
 
 $ hactool -t pfs0 --outdir=out file.nsp      # paru -S hactool-git
 
-$ nstool -x out file.{nsp,xci}
+$ nstool -x out file.{nsp,xci,nca}
 ```
 
 

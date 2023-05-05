@@ -8,7 +8,7 @@ software:
   - https://github.com/allcoolthingsatoneplace/UnrealPakTool
 
 kind: archive
-name: "Unreal Engine PAK archive"
+name: Unreal Engine PAK archive
 extensions: [.pak]
 endian: little
 

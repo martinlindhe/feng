@@ -1,17 +1,26 @@
 # STATUS: 1%
 
-# "CRI CPK" ?
+# CPK is an archive format developed by CRI Middleware.
 
 # Used in:
 # Naruto Shippuden: Ultimate Ninja Storm Generations (2012) PS3
 # Naruto Shippuden: Ultimate Ninja Storm 3 (2013) PS3
 # Naruto Shippuden: Ultimate Ninja Storm Revolution (2014) PS3
 
-# TODO: finish mapping
+# Corpse Party 2U (PSP)
+# Time Travelers (PSP)
+# + many more
+
+# TODO: continue mapping
 
 references:
+  - https://github.com/wmltogether/CriPakTools/blob/mod/LibCPK/CPK.cs
+  - https://wiki.vg-resource.com/CPK
   - http://aluigi.org/papers/bms/cpk.bms
   - https://forum.xentax.com/viewtopic.php?f=10&t=10082
+
+software:
+  - https://github.com/wmltogether/CriPakTools
 
 kind: archive
 name: "Naruto: Ultimate Ninja Storm cpk archive"

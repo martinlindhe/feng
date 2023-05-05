@@ -83,7 +83,7 @@ online-only universal game modding tool
 - https://moddingwiki.shikadi.net/wiki/Main_Page     (DOS Game Modding Wiki)
 - http://wiki.xentax.com/index.php/Game_File_Format_Central
 - https://zenhax.com/
-- https://www.vg-resource.com/
+- https://www.vg-resource.com/   (wiki)
 - https://www.gildor.org/smf/index.php/board,3.0.html - UE viewer forums (unreal engine extractor)
 - https://www.hackromtools.info/ - Pokemon modding
 - https://psxtools.de/forum/

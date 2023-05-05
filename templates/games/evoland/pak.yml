@@ -1,0 +1,56 @@
+# STATUS: 5%
+
+# Used in:
+# Evoland Legendary Edition (2019) Switch
+
+kind: archive
+name: Evoland PAK archive
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'PAK' 00
+    extensions: [.pak]
+
+structs:
+  header:
+    ascii[4] Signature: c'PAK' 00
+    u32 v1: ??
+    u32 v2: ?? # number is less than file size but above 90% of it
+    u16 v4: ??
+    u32 v3: ??
+
+
+    u8 NameLen: ??
+    ascii[self.NameLen] Name: ?? # XXX len?
+
+    u8 v5: ?? # 1
+    u32 v6: ??
+
+  file:
+    u8 FilenameLen: ??
+    ascii[self.FilenameLen] Filename: ??
+
+    u32 MaybeSize1: ?? #
+    u32 MaybeSize2: ?? # size?
+    u32 MaybeSize3: ?? # or sth
+
+    u8 v8: ??
+
+
+
+layout:
+  - header Header
+  - file[655] File
+
+
+
+# evo1:
+#24909         0x614D          JPEG image data, EXIF standard
+#24921         0x6159          TIFF image data, big-endian, offset of first image directory: 8
+#1285062       0x139BC6        PNG image, 346 x 419, 8-bit/color RGBA, non-interlaced
+#1285168       0x139C30        Zlib compressed data, best compression
+#1342785       0x147D41        PNG image, 512 x 625, 8-bit/color RGB, non-interlaced
+#1342934       0x147DD6        Zlib compressed data, default compression
+#1347708       0x14907C        JPEG image data, EXIF standard
+#1347720       0x149088        TIFF image data, big-endian, offset of first image directory: 8#

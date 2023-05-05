@@ -1,0 +1,37 @@
+# STATUS: 10%
+
+# Used in:
+# Battle Fantasia (2008) PS3
+
+# TODO: extract data as a formatted audio stream,
+#   see https://forum.xentax.com/viewtopic.php?p=43568#p43568 for make-shift headers
+
+references:
+  - https://forum.xentax.com/viewtopic.php?p=43568#p43568
+
+kind: audio
+name: Battle Fantasia audio file
+extensions: [.msf]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'MSF0'
+
+structs:
+  header:
+    ascii[4] Signature: c'MSF0'
+    u32 BitSize:
+      eq 00000004: 66 kbit/s
+      eq 00000005: 105 kbit/s
+      eq 00000006: 132 kbit/s
+    u32 Channels: ??
+    u32 Size: ??
+    u32 Freq: ??
+    u32 u5: ?? # 64
+    i32[10] Reserved: ?? # -1
+
+    raw:u8[self.Size] Data: ??
+
+layout:
+  - header Header
