@@ -1,0 +1,29 @@
+# STATUS: 1%
+
+# Movie clip?
+
+# Used in:
+# The Lord of the Rings: Aragorn's Quest (PS3)
+
+kind: game
+name: Aragorn's Quest FMV file
+extensions: [.fmv]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'FMV!'
+
+structs:
+  header:
+    ascii[4] Signature: c'FMV!'
+    u32 u1: ?? # 00 1e 01 13
+    u32 u2: ?? # 02 d0 05 00
+    u32 u3: ??
+
+    # header ends at 0x0040 or 0x0050 (different files)
+
+
+layout:
+  - header Header
+

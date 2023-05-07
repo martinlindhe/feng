@@ -1,0 +1,26 @@
+# STATUS: 1%
+#
+# Used in:
+# - Fable Anniversary (XBox360)
+# - Fable: The Journey (XBox360)
+
+kind: archive
+name: Xbox 360 system update file
+
+extensions: [.xxx, .tfc, .upk]
+
+magic:
+  - offset: 0000
+    match: 9e 2a 83 c1
+    endian: big # XXX
+
+  - offset: 0000
+    match: c1 83 2a 9e
+    endian: little # XXX in GlobalPersistentCookerData.upk on xbox360, while most is in the other endian
+
+structs:
+  header:
+    u32 Signature: ??
+
+layout:
+  - header Header

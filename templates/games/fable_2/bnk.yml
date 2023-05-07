@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+# Used in:
+# Fable II (XBox360)
+
+kind: game
+name: Fable II bnk file
+extensions: [.bnk]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: 00 00 80 00
+
+  - offset: 0000
+    match: 00 01 00 00 # globals_models.bnk, globals_model_headers.bnk, globals_streaming.bnk
+
+structs:
+  header:
+    ascii[4] Signature: ??
+    u32 u1: ?? # 3
+    u32 u2: ??
+    u32 u3: ??
+
+layout:
+  - header Header
+

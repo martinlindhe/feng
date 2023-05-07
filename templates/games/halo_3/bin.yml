@@ -1,0 +1,34 @@
+# STATUS: 20%
+#
+# Used in:
+# - Halo III (XBox360)
+
+# TODO: map rest
+
+kind: game
+name: Halo III font file
+endian: little
+
+extensions: [.bin]
+
+magic:
+  - offset: 0000
+    match: 03 00 00 c0
+
+structs:
+  header:
+    u32 Signature: ??
+    u32 EntryCount: ??
+
+  entry:
+    u32 Offset: ??
+    u32 Size: ??
+    u32 MaybeFlags: ??
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - entry[Header.EntryCount] Entry

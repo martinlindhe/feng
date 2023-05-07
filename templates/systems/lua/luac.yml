@@ -16,7 +16,7 @@ software:
 
 kind: bytecode
 name: Lua compiled bytecode
-extensions: [.luac]
+extensions: [.luac, .lua]
 
 endian: little
 

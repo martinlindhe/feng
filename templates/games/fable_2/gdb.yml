@@ -1,0 +1,29 @@
+# STATUS: 1%
+
+# Used in:
+# Fable II (XBox360)
+
+kind: game
+name: Fable II gdb file
+extensions: [.gdb]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'GDB' 00
+
+structs:
+  header:
+    ascii[4] Signature: c'GDB' 00
+    u32 MaybeCount: ??
+    u32 u2: ??
+    u32 u3: ??
+
+    # footer?
+    u32 f1: ?? # 1
+    u32 f2: ?? # 0
+    u32 f3: ?? # 0
+
+layout:
+  - header Header
+

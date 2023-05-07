@@ -18,6 +18,7 @@ software:
   - paru -S psarc  # arch linux
   - http://nomansskymods.com/mods/psarc-decompile-tool/
   - https://github.com/cmkushnir/NMSPakViewer
+  - https://github.com/John-K/pspdecrypt # decrypts psp psar archives
 
 kind: archive
 name: PlayStation archive

@@ -1,10 +1,10 @@
 # Extract data from ISO
 
-If mounted normally, it will expose videos explaining this is a game disc.
+If mounted in ISO9660 mode, it will only expose videos explaining it is a game disc.
 
-Extract filesystem using `extract-xiso`
+Extract the Xbox filesystem using `extract-xiso`
 
-https://github.com/XboxDev/extract-xiso
+https://github.com/XboxDev/extract-xiso  # paru -S extract-xiso
 
 
 

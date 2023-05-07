@@ -1,0 +1,24 @@
+# STATUS: 1%
+#
+# - Halo III (XBox360)
+# - Halo: Reach (XBox360)
+
+kind: archive
+name: Halo III map file
+endian: big
+
+extensions: [.map]
+
+magic:
+  - offset: 0000
+    match: c'head'
+
+structs:
+  header:
+    ascii[4] Signature: c'head'
+    u32 MaybeVersion: ?? # 0b = Halo III XBox360
+    u32 v2: ?? # 03 4a d0 00   XXX maybe not u32
+
+layout:
+  - header Header
+

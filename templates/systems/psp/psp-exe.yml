@@ -1,0 +1,28 @@
+# STATUS: 1%
+
+software:
+  - https://github.com/John-K/pspdecrypt
+
+kind: system
+name: Sony PlayStation Portable executable
+extensions: [.bin, .prx] # eboot.bin, *.prx
+endian: big
+
+magic:
+  - offset: 0000
+    match: 7e c'PSP'
+
+structs:
+  header:
+    ascii[4] Signature: 7e c'PSP'
+    u16 u1: ?? # 0 for eboot.bin, 0610 for .prx file
+    u16 u2: ?? # 0 for eboot.bin, 0100 for .prx file
+    u16 u3: ?? # 01 01 for eboot.bin, 02 01 for .prx file
+    ascii[28] Text: ?? #  XXX len
+
+    u16 u4: ?? # 0102 for .prx file
+    u16 u5: ?? # f816 or f02f or .prx file
+
+layout:
+  - header Header
+

@@ -633,7 +633,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 
 		case "filename":
 			// record filename to use for the next data output operation
-			if strings.Contains(es.Pattern.Value, ".png") {
+			if strings.Contains(es.Pattern.Value, ".png") || strings.Contains(es.Pattern.Value, ".jpg") {
 				// don't evaluate plain filenames
 				fl.filename = es.Pattern.Value
 			} else {

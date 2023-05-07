@@ -1,0 +1,44 @@
+# STATUS: 1%
+
+# Used in:
+# The Lord of the Rings: Conquest (PS3)
+
+kind: game
+name: "The Lord of the Rings: Conquest GFX file"
+extensions: [.gfx]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'GFX' 08
+
+structs:
+  header:
+    ascii[4] Signature: c'GFX' 08
+    u32 Filesize: ??
+    u32 u2: ?? # 20 03 00 80
+    u32 u3: ?? # e0 01 00 00
+    u32 u4: ?? # 01 1e 00 00
+
+    u32 u5: ?? # 05 fa 11 00 / 05 fa 16 00 / 05 fa 10 00
+
+    u32 u6: ?? # 2
+    u32 u7: ?? # 00 00 0e 00
+
+
+
+  # name list:
+    u8 NameSize: ??
+    ascii[self.NameSize] Name: ??
+
+    u32 v1: ?? # 00 00 11 44
+    u32 v2: ?? # 02 43 00 00
+    u32 v3: ?? # xxx signed?   ff ff ff 7c / 66 66 66 3f / 00 00 00 3f
+
+    u32 v4: ?? # 00 00 02 03 / 00 00 00 7e 03 / 0e 00 01 fa
+
+    u32 v5: ?? # ff 00 07 00 / 00 19 8e 00 / 20 00 20 00
+
+layout:
+  - header Header
+

@@ -1,0 +1,22 @@
+# STATUS: 1%
+#
+# - Fable Anniversary (XBox360)
+
+kind: archive
+name: Xbox 360 system update file
+endian: big
+
+extensions: [.xzp]
+
+magic:
+  - offset: 0000
+    match: c'BDES'
+
+structs:
+  header:
+    ascii[4] Signature: c'BDES'
+    u32 v1: ?? # 1
+
+layout:
+  - header Header
+

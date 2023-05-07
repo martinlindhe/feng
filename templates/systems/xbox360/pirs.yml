@@ -1,12 +1,11 @@
 # STATUS: 1%
 #
-# "New Xbox Experience Game Assets"
-#
 # Used in:
 # - Dance Central 3 (XBox360)
+# - Fable Anniversary (XBox360)
 
 kind: archive
-name: Dance Central 3 PIRS archive
+name: New Xbox Experience Game Asset
 endian: big
 
 magic:

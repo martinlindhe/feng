@@ -1,0 +1,41 @@
+# STATUS: 20%
+#
+# - Halo III (XBox360)
+# - Halo: Reach (XBox360)
+
+kind: archive
+name: Halo III map info file
+endian: big
+
+extensions: [.blf, .mapinfo, .campaign]
+
+magic:
+  - offset: 0000
+    match: c'_blf'
+
+structs:
+  header:
+    ascii[4] Signature: c'_blf'
+    u32 v1: ?? # 00 30
+    u16 v2: ?? # 1
+    u16 v3: ?? # 2
+    i16 v4: ?? # -2
+    u16 v5: ?? # 0
+
+    u8[32] Reserved: ?? # 0
+
+    ascii[4] Tag: c'mapi' # XXX
+    u32 u1: ?? # number is self.DataLen + 20
+    u16 u2: ?? #
+    u16 u3: ?? #
+    u32 u4: ?? # 0
+
+    u32 DataLen: ??
+    filename: image.jpg
+    raw:u8[self.DataLen] JpegData: ??
+
+    raw:u8[273] Unknown: ?? # XXX
+
+layout:
+  - header Header
+

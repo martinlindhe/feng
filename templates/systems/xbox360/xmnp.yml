@@ -1,0 +1,21 @@
+# STATUS: 1%
+#
+# - Fable Anniversary (XBox360)
+
+kind: archive
+name: Xbox 360 system update file
+endian: big
+
+extensions: [.manifest] # $SystemUpdate/system.manifest
+
+magic:
+  - offset: 0000
+    match: c'XMNP'
+
+structs:
+  header:
+    ascii[4] Signature: c'XMNP'
+
+layout:
+  - header Header
+

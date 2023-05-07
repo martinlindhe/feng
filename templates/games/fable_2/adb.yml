@@ -1,0 +1,31 @@
+# STATUS: 1%
+
+# Used in:
+# Fable II (XBox360)
+
+# TODO MAX: dont decompress lcorrectly: "unexpected EOF"
+
+# TODO: has a corresponding .bnk file ?
+
+kind: audio
+name: Fable II audio file
+extensions: [.adb]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'LhCoMpReSsEd'
+
+structs:
+  header:
+    ascii[12] Signature: c'LhCoMpReSsEd'
+    u32 u1: ?? # 1
+
+    u32 u2: ?? #
+    u32 Size: ??
+
+    compressed:zlib[self.Size] Data: ??
+
+layout:
+  - header Header
+

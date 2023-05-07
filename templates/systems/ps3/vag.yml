@@ -18,7 +18,7 @@ software:
 
 kind: archive
 name: Sony PlayStation 2 & 3 Audio File
-extensions: [.vag, .nob, .adb]
+#extensions: [.vag, .nob, .adb, .bin]
 endian: big
 
 magic:

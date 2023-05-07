@@ -10,7 +10,7 @@ software:
 
 kind: system
 name: XBox 360 XEX file
-extensions: [.xex]
+extensions: [.xex, .lex, .dll]
 endian: big
 
 magic:
