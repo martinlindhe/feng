@@ -1,0 +1,25 @@
+# STATUS: 75%
+
+# Used in:
+# Battlefield 2: Modern Combat (2005) XBox360
+
+kind: game
+name: "Battlefield 2: Modern Combat texture"
+extensions: [.cat]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'PZFB'
+
+structs:
+  header:
+    ascii[4] Signature: c'PZFB'
+    u32 u1: ?? # 1
+    u32 FileSize: ??
+    u32 u3: ?? # XXX
+
+    compressed:zlib[self.FileSize - 16] Data: ??
+
+layout:
+  - header Header

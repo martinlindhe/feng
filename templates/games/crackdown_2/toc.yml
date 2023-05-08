@@ -1,0 +1,37 @@
+# STATUS: 1%
+
+# Used in:
+# Crackdown 2 (XBox360)
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=4684  # extracts RIFX from PACK data
+  - https://zenhax.com/viewtopic.php?t=571  # related to the same game, but different format (.dff)
+
+kind: game
+name: Crackdown 2 game data
+extensions: [.toc]
+endian: big
+
+multi_file: true # File pair: .pack.toc (entry list) and .pack (data)
+
+magic:
+  - offset: 0000
+    match: c'PACK'
+
+structs:
+  header:
+    ascii[4] Signature: c'PACK'
+    u32 MaybeVersion: ?? # 2
+    u32 u1: ?? # 0 or 1
+    u32 u2: ?? # 0 or 1 or 3  maybe filename entry count ? utf16 names at end of file ?
+    u32 u3: ?? # 2048
+
+    u32[5] MaybeReserved: ?? # XXX 0 on small samples, nonzero on streaming.pack.toc !!!
+
+    u32 v1: ?? # ???
+    u32 v2: ?? # de de de de
+
+    le:utf16z Name: ?? # XXX little endian is being ignored ...
+
+layout:
+  - header Header

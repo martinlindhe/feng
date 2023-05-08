@@ -1,0 +1,34 @@
+# STATUS: 90%
+
+# Used in:
+# Dead Rising 2 (XBox360)
+
+# TODO: 500k file parses really slow, speed-up
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=5191
+
+kind: game
+name: Dead Rising 2 localized text
+extensions: [.bcs]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 ItemCount: ??
+
+  item_id:
+    u32 ItemID: ??
+
+  item:
+    u32 Offset: ??
+    offset: self.Offset
+    utf8z Text: ??
+    offset: restore
+
+layout:
+  - header Header
+  - item_id[Header.ItemCount] ItemID
+  - item[Header.ItemCount] Item

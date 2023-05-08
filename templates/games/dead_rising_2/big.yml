@@ -1,0 +1,69 @@
+# STATUS: 30%
+
+# Used in:
+# Dead Rising 2 (XBox360)
+
+# TODO: uses Microsoft LZX compression, aka XMemDecompress, aka xcompress.lib (see https://github.com/microsoft/go-winio/blob/e268c11e27607f25b97bcb14e9d01af70c2c0f52/wim/decompress.go)
+
+references:
+  - https://zenhax.com/viewtopic.php?t=18166
+  - http://aluigi.altervista.org/bms/deadrising2_otr.bms
+
+kind: archive
+name: Dead Rising 2 archive file
+extensions: [.big, .tex]
+
+magic:
+  - offset: 0000
+    match: 06 05 04 03
+    endian: little
+
+structs:
+  header:
+    u32 Signature: ??
+    u32 SomeTableSize: ?? # XXX or version ?
+    u32 Filesize: ??
+
+    u32 FileCount: ??
+    u32 NameTableSize: ??
+    u32 NameTableOffset: ??
+
+  file:
+    u32 NameOffset: ??
+    offset: self.NameOffset
+    asciiz Name: ??
+    offset: restore
+
+    u32 Checksum: ??
+    u32 CompressedSize: ??
+    u32 ExtractedSize: ??
+    u32 Offset: ??
+    u32 v5: ?? # 4
+    u32 v6: ?? # 0
+
+    filename: self.Name
+
+    offset: self.Offset
+    if self.CompressedSize != self.ExtractedSize:
+      be:u32 FULL_CHUNK_SIZE: ??
+      be:u32 CHUNK_ZMODE: ?? # 80 00  = zlib ?
+
+      # multiple chunks : XXX
+
+      be:u32 CHUNK_ZSIZE: ??
+      #compressed:lzx[self.CHUNK_ZSIZE] Data: ??
+      raw:u8[self.CHUNK_ZSIZE] Data: ?? # XXX LZX compression
+
+      #if self.CompressedSize == self.ExtractedSize:
+      #raw:u8[self.CompressedSize] Data: ??
+      #else:
+      #  compressed:lzma2[self.CompressedSize] Data: ??
+      #u8[alignment(self.CompressedSize , 2048)] Padding: ??
+    else:
+      raw:u8[self.CompressedSize] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - file[Header.FileCount] File

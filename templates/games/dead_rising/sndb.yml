@@ -1,0 +1,43 @@
+# STATUS: 25%
+
+# Used in:
+# Dead Rising (XBox360)
+
+# XXX Sound Bank ?
+
+# TODO: decode tag data
+
+kind: audio
+name: Dead Rising sound file
+extensions: [.snd]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'SNDB'
+
+structs:
+  header:
+    ascii[4] Signature: c'SNDB'
+    u32 Filesize: ??
+    u32 u2: ?? # 512
+
+    i32 u3: ?? # -1
+    u32 u4: ?? # 32
+    u32 u5: ?? # 288
+    u32 u5: ?? # 352
+    i32 u6: ?? # -1
+
+  tag:
+    ascii[4] Tag: ??
+    label: self.Tag
+    u32 TagSize: ?? # size, including tag header
+
+    raw:u8[self.TagSize - 8] Data: ??
+    # CSR: XXX some table (256 bytes)
+    # CSH: XXX small table (64 bytes)
+    # CSB: XXX data
+
+layout:
+  - header Header
+  - tag[] Tag

@@ -1,0 +1,39 @@
+# STATUS: 90%
+
+# Used in:
+# Dead Rising (XBox360)
+
+# TODO: determine entry.u1 type (needed for repacking feature)
+
+kind: archive
+name: Dead Rising archive
+extensions: [.arc]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 00 c'CRA'
+
+structs:
+  header:
+    ascii[4] Signature: 00 c'CRA'
+    u16 MaybeVersion: ?? # 4
+    u16 EntryCount: ??
+
+  entry:
+    ascii[0x40] Name: ??
+
+    u32 u1: ?? # XXX hash or timestamp?
+    u32 CompressedSize: ??
+    u32 ExpandedSize: ??
+    u32 Offset: ??
+
+    filename: self.Name
+    offset: self.Offset
+    compressed:zlib[self.CompressedSize] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - entry[Header.EntryCount] Entry
