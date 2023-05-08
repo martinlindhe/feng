@@ -324,7 +324,7 @@ func SingleUnitSize(kind string) int64 {
 	case "u16", "i16",
 		"dostime", "dosdate":
 		return 2
-	case "rgb8":
+	case "u24", "rgb8":
 		return 3
 	case "u32", "i32", "f32", "time_t_32", "dostimedate":
 		return 4
@@ -394,9 +394,12 @@ func AsUint64Raw(b []byte) (v uint64) {
 
 	if len(b) == 1 {
 		v = uint64(b[0])
-	} else if len(b) <= 2 {
+	} else if len(b) == 2 {
 		v = uint64(binary.BigEndian.Uint16(b))
-	} else if len(b) <= 4 {
+	} else if len(b) == 3 {
+		d := append([]byte{0}, b...)
+		v = uint64(binary.BigEndian.Uint32(d))
+	} else if len(b) == 4 {
 		v = uint64(binary.BigEndian.Uint32(b))
 	} else {
 		v = binary.BigEndian.Uint64(b)

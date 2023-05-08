@@ -140,7 +140,9 @@ list_val(self.index, "Filename", "Name")  = reads a value from a field in anothe
 
 numeric
 
-    u8, u16, u32, u64, f32
+    u8, u16, u24, u32, u64
+    i8, i16, i32, i64
+    f32
 
 
 numeric bit fields
@@ -157,10 +159,12 @@ text
     ascii[5]          ascii string
     asciiz            zero terminated ascii string
     asciinl           newline-terminated (\n) ascii string
+
+    utf8z             zero terminated utf8 string
+
     utf16[6]          6-byte area with utf16 encoded string data (utf16 le == wchar_t)
     utf16z            zero terminated utf16 string
 
-    utf8z             zero terminated utf8 string
     sjis[4]           4-byte area with ShiftJIS encoded string data
 
 

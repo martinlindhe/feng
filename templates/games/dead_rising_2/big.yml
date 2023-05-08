@@ -2,6 +2,7 @@
 
 # Used in:
 # Dead Rising 2 (XBox360)
+# Dead Rising 2: Off the Record (XBox360)
 
 # TODO: uses Microsoft LZX compression, aka XMemDecompress, aka xcompress.lib (see https://github.com/microsoft/go-winio/blob/e268c11e27607f25b97bcb14e9d01af70c2c0f52/wim/decompress.go)
 
@@ -11,7 +12,7 @@ references:
 
 kind: archive
 name: Dead Rising 2 archive file
-extensions: [.big, .tex]
+extensions: [.big, .tex, .bcf]
 
 magic:
   - offset: 0000

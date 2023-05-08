@@ -224,7 +224,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[8:12])))),
 			prettyFloat(math.Float32frombits(uint32(value.AsUint64Raw(b[12:16])))))
 
-	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64":
+	case "u8", "u16", "u24", "u32", "u64", "i8", "i16", "i32", "i64":
 		if !field.Format.Slice && field.Format.Range != "" {
 			log.Debug().Msgf("GetFieldValue %s", field.Format.Label)
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
@@ -363,7 +363,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 	}
 
 	switch field.Format.Kind {
-	case "u8", "u16", "u32", "u64", "i8", "i16", "i32", "i64", "f32":
+	case "u8", "u16", "u24", "u32", "u64", "i8", "i16", "i32", "i64", "f32":
 		if !field.Format.Slice && field.Format.Range != "" {
 			unitLength, totalLength := fl.GetAddressLengthPair(&field.Format)
 

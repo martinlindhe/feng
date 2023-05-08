@@ -1,0 +1,65 @@
+# STATUS: 1%
+
+# Used in:
+# FlatOut (PS2)
+# FlatOut: Head On (PSP)
+# FlatOut: Ultimate Carnage (XBox360)
+
+references:
+  - http://aluigi.altervista.org/bms/flatout_bfs1.bms # for FlatOut 2
+  - https://wiki.xentax.com/index.php/FlatOut_BFS # XXX not fully matching xbox360 version
+
+kind: game
+name: FlatOut archive
+extensions: [.bfs]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'bfs1'
+
+structs:
+  header:
+    ascii[4] Signature: c'bfs1'
+
+    # 20 07 03 10 = FlatOut: Ultimate Carnage
+    # 05 05 04 20 = FlatOut, FlatOut: Head On
+    u32 MaybeVersion: ??
+
+    u32 EntryTableSize: ?? # including header and all, so value = end of entry table offset. XXX use for padding
+
+    u32 v1: ??
+
+    u32 FileCount: ??
+
+  file:
+    u32 Offset: ??
+    u32 Chunks: ?? # XXX
+    if self.Offset != 0:
+      offset: self.Offset
+      chunk[self.Chunks] Chunk: ??
+      offset: restore
+
+  chunk:
+      # XXX merge all the chunks into one output file
+      u8 Flags: ?? # bit 0 = compressed
+      u24 Versions: ??
+
+      u32 ChunkOffset: ??
+      u32 ExpandedSize: ??
+      u32 CompressedSize: ??
+      u32 SomeCRC: ??
+      u32 NameCRC: ?? # XXX points to a name entry ?
+      u32[self.Versions] VersionData: ??
+
+      offset: self.ChunkOffset
+      if self.Flags & 1:
+        compressed:zlib[self.CompressedSize] Data: ??
+      else:
+        raw:u8[self.CompressedSize] Data: ??
+      offset: restore
+
+layout:
+  - header Header
+
+  - file[Header.FileCount] File

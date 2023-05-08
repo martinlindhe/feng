@@ -727,7 +727,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				fl.offset += len
 			}
 
-		case "u8", "i8", "u16", "i16", "u32", "i32", "u64", "i64",
+		case "u8", "i8", "u16", "i16", "u24", "u32", "i32", "u64", "i64",
 			"f32",
 			"xyzm32",
 			"ascii", "utf16", "sjis",
@@ -965,6 +965,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 									//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 									log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
 									//}
+									break
 								}
 
 							}
