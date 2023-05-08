@@ -95,6 +95,7 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 			log.Error().Err(err).Msgf("Extraction failed")
 			return nil
 		}
+		log.Info().Msgf("Expanded %d compressed -> %d uncompressed bytes.", field.Length, len(expanded))
 		f.Write(expanded)
 
 	case "raw":

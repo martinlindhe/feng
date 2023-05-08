@@ -302,6 +302,7 @@ func SingleUnitSize(kind string) int64 {
 
 		// all string types are counted in bytes
 		"ascii", "asciiz", "asciinl",
+		"utf8z",
 		"utf16", "utf16z",
 		"sjis",
 
@@ -315,6 +316,8 @@ func SingleUnitSize(kind string) int64 {
 		"compressed:lzss",
 		"compressed:zlib",
 		"compressed:gzip",
+		"compressed:lzma",
+		"compressed:lzma2",
 		"compressed:deflate",
 		"raw:u8", "encrypted:u8":
 		return 1
@@ -439,6 +442,18 @@ func Utf16String(b []byte) string {
 		panic(err)
 	}
 	return strings.TrimRight(string(decoded), "\x00")
+}
+
+// text encoding used by Windows (00 00-terminated)
+func Utf8zString(b []byte) string {
+	end := 0
+	for i := 0; i < len(b); i++ {
+		end = i
+		if b[i] == 0 {
+			break
+		}
+	}
+	return string(b[:end])
 }
 
 // text encoding used by Windows (00 00-terminated)

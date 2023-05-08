@@ -197,6 +197,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 		"compressed:lzf", "compressed:zlib", "compressed:gzip",
+		"compressed:lzma", "compressed:lzma2",
 		"raw:u8", "encrypted:u8":
 		return ""
 	}
@@ -280,6 +281,9 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 		v, _ := value.AsciiZString(b, len(b))
 		return v
 
+	case "utf8z":
+		return value.Utf8zString(b)
+
 	case "utf16":
 		return value.Utf16String(b)
 
@@ -353,6 +357,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 		"compressed:lzf", "compressed:zlib", "compressed:gzip",
+		"compressed:lzma", "compressed:lzma2",
 		"raw:u8", "encrypted:u8":
 		return ""
 	}
@@ -482,7 +487,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 			return fmt.Sprintf("%d", value.AsUint64Raw(b))
 		}
 
-	case "ascii", "asciiz", "asciinl", "xyzm32", "utf16", "utf16z", "sjis", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
+	case "ascii", "asciiz", "asciinl", "xyzm32", "utf16", "utf8z", "utf16z", "sjis", "time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 		"rgb8", "rgba32":
 		res := fl.GetFieldValue(field).(string)
 		if len(res) > 100 {

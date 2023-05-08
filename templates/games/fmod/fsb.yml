@@ -18,7 +18,7 @@ software:
 
 kind: audio
 name: FMOD sample bank
-extensions: [.fsb]
+extensions: [.fsb, .rmdp]
 endian: little
 
 magic:

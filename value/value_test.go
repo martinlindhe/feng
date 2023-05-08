@@ -120,9 +120,16 @@ func TestUtf16String(t *testing.T) {
 
 func TestUtf16zString(t *testing.T) {
 	b := []byte{
-		// this byte order is found in XBox xbe "utf16z" strings
 		0x2E, 0x00, 0x65, 0x00, 0x78, 0x00, 0x65, 0x00, 0x00, 0x00,
 		0x31, 0x00, // trailing data that should be ignored
 	}
 	assert.Equal(t, ".exe", Utf16zString(b))
+}
+
+func TestUtf8zString(t *testing.T) {
+	b := []byte{
+		0xc2, 0xa1, 0x45, 0x68, 0x21, 0x00,
+		0x31, 0x00, // trailing data that should be ignored
+	}
+	assert.Equal(t, "¡Eh!", Utf8zString(b))
 }

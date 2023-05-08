@@ -3,6 +3,9 @@
 # - Halo III (XBox360)
 # - Halo: Reach (XBox360)
 
+software:
+  - https://github.com/craftycodie/Sunrise-BlfTool
+
 kind: archive
 name: Halo III map info file
 endian: big

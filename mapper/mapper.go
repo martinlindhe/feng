@@ -735,6 +735,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 			"compressed:lzf", "compressed:zlib", "compressed:gzip",
+			"compressed:lzma", "compressed:lzma2",
 			"raw:u8", "encrypted:u8":
 			// internal data types
 			log.Debug().Msgf("expandChildren type %s: %s (child of %s)", es.Field.Kind, es.Field.Label, dfParent.Label)
@@ -834,7 +835,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			})
 			fl.offset += len
 
-		case "asciiz":
+		case "asciiz", "utf8z":
 			val, err := fl.readBytesUntilMarkerByte(0)
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)

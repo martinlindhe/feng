@@ -159,6 +159,8 @@ text
     asciinl           newline-terminated (\n) ascii string
     utf16[6]          6-byte area with utf16 encoded string data (utf16 le == wchar_t)
     utf16z            zero terminated utf16 string
+
+    utf8z             zero terminated utf8 string
     sjis[4]           4-byte area with ShiftJIS encoded string data
 
 
