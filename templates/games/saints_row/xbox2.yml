@@ -1,0 +1,67 @@
+# STATUS: 10%
+
+# Used in:
+# - Saints Row (XBox360)
+
+# TODO MAX: use a variable to calc data start for successful unpacking
+
+references:
+  - http://aluigi.org/bms/rfguerrilla.bms
+  - https://www.zenhax.com/viewtopic.php?t=8641 # xbox360 version
+  - https://forum.xentax.com/viewtopic.php?t=25743 # pc version, .exe
+
+kind: game
+name: Saints Row archive
+filenames: [ "*_xbox2" ]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 51 89 0a ce
+
+
+structs:
+  header:
+    ascii[4] Signature: ??
+    u32 Version: ?? # 3 = XBox360 version
+    u32[83] Padding: ??
+    u32 FileCount: ??
+    u32 VPP_SIZE: ??
+    u32 FileTableSize: ??
+    u32 NameTableSize: ??
+
+    # < ver 6:
+    u32 ExpandedSize: ??
+    u32 CompressedSize: ??
+    u32 v1: ??
+    u32 v2: ??
+    u8[alignment(OFFSET, 2048)] Padding: ??
+
+   # varset DataOffset: OFFSET + self.VPP_SIZE - self.CompressedSize  # XXX calc INTEGER.  first = 0x60c8
+
+  file:
+    u32 NameOffset: ??
+    offset: 0x800 + Header.FileTableSize + alignment(Header.FileTableSize, 2048) + self.NameOffset
+    asciiz Name: ??
+    offset: restore
+
+    u32 u1: ?? # 0
+    u32 u2: ?? # XXX increasing value, but dont seem to be exact data offset
+    u32 CRC: ?? # XXX if ver < 6
+    u32 ExpandedSize: ??
+    u32 CompressedSize: ??
+    u32 u3: ?? # 0
+
+    # XXX need to keep a variable for data start
+    #offset: 0x800 + Header.VPP_SIZE - Header.CompressedSize
+    #compressed:zlib[self.CompressedSize] Data: ??
+    #varset DataOffset: DataOffset + self.CompressedSize
+    #  math OFFSET x= 0x800     padding ?
+    #offset: restore
+
+layout:
+  - header Header
+
+  - file[Header.FileCount] File
+
+  #- file[1] File

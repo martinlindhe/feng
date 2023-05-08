@@ -1,0 +1,65 @@
+# STATUS: 10%
+
+# Used in:
+# - Lost Odyssey (XBox360)
+
+references:
+  - https://www.gildor.org/smf/index.php/topic,116.msg30238.html#msg30238
+  - https://forum.xentax.com/viewtopic.php?t=18186
+
+kind: game
+name: Lost Odyssey archive
+filenames: [ LO.fpi ]
+endian: little
+
+no_magic: true
+
+multi_file: true # File pair: .fpi (entry list) and .fpd (data)
+
+structs:
+  header:
+    u32 v1: ?? # 0
+    u32 v2: ?? # 0
+    u32 v3: ?? # 01 00
+    u32 v4: ?? # cc 00 40 00
+    u32 v5: ?? # 00 11 12 00
+    u32 v6: ?? # 01 04 00 18   xxx not 32bit
+    u16 v7: ?? # 1
+
+    u16 EntryCount: ??
+    u32 Entry2Count: ??
+    u32 EntryStartOffset: ??
+    u32 Offset2: ??
+    u32 Offset3: ??
+    u32 Offset4: ??
+
+  entry:
+    u16 u1: ??
+    u16 u2: ??
+    u32 TBLOFF1: ??
+    u32 TBLOFF2: ??
+    u8[0x24] u3: ??
+
+  entry2:
+    u16 w0: ??
+    u16 w1: ??
+    u32 w2: ??  # maybe timestamp?
+    u32 Offset: ??
+    u32 w3: ??
+    u32 Size: ??
+    u32 w4: ??
+
+    #import: raw:u8, self.Offset, self.Size, no_ext(FILE_NAME) + ".fpd"
+
+    #offset: self.Offset
+    #raw:u8[self.Size] Data: ??
+    #offset: restore
+
+layout:
+  - header Header
+
+  - offset Header.EntryStartOffset
+  - entry[Header.EntryCount] Entry
+
+  - offset Header.Offset2
+  - entry2[Header.EntryCount] Entry2

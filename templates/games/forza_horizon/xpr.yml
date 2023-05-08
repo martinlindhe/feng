@@ -1,0 +1,39 @@
+# STATUS: 1%
+
+# Used in:
+# - Forza Horizon (XBox360)
+
+kind: game
+name: Forza Horizon xpr file
+extensions: [.xpr]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'XPR2'
+
+structs:
+  header:
+    ascii[4] Magic: ??
+    u32 Offset: ?? # 2048  header size?
+    u32 DataSize: ?? # XXX almost data size .. ? offset?
+
+    u32 v3: ?? # 1
+
+    ascii[4] Tag: ?? # TXCM ...
+    u32 u1: ?? # 48
+    u32 u2: ?? # 52
+    u32 u3: ?? #
+    u32 u4: ?? # 0
+
+    ascii[24] Name: ??
+    u8[52] Unknown: ?? # XXX decode
+
+    u8[alignment(OFFSET, 2048)] Padding: ??
+
+    offset: self.Offset
+    raw:u8[self.DataSize] Data: ??
+
+
+layout:
+  - header Header

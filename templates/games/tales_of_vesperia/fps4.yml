@@ -1,0 +1,49 @@
+# STATUS: 30%
+
+# Used in:
+# Tales of Vesperia (2008) XBox360
+
+# TODO: handle compression
+
+kind: game
+name: Tales of Vesperia data
+extensions: [.svo]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'FPS4'
+
+structs:
+  header:
+    ascii[4] Signature: c'FPS4'
+    u32 EntryCount: ??
+    u32 u2: ?? # 28
+    u32 u3: ?? # 2048
+
+    u32 u4: ?? # 00 2c 00 0f
+    u32 u5: ?? # 00 01 00 00
+    u32 u6: ?? # 00 00 00 74   changes !!!
+
+  file:
+    u32 Offset: ??
+
+    u32 ExpandedSize: ??
+    u32 CompressedSize: ??
+    ascii[32] Name: ??
+
+    filename: self.Name
+    offset: self.Offset
+    raw:u8[self.CompressedSize] Data: ??
+    u8[alignment(OFFSET, 2048)] Padding: ??
+    offset: restore
+
+  footer:
+    asciiz MaybeInputFilename: ?? # XXX maybe some windows codepage encoding
+    u8[alignment(OFFSET, 2048)] Padding: ??
+
+layout:
+  - header Header
+  - file[Header.EntryCount] File
+
+  - footer Footer

@@ -1,0 +1,19 @@
+# STATUS: 1%
+
+kind: audio
+name: FMOD audio events
+extensions: [.fev]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'FEV1'
+
+structs:
+  header:
+    ascii[3] Magic: ??
+    u8 Version:
+      eq c'1': V1
+
+layout:
+  - header Header
