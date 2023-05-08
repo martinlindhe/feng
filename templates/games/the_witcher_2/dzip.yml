@@ -7,6 +7,8 @@
 
 # TODO MAX: decompress content. XXX maybe need to concat all data before decompression ???
 
+# TODO: set timestamp on output file from self.Timestamp //feb 2023
+
 references:
   - https://witcher.fandom.com/wiki/Extracting_The_Witcher_2_files
   - https://forum.xentax.com/viewtopic.php?f=10&t=6634
@@ -47,7 +49,6 @@ structs:
     u64 Offset: ??
     u64 CompressedSize: ??
     filename: self.Name
-    # TODO: set timestamp on output file from self.Timestamp //feb 2023
     offset: self.Offset
     compressed:lzf[self.CompressedSize] Data: ??  # TODO MAX PRIO: we need to set compressed AND uncompressed size for successful extraction
     offset: restore

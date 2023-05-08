@@ -4,6 +4,8 @@
 # - MID: decode utf8 text in iTXt
 # - LOW: calculate crc32
 
+# TODO: the concatenation of the contents of all the IDAT chunks makes up a zlib datastream (if compression is on)
+
 references:
   - https://en.wikipedia.org/wiki/Portable_Network_Graphics
   - http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
@@ -42,7 +44,7 @@ structs:
       eq 04: COLOR_GRAY_ALPHA
       eq 06: COLOR_RGBA
     u8 Compression method:
-      eq 00: deflate                        # NOTE: the concatenation of the contents of all the IDAT chunks makes up a zlib datastream
+      eq 00: deflate
     u8 Filter method:
       eq 00: none+sub+up+average+paeth
     u8 Interlace method:

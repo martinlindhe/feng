@@ -12,7 +12,6 @@ import (
 )
 
 // Write data streams to outDir
-// FIXME: doesn't evaluate if/else-blocks, so child values of them will not be extracted
 func (fl *FileLayout) Extract(outDir string) error {
 
 	err := os.MkdirAll(outDir, os.ModePerm)
@@ -24,6 +23,14 @@ func (fl *FileLayout) Extract(outDir string) error {
 		for _, field := range layout.Fields {
 			if err := fl.extractField(&field, layout, outDir); err != nil {
 				log.Error().Err(err).Msgf("Extract failed.")
+			}
+		}
+
+		for _, child := range layout.Children {
+			for _, field := range child.Fields {
+				if err := fl.extractField(&field, layout, outDir); err != nil {
+					log.Error().Err(err).Msgf("Extract failed.")
+				}
 			}
 		}
 	}

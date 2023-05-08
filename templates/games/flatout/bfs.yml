@@ -1,13 +1,18 @@
-# STATUS: 1%
+# STATUS: 75%
+
+# This mapping does not work correctly with the first FlatOut game, and no way to auto detect
 
 # Used in:
-# FlatOut (PS2)
-# FlatOut: Head On (PSP)
-# FlatOut: Ultimate Carnage (XBox360)
+# FlatOut (PS2) - NO!!!! format is slighjtly off
+# FlatOut 2 (PS2)
+# FlatOut: Head On (PSP)               TODO flatout.bfs has a name table at 0x4260
+# FlatOut: Ultimate Carnage (XBox360)  TODO streamed.bfs has name table at 0xB800
+
+# TODO: improve output naming
 
 references:
   - http://aluigi.altervista.org/bms/flatout_bfs1.bms # for FlatOut 2
-  - https://wiki.xentax.com/index.php/FlatOut_BFS # XXX not fully matching xbox360 version
+  - https://wiki.xentax.com/index.php/FlatOut_BFS # XXX this is maybe for FlatOut 1 ?, not matching xbox360 version
 
 kind: game
 name: FlatOut archive
@@ -22,44 +27,44 @@ structs:
   header:
     ascii[4] Signature: c'bfs1'
 
+    # 05 05 04 20 = FlatOut, FlatOut 2, FlatOut: Head On
     # 20 07 03 10 = FlatOut: Ultimate Carnage
-    # 05 05 04 20 = FlatOut, FlatOut: Head On
     u32 MaybeVersion: ??
 
     u32 EntryTableSize: ?? # including header and all, so value = end of entry table offset. XXX use for padding
 
     u32 v1: ??
 
-    u32 FileCount: ??
+    u32 FolderCount: ??
 
-  file:
+  folder:
     u32 Offset: ??
-    u32 Chunks: ?? # XXX
+    u32 FileCount: ??
     if self.Offset != 0:
       offset: self.Offset
-      chunk[self.Chunks] Chunk: ??
+      file[self.FileCount] File: ??
       offset: restore
 
-  chunk:
-      # XXX merge all the chunks into one output file
-      u8 Flags: ?? # bit 0 = compressed
-      u24 Versions: ??
+  file:
+    u8 Flags: ?? # bit 0 = compressed
+    u24 Versions: ??
 
-      u32 ChunkOffset: ??
-      u32 ExpandedSize: ??
-      u32 CompressedSize: ??
-      u32 SomeCRC: ??
-      u32 NameCRC: ?? # XXX points to a name entry ?
-      u32[self.Versions] VersionData: ??
+    u32 ChunkOffset: ??
+    u32 ExpandedSize: ??
+    u32 CompressedSize: ??
+    u32 SomeCRC: ??
+    u32 NameCRC: ?? # XXX points to a name entry ?
+    u32[self.Versions] VersionData: ??
 
-      offset: self.ChunkOffset
-      if self.Flags & 1:
-        compressed:zlib[self.CompressedSize] Data: ??
-      else:
-        raw:u8[self.CompressedSize] Data: ??
-      offset: restore
+    offset: self.ChunkOffset
+    if self.Flags & 1:
+      compressed:zlib[self.CompressedSize] Data: ??
+    else:
+      raw:u8[self.CompressedSize] Data: ??
+
+    offset: restore
 
 layout:
   - header Header
 
-  - file[Header.FileCount] File
+  - folder[Header.FolderCount] Folder
