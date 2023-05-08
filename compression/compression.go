@@ -33,6 +33,8 @@ func ExtractorFactory(name string) (Extractor, error) {
 		return Deflate{}, nil
 	case "lzma":
 		return Lzma{}, nil
+	case "lzma2":
+		return Lzma2{}, nil
 	case "lzo1":
 		return Lzo1x{}, nil
 	case "lz4":
@@ -118,6 +120,29 @@ func (o Lzma) Extract(f afero.File) ([]byte, error) {
 
 func (o Lzma) Compress(in []byte, w io.Writer) error {
 	zw, err := lzma.NewWriter(w)
+	if err != nil {
+		return err
+	}
+	_, err = zw.Write(in)
+	zw.Close()
+	return err
+}
+
+type Lzma2 struct{}
+
+func (o Lzma2) Extract(f afero.File) ([]byte, error) {
+	reader, err := lzma.NewReader2(f)
+	if err != nil {
+		return nil, err
+	}
+
+	out := new(bytes.Buffer)
+	_, err = io.Copy(out, reader)
+	return out.Bytes(), err
+}
+
+func (o Lzma2) Compress(in []byte, w io.Writer) error {
+	zw, err := lzma.NewWriter2(w)
 	if err != nil {
 		return err
 	}

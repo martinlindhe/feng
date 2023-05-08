@@ -164,8 +164,8 @@ text
 
 date / time
 
-    time_t_32         32-bit timestamp of seconds since 00:00 January 1, 1970, in UTC
-    filetime          64-bit windows timestamp, in UTC
+    time_t_32         32-bit Windows timestamp of seconds since 00:00 January 1, 1970, in UTC
+    filetime          64-bit Windows timestamp, in UTC
     dosdate           16-bit MS-DOS datestamp, in UTC
     dostime           16-bit MS-DOS timestamp, in UTC
     dostimedate       32-bit MS-DOS (dostime, dosdate)
@@ -192,6 +192,8 @@ data tagging (for extraction feature)
     compressed:lzss[self.Size]      mark area as Lzss-compatible data
     compressed:lz4[self.Size]       mark area as Lz4-compressed data
     compressed:lzf[self.Size]       mark area as LZF compressed data
+    compressed:lzma[self.Size]      mark area as Lzma compressed data
+    compressed:lzma2[self.Size]     mark area as Lzma2 compressed data
 
     filename: self.Filename         set the filename to use while extracting for the next data area
 
