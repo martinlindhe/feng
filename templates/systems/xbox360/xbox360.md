@@ -17,3 +17,15 @@ http://gael360.free.fr/wxPirs.php
 
 https://free60.org/System-Software/Formats/STFS
 
+
+# LZX compression (TODO)
+
+Some formats uses Microsoft LZX compression, aka XMemDecompress, aka xcompress.lib
+
+- can maybe repurpose https://github.com/microsoft/go-winio/blob/e268c11e27607f25b97bcb14e9d01af70c2c0f52/wim/decompress.go ?
+
+- rust decompressor https://crates.io/crates/lzxd
+
+- TODO no compressor code ?
+
+https://en.wikipedia.org/wiki/LZX

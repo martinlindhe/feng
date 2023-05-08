@@ -1,13 +1,14 @@
 # STATUS: 10%
 
+# Used in:
+# - Nickelodeon Victorious: Taking the Lead (2012): Wii
+# - Ghostbusters: The Video Game (2009) XBox360
+
 # Maybe used in games:
 #   The Walking Dead Survival Instinct
 #   Country Dance 2
 #   Silent Hill Book of Memories
-#   Ghostbusters: The Video Game (2009)
 
-# Confirmed used in:
-# - Nickelodeon Victorious: Taking the Lead (2012): Wii
 
 # MAX: need more samples
 
@@ -46,7 +47,7 @@ structs:
     u32 ExpandedSize: ?? # XXX
 
     offset: FILE_SIZE - (Header.FileCount * 312) # start of names table.
-    ascii[16] Identifier: c'johnsanderson' 00 00 00
+    ascii[16] Identifier: c'johnsanderson' 00 00 00 # XXX works on Victorious but not on Ghostbusters
     u8[16] Reserved: ??
     u32 UnknownValue: ?? # XXX
     u32 Unknown: ?? # 0

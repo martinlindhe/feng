@@ -3,7 +3,6 @@
 # This mapping does not work correctly with the first FlatOut game, and no way to auto detect
 
 # Used in:
-# FlatOut (PS2) - NO!!!! format is slighjtly off
 # FlatOut 2 (PS2)
 # FlatOut: Head On (PSP)               TODO flatout.bfs has a name table at 0x4260
 # FlatOut: Ultimate Carnage (XBox360)  TODO streamed.bfs has name table at 0xB800

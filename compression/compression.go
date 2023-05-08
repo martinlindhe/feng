@@ -27,6 +27,8 @@ func ExtractorFactory(name string) (Extractor, error) {
 	switch name {
 	case "zlib":
 		return Zlib{}, nil
+	case "zlib_loose":
+		return ZlibLoose{}, nil
 	case "gzip":
 		return Gzip{}, nil
 	case "deflate":
@@ -78,6 +80,28 @@ func (o Zlib) Extract(f afero.File) ([]byte, error) {
 }
 
 func (o Zlib) Compress(in []byte, w io.Writer) error {
+	zw := zlib.NewWriter(w)
+	_, err := zw.Write(in)
+	zw.Close()
+	return err
+}
+
+// ignores compression errors
+type ZlibLoose struct{}
+
+func (o ZlibLoose) Extract(f afero.File) ([]byte, error) {
+	reader, err := zlib.NewReader(f)
+	if err != nil {
+		return nil, err
+	}
+	defer reader.Close()
+
+	out := new(bytes.Buffer)
+	io.Copy(out, reader)
+	return out.Bytes(), nil
+}
+
+func (o ZlibLoose) Compress(in []byte, w io.Writer) error {
 	zw := zlib.NewWriter(w)
 	_, err := zw.Write(in)
 	zw.Close()

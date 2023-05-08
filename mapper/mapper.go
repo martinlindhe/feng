@@ -734,7 +734,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			"rgb8", "rgba32",
 			"time_t_32", "filetime", "dostime", "dosdate", "dostimedate",
 			"compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
-			"compressed:lzf", "compressed:zlib", "compressed:gzip",
+			"compressed:lzf", "compressed:zlib", "compressed:zlib_loose", "compressed:gzip",
 			"compressed:lzma", "compressed:lzma2",
 			"raw:u8", "encrypted:u8":
 			// internal data types
