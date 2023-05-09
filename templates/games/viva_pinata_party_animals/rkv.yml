@@ -1,26 +1,27 @@
-# STATUS: 5%
+# STATUS: 80%, extract: ok
 #
 # Archive format used in games developed by Krome Studios
 
 # Used in:
-# Viva Piñata: Trouble in Paradise (2008) XBox360
-# Hellboy: Science of Evil
+# - Viva Piñata: Trouble in Paradise (2008) XBox360
+# - Hellboy: Science of Evil (2008) PS3
 
 # NOTE:
-# RKV2 and RKV3 files seem to exist, in these games (unconfirmed):
+# RKV2 and RKV3 files exists, in these games and more:
 # - Ty The Tasmanian Tiger
 # - Ty 2
-# - games developed by Krome Studios, or Rare ?
 # - The Legend of Spyro (Krome Studios), RKV2
 
-software:
-  - https://raw.githubusercontent.com/Dnawrkshp/ty-1-tools/master/rkv-extract/rkv-extract/source/rkv-extract.cpp # for RKV2 files
-  - https://aluigi.altervista.org/bms/rkv.bms
-  - http://aluigi.org/bms/rkv2.bms # for RKV2 format
-  - https://aluigi.altervista.org/bms/rkv4.bms #
+references:
+  - https://aluigi.altervista.org/bms/rkv4.bms
 
-kind: game
-name: "Viva Piñata: Trouble in Paradise file"
+  # related to RKV1, RKV2 format:
+  - https://raw.githubusercontent.com/Dnawrkshp/ty-1-tools/master/rkv-extract/rkv-extract/source/rkv-extract.cpp # for RKV2 format
+  - https://aluigi.altervista.org/bms/rkv.bms # for RKV 1 format
+  - http://aluigi.org/bms/rkv2.bms # for RKV2 format
+
+kind: archive
+name: Krome Studios RKV4 archive
 extensions: [.rkv]
 endian: little
 
@@ -41,26 +42,26 @@ structs:
     u8[32] Reserved: ?? # 0
 
     # XXX unknown table:
-    ascii[28] Name1: ?? # jasonschroder
-    u32 Size1: ?? # 0
+    ascii[28] Name1: ?? # jasonschroder = Viva Piñata: Trouble in Paradise, damianstewart = Hellboy: Science of Evil
+    u32 MaybeSize1: ?? # 0
 
     ascii[28] Name2: ?? # nil or MKConvertM3D
-    u32 Size2: ?? # 0
+    u32 MaybeSize2: ?? # 0
 
     ascii[28] Name3: ?? # nil or MKConvertTGA
-    u32 Size3: ?? # 0
+    u32 MaybeSize3: ?? # 0
 
     ascii[28] Name4: ?? # nil or MKConvertWAV
-    u32 Size4: ?? # 0
+    u32 MaybeSize4: ?? # 0
 
     ascii[28] Name5: ?? # nil or MKConvertMDT
-    u32 Size5: ?? # 0
+    u32 MaybeSize5: ?? # 0
 
     ascii[28] Name6: ?? # nil or CompileScript
-    u32 Size6: ?? # 0
+    u32 MaybeSize6: ?? # 0
 
     ascii[28] Name7: ?? # nil or MKConvertFNT
-    u32 Size7: ?? # 0
+    u32 MaybeSize7: ?? # 0
 
     u8[alignment(OFFSET, 1024)] Padding: ??
 
@@ -85,7 +86,7 @@ structs:
       raw:u8[self.CompressedSize] Data: ??
     else:
       u8 CompType: ??
-      compressed:lzf[self.CompressedSize - 1] Data: ?? # XXX lzf needs to know "compressed size" value
+      compressed:lzf[self.CompressedSize - 1] Data: ??
       u8[alignment(self.CompressedSize, 32)] Padding: ??
     offset: restore
 

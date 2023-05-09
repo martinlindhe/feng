@@ -83,8 +83,11 @@ type FileLayout struct {
 	// debugging: measure evaluation time?
 	measureTime bool
 
-	// time spent evaluating this template
+	// time spent evaluating the template
 	evaluationTime time.Duration
+
+	// time spent presenting the template
+	presentTime time.Duration
 
 	// time spent evaluating templates until match was found, including this template
 	totalEvaluationTimeUntilMatch time.Duration
@@ -670,9 +673,13 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	if fl.BaseName != "" {
 		res = "# " + fl.BaseName + "\n"
 	}
+
+	presentStart := time.Now()
 	for _, layout := range fl.Structs {
 		res += fl.presentStruct(layout, cfg)
 	}
+
+	fl.presentTime = time.Since(presentStart)
 
 	res += fl.reportUnmappedByteCount()
 
@@ -725,6 +732,7 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 		res += fmt.Sprintf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
 
 		res += fmt.Sprintf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
+		res += fmt.Sprintf("PRESENT TIME: %v\n", fl.presentTime)
 	}
 
 	return res
