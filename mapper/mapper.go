@@ -168,6 +168,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 			rangeQ = strings.ReplaceAll(rangeQ, "self.", fs.Name+".")
 		}
 		parsedRange, err := fl.EvaluateExpression(rangeQ, df)
+		//parsedRange, err := fl.evaluateExpressionWithExistingVariables(rangeQ, df)
 		if err != nil {
 			return err
 		}
@@ -674,6 +675,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			previousOffset := fl.pushOffset()
 
 			fl.offset, err = fl.EvaluateExpression(es.Pattern.Value, dfParent)
+			//fl.offset, err = fl.evaluateExpressionWithExistingVariables(es.Pattern.Value, dfParent)
 			log.Debug().Msgf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, es.Pattern.Value)
 			if err != nil {
 				return err

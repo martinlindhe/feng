@@ -33,8 +33,6 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 		return "", fmt.Errorf("nothing to eval")
 	}
 
-	log.Debug().Msgf("EVAL STR EXPR %s", in)
-
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return "", err
@@ -59,13 +57,11 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 
 // evaluates a math expression
 func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (int64, error) {
-	started := time.Now()
+
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
 		return 0, err
 	}
-
-	fl.evaluatedExpressionTime += time.Since(started)
 
 	switch v := result.(type) {
 	case int:
@@ -554,6 +550,75 @@ func (fl *FileLayout) getScriptFunctionMap() map[string]goval.ExpressionFunction
 	return fl.scriptFunctions
 }
 
+// evaluates a math expression, like EvaluateExpression but use existing
+func (fl *FileLayout) evaluateExpressionWithExistingVariables(in string, df *value.DataField) (int64, error) {
+	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
+	in = strings.ReplaceAll(in, "self.", df.Label+".")
+
+	fl.createInitialConstants()
+
+	// fast path: if "in" looks like decimal number just convert it
+	if v, err := strconv.Atoi(in); err == nil {
+		return int64(v), nil
+	}
+
+	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING (existing vars) at %06x", fl.offset)
+
+	// update to current .index values
+	for _, layout := range fl.Structs {
+		/*if layout.evaluated {
+			continue
+		}*/
+		if fl.scriptVariables[layout.Name] == nil {
+			fl.scriptVariables[layout.Name] = make(map[string]interface{})
+		}
+		fl.scriptVariables[layout.Name].(map[string]interface{})["index"] = int(layout.Index)
+
+		for _, child := range layout.Children {
+			if fl.scriptVariables[child.Name] == nil {
+				fl.scriptVariables[child.Name] = make(map[string]interface{})
+			}
+			fl.scriptVariables[child.Name].(map[string]interface{})["index"] = int(child.Index)
+		}
+	}
+
+	started := time.Now()
+	fl.evaluatedExpressions++
+	result, err := fl.eval.Evaluate(in, fl.scriptVariables, fl.getScriptFunctionMap())
+	fl.evaluatedExpressionTime += time.Since(started)
+
+	if err != nil {
+		if DEBUG_EVAL {
+			spew.Dump(fl.scriptVariables)
+		}
+		return 0, EvaluateError{input: in, msg: err.Error()}
+	}
+
+	switch v := result.(type) {
+	case int:
+		if DEBUG_EVAL {
+			log.Info().Msgf("evaluateExpressionWithExistingVariables: %s => %d", in, v)
+		}
+		return int64(v), nil
+
+	case uint64:
+		if DEBUG_EVAL {
+			log.Info().Msgf("evaluateExpressionWithExistingVariables: %s => %d", in, v)
+		}
+		return int64(v), nil
+
+	case bool:
+		if v {
+			return 1, nil
+		} else {
+			return 0, nil
+		}
+
+	default:
+		panic(fmt.Errorf("unhandled result type %T from %s", result, in))
+	}
+}
+
 func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{}, error) {
 	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
 	in = strings.ReplaceAll(in, "self.", df.Label+".")
@@ -565,48 +630,56 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		return uint64(v), nil
 	}
 
+	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
+
+	started := time.Now()
 	fl.evaluatedExpressions++
 
 	for idx, layout := range fl.Structs {
-
 		if layout.evaluated {
 			if idx+1 < len(fl.Structs) {
+				// HACK WORKAROUND, due to to evaluateExpr() being called recursively  TODO FIX by avoid recurse
 				// must not skip the struct currently being parsed when evaluateExpr() is invoked
-				log.Warn().Msgf("Skipping %s while evaluating %s. idx %d, len %d",
+				log.Debug().Msgf("Skipping %s while evaluating %s. idx %d, len %d",
 					layout.Name, df.Label, idx+1, len(fl.Structs))
 				continue
 			}
 		}
-		log.Info().Msgf("Processing struct %d: %s", idx, layout.Name)
-
-		mapped := make(map[string]interface{})
+		if DEBUG_EVAL {
+			log.Info().Msgf("Processing struct %d: %s", idx, layout.Name)
+		}
+		if fl.scriptVariables[layout.Name] == nil {
+			fl.scriptVariables[layout.Name] = make(map[string]interface{})
+		}
 		for _, field := range layout.Fields {
-			log.Warn().Msgf("adding %s.%s", layout.Name, field.Format.Label)
-			mapped[field.Format.Label] = fl.GetFieldValue(&field)
+			if DEBUG_EVAL {
+				log.Warn().Msgf("adding %s.%s", layout.Name, field.Format.Label)
+			}
+			fl.scriptVariables[layout.Name].(map[string]interface{})[field.Format.Label] = fl.GetFieldValue(&field)
 		}
 
-		mapped["index"] = int(layout.Index)
-		fl.scriptVariables[layout.Name] = mapped
+		fl.scriptVariables[layout.Name].(map[string]interface{})["index"] = int(layout.Index)
 
 		for _, child := range layout.Children {
-			mapped = make(map[string]interface{})
+			if fl.scriptVariables[child.Name] == nil {
+				fl.scriptVariables[child.Name] = make(map[string]interface{})
+			}
 
 			for _, field := range child.Fields {
 				log.Warn().Msgf("Adding child node %s to %s", field.Format.Label, layout.Name)
-				mapped[field.Format.Label] = fl.GetFieldValue(&field)
+				fl.scriptVariables[child.Name].(map[string]interface{})[field.Format.Label] = fl.GetFieldValue(&field)
 			}
 
-			mapped["index"] = int(child.Index)
-			fl.scriptVariables[child.Name] = mapped
+			fl.scriptVariables[child.Name].(map[string]interface{})["index"] = int(child.Index)
 			log.Warn().Msgf("adding %s.%s", df.Label, child.Name)
 		}
 
 		fl.Structs[idx].evaluated = true
 	}
 
-	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
-
 	result, err := fl.eval.Evaluate(in, fl.scriptVariables, fl.getScriptFunctionMap())
+	fl.evaluatedExpressionTime += time.Since(started)
+
 	if err != nil {
 		if DEBUG_EVAL {
 			spew.Dump(fl.scriptVariables)

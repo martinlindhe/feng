@@ -1074,9 +1074,10 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (int64, int64) {
 
 	if df.Range != "" {
 		if df.RangeVal == 0 {
-			log.Warn().Msgf("Calculating initial value for df.Range: %s", df.Range)
+			log.Debug().Msgf("Calculating initial value for df.Range: %s", df.Range)
 
-			val, err := fl.EvaluateExpression(df.Range, df)
+			//val, err := fl.EvaluateExpression(df.Range, df)
+			val, err := fl.evaluateExpressionWithExistingVariables(df.Range, df)
 			if err != nil {
 				panic(err)
 			}
