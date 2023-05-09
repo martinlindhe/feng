@@ -1,0 +1,95 @@
+# STATUS: 5%
+#
+# Archive format used in games developed by Krome Studios
+
+# Used in:
+# Viva Piñata: Trouble in Paradise (2008) XBox360
+# Hellboy: Science of Evil
+
+# NOTE:
+# RKV2 and RKV3 files seem to exist, in these games (unconfirmed):
+# - Ty The Tasmanian Tiger
+# - Ty 2
+# - games developed by Krome Studios, or Rare ?
+# - The Legend of Spyro (Krome Studios), RKV2
+
+software:
+  - https://raw.githubusercontent.com/Dnawrkshp/ty-1-tools/master/rkv-extract/rkv-extract/source/rkv-extract.cpp # for RKV2 files
+  - https://aluigi.altervista.org/bms/rkv.bms
+  - http://aluigi.org/bms/rkv2.bms # for RKV2 format
+  - https://aluigi.altervista.org/bms/rkv4.bms #
+
+kind: game
+name: "Viva Piñata: Trouble in Paradise file"
+extensions: [.rkv]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'RKV4'
+
+structs:
+  header:
+    ascii[4] Signature: c'RKV4'
+    u32 FileCount: ??
+    u32 u1: ?? # XXX
+    u32[2] Reserved: ?? # 0, 0
+    u32 u2: ?? # 0010
+    u32 FileTableOffset: ??
+    u32 u3: ?? # 0060
+
+    u8[32] Reserved: ?? # 0
+
+    # XXX unknown table:
+    ascii[28] Name1: ?? # jasonschroder
+    u32 Size1: ?? # 0
+
+    ascii[28] Name2: ?? # nil or MKConvertM3D
+    u32 Size2: ?? # 0
+
+    ascii[28] Name3: ?? # nil or MKConvertTGA
+    u32 Size3: ?? # 0
+
+    ascii[28] Name4: ?? # nil or MKConvertWAV
+    u32 Size4: ?? # 0
+
+    ascii[28] Name5: ?? # nil or MKConvertMDT
+    u32 Size5: ?? # 0
+
+    ascii[28] Name6: ?? # nil or CompileScript
+    u32 Size6: ?? # 0
+
+    ascii[28] Name7: ?? # nil or MKConvertFNT
+    u32 Size7: ?? # 0
+
+    u8[alignment(OFFSET, 1024)] Padding: ??
+
+  file:
+    offset: Header.FileTableOffset + (self.index * 0x20)
+    u32 NameOffset: ??
+    u32 v1: ?? # 0
+    u32 Offset: ??
+    u32 CRC: ??
+    u32 ExpandedSize: ??
+    u32 CompressedSize: ??
+    u64 v2: ?? # 0
+    offset: restore
+
+    offset: Header.FileTableOffset + (Header.FileCount * 0x20) + self.NameOffset
+    asciiz Name: ??
+    filename: self.Name
+    offset: restore
+
+    offset: self.Offset
+    if self.CompressedSize == self.ExpandedSize:
+      raw:u8[self.CompressedSize] Data: ??
+    else:
+      u8 CompType: ??
+      compressed:lzf[self.CompressedSize - 1] Data: ?? # XXX lzf needs to know "compressed size" value
+      u8[alignment(self.CompressedSize, 32)] Padding: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - file[Header.FileCount] File

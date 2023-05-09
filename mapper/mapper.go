@@ -46,6 +46,8 @@ type MapReaderConfig struct {
 	StartOffset int64
 
 	Brief bool
+
+	MeasureTime bool
 }
 
 // produces a list of fields with offsets and sizes from input reader based on data structure
@@ -60,7 +62,7 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 		cfg.Endian = cfg.DS.Endian
 	}
 
-	fl := FileLayout{DS: cfg.DS, BaseName: cfg.DS.BaseName, startOffset: cfg.StartOffset, endian: cfg.Endian, Extension: ext, _f: cfg.F}
+	fl := FileLayout{DS: cfg.DS, BaseName: cfg.DS.BaseName, startOffset: cfg.StartOffset, endian: cfg.Endian, measureTime: cfg.MeasureTime, Extension: ext, _f: cfg.F}
 	fl.size = fileSize(cfg.F)
 	if cfg.Brief {
 		return &fl, nil
@@ -327,6 +329,7 @@ func (cfg *MapperConfig) mapFileToReader(ds *template.DataStructure, endian stri
 		StartOffset: cfg.StartOffset,
 		Endian:      endian,
 		Brief:       cfg.Brief,
+		MeasureTime: cfg.MeasureTime,
 	})
 	if err != nil {
 		// template don't match, try another
@@ -376,13 +379,10 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 
 		parseStart := time.Now()
 		fl, err = cfg.mapFileToReader(ds, endian)
-		parseTime := time.Since(parseStart)
-		if err == nil {
-			if cfg.MeasureTime {
-				passed := time.Since(started)
-				log.Warn().Msgf("MEASURE: evaluation of %d templates until a match was found: %v, template parsed in %v", processed, passed, parseTime)
-			}
-		}
+
+		fl.totalEvaluationTimeUntilMatch = time.Since(started)
+		fl.evaluationTime = time.Since(parseStart)
+
 		return err
 	})
 	if errors.Is(err, errMapFileMatched) {

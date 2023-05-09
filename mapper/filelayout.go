@@ -79,6 +79,15 @@ type FileLayout struct {
 
 	// time spent evaluating expressions during parsing
 	evaluatedExpressionTime time.Duration
+
+	// debugging: measure evaluation time?
+	measureTime bool
+
+	// time spent evaluating this template
+	evaluationTime time.Duration
+
+	// time spent evaluating templates until match was found, including this template
+	totalEvaluationTimeUntilMatch time.Duration
 }
 
 // pop last offset from previousOffsets list
@@ -696,7 +705,7 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 		res += "EOF\n"
 	}
 
-	res += "\n---\n"
+	res += "\n---STAT---\n"
 	res += fmt.Sprintf("FILE SIZE : %d / 0x%06x / %s\n", fl.size, fl.size, ByteCountSI(fl.size))
 
 	pctRead := (float64(fl.bytesRead) / float64(fl.size)) * 100
@@ -707,12 +716,15 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 		res += fmt.Sprintf("BYTES IMPORTED: %d\n", fl.bytesImported)
 	}
 
-	if fl.evaluatedExpressions > 0 {
-		res += fmt.Sprintf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
-	}
-
 	if len(fl.previousOffsets) != 0 {
 		res += fmt.Sprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
+	}
+
+	if fl.measureTime {
+		res += fmt.Sprintf("\n---TIME---\n")
+		res += fmt.Sprintf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
+
+		res += fmt.Sprintf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
 	}
 
 	return res

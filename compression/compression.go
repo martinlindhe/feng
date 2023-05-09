@@ -12,6 +12,8 @@ import (
 	"github.com/rasky/go-lzo"
 	"github.com/spf13/afero"
 	"github.com/ulikunitz/xz/lzma"
+
+	"github.com/martinlindhe/feng/compression/lzf"
 )
 
 // The Extractor handles compression and decompression for a specific compression format
@@ -41,6 +43,8 @@ func ExtractorFactory(name string) (Extractor, error) {
 		return Lzo1x{}, nil
 	case "lz4":
 		return Lz4{}, nil
+	case "lzf":
+		return Lzf{}, nil
 	}
 	panic(fmt.Sprintf("unknown extractor '%s'", name))
 }
@@ -207,25 +211,24 @@ func (o Lz4) Compress(in []byte, w io.Writer) error {
 	return err
 }
 
-/*
-// TODO need go rework github.com/zhuyie/golzf to support reader interface, or finish lzf port in compression/lzf/lzf.go
-///replace github.com/zhuyie/golzf v0.0.0-20161112031142-8387b0307ade => ../golzf
-
-type Lzf struct{}
+type Lzf struct {
+	CompressedSize uint // deduced from field size
+}
 
 func (o Lzf) Extract(f afero.File) ([]byte, error) {
-	expanded := make([]byte, 1024*1024) // XXX have a "known" expanded size value ready from format parsing
-	n, err := lzf.Decompress(data, expanded)
-	return expanded[0:n], err
+	uncompressed, err := lzf.Decompress(f, o.CompressedSize)
+	return uncompressed, err
 }
 
 func (o Lzf) Compress(in []byte, w io.Writer) error {
-	buf := make([]byte, len(in)-1)
-	n, err := lzf.Compress(in, buf)
-	w.Write(buf[:n])
-	return err
+	panic("lzf compression TODO")
+	/*
+		buf := make([]byte, len(in)-1)
+		n, err := lzf.Compress(in, buf)
+		w.Write(buf[:n])
+		return err
+	*/
 }
-*/
 
 /*
 // TODO need github.com/fbonhomm/LZSS to support reader interface

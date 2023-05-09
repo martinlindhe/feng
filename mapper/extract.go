@@ -97,7 +97,15 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 			log.Error().Err(err).Msgf("Read failed")
 			return nil
 		}
-		expanded, err := extractor.Extract(r)
+
+		var expanded []byte
+		if t, ok := extractor.(compression.Lzf); ok {
+			t.CompressedSize = uint(field.Length)
+			expanded, err = t.Extract(r)
+		} else {
+			expanded, err = extractor.Extract(r)
+		}
+
 		if err != nil {
 			log.Error().Err(err).Msgf("Extraction failed")
 			return nil
