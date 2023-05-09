@@ -2,6 +2,7 @@
 
 # Used in:
 # Viva Pinata (2006) XBox360
+# Viva Piñata: Trouble in Paradise (2008) XBox360
 
 kind: game
 name: Viva Pinata pkg file
@@ -10,7 +11,10 @@ endian: big
 
 magic:
   - offset: 0000
-    match: 00 00 00 01 # XXX
+    match: 00 00 00 01 # XXX weak. 1 for Viva Pinata (2006)
+
+  - offset: 0000
+    match: 00 00 00 02 # XXX weak. 2 for Viva Piñata: Trouble in Paradise (2008)
 
 structs:
   header:
@@ -25,9 +29,7 @@ structs:
 
     offset: self.Offset
     raw:u8[self.Size] Data: ??
-    if self.index != Header.FileCount - 1:
-      # the xbox360 version skips padding on the last entry
-      u8[alignment(OFFSET, 2048)] Padding: ??
+    u8[alignment(OFFSET, 2048)] Padding: ??
     offset: restore
 
   align:

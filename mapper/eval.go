@@ -562,7 +562,7 @@ func (fl *FileLayout) evaluateExpressionWithExistingVariables(in string, df *val
 		return int64(v), nil
 	}
 
-	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING (existing vars) at %06x", fl.offset)
+	log.Info().Str("in", in).Str("block", df.Label).Msgf("EVALUATING (existing vars) at %06x", fl.offset)
 
 	// update to current .index values
 	for _, layout := range fl.Structs {
@@ -581,6 +581,7 @@ func (fl *FileLayout) evaluateExpressionWithExistingVariables(in string, df *val
 			fl.scriptVariables[child.Name].(map[string]interface{})["index"] = int(child.Index)
 		}
 	}
+	//spew.Dump(fl.scriptVariables)
 
 	started := time.Now()
 	fl.evaluatedExpressions++
@@ -645,9 +646,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				continue
 			}
 		}
-		if DEBUG_EVAL {
-			log.Info().Msgf("Processing struct %d: %s", idx, layout.Name)
-		}
+		//if DEBUG_EVAL {
+		log.Warn().Msgf("Processing struct %d: %s", idx, layout.Name)
+		//}
 		if fl.scriptVariables[layout.Name] == nil {
 			fl.scriptVariables[layout.Name] = make(map[string]interface{})
 		}

@@ -1,0 +1,28 @@
+# STATUS: 1%
+
+# Krome Studios game engine format
+
+# Used in:
+# - Hellboy: Science of Evil (2008) PS3
+# - Viva Pinata games
+
+# TODO MAP. maybe a pair format with a .sdb file ?
+
+kind: game
+name: Krome Studios 10dm file
+extensions: [.sdd, .snd, .dsd]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'10dm'
+
+structs:
+  header:
+    ascii[4] Signature: c'10dm'
+    u32 v1: ?? # 1
+    u32 v2: ??
+    u32 v3: ??
+
+layout:
+  - header Header

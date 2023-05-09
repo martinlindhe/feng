@@ -3,6 +3,7 @@
 # FMOD FSB audio format used in many games
 
 # Used in for example:
+# Hellboy (PS3), FSB3
 # Crysis (PS3), FSB4
 # Dark Souls III
 
@@ -29,6 +30,7 @@ structs:
   header:
     ascii[3] Magic: ??
     u8 Version:
+      eq c'3': V3
       eq c'4': V4
       eq c'5': V5
 

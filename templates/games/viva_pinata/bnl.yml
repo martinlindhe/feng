@@ -2,6 +2,7 @@
 
 # Used in:
 # Viva Pinata (2006) XBox360
+# Viva Piñata: Trouble in Paradise (2008) XBox360
 
 kind: game
 name: Viva Pinata language file
@@ -15,7 +16,7 @@ magic:
 structs:
   header:
     ascii[4] Signature: c'CAFF'
-    ascii[16] Version: ?? # 07.08.06.0036 = XBox360 version
+    ascii[16] Version: ?? # 07.08.06.0036
 
     #            english.bnl / swedish.bnl
     u32 DataOffset: ?? # 00 78
