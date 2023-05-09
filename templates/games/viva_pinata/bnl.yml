@@ -1,0 +1,54 @@
+# STATUS: 60%
+
+# Used in:
+# Viva Pinata (2006) XBox360
+
+kind: game
+name: Viva Pinata language file
+#extensions: [.bnl]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'CAFF'
+
+structs:
+  header:
+    ascii[4] Signature: c'CAFF'
+    ascii[16] Version: ?? # 07.08.06.0036 = XBox360 version
+
+    #            english.bnl / swedish.bnl
+    u32 DataOffset: ?? # 00 78
+    u32 u2: ?? # 08 57 24 b4 / 0f 3c b6 24
+    u32 u3: ?? # 00 00 0b 8c
+    u32 u4: ?? # 00 00 0b 8c
+
+    u32[2] res1: ?? # 0, 0
+    u32 u7: ?? # 00 00 0b 8c
+    u32 u8: ?? # 00 00 0b 93
+
+    u32[3] res2: ?? # 0, 0, 0
+    u32[2] res3: ?? # 0, 0
+    u32 uE: ?? # 01 01 01 00
+    u32 uF: ?? # 6
+
+  # entry 0:
+    u32 Expanded1Size: ??
+    u32 MaybeChecksum1: ?? # XXX algo?
+    u32[2] e1: ?? # 0, 0
+    u32 Data1Size: ??
+
+  # entry 1:
+    u32 Expanded2Size: ??
+    u32 MaybeChecksum2: ??
+    u32[2] f1: ?? # 0, 0
+    u32 Data2Size: ??
+
+    compressed:zlib[self.Data1Size] Data: ??
+
+    compressed:zlib[self.Data2Size] Data2: ??
+
+    compressed:zlib[FILE_SIZE - OFFSET] Data3: ??
+
+layout:
+  - header Header

@@ -1,0 +1,38 @@
+# STATUS: 1%
+
+# Used in:
+# Viva Pinata (2006) XBox360
+
+kind: audio
+name: Viva Pinata sound bank
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'DNBW' # WaveBank ND ?
+
+structs:
+  header:
+    ascii[4] Signature: c'DNBW'
+    u32 v1: ??
+    u32 v2: ??
+    u32 v3: ??
+
+    u32 v4: ??
+    u32 v5: ??
+    u32 v6: ??
+    u32 v7: ??
+
+    u32[2] v8: ?? # 0, 0
+
+    u32 v9: ??
+    u32 vA: ??
+    u32 vB: ??
+    u32 vC: ??
+
+    ascii[64] Name: ??
+
+    # XXX continue map
+
+layout:
+  - header Header

@@ -1,0 +1,39 @@
+# STATUS: 80%
+
+# Used in:
+# Viva Pinata (2006) XBox360
+
+kind: game
+name: Viva Pinata pkg file
+extensions: [.pkg]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 00 00 00 01 # XXX
+
+structs:
+  header:
+    u32 Signature: ?? # 1
+    u32 FileCount: ??
+    u32 v2: ??
+
+  file:
+    u32 Offset: ??
+    u32 Size: ??
+    u32 v5: ??
+
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    if self.index != Header.FileCount - 1:
+      # the xbox360 version skips padding on the last entry
+      u8[alignment(OFFSET, 2048)] Padding: ??
+    offset: restore
+
+  align:
+    u8[alignment(OFFSET, 2048)] Padding: ??
+
+layout:
+  - header Header
+  - file[Header.FileCount] File
+  - align Align

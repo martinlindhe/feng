@@ -1,0 +1,97 @@
+# STATUS: 5%
+
+# Used in:
+# Tales of Vesperia (2008) XBox360
+
+kind: game
+name: Tales of Vesperia sound file
+extensions: [.se3]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'SE3 '
+
+structs:
+  header:
+    ascii[4] Signature: c'SE3 '
+    u32 u1: ??
+    u32 u2: ?? # 16
+    u32 SomeOffset: ?? # XXX start of a data struct
+
+    ascii[4] Tag: ?? # ELBP
+    u32 NameCount: ??
+
+  name:
+    ascii[48] Name: ??
+
+  entry:
+    # XXX 232 bytes per entry ?
+    u32 v0: ??
+    u32 v1: ?? # 0
+    u32 v2: ??
+    u32 v3: ??
+
+    u32 v4: ??
+    u32 v5: ??
+    u32 v6: ??
+    u32 v7: ??
+
+    u32 v8: ??
+    u32 v9: ??
+    u32 vA: ??
+    u32 vB: ??
+
+    u32 vC: ??
+    u32 vD: ??
+    u32 vE: ??
+    u32 vF: ?? # 0
+
+    ascii[4] Tag: c'xma' 00
+    u32 w1: ?? #
+    u32 w2: ??
+    u32 w3: ??
+
+    u32 w4: ??
+    u32 MaybeOffset: ??
+    u32 w6: ??
+    u32 w7: ??
+
+    u32 w8: ??
+    u32 w9: ??
+    u32 wA: ??
+    u32 wB: ??
+
+    i32 wC: ?? # -1
+    u32 wD: ??
+    f32 wE: ??
+    f32 wF: ??
+
+#--
+    u32 x0: ??
+    u32 x1: ?? # 0
+    f32 x2: ??
+    u32 x3: ??
+
+    u32 x4: ??
+    u32 x5: ??
+    f32 x6: ??
+    f32 x7: ??
+
+    u32 x8: ??
+    u32 x9: ??
+    u32 xA: ??
+    f32 xB: ??
+
+    u32 xC: ??
+    u32 xD: ??
+    u32 xE: ??
+    u32 xF: ?? # 0
+
+
+layout:
+  - header Header
+  - name[Header.NameCount] Name
+
+  - offset Header.SomeOffset
+  - entry Entry

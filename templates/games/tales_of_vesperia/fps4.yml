@@ -1,13 +1,19 @@
-# STATUS: 30%
+# STATUS: 70%
 
 # Used in:
 # Tales of Vesperia (2008) XBox360
 
-# TODO: handle compression
+# TODO: is the data compressed ?
+
+references:
+  - https://zenhax.com/viewtopic.php?t=7018
+
+software:
+  - http://temple-tales.ru/translations/tools/ToVTools_v1.0_by_RangerRus.rar
 
 kind: game
 name: Tales of Vesperia data
-extensions: [.svo]
+extensions: [.svo, .dat]
 endian: big
 
 magic:
@@ -23,23 +29,23 @@ structs:
 
     u32 u4: ?? # 00 2c 00 0f
     u32 u5: ?? # 00 01 00 00
-    u32 u6: ?? # 00 00 00 74   changes !!!
+    u32 HeaderSize: ?? # including file entries
 
   file:
     u32 Offset: ??
 
-    u32 ExpandedSize: ??
-    u32 CompressedSize: ??
+    u32 PaddedSize: ?? # size padded to 2048-byte alignment
+    u32 Size: ??
     ascii[32] Name: ??
 
     filename: self.Name
     offset: self.Offset
-    raw:u8[self.CompressedSize] Data: ??
+    raw:u8[self.Size] Data: ??
     u8[alignment(OFFSET, 2048)] Padding: ??
     offset: restore
 
   footer:
-    asciiz MaybeInputFilename: ?? # XXX maybe some windows codepage encoding
+    asciiz MaybeOutputFilename: ?? # XXX maybe some windows codepage encoding
     u8[alignment(OFFSET, 2048)] Padding: ??
 
 layout:
