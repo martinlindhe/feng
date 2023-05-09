@@ -646,9 +646,9 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 				continue
 			}
 		}
-		//if DEBUG_EVAL {
-		log.Warn().Msgf("Processing struct %d: %s", idx, layout.Name)
-		//}
+		if DEBUG_EVAL {
+			log.Warn().Msgf("Processing struct %d: %s", idx, layout.Name)
+		}
 		if fl.scriptVariables[layout.Name] == nil {
 			fl.scriptVariables[layout.Name] = make(map[string]interface{})
 		}

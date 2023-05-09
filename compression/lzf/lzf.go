@@ -9,6 +9,7 @@ package lzf
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 	"io"
 )
 
@@ -81,7 +82,7 @@ func Decompress(r io.Reader, compressedSize uint) ([]byte, error) {
 
 			refPos := int32(output.Len()) - refOffset
 			if refPos < 0 {
-				panic("Err(LzfError::DataCorrupted) 4")
+				panic(fmt.Errorf("Err(LzfError::DataCorrupted) 4 at %06x: %d", currentOffset-1, refPos))
 			}
 
 			c := output.Bytes()[refPos]

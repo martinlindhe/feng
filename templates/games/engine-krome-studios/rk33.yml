@@ -1,0 +1,65 @@
+# STATUS: 80%, extraction: ok
+#
+# Archive format used in games developed by Krome Studios
+
+# Used in:
+# - Blade Kitten (2010) PS3
+# - Legend of the Guardians: The Owls of Ga'Hoole (2010)
+# - Star Wars: The Clone Wars - Republic Heroes (2009)
+# - Game Room (2010)
+
+references:
+  - https://aluigi.altervista.org/bms/rkv.bms
+
+kind: archive
+name: Krome Studios RK33 archive
+extensions: [.rkv]
+endian: big
+
+magic:
+  - offset: 0054
+    match: c'RK33'
+
+structs:
+  header:
+    ascii[0x40] Filename: ?? # same as FILE_NAME
+    u32 v0: ?? # 0
+    u32 v1: ?? # XXX maybe data size
+    u32 v2: ?? # 3
+    u32 FileCount: ??
+    u32 v4: ?? #
+
+    ascii[4] Signature: c'RK33'
+    u32 v5: ?? # 0 or 1
+
+    ascii[0x40] LanguageTag: ?? # "All", "fr-FR,fr-CA"
+    u8[alignment(OFFSET, 0x100)] Padding: ??
+
+  file:
+    ascii[64] Name: ??
+    filename: self.Name
+    u32 u1: ??
+    u32 u2: ??
+    u32 u3: ?? # 0
+    u32 Offset: ??
+    u32 Checksum: ?? # XXX algo
+
+    u32 ExpandedSize: ??
+    u32 CompressedSize: ??
+    u32 u4: ?? # 0
+
+    offset: self.Offset
+
+    if self.CompressedSize == self.ExpandedSize:
+      raw:u8[self.CompressedSize] Data: ??
+    else:
+      u8 CompType: ?? # 2 = lzf
+      compressed:lzf[self.CompressedSize - 1] Data: ??
+      u8[alignment(self.CompressedSize, 32)] Padding: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - offset FILE_SIZE - (Header.FileCount * 0x60)
+  - file[Header.FileCount] File

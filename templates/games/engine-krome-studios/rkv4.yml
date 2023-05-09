@@ -85,7 +85,7 @@ structs:
     if self.CompressedSize == self.ExpandedSize:
       raw:u8[self.CompressedSize] Data: ??
     else:
-      u8 CompType: ??
+      u8 CompType: ?? # 2 = lzf
       compressed:lzf[self.CompressedSize - 1] Data: ??
       u8[alignment(self.CompressedSize, 32)] Padding: ??
     offset: restore

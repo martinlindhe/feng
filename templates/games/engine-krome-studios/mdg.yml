@@ -1,0 +1,25 @@
+# STATUS: 1%
+
+# Krome Studios game engine format
+
+# Used in:
+# - Blade Kitten PS3
+
+kind: game
+name: Krome Studios mdg file
+extensions: [.mdg]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'MDG5'
+
+structs:
+  header:
+    ascii[4] Signature: c'MDG5'
+    u32 v1: ?? # 0
+    u32 v2: ?? # 0
+    u32 v3: ?? # 0
+
+layout:
+  - header Header

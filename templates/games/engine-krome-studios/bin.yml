@@ -1,0 +1,25 @@
+# STATUS: 1%
+
+# Krome Studios game engine format
+
+# Used in:
+# - Blade Kitten PS3
+
+kind: game
+name: Krome Studios bin file
+extensions: [.bin]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 12 34 56 78
+
+structs:
+  header:
+    ascii[4] Signature: 12 34 56 78
+    u32 v1: ?? #
+    u32 v2: ?? #
+    u32 v3: ?? #
+
+layout:
+  - header Header
