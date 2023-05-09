@@ -86,9 +86,9 @@ func (fl *FileLayout) peekBytes(field *Field) (b []byte, err error) { // XXX dep
 		size := field.Format.RangeVal
 		log.Info().Msgf("IMPORT % 2d bytes from %06x in %s", size, field.Offset, field.ImportFile)
 
-		f, err := os.Open(field.ImportFile) // XXX use afero
-		if err != nil {
-			return nil, err
+		f, err2 := os.Open(field.ImportFile) // XXX use afero
+		if err2 != nil {
+			return nil, err2
 		}
 		defer f.Close()
 
@@ -98,7 +98,8 @@ func (fl *FileLayout) peekBytes(field *Field) (b []byte, err error) { // XXX dep
 		}
 
 		b = make([]byte, size)
-		n, err := f.Read(b)
+		var n int
+		n, err = f.Read(b)
 		fl.bytesImported += n
 	} else {
 		b, err = fl.peekBytesMainFile(field.Offset, field.Length)
@@ -109,7 +110,7 @@ func (fl *FileLayout) peekBytes(field *Field) (b []byte, err error) { // XXX dep
 	if unitLength > 1 && field.Endian == "little" {
 		b = value.ReverseBytes(b, int(unitLength))
 	}
-	return b, nil
+	return
 }
 
 func (fl *FileLayout) peekBytesMainFile(offset int64, size int64) ([]uint8, error) {

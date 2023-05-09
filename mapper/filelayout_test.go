@@ -109,7 +109,9 @@ layout:
 
 func mockFile(t *testing.T, filename string, data []byte) afero.File {
 	appFS := afero.NewMemMapFs()
-	afero.WriteFile(appFS, filename, data, 0644)
+	err := afero.WriteFile(appFS, filename, data, 0644)
+	assert.Nil(t, err)
+
 	f, err := appFS.Open(filename)
 	assert.Nil(t, err)
 	return f

@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/maja42/goval"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/afero"
@@ -62,7 +63,7 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 		cfg.Endian = cfg.DS.Endian
 	}
 
-	fl := FileLayout{DS: cfg.DS, BaseName: cfg.DS.BaseName, startOffset: cfg.StartOffset, endian: cfg.Endian, measureTime: cfg.MeasureTime, Extension: ext, _f: cfg.F}
+	fl := FileLayout{DS: cfg.DS, BaseName: cfg.DS.BaseName, startOffset: cfg.StartOffset, endian: cfg.Endian, measureTime: cfg.MeasureTime, Extension: ext, _f: cfg.F, eval: goval.NewEvaluator()}
 	fl.size = fileSize(cfg.F)
 	if cfg.Brief {
 		return &fl, nil
@@ -234,7 +235,10 @@ func MapFileToGivenTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 		return nil, fmt.Errorf("%s: %s", cfg.TemplateFilename, err.Error())
 	}
 
-	cfg.F.Seek(cfg.StartOffset, os.SEEK_SET)
+	_, err = cfg.F.Seek(cfg.StartOffset, io.SeekStart)
+	if err != nil {
+		return nil, err
+	}
 
 	fl, err = MapReader(&MapReaderConfig{
 		F:           cfg.F,
@@ -615,8 +619,10 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			if err != nil {
 				return err
 			}
-
 			filename, err := fl.EvaluateStringExpression(matches[3], dfParent)
+			if err != nil {
+				return err
+			}
 
 			es.Field.Kind = kind
 			es.Field.Range = fmt.Sprintf("%d", size)

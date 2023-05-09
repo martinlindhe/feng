@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/maja42/goval"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/afero"
 
@@ -91,6 +92,12 @@ type FileLayout struct {
 
 	// time spent evaluating templates until match was found, including this template
 	totalEvaluationTimeUntilMatch time.Duration
+
+	scriptFunctions map[string]goval.ExpressionFunction
+
+	scriptVariables map[string]interface{}
+
+	eval *goval.Evaluator
 }
 
 // pop last offset from previousOffsets list
@@ -161,6 +168,8 @@ type Struct struct {
 
 	// when evaluated once, struct can be skipped by eval function
 	evaluated bool
+
+	//evaluatedMap map[string]interface{}
 }
 
 type Field struct {
@@ -667,7 +676,7 @@ func (fl *FileLayout) presentStruct(layout *Struct, cfg *PresentFileLayoutConfig
 
 func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
 	if fl == nil {
-		panic(fmt.Sprintf("Probably input yaml error, look for properly escaped strings and \" characters"))
+		panic("Probably input yaml error, look for properly escaped strings and \" characters")
 	}
 	fl.inUTC = cfg.InUTC
 	if fl.BaseName != "" {
@@ -728,7 +737,7 @@ func (fl *FileLayout) reportUnmappedByteCount() string {
 	}
 
 	if fl.measureTime {
-		res += fmt.Sprintf("\n---TIME---\n")
+		res += "\n---TIME---\n"
 		res += fmt.Sprintf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
 
 		res += fmt.Sprintf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
@@ -1065,7 +1074,8 @@ func (fl *FileLayout) GetAddressLengthPair(df *value.DataField) (int64, int64) {
 
 	if df.Range != "" {
 		if df.RangeVal == 0 {
-			log.Debug().Msgf("Calculating initial value for df.Range: %s", df.Range)
+			log.Warn().Msgf("Calculating initial value for df.Range: %s", df.Range)
+
 			val, err := fl.EvaluateExpression(df.Range, df)
 			if err != nil {
 				panic(err)

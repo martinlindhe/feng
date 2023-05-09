@@ -43,7 +43,7 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 	switch v := result.(type) {
 	case string:
 		if DEBUG_EVAL {
-			log.Printf("EvaluateStringExpression: %s => %s", in, v)
+			log.Info().Msgf("EvaluateStringExpression: %s => %s", in, v)
 		}
 		return v, nil
 
@@ -59,8 +59,6 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 
 // evaluates a math expression
 func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (int64, error) {
-	fl.evaluatedExpressions++
-
 	started := time.Now()
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
@@ -72,13 +70,13 @@ func (fl *FileLayout) EvaluateExpression(in string, df *value.DataField) (int64,
 	switch v := result.(type) {
 	case int:
 		if DEBUG_EVAL {
-			log.Printf("EvaluateExpression: %s => %d", in, v)
+			log.Info().Msgf("EvaluateExpression: %s => %d", in, v)
 		}
 		return int64(v), nil
 
 	case uint64:
 		if DEBUG_EVAL {
-			log.Printf("EvaluateExpression: %s => %d", in, v)
+			log.Info().Msgf("EvaluateExpression: %s => %d", in, v)
 		}
 		return int64(v), nil
 
@@ -112,7 +110,7 @@ func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
 		val, _ := fl.peekU32(offset)
 
 		if DEBUG_EVAL {
-			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, int(val))
+			log.Info().Msgf("peek_i32 AT OFFSET %06x: %04x", offset, int(val))
 		}
 		return int(val), nil
 	}
@@ -123,7 +121,7 @@ func (fl *FileLayout) evalPeekI32(args ...interface{}) (interface{}, error) {
 		val, _ := fl.peekU32(int64(offset))
 
 		if DEBUG_EVAL {
-			log.Printf("peek_i32 AT OFFSET %06x: %04x", offset, val)
+			log.Info().Msgf("peek_i32 AT OFFSET %06x: %04x", offset, val)
 		}
 		return int(val), nil
 	}
@@ -148,7 +146,7 @@ func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
 		val, _ := fl.peekU16(offset)
 
 		if DEBUG_EVAL {
-			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			log.Info().Msgf("peek_i16 AT OFFSET %06x: %04x", offset, val)
 		}
 		return int(val), nil
 	}
@@ -159,7 +157,7 @@ func (fl *FileLayout) evalPeekI16(args ...interface{}) (interface{}, error) {
 		val, _ := fl.peekU16(int64(offset))
 
 		if DEBUG_EVAL {
-			log.Printf("peek_i16 AT OFFSET %06x: %04x", offset, val)
+			log.Info().Msgf("peek_i16 AT OFFSET %06x: %04x", offset, val)
 		}
 		return int(val), nil
 	}
@@ -183,7 +181,7 @@ func (fl *FileLayout) evalPeekI8(args ...interface{}) (interface{}, error) {
 		val, _ := fl.peekU8(offset)
 
 		if DEBUG_EVAL {
-			log.Printf("peek_i8 AT OFFSET %06x: %04x", offset, val)
+			log.Info().Msgf("peek_i8 AT OFFSET %06x: %04x", offset, val)
 		}
 		return int(val), nil
 	}
@@ -193,7 +191,7 @@ func (fl *FileLayout) evalPeekI8(args ...interface{}) (interface{}, error) {
 		}
 		val, _ := fl.peekU8(int64(offset))
 		if DEBUG_EVAL {
-			log.Printf("peek_i8 AT OFFSET %06x: %02x", offset, val)
+			log.Info().Msgf("peek_i8 AT OFFSET %06x: %02x", offset, val)
 		}
 		return int(val), nil
 	}
@@ -514,64 +512,25 @@ func (fl *FileLayout) evalNot(args ...interface{}) (interface{}, error) {
 	return !found, nil
 }
 
-var (
-	evalVariables = make(map[string]interface{})
-)
-
-func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{}, error) {
-	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
-	in = strings.ReplaceAll(in, "self.", df.Label+".")
-
-	// fast path: if "in" looks like decimal number just convert it
-	if v, err := strconv.Atoi(in); err == nil {
-		return uint64(v), nil
+func (fl *FileLayout) createInitialConstants() {
+	if fl.scriptVariables != nil {
+		return
 	}
-
-	eval := goval.NewEvaluator()
-
-	for idx, layout := range fl.Structs {
-		if layout.evaluated {
-			if idx+2 < len(fl.Structs) {
-				// must not skip the struct currently being parsed when evaluateExpr() is invoked
-				log.Debug().Msgf("Skipping %s while evaluating %s. idx %d, len %d",
-					layout.Name, df.Label, idx+1, len(fl.Structs))
-
-				continue
-			}
-		}
-		mapped := make(map[string]interface{})
-		for _, field := range layout.Fields {
-			mapped[field.Format.Label] = fl.GetFieldValue(&field)
-		}
-
-		mapped["index"] = int(layout.Index)
-		evalVariables[layout.Name] = mapped
-
-		for _, child := range layout.Children {
-			mapped = make(map[string]interface{})
-
-			for _, field := range child.Fields {
-				log.Debug().Msgf("Adding child node %s to %s", field.Format.Label, layout.Name)
-				mapped[field.Format.Label] = fl.GetFieldValue(&field)
-			}
-
-			mapped["index"] = int(child.Index)
-			evalVariables[child.Name] = mapped
-		}
-
-		fl.Structs[idx].evaluated = true
-	}
+	fl.scriptVariables = make(map[string]interface{})
 
 	for _, constant := range fl.DS.Constants {
 		if len(constant.Value) <= 4 || len(constant.Value) == 8 {
-			evalVariables[constant.Name] = int(value.AsUint64Raw(constant.Value))
+			fl.scriptVariables[constant.Name] = int(value.AsUint64Raw(constant.Value))
 		}
 	}
-	evalVariables["FILE_SIZE"] = int(fl.size)
-	evalVariables["FILE_NAME"] = fl._f.Name()
+	fl.scriptVariables["FILE_SIZE"] = int(fl.size)
+	fl.scriptVariables["FILE_NAME"] = fl._f.Name()
+}
 
-	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
-
+func (fl *FileLayout) getScriptFunctionMap() map[string]goval.ExpressionFunction {
+	if fl.scriptFunctions != nil {
+		return fl.scriptFunctions
+	}
 	functions := make(map[string]goval.ExpressionFunction)
 	functions["peek_i32"] = fl.evalPeekI32
 	functions["peek_i16"] = fl.evalPeekI16
@@ -591,10 +550,66 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	functions["no_ext"] = fl.evalNoExt
 	functions["basename"] = fl.evalBasename
 	functions["list_val"] = fl.evalListVal
-	result, err := eval.Evaluate(in, evalVariables, functions)
+	fl.scriptFunctions = functions
+	return fl.scriptFunctions
+}
+
+func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{}, error) {
+	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
+	in = strings.ReplaceAll(in, "self.", df.Label+".")
+
+	fl.createInitialConstants()
+
+	// fast path: if "in" looks like decimal number just convert it
+	if v, err := strconv.Atoi(in); err == nil {
+		return uint64(v), nil
+	}
+
+	fl.evaluatedExpressions++
+
+	for idx, layout := range fl.Structs {
+
+		if layout.evaluated {
+			if idx+1 < len(fl.Structs) {
+				// must not skip the struct currently being parsed when evaluateExpr() is invoked
+				log.Warn().Msgf("Skipping %s while evaluating %s. idx %d, len %d",
+					layout.Name, df.Label, idx+1, len(fl.Structs))
+				continue
+			}
+		}
+		log.Info().Msgf("Processing struct %d: %s", idx, layout.Name)
+
+		mapped := make(map[string]interface{})
+		for _, field := range layout.Fields {
+			log.Warn().Msgf("adding %s.%s", layout.Name, field.Format.Label)
+			mapped[field.Format.Label] = fl.GetFieldValue(&field)
+		}
+
+		mapped["index"] = int(layout.Index)
+		fl.scriptVariables[layout.Name] = mapped
+
+		for _, child := range layout.Children {
+			mapped = make(map[string]interface{})
+
+			for _, field := range child.Fields {
+				log.Warn().Msgf("Adding child node %s to %s", field.Format.Label, layout.Name)
+				mapped[field.Format.Label] = fl.GetFieldValue(&field)
+			}
+
+			mapped["index"] = int(child.Index)
+			fl.scriptVariables[child.Name] = mapped
+			log.Warn().Msgf("adding %s.%s", df.Label, child.Name)
+		}
+
+		fl.Structs[idx].evaluated = true
+	}
+
+	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
+
+	result, err := fl.eval.Evaluate(in, fl.scriptVariables, fl.getScriptFunctionMap())
 	if err != nil {
 		if DEBUG_EVAL {
-			spew.Dump(evalVariables)
+			spew.Dump(fl.scriptVariables)
 		}
 		return 0, EvaluateError{input: in, msg: err.Error()}
 	}

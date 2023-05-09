@@ -101,8 +101,8 @@ func (o ZlibLoose) Extract(f afero.File) ([]byte, error) {
 	defer reader.Close()
 
 	out := new(bytes.Buffer)
-	io.Copy(out, reader)
-	return out.Bytes(), nil
+	_, err = io.Copy(out, reader)
+	return out.Bytes(), err
 }
 
 func (o ZlibLoose) Compress(in []byte, w io.Writer) error {

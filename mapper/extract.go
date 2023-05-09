@@ -110,7 +110,10 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 			log.Error().Err(err).Msgf("Extraction failed")
 			return nil
 		}
-		f.Write(expanded)
+		_, err = f.Write(expanded)
+		if err != nil {
+			return err
+		}
 
 	case "raw":
 		if parts[1] != "u8" {
@@ -124,7 +127,10 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 			log.Error().Err(err).Msgf("Read failed")
 			return nil
 		}
-		f.Write(data)
+		_, err = f.Write(data)
+		if err != nil {
+			return err
+		}
 
 	case "encrypted":
 		if parts[1] != "u8" {
@@ -139,10 +145,17 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 		if err != nil {
 			log.Error().Err(err).Msgf("decryption failed")
 		}
-		f.Write(dec)
+		_, err = f.Write(dec)
+		if err != nil {
+			return err
+		}
 	}
 
-	f.Stat()
+	_, err = f.Stat()
+	if err != nil {
+		return err
+	}
+
 	log.Info().Msgf("Extracted %d bytes -> %d to %s", field.Length, fileSize(f), fullName)
 	return nil
 }
