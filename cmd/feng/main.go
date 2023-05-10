@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"runtime"
 	"runtime/pprof"
 
@@ -18,7 +19,8 @@ import (
 var args struct {
 	Filename    string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
 	Template    string `type:"existingfile" help:"Parse file using this template."`
-	OutDir      string `help:"Write files to this directory."`
+	Extract     bool   `help:"Extract data streams from input file." short:"x"`
+	OutDir      string `help:"Write files to this directory. Implies --extract"`
 	Offset      int64  `help:"Starting offset (default is 0)."`
 	Raw         bool   `help:"Show raw values"`
 	LocalTime   bool   `help:"Show timestamps in local timezone (default is UTC)."`
@@ -92,7 +94,17 @@ func main() {
 	}
 
 	if args.OutDir != "" {
-		err = fl.Extract(args.OutDir)
+		// --out-dir implies --extract mode
+		args.Extract = true
+	}
+
+	if args.Extract {
+		outDir := args.OutDir
+		if outDir == "" {
+			outDir = basenameWithoutExt(args.Filename)
+		}
+
+		err = fl.Extract(outDir)
 		if err != nil {
 			log.Fatal().Err(err).Msgf("Extraction failed.")
 			return
@@ -124,4 +136,10 @@ func main() {
 			log.Fatal().Err(err).Msg("could not write memory profile")
 		}
 	}
+}
+
+// returns the filename without path (basename) and without extension
+func basenameWithoutExt(fileName string) string {
+	s := filepath.Base(fileName)
+	return s[:len(s)-len(filepath.Ext(s))]
 }

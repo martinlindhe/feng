@@ -39,7 +39,7 @@ func ExtractorFactory(name string) (Extractor, error) {
 		return Lzma{}, nil
 	case "lzma2":
 		return Lzma2{}, nil
-	case "lzo1":
+	case "lzo1x":
 		return Lzo1x{}, nil
 	case "lz4":
 		return Lz4{}, nil

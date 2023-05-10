@@ -74,12 +74,12 @@ func TestExtractors(t *testing.T) {
 		},
 
 		{
-			comp:       "lzo1",
+			comp:       "lzo1x",
 			raw:        []byte{'h', 'e', 'l', 'l', 'o'},
 			compressed: []byte{0x16, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x11, 0x00, 0x00},
 		},
 		{
-			comp:       "lzo1",
+			comp:       "lzo1x",
 			raw:        []byte{},
 			compressed: []byte{0x11, 0x0, 0x0},
 		},
