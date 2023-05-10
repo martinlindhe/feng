@@ -33,11 +33,16 @@ structs:
     u8[0x100] Package Signature: ??
     u8[0x128] Padding: ??
 
-    u8[0x100] License entries: ?? # XXX
-    u8[0x14] Header SHA1 Hash: ?? # XXX from 0x344 to first hash table
+  license:
+    i64 LicenseID: ?? # XUID / PUID / console id
+    i32 LicenseBits: ??
+    i32 LicenseFlags: ??
+
+  header2:
+    u8[20] Header SHA1 Hash: ?? # XXX from 0x344 to first hash table
     u32 HeaderSize: ??
     u32 ContentType:
-      eq 00000001: 	Saved Game
+      eq 00000001: Saved Game
       eq 00000002: Marketplace Content
       eq 00000003: Publisher
       eq 00001000: Xbox 360 Title
@@ -70,7 +75,9 @@ structs:
       eq 00600000: Viral Video
       eq 02000000: Community Game
 
-    u32 MetadataVersion: ?? # XXX 1 or 2 ...
+    u32 MetadataVersion:
+      eq 00000001: V1
+      eq 00000002: V2
 
     u64 ContentSize: ??
     u32 MediaID: ??
@@ -91,10 +98,10 @@ structs:
     u32 FileCount: ??  # XXX
     u64 FileCombinedSize: ??
     u32 DescriptorType:
-      eq 00: STFS
-      eq 01: SVOD
+      eq 00000000: STFS
+      eq 00000001: SVOD
     u32 Reserved: ??
-    if self.MetadataVersion == 1:
+    if self.MetadataVersion == V1:
       u8[0x4c] Padding: ??
     else:
       u8[0x10] SeriesID: ??
@@ -108,17 +115,25 @@ structs:
     utf16[0x900] DisplayDescription: ??
     utf16[0x80] PublisherName: ??
     utf16[0x80] TitleName: ??
-    u8 TransferFlags: ?? # XXX
+    u8 TransferFlags:
+      bit b00000011: Reserved
+      bit b00000100: Deep Link Supported
+      bit b00001000: Disable Network Storage
+      bit b00010000: Kinect Enabled
+      bit b00100000: Move-Only Transfer
+      bit b01000000: Device ID Transfer
+      bit b10000000: Profile ID Transfer
+
     u32 ThumbnailSize: ??
     u32 TitleThumbnailSize: ??
 
     filename: thumbnail.png
-    raw:u8[self.ThumbnailSize] ThumbnailData: ??
-    u8[alignment(self.ThumbnailSize, 8192)] Padding: ??
+    raw:u8[self.ThumbnailSize] ThumbnailData: ?? # PNG
+    u8[alignment(self.ThumbnailSize, 8192)] Padding: ?? # XXX if V2 0x300 (each 0x80 = different locale) 	image 	Additional Display Names
 
     filename: title_thumbnail.png
-    raw:u8[self.TitleThumbnailSize] TitleThumbnailData: ??
-    u8[alignment(self.TitleThumbnailSize, 8192)] Padding: ??
+    raw:u8[self.TitleThumbnailSize] TitleThumbnailData: ?? # PNG
+    u8[alignment(self.TitleThumbnailSize, 8192)] Padding: ?? # XXX if V2 0x300 (each 0x80 = different locale) 	image 	Additional Display Descriptions
 
 
 
@@ -156,6 +171,8 @@ structs:
 
 layout:
   - header Header
+  - license[16] License
+  - header2 Header2
 
   - detect Detect
 

@@ -13,11 +13,12 @@ references:
   - https://github.com/kaitai-io/kaitai_struct_formats/blob/master/archive/lzh.ksy
 
 software:
-  - unpacker 7zip, winrar
+  - 7zip
+  - winrar
 
 kind: archive
 name: LHA Archive
-extensions: [.lha, .lzh]
+extensions: [.lha, .lzh, .dat]
 mime: application/x-lzh-compressed
 endian: little
 
@@ -53,7 +54,7 @@ structs:
       u8 FileAttributes: ?? # XXX map: https://web.archive.org/web/20061231183150/http://homepage1.nifty.com/dangan/en/Content/Program/Java/jLHA/Notes/DataNotes.html#DosAttr
     else:
       u8 Reserved: ??
-    
+
     u8 HeaderLevel: ?? # high byte of FileAttributes but always 00 in MS-DOS, so it is used for header level detection
 
     label: '"Level" + self.HeaderLevel'
@@ -61,7 +62,7 @@ structs:
     if either(self.HeaderLevel, 0, 1):
       u8 FilenameLength: ??
       ascii[self.FilenameLength] Path and filename: ??
-    
+
     u16 Uncompressed CRC16: ??
 
     if either(self.HeaderLevel, 1, 2):
@@ -99,7 +100,7 @@ structs:
     # XXX level1 has a different meaning for CompressedSize ... called SkipSize
     #
     # This is the sum of byte count of total of all extended headers and the byte
-    # count of the compressed file which is following this header. 
+    # count of the compressed file which is following this header.
     # Skip size is 0x0000000D in the foregoing sample. (The byte count of
     # compressed file : 0 + Total of the byte count of each extended headers : 13)
     raw:u8[self.CompressedSize] Compressed data: ??

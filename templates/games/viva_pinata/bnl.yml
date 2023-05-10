@@ -1,8 +1,11 @@
-# STATUS: 60%
+# STATUS: 60%, extract: ok
+
+# Maybe in-house format by RARE ?
 
 # Used in:
 # Viva Pinata (2006) XBox360
 # Viva Piñata: Trouble in Paradise (2008) XBox360
+# Banjo-Kazooie: Nuts & Bolts (2008) XBox360        Data3 NO COMPRESSION and cannot detect
 
 kind: game
 name: Viva Pinata language file
@@ -45,9 +48,15 @@ structs:
     u32[2] f1: ?? # 0, 0
     u32 Data2Size: ??
 
-    compressed:zlib[self.Data1Size] Data: ??
+    if self.Data1Size != self.Expanded1Size:
+      compressed:zlib[self.Data1Size] Data1: ??
+    else:
+      raw:u8[self.Data1Size] Data1: ??
 
-    compressed:zlib[self.Data2Size] Data2: ??
+    if self.Data2Size != self.Expanded2Size:
+      compressed:zlib[self.Data2Size] Data2: ??
+    else:
+      raw:u8[self.Data2Size] Data2: ??
 
     compressed:zlib[FILE_SIZE - OFFSET] Data3: ??
 
