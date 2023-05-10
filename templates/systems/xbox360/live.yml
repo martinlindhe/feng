@@ -1,13 +1,23 @@
-# STATUS: 20%
+# STATUS: 40%, extract: borked
 
 # Format used on XBox 360 for XBLA titles
 
-# TODO MAX: continue parsing, see https://free60.org/System-Software/Formats/STFS/#live-pirs
+
+# TODO MAX: files are zlib compressed and start offset calc is wrong !
+
 
 # TODO:
 # read v2 fields, need sample:
 #  0x541A 	0x300 (each 0x80 = different locale) 	image 	Additional Display Names
 #  0x941A 	0x300 (each 0x80 = different locale) 	image 	Additional Display Descriptions
+
+# TODO read Hash Tables
+
+# TODO MAX: create full path from directory names
+
+# TODO MAX: Files are not always stored in consecutive blocks, you have to find the corresponding hash table record and read the next block number (similar to cluster maps in FAT).
+
+
 
 references:
   - https://free60.org/System-Software/Formats/STFS/#live-pirs
@@ -25,11 +35,12 @@ magic:
   - offset: 0000
     match: c'LIVE'
 
-  # XXX 'PIRS' header also exists, need sample
+  - offset: 0000
+    match: c'PIRS'
 
 structs:
   header:
-    ascii[4] Signature: c'LIVE'
+    ascii[4] Signature: ??
     u8[0x100] Package Signature: ??
     u8[0x128] Padding: ??
 
@@ -94,12 +105,31 @@ structs:
     u32 SaveGameID: ??
     u8[5] ConsoleID: ??
     u8[8] ProfileID: ??
-    u8[0x24] Volume descriptor: ??
+
+    offset: "0x03A9"
+    u32 DescriptorType:
+      eq 00000000: STFS # Secure Transacted File System
+      eq 00000001: SVOD
+    offset: restore
+
+    if self.DescriptorType == STFS:
+      u8 VolumeDescriptorSize: "24"
+      u8 Reserved: ?? # 0
+      u8 BlockSeparation: ??
+      u16 File Table Block Count: ??
+      u24 FileTableBlockNumber: ?? # points to start of file table
+      u8[0x14] Hash Table: ??
+      u32 Total Allocated Block Count: ??
+      u32 Total Unallocated Block Count: ??
+
+    else:
+      u8[0x24] SVOD Volume descriptor: ??    # XXX decode SVOD, need sample!
+
     u32 FileCount: ??  # XXX
     u64 FileCombinedSize: ??
-    u32 DescriptorType:
-      eq 00000000: STFS
-      eq 00000001: SVOD
+
+    offset: "0x03AD"
+
     u32 Reserved: ??
     if self.MetadataVersion == V1:
       u8[0x4c] Padding: ??
@@ -111,8 +141,8 @@ structs:
       u8[0x28] Padding: ??
 
     u8[0x14] DeviceID: ??
-    utf16[0x900] DisplayName: ??
-    utf16[0x900] DisplayDescription: ??
+    localized_text[18] DisplayName: ?? # 0 = english, 2 = japanese, 4 = german, 6 = french
+    localized_text[18] DisplayDescription: ??
     utf16[0x80] PublisherName: ??
     utf16[0x80] TitleName: ??
     u8 TransferFlags:
@@ -135,49 +165,42 @@ structs:
     raw:u8[self.TitleThumbnailSize] TitleThumbnailData: ?? # PNG
     u8[alignment(self.TitleThumbnailSize, 8192)] Padding: ?? # XXX if V2 0x300 (each 0x80 = different locale) 	image 	Additional Display Descriptions
 
+    # move to file table start
+    if peek_i16(0xc032) == 0xFFFF:
+      # PIRS type 1
+      offset: "0xc000"
+    else:
+      # PIRS type 2
+      offset: "0xd000"
 
+  localized_text:
+    utf16[0x80] Text: ??
 
+  file: # each entry is 0x40 bytes
+    ascii[40] Name: ??
+    filename: self.Name
+    u8 Flags:
+      bit b00111111: NameLen
+      bit b01000000: all blocks are consecutive
+      bit b10000000: DIRECTORY # entry is a directory
+    le:u24 Blocks: ?? # XXX Number of blocks allocated for file (little endian)
+    le:u24 BlocksCopy: ?? # XXX same as self.Blocks ?
+    le:u24 StartingBlock: ??  # XXX used to calc offset
+    i16 PathIndicator: ?? # XXX indicate what subdirectory file belongs to, -1 == root folder
+    u32 Size: ??
+    u32 UpdateTime: ?? # XXX dont decode well. see https://github.com/rene0/xbox360/blob/master/extract360.py#L167
+    u32 AccessTime: ??
 
+    if self.Flags == 0: # terminator entry
+      parse: stop
 
-
-  detect:
-    offset: "0xc030"
-    u32 Num: ??
-
-    # default:
-    #pirs_offset = 0x2000
-    #pirs_start = 0xb000 + 0x2000
-
-    if self.Num == 0x434f4e20: # c'CON' 20
-      # PIRS TYPE 2:
-      #pirs_offset = 0x2000
-      #pirs_start = 0xc000
-
-    if self.Num == 65535:
-      # PIRS TYPE 1:
-      #pirs_offset = 0x1000
-      offset: 0xb000 + 0x1000
-
-
-  file:
-    ascii[32] Filename: ??
-    u32 u1: ??
-    u32 u2: ??
-    u32 u3: ?? # x
-    u32 u4: ?? # x
-    u32 u5: ?? # x
-    u32 u6: ?? #
-    u32 u7: ??
+    offset: 0xC000 + (self.StartingBlock * 0x1000) # XXX not correct
+    raw:u8[self.Size] Data: ?? # XXX zlib compressed ?
+    offset: restore
 
 layout:
   - header Header
   - license[16] License
   - header2 Header2
 
-  - detect Detect
-
-  - file File
-
-
-# Microsoft Xbox 360 package (Xbox Live) (XA-2682, media ID: 6480C08F), content type: Arcade Title
-
+  - file[] File

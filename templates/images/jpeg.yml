@@ -12,7 +12,7 @@ references:
   - https://github.com/martinlindhe/formats/blob/master/parse/image/img_jpeg.go
 
 kind: image
-extensions: [.jpg, .jpeg]
+#extensions: [.jpg, .jpeg]
 mime: image/jpeg
 endian: big
 
