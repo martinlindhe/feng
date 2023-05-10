@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+# Krome Studios game engine format
+
+# Used in:
+# - Star Wars: The Force Unleashed (2008) PS2
+
+kind: game
+name: Krome Studios sbk file
+extensions: [.sbk]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'SB01'
+
+structs:
+  header:
+    ascii[4] Signature: c'SB01'
+    u32 v1: ?? # 1
+    u32 v2: ?? #
+    u32 v3: ?? # 0
+    ascii[32] Name: ??
+
+layout:
+  - header Header

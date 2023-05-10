@@ -16,6 +16,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/afero"
 
+	"github.com/martinlindhe/feng"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
 )
@@ -620,28 +621,28 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 	return res
 }
 
-func (fl *FileLayout) PresentStructureTree(structs []*Struct) string {
-	res := fmt.Sprintf("# structure tree of %s\n", fl._f.Name())
+func (fl *FileLayout) PresentStructureTree(structs []*Struct) {
+	feng.Fprintf("# structure tree of %s\n", fl._f.Name())
+
 	for _, layout := range structs {
-		res += fl.presentStructureTreeNode(layout, 0)
+		fl.presentStructureTreeNode(layout, 0)
 	}
-	return res
 }
-func (fl *FileLayout) presentStructureTreeNode(layout *Struct, indent int) string {
+func (fl *FileLayout) presentStructureTreeNode(layout *Struct, indent int) {
 	prefix := strings.Repeat(" ", indent)
-	res := ""
+
 	heading := prefix + layout.Name
 	if layout.Label != "" {
 		heading += ` "` + layout.Label + `"`
 	}
 	if len(layout.Fields) == 0 {
-		res += "   empty struct"
+		feng.Fprintf("   empty struct")
 	}
-	res += heading + "\n"
+	feng.Fprintf(heading + "\n")
 	for _, child := range layout.Children {
-		res += prefix + fl.presentStructureTreeNode(child, indent+2)
+		feng.Fprintf(prefix)
+		fl.presentStructureTreeNode(child, indent+2)
 	}
-	return res
 }
 
 type PresentFileLayoutConfig struct {
@@ -674,77 +675,75 @@ func (fl *FileLayout) presentStruct(layout *Struct, cfg *PresentFileLayoutConfig
 	return res
 }
 
-func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) (res string) {
+func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {
 	if fl == nil {
 		panic("Probably input yaml error, look for properly escaped strings and \" characters")
 	}
 	fl.inUTC = cfg.InUTC
 	if fl.BaseName != "" {
-		res = "# " + fl.BaseName + "\n"
+		feng.Fprintf("# " + fl.BaseName + "\n")
 	}
 
 	presentStart := time.Now()
 	for _, layout := range fl.Structs {
-		res += fl.presentStruct(layout, cfg)
+		feng.Fprintf(fl.presentStruct(layout, cfg))
 	}
 
 	fl.presentTime = time.Since(presentStart)
 
-	res += fl.reportUnmappedByteCount()
+	fl.reportUnmappedByteCount()
 
 	if cfg.ReportOverlapping {
-		res += fl.reportOverlappingData()
+		fl.reportOverlappingData()
 	}
 
 	if cfg.ReportUnmapped {
-		res += fl.reportUnmappedData()
+		fl.reportUnmappedData()
 	}
 
 	if fl.unseen {
-		res += "\nUNSEEN data file. please submit a sample\n"
+		feng.Fprintf("\nUNSEEN data file. please submit a sample\n")
 	}
-
-	return
 }
 
-func (fl *FileLayout) reportUnmappedByteCount() string {
-	res := ""
+func (fl *FileLayout) reportUnmappedByteCount() {
+
 	mappedBytes := fl.MappedBytes()
 	if mappedBytes < fl.size {
 		unmapped := fl.size - mappedBytes
 		unmappedPct := (float64(unmapped) / float64(fl.size)) * 100
-		res += fmt.Sprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
+		feng.Fprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
 	} else if mappedBytes > fl.size {
 		overflow := mappedBytes - fl.size
-		res += fmt.Sprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
+
+		feng.Fprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
 	} else {
-		res += "EOF\n"
+		feng.Fprintf("EOF\n")
 	}
 
-	res += "\n---STAT---\n"
-	res += fmt.Sprintf("FILE SIZE : %d / 0x%06x / %s\n", fl.size, fl.size, ByteCountSI(fl.size))
+	feng.Fprintf("\n---STAT---\n")
+	feng.Fprintf("FILE SIZE : %d / 0x%06x / %s\n", fl.size, fl.size, ByteCountSI(fl.size))
 
 	pctRead := (float64(fl.bytesRead) / float64(fl.size)) * 100
 
-	res += fmt.Sprintf("BYTES READ: %d (%.1f%%)\n", fl.bytesRead, pctRead) // XXX show bytes read in % of file size
+	feng.Fprintf("BYTES READ: %d (%.1f%%)\n", fl.bytesRead, pctRead) // XXX show bytes read in % of file size
 
 	if fl.bytesImported > 0 {
-		res += fmt.Sprintf("BYTES IMPORTED: %d\n", fl.bytesImported)
+		feng.Fprintf("BYTES IMPORTED: %d\n", fl.bytesImported)
 	}
 
 	if len(fl.previousOffsets) != 0 {
-		res += fmt.Sprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
+		feng.Fprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
 	}
 
 	if fl.measureTime {
-		res += "\n---TIME---\n"
-		res += fmt.Sprintf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
+		feng.Fprintf("\n---TIME---\n")
+		feng.Fprintf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
 
-		res += fmt.Sprintf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
-		res += fmt.Sprintf("PRESENT TIME: %v\n", fl.presentTime)
+		feng.Fprintf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
+		feng.Fprintf("PRESENT TIME: %v\n", fl.presentTime)
 	}
 
-	return res
 }
 
 func ByteCountSI(b int64) string {
@@ -760,13 +759,11 @@ func ByteCountSI(b int64) string {
 	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "kMGTPE"[exp])
 }
 
-func (fl *FileLayout) reportOverlappingData() string {
-	return "TODO: report overlapping bytes"
+func (fl *FileLayout) reportOverlappingData() {
+	feng.Fprintf("TODO: report overlapping bytes")
 }
 
-func (fl *FileLayout) reportUnmappedData() string {
-
-	res := ""
+func (fl *FileLayout) reportUnmappedData() {
 	unmappedRanges := []dataRange{}
 	r := dataRange{offset: -1}
 	log.Info().Msgf("reportUnmappedData start")
@@ -801,12 +798,11 @@ func (fl *FileLayout) reportUnmappedData() string {
 		rawData, _ := fl.peekBytesMainFile(ur.offset, end)
 
 		if lastOffset != ur.offset {
-			res += fmt.Sprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, rawData, trail)
+			feng.Fprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, rawData, trail)
 		} else {
-			res += fmt.Sprintf("  [%06x] u8 \t% 02x%s\n", ur.offset, rawData, trail)
+			feng.Fprintf("  [%06x] u8 \t% 02x%s\n", ur.offset, rawData, trail)
 		}
 	}
-	return res
 }
 
 type dataRange struct {

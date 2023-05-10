@@ -6,19 +6,8 @@
 # - Viva Piñata: Trouble in Paradise (2008) XBox360
 # - Hellboy: Science of Evil (2008) PS3
 
-# NOTE:
-# RKV2 and RKV3 files exists, in these games and more:
-# - Ty The Tasmanian Tiger
-# - Ty 2
-# - The Legend of Spyro (Krome Studios), RKV2
-
 references:
   - https://aluigi.altervista.org/bms/rkv4.bms
-
-  # related to RKV1, RKV2 format:
-  - https://raw.githubusercontent.com/Dnawrkshp/ty-1-tools/master/rkv-extract/rkv-extract/source/rkv-extract.cpp # for RKV2 format
-  - https://aluigi.altervista.org/bms/rkv.bms # for RKV 1 format
-  - http://aluigi.org/bms/rkv2.bms # for RKV2 format
 
 kind: archive
 name: Krome Studios RKV4 archive

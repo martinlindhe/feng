@@ -1,0 +1,57 @@
+# STATUS: 80%, extract: ok
+#
+# Archive format used in games developed by Krome Studios
+
+# Used in:
+# - King Arthur (2004) PS2
+# - Ty the Tasmanian Tiger 2: Bush Rescue (2004) PS2
+# - Ty the Tasmanian Tiger 3: Night of the Quinkan (2005) PS2
+# - The Legend of Spyro: A New Beginning (2006) PS2
+# - The Legend of Spyro: The Eternal Night (2007) PS2
+# - Star Wars: The Force Unleashed (2008) PS2
+
+references:
+  - http://aluigi.org/bms/rkv2.bms
+  - https://raw.githubusercontent.com/Dnawrkshp/ty-1-tools/master/rkv-extract/rkv-extract/source/rkv-extract.cpp
+
+kind: archive
+name: Krome Studios RKV2 archive
+extensions: [.rkv, .bpk]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'RKV2'
+
+structs:
+  header:
+    ascii[4] Signature: c'RKV2'
+    u32 FileCount: ??
+    u32 NAME_SIZE: ?? # XXX
+    u32 FULLNAME_FILES: ?? # XXX
+    u32 v1: ?? #
+    u32 FileTableOffset: ??
+    u32 v2: ?? #
+
+  file:
+    u32 NameOffset: ??
+
+    offset: Header.FileTableOffset + (Header.FileCount * 20) + self.NameOffset
+    asciiz Name: ??
+    filename: self.Name
+    offset: restore
+
+    u32 u1: ?? # 0
+    u32 Size: ??
+    u32 Offset: ??
+    u32 Checksum: ?? # XXX algo
+
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - offset Header.FileTableOffset
+  - file[Header.FileCount] File

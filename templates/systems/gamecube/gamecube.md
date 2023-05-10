@@ -21,7 +21,14 @@ GCRebuilder: https://gamebanana.com/tools/6410
 
 a modern popular format developed by the dolphin-emu team
 
-Convert to iso using Dolphin: right click game and select "Convert ..."
+### extract from rvz
+
+Convert to wia using Dolphin: right click game and select "Convert ..."
+
+Then use `wit` to extract files from the archive.
+
+	wit extract <file.wia> <outdir>
+
 
 # various formats
 

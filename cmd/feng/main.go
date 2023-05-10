@@ -41,7 +41,9 @@ func main() {
 		kong.Name("feng"),
 		kong.Description("A binary template reader and data presenter."))
 
-	feng.InitLogging()
+	stdOut := feng.InitLogging()
+	defer stdOut.Flush()
+
 	if args.Debug {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
@@ -97,17 +99,17 @@ func main() {
 		}
 	} else {
 		if args.Tree {
-			fmt.Print(fl.PresentStructureTree(fl.Structs))
+			fl.PresentStructureTree(fl.Structs)
 		} else if args.Brief {
 			fmt.Println(args.Filename+":", fl.BaseName)
 		} else {
-			fmt.Print(fl.Present(&mapper.PresentFileLayoutConfig{
+			fl.Present(&mapper.PresentFileLayoutConfig{
 				ShowRaw:           args.Raw,
 				ShowInDecimal:     args.Decimal,
 				ReportUnmapped:    args.Unmapped,
 				ReportOverlapping: args.Overlapping,
 				InUTC:             !args.LocalTime,
-			}))
+			})
 		}
 	}
 

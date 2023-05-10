@@ -1,0 +1,65 @@
+# STATUS: 50%, extract: somewhat ok
+#
+# Archive format used in games developed by Krome Studios
+
+# Used in:
+# - Sunny Garcia Surfing (2001) PS2
+# - Ty the Tasmanian Tiger  (2002) PS2
+# - The Adventures of Jimmy Neutron Boy Genius: Jet Fusion (2003) Gamecube, PS2
+
+# TODO MAX: comparison vs 0xffffffff fails ... also < 0 fails ! cant skip file entries
+# TODO MAX: use directory name for output files
+
+references:
+  - http://aluigi.org/bms/rkv2.bms
+  - https://raw.githubusercontent.com/Dnawrkshp/ty-1-tools/master/rkv-extract/rkv-extract/source/rkv-extract.cpp
+
+kind: archive
+name: Krome Studios RKV2 archive
+filenames: [
+  "data_gc.rkv",  # The Adventures of Jimmy Neutron Boy Genius: Jet Fusion, Gamecube
+  "data_p2.rkv",  # The Adventures of Jimmy Neutron Boy Genius: Jet Fusion, PS2
+  "data.rkv",     # Sunny Garcia Surfing (2001)
+]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 FileCount: ??
+    u32 DirectoryCount: ??
+    offset: restore
+
+  dir: # size 0x100
+    ascii[0x100] Name: ??
+
+  file: # size 0x40
+    ascii[32] Name: ??
+    filename: self.Name
+    u32 u1: ?? # # XXX maybe directory ID
+    u32 MaybeSize: ?? # XXX maybe expanded size ?
+    u32 u3: ?? # 0 # XXX if nonzero, maybe compressed?
+    u32 Offset: ??
+
+    u32 MaybeChecksum: ?? # XXX
+    time_t_32 Timestamp: ?? # 2003-04-07T01:39:02Z   XXX does not decode correctly on Sunny Garcia Surfing
+    u32 MaybeFlags: ??
+    u32 u8: ?? # 0
+
+    #if self.MaybeSize > 0: # XXX FIXME signed comparison fails
+    #if self.MaybeSize < 59834372: # XXX FENG BUG, MaybeSize is not populated when comparison happens ???
+    if self.MaybeSize < 7000: # XXX hack
+      offset: self.Offset
+      raw:u8[self.MaybeSize] Data: ??
+      offset: restore
+
+layout:
+  - offset FILE_SIZE - 8
+  - header Header
+
+  - offset FILE_SIZE - 8 - (Header.DirectoryCount * 0x100)
+  - dir[Header.DirectoryCount] Directory
+
+  - offset FILE_SIZE - 8 - (Header.DirectoryCount * 0x100) - (Header.FileCount * 0x40)
+  - file[Header.FileCount] File

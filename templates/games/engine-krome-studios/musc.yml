@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+# Krome Studios game engine format
+
+# Used in:
+# - Ty the Tasmanian Tiger 2: Bush Rescue (2004) PS2
+
+# TODO maybe music file
+
+kind: game
+name: Krome Studios mus file
+extensions: [.mus]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'MUSC'
+
+structs:
+  header:
+    ascii[4] Signature: c'MUSC'
+    u32 v1: ?? #
+    u32 v2: ?? #
+    u32 v3: ?? #
+
+layout:
+  - header Header
