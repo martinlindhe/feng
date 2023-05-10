@@ -1,4 +1,4 @@
-# STATUS: 40%, extract: borked
+# STATUS: 40%, extract: broken
 
 # Format used on XBox 360 for XBLA titles
 
@@ -27,8 +27,8 @@ software:
   - https://github.com/Gualdimar/Velocity  # paru -S velocity-xbox360-git
   - http://gael360.free.fr/wxPirs.php
 
-kind: system
-name: XBox 360 LIVE file
+kind: archive
+name: XBox 360 LIVE/PIRS archive
 endian: big
 
 magic:

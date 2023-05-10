@@ -1,0 +1,40 @@
+# STATUS: 90%, extract: ok
+
+# Similar to the older Neversoft hed-wad format but different order of file struct fields
+
+# Used in:
+# Tony Hawk's Pro Skater 3 (2001) PS2
+# Tony Hawk's Pro Skater 4 (2004) PS2
+# Tony Hawk’s Underground PS2 xxx
+# ++ more ?
+
+references:
+  - https://wiki.xentax.com/index.php/Tony_Hawk%E2%80%99s_Underground_HED_WAD
+  - https://github.com/bartlomiejduda/Tools/blob/master/NEW%20Tools/Tony%20Hawk%E2%80%99s%20Underground%20(PS2)/Tony_Hawks_Underground_HED_WAD_Tool.py
+
+kind: archive
+name: "Tony Hawk's HED+WAD-3 file pair"
+extensions: [.hed]
+endian: little
+
+no_magic: true
+
+multi_file: true # File pair: .hed (entry list) and .wad (data)
+
+structs:
+  file:
+    u32 Offset: ??
+    if self.Offset == 0xFFFFFFFF:
+      parse: stop
+
+    u32 Size: ??
+    asciiz Name: ??
+    filename: self.Name
+
+    u8[alignment(OFFSET, 4)] Padding: ??
+
+    import: raw:u8, self.Offset, self.Size, no_ext(FILE_NAME) + ".wad"
+
+layout:
+  - file[] File
+

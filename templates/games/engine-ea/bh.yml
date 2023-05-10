@@ -1,0 +1,29 @@
+# STATUS: 1%
+
+# In-house Electronic Arts engine-format
+
+# Seems to be a lookup table for a corresponding .big file
+
+# Used in:
+# - Skate (2007) PS3 (EA Black Box)
+
+references:
+  - https://wiki.xentax.com/index.php/EA_VIV_BIG4
+
+kind: game
+name: Electronic Arts Viv4 file
+extensions: [.bh]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'Viv4'
+
+structs:
+  header:
+    ascii[4] Signature: c'Viv4'
+    u32 v1: ?? # XXX
+    u32 v2: ?? # XXX
+
+layout:
+  - header Header

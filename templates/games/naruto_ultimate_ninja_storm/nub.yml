@@ -10,10 +10,11 @@ kind: game
 name: "Naruto: Ultimate Ninja Storm nub file"
 endian: big
 
+extensions: [.nub]
+
 magic:
   - offset: 0000
-    match: 00 02 01 00
-    extensions: [.nub]
+    match: 00 02 01 00 # XXX weak magic
 
 structs:
   header:

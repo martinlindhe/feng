@@ -1,0 +1,37 @@
+# STATUS: 90%, extract: ok
+
+# Container for DDS textures
+
+# Used in:
+# Tony Hawk's Pro Skater 2x (2001) Xbox
+
+kind: archive
+name: "Tony Hawk's Pro Skater 2x ddx archive"
+endian: little
+
+extensions: [.ddx]
+
+magic:
+  - offset: 0000
+    match: 00 00 00 00   # XXX weak
+
+structs:
+  header:
+    u32 Signature: ??
+    u32 Filesize: ??
+    u32 BaseOffset: ??
+    u32 FileCount: ??
+
+  file:
+    u32 RelativeOffset: ??
+    u32 Size: ??
+    ascii[256] Name: ??
+    filename: self.Name
+
+    offset: Header.BaseOffset + self.RelativeOffset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

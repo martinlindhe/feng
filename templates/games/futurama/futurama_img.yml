@@ -23,7 +23,7 @@ endian: little
 no_magic: true
 
 filenames: [
-  futurama.img, "ntsc[0-9]?",
+  futurama.img, "ntsc[0-9]?.img",
   "FutNTSC[0-9]*.img", SysNTSC.img,
 ]
 

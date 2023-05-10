@@ -10,7 +10,7 @@ extensions: [.hdr, .raw_hdr]
 
 magic:
   - offset: 0000
-    match: 02 00 00 00
+    match: 02 00 00 00  # XXX weak magic
 
 structs:
   header:

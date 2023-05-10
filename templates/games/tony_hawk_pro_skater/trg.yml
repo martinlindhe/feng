@@ -1,0 +1,22 @@
+# STATUS: 1%
+
+# Used in:
+# Tony Hawk's Pro Skater (1999) PS1
+
+kind: game
+name: Tony Hawk's trg file
+extensions: [.trg]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'_TRG'
+
+structs:
+  header:
+    ascii[4] Signature: c'_TRG'
+    u32 v1: ?? # 2
+    u32 MaybeCount: ?? # XXX
+
+layout:
+  - header Header

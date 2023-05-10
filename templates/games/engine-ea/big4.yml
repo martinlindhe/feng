@@ -1,7 +1,10 @@
-# STATUS: 80%
+# STATUS: 80%, extract: ok
+
+# In-house Electronic Arts engine-format
 
 # Used in:
-# Battlefield 2: Modern Combat (2005) PS2
+# - Battlefield 2: Modern Combat (2005) PS2 (DICE/EA)
+# - Skate (2007) PS3 (EA Black Box)
 
 # These games also use this file format:
 # 007: Everything or Nothing (GameCube) *.viv
@@ -14,8 +17,8 @@ references:
   - https://wiki.xentax.com/index.php/EA_VIV_BIG4
 
 kind: game
-name: "Battlefield 2: Modern Combat big4 archive"
-extensions: [.viv]
+name: Electronic Arts BIG4 archive
+extensions: [.big, .viv]
 endian: big
 
 magic:
@@ -27,7 +30,7 @@ structs:
     ascii[4] Signature: c'BIG4'
     u32 ArchiveSize: ?? # XXX
     u32 FileCount: ?? #
-    u32 FileDataOffset: ?? # XXX First File Offset / Directory Size
+    u32 FileDataOffset: ??
 
   file:
     u32 Offset: ??

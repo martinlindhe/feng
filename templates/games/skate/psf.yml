@@ -1,0 +1,49 @@
+# STATUS: 25%
+
+# Used in:
+# - Skate (2007) PS3 (EA Black Box)
+
+# TODO MAX: uses RefPack compression? (Bullfrog/EA games)
+
+kind: game
+name: Skate psf file
+extensions: [.psf]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'SFIL'
+
+structs:
+  header:
+    ascii[4] Signature: c'SFIL'
+    u32 v1: ?? # 2
+    u32 v2: ?? # 0
+    u32 v3: ?? # 44 88 e8 d2   XXX hash?
+    u32 v4: ?? # 00 00 01 00
+    u32 v5: ?? # 00 00 01 84
+    u32 v6: ?? # 1
+    u8[alignment(OFFSET, 0x100)] Padding: ??
+
+  file:
+    u32 MaybeTime: ?? # XXX
+    u32 MaybeHash: ?? # XXX
+    u32 CompressedSize: ?? # XXX
+    u32 HeadSize: ?? # XXX
+    u32 NextRelativeOffset: ??
+    u8[alignment(OFFSET, 256)] Padding: ??
+
+    offset: offset("self.MaybeTime") + self.HeadSize
+    u16 v1: ?? # 10 fb
+    u24 Size: ?? # XXX
+    u8 v2: ?? # e5
+    raw:u8[self.CompressedSize] Data: ??
+    u8[alignment(self.CompressedSize, 256)] Padding: ??
+    offset: restore
+
+    offset: offset("self.MaybeTime") + self.NextRelativeOffset
+
+layout:
+  - header Header
+
+  - file[] File

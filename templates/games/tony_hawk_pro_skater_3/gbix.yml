@@ -1,0 +1,31 @@
+# STATUS: 1%
+
+# Used in:
+# Tony Hawk's Pro Skater 3 (PS2)
+
+# TODO continue mapping. maybe texture format. ps2 version has corresponding .bmp files
+
+kind: game
+name: Tony Hawk's Pro Skater 3 GBIX file
+extensions: [.pvr]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'GBIX'
+
+structs:
+  header:
+    ascii[4] Signature: c'GBIX'
+    u32 u1: ?? # 8
+    u32 u2: ?? # 0
+
+    ascii[4] SomeTag: ?? # 20 20 20 20  == ascii spaces
+    ascii[4] AnotherTag: ?? # PVRT
+
+    u32 u3: ?? # XXX almost the size of file
+    u32 u4: ??
+    u32 u5: ?? # 01 00 01 00   maybe 2x 16 bit
+
+layout:
+  - header Header

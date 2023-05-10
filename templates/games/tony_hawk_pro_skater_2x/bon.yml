@@ -1,0 +1,48 @@
+# STATUS: 80%, extract: ok
+
+# Container for DDS textures
+
+# Used in:
+# Tony Hawk's Pro Skater 2x (2001) Xbox
+
+kind: archive
+name: "Tony Hawk's Pro Skater 2x bon archive"
+endian: little
+
+extensions: [.bon]
+
+magic:
+  - offset: 0000
+    match: c'Bon' 00
+
+structs:
+  header:
+    u32 Signature: ??
+    u32 Type: ?? # 3 / 4
+    u16 FileCount: ??
+    if self.Type == 4:
+      u16 Unknown: ?? # 0
+
+  file:
+    u16 Name1Len: ??
+    ascii[self.Name1Len] Name1: ??
+
+    u32 MaybeColor: ?? # ff 7f 7f 7f looks like ARGB
+    u32 MaybeFlags: ?? # 3e 80 00 00
+    u32 u3: ?? # 3d 4c cc cd
+    u8 u4: ?? # 1
+    if self.u4 == 0:
+      parse: stop
+
+    u16 Name2Len: ??
+    ascii[self.Name2Len] Name2: ??
+    filename: self.Name2
+
+    u24 u5: ?? # 01 01 01
+    u32 Size: ??
+
+    raw:u8[self.Size] Data: ??
+
+layout:
+  - header Header
+  - file[Header.FileCount] File
