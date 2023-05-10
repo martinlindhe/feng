@@ -631,7 +631,7 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 		return uint64(v), nil
 	}
 
-	log.Warn().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
+	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
 
 	started := time.Now()
 	fl.evaluatedExpressions++
