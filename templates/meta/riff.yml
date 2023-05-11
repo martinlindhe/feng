@@ -7,6 +7,9 @@
 # The Microsoft implementation is mostly known through container formats like AVI, ANI and WAV, which use
 # RIFF as their basis.
 
+# Used in:
+# - Tony Hawk's Pro Skater HD (2012) PS3 (RIFX format)
+
 references:
   - https://en.wikipedia.org/wiki/Resource_Interchange_File_Format
   - https://en.wikipedia.org/wiki/WebP
@@ -18,7 +21,7 @@ references:
   - http://web.archive.org/web/20160622000928/https://www.fmod.org/questions/question/forum-4928/  # FMod FSB4 format
 
 software:
-  - ffmpeg or vlc for WAVE, AVI
+  - ffmpeg or vlc for WAVE, AVI # FIXME, RIFX is unsupported by ffmpeg 6.0, see https://fftrac-bg.ffmpeg.org/ticket/10201
   - https://github.com/gdawg/fsbext   # FMOD sound bank extractor
   - https://gitlab.com/lukasjuhrich/riffinfo
   - http://aezay.dk/aezay/fsbextractor/
@@ -27,7 +30,6 @@ software:
 kind: media
 name: Resource Interchange File Format
 #extensions: [.webp, .wav, .avi, .ani, .rmi, .psf]
-endian: little
 
 # XXX mime types:
 # "WEBP": "image/webp"
@@ -39,10 +41,15 @@ endian: little
 magic:
   - offset: 0000
     match: c'RIFF'
+    endian: little
+
+  - offset: 0000
+    match: c'RIFX'
+    endian: big
 
 structs:
   header:
-    ascii[4] Signature: c'RIFF'
+    ascii[4] Signature: ??
     u32 Length: ??
     ascii[4] Content: ?? # XXX switch on ascii[4]
     #  eq c'WAVE': Wave
