@@ -1,7 +1,9 @@
 # STATUS: 1%
 #
-# encrypted files used in Wii-U (and Switch), downloaded from Nintendo Update Servers (NUS).
-# Is a collection of files: *.h3 *.app, title.cert, title.tmd, title.tik
+# encrypted files used in Wii, Wii-U, Switch, downloaded from Nintendo Update Servers (NUS).
+
+# For Wii, the names are: tmd.bin, ticket.bin, cert.bin, h3.bin
+# For Wii-U and Switch it is a collection of files: title.tmd, title.tik, title.cert, *.h3 *.app
 
 # .app files
 # Numbered starting from 0 (00000000.app) to however big the channel/game is.
@@ -34,7 +36,7 @@ software:
 
 kind: archive
 name: xxx
-extensions: [.tmd, .tik]
+extensions: [.tmd, .tik, .bin]
 endian: big # XXX
 
 magic:

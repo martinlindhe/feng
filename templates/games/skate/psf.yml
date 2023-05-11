@@ -7,7 +7,7 @@
 
 kind: game
 name: Skate psf file
-extensions: [.psf]
+extensions: [.psf, .wsf]
 endian: big
 
 magic:

@@ -1,0 +1,58 @@
+# STATUS: 70%, extract: ok for version 4 files
+
+# Used in:
+# - Tony Hawk: Ride (2009) (version 3)
+# - Tony Hawk: Shred (2010) (version 4)
+
+references:
+  - https://aluigi.altervista.org/bms/tonyhawk_ride.bms
+
+kind: game
+name: "Tony Hawk: Ride archive"
+extensions: [.pak]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'PAK' 00 fe eb # NOTE: Evoland .pak use same magic first 4 bytes, but different format !
+
+structs:
+  header: # size 16
+    ascii[6] Magic: c'PAK' 00 fe eb
+    u16 Version: ??
+    u32 FileCount: ??
+    u32 NAME_SIZE: ??
+
+  file:
+    u32 Checksum: ??  # XXX algo?
+    u32 NameOffset: ??
+
+    if Header.Version >= 4:
+      offset: 16 + (Header.FileCount * 32) + self.NameOffset
+    else:
+      offset: 16 + (Header.FileCount * 24) + self.NameOffset
+
+    asciiz Name: ??
+    filename: self.Name
+    offset: restore
+
+    u32 u1: ?? # XXX 1=dir, 2= file ???
+    u32 u2: ??
+    u32 Offset: ??
+
+    if Header.Version >= 4:
+      u32 MaybeExpandedSize: ??
+
+    u32 CompressedSize: ??
+
+    if Header.Version >= 4:
+      u32 u4: ?? # 0
+
+    offset: self.Offset
+    raw:u8[self.CompressedSize] Data: ?? # XXX
+    offset: restore
+
+layout:
+  - header Header
+
+  - file[Header.FileCount] File

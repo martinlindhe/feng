@@ -64,7 +64,7 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 	}
 
 	fl := FileLayout{DS: cfg.DS, BaseName: cfg.DS.BaseName, startOffset: cfg.StartOffset, endian: cfg.Endian, measureTime: cfg.MeasureTime, Extension: ext, _f: cfg.F, eval: goval.NewEvaluator()}
-	fl.size = fileSize(cfg.F)
+	fl.size = FileSize(cfg.F)
 	if cfg.Brief {
 		return &fl, nil
 	}
@@ -202,7 +202,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 	return nil
 }
 
-func fileSize(f afero.File) int64 {
+func FileSize(f afero.File) int64 {
 	fi, err := f.Stat()
 	if err != nil {
 		log.Fatal().Err(err).Msg("stat failed")
@@ -408,7 +408,8 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 			buf = buf[:n]
 
 			s, _ := value.AsciiPrintableString(buf, len(buf))
-			return nil, fmt.Errorf("no match '%s' %s", hex.EncodeToString(buf[:n]), s)
+			size := FileSize(cfg.F)
+			return nil, fmt.Errorf("no match '%s' %s (%d bytes)", hex.EncodeToString(buf[:n]), s, size)
 		}
 	}
 

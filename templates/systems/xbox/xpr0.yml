@@ -1,5 +1,8 @@
 # STATUS: 5%
-# archive format used on XBox (MX Unleashed)
+# archive format used on XBox
+
+# Used in:
+# MX Unleashed (XBox)
 #
 # MAX calc size of file entry. needs a 2nd loop over parsed file_Entries.
 #  can we script this separate???

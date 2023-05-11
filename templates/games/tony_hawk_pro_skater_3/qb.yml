@@ -1,8 +1,10 @@
 # STATUS: 1%
 
 # Used in:
-# Tony Hawk's Pro Skater 3 (PS2)
-# Tony Hawk's Pro Skater 4 (PS2)
+# - Tony Hawk's Pro Skater 3 (PS2)
+# - Tony Hawk's Pro Skater 4 (PS2)
+# - Tony Hawk’s Underground (2003) PS2
+
 
 software:
   - https://zenhax.com/viewtopic.php?t=7808 # THQBEditor-1.0RC1.7z

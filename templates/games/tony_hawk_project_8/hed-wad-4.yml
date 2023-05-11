@@ -1,0 +1,38 @@
+# STATUS: 50%, extract: some OK, fails on some files
+
+# Similar to the older Neversoft hed-wad format but different order of file struct fields
+
+# Used in:
+# - Tony Hawk's Project 8 (2006) PS2 uses a different variation, where Offset is instead a number ...
+
+# TODO: some bug with offset calculation from sector. maybe overflow in scripting engine?
+#      -  "1047693 * 2048" = 0x7fe46800  but we get 0x7ff80d8c000 ... overflow
+
+
+kind: archive
+name: "Tony Hawk's HED+WAD-4 file pair"
+extensions: [.hed]
+endian: little
+
+no_magic: true
+
+multi_file: true # File pair: .hed (entry list) and .wad (data)
+
+structs:
+  file:
+    u32 Sector: ??
+    if self.Sector == 0xFFFFFFFF: # XXX
+      parse: stop
+
+    u32 Size: ??
+    asciiz Name: ??
+    filename: self.Name
+
+    u8[alignment(OFFSET, 4)] Padding: ??
+
+    import: raw:u8, self.Sector * 2048, self.Size, no_ext(FILE_NAME) + ".wad"
+
+layout:
+  - file[] File
+
+

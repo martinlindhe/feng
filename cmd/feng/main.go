@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -86,7 +85,8 @@ func main() {
 	}
 	if err != nil {
 		if args.Brief {
-			fmt.Printf("%s: %s\n", err, args.Filename)
+			size := mapper.FileSize(f)
+			feng.Printf("%s: %s (%d bytes)\n", err, args.Filename, size)
 			os.Exit(1)
 		}
 		log.Fatal().Err(err).Msgf("Failed to map %s.", args.Filename)
@@ -113,7 +113,8 @@ func main() {
 		if args.Tree {
 			fl.PresentStructureTree(fl.Structs)
 		} else if args.Brief {
-			fmt.Println(args.Filename+":", fl.BaseName)
+			size := mapper.FileSize(f)
+			feng.Printf("%s: %s (%d bytes)\n", args.Filename, fl.BaseName, size)
 		} else {
 			fl.Present(&mapper.PresentFileLayoutConfig{
 				ShowRaw:           args.Raw,

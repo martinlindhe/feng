@@ -17,9 +17,6 @@ GCRebuilder: https://gamebanana.com/tools/6410
 
 "CISO" header
 
-### RVZ
-
-a modern popular format developed by the dolphin-emu team
 
 ### extract from rvz
 

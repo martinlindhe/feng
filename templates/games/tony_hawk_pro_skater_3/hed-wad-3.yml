@@ -3,10 +3,16 @@
 # Similar to the older Neversoft hed-wad format but different order of file struct fields
 
 # Used in:
-# Tony Hawk's Pro Skater 3 (2001) PS2
-# Tony Hawk's Pro Skater 4 (2004) PS2
-# Tony Hawk’s Underground PS2 xxx
-# ++ more ?
+# - Tony Hawk's Pro Skater 3 (2001) PS2
+# - Tony Hawk's Pro Skater 4 (2002) PS2
+# - Tony Hawk’s Underground (2003) PS2
+# - Tony Hawk’s Underground 2 (2004) PS2
+# - Tony Hawk's American Wasteland (2005) PS2
+# - Tony Hawk's Downhill Jam (2006) PS2
+
+# TODO Tony Hawk's Project 8 (2006) PS2 uses a different variation, where Offset is instead a number ...
+
+# - Tony Hawk's Proving Ground (2007) PS2
 
 references:
   - https://wiki.xentax.com/index.php/Tony_Hawk%E2%80%99s_Underground_HED_WAD

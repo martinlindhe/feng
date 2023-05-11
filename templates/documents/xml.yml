@@ -1,0 +1,19 @@
+# STATUS: 1%
+
+# This template is considered done.
+# It only exists to weed out XML data while bulk matching.
+
+kind: document
+name: XML document
+mime: text/xml
+
+magic:
+  - offset: 0000
+    match: c'<?xml'
+
+structs:
+  header:
+    ascii[5] Signature: c'<?xml'
+
+layout:
+  - header Header

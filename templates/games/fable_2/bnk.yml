@@ -8,7 +8,7 @@ name: Fable II bnk file
 extensions: [.bnk]
 endian: big # XXX
 
-magic:
+magic: # XXX weak magic
   - offset: 0000
     match: 00 00 80 00
 

@@ -2,10 +2,14 @@
 
 # Used in:
 # - Skate (2007) PS3
+# - Skate It (2008) Wii
+
+software:
+  - https://zenhax.com/viewtopic.php?f=17&t=9407&start=20#p67127 # Noesis plugin
 
 kind: game
 name: Skate psg texture
-#extensions: [.psg]
+#extensions: [.psg, .rg2]
 endian: big
 
 magic:
@@ -15,7 +19,7 @@ magic:
 structs:
   header:
     ascii[4] Signature: 89 c'RW4'
-    ascii[4] System: ?? # "ps3"
+    ascii[4] System: ?? # "ps3" in Skate, "rev" in Skate It
 
     u32 u1: ?? # 0d 0a 1a 0a
     u32 u2: ?? # 01 20 04 00

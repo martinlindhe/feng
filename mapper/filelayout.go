@@ -622,7 +622,7 @@ func (fl *FileLayout) presentField(field *Field, cfg *PresentFileLayoutConfig) s
 }
 
 func (fl *FileLayout) PresentStructureTree(structs []*Struct) {
-	feng.Fprintf("# structure tree of %s\n", fl._f.Name())
+	feng.Printf("# structure tree of %s\n", fl._f.Name())
 
 	for _, layout := range structs {
 		fl.presentStructureTreeNode(layout, 0)
@@ -636,11 +636,11 @@ func (fl *FileLayout) presentStructureTreeNode(layout *Struct, indent int) {
 		heading += ` "` + layout.Label + `"`
 	}
 	if len(layout.Fields) == 0 {
-		feng.Fprintf("   empty struct")
+		feng.Printf("   empty struct")
 	}
-	feng.Fprintf(heading + "\n")
+	feng.Printf(heading + "\n")
 	for _, child := range layout.Children {
-		feng.Fprintf(prefix)
+		feng.Printf(prefix)
 		fl.presentStructureTreeNode(child, indent+2)
 	}
 }
@@ -681,12 +681,12 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {
 	}
 	fl.inUTC = cfg.InUTC
 	if fl.BaseName != "" {
-		feng.Fprintf("# " + fl.BaseName + "\n")
+		feng.Printf("# " + fl.BaseName + "\n")
 	}
 
 	presentStart := time.Now()
 	for _, layout := range fl.Structs {
-		feng.Fprintf(fl.presentStruct(layout, cfg))
+		feng.Printf(fl.presentStruct(layout, cfg))
 	}
 
 	fl.presentTime = time.Since(presentStart)
@@ -702,7 +702,7 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {
 	}
 
 	if fl.unseen {
-		feng.Fprintf("\nUNSEEN data file. please submit a sample\n")
+		feng.Printf("\nUNSEEN data file. please submit a sample\n")
 	}
 }
 
@@ -712,36 +712,36 @@ func (fl *FileLayout) reportUnmappedByteCount() {
 	if mappedBytes < fl.size {
 		unmapped := fl.size - mappedBytes
 		unmappedPct := (float64(unmapped) / float64(fl.size)) * 100
-		feng.Fprintf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
+		feng.Printf("0x%04x (%d) unmapped bytes (%.1f%%)\n", unmapped, unmapped, unmappedPct)
 	} else if mappedBytes > fl.size {
 		overflow := mappedBytes - fl.size
 
-		feng.Fprintf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
+		feng.Printf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
 	} else {
-		feng.Fprintf("EOF\n")
+		feng.Printf("EOF\n")
 	}
 
-	feng.Fprintf("\n---STAT---\n")
-	feng.Fprintf("FILE SIZE : %d / 0x%06x / %s\n", fl.size, fl.size, ByteCountSI(fl.size))
+	feng.Printf("\n---STAT---\n")
+	feng.Printf("FILE SIZE : %d / 0x%06x / %s\n", fl.size, fl.size, ByteCountSI(fl.size))
 
 	pctRead := (float64(fl.bytesRead) / float64(fl.size)) * 100
 
-	feng.Fprintf("BYTES READ: %d (%.1f%%)\n", fl.bytesRead, pctRead) // XXX show bytes read in % of file size
+	feng.Printf("BYTES READ: %d (%.1f%%)\n", fl.bytesRead, pctRead) // XXX show bytes read in % of file size
 
 	if fl.bytesImported > 0 {
-		feng.Fprintf("BYTES IMPORTED: %d\n", fl.bytesImported)
+		feng.Printf("BYTES IMPORTED: %d\n", fl.bytesImported)
 	}
 
 	if len(fl.previousOffsets) != 0 {
-		feng.Fprintf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
+		feng.Printf("WARNING UNPOPPED OFFSETS: %#v (indicates buggy template)\n", fl.previousOffsets)
 	}
 
 	if fl.measureTime {
-		feng.Fprintf("\n---TIME---\n")
-		feng.Fprintf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
+		feng.Printf("\n---TIME---\n")
+		feng.Printf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
 
-		feng.Fprintf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
-		feng.Fprintf("PRESENT TIME: %v\n", fl.presentTime)
+		feng.Printf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
+		feng.Printf("PRESENT TIME: %v\n", fl.presentTime)
 	}
 
 }
@@ -760,7 +760,7 @@ func ByteCountSI(b int64) string {
 }
 
 func (fl *FileLayout) reportOverlappingData() {
-	feng.Fprintf("TODO: report overlapping bytes")
+	feng.Printf("TODO: report overlapping bytes")
 }
 
 func (fl *FileLayout) reportUnmappedData() {
@@ -798,9 +798,9 @@ func (fl *FileLayout) reportUnmappedData() {
 		rawData, _ := fl.peekBytesMainFile(ur.offset, end)
 
 		if lastOffset != ur.offset {
-			feng.Fprintf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, rawData, trail)
+			feng.Printf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, rawData, trail)
 		} else {
-			feng.Fprintf("  [%06x] u8 \t% 02x%s\n", ur.offset, rawData, trail)
+			feng.Printf("  [%06x] u8 \t% 02x%s\n", ur.offset, rawData, trail)
 		}
 	}
 }

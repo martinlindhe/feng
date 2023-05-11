@@ -1,0 +1,25 @@
+# STATUS: 1%
+
+# Used in:
+# - Skate It (2008) Wii
+
+kind: game
+name: Skate atoc file
+extensions: [.wst]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'ATOC'
+
+structs:
+  header:
+    ascii[4] Signature: c'ATOC'
+    u32 v1: ?? # 3
+    u32 v2: ?? # 0
+    u32 v3: ?? # xxx
+    u32 v4: ?? # xxx some count ?
+    u32 v5: ?? # 0
+
+layout:
+  - header Header

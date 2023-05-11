@@ -1,0 +1,52 @@
+# STATUS: 1%
+
+# In-house Electronic Arts engine video container, holding VP6 video
+
+# Used in:
+# - Skate It (2008) Wii
+
+# also used in:
+# EA Cricket 2005 *.vp6
+# FIFA Manager 2006 *.vp6
+
+references:
+  - https://wiki.multimedia.cx/index.php/Electronic_Arts_VP6
+  - https://wiki.xentax.com/index.php/EA_VP6_Archive
+
+software:
+  - vlc
+  - ffmpeg
+
+kind: game
+name: Electronic Arts VP6 video
+extensions: [.vp6]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'MVhd'
+
+structs:
+  chunk:
+    ascii[4] Type: ??
+    label: self.Type
+
+    u32 ChunkLen: ??
+
+    if self.Type == "MVhd":
+      ascii[4] CodecID: ?? # "vp60"
+      u16 Width: ??
+      u16 Height: ??
+      u32 FrameCount: ??
+      u32 Largest frame chunk size: ??
+      u32 Frame rate (denominator, rate): ??
+      u32 Frame rate (numerator, scale): ??
+    else:
+      # TODO: decode more types
+      # MV0K = key-frame
+      # MV0F = delta frame
+
+      u8[self.ChunkLen - 8] Data: ??
+
+layout:
+  - chunk[] Chunk

@@ -1,0 +1,59 @@
+# STATUS: 10%
+
+# Used in:
+# Risk: Factions (2010) PS3
+
+# TODO: finish mapping
+
+kind: archive
+name: "Risk: Factions WAD archive"
+extensions: [.wad]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 02 01 12 34
+
+structs:
+  header:
+    u32 Signature: ??
+    u32 v1: ?? # XXX
+    u32 NameTableSize: ??
+
+  name:
+    if OFFSET >= 8 + Header.NameTableSize:
+      parse: stop # XXX how to calc number of entries?
+    asciiz Name: ??
+
+  entry_head:
+    u32 u1: ?? # 0
+    u32 EntryCount: ??
+
+  entry:
+    u16 ID: ?? # unique, incrementing
+    u16 MaybeFlags: ?? # 01 00
+    u32 w1: ?? # XXX some reference? reused in multiple entries
+
+  file_head:
+    u32 FileCount: ??
+    u32 u1: ?? # 00 00 00 dc   (220) XXX
+
+  file:
+    u32 v1: ?? # XXX not offset or sizes ...
+    u32 v2: ?? # XXX
+
+layout:
+  - header Header
+
+  - name[] Name
+
+  - entry_head EntryHead
+
+  - entry[EntryHead.EntryCount] Entry
+
+
+  # WIP :
+  - file_head FileHead
+  - file[FileHead.FileCount] File # last entry is a NULL entry ??? there are multiple
+
+  # XXX what follows is another list of offset:len pairs???

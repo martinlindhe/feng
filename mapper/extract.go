@@ -78,7 +78,7 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 		return nil
 	}
 
-	feng.Fprintf("<%s.%s> Extracting %s from %08x to %s:", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
+	feng.Printf("<%s.%s> Extracting %s from %08x to %s:", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
 
 	f, err := fs1.Create(fullName)
 	if err != nil {
@@ -116,7 +116,7 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 			return err
 		}
 
-		feng.Fprintf(" Extracted %d bytes -> %d\n", field.Length, fileSize(f))
+		feng.Printf(" Extracted %d bytes -> %d\n", field.Length, FileSize(f))
 
 	case "raw":
 		if parts[1] != "u8" {
@@ -134,7 +134,7 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 		if err != nil {
 			return err
 		}
-		feng.Fprintf(" OK\n")
+		feng.Printf(" OK\n")
 
 	case "encrypted":
 		if parts[1] != "u8" {
@@ -153,7 +153,7 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 		if err != nil {
 			return err
 		}
-		feng.Fprintf(" Decrypted %d bytes\n", field.Length)
+		feng.Printf(" Decrypted %d bytes\n", field.Length)
 	}
 
 	return nil
