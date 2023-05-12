@@ -1,0 +1,47 @@
+# STATUS: 1%
+
+# Used in Unreal Engine 1-3
+#
+# Used in:
+# - Tony Hawk's Pro Skater HD (2012) ue3
+# - Fable: The Journey (2012) ue3
+# - Fable Anniversary (2013) ue3
+
+# TODO MAX: continue mapping. something is off with size or sign. need more samples
+
+references:
+  - https://wiki.beyondunreal.com/Legacy:Package_File_Format
+
+software:
+  - https://www.gildor.org/down/47/umodel/extract.zip # Unreal Package Extractor
+  - https://www.gildor.org/en/projects/umodel # UE Viewer
+
+kind: archive
+name: Unreal Engine 1-3 package
+
+extensions: [.xxx, .tfc, .upk]
+
+magic:
+  - offset: 0000
+    match: 9e 2a 83 c1
+    endian: big # XXX
+
+  #- offset: 0000
+  #  match: c1 83 2a 9e
+  #  endian: big # in GlobalPersistentCookerData.upk on xbox360 Fable, while most is in the other endian
+
+structs:
+  header:
+    u32 Signature: ??
+    u16 Version: ?? # 0
+    u16 LicenseNumber: ?? # different for each game
+    u32 PackageFlags: ?? # XXX
+    u32 NameCount: ??
+    u32 NameOffset: ??
+    u32 ExportCount: ??
+    u32 ExportOffset: ??
+    u32 ImportCount: ??
+    u32 ImportOffset: ??
+
+layout:
+  - header Header

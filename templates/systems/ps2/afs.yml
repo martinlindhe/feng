@@ -53,7 +53,7 @@ structs:
     u32 Offset: ??
     u32 Size: ??  # 0 == end of list marker
 
-    filename: list_val(self.index, "Filename", "Name")
+    filename: struct(self.index, "Filename", "Name")
 
     offset: self.Offset
     raw:u8[self.Size] Data: ??

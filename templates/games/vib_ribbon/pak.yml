@@ -1,0 +1,33 @@
+# STATUS: 100%
+
+# Used in:
+# - Vib-Ribbon (1999) PS1
+
+references:
+  - https://aluigi.altervista.org/bms/vib_ribbon.bms
+
+kind: archive
+name: Vib-Ribbon archive
+filenames: ["[0-9]?_?files.pak"] # 01_files.pak, files.pak
+endian: little
+no_magic: true
+
+structs:
+  header:
+    u32 FileCount: ??
+
+  file:
+    u32 Offset: ??
+    offset: self.Offset
+    asciiz Name: ??
+    filename: self.Name
+    u8[alignment(OFFSET, 4)] Padding: ??
+    u32 Size: ??
+
+    raw:u8[self.Size] Data: ??
+    u8[alignment(OFFSET, 4)] Padding: ??
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

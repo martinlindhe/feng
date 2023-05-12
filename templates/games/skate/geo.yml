@@ -1,0 +1,24 @@
+# STATUS: 1%
+
+# Used in:
+# - Skate It (2008) Wii
+
+kind: game
+name: Skate geo file
+extensions: [.geo]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'Sk8' 00
+
+structs:
+  header:
+    ascii[4] Signature: c'Sk8' 00
+
+    u32 u1: ?? #
+    u32 u2: ?? #
+    u32 u3: ?? #
+
+layout:
+  - header Header

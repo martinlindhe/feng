@@ -10,7 +10,7 @@ name: Unity (engine) level
 endian: big # XXX
 
 filenames: [
-  "level[0-9]+", # XXX handle regex match
+  "level[0-9]+",
   globalgamemanagers
 ]
 

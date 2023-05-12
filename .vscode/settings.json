@@ -8,6 +8,7 @@
         "alecthomas",
         "alphabitfields",
         "alphapixels",
+        "aluigi",
         "Aragorn",
         "archiver",
         "ARGB",
@@ -127,6 +128,7 @@
         "gameboy",
         "Gamebryo",
         "Gamecube",
+        "Gameworks",
         "gdb",
         "GDROM",
         "Ghidra",
@@ -323,5 +325,6 @@
         "ZIPFILERECORD",
         "zipx",
         "zstd"
-    ]
+    ],
+    "git.ignoreLimitWarning": true
 }

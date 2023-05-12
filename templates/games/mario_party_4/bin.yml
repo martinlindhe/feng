@@ -1,0 +1,58 @@
+# STATUS: 50%, extract: without names (compressed block)
+
+# Used in:
+# - Mario Party 4 (2002) - lzss compression
+# - Mario Party 5 (2003) - zlib compression
+# - Mario Party 6 (2004) - zlib compression
+# - Mario Party 7 (2005) - zlib compression
+# - Mario Party 8 (2007) - zlib compression
+
+# TODO: some idea on how to extract filenames from the compressed entry with "HSFV" header is in mario_party_5.bms
+
+# TODO: mario party 4 lzss compression extraction fails. no idea why
+
+references:
+  - https://aluigi.altervista.org/bms/mario_party_5.bms
+  - https://aluigi.altervista.org/bms/mario_party_6.bms
+  - https://github.com/Ploaj/Metanoia/blob/225b4eec7c004109d7a7dc7bd56cc7584e44faf8/Metanoia/Formats/GameCube/HSF.cs # parser for the .hsf models
+
+software:
+  - https://github.com/gamemasterplc/mpbinpack
+  - https://github.com/gamemasterplc/mpatbtools # related: for Mario Party ATB Files
+
+kind: archive
+name: Mario Party 4-5 archive
+endian: big
+
+extensions: [.bin]
+
+no_magic: true
+
+structs:
+  header:
+    u32 FileCount: ??
+
+  file:
+    u32 Offset: ??
+    offset: self.Offset
+    u32 UncompressedSize: ??
+    u32 CompressionType:
+      eq 00000001: LZSS
+      eq 00000004: SLIDE # NEED SAMPLE
+      eq 00000005: RLE   # NEED SAMPLE
+      eq 00000007: ZLIB
+
+    # HACK because one entry pointed past end of file ...
+    if self.CompressionType == LZSS && OFFSET + self.UncompressedSize < FILE_SIZE:
+      compressed:lzss[self.UncompressedSize] Data: ??
+
+    if self.CompressionType == ZLIB:
+      u32 UncompressedSize2: ??
+      u32 CompressedSize: ??
+      compressed:zlib[self.CompressedSize] Data: ??
+
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

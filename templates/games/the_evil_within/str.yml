@@ -1,0 +1,77 @@
+# STATUS: 70%, extract: without filenames
+
+# In-house format by Tango Gameworks
+
+# Used in:
+# - The Evil Within (2014) PS3
+
+
+# TODO: .tpr files in The Evil Within have the same magic bytes, but different structure. filenames near end
+
+# TODO: if extension is .tangoresource (PC version), structure is different
+
+# TODO MAX: fix "filename: list_val()"" so named output works
+
+# TODO: need compressed sample
+
+references:
+  - http://aluigi.org/papers/bms/others/the_evil_within.bms
+  - https://zenhax.com/viewtopic.php?t=248
+
+kind: game
+name: The Evil Within str file
+extensions: [.str]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 22 94 ab cd
+
+structs:
+  header:
+    u32 Signature: ??
+    u32 FileEntryHeaderOffset: ??
+    u32 u1: ?? # XXX some size ?
+    u32 u2: ?? # XXX some hash ?
+
+  file_header:
+    u32 FileCount: ?? # XXX
+    u32 v1: ?? # 0
+    u32 v2: ?? # 0
+    u32 NUM1: ??
+    u32 NUM2: ??
+
+    if self.NUM1 != 0 || self.NUM2 != 0:
+      data: unseen
+      # XXX xmath TMP "OFFSET + ((NUM1 + NUM2) * 2)"; goto TMP
+
+    u32 NamesEntrySize: ??
+    u32 NameCount: ??
+
+  name:
+    asciiz Name: ??
+
+  file:
+    u32 NameIndex: ??
+    #filename: struct(self.NameIndex, "File", "Name")     # XXX BROKEN
+    u32 Offset: ??
+    u32 CompressedSize: ??
+    u32 ExpandedSize: ??
+
+    offset: self.Offset
+    if self.CompressedSize == self.ExpandedSize:
+      raw:u8[self.CompressedSize] Data: ??
+    else:
+      compressed:zlib[self.CompressedSize] Data: ??
+      data: unseen # XXX need sample
+    offset: restore
+
+layout:
+  - header Header
+
+  - offset Header.FileEntryHeaderOffset
+  - file_header FileHeader
+
+  - name[FileHeader.NameCount] Name
+
+  - file[FileHeader.FileCount] File

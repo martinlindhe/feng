@@ -1,0 +1,24 @@
+# STATUS: 1%
+
+# Used in:
+# - Mario Party 4 (2002)
+
+kind: archive
+name: Mario Party 4 gsnd file
+endian: big
+
+extensions: [.msm]
+
+magic:
+  - offset: 0000
+    match: c'GSND'
+
+structs:
+  header:
+    ascii[4] Signature: c'GSND'
+    u32 SomeCount: ?? # XXX
+    u32 v2: ?? # 02 31 e1 60 XXX
+
+
+layout:
+  - header Header

@@ -131,9 +131,10 @@ sevenbitstring(self.Filename) = "chars"  returns string value of input field as 
 bitset(self.Value, 7) = true   returns true if bit 7 of self.Value is set
 cleanstring("self.Value") = "chars" cleans input ascii string, terminates at first nul byte
 no_ext("hello.ext")    = "hello", return input string (filename) without extension
+ext("hello.ext")       = ".ext", return the extension of input filename
 basename("path/to/file.ext") = "file.ext", returns basename without file path
 
-list_val(self.index, "Filename", "Name")  = reads a value from a field in another struct slice
+struct(self.index, "Filename", "Name")  = reads a value from a field in a struct array
 
 
 # Data types
