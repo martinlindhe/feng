@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/maja42/goval"
 	"github.com/rs/zerolog/log"
 
 	"github.com/martinlindhe/feng/value"
@@ -32,6 +31,8 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 	if in == df.Label {
 		return "", fmt.Errorf("nothing to eval")
 	}
+
+	log.Info().Msgf("eval string %s, %v", in, fl.scriptFunctions)
 
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {
@@ -356,6 +357,17 @@ func (fl *FileLayout) evalCleanString(args ...interface{}) (interface{}, error) 
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// 1 arg: name of variable. return extension from filename (".ext")
+func (fl *FileLayout) evalExt(args ...interface{}) (interface{}, error) {
+	if len(args) != 1 {
+		return nil, fmt.Errorf("expected exactly 1 argument")
+	}
+	if s, ok := args[0].(string); ok {
+		return filepath.Ext(s), nil
+	}
+	return nil, fmt.Errorf("expected string, got %T", args[0])
+}
+
 // 1 arg: name of variable. return filename without extension
 func (fl *FileLayout) evalNoExt(args ...interface{}) (interface{}, error) {
 	if len(args) != 1 {
@@ -378,10 +390,11 @@ func (fl *FileLayout) evalBasename(args ...interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("expected string, got %T", args[0])
 }
 
+// fetch a value from a field in a struct array
 // 3 args: 1) struct index 2) struct name 3) field name
-func (fl *FileLayout) evalListVal(args ...interface{}) (interface{}, error) {
+func (fl *FileLayout) evalStruct(args ...interface{}) (interface{}, error) {
 	if len(args) != 3 {
-		return nil, fmt.Errorf("expected exactly 2 argument")
+		return nil, fmt.Errorf("expected exactly 3 argument")
 	}
 
 	v1, ok := args[0].(int)
@@ -399,7 +412,6 @@ func (fl *FileLayout) evalListVal(args ...interface{}) (interface{}, error) {
 
 	st, err := fl.findStruct(fmt.Sprintf("%s_%d", v2, v1)) // File_3
 	if err != nil {
-		//return nil, errr
 		log.Warn().Err(err).Msgf("field %s[%d].%s not found", v2, v1, v3)
 		return "", nil
 	}
@@ -523,33 +535,6 @@ func (fl *FileLayout) createInitialConstants() {
 	fl.scriptVariables["FILE_NAME"] = fl._f.Name()
 }
 
-func (fl *FileLayout) getScriptFunctionMap() map[string]goval.ExpressionFunction {
-	if fl.scriptFunctions != nil {
-		return fl.scriptFunctions
-	}
-	functions := make(map[string]goval.ExpressionFunction)
-	functions["peek_i32"] = fl.evalPeekI32
-	functions["peek_i16"] = fl.evalPeekI16
-	functions["peek_i8"] = fl.evalPeekI8
-	functions["atoi"] = fl.evalAtoi
-	functions["otoi"] = fl.evalOtoi
-	functions["ceil"] = fl.evalCeil
-	functions["abs"] = fl.evalAbs
-	functions["alignment"] = evalAlignment
-	functions["offset"] = fl.evalOffset
-	functions["len"] = fl.evalLen
-	functions["not"] = fl.evalNot
-	functions["either"] = fl.evalEither
-	functions["sevenbitstring"] = fl.evalSevenBitString
-	functions["bitset"] = fl.evalBitSet
-	functions["cleanstring"] = fl.evalCleanString
-	functions["no_ext"] = fl.evalNoExt
-	functions["basename"] = fl.evalBasename
-	functions["list_val"] = fl.evalListVal
-	fl.scriptFunctions = functions
-	return fl.scriptFunctions
-}
-
 // evaluates a math expression, like EvaluateExpression but use existing
 func (fl *FileLayout) evaluateExpressionWithExistingVariables(in string, df *value.DataField) (int64, error) {
 	in = strings.ReplaceAll(in, "OFFSET", fmt.Sprintf("%d", fl.offset))
@@ -585,7 +570,7 @@ func (fl *FileLayout) evaluateExpressionWithExistingVariables(in string, df *val
 
 	started := time.Now()
 	fl.evaluatedExpressions++
-	result, err := fl.eval.Evaluate(in, fl.scriptVariables, fl.getScriptFunctionMap())
+	result, err := fl.eval.Evaluate(in, fl.scriptVariables, fl.scriptFunctions)
 	fl.evaluatedExpressionTime += time.Since(started)
 
 	if err != nil {
@@ -634,7 +619,6 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	log.Debug().Str("in", in).Str("block", df.Label).Msgf("EVALUATING at %06x", fl.offset)
 
 	started := time.Now()
-	fl.evaluatedExpressions++
 
 	for idx, layout := range fl.Structs {
 		if layout.evaluated {
@@ -679,8 +663,8 @@ func (fl *FileLayout) evaluateExpr(in string, df *value.DataField) (interface{},
 	}
 
 	//spew.Dump(fl.scriptVariables)
-
-	result, err := fl.eval.Evaluate(in, fl.scriptVariables, fl.getScriptFunctionMap())
+	fl.evaluatedExpressions++
+	result, err := fl.eval.Evaluate(in, fl.scriptVariables, fl.scriptFunctions)
 	fl.evaluatedExpressionTime += time.Since(started)
 
 	if err != nil {

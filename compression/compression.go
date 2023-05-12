@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 
+	lzss "github.com/fbonhomm/LZSS/source"
 	"github.com/pierrec/lz4/v4"
 	"github.com/rasky/go-lzo"
 	"github.com/spf13/afero"
@@ -45,6 +46,8 @@ func ExtractorFactory(name string) (Extractor, error) {
 		return Lz4{}, nil
 	case "lzf":
 		return Lzf{}, nil
+	case "lzss":
+		return Lzss{}, nil
 	}
 	panic(fmt.Sprintf("unknown extractor '%s'", name))
 }
@@ -230,24 +233,28 @@ func (o Lzf) Compress(in []byte, w io.Writer) error {
 	*/
 }
 
-/*
-// TODO need github.com/fbonhomm/LZSS to support reader interface
-
-/// https://github.com/fbonhomm/LZSS/pull/1
-///replace github.com/fbonhomm/LZSS v0.0.0-20200907090355-ba1a01a92989 => github.com/martinlindhe/LZSS v0.0.0-20221025204446-acc47c959dfe
-
-type Lzss struct{}
+// LZSS is not really working ???, need a better impl.
+type Lzss struct {
+	CompressedSize uint // deduced from field size
+}
 
 func (o Lzss) Extract(f afero.File) ([]byte, error) {
 
-	lzssMode0 := lzss.LZSS{}
-	expanded := lzssMode0.Decompress(data)
+	// TODO need github.com/fbonhomm/LZSS to support reader interface
+	// https://github.com/fbonhomm/LZSS/pull/1
+
+	data := make([]byte, o.CompressedSize)
+	if _, err := io.ReadFull(f, data); err != nil {
+		return nil, err
+	}
+
+	lzssMode := lzss.LZSS{Mode: 1, PositionMode: 1}
+	expanded := lzssMode.Decompress(data)
 	return expanded, nil
 }
 
 func (o Lzss) Compress(in []byte, w io.Writer) error {
-	lzssMode0 := lzss.LZSS{}
-	_, err := w.Write(lzssMode0.Compress(in))
+	lzssMode := lzss.LZSS{Mode: 1, PositionMode: 0}
+	_, err := w.Write(lzssMode.Compress(in))
 	return err
 }
-*/

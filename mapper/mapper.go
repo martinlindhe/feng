@@ -68,6 +68,29 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 	if cfg.Brief {
 		return &fl, nil
 	}
+
+	functions := make(map[string]goval.ExpressionFunction)
+	functions["peek_i32"] = fl.evalPeekI32
+	functions["peek_i16"] = fl.evalPeekI16
+	functions["peek_i8"] = fl.evalPeekI8
+	functions["atoi"] = fl.evalAtoi
+	functions["otoi"] = fl.evalOtoi
+	functions["ceil"] = fl.evalCeil
+	functions["abs"] = fl.evalAbs
+	functions["alignment"] = evalAlignment
+	functions["offset"] = fl.evalOffset
+	functions["len"] = fl.evalLen
+	functions["not"] = fl.evalNot
+	functions["either"] = fl.evalEither
+	functions["sevenbitstring"] = fl.evalSevenBitString
+	functions["bitset"] = fl.evalBitSet
+	functions["cleanstring"] = fl.evalCleanString
+	functions["ext"] = fl.evalExt
+	functions["no_ext"] = fl.evalNoExt
+	functions["basename"] = fl.evalBasename
+	functions["struct"] = fl.evalStruct
+	fl.scriptFunctions = functions
+
 	log.Debug().Msgf("mapping ds '%s'", cfg.DS.BaseName)
 
 	for _, df := range cfg.DS.Layout {
@@ -470,6 +493,8 @@ func mapFileToNoMagicMatchingExtension(cfg *MapperConfig) (fl *FileLayout, err2 
 			log.Debug().Msgf("%s: no_magic extension don't match (count %d)", tpl, matched)
 			return nil
 		}
+
+		log.Warn().Msgf("%s: WEAK MATCH", tpl) // TODO: improve presentation in 1-line --brief output
 
 		fl, err = cfg.mapFileToReader(ds, ds.Endian)
 		return err

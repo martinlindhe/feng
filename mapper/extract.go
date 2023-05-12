@@ -103,6 +103,10 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 		if t, ok := extractor.(compression.Lzf); ok {
 			t.CompressedSize = uint(field.Length)
 			expanded, err = t.Extract(r)
+
+		} else if t, ok := extractor.(compression.Lzss); ok {
+			t.CompressedSize = uint(field.Length)
+			expanded, err = t.Extract(r)
 		} else {
 			expanded, err = extractor.Extract(r)
 		}

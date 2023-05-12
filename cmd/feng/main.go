@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"path/filepath"
 	"runtime"
 	"runtime/pprof"
@@ -87,7 +86,7 @@ func main() {
 		if args.Brief {
 			size := mapper.FileSize(f)
 			feng.Printf("%s: %s (%d bytes)\n", err, args.Filename, size)
-			os.Exit(1)
+			return
 		}
 		log.Fatal().Err(err).Msgf("Failed to map %s.", args.Filename)
 		return

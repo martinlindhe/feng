@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/alecthomas/kong v0.7.1
 	github.com/davecgh/go-spew v1.1.1
+	github.com/fbonhomm/LZSS v0.0.0-20200907090355-ba1a01a92989
 	github.com/maja42/goval v1.3.1
 	github.com/pierrec/lz4/v4 v4.1.17
 	github.com/pkg/errors v0.9.1
