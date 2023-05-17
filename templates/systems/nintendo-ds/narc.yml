@@ -35,7 +35,7 @@ structs:
 
     offset_pair[self.FileCount] Offsets: ??
 
-  offset_pair: # XXX make "offset" a reserved word !
+  offset_pair:
     u32 StartOffset: ??
     u32 EndOffset: ??
 
@@ -64,9 +64,9 @@ structs:
       u16 FolderID: ??
 
   fimg:
-    ascii[4] Signature: c'GMIF' # FIMG = File Image
+    ascii[4] Signature: c'GMIF' # FIMG = File Images
     u32 SectionSize: ??
-    raw:u8[self.SectionSize - 8] Data: ??
+    u8[self.SectionSize - 8] Data: ?? # XXX map this area from each file entry, it is multiple files stacked
 
 layout:
   - header Header

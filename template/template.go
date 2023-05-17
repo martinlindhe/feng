@@ -242,11 +242,21 @@ func (t *Template) evaluateStructs() ([]EvaluatedStruct, error) {
 	return res, nil
 }
 
+var (
+	reservedNames = []string{"offset"}
+)
+
 // parses a "struct" child with all their child nodes
 func parseStruct(c *yaml.MapItem) (EvaluatedStruct, error) {
 
 	key := c.Key.(string)
 	es := EvaluatedStruct{Name: key}
+
+	for _, r := range reservedNames {
+		if key == r {
+			return es, fmt.Errorf("reserved word %s in struct name", key)
+		}
+	}
 
 	for _, v := range c.Value.([]yaml.MapItem) {
 		field, err := value.ParseDataField(v.Key.(string))

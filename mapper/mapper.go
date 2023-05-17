@@ -149,7 +149,7 @@ func (fl *FileLayout) mapLayout(fs *Struct, ds *template.DataStructure, df *valu
 
 	if df.Slice {
 		err = fl.expandStructSlice(ds, df, es)
-		if err != nil {
+		if err != nil && !errors.Is(err, ErrParseStop) {
 			log.Warn().Err(err).Msgf("expandStructSlice failed")
 		}
 		return nil
