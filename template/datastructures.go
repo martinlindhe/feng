@@ -16,7 +16,7 @@ type DataStructure struct {
 	Constants []Constant
 
 	// evaluated file structs
-	EvaluatedStructs []evaluatedStruct
+	EvaluatedStructs []EvaluatedStruct
 
 	Layout []value.DataField
 
@@ -88,7 +88,7 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 }
 
 // looks up layout name from sections
-func (ds *DataStructure) FindStructure(name string) (*evaluatedStruct, error) {
+func (ds *DataStructure) FindStructure(name string) (*EvaluatedStruct, error) {
 	for _, str := range ds.EvaluatedStructs {
 		if name == str.Name {
 			return &str, nil

@@ -148,42 +148,10 @@ func (fl *FileLayout) mapLayout(fs *Struct, ds *template.DataStructure, df *valu
 	}
 
 	if df.Slice {
-		// like ranged layout but keep reading until EOF
-		log.Debug().Msgf("appending sliced %s[] %s", df.Kind, df.Label)
-
-		baseLabel := df.Label
-		for i := uint64(0); i < math.MaxUint64; i++ {
-			df.Index = int(i)
-			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
-			if err := fl.expandStruct(df, ds, es.Expressions, true); err != nil {
-				if DEBUG_LABEL {
-					log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
-				}
-				df.Label = baseLabel
-
-				if errors.Is(err, ErrParseStop) {
-					if DEBUG_MAPPER {
-						log.Info().Msgf("reached ParseStop")
-					}
-					break
-				}
-
-				if errors.Is(err, ErrParseContinue) {
-					continue
-				}
-
-				if err == io.EOF {
-					log.Error().Msgf("reached EOF")
-					break
-				}
-				return err
-			}
-			if DEBUG_LABEL {
-				log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
-			}
-			df.Label = baseLabel
+		err = fl.expandStructSlice(ds, df, es)
+		if err != nil {
+			log.Warn().Err(err).Msgf("expandStructSlice failed")
 		}
-		return nil
 	}
 	if df.Range != "" {
 		rangeQ := df.Range
@@ -221,6 +189,45 @@ func (fl *FileLayout) mapLayout(fs *Struct, ds *template.DataStructure, df *valu
 		}
 		log.Error().Msgf("%s errors out: %s\n", ds.BaseName, err.Error())
 		return err
+	}
+	return nil
+}
+
+// like ranged layout but keep reading until EOF
+func (fl *FileLayout) expandStructSlice(ds *template.DataStructure, df *value.DataField, es *template.EvaluatedStruct) error {
+	log.Debug().Msgf("appending sliced %s[] %s", df.Kind, df.Label)
+
+	baseLabel := df.Label
+	for i := uint64(0); i < math.MaxUint64; i++ {
+		df.Index = int(i)
+		df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
+		if err := fl.expandStruct(df, ds, es.Expressions, true); err != nil {
+			if DEBUG_LABEL {
+				log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
+			}
+			df.Label = baseLabel
+
+			if errors.Is(err, ErrParseStop) {
+				if DEBUG_MAPPER {
+					log.Info().Msgf("reached ParseStop")
+				}
+				break
+			}
+
+			if errors.Is(err, ErrParseContinue) {
+				continue
+			}
+
+			if err == io.EOF {
+				log.Error().Msgf("reached EOF")
+				break
+			}
+			return err
+		}
+		if DEBUG_LABEL {
+			log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
+		}
+		df.Label = baseLabel
 	}
 	return nil
 }
@@ -971,41 +978,9 @@ func (fl *FileLayout) expandChildren(fs *Struct, dfParent *value.DataField, ds *
 						log.Debug().Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
 
 						if es.Field.Slice {
-							// like ranged layout but keep reading until EOF
-							log.Debug().Msgf("appending sliced %s[] %s", es.Field.Kind, es.Field.Label)
-
-							baseLabel := es.Field.Label
-							for i := uint64(0); i < math.MaxUint64; i++ {
-
-								es.Field.Index = int(i)
-								es.Field.Label = fmt.Sprintf("%s_%d", baseLabel, i)
-								if err := fl.expandStruct(&es.Field, ds, subEs.Expressions, true); err != nil {
-									if DEBUG_LABEL {
-										log.Printf("--- used Label %s, restoring to %s", es.Field.Label, baseLabel)
-									}
-									es.Field.Label = baseLabel
-
-									if errors.Is(err, ErrParseStop) {
-										if DEBUG_MAPPER {
-											log.Info().Msgf("reached ParseStop")
-										}
-										break
-									}
-
-									if errors.Is(err, ErrParseContinue) {
-										continue
-									}
-
-									if err == io.EOF {
-										log.Error().Msgf("reached EOF")
-										break
-									}
-									return err
-								}
-								if DEBUG_LABEL {
-									log.Printf("--- used Label %s, restoring to %s", es.Field.Label, baseLabel)
-								}
-								es.Field.Label = baseLabel
+							err = fl.expandStructSlice(ds, &es.Field, subEs)
+							if err != nil {
+								log.Warn().Err(err).Msgf("expandStructSlice failed")
 							}
 							continue
 						}

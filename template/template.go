@@ -136,7 +136,7 @@ type Expression struct {
 }
 
 // a "structs" node
-type evaluatedStruct struct {
+type EvaluatedStruct struct {
 	Name string
 
 	Expressions []Expression
@@ -230,8 +230,8 @@ func (r ValidationError) Error() string {
 	return r.Message
 }
 
-func (t *Template) evaluateStructs() ([]evaluatedStruct, error) {
-	res := []evaluatedStruct{}
+func (t *Template) evaluateStructs() ([]EvaluatedStruct, error) {
+	res := []EvaluatedStruct{}
 	for _, c := range t.Structs {
 		es, err := parseStruct(&c)
 		if err != nil {
@@ -243,10 +243,10 @@ func (t *Template) evaluateStructs() ([]evaluatedStruct, error) {
 }
 
 // parses a "struct" child with all their child nodes
-func parseStruct(c *yaml.MapItem) (evaluatedStruct, error) {
+func parseStruct(c *yaml.MapItem) (EvaluatedStruct, error) {
 
 	key := c.Key.(string)
-	es := evaluatedStruct{Name: key}
+	es := EvaluatedStruct{Name: key}
 
 	for _, v := range c.Value.([]yaml.MapItem) {
 		field, err := value.ParseDataField(v.Key.(string))

@@ -640,7 +640,7 @@ func (fl *FileLayout) presentStructureTreeNode(layout *Struct, indent int) {
 	}
 	feng.Printf(heading + "\n")
 	for _, child := range layout.Children {
-		feng.Printf(prefix)
+		feng.Printf(prefix + "_PFX_")
 		fl.presentStructureTreeNode(child, indent+2)
 	}
 }
