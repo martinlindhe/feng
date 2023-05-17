@@ -33,6 +33,8 @@ var args struct {
 	MemProfile  string `name:"mem-profile" help:"[Dev] Create memory profile."`
 }
 
+var DEBUG_SLOWNESS = true
+
 func main() {
 
 	var fs1 = afero.NewOsFs()
@@ -73,7 +75,7 @@ func main() {
 		F:                f,
 		StartOffset:      args.Offset,
 		TemplateFilename: args.Template,
-		MeasureTime:      args.Time,
+		MeasureTime:      args.Time || DEBUG_SLOWNESS,
 		Brief:            args.Brief,
 	}
 

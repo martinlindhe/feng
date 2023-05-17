@@ -94,7 +94,7 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 	log.Debug().Msgf("mapping ds '%s'", cfg.DS.BaseName)
 
 	for _, df := range cfg.DS.Layout {
-		err := fl.mapLayout(cfg.F, nil, cfg.DS, &df)
+		err := fl.mapLayout(nil, cfg.DS, &df)
 		if err != nil {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 				log.Error().Err(err).Msgf("mapLayout error processing %s at %06x", df.Label, fl.offset)
@@ -106,7 +106,7 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 	return &fl, nil
 }
 
-func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStructure, df *value.DataField) error {
+func (fl *FileLayout) mapLayout(fs *Struct, ds *template.DataStructure, df *value.DataField) error {
 
 	if df.Kind == "offset" {
 
@@ -116,7 +116,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 				log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, previousOffset)
 			}
 			fl.offset = previousOffset
-			_, err := rr.Seek(int64(fl.offset), io.SeekStart)
+			_, err := fl._f.Seek(int64(fl.offset), io.SeekStart)
 			if err != nil {
 				return err
 			}
@@ -132,7 +132,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 
 		fl.offset = v
 		log.Debug().Msgf("--- CHANGED OFFSET FROM %04x TO %04x (%s)", previousOffset, fl.offset, df.Label)
-		_, err = rr.Seek(int64(v), io.SeekStart)
+		_, err = fl._f.Seek(int64(v), io.SeekStart)
 		if err != nil {
 			return err
 		}
@@ -155,7 +155,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 		for i := uint64(0); i < math.MaxUint64; i++ {
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
-			if err := fl.expandStruct(rr, df, ds, es.Expressions, true); err != nil {
+			if err := fl.expandStruct(df, ds, es.Expressions, true); err != nil {
 				if DEBUG_LABEL {
 					log.Printf("--- used Label %s, restoring to %s", df.Label, baseLabel)
 				}
@@ -202,7 +202,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 		for i := int64(0); i < parsedRange; i++ {
 			df.Index = int(i)
 			df.Label = fmt.Sprintf("%s_%d", baseLabel, i)
-			if err := fl.expandStruct(rr, df, ds, es.Expressions, false); err != nil {
+			if err := fl.expandStruct(df, ds, es.Expressions, false); err != nil {
 				if errors.Is(err, ErrParseContinue) {
 					continue
 				}
@@ -213,7 +213,7 @@ func (fl *FileLayout) mapLayout(rr afero.File, fs *Struct, ds *template.DataStru
 		return nil
 	}
 
-	if err := fl.expandStruct(rr, df, ds, es.Expressions, false); err != nil {
+	if err := fl.expandStruct(df, ds, es.Expressions, false); err != nil {
 		if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 			// accept eof errors as valid parse for otherwise valid mapping
 			log.Error().Msgf("reached EOF")
@@ -475,7 +475,7 @@ func mapFileToNoMagicMatchingExtension(cfg *MapperConfig) (fl *FileLayout, err2 
 				matches := re.MatchString(actualName)
 
 				if matches {
-					log.Info().Msgf("%s: no_magic filename match %s == %v", tpl, wantedName, actualName)
+					log.Debug().Msgf("%s: no_magic filename match %s == %v", tpl, wantedName, actualName)
 					matched++
 				}
 			}
@@ -510,7 +510,7 @@ func mapFileToNoMagicMatchingExtension(cfg *MapperConfig) (fl *FileLayout, err2 
 	return fl, err2
 }
 
-func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression, isSlice bool) error {
+func (fl *FileLayout) expandStruct(dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression, isSlice bool) error {
 
 	if DEBUG_MAPPER {
 		log.Printf("expandStruct: adding struct %s", dfParent.Label)
@@ -519,7 +519,7 @@ func (fl *FileLayout) expandStruct(r afero.File, dfParent *value.DataField, ds *
 	fs := &Struct{Name: dfParent.Label}
 	fl.Structs = append(fl.Structs, fs)
 
-	err := fl.expandChildren(r, fs, dfParent, ds, expressions)
+	err := fl.expandChildren(fs, dfParent, ds, expressions)
 	if errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 
 		if len(fl.Structs) < 1 || len(fl.Structs[0].Fields) == 0 {
@@ -544,7 +544,7 @@ func presentStringValue(v string) string {
 	return v
 }
 
-func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
+func (fl *FileLayout) expandChildren(fs *Struct, dfParent *value.DataField, ds *template.DataStructure, expressions []template.Expression) error {
 	var err error
 
 	log.Debug().Msgf("expandChildren: %06x expanding struct %s", fl.offset, dfParent.Label)
@@ -666,7 +666,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 
 		case "filename":
 			// record filename to use for the next data output operation
-			if strings.Contains(es.Pattern.Value, ".png") || strings.Contains(es.Pattern.Value, ".jpg") {
+			if strings.Contains(es.Pattern.Value, ".png") || strings.Contains(es.Pattern.Value, ".jpg") || strings.Contains(es.Pattern.Value, ".bin") {
 				// don't evaluate plain filenames
 				fl.filename = es.Pattern.Value
 			} else {
@@ -686,7 +686,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 					log.Printf("--- RESTORED OFFSET FROM %04x TO %04x", fl.offset, previousOffset)
 				}
 				fl.offset = previousOffset
-				_, err := r.Seek(int64(fl.offset), io.SeekStart)
+				_, err := fl._f.Seek(int64(fl.offset), io.SeekStart)
 				if err != nil {
 					return err
 				}
@@ -706,7 +706,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 			if err != nil {
 				return err
 			}
-			_, err = r.Seek(int64(fl.offset), io.SeekStart)
+			_, err = fl._f.Seek(int64(fl.offset), io.SeekStart)
 			if err != nil {
 				return err
 			}
@@ -930,7 +930,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				log.Debug().Msgf("IF EVALUATED FALSE: q=%s, a=%d", q, a)
 			}
 			if a != 0 {
-				err := fl.expandChildren(r, fs, dfParent, ds, es.Children)
+				err := fl.expandChildren(fs, dfParent, ds, es.Children)
 				if err != nil {
 					return err
 				}
@@ -948,7 +948,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 				log.Debug().Msgf("ELSE EVALUATED FALSE: lastIf=%s, a=%d", lastIf, a)
 			}
 			if a == 0 {
-				err := fl.expandChildren(r, fs, dfParent, ds, es.Children)
+				err := fl.expandChildren(fs, dfParent, ds, es.Children)
 				if err != nil {
 					return err
 				}
@@ -970,9 +970,48 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 
 						log.Debug().Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
 
+						if es.Field.Slice {
+							// like ranged layout but keep reading until EOF
+							log.Debug().Msgf("appending sliced %s[] %s", es.Field.Kind, es.Field.Label)
+
+							baseLabel := es.Field.Label
+							for i := uint64(0); i < math.MaxUint64; i++ {
+
+								es.Field.Index = int(i)
+								es.Field.Label = fmt.Sprintf("%s_%d", baseLabel, i)
+								if err := fl.expandStruct(&es.Field, ds, subEs.Expressions, true); err != nil {
+									if DEBUG_LABEL {
+										log.Printf("--- used Label %s, restoring to %s", es.Field.Label, baseLabel)
+									}
+									es.Field.Label = baseLabel
+
+									if errors.Is(err, ErrParseStop) {
+										if DEBUG_MAPPER {
+											log.Info().Msgf("reached ParseStop")
+										}
+										break
+									}
+
+									if errors.Is(err, ErrParseContinue) {
+										continue
+									}
+
+									if err == io.EOF {
+										log.Error().Msgf("reached EOF")
+										break
+									}
+									return err
+								}
+								if DEBUG_LABEL {
+									log.Printf("--- used Label %s, restoring to %s", es.Field.Label, baseLabel)
+								}
+								es.Field.Label = baseLabel
+							}
+							continue
+						}
+
 						es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
 						if es.Field.Range != "" {
-
 							parsedRange, err := fl.EvaluateExpression(es.Field.Range, &es.Field)
 							if err != nil {
 								return err
@@ -994,7 +1033,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 
 								child := &Struct{Name: name, Index: int(i)}
 								fs.Children = append(fs.Children, child)
-								err = fl.expandChildren(r, child, &parent, ds, subEs.Expressions)
+								err = fl.expandChildren(child, &parent, ds, subEs.Expressions)
 								if err != nil {
 									//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 									log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)
@@ -1007,7 +1046,7 @@ func (fl *FileLayout) expandChildren(r afero.File, fs *Struct, dfParent *value.D
 
 							// add this as child node to current struct (fs)
 							child := &Struct{Name: es.Field.Label}
-							err = fl.expandChildren(r, child, &es.Field, ds, subEs.Expressions)
+							err = fl.expandChildren(child, &es.Field, ds, subEs.Expressions)
 							if err != nil {
 								//if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 								log.Error().Err(err).Msgf("expanding custom struct '%s %s'", es.Field.Kind, es.Field.Label)

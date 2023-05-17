@@ -138,6 +138,9 @@ func (fl *FileLayout) readBytes(totalLength, unitLength int64, endian string) ([
 	if totalLength > 1024*1024*1024 {
 		return nil, fmt.Errorf("readBytes: attempt to read unexpected amount of data %d", totalLength)
 	}
+	if totalLength < 0 {
+		return nil, fmt.Errorf("readBytes: negative totalLength %d", totalLength)
+	}
 
 	val := make([]byte, totalLength)
 	if DEBUG_READ {
