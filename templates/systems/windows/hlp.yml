@@ -9,7 +9,7 @@ software:
 
 kind: document
 name: Microsoft Help file
-extensions: [.hlp]
+extensions: [.hlp, .gid]
 mime: application/winhlp
 endian: little
 

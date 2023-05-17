@@ -1,15 +1,21 @@
-# STATUS: 20%
+# STATUS: 30%
 
-# HI: support DSi header format
+# TODO MAX: map filenames (subtable mapping issues: they are not proper parent & children). NEED function to fetch value by name from parent struct.
+
+# TODO: calculate checksums
+# TODO: support DSi header format (need sample)
 
 references:
   - http://problemkaputt.de/gbatek.htm#dscartridgesencryptionfirmware
   - https://www.sweetscape.com/010editor/repository/files/NDS.bt
 
+software:
+  - https://github.com/haroohie-club/NitroPacker/   # NitroPacker unpack -r file.nds -o out_dir
+
 kind: executable
 name: Nintendo DS ROM
 extensions: [.nds]
-endian: little # XXX
+endian: little
 
 magic:
   - offset: 00C0
@@ -17,14 +23,15 @@ magic:
 
 structs:
   header:
-    ascii[12] Game Title: ??
-    ascii[4] Game code: ??
-    ascii[2] Maker code: ??
-    u8 Unit code:
-      # (00h=NDS, 02h=NDS+DSi, 03h=DSi) (bit1=DSi)
-      bit 0000_0010: DSi
-    u8 Encryption seed: ??
-    u8 Device capacity: ??
+    ascii[12] GameTitle: ??
+    ascii[4] GameCode: ??
+    ascii[2] MakerCode: ??
+    u8 UnitCode:
+      eq 00: NDS
+      eq 02: NDS+DSi
+      eq 03: DSi
+    u8 EncryptionSeed: ??
+    u8 DeviceCapacity: ??
     u8[7] Reserved: ??
     u8 Reserved: ?? # XXX used on DSi
     u8 NDS region: # XXX other on DSi
@@ -32,20 +39,36 @@ structs:
       eq 40: Korea
       eq 80: China
     u8 ROM version: ??
-    u8 Autostart: ??    # (Bit2: Skip "Press Button" after Health and Safety) (Also skips bootmenu, even in Manual mode & even Start pressed)
-    u32 ARM9 rom_offset: ??
+    u8 Autostart: ??    # (Bit2: Skip "Press Button" after Health and Safety) (Also skips boot menu, even in Manual mode & even Start pressed)
+    u32 ARM9ROMOffset: ??
     u32 ARM9 entry_address: ??
     u32 ARM9 ram_address: ??
-    u32 ARM9 size: ??
-    u32 ARM7 rom_offset: ??
+    u32 ARM9ROMSize: ??
+
+    # TODO map arm7 + arm9 roms
+    #offset: self.ARM9ROMOffset
+    #filename: arm7.bin
+    #raw:u8[self.ARM9ROMSize] ARM9 ROM DATA: ??
+    #offset: restore
+
+    u32 ARM7ROMOffset: ??
     u32 ARM7 entry_address: ??
     u32 ARM7 ram_address: ??
-    u32 ARM7 size: ??
+    u32 ARM7ROMSize: ??
 
-    u32 File Name Table offset: ??
-    u32 File Name Table size: ??
-    u32 File Allocation Table offset: ??
-    u32 File Allocation Table size: ??
+    #offset: self.ARM7ROMOffset
+    #filename: arm9.bin
+    #raw:u8[self.ARM7ROMSize] ARM7 ROM DATA: ??
+    #offset: restore
+
+    filename:  # clear filename
+
+    u32 FilenameTableOffset: ??
+    u32 FilenameTableSize: ??
+
+    u32 FileAllocationTableOffset: ??
+    u32 FileAllocationTableSize: ??
+
     u32 File ARM9 overlay_offset: ??
     u32 File ARM9 overlay_size: ??
     u32 File ARM7 overlay_offset: ??
@@ -71,7 +94,7 @@ structs:
 
     u16 Nintendo Logo Checksum: ??  # XXX CRC-16 of [0C0h-15Bh], fixed CF56h
     u16 Header Checksum: ??         # XXX CRC-16 of [000h-15Dh]
-  
+
     u32 Debug rom_offset: ??
     u32 Debug size: ??
     u32 Debug ram_address: ??
@@ -79,5 +102,53 @@ structs:
     u8[144] Reserved: ??
     u8[3584] Reserved: ??
 
+
+  fat:
+    u32 Offset: ??
+    u32 Size: ??
+
+    offset: self.Offset
+    raw:u8[self.Size - self.Offset] Data: ??
+    u8[alignment(OFFSET, 512)] Padding: ?? # ff
+    offset: restore
+
+  fnt_header:
+    u32 u1: ??
+    u16 u2: ??
+    u16 DirectoryCount: ??
+
+  fnt:
+    u32 Offset: ??
+    u16 FirstFileID: ??
+    u16 ParentFolderID: ??
+
+    offset: Header.FilenameTableOffset + self.Offset
+
+    subtable[] Subtable: ??
+
+    offset: restore
+
+  subtable:
+    u8 Flags:
+      bit b0111_1111: LENGTH
+      bit b1000_0000: DIRECTORY
+    if self.Flags == 0:
+      parse: stop
+    ascii[self.Flags & LENGTH] Name: ??
+    if self.Flags & DIRECTORY:
+      u16 FolderID: ??
+
+    # XXX FAT ID = parent FntHeader.FirstFileID + self.index        XXX get value from parent ... !?
+    # XXX calculate offset in FAT table from that ...
+
 layout:
   - header Header
+
+#  - offset Header.FileAllocationTableOffset
+#  - fat[Header.FileAllocationTableSize / 8] FAT
+
+
+  - offset Header.FilenameTableOffset
+  - fnt_header FntHeader
+  - fnt[FntHeader.DirectoryCount] FileNameTable
+

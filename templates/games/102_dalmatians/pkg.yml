@@ -1,0 +1,32 @@
+# STATUS: 25%, extract: ok
+
+# TODO: signed compare is broken
+
+kind: archive
+name: 102 Dalmatians archive
+filenames: [pcdogs.pkg]
+endian: little # XXX
+
+no_magic: true
+
+structs:
+  header:
+    u32 v1: ?? # 0800  = XXX header size, or point to next area
+    u32 v2: ??
+
+  file:
+    i32 Offset: ??
+    i32 Size: ??
+    if self.Offset == 0:
+      parse: stop
+
+    if self.Offset != 4294967295:   # XXX signed compare fails versus "-1"
+      offset: self.Offset
+      u32 Unknown: ?? # 1 or 4 or  cd cd cd cd  ...  compression format ???
+      raw:u8[self.Size] Data: ??
+      u8[alignment(OFFSET, 2048)] Padding: ??
+      offset: restore
+
+layout:
+  - header Header
+  - file[] File

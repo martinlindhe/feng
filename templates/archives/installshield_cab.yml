@@ -1,0 +1,38 @@
+# STATUS: 1%
+
+references:
+  - http://fileformats.archiveteam.org/wiki/InstallShield_CAB
+
+software:
+  - https://github.com/twogood/unshield  # InstallShield     # sudo pacman -S unshield
+
+kind: archive
+name: InstallShield CAB archive
+extensions: [.cab]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'ISc('  # InstallShield CAB Archive File
+
+structs:
+  header:
+    ascii[4] Signature: ??
+
+    u16 MajorVersion: ?? # 4
+    u16 MinorVersion: ?? # 100
+
+    u32 v2: ?? # 0
+    u32 v3: ?? # 0200    XXX header block len ???
+    u32 v4: ?? # XXX     descriptor size
+
+    u32 v5: ?? # XXX   points to start of compressed data ???
+    u32 v6: ?? # 0
+
+    u32 v7: ?? # 0
+    u32 v8: ?? # 0015
+
+    # XXX zeroes up to 0x200
+
+layout:
+  - header Header

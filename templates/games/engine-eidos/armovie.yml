@@ -1,0 +1,58 @@
+# STATUS: 1%
+
+# Media format used by EIDOS Interactive.
+
+# Used in:
+# - 102 Dalmatians PC   # ESCAPE 2.0
+
+references:
+- https://wiki.multimedia.cx/index.php/ARMovie
+
+software:
+  - ffmpeg
+
+kind: media
+name: 102 Dalmatians archive
+extensions: [.rpl]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'ARMovie' 0a
+
+structs:
+  header:
+    ascii[8] Signature: ??
+
+    asciinl Filename: ??
+
+    asciinl Copyright: ?? # Copyright (c) 1997 Eidos plc.  All rights reserved.
+
+    asciinl Codec: ?? # ESCAPE 2.0
+
+
+    asciinl Line4: ?? # 130        video format
+    asciinl Line5: ?? # 640        pixels
+    asciinl Line6: ?? # 300        pixels
+
+    asciinl Line7: ?? # 16         bits per pixel RGB
+    asciinl Line8: ?? # 30.000000  frames per second
+    asciinl Line9: ?? # 1          sound format - standard
+
+    asciinl LineA: ?? # 44100      Hz samples
+    asciinl LineB: ?? # 2          channels
+    asciinl LineC: ?? # 8          bits per sample (LINEAR UNSIGNED)
+
+    asciinl LineD: ?? # 1          frames per chunk
+    asciinl LineE: ?? # 396        number of chunks
+    asciinl LineF: ?? # 0          even chunk size
+
+    asciinl LineG: ?? # 0          odd chunk size
+    asciinl LineH: ?? # 4035560    offset to chunk cat
+    asciinl LineI: ?? # 1024       offset to sprite
+
+    asciinl LineJ: ?? # 0          size of sprite
+    asciinl LineK: ?? # 0          offset to key frames
+
+layout:
+  - header Header

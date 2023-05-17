@@ -1,7 +1,5 @@
 # STATUS: 10%
 
-# HI: adjust size of Title field depending on GBC rom or not.
-
 references:
   - https://www.problemkaputt.de/gbatek.htm#gbacartridges
 
@@ -16,8 +14,8 @@ magic:
 
 structs:
   header:
-    u8[4] Entry point: ??         # 32-bit ARM branch opcode, eg "B rom_start"
-    u8[152] Nintendo Logo: ??
+    u8[4] EntryPoint: ??         # 32-bit ARM branch opcode, eg "B rom_start"
+    u8[152] NintendoLogo: ??
     u8 NintendoLogo2: # normally "21"
       bit b1000_0010: Debugging Enable
     u8 NintendoLogo3: "D4"
@@ -29,13 +27,14 @@ structs:
     ascii[4] Game Code: ??
     ascii[2] Maker Code: ??
     u8 Reserved: "96"
-    u8 Main unit code: ??
+    u8 Main unit code: ?? # 0
     u8 Device type: ?? # XXX bit7=DACS/debug related
     u8[7] Reserved: ??
     u8 Software version: ??
     u8 Header checksum: ??
     u8[2] Reserved: ??
 
+    # -- Additional multiboot header entries --
     #u8[4] RAM entry point: ??     # 32-bit ARM branch opcode, eg "B rom_start"
     #u8 Boot mode:
     #  eq 01: Joybus mode

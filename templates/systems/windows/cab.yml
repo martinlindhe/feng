@@ -7,8 +7,7 @@ references:
   - https://github.com/google/go-cabfile
 
 software:
-  - https://github.com/twogood/unshield (installshield installers)
-  - https://github.com/Bioruebe/UniExtract2
+  - https://www.cabextract.org.uk/
 
 kind: archive
 name: Microsoft Cabinet Archive

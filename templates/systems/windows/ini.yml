@@ -1,0 +1,19 @@
+# STATUS: 1%
+
+kind: system
+name: Windows INI file
+endian: little
+
+filenames: [
+  ".*.ini",
+  "autorun.inf",
+]
+
+no_magic: true
+
+structs:
+  header:
+    ascii[10] First: ??
+
+layout:
+  - header Header

@@ -19,9 +19,15 @@ magic:
   - offset: 0000
     match: c'ID3'
 
+  - offset: 0000
+    match: ff fb 90 44
+
+  - offset: 0000
+    match: ff f3 40 cc
+
 structs:
   header:
-    ascii[3] Signature: c'ID3'
+    u8[4] Signature: ??
 
 layout:
   - header Header
