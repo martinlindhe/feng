@@ -95,7 +95,7 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 
 	for _, df := range cfg.DS.Layout {
 		err := fl.mapLayout(nil, cfg.DS, &df)
-		if err != nil {
+		if err != nil && !errors.Is(err, ErrParseStop) {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 				log.Error().Err(err).Msgf("mapLayout error processing %s at %06x", df.Label, fl.offset)
 			}
@@ -152,6 +152,7 @@ func (fl *FileLayout) mapLayout(fs *Struct, ds *template.DataStructure, df *valu
 		if err != nil {
 			log.Warn().Err(err).Msgf("expandStructSlice failed")
 		}
+		return nil
 	}
 	if df.Range != "" {
 		rangeQ := df.Range
@@ -211,7 +212,7 @@ func (fl *FileLayout) expandStructSlice(ds *template.DataStructure, df *value.Da
 				if DEBUG_MAPPER {
 					log.Info().Msgf("reached ParseStop")
 				}
-				break
+				return err
 			}
 
 			if errors.Is(err, ErrParseContinue) {
@@ -810,9 +811,10 @@ func (fl *FileLayout) expandChildren(fs *Struct, dfParent *value.DataField, ds *
 			if es.Pattern.Known {
 
 				if !bytes.Equal(es.Pattern.Pattern, val) {
-					log.Debug().Msgf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'", fl.offset, es.Field.Label, es.Pattern.Pattern, val)
-					return fmt.Errorf("[%08x] pattern '%s' does not match. expected '% 02x', got '% 02x'",
-						fl.offset, es.Field.Label, es.Pattern.Pattern, val)
+					return fmt.Errorf("[%08x] pattern '%s' does not match. expected '% 02x' (%s), got '% 02x' (%s)",
+						fl.offset, es.Field.Label,
+						es.Pattern.Pattern, es.Pattern.Pattern,
+						val, val)
 				}
 			}
 
@@ -979,10 +981,10 @@ func (fl *FileLayout) expandChildren(fs *Struct, dfParent *value.DataField, ds *
 
 						if es.Field.Slice {
 							err = fl.expandStructSlice(ds, &es.Field, subEs)
-							if err != nil {
+							if err != nil && !errors.Is(err, ErrParseStop) {
 								log.Warn().Err(err).Msgf("expandStructSlice failed")
 							}
-							continue
+							break
 						}
 
 						es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
@@ -1015,7 +1017,6 @@ func (fl *FileLayout) expandChildren(fs *Struct, dfParent *value.DataField, ds *
 									//}
 									break
 								}
-
 							}
 						} else {
 

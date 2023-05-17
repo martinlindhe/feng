@@ -1,0 +1,76 @@
+# STATUS: 25%
+
+# Format is similar to nds.yml
+
+# TODO MAX: handle archive with multiple files (sample 3-files.btlMap0.narc)
+# TODO map & extract data
+
+# TODO: handle endianness, need sample
+
+references:
+  - https://llref.emutalk.net/docs/?file=xml/narc.xml#xml-doc
+
+kind: system
+name:  Nitro Archive (Nintendo DS)
+extensions: [.narc]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'NARC'
+
+structs:
+  header:
+    ascii[4] Signature: c'NARC' # NARC = Nitro Archive
+    u16 Endian: ?? # fffe = little endian ??? XXX
+    u16 u1: ?? # 01 00
+    u32 Filesize: ??
+    u16 HeaderSize: ??
+    u16 SectionCount: ??
+
+  fatb:
+    ascii[4] Signature: c'BTAF' # FATB = File Allocation Table Block
+    u32 SectionSize: ??
+    u32 FileCount: ??
+
+    offset_pair[self.FileCount] Offsets: ??
+
+  offset_pair: # XXX make "offset" a reserved word !
+    u32 StartOffset: ??
+    u32 EndOffset: ??
+
+  fnt_root:
+    ascii[4] Signature: c'BTNF' # FNTB = File Name Table Block
+    u32 SectionSize: ??
+
+  fnt:
+    if OFFSET >= offset("FNTRoot.Signature") + FNTRoot.SectionSize:
+      parse: stop
+    u32 Offset: ??
+    u16 FirstFileID: ?? # XXX first_pos
+    u16 ParentFolderID: ?? # XXX parent
+
+    subtable[] Subtable: ??
+    u8[alignment(OFFSET, 4)] Padding: ?? # XXX XXX get skipped?
+
+  subtable:
+    u8 Flags:
+      bit b0111_1111: LENGTH
+      bit b1000_0000: DIRECTORY
+    if self.Flags == 0:
+      parse: stop
+    ascii[self.Flags & LENGTH] Name: ??
+    if self.Flags & DIRECTORY:
+      u16 FolderID: ??
+
+  fimg:
+    ascii[4] Signature: c'GMIF' # FIMG = File Image
+    u32 SectionSize: ??
+    raw:u8[self.SectionSize - 8] Data: ??
+
+layout:
+  - header Header
+  - fatb FileAllocationTableBlock
+  - fnt_root FNTRoot
+  - fnt[] FNT
+  - fimg FileImages

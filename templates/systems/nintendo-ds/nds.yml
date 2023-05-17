@@ -1,6 +1,6 @@
 # STATUS: 30%
 
-# TODO MAX: map filenames (subtable mapping issues: they are not proper parent & children). NEED function to fetch value by name from parent struct.
+# TODO MAX: map filenames (subtable mapping issues: they are not proper parent & child). NEED function to fetch value by name from parent struct.
 
 # TODO: calculate checksums
 # TODO: support DSi header format (need sample)
