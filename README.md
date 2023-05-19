@@ -10,7 +10,7 @@ and a commandline app working with the format.
 
 # Template example
 
-Binary formats are specified in a template file, see [TEMPLATE.md](TEMPLATE.md) for the format documentation.
+Binary formats are specified in a template file. See [TEMPLATE.md](TEMPLATE.md) for the template format documentation.
 
 Here's the OpenType Font table parsing:
 

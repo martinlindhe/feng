@@ -11,7 +11,7 @@ software:
 
 kind: archive
 name: InstallShield Z archive
-extensions: [.z]
+extensions: [.z, .lib]
 endian: little
 
 magic:

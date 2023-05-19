@@ -243,7 +243,7 @@ func (t *Template) evaluateStructs() ([]EvaluatedStruct, error) {
 }
 
 var (
-	reservedNames = []string{"offset"}
+	reservedNames = []string{"offset", "file_size"}
 )
 
 // parses a "struct" child with all their child nodes
@@ -253,7 +253,7 @@ func parseStruct(c *yaml.MapItem) (EvaluatedStruct, error) {
 	es := EvaluatedStruct{Name: key}
 
 	for _, r := range reservedNames {
-		if key == r {
+		if strings.ToLower(key) == r {
 			return es, fmt.Errorf("reserved word %s in struct name", key)
 		}
 	}
