@@ -1,0 +1,103 @@
+# STATUS: 60%, extraction: ok (for simple archives)
+
+# InstallShield V3 archive
+
+references:
+  - http://fileformats.archiveteam.org/wiki/InstallShield_Z
+
+software:
+  - https://github.com/wfr/unshieldv3/
+  - https://github.com/OmniBlade/isextract/
+
+kind: archive
+name: InstallShield Z archive
+extensions: [.z]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 13 5d 65 8c 3a 01 02 00
+
+structs:
+  header:
+    u8[4] Signature: 13 5d 65 8c
+    u8 HeaderSize: 3a
+    u8 u1: ?? # 1
+    u8 u2: ?? # 2
+    u16 Reserved: ?? # 0
+    u8 has_password: ??
+    u16 flags: ??      # Flags : 0x1 : split file
+                       #         0x2 : split file contiguously (a file is not split across archive parts)
+
+    u16 FileCount: ??
+
+    u32 FileDate: ??     # XXX decode, see https://github.com/lephilousophe/idecomp/blob/master/idecomp.py#L60
+    u32 Filesize: ?? # XXX original_archive_size
+
+    u32 total_original_size: ??
+    u32 taken: ?? # XXX size of metadata and incomplete file part
+
+    u8 TotalParts: ??
+    u8 PartID: ??
+    u8 Checksum: ?? # XXX total_compacted_size % 253
+
+    u32 end_integral_data: ??
+    u32 start_integral_data: ??
+
+    u32 DirectoryListOffset: ??
+    u32 DirectoryListSize: ??
+
+    u16 DirectoryCount: ??
+
+    u32 FileListOffset: ??
+    u32 FileListSize: ??
+    u32 password: ??
+
+  dir:
+    u16 v1: ??
+    u16 v2: ??
+    u16 NameLen: ??
+    ascii[self.NameLen + 1] Name: ??
+    u32 v3: ??
+
+  file:
+    u8 end_part_id: ??
+    u16 dir_id: ??
+
+    u32 UncompressedSize: ??
+    u32 CompressedSize: ??
+    u32 Offset: ??
+    u32 FileDate: ??
+    u32 Attributes: ??
+
+    u16 entry_size: ??
+
+    u16 Flags: ??
+    # Flags: 0x100 = span on multiple files
+    #        0x 40 = has version (not always set because filtered in icomp)
+    #        0x 20 = invalid (used internally by icomp when removing files and shouldn't be observed in files)
+    #        0x 10 = stored, not compressed
+
+    u8 Reserved: ??
+    u8 start_part_id: ??
+    u8 NameLen: ??
+    ascii[self.NameLen] Name: ??
+    filename: self.Name
+
+    u32 versionMS: ??
+    u32 name_size: ??
+    u32 name: ??
+    u8 versionLS: ??
+
+    offset: self.Offset
+    compressed:pkware[self.CompressedSize] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+
+  - offset Header.DirectoryListOffset
+  - dir[Header.DirectoryCount] Directory
+
+  - offset Header.FileListOffset
+  - file[Header.FileCount] File

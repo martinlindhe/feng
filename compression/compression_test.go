@@ -83,6 +83,12 @@ func TestExtractors(t *testing.T) {
 			raw:        []byte{},
 			compressed: []byte{0x11, 0x0, 0x0},
 		},
+
+		{
+			comp:       "pkware",
+			raw:        []byte{'h', 'e', 'l', 'l', 'o'},
+			compressed: []byte{0x00, 0x04, 0xd0, 0x94, 0x61, 0xc3, 0xe6, 0x2d, 0xe0, 0x1f},
+		},
 	}
 
 	for idx, tt := range tests {

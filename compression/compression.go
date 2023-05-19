@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/JoshVarga/blast"
 	lzss "github.com/fbonhomm/LZSS/source"
 	"github.com/pierrec/lz4/v4"
 	"github.com/rasky/go-lzo"
@@ -48,6 +49,8 @@ func ExtractorFactory(name string) (Extractor, error) {
 		return Lzf{}, nil
 	case "lzss":
 		return Lzss{}, nil
+	case "pkware":
+		return Pkware{}, nil
 	}
 	panic(fmt.Sprintf("unknown extractor '%s'", name))
 }
@@ -256,5 +259,31 @@ func (o Lzss) Extract(f afero.File) ([]byte, error) {
 func (o Lzss) Compress(in []byte, w io.Writer) error {
 	lzssMode := lzss.LZSS{Mode: 1, PositionMode: 0}
 	_, err := w.Write(lzssMode.Compress(in))
+	return err
+}
+
+// PKWARE DCL compressed data (aka blast/explode/implode)
+type Pkware struct{}
+
+func (o Pkware) Extract(f afero.File) ([]byte, error) {
+	out := new(bytes.Buffer)
+	r, err := blast.NewReader(f)
+	if err != nil {
+		return nil, err
+	}
+	_, err = io.Copy(out, r)
+	r.Close()
+	return out.Bytes(), err
+}
+
+func (o Pkware) Compress(in []byte, w io.Writer) error {
+	var b bytes.Buffer
+	z := blast.NewWriter(&b, blast.Binary, blast.DictionarySize1024)
+	_, err := z.Write(in)
+	z.Close()
+	if err != nil {
+		return err
+	}
+	_, err = w.Write(b.Bytes())
 	return err
 }

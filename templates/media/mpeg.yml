@@ -12,7 +12,7 @@ software:
 
 kind: video
 name: MPEG sequence ("EVOB")
-extensions: [.vob, .evo, .mpg, .mpeg, .sfd, .m2v, .pss]
+extensions: [.vob, .evo, .mpg, .mpeg, .sfd, .m2v, .pss, .smg]
 mime: video/mpeg
 endian: big # XXX
 

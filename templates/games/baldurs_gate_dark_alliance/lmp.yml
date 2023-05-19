@@ -1,0 +1,31 @@
+# STATUS: 70%, extraction: ok
+
+# Used in:
+# - Baldur's Gate: Dark Alliance (PS2)
+
+kind: game
+name: "Baldur's Gate: Dark Alliance lmp file"
+extensions: [.lmp]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 EntryCount: ??
+
+  file:
+    ascii[0x38] Name: ??
+    filename: self.Name
+    u32 Offset: ??
+    u32 Size: ??
+
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    u8[alignment(OFFSET, 128)] Padding: ?? # XXX len
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.EntryCount] File
+

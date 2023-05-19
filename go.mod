@@ -19,6 +19,7 @@ require (
 )
 
 require (
+	github.com/JoshVarga/blast v0.0.0-20210808061142-eadad17358e8 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

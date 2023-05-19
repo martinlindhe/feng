@@ -219,7 +219,7 @@ func (fl *FileLayout) GetFieldValue(field *Field) interface{} {
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 		"compressed:lzf", "compressed:zlib", "compressed:zlib_loose", "compressed:gzip",
-		"compressed:lzma", "compressed:lzma2",
+		"compressed:lzma", "compressed:lzma2", "compressed:pkware",
 		"raw:u8", "encrypted:u8":
 		return ""
 	}
@@ -379,7 +379,7 @@ func (fl *FileLayout) PresentFieldValue(field *Field, b []byte) string {
 	switch field.Format.Kind {
 	case "compressed:deflate", "compressed:lzo1x", "compressed:lzss", "compressed:lz4",
 		"compressed:lzf", "compressed:zlib", "compressed:zlib_loose", "compressed:gzip",
-		"compressed:lzma", "compressed:lzma2",
+		"compressed:lzma", "compressed:lzma2", "compressed:pkware",
 		"raw:u8", "encrypted:u8":
 		return ""
 	}

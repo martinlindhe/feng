@@ -22,7 +22,7 @@ magic:
 structs:
   header:
     ascii[4] Signature: c'NARC' # NARC = Nitro Archive
-    u16 Endian: ?? # fffe = little endian ??? XXX
+    u16 Endian: ?? # fffe = little endian
     u16 u1: ?? # 01 00
     u32 Filesize: ??
     u16 HeaderSize: ??

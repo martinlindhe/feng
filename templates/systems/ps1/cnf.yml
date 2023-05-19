@@ -8,16 +8,10 @@ endian: little
 
 # TODO PARSE rest:
 
-# --PS1--
 # BOOT=xxx;1
 # TCB=4
 # EVENT=10
 # STACK=801fff00
-
-# --PS2--
-# BOOT2=xxx;1
-# VER = 1.02
-# VMODE = PAL
 
 filenames: [system.cnf]
 
@@ -25,9 +19,12 @@ magic:
   - offset: 0000
     match: c'BOOT='
 
+  - offset: 0000
+    match: c'BOOT ='
+
 structs:
   header:
-    ascii[5] Signature: c'BOOT='
+    ascii[4] Signature: c'BOOT'
     asciinl BootFile: ??
 
 layout:

@@ -1,0 +1,34 @@
+# STATUS: 25%
+
+# Used in:
+# - The Adventures of Lomax (1996, PS1)
+
+kind: game
+name: The Adventures of Lomax world file
+endian: big
+
+extensions: [.wld]
+
+magic:
+  - offset: 0000
+    match: c'WRLD'
+
+structs:
+  chunk:
+    # types:
+    # c'WRLD' World chunk
+    # c'NMY ' XXX
+    # c'PARA' XXX
+    # c'HEAD' XXX
+    # c'TTAB' XXX
+    # c'MAP ' XXX
+    # c'CELL' XXX
+    # c'GNMY' XXX
+    # c'ANIM' XXX
+    # c'END ' Last chunk
+    ascii[4] Signature: ??
+    u32 Size: ?? # 4
+    u8[self.Size] Data: ?? # XXX
+
+layout:
+  - chunk[] Chunk

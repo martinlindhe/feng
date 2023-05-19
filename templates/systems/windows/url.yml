@@ -1,0 +1,18 @@
+# STATUS: 1%
+
+kind: system
+name: Windows URL file
+endian: little
+
+extensions: [".url"]
+
+magic:
+  - offset: 0000
+    match: c'[InternetShortcut]'
+
+structs:
+  header:
+    ascii[18] Signature: c'[InternetShortcut]'
+
+layout:
+  - header Header

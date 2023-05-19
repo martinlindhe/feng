@@ -320,6 +320,7 @@ func SingleUnitSize(kind string) int64 {
 		"compressed:lzma",
 		"compressed:lzma2",
 		"compressed:deflate",
+		"compressed:pkware",
 		"raw:u8", "encrypted:u8":
 		return 1
 	case "u16", "i16",

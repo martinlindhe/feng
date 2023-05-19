@@ -14,11 +14,15 @@ filenames: [system.cnf]
 
 magic:
   - offset: 0000
-    match: c'BOOT2'
+    match: c'BOOT2='
+
+  - offset: 0000
+    match: c'BOOT2 ='
+
 
 structs:
   header:
-    ascii[8] Signature: c'BOOT2 = '
+    ascii[5] Signature: c'BOOT2'
     asciinl BootFile: ??
 
 layout:

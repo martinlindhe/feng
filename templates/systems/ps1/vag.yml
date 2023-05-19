@@ -1,14 +1,14 @@
 # STATUS: 1%
 #
-# Audio format used in PS2/PS3
+# Audio format used in PS1/PS2/PS3
 #
 # Used in (confirmed):
+# - The Adventures of Lomax (1996, PS1): ambient/*.vag, jinglkes/*.vag
 # - Alone in the Dark: The New Nightmare (2001, PS2): nob/*.nob
 #-  Legends of Wrestling II (2002, PS2) `sounds.adb` files
 # - Futurama (2003, PS2): inside futurama.img: *.vag
 # - God of War III (2010, PS3): inside PS3_GAME/USRDIR/STREAMS.PSARC
 # - Tony Hawk's Pro Skater 4 (PS2): inside skate4.wad in Sounds/vag
-
 
 references:
   - https://www.psdevwiki.com/ps3/Multimedia_Formats_and_Tools#VAG
@@ -18,7 +18,7 @@ software:
   - ffmpeg
 
 kind: archive
-name: Sony PlayStation 2 & 3 Audio File
+name: Sony PlayStation Audio File
 #extensions: [.vag, .nob, .adb, .bin]
 endian: big
 

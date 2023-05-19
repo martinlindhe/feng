@@ -201,6 +201,7 @@ data tagging (for extraction feature)
     compressed:lzf[self.Size]       mark area as LZF compressed data
     compressed:lzma[self.Size]      mark area as Lzma compressed data
     compressed:lzma2[self.Size]     mark area as Lzma2 compressed data
+    compressed:pkware[self.Size]    mark area as PKWARE DCL compressed data (aka blast/explode/implode)
 
     filename: self.Filename         set the filename to use while extracting for the next data area
 

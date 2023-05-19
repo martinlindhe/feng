@@ -1,0 +1,55 @@
+# STATUS: 50%
+
+# Used in:
+# - Aqua Teen Hunger Force: Zombie Ninja Pro-Am (PS2)
+
+# TODO: decode the msrc_entry
+
+kind: game
+name: "Aqua Teen Hunger Force: Zombie Ninja Pro-Am localization"
+extensions: [.tbl]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'HSRC'
+
+structs:
+  header:
+    ascii[4] Signature: c'HSRC'
+    u32 v1: ?? # section size
+    u16 v2: ?? # 1
+    u16 v3: ?? # 3
+
+    ascii[4] Tag: c'CSRC'
+    u32 v4: ?? # section size
+    u32 v5: ?? # 0
+    u32 v6: ?? # 0
+
+    ascii[4] Tag: c'LSRC'
+    u32 v7: ?? # section size
+    u32 v8: ?? # 0
+
+    ascii[4] Tag: c'DSRC'
+    u24 TextLen: ??
+    utf16[self.TextLen] Text: ??
+    u8[alignment(OFFSET, 4)] Padding: ??
+
+    ascii[4] Tag: c'MSRC'
+    u32 v9: ?? # section size
+    u32 EntryCount: ??
+    u32 vA: ?? # 0c
+    msrc_entry[self.EntryCount] Entry: ??
+    #u8[alignment(OFFSET, 16)] Padding: ??
+
+  msrc_entry:
+    u32 u1: ?? # index
+    u32 u2: ?? # 0, XXX maybe flags?
+    u32 u3: ?? # XXX offset ?
+
+    #offset: offset("Header.Text") + self.u3 - 1
+    #utf16z Xx: ??
+    #offset: restore
+
+layout:
+  - header Header

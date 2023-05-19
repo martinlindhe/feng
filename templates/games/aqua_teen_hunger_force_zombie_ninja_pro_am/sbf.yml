@@ -1,0 +1,35 @@
+# STATUS: 1%
+
+# Used in:
+# - Aqua Teen Hunger Force: Zombie Ninja Pro-Am (PS2)
+
+# TODO: some files have .sbf extension but different structure
+
+kind: game
+name: "Aqua Teen Hunger Force: Zombie Ninja Pro-Am sbf file"
+extensions: [.sbf]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 10 00 05 30
+
+structs:
+  header:
+    u8[4] Signature: 10 00 05 30
+    u32 v1: ?? # 18 cf          XXX some count, has to do with the size up until the file listings start
+    u16 v2: ?? # 8
+    u16 v3: ?? # 4
+
+    u32 v5: ?? # 30 01 00 17
+    u32 v6: ?? # 4
+    u32 v7: ?? # 0
+
+    u32 v8: ?? # a0 01 00 16
+    u32 v9: ?? # 00 00 00 84    XXX some count
+
+    u32 vA: ?? # 00 00 01 86    XXX some count
+    u32 vB: ?? # 00 00 19 60    XXX some count
+
+layout:
+  - header Header
