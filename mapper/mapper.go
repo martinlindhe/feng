@@ -382,13 +382,11 @@ func (cfg *MapperConfig) mapFileToReader(ds *template.DataStructure, endian stri
 	return fl, err
 }
 
-// maps input file to a matching template
-func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
+func walkDirMapToTemplate(cfg *MapperConfig, fsys fs.FS, rootFolder string) (*FileLayout, error) {
 
-	started := time.Now()
-	processed := 0
+	var fl *FileLayout
 
-	err = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
+	err := fs.WalkDir(fsys, rootFolder, func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
 		if err != nil {
 			panic(err)
@@ -405,7 +403,6 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 		if err != nil {
 			return err
 		}
-		processed++
 
 		matched, endian := cfg.MatchesMagic(ds)
 		if !matched {
@@ -416,12 +413,23 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 		parseStart := time.Now()
 		fl, err = cfg.mapFileToReader(ds, endian)
 
-		fl.totalEvaluationTimeUntilMatch = time.Since(started)
 		fl.evaluationTime = time.Since(parseStart)
 
 		return err
 	})
+
+	return fl, err
+}
+
+// maps input file to a matching template
+func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
+
+	started := time.Now()
+
+	fl, err = walkDirMapToTemplate(cfg, feng.Templates, ".")
+
 	if errors.Is(err, errMapFileMatched) {
+		fl.totalEvaluationTimeUntilMatch = time.Since(started)
 		return fl, nil
 	}
 	if err != nil {
