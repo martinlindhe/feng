@@ -69,3 +69,7 @@ cmd/feng: Lists data fields of input file.
 cmd/renamer: Renames all files in input folder to use the correct file extensions.
 ```
 
+
+## User templates
+
+feng reads additional templates from `~/.config/feng`, or specified with the --template argument.

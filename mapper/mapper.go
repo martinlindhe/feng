@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"math"
 	"os"
+	"os/user"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -344,8 +345,8 @@ func (cfg *MapperConfig) MatchesMagic(ds *template.DataStructure) (bool, string)
 	return false, ""
 }
 
-func mapTemplateIntoDataStructure(templateFilename string) (*template.DataStructure, error) {
-	rawTemplate, err := fs.ReadFile(feng.Templates, templateFilename)
+func mapTemplateIntoDataStructure(fsys fs.FS, templateFilename string) (*template.DataStructure, error) {
+	rawTemplate, err := fs.ReadFile(fsys, templateFilename)
 	if err != nil {
 		return nil, err
 	}
@@ -382,11 +383,14 @@ func (cfg *MapperConfig) mapFileToReader(ds *template.DataStructure, endian stri
 	return fl, err
 }
 
-func walkDirMapToTemplate(cfg *MapperConfig, fsys fs.FS, rootFolder string) (*FileLayout, error) {
+// cfg
+// fsys
+// rootDir path for real fs, empty for embed.FS
+func walkDirMapToTemplate(cfg *MapperConfig, fsys fs.FS, rootDir string) (*FileLayout, error) {
 
 	var fl *FileLayout
 
-	err := fs.WalkDir(fsys, rootFolder, func(tpl string, d fs.DirEntry, err error) error {
+	err := fs.WalkDir(fsys, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
 		if err != nil {
 			panic(err)
@@ -399,7 +403,7 @@ func walkDirMapToTemplate(cfg *MapperConfig, fsys fs.FS, rootFolder string) (*Fi
 			return nil
 		}
 
-		ds, err := mapTemplateIntoDataStructure(tpl)
+		ds, err := mapTemplateIntoDataStructure(fsys, tpl)
 		if err != nil {
 			return err
 		}
@@ -421,24 +425,49 @@ func walkDirMapToTemplate(cfg *MapperConfig, fsys fs.FS, rootFolder string) (*Fi
 	return fl, err
 }
 
+func getHomeDir() (string, error) {
+	usr, err := user.Current()
+	return usr.HomeDir, err
+}
+
 // maps input file to a matching template
 func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 
 	started := time.Now()
 
-	fl, err = walkDirMapToTemplate(cfg, feng.Templates, ".")
+	homeDir, err := getHomeDir()
+	if err != nil {
+		return nil, err
+	}
 
+	userConfigPath := filepath.Join(homeDir, ".config/feng")
+	userTemplates := os.DirFS(userConfigPath)
+
+	// eval user templates
+	fl, err = walkDirMapToTemplate(cfg, userTemplates, userConfigPath)
 	if errors.Is(err, errMapFileMatched) {
 		fl.totalEvaluationTimeUntilMatch = time.Since(started)
 		return fl, nil
 	}
-	if err != nil {
-		return fl, err
+
+	// eval our internal templates
+	fl, err = walkDirMapToTemplate(cfg, feng.Templates, "")
+	if errors.Is(err, errMapFileMatched) {
+		fl.totalEvaluationTimeUntilMatch = time.Since(started)
+		return fl, nil
 	}
 
 	if fl == nil {
 		// if no magic match, try to find a filename extension match on any template with no_magic = true
-		fl, err = mapFileToNoMagicMatchingExtension(cfg)
+
+		// user templates
+		fl, err = mapFileToNoMagicMatchingExtension(cfg, userTemplates)
+
+		if err != nil {
+			// our internal templates
+			fl, err = mapFileToNoMagicMatchingExtension(cfg, feng.Templates)
+		}
+
 		if err != nil {
 			// dump hex of first bytes for unknown files
 			_, _ = cfg.F.Seek(0, io.SeekStart)
@@ -456,9 +485,9 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 }
 
 // try to find a filename extension match on any template with no_magic = true
-func mapFileToNoMagicMatchingExtension(cfg *MapperConfig) (fl *FileLayout, err2 error) {
+func mapFileToNoMagicMatchingExtension(cfg *MapperConfig, fsys fs.FS) (fl *FileLayout, err2 error) {
 
-	err2 = fs.WalkDir(feng.Templates, ".", func(tpl string, d fs.DirEntry, err error) error {
+	err2 = fs.WalkDir(fsys, ".", func(tpl string, d fs.DirEntry, err error) error {
 		// cannot happen
 		if err != nil {
 			panic(err)
@@ -471,7 +500,7 @@ func mapFileToNoMagicMatchingExtension(cfg *MapperConfig) (fl *FileLayout, err2 
 			return nil
 		}
 
-		ds, err := mapTemplateIntoDataStructure(tpl)
+		ds, err := mapTemplateIntoDataStructure(fsys, tpl)
 		if err != nil {
 			return err
 		}

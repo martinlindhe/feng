@@ -81,7 +81,7 @@ func main() {
 
 		log.Info().Msgf("Parsed %s as %s\n\n", entry.In, fl.BaseName)
 
-		data := fl.Present(&mapper.PresentFileLayoutConfig{
+		fl.Present(&mapper.PresentFileLayoutConfig{
 			ShowRaw:           true,
 			ReportOverlapping: true,
 			InUTC:             true})
