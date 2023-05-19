@@ -1,0 +1,33 @@
+# STATUS: 20%
+
+# Container format QTFF (QuickTime File Format) by Apple
+
+references:
+  - https://developer.apple.com/standards/qtff-2001.pdf
+  - https://docs.fileformat.com/video/mov/
+
+software:
+  - ffmpeg
+  - vlc
+
+kind: video
+name: Apple Quicktime Movie
+extensions: [.mov]
+mime: video/quicktime
+endian: big
+
+magic:
+  - offset: 0004
+    match: c'moov'
+
+  - offset: 0004
+    match: c'mdat'
+
+structs:
+  chunk:
+    u32 Size: ??
+    ascii[4] Signature: ??
+    u8[self.Size] Data: ?? # XXX
+
+layout:
+  - chunk[] Chunk

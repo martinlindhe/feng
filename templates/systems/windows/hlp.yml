@@ -25,7 +25,6 @@ structs:
     u32 EntireFileSize: ??
 
   file_header:
-    offset: Header.DirectoryStart
     u32 ReservedSpace: ??
     u32 UsedSpace: ??
     u8 FileFlags: ??
@@ -77,6 +76,8 @@ structs:
 
 layout:
   - header Header
+
+  - offset Header.DirectoryStart
   - file_header FileHeader
   - btree_header BTreeHeader
   - btree_index_header[BTreeHeader.Levels] BTreeIndexHeader
