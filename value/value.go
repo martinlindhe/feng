@@ -210,9 +210,16 @@ func ParseDataField(in string) (DataField, error) {
 
 	space := strings.Index(in, " ")
 	if space == -1 {
-		// single token like "endian"
-		df.Kind = in
-	} else if p1 >= 0 {
+		if in == "label" || in == "parse" || in == "endian" || in == "else" || in == "data" || in == "filename" || in == "offset" || in == "until" {
+			// single token like "endian"
+			df.Kind = in
+			return df, nil
+		}
+
+		return df, fmt.Errorf("token label missing in '%s", in)
+	}
+
+	if p1 >= 0 {
 		// ranged format: kind[range] label
 		df.Kind, df.Endian = parseKindEndianPair(in[0:p1])
 		df.Range = strings.TrimSpace(in[p1+1 : p2])

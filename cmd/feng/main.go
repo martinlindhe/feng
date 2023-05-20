@@ -87,7 +87,7 @@ func main() {
 	if err != nil {
 		if args.Brief {
 			size := mapper.FileSize(f)
-			feng.Printf("%s: %s (%d bytes)\n", err, args.Filename, size)
+			feng.Printf("%s: %s (%s)\n", err, args.Filename, mapper.ByteCountSI(size))
 			return
 		}
 		log.Fatal().Err(err).Msgf("Failed to map %s.", args.Filename)
@@ -115,7 +115,7 @@ func main() {
 			fl.PresentStructureTree(fl.Structs)
 		} else if args.Brief {
 			size := mapper.FileSize(f)
-			feng.Printf("%s: %s (%d bytes)\n", args.Filename, fl.BaseName, size)
+			feng.Printf("%s: %s (%s)\n", args.Filename, fl.BaseName, mapper.ByteCountSI(size))
 		} else {
 			fl.Present(&mapper.PresentFileLayoutConfig{
 				ShowRaw:           args.Raw,

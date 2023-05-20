@@ -1,6 +1,7 @@
 package value
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -60,19 +61,23 @@ func TestReplaceNextBitTag(t *testing.T) {
 func TestParseDataField(t *testing.T) {
 
 	test := []struct {
-		field    string
-		expected DataField
+		field       string
+		expected    *DataField
+		expectedErr error
 	}{
-		{"u16 Width", DataField{Kind: "u16", Range: "", Label: "Width"}},
-		{"u8[5] Label", DataField{Kind: "u8", Range: "5", Label: "Label"}},
-		{"endian big", DataField{Kind: "endian", Range: "", Label: "big"}},
-		{"offset self.offset+4", DataField{Kind: "offset", Range: "", Label: "self.offset+4"}},
-		{"Seg[self.offset+4] My label", DataField{Kind: "Seg", Range: "self.offset+4", Label: "My label"}},
+		{"u16 Width", &DataField{Kind: "u16", Range: "", Label: "Width"}, nil},
+		{"u8[5] Label", &DataField{Kind: "u8", Range: "5", Label: "Label"}, nil},
+		{"endian big", &DataField{Kind: "endian", Range: "", Label: "big"}, nil},
+		{"offset self.offset+4", &DataField{Kind: "offset", Range: "", Label: "self.offset+4"}, nil},
+		{"Seg[self.offset+4] My label", &DataField{Kind: "Seg", Range: "self.offset+4", Label: "My label"}, nil},
+
+		// should fail
+		{"Seg[self.offset]", &DataField{}, fmt.Errorf("token label missing")},
 	}
 	for _, h := range test {
 		field, err := ParseDataField(h.field)
-		assert.Equal(t, nil, err)
-		assert.Equal(t, field, h.expected)
+		assert.Equal(t, h.expectedErr, err)
+		assert.Equal(t, field, *h.expected)
 	}
 }
 

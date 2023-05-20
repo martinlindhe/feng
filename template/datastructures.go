@@ -63,14 +63,17 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 	}
 	constants, err := template.evaluateConstants()
 	if err != nil {
+		log.Warn().Err(err).Msgf("%s: evaluateConstants failed", basename)
 		return nil, err
 	}
 	structs, err := template.evaluateStructs()
 	if err != nil {
+		log.Warn().Err(err).Msgf("%s: evaluateStructs failed", basename)
 		return nil, err
 	}
 	layout, err := template.evaluateLayout()
 	if err != nil {
+		log.Warn().Err(err).Msgf("%s: evaluateLayout failed", basename)
 		return nil, err
 	}
 

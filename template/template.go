@@ -261,7 +261,7 @@ func parseStruct(c *yaml.MapItem) (EvaluatedStruct, error) {
 	for _, v := range c.Value.([]yaml.MapItem) {
 		field, err := value.ParseDataField(v.Key.(string))
 		if err != nil {
-			log.Printf("TEMPLATE ERROR: cant parse field '%s': %v", v.Key.(string), err)
+			//log.Warn().Err(err).Msgf("TEMPLATE ERROR: cant parse field '%s'", v.Key.(string))
 			return es, err
 		}
 

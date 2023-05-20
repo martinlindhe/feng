@@ -766,7 +766,6 @@ func (fl *FileLayout) reportOverlappingData() {
 func (fl *FileLayout) reportUnmappedData() {
 	unmappedRanges := []dataRange{}
 	r := dataRange{offset: -1}
-	log.Info().Msgf("reportUnmappedData start")
 	for i := int64(0); i < int64(fl.size); i++ {
 		if !fl.isMappedByte(i) {
 			if r.offset == -1 {
@@ -783,7 +782,6 @@ func (fl *FileLayout) reportUnmappedData() {
 	if r.offset != -1 {
 		unmappedRanges = append(unmappedRanges, r)
 	}
-	log.Info().Msgf("reportUnmappedData unmappedRanges len %d", len(unmappedRanges))
 
 	maxBytesShown := int64(32)
 	for _, ur := range unmappedRanges {

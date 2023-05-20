@@ -476,8 +476,7 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 			buf = buf[:n]
 
 			s, _ := value.AsciiPrintableString(buf, len(buf))
-			size := FileSize(cfg.F)
-			return nil, fmt.Errorf("no match '%s' %s (%s)", hex.EncodeToString(buf[:n]), s, ByteCountSI(size))
+			return nil, fmt.Errorf("no match '%s' %s", hex.EncodeToString(buf[:n]), s)
 		}
 	}
 
