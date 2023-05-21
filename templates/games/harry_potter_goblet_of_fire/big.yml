@@ -1,7 +1,9 @@
 # STATUS: 70%
 
 # Used in:
-# Harry Potter and the Goblet of Fire (PS2)
+# - Harry Potter and the Goblet of Fire (2005, EA UK) PS2
+
+# TODO: this format has same magic as another format used in Colin McRae Rally 04, need better magic to distinguish.
 
 kind: archive
 name: Harry Potter and the Goblet of Fire archive

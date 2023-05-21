@@ -1,15 +1,16 @@
 # STATUS: 50%
 
-# format used on dreamcast 
-
 # MID : interpret ascii[4] CRC as a value for crc calculation comparison
+
+# TODO matching: use filenames regex match instead
 
 references:
   - https://dreamcast.wiki/IP.BIN
 
 kind: system
-name:  Dreamcast IP.BIN (disc bootsector)
+name: Dreamcast IP.BIN (disc bootsector)
 extensions: [.bin]
+#filenames: [ip.bin] # IP0000.BIN xxx
 endian: little
 
 magic:

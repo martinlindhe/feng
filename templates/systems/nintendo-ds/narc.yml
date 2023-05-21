@@ -11,7 +11,7 @@ references:
   - https://llref.emutalk.net/docs/?file=xml/narc.xml#xml-doc
 
 kind: system
-name:  Nitro Archive (Nintendo DS)
+name: Nitro Archive (Nintendo DS)
 extensions: [.narc]
 endian: little
 

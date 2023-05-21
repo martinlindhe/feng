@@ -5,7 +5,7 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/DOL.bt
 
 kind: system
-name:  Nintendo Gamecube Executable
+name: Nintendo Gamecube Executable
 extensions: [.dol]
 endian: big
 

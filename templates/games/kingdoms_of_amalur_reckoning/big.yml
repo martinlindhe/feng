@@ -1,0 +1,86 @@
+# STATUS: 25%
+
+# In-house format by Big Huge Games
+
+# Used in:
+# Kingdoms of Amalur: Reckoning (2012) PS3/XBox360
+
+# TODO map filenames to data
+
+references:
+  - https://forum.xentax.com/viewtopic.php?t=8095 # by chrrox
+  - https://aluigi.altervista.org/bms/kingdoms_alamur_reckoning.bms   # XXX for pc version?
+
+kind: archive
+name: "Kingdoms of Amalur: Reckoning archive"
+endian: big
+extensions: [.big]
+
+magic:
+  - offset: 0000
+    match: c2 c8 c7 80
+
+structs:
+  header:
+    u8[4] Signature: c2 c8 c7 80
+    u32 MaybeVersion: ??
+    u32 u2: ?? # 01 00 00 00
+    u8 SoftwareLen: ??
+    ascii[self.SoftwareLen] Software: ?? # BHG6109 : 38CORP : bhg.builder
+
+    u32 start: ?? # 2
+
+    # XXX maybe list of area sizes, or start offsets ?
+    u32 FileCount: ?? # xxx
+    u32 size: ?? # XXX some value
+    u32 zsize: ?? # XXX same as u5
+
+    u32 FilenameTableOffset: ??
+    u32 u1: ?? # XXX -1
+    u32 u2: ?? # XXX
+
+    u8[0x28] unknown: ??  # XXX map more header fields ...
+
+  name_hdr:
+    u32 v1: ?? # XXX
+    u32 v2: ?? # XXX
+    u16 v3: ?? # XXX
+    u8 v4: ?? # 0
+
+  name:
+    u32 NameSize: ??
+    u8 x1: ?? # 2e
+    ascii[self.NameSize - 1] Name: ??
+
+  file:
+    u32 CompressedSize: ??
+    u32 UncompressedSize: ??
+    u32 Offset: ??
+    u32 u1: ??
+    u32 u2: ??
+
+    offset: self.Offset
+    u32 tsize: ??
+    u32 null: ??
+    u32 size: ??
+    u32 zsize: ??
+
+    raw:u8[self.CompressedSize] Data: ??
+    offset: restore
+
+    #if self.CompressedSize == self.UncompressedSize:
+
+    #else:
+    #  compressed:deflate[self.CompressedSize] Data: ??
+
+
+layout:
+  - header Header
+
+  - file[Header.FileCount - 3] File
+
+  - offset Header.FilenameTableOffset
+  - name_hdr FilenameTableHeader
+  - name[Header.FileCount] Filename
+
+  # XXX one more table exists at end of file

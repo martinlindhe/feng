@@ -9,7 +9,7 @@ software:
   - ffmpeg
 
 kind: video
-name:  Nintendo Gamecube/Wii THP video
+name: Nintendo Gamecube/Wii THP video
 extensions: [.thp]
 endian: big # XXX
 

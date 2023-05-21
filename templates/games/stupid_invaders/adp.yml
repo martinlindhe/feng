@@ -1,0 +1,31 @@
+# STATUS: 95%
+
+# Used in:
+# - Stupid Invaders (2000) Win
+
+references:
+  - https://wiki.multimedia.cx/index.php/Xilam_DERF#Audio_format
+
+software:
+  - ffmpeg
+
+kind: audio
+name: Xilam DERF audio
+extensions: [.adp]
+
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'DERF'
+
+structs:
+  header:
+    ascii[4] Signature: c'DERF'
+    u32 Channels: ??
+    u32 DataSize: ?? # FILE_SIZE - 12
+
+    u8[self.DataSize] Data: ??
+
+layout:
+  - header Header

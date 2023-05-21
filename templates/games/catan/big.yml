@@ -1,0 +1,59 @@
+# STATUS: 70%, extract: ok
+
+# In-house format by Big Huge Games
+
+# Used in:
+# Catan (2007) XBox360 Live
+
+kind: archive
+name: Catan archive
+endian: big # XXX
+extensions: [.big]
+
+magic:
+  - offset: 0000
+    match: 00 00 00 0b 01 00 00 00 # XXX unsure. all samples has it
+
+structs:
+  header:
+    u8[4] Signature: 00 00 00 0b
+    u32 u1: ?? # 01 00 00 00
+
+    u8 NameLen: ??
+    utf16[self.NameLen * 2] Name: ??
+
+    u32 u2: ?? # 0
+    u32 FileCount: ??
+
+    u32 u4: ?? # XXX same as FileCount
+    u32 u5: ?? # ff ff 00 00
+    u16 u6: ?? # 0
+
+  file:
+    u8 FilenameLen: ??
+    u16 u8: ??  # 2e
+    utf16[self.FilenameLen * 2] Filename: ??
+    filename: self.Filename
+    u16 u9: ?? # 0
+    u32 uA: ?? # 0
+    u32 Offset: ?? # 00 00 01 04
+    u32 UncompressedSize: ?? # 00 00 09 40
+    u32 uBb: ?? # 0
+    u32 uD: ?? # 45 c2 44 65
+    u16 uE: ?? # 00 00
+
+    u8 uF: ?? # 0
+    u8 TagLen: ??
+    utf16[self.TagLen * 2] Tag: ??  # "bxml", "string_lookup"
+
+    u32 uG: ?? # 0
+    u8 uF: ??
+
+    offset: self.Offset
+    u32 CompressedSize: ??
+    compressed:zlib[self.CompressedSize - 4] Data: ?? # XXX
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

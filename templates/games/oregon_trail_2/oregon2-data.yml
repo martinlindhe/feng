@@ -1,0 +1,52 @@
+# STATUS: 60%, extract: ok-ish
+
+# Used in:
+# Oregon Trail II (1995) Win/Mac
+
+# TODO: might be a format from InstallShield v3 installer ?
+
+# TODO: are some files compressed?
+
+kind: archive
+name: Oregon Trail 2 archive
+endian: big
+#filenames: [oregonii.dat, oregonii.eng, oregonii.fst]
+
+magic:
+  - offset: 0000
+    match: 01 4a
+
+structs:
+  header:
+    u8[2] Signature: 01 4a
+    u16 u1: ?? # 0 or 1
+    u16 u2: ?? # xxx
+    u16 FolderCount: ??
+    u16 u4: ?? # 1
+
+    ascii[0x3f] MaybePadding1: ?? # c'P'
+    u8 u5: ?? # 0
+    ascii[0xff] MaybePadding2: ?? # c'I'
+    u8 u6: ?? # 0
+
+  folder:
+    asciiz SomeTag: ?? # CONVR
+    u32 v1: ??
+    u32 v2: ??
+
+  file:
+    u16 x1: ?? # XXX probably reference to folder entry
+    if self.x1 == 0x1800: # XXX guessing, seems to work with oregonii.eng
+      parse: stop
+    u16 MaybeUncompressedSize: ?? # XXX if 0, then uncompressed data ?
+    u32 CompressedSize: ??
+    u32 Offset: ??
+    offset: self.Offset
+    raw:u8[self.CompressedSize] Data: ??
+    offset: restore
+
+layout:
+  - header Header
+  - folder[Header.FolderCount] Tag
+  - file[] File
+

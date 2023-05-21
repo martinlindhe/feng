@@ -13,7 +13,7 @@ references:
 
 kind: image
 name: DirectDraw Surface
-extensions: [.dds]
+#extensions: [.dds]
 mime: image/vnd-ms.dds
 endian: little
 

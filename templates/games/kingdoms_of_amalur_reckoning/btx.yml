@@ -1,0 +1,45 @@
+# STATUS: 1%
+
+# In-house format by Big Huge Games
+
+# Used in:
+# Kingdoms of Amalur: Reckoning (2012) XBox360
+
+kind: media # XXX texture?
+name: "Kingdoms of Amalur: Reckoning btx file"
+endian: big
+extensions: [.btx]
+
+magic:
+  - offset: 0000
+    match: c'BHGX'
+
+structs:
+  header:
+    ascii[4] Signature: c'BHGX'
+    u32 RestOfFileSize: ?? #  FILE_SIZE - 8
+    u32 u2: ?? # 3
+    u32 u3: ?? # 1
+    u32 u4: ?? # 0
+    u32 u5: ?? # 0
+    u32 u6: ?? # 0
+
+    u32 u7: ?? # ff ff 00 00
+    u32 u8: ?? # ff ff 00 00
+
+    u32 u9: ?? # 82 00 00 02
+    u32 uA: ?? # 00 00 00 54    or 52 ... XXX LEN ??
+
+    u16 uB: ?? # 00 0f      XXXX or 00 59           XXX len ?
+    u16 uC: ?? # e0 ff      XXX or e4 ff
+
+    u32 uD: ?? # 00 00 0d 10
+    u32 uE: ?? # 0
+    u32 uF: ?? # 00 00 0a 00
+
+    u32[8 * 4] SomeTable: ?? # XXX len is variable ... matches wait.btx
+    u8 X: ??
+
+layout:
+  - header Header
+

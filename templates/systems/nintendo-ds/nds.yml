@@ -61,7 +61,7 @@ structs:
     #raw:u8[self.ARM7ROMSize] ARM7 ROM DATA: ??
     #offset: restore
 
-    filename:  # clear filename
+    filename: # clear filename
 
     u32 FilenameTableOffset: ??
     u32 FilenameTableSize: ??

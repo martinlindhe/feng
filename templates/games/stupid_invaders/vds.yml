@@ -1,0 +1,48 @@
+# STATUS: 95%
+
+# Used in:
+# - Stupid Invaders (2000) Win
+
+references:
+  - https://wiki.multimedia.cx/index.php/Xilam_DERF#Video_format
+
+software:
+  - ffmpeg
+
+kind: video
+name: Xilam DERF video
+extensions: [.vds]
+
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'DERF'
+
+structs:
+  header:
+    ascii[4] Signature: c'DERF'
+    u32 DataSize: ??
+    u16 ChunkCount: ?? # XXX
+    u16 Width: ??
+    u16 Height: ??
+
+    u8[22] unknown: ?? # XXX
+
+  chunk:
+    ascii[2] Type: ?? # XXX
+      # TODO switch on ascii[2]:
+      # FK - keyframe chunk
+      # KB - interframe chunk
+      # CM - mono audio data (DPCM-encoded in the same way as audio file)
+      # CS - stereo audio data
+
+    u16 u1: ??
+    u32 Size: ??
+    u32 u2: ??
+    u32 u3: ??
+    u8[self.Size - 16] Data: ??
+
+layout:
+  - header Header
+  - chunk[] Chunk

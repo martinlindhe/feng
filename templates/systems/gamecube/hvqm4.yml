@@ -19,7 +19,7 @@ references:
   - https://github.com/Tilka/hvqm4
 
 kind: system
-name:  Nintendo GameCube movie
+name: Nintendo GameCube movie
 extensions: [.h4m, .str]
 endian: big
 

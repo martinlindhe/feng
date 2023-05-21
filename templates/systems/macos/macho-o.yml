@@ -13,7 +13,7 @@ software:
   - https://github.com/h3adshotzz/libhelper
 
 kind: executable
-name:  Mach-O executable
+name: Mach-O executable
 extensions: [.o, .dylib]
 endian: little
 

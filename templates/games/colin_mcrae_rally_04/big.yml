@@ -1,0 +1,39 @@
+# STATUS: 90%, extract: ok
+
+# Used in:
+# - Colin McRae Rally 04 (2003, Codemasters) PS2
+
+# TODO: this format has same magic as another format used in Harry Potter and the Goblet of Fire, need better magic to distinguish.
+
+kind: archive
+name: Colin McRae Rally 04 archive
+extensions: [.big, .cp4, .rib, .cfg, .bgp, .pfp, .pcp]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'BIGF'
+
+structs:
+  header:
+    ascii[4] Magic: c'BIGF'
+    u32 FileCount: ?? # 3
+    u32 DataStartOffset: ?? # 0800
+    u32 u3: ?? # 0800
+    ascii[16] Text: ?? # "rthomas"
+    u32 u4: ?? # 0
+
+  file:
+    ascii[16] Filename: ??
+    filename: self.Filename
+    u32 Size: ??
+    u32 RelOffset: ??
+
+    offset: Header.DataStartOffset + self.RelOffset
+    raw:u8[self.Size] Data: ??
+    u8[alignment(OFFSET, 2048)] Padding: ?? # 3f
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

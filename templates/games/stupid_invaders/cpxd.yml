@@ -1,0 +1,31 @@
+# STATUS: 1%
+
+# Used in:
+# - Stupid Invaders (2000) Win
+
+kind: game
+name: Stupid Invaders archive # XXX ???
+#extensions: [.spr]
+
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'CPxD'
+
+structs:
+  header:
+    ascii[4] Signature: c'CPxD'
+    u32 u1: ?? # 18d0 or 18fd ... size ?
+    u32 u2: ?? # 3790 or 3149 .. size ?
+    u32 u3: ?? # 00 30 00 00   XXX 16-bit ?
+    u8 u4: ?? # 2
+
+    ascii[4] Text: c'DATA' # XXX
+    u32 v1: ?? # 00 34 00 00
+    u32 v2: ?? # 1c c4 00 bc
+    u32 v3: ?? # 9034 or 1835
+
+layout:
+  - header Header
+

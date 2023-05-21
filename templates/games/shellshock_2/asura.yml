@@ -1,0 +1,49 @@
+# STATUS: 1%
+
+# Used in:
+# - ShellShock 2: Blood Trails (2009, Eidos) PS3
+
+# XXX TODO: mapped using BTN_PS3.ASRBE ... "Asura   TXTT" .. seems to be a file archive
+
+kind: game
+name: ShellShock 2 asura archive
+extensions: [.asrbe, .enbe, .guibe, .ps3] # XXX is it multiple formats with similar header?
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'Asura'
+
+structs:
+  header:
+    ascii[5] Signature: c'Asura'
+    ascii[3] Spaces: c'   '
+    ascii[4] Tag: c'TXTT'    # XXX if "TXTH", then a different structure follows
+    u32 FileTableSize: ?? # XXX
+    u32 u2: ?? # 1
+    u32 u3: ?? # 0
+    u32 FileCount: ?? # XXX
+    endian: little
+
+  file:
+    asciiz Name: ??
+    u8[alignment(OFFSET, 4)] Padding: ??
+    filename: self.Name
+
+    # XXX all mapping here is guesswork, and something is still off
+    u32 RelOffset: ??
+    u32 v2: ?? # XXX same as Reloffset sometimes. .... ?!
+    u32 v3: ?? # 3f 6f 80 00 xxx
+    u32 v4: ?? # 3f 70 80 00 xxx
+    u32 v5: ?? # 43 80 00 00   ALWAYS
+    u32 v6: ?? # 43 80 00 00   ALWAYS
+    u16 v7: ?? # 0
+
+    offset: Header.FileTableSize + self.RelOffset
+    u8[self.v7] Data: ?? # XXX Size
+    offset: restore
+
+layout:
+  - header Header
+
+  - file[Header.FileCount] File # XXX there are 2 more file entries at end, with odd values

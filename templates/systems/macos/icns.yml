@@ -8,7 +8,7 @@ references:
   - https://www.sweetscape.com/010editor/repository/files/ICNS.bt
 
 kind: archive
-name:  Apple icns icon collection
+name: Apple icns icon collection
 extensions: [.icns]
 endian: big
 

@@ -1,7 +1,8 @@
 # STATUS: 10%
 
 # Used in:
-# Battle Fantasia (2008) PS3
+# - Battle Fantasia (2008, Arc System Works) PS3
+# - ShellShock 2: Blood Trails (2009, Eidos) PS3
 
 # TODO: extract data as a formatted audio stream,
 #   see https://forum.xentax.com/viewtopic.php?p=43568#p43568 for make-shift headers
@@ -10,8 +11,8 @@ references:
   - https://forum.xentax.com/viewtopic.php?p=43568#p43568
 
 kind: audio
-name: Battle Fantasia audio file
-extensions: [.msf]
+name: MSF audio file
+#extensions: [.msf, .mp3]
 endian: big
 
 magic:
@@ -27,7 +28,7 @@ structs:
       eq 00000006: 132 kbit/s
     u32 Channels: ??
     u32 Size: ??
-    u32 Freq: ??
+    u32 Freq: ?? # 48000
     u32 u5: ?? # 64
     i32[10] Reserved: ?? # -1
 

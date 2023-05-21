@@ -3,8 +3,9 @@
 # Image archive format used on PS2 and PSP
 
 # Confirmed use in games:
-# Devil May Cry (PS2)
-# Jade Cocoon 2 (PS2)
+# - Devil May Cry (PS2)
+# - Jade Cocoon 2 (PS2)
+# - Colin McRae Rally 04 (PS2)
 
 references:
   - https://wiki.xentax.com/index.php/TM2_TIM2_Image
@@ -14,7 +15,7 @@ software:
 
 kind: image
 name: TIM2 image archive
-extensions: [.000]
+extensions: [.tm2, .000]
 endian: little # XXX
 
 magic:
