@@ -7,7 +7,7 @@ references:
   - https://github.com/m35/jpsxdec/blob/51b43e59363872e2d4a21cd2d22413cc154689ed/jpsxdec/PlayStation1_STR_format.txt
 
 software:
-  - https://github.com/m35/jpsxdec # java software
+  - https://github.com/m35/jpsxdec
 
 kind: media
 name: Playstation 1 Video file
@@ -16,11 +16,11 @@ endian: little
 
 magic:
   - offset: 0000
-    match: 60 01 01 80 # video frame marker
+    match: 60 01 01 80
 
 structs:
   header:
-    u8[4] Signature: 60 01 01 80
+    u8[4] Signature: 60 01 01 80 # video frame marker
 
     u16 Multiplexed chunk number of this video frame: ?? # 0 to (Number of multiplexed chunks) - 1
     u16 MultiplexedChunkCount: ?? # Number of multiplexed chunks in this frame

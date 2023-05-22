@@ -1,0 +1,18 @@
+# STATUS: 1%
+#
+# Used in:
+# - Gex 3 (1999) PS1
+
+kind: archive
+name: Gex 3 bigfile archive
+filenames: [bigfile.dat]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 SomeCount: ??
+
+layout:
+  - header Header

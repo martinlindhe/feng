@@ -1,0 +1,51 @@
+# STATUS: 1%
+#
+# Used in:
+# - Lineage II (Win)
+
+# TODO MAX: files are encrypted
+
+# TODO MAX: fix utf16 decoding (off by 1? or reading ignores endian ?) need test with le:utf16 and be:utf16 ...
+
+references:
+  - https://github.com/acmi/L2crypt
+
+software:
+  - https://wiki.xentax.com/index.php/Game_Archive_UnPacker_(GAUP_plugin)
+
+kind: archive
+name: Lineage II archive
+extensions: [
+  .ukx, # meshes and animations
+  .utx, # textures
+  .usx, # staticmeshes
+  .uax, # sounds and music
+  .unr, # maps
+  .uix, # interface
+  .u,   # other scripts and classes
+  .dat, .ini, .int, .htm, .html, .bmp # data
+]
+
+endian: little
+
+constants:
+  XOR_KEY_111: 0xAC
+
+magic:
+  - offset: 0000
+    match: 4C 00 69 00 6E 00 65 00 61 00 67 00 65 00 32 00  # Lineage 2 in utf16
+
+structs:
+  header:
+    utf16[16] Signature: ?? # XXX utf16 decoding fails... we decode in wrong order? should be utf16le
+    utf16[12] Version: ?? # XXX utf16 decoding fails ... "Ver111". XXX need to parse version number to string for comparison
+
+    # XXX all of this assumes version 111. see https://github.com/acmi/L2crypt/blob/master/src/main/java/acmi/l2/clientmod/crypt/L2Crypt.java#L87
+    # TODO set xor key to be used for the remaining reads
+
+
+    u32 u1: ?? # 6d 2f 86 32
+
+layout:
+  - header Header
+

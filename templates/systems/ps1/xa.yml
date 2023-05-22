@@ -1,0 +1,56 @@
+# STATUS: 1%
+#
+# Audio/video format developed by Sony for use on the PlayStation 1.
+
+# Used in:
+# - Gex 3 (1999) PS1
+# + many more PS1 games
+
+# TODO: need more samples
+
+references:
+  - http://www.psxdev.net/forum/viewtopic.php?t=468 # XA subheader information.txt
+
+software:
+  - https://www.romhacking.net/utilities/894/
+  - https://github.com/m35/jpsxdec
+
+kind: media
+name: Playstation 1 Audio file
+extensions: [.xa]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 18182a1a 18182a1a 2a2a1a1a 2a2a1a1a
+
+structs:
+  header:
+    u8[16] Signature: ??
+
+  file:
+    u8 FileNumber: ?? # 0 = standard, !0 = interleaved
+    u8 Channels: ??
+    u8 Submode:
+      bit b0000_0001: EndOfRecord
+      bit b0000_0010: VideoSector
+      bit b0000_0100: AudioSector
+      bit b0000_1000: DataSector
+      bit b0001_0000: Trigger
+      bit b0010_0000: Form
+      bit b0100_0000: RealTimeSector
+      bit b1000_0000: EndOfFile
+
+    u8 CodingInfo:
+      bit b0000_0011: 0=Mono,1=Stereo
+      bit b0000_1100: 0=37.8kHz (level A/B),1=18.9kHz (level C)
+      bit b0011_0000: 0=4bit (level B/C), 8bit (level A)
+      bit b0100_0000: Emphasis
+      bit b1000_0000: Reserved
+
+layout:
+  - header Header
+
+  # XA subheader information is 8 bytes, 2 blocks of 4 bytes, each block being identical.
+  # XXX not sure of the start offset
+  - file[2] File

@@ -1,0 +1,53 @@
+# STATUS: 1%
+
+# Used in:
+# - Gex 3 (1999) PS1
+
+kind: game
+name: Gex 3 wdg file
+extensions: [.wdg] # warzone.wdg
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'WDG4'
+
+structs:
+  header:
+    ascii[4] Signature: c'WDG4'
+    u32 u1: ?? # 9
+
+  entry: # 0x50 byte
+    u32 v0: ??
+    u32 v1: ??
+    u32 v2: ??
+    u32 v3: ??
+
+    u32 v4: ??
+    u32 v5: ??
+    u32 v6: ??
+    u32 v7: ??
+
+    u32 v8: ??
+    u32 v9: ??
+    u32 vA: ??
+    u32 vB: ??
+
+    u32 vC: ??
+    u32 vD: ??
+    u32 vE: ??
+    u32 vF: ??
+
+    u32 vG: ??
+    u32 vH: ??
+    u32 vI: ??
+    u32 vJ: ??
+
+layout:
+  - header Header
+
+  - entry[2] Entry
+
+  # from around a0 ??? to 1cd0 almost -- entry table
+  # 1cd0: RIFF header
+
