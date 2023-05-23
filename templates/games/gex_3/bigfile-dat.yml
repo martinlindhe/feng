@@ -3,6 +3,9 @@
 # Used in:
 # - Gex 3 (1999) PS1
 
+software:
+  - https://github.com/TheSerioliOfNosgoth/SoulSpiral-Official
+
 kind: archive
 name: Gex 3 bigfile archive
 filenames: [bigfile.dat]
