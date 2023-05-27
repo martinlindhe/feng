@@ -126,6 +126,8 @@ func (fl *FileLayout) peekBytesMainFile(offset int64, size int64) ([]uint8, erro
 	n, _ := fl._f.Read(data)
 	fl.bytesRead += n
 	_, _ = fl._f.Seek(prevOffset, io.SeekStart)
+
+	data = fl.xorResult(data)
 	return data, nil
 }
 
@@ -156,7 +158,25 @@ func (fl *FileLayout) readBytes(totalLength, unitLength int64, endian string) ([
 		val = value.ReverseBytes(val, int(unitLength))
 	}
 
-	return val, nil
+	return fl.xorResult(val), nil
+}
+
+// transforms data according to fl.xorKey
+func (fl *FileLayout) xorResult(in []byte) []byte {
+	if len(fl.xorKey) == 0 {
+		return in
+	}
+
+	if len(fl.xorKey) != 1 {
+		log.Fatal().Msgf("TODO impl multi-byte xor key")
+	}
+
+	out := make([]byte, len(in))
+	for idx, b := range in {
+		out[idx] = b ^ fl.xorKey[0]
+	}
+	log.Info().Msgf("xor %02x to %02x", in, out)
+	return out
 }
 
 // this encoding is used by fonts/woff2 (UIntBase128)
@@ -259,6 +279,8 @@ func (fl *FileLayout) readBytesUntilMarkerByte(marker byte) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
+
+		b = fl.xorResult(b)
 
 		fl.bytesRead += int(n)
 

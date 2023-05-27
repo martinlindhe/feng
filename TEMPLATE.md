@@ -216,6 +216,15 @@ pattern matching data types
   until: u8 scanData ff d9            maps all bytes to scanData until marker is seen (images/jpeg)
 
 
+# Xor encoding
+
+Decode data using a Xor key
+
+```yaml
+    xor_key: ff
+```
+
+
 # Encryption
 Mark an area to be decrypted.
 

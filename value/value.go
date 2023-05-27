@@ -210,7 +210,7 @@ func ParseDataField(in string) (DataField, error) {
 
 	space := strings.Index(in, " ")
 	if space == -1 {
-		if in == "label" || in == "parse" || in == "endian" || in == "else" || in == "data" || in == "filename" || in == "offset" || in == "until" || in == "import" || in == "default" {
+		if in == "label" || in == "parse" || in == "endian" || in == "else" || in == "data" || in == "filename" || in == "offset" || in == "until" || in == "import" || in == "default" || in == "xor_key" {
 			// single token like "endian"
 			df.Kind = in
 			return df, nil

@@ -5,15 +5,19 @@
 # Used in:
 # Tony Hawk's Pro Skater 2x (2001) Xbox
 
+# TODO: improve magic for fewer false matches
+
 kind: archive
 name: "Tony Hawk's Pro Skater 2x ddx archive"
 endian: little
 
 extensions: [.ddx]
 
-magic:
-  - offset: 0000
-    match: 00 00 00 00   # XXX weak
+no_magic: true
+
+#magic:
+#  - offset: 0000
+#    match: 00 00 00 00   # XXX weak
 
 structs:
   header:

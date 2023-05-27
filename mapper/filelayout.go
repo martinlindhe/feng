@@ -67,6 +67,9 @@ type FileLayout struct {
 	// current encryption key
 	encryptionKey []byte
 
+	// current xor key
+	xorKey []byte
+
 	// file handle
 	_f afero.File
 

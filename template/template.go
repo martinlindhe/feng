@@ -286,7 +286,7 @@ func parseStruct(c *yaml.MapItem) (EvaluatedStruct, error) {
 
 		case string:
 			switch field.Kind {
-			case "endian", "data", "label", "offset", "filename", "parse", "until", "encryption", "import":
+			case "endian", "data", "label", "offset", "filename", "parse", "until", "encryption", "xor_key", "import":
 				pattern := value.DataPattern{Known: true, Value: val}
 				expr = Expression{field, pattern, []Expression{}, []MatchPattern{}}
 

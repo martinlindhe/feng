@@ -673,6 +673,13 @@ func (fl *FileLayout) expandChildren(fs *Struct, dfParent *value.DataField, ds *
 
 			log.Info().Msgf("Encryption set to '%s' at %06x", fl.encryptionMethod, fl.offset)
 
+		case "xor_key":
+			key, err := value.ParseHexString(es.Pattern.Value)
+			if err != nil {
+				log.Fatal().Err(err).Msgf("failed to parse xor_key '%s'", es.Pattern.Value)
+			}
+			fl.xorKey = key
+
 		case "import":
 			// import data block from another file
 			// syntax: import: type, offset, size, filename
