@@ -1,4 +1,4 @@
-# STATUS: 50%
+# STATUS: 50%, extract: not compressed data
 
 # - HI: level2_tiny.lzh does not fully map
 # - HI: need sample with level3 header
@@ -34,7 +34,7 @@ structs:
       parse: stop
     u8 Checksum: ??             # xxx algorithm: This is low 1 byte of the total of each bytes of whole header without 2 bytes of the head. Header checksum is 0xC3 in the foregoing sample. (Total of each bytes of whole header without 2 bytes of the head is 0x07C3.)
     ascii[3] Signature: c'-lh'
-    ascii Compression method:
+    ascii CompressionMethod:
       eq c'0': None
       eq c'1': LZW, 4K sliding window. Dynamic Huffman
       eq c'2': LZW, 8K sliding window. Dynamic Huffman
@@ -61,7 +61,8 @@ structs:
 
     if either(self.HeaderLevel, 0, 1):
       u8 FilenameLength: ??
-      ascii[self.FilenameLength] Path and filename: ??
+      ascii[self.FilenameLength] Filename: ??
+      filename: self.Filename
 
     u16 Uncompressed CRC16: ??
 
@@ -103,7 +104,10 @@ structs:
     # count of the compressed file which is following this header.
     # Skip size is 0x0000000D in the foregoing sample. (The byte count of
     # compressed file : 0 + Total of the byte count of each extended headers : 13)
-    raw:u8[self.CompressedSize] Compressed data: ??
+    if self.CompressionMethod == 0:
+      raw:u8[self.CompressedSize] Data: ??
+    else:
+      u8[self.CompressedSize] CompressedData: ?? # XXX lzhuf compressed data
 
 layout:
   - header[] Header

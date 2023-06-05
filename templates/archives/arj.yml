@@ -1,9 +1,8 @@
-# STATUS: 80%
+# STATUS: 80%, extract: not compressed data
 
 references:
   - https://raw.githubusercontent.com/FarGroup/FarManager/master/plugins/multiarc/arc.doc/arj.txt
   - http://fileformats.archiveteam.org/wiki/ARJ
-  - https://github.com/martinlindhe/formats/blob/master/parse/archive/arc_arj.go
 
 kind: archive
 name: ARJ Archive
@@ -129,10 +128,10 @@ structs:
       #bit b1100_0000: Reserved2
     u8 CompressionMethod:
       eq 00: Stored
-      eq 01: Compressed 1a (best)
+      eq 01: Compressed 1a (best) # LZ77+Huffman. These are all essentially the same as LHA's "lh6" method, but with the history window artificially limited to 26K, instead of 32K.
       eq 02: Compressed 1b
       eq 03: Compressed 1c
-      eq 04: Compressed 2 (fastest)
+      eq 04: Compressed 2 (fastest) # An ARJ-specific implementation of LZ77/LZSS.
       eq 08: No data, no CRC
       eq 09: No data
     u8 FileType:
@@ -168,6 +167,7 @@ structs:
       u32 OriginalFileSize: ??
 
     asciiz FileName: ??
+    filename: self.FileName
     asciiz FileComment: ??
 
     u32 CRC32: ??
@@ -176,7 +176,10 @@ structs:
       # NOTE: if ext header size > 0, it should follow here. not used in file format
       u8[self.ExtHeaderSize] Ext Header data: ??
 
-    raw:u8[self.CompressedSize] CompressedData: ??
+    if self.CompressionMethod == Stored:
+      raw:u8[self.CompressedSize] Data: ??
+    else: # XXX
+      raw:u8[self.CompressedSize] CompressedData: ?? # XXX compression ?!
 
 layout:
   - header Header

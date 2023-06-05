@@ -1,4 +1,4 @@
-# STATUS: 90%
+# STATUS: 90%, extract: ok
 
 # MAX: handle unix timestamp as ascii number. nested data types ???? ascii[16] -> unixtime
 
@@ -18,9 +18,9 @@ structs:
   header:
     ascii[8] Signature: c'!<arch>' 0a
 
-  ar_file:
-    ascii[16] Filename: ??
-    label: self.Filename
+  file:
+    ascii[16] Name: ??
+    filename: self.Name
     ascii[12] Modification time: ??
     ascii[6] Owner ID: ??
     ascii[6] Group ID: ??
@@ -28,8 +28,8 @@ structs:
     ascii[10] FileStreamSize: ??
     u8[2] EndMarker: 60 0a
 
-    u8[atoi(self.FileStreamSize)] Data: ??
+    raw:u8[atoi(self.FileStreamSize)] Data: ??
 
 layout:
   - header Header
-  - ar_file[] File
+  - file[] File

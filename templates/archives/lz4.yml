@@ -44,7 +44,7 @@ structs:
     if self.Flags & PresetDictionary:
       data: unseen
       u32 DictionaryID: ??
-    
+
     u8 HeaderChecksum: ??     # XXX checksum type?
 
   block:
@@ -55,7 +55,7 @@ structs:
     if Header.Flags & BlockChecksum:
       u32 BlockChecksum: ??
     if (self.DataSize & DATA_SIZE) == 0:
-      label: '"EndMarker"'
+      label: EndMarker
       parse: stop
 
   trailer:

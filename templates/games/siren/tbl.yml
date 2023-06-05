@@ -1,0 +1,73 @@
+# STATUS: 20%
+
+# Used in:
+# - Siren (2003) PS2
+
+# TODO MAX: need variables in order to calc file parts (multiple segments)
+
+references:
+  - https://github.com/RetingencyPlan/le_quickbms_script_compendium/blob/master/siren.bms
+  - https://zenhax.com/viewtopic.php?t=8188&view=previous#p32534
+
+kind: archive
+name: Siren archive index
+endian: little
+
+multi_file: true # File series: .tbl (entry list) and .000, .001, ... (data)
+
+filenames: [
+  siren.tbl, # Siren
+]
+
+#constants:
+#  ARC_SIZE: 0x20000000
+
+magic:
+  - offset: 0000
+    match: ac bb ab cb
+
+structs:
+  header:
+    xor_key: ff
+
+    ascii[4] Signature: c'SDT4'
+
+    u32 FileCount: ??
+    u32 TableSize: ??
+    u32 MaybeChecksum: ?? # XXX
+
+    u32 FileTableOffset: ??
+    u32 FileNameTableOffset: ??
+    u32 u2: ?? # 1
+    u32 u3: ?? # 0
+
+  file:
+    u32 Flags:
+      bit b01111111_11111111_11111111_11111111: SECTOR
+      bit b10000000_00000000_00000000_00000000: DUAL_LAYER # XXX
+    if self.Flags & DUAL_LAYER:
+      # XXX
+      data: unseen
+      parse: stop
+    u32 Size: ??
+    u32 RelNameOffset: ??
+
+    offset: Header.FileNameTableOffset + self.RelNameOffset
+    asciiz Name: ??
+    filename: self.Name
+    offset: restore
+
+    # XXX calc == "varset"
+    if self.index == 0:
+      calc: base_sector = self.Flags & SECTOR   # XXX IMPL
+
+    # XXX mutliple file support, .001, .002 ... TODO, need variables in order to calc this(?)
+    ###import: raw:u8, (self.Flags & SECTOR) * 0x800, self.Size, no_ext(FILE_NAME) + ".000"
+
+layout:
+  - header Header
+
+  - offset Header.FileTableOffset
+
+  #- file[Header.FileCount] File
+  - file[1] File

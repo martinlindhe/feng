@@ -1,4 +1,4 @@
-# STATUS: 95%
+# STATUS: 95%, extract: ok
 #
 # - LOW: mark crc16, crc32 for data validation
 
@@ -61,11 +61,12 @@ structs:
 
     if self.HeaderFlags & FLAG_EXTRA:
       data: unseen
-      u16 Extra Length: ??
-      u8[self.Extra Length] Data: ??
+      u16 ExtraLength: ??
+      u8[self.ExtraLength] Data: ??
 
     if self.HeaderFlags & FLAG_NAME:
       asciiz Filename: ??
+      filename: self.Filename
 
     if self.HeaderFlags & FLAG_COMMENT:
       data: unseen

@@ -175,7 +175,7 @@ func (fl *FileLayout) xorResult(in []byte) []byte {
 	for idx, b := range in {
 		out[idx] = b ^ fl.xorKey[0]
 	}
-	log.Info().Msgf("xor %02x to %02x", in, out)
+	//log.Info().Msgf("xor %02x to %02x", in, out)
 	return out
 }
 

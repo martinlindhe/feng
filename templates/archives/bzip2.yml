@@ -1,6 +1,6 @@
 # STATUS: 1%
 #
-# MAX: need bit-sized fields in order to correctly parse format
+# TODO MAX: need bit-sized fields in order to correctly parse format
 
 references:
   - https://en.wikipedia.org/wiki/Bzip2#File_format
