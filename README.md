@@ -6,6 +6,44 @@ and a commandline app working with the format.
 **WARNING : The format is not yet stabilized and things may break.**
 
 
+# Usage
+
+```
+Usage: feng <filename>
+
+A binary template reader and data presenter.
+
+Arguments:
+  <filename>
+
+Flags:
+  -h, --help                  Show context-sensitive help.
+      --template=STRING       Parse file using this template.
+  -x, --extract               Extract data streams from input file.
+      --out-dir=STRING        Write files to this directory. Implies --extract
+      --offset=INT-64         Starting offset (default is 0).
+      --raw                   Show raw values
+      --local-time            Show timestamps in local timezone (default is UTC).
+      --brief                 Show brief file information.
+      --tree                  Show parsed file structure tree.
+      --decimal               Show offsets in decimal (default is hex).
+      --unmapped              Print a report on unmapped bytes.
+      --overlapping           Print a report on overlapping bytes.
+      --debug                 [Dev] Enable debug logging
+      --time                  [Dev] Measure where processing time is spent.
+      --cpu-profile=STRING    [Dev] Create CPU profile.
+      --mem-profile=STRING    [Dev] Create memory profile.
+```
+
+
+# Installation
+
+Windows/macOS and Linux binaries is available on the [Releases](https://github.com/martinlindhe/feng/releases) page.
+
+Assuming you have golang, then installing the cli app `feng` from git is as easy as:
+
+    go install github.com/martinlindhe/feng/cmd/feng@latest
+
 
 
 # Template example
@@ -51,23 +89,6 @@ Mapping a file with the above structure would result in something like [smoketes
 
 *Template is from [templates/fonts/otf.yml](templates/fonts/otf.yml).*
 
-
-
-# Installation
-
-Windows/macOS and Linux binaries is available on the [Releases](https://github.com/martinlindhe/feng/releases) page.
-
-Assuming you have golang, then installing the cli app `feng` from git is as easy as:
-
-    go install github.com/martinlindhe/feng/cmd/feng@latest
-
-
-# Command line tools
-
-```
-cmd/feng: Lists data fields of input file.
-cmd/renamer: Renames all files in input folder to use the correct file extensions.
-```
 
 
 ## User templates
