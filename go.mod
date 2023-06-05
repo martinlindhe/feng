@@ -3,6 +3,7 @@ module github.com/martinlindhe/feng
 go 1.18
 
 require (
+	github.com/JoshVarga/blast v0.0.0-20210808061142-eadad17358e8
 	github.com/alecthomas/kong v0.7.1
 	github.com/davecgh/go-spew v1.1.1
 	github.com/fbonhomm/LZSS v0.0.0-20200907090355-ba1a01a92989
@@ -19,9 +20,8 @@ require (
 )
 
 require (
-	github.com/JoshVarga/blast v0.0.0-20210808061142-eadad17358e8 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.18 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
