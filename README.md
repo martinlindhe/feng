@@ -40,7 +40,7 @@ Flags:
 
 Windows/macOS and Linux binaries is available on the [Releases](https://github.com/martinlindhe/feng/releases) page.
 
-Assuming you have golang, then installing the cli app `feng` from git is as easy as:
+If you have golang installed, then you can install `feng` from git like this:
 
     go install github.com/martinlindhe/feng/cmd/feng@latest
 
