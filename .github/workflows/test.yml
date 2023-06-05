@@ -6,19 +6,19 @@ jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.17.x, 1.18.x]
+        go-version: [1.20.x]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Install Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.go-version }}
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Smoketest
-      run: |
-        git clone --depth 1 https://github.com/martinlindhe/feng-samples ../feng-samples
-        go test -v ./smoketest -run TestCompareWithReferenceParse
-    #- name: Test
-    #  run: go test -v ./...
+    #- name: Smoketest
+    #  run: |
+    #    git clone --depth 1 https://github.com/martinlindhe/feng-samples ../feng-samples
+    #    go test -v ./smoketest -run TestCompareWithReferenceParse
+    - name: Test
+      run: go test -v ./...
