@@ -72,7 +72,7 @@ func TestParseDataField(t *testing.T) {
 		{"Seg[self.offset+4] My label", &DataField{Kind: "Seg", Range: "self.offset+4", Label: "My label"}, nil},
 
 		// should fail
-		{"Seg[self.offset]", &DataField{}, fmt.Errorf("token label missing")},
+		{"Seg[self.offset]", &DataField{}, fmt.Errorf("token label missing in 'Seg[self.offset]")},
 	}
 	for _, h := range test {
 		field, err := ParseDataField(h.field)
