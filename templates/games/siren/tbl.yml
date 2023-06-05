@@ -58,8 +58,8 @@ structs:
     offset: restore
 
     # XXX calc == "varset"
-    if self.index == 0:
-      calc: base_sector = self.Flags & SECTOR   # XXX IMPL
+    #if self.index == 0:
+    #  calc: base_sector = self.Flags & SECTOR   # XXX IMPL
 
     # XXX mutliple file support, .001, .002 ... TODO, need variables in order to calc this(?)
     ###import: raw:u8, (self.Flags & SECTOR) * 0x800, self.Size, no_ext(FILE_NAME) + ".000"

@@ -33,7 +33,7 @@ func ParseDataPattern(in string) (DataPattern, error) {
 	} else {
 		dp.Value = in
 	}
-	log.Debug().Msgf("ParseDataPattern: '%s' => '%s'", in, value)
+	//log.Debug().Msgf("ParseDataPattern: '%s' => '%s'", in, value)
 	return dp, nil
 }
 
@@ -102,7 +102,7 @@ func replaceNextBitTag(s string) (string, error) {
 		return "", err
 	}
 
-	log.Debug().Msgf("replaceNextBitTag(%s): %d", m, i)
+	//log.Debug().Msgf("replaceNextBitTag(%s): %d", m, i)
 
 	// XXX fix bit sizing
 	lm := len(m)

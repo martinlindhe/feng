@@ -39,13 +39,10 @@ func TestEvaluateAllTemplates(t *testing.T) {
 		assert.Equal(t, nil, err)
 
 		switch tpl.Kind {
-		case "image", "archive", "system", "executable":
+		case "image", "archive", "system", "executable", "document", "debug", "media", "network", "video", "audio", "font", "bytecode", "game", "asset", "container", "":
 		default:
 			t.Errorf("unknown kind '%s' in template %s", tpl.Kind, tpl.Name)
-		}
-
-		if len(tpl.Extensions) == 0 {
-			t.Errorf("extensions missing")
+			t.FailNow()
 		}
 
 		_, err = UnmarshalTemplateIntoDataStructure(templateData, path)

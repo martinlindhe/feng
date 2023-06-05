@@ -2,7 +2,7 @@
 
 # Used in Fallout 4 (PC)
 
-kind: xxx
+kind: game
 name: Fallout 4 BCSG archive
 extensions: [.csg]
 endian: little

@@ -1,6 +1,7 @@
 package mapper
 
 import (
+	"bytes"
 	"crypto/aes"
 	"encoding/binary"
 	"fmt"
@@ -676,6 +677,35 @@ func (fl *FileLayout) presentStruct(layout *Struct, cfg *PresentFileLayoutConfig
 	}
 
 	return res
+}
+
+// like fl.Present() but returns output as a string
+func (fl *FileLayout) PresentOutput(cfg *PresentFileLayoutConfig) string {
+
+	old := os.Stdout // keep backup of the real stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	fl.Present(cfg)
+
+	outC := make(chan string)
+	// copy the output in a separate goroutine so printing can't block indefinitely
+	go func() {
+		var buf bytes.Buffer
+		io.Copy(&buf, r)
+		outC <- buf.String()
+	}()
+
+	// back to normal state
+	w.Close()
+	os.Stdout = old // restoring the real stdout
+	out := <-outC
+
+	// reading our temp stdout
+	//	fmt.Println("previous output:")
+	//	fmt.Print(out)
+
+	return out
 }
 
 func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {

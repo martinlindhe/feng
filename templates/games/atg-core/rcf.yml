@@ -18,7 +18,7 @@ references:
   - http://aluigi.zenhax.com/bms/atg_core_cement.bms
   - SIMILAR https://wiki.xentax.com/index.php/Radcore_Cement_Library_RCF
 
-kind: game archive
+kind: archive
 name: ATG Core Cement Library
 endian: big
 extensions: [.rcf]

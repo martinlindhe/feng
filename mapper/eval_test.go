@@ -7,8 +7,20 @@ import (
 	"github.com/maja42/goval"
 	"github.com/martinlindhe/feng/template"
 	"github.com/martinlindhe/feng/value"
+	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
+
+func mockFile(t *testing.T, filename string, data []byte) afero.File {
+	appFS := afero.NewMemMapFs()
+	err := afero.WriteFile(appFS, filename, data, 0644)
+	if err != nil {
+		panic(err)
+	}
+	f, err := appFS.Open(filename)
+	assert.Nil(t, err)
+	return f
+}
 
 func TestEvaluateExpression(t *testing.T) {
 	templateData := `
@@ -37,7 +49,7 @@ layout:
 
 	test := []struct {
 		expr     string
-		expected uint64
+		expected int64
 	}{
 		{"4+2", 6},
 		{"2 << 10", 0x800},

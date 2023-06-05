@@ -4,7 +4,7 @@
 
 # Holds some index. Is related to .esm files ("TES4" header)
 
-kind: xxx
+kind: game
 name: Fallout 4 BCDX archive
 extensions: [.cdx]
 endian: little

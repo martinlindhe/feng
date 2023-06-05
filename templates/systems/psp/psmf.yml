@@ -12,7 +12,7 @@ references:
 software:
   - ffmpeg
 
-kind: multimedia
+kind: media
 name: PlayStation Portable Movie Format
 extensions: [.pmf]
 endian: big

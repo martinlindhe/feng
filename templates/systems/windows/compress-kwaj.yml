@@ -7,7 +7,7 @@
 references:
   - http://fileformats.archiveteam.org/wiki/MS-DOS_installation_compression
 
-kind: windows
+kind: system
 name: Microsoft KWAJ compressed
 mime: application/x-ms-compress-kwaj
 endian: little

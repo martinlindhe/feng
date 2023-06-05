@@ -524,13 +524,17 @@ func (fl *FileLayout) createInitialConstants() {
 	if fl.scriptVariables != nil {
 		return
 	}
+
 	fl.scriptVariables = make(map[string]interface{})
 
-	for _, constant := range fl.DS.Constants {
-		if len(constant.Value) <= 4 || len(constant.Value) == 8 {
-			fl.scriptVariables[constant.Name] = int(value.AsUint64Raw(constant.Value))
+	if fl.DS != nil {
+		for _, constant := range fl.DS.Constants {
+			if len(constant.Value) <= 4 || len(constant.Value) == 8 {
+				fl.scriptVariables[constant.Name] = int(value.AsUint64Raw(constant.Value))
+			}
 		}
 	}
+
 	fl.scriptVariables["FILE_SIZE"] = int(fl.size)
 	fl.scriptVariables["FILE_NAME"] = fl._f.Name()
 }
