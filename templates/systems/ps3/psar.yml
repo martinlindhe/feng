@@ -22,7 +22,7 @@ software:
 
 kind: archive
 name: PlayStation archive
-extensions: [.psarc, .pak, .bin]
+#extensions: [.psarc, .pak, .bin]
 endian: big
 
 magic:

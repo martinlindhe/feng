@@ -1,0 +1,49 @@
+# STATUS: 50%
+
+# Used in:
+# - Sly Cooper: Thieves in Time (PS3)
+
+# XXX: maybe ps3-standardized str format, no idea...
+
+# TODO: figure out the meaning of the data table "pair"
+
+kind: game
+name: "Sly Cooper: Thieves in Time str file"
+extensions: [.str]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'SSTRPS3 '
+
+structs:
+  header:
+    ascii[8] Signature: c'SSTRPS3 '
+    u32 PairTableSize: ?? # XXX size of the "pair" table
+    u32 StringTableSize: ??
+    u32 v3: ?? # 01 00 00 00
+    u32 StringCount: ??
+    u32 v5: ?? # 00 00 00 30
+    u32 v6: ?? # 00 00 cf 18
+
+    u32 StringTableStart: ??
+    u32 v7: ?? # 0
+    u32 v8: ?? # 0
+    u32 v9: ?? # 0
+
+  pair:
+    u32 u1: ??
+    u32 u2: ??
+    if OFFSET >= Header.MaybeTableSize:
+      parse: stop
+
+  string:
+    utf8z String: ??
+
+layout:
+  - header Header
+
+  - pair[] Pair  # XXX unknown data table
+
+  - offset Header.StringTableStart
+  - string[Header.StringCount] String

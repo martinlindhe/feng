@@ -11,9 +11,11 @@ name: Legend of Legaia archive
 filenames: [prot.dat, dmy.dat]
 endian: little
 
-magic:
-  - offset: 0000
-    match: 00 00 00 00 # XXX
+no_magic: true
+
+#magic:
+#  - offset: 0000
+#    match: 00 00 00 00 # XXX weak
 
 structs:
   header:

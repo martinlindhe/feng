@@ -89,6 +89,11 @@ online-only universal game modding tool
 - https://psxtools.de/forum/
 
 
+# GAME SOUND EFFECT EXTRACTION
+- https://soundeffects.fandom.com/wiki/Sound_Effects_Wiki
+- https://www.sounds-resource.com/
+
+
 # SAMPLES
 - https://telparia.com/fileFormatSamples/
 - https://samples.ffmpeg.org/
