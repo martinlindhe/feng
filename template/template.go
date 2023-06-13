@@ -232,11 +232,17 @@ func (r ValidationError) Error() string {
 
 func (t *Template) evaluateStructs() ([]EvaluatedStruct, error) {
 	res := []EvaluatedStruct{}
+	usedName := make(map[string]bool)
 	for _, c := range t.Structs {
 		es, err := parseStruct(&c)
 		if err != nil {
 			return nil, err
 		}
+		if _, ok := usedName[es.Name]; ok {
+			return nil, fmt.Errorf("struct name '%s' is already in use", es.Name)
+		}
+
+		usedName[es.Name] = true
 		res = append(res, es)
 	}
 	return res, nil
@@ -369,7 +375,6 @@ func (t *Template) evaluateLayout() ([]value.DataField, error) {
 
 	for _, s := range t.Layout {
 		key, err := value.ParseDataField(s)
-		//log.Println(s, key)
 		if err != nil {
 			return nil, err
 		}

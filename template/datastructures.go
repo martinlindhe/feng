@@ -71,6 +71,7 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 		log.Warn().Err(err).Msgf("%s: evaluateStructs failed", basename)
 		return nil, err
 	}
+
 	layout, err := template.evaluateLayout()
 	if err != nil {
 		log.Warn().Err(err).Msgf("%s: evaluateLayout failed", basename)
