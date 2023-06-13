@@ -1,0 +1,32 @@
+# STATUS: 1%
+
+# Used in:
+# - Okage: Shadow King (PS2)
+
+# XXX same kind of structure as in xseq.yml
+
+kind: game
+name: "Okage: Shadow King XVAB file"
+extensions: [.xv]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XVAB'
+
+structs:
+  header:
+    ascii[4] Signature: c'XVAB'
+    u32 v1: ??
+    u32 v2: ??
+
+  tag:
+    ascii[4] Tag: ?? # HEAD, TGIF, TGBP, TGSP, SEIF, SEGP, SERQ, SESQ, VELT, PANT, LFOT
+    u32 TagSize: ??
+    u8[self.TagSize] Data: ??
+
+    # XXX "LFOT" tag seem to hold more data than TagSize
+
+layout:
+  - header Header
+  - tag[] Tag

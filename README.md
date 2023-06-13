@@ -3,8 +3,6 @@
 Feng is a yaml-based template format for specifying binary file structures,
 and a commandline app working with the format.
 
-**WARNING : The format is not yet stabilized and things may break.**
-
 
 # Usage
 
@@ -38,12 +36,14 @@ Flags:
 
 # Installation
 
-Windows/macOS and Linux binaries is available on the [Releases](https://github.com/martinlindhe/feng/releases) page.
+Binary releases can be downloaded from the [Releases](https://github.com/martinlindhe/feng/releases) page.
 
-If you have golang installed, then you can install `feng` from git like this:
+
+## Installation from git
+
+You need `golang` installed on your system. Install the `feng` command:
 
     go install github.com/martinlindhe/feng/cmd/feng@latest
-
 
 
 # Template example

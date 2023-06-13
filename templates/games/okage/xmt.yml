@@ -1,0 +1,26 @@
+# STATUS: 1%
+
+# Used in:
+# - Okage: Shadow King (PS2)
+
+# TODO map rest of file (some table)
+
+kind: game
+name: "Okage: Shadow King XMT file"
+extensions: [.xmt]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XMT' 00
+
+structs:
+  header:
+    ascii[4] Signature: c'XMT' 00
+    u32 v1: ??
+    u32 v2: ??
+    u32 v3: ??
+    i32 v4: ?? # -1
+
+layout:
+  - header Header

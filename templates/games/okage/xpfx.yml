@@ -1,0 +1,42 @@
+# STATUS: 25% extract: raw data, does not handle decompression
+
+# Used in:
+# - Okage: Shadow King (PS2)
+
+# TODO: compression? "comtype okage" according to quickbms
+
+resources:
+  - https://web.archive.org/web/20220309165319/https://aluigi.altervista.org/bms/okage_xpk.bms
+  - https://web.archive.org/web/20230429100945/https://zenhax.com/viewtopic.php?t=2313
+
+kind: game
+name: "Okage: Shadow King XPFX file"
+#extensions: [.xpf]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XPFX'
+
+structs:
+  header:
+    ascii[4] Signature: c'XPFX'
+    u32 BaseOffset: ??
+    u32 FileCount: ??
+    u32 Reserved: ??
+
+  file:
+    ascii[0x18] Name: ??
+    filename: self.Name
+
+    u32 Offset: ??
+    u32 Size: ??
+
+    offset: Header.BaseOffset + self.Offset
+    be:u32 UncompressedSize: ?? # XXX
+    raw:u8[self.Size - 4] Data: ??  # XXX maybe compressed?
+    offset: restore
+
+layout:
+  - header Header
+  - file[Header.FileCount] File

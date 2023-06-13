@@ -4,8 +4,10 @@
 # Used in DOS and early Windows games.
 
 # Used in:
-# EverQuest
-# EverQuest 2
+# - EverQuest
+# - EverQuest 2
+
+# TODO: a similar format (same?) is used in Sly Cooper: Thieves in Time (PS3)
 
 references:
   - https://moddingwiki.shikadi.net/wiki/XMI_Format

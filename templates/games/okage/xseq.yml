@@ -1,0 +1,32 @@
+# STATUS: 25%
+
+# Sound effect
+
+# Used in:
+# - Okage: Shadow King (PS2)
+
+# XXX same kind of structure as in xvab.yml
+
+kind: game
+name: "Okage: Shadow King XSEQ file"
+extensions: [.xsq]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'XSEQ'
+
+structs:
+  header:
+    ascii[4] Signature: c'XSEQ'
+    u32 v1: ??
+    u32 v2: ??
+
+  tag:
+    ascii[4] Tag: ?? # HEAD, TRK, SEQU
+    u32 TagSize: ??
+    u8[self.TagSize] Data: ??
+
+layout:
+  - header Header
+  - tag[] Tag

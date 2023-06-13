@@ -1,0 +1,38 @@
+# STATUS: 1%
+
+# Used in:
+# - Crisis Beat (PS1)
+
+# TODO: map and extract data
+
+kind: game
+name: Crisis Beat archive
+extensions: [.0]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 DataOffset: ?? # start of data
+    u32 v1: ?? #
+    u32 v2: ?? #
+    u32 v3: ?? #
+
+    u32 v4: ?? #
+    u32 v5: ?? #
+    u32 v6: ?? #
+    u32 v7: ?? #
+
+    u32 v8: ?? #
+    u32 v9: ?? #
+    u32 vA: ??
+    u32 vB: ??
+
+    u32 vC: ??
+    u32 vD: ??
+    u32 vE: ?? # 0
+    u32 vF: ?? # 0
+
+layout:
+  - header Header

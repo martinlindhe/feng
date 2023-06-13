@@ -1,0 +1,94 @@
+# STATUS: 1%
+
+# Looks to be compiled script file
+
+# Used in:
+# - Sly Cooper: Thieves in Time (PS3), in Sly4.psarc.edat, in Scripts/*
+
+kind: game
+name: "Sly Cooper: Thieves in Time XMLB file"
+extensions: [.xmb]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'XMLB'
+
+structs:
+  header:
+    ascii[4] Signature: c'XMLB'
+    u32 v1: ?? # 00 04 00 00
+    ascii[4] Platform: ?? # c'PS3 '
+    u32 FileSize: ??
+
+    u32 v4: ?? # 00 01 00 00
+    u32 v5: ?? # 00 00 00 18
+    u32 MaybeChecksum: ?? # XXX
+    u32 v7: ?? # 0
+
+    u32 v8: ?? # 0
+    u16 EntryCount: ?? #
+    u16 v9b: ?? # 0
+    u32 MaybeHeaderSize: ?? # XXX always 48
+    u32 vB: ?? # 0
+
+  # list of start offsets to each entry (variable length)
+  lookup_table:
+    u32 Offset: ??
+
+    offset: self.Offset
+    u32 u0: ?? # 014b07   XXX offset?
+    u32 u1: ?? # 0
+    u32 u2: ?? # 0018
+    u32 u3: ?? # 2
+
+    u32 u4: ?? # 0
+    u32 PointToU7: ?? # == offset('self.u5') + 8
+    u32 u6: ?? # 0
+    u32 u7: ?? # 24728b
+
+    u32 u8: ?? # 164c    XXX
+    u32 u9: ?? # 04 da 99 51
+    u32 SomeDataOffset: ?? # 1660   XXX points to some relative data, too
+    u32 MaybeChecksum: ?? # XXX
+
+    asciiz Name: ??
+    u16 XXX: ??
+
+#    offset: self.SomeDataOffset
+#    u8[8] Data: ?? # XXX
+#    offset: restore
+
+    offset: restore
+
+layout:
+  - header Header
+
+  - lookup_table[Header.EntryCount] Lookup
+
+  #- lookup_table[3] Lookup
+
+
+# XXX
+#  [00165f] XXX                            u16 be           0                              00 00
+#  [0016a5] XXX                            u16 be           0                              00 00
+#  [0016f1] XXX                            u16 be           0                              00 00
+#  [00173f] XXX                            u16 be           0                              00 00
+#  [00178b] XXX                            u16 be           0                              00 00
+#  [0017ca] XXX                            u16 be           0                              00 00
+#  [00181c] XXX                            u16 be           1                              00 01
+#  [00186e] XXX                            u16 be           0                              00 00
+#  [0018c2] XXX                            u16 be           0                              00 00
+#  [00192b] XXX                            u16 be           224                            00 e0
+#  [001993] XXX                            u16 be           224                            00 e0
+#  [0019fb] XXX                            u16 be           224                            00 e0
+
+# XXX
+# tuning.xmb:  table size 15f0, from 0030h   until   1620h
+
+# 15f0 / 4 = 57c
+
+# 1620   entry0
+# 1668   entry1
+# 16b0   entry2
+
