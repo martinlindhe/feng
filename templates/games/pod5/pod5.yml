@@ -61,8 +61,7 @@ structs:
 
 layout:
   - header Header
-  - file_entry FileEntry # XXX multiple
-  - file_entry FileEntry # XXX multiple
+  - file_entry[2] FileEntry # XXX multiple
 
 
 

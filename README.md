@@ -1,7 +1,7 @@
 [![Discord](https://img.shields.io/discord/999601338407190569.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/mYBn9XqRBr)
 
-Feng is a yaml-based template format for specifying binary file structures,
-and a commandline app working with the format.
+Feng is a command line app for querying, presenting and extracting any kind of structured binary data,
+using a yaml-based template format that allows for specifying the file structure.
 
 
 # Usage
