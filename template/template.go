@@ -241,7 +241,6 @@ func (t *Template) evaluateStructs() ([]EvaluatedStruct, error) {
 		if _, ok := usedName[es.Name]; ok {
 			return nil, fmt.Errorf("struct name '%s' is already in use", es.Name)
 		}
-
 		usedName[es.Name] = true
 		res = append(res, es)
 	}
@@ -372,12 +371,17 @@ func ParseMatchPattern(item yaml.MapItem) (*MatchPattern, error) {
 func (t *Template) evaluateLayout() ([]value.DataField, error) {
 
 	res := []value.DataField{}
+	usedName := make(map[string]bool)
 
 	for _, s := range t.Layout {
 		key, err := value.ParseDataField(s)
 		if err != nil {
 			return nil, err
 		}
+		if _, ok := usedName[key.Label]; ok {
+			return nil, fmt.Errorf("layout name '%s' is already in use", key.Label)
+		}
+		usedName[key.Label] = true
 		res = append(res, key)
 	}
 
