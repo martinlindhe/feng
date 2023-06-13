@@ -1,7 +1,6 @@
 package template
 
 import (
-	"fmt"
 	"io/fs"
 	"path/filepath"
 	"testing"
@@ -32,8 +31,6 @@ func TestEvaluateAllTemplates(t *testing.T) {
 		templateData, err := fs.ReadFile(feng.Templates, path)
 		assert.Equal(t, nil, err)
 
-		fmt.Println("processing", path)
-
 		var tpl Template
 		err = yaml.Unmarshal(templateData, &tpl)
 		assert.Equal(t, nil, err)
@@ -46,7 +43,7 @@ func TestEvaluateAllTemplates(t *testing.T) {
 		}
 
 		_, err = UnmarshalTemplateIntoDataStructure(templateData, path)
-		assert.Equal(t, nil, err)
+		assert.Equal(t, nil, err, path)
 		return nil
 	})
 }

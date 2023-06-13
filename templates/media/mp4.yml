@@ -32,6 +32,4 @@ layout:
   # a mp4 file consists of box slices:
   # - box[] Box
 
-  - box Box
-  - box Box
-
+  - box[2] Box
