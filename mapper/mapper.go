@@ -823,6 +823,13 @@ func (fl *FileLayout) expandChildren(fs *Struct, dfParent *value.DataField, ds *
 			"compressed:lzma", "compressed:lzma2", "compressed:pkware",
 			"raw:u8", "encrypted:u8":
 			// internal data types
+
+			for _, x := range fs.Fields {
+				if x.Format.Label == es.Field.Label {
+					return fmt.Errorf("field name '%s' is already in use", es.Field.Label)
+				}
+			}
+
 			log.Debug().Msgf("expandChildren type %s: %s (child of %s)", es.Field.Kind, es.Field.Label, dfParent.Label)
 			es.Field.Range = strings.ReplaceAll(es.Field.Range, "self.", dfParent.Label+".")
 			unitLength, totalLength := fl.GetAddressLengthPair(&es.Field)
