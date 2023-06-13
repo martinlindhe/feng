@@ -694,7 +694,7 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {
 
 	fl.presentTime = time.Since(presentStart)
 
-	fl.reportUnmappedByteCount()
+	fl.reportParseStats()
 
 	if cfg.ReportOverlapping {
 		fl.reportOverlappingData()
@@ -709,7 +709,7 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {
 	}
 }
 
-func (fl *FileLayout) reportUnmappedByteCount() {
+func (fl *FileLayout) reportParseStats() {
 
 	mappedBytes := fl.MappedBytes()
 	if mappedBytes < fl.size {
@@ -746,7 +746,6 @@ func (fl *FileLayout) reportUnmappedByteCount() {
 		feng.Printf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
 		feng.Printf("PRESENT TIME: %v\n", fl.presentTime)
 	}
-
 }
 
 func ByteCountSI(b int64) string {
