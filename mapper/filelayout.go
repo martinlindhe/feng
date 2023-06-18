@@ -639,11 +639,11 @@ func (fl *FileLayout) presentStructureTreeNode(layout *Struct, indent int) {
 		heading += ` "` + layout.Label + `"`
 	}
 	if len(layout.Fields) == 0 {
-		feng.Printf("   empty struct")
+		feng.Print("   empty struct")
 	}
-	feng.Printf(heading + "\n")
+	feng.Print(heading + "\n")
 	for _, child := range layout.Children {
-		feng.Printf(prefix + "_PFX_")
+		feng.Print(prefix + "_PFX_")
 		fl.presentStructureTreeNode(child, indent+2)
 	}
 }
@@ -684,12 +684,12 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {
 	}
 	fl.inUTC = cfg.InUTC
 	if fl.BaseName != "" {
-		feng.Printf("# " + fl.BaseName + "\n")
+		feng.Print("# " + fl.BaseName + "\n")
 	}
 
 	presentStart := time.Now()
 	for _, layout := range fl.Structs {
-		feng.Printf(fl.presentStruct(layout, cfg))
+		feng.Print(fl.presentStruct(layout, cfg))
 	}
 
 	fl.presentTime = time.Since(presentStart)
@@ -721,10 +721,10 @@ func (fl *FileLayout) reportParseStats() {
 
 		feng.Printf("TOO MANY BYTES MAPPED! expected 0x%04x bytes but got 0x%04x. That is %d bytes too many!\n", fl.size, mappedBytes, overflow)
 	} else {
-		feng.Printf("EOF\n")
+		feng.Print("EOF\n")
 	}
 
-	feng.Printf("\n---STAT---\n")
+	feng.Print("\n---STAT---\n")
 	feng.Printf("FILE SIZE : %d / 0x%06x / %s\n", fl.size, fl.size, ByteCountSI(fl.size))
 
 	pctRead := (float64(fl.bytesRead) / float64(fl.size)) * 100
@@ -740,7 +740,7 @@ func (fl *FileLayout) reportParseStats() {
 	}
 
 	if fl.measureTime {
-		feng.Printf("\n---TIME---\n")
+		feng.Print("\n---TIME---\n")
 		feng.Printf("EVALUATED EXPRESSIONS: %d (%v)\n", fl.evaluatedExpressions, fl.evaluatedExpressionTime)
 
 		feng.Printf("MEASURE: template parsed in %v (other templates = %v)\n", fl.evaluationTime, fl.totalEvaluationTimeUntilMatch-fl.evaluationTime)
@@ -762,7 +762,7 @@ func ByteCountSI(b int64) string {
 }
 
 func (fl *FileLayout) reportOverlappingData() {
-	feng.Printf("TODO: report overlapping bytes")
+	feng.Print("TODO: report overlapping bytes")
 }
 
 func (fl *FileLayout) reportUnmappedData() {

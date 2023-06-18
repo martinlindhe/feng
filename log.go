@@ -18,6 +18,10 @@ func InitLogging() *bufio.Writer {
 	return STDOUT
 }
 
+func Print(a ...any) {
+	fmt.Fprint(STDOUT, a...)
+}
+
 func Printf(format string, a ...any) {
 	fmt.Fprintf(STDOUT, format, a...)
 }

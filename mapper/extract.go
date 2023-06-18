@@ -138,7 +138,7 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 		if err != nil {
 			return err
 		}
-		feng.Printf(" OK\n")
+		feng.Print(" OK\n")
 
 	case "encrypted":
 		if parts[1] != "u8" {
