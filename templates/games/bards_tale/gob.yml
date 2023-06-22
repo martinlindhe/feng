@@ -1,0 +1,33 @@
+# STATUS: 5%
+
+# Used in:
+# - The Bard's Tale (2004, PS2)
+
+kind: game
+name: "The Bard's Tale gob file"
+extensions: [.gob]
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    u32 EntryCount: ??
+
+  file:
+    ascii[0x20] Name: ??
+    filename: self.Name
+
+    u32 Offset: ??
+    u32 Size: ??
+
+    if self.Offset == 0:
+      parse: stop
+
+    offset: self.Offset
+    raw:u8[self.Size] Data: ??
+    offset: restore
+
+layout:
+  - file[30] File
+

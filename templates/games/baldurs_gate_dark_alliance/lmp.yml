@@ -1,7 +1,8 @@
-# STATUS: 70%, extraction: ok
+# STATUS: 80%, extraction: ok
 
 # Used in:
-# - Baldur's Gate: Dark Alliance (PS2)
+# - Baldur's Gate: Dark Alliance (2001, PS2)
+# - The Bard's Tale (2004, PS2)
 
 kind: game
 name: "Baldur's Gate: Dark Alliance lmp file"
@@ -15,8 +16,12 @@ structs:
     u32 EntryCount: ??
 
   file:
-    ascii[0x38] Name: ??
+    asciiz Name: ??
     filename: self.Name
+
+    asciiz Extra1: ?? # XXX
+    asciiz Extra2: ?? # XXX
+    ascii[0x38 - len("self.Name") - len("self.Extra1") - len("self.Extra2")] Extra3: ?? # XXX
     u32 Offset: ??
     u32 Size: ??
 
