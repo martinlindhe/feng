@@ -93,4 +93,4 @@ Mapping a file with the above structure would result in something like [smoketes
 
 ## User templates
 
-feng reads additional templates from `~/.config/feng`, or specified with the --template argument.
+feng reads user templates from `~/.config/feng`, or from a custom path with the `--template` argument.

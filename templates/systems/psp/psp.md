@@ -8,3 +8,6 @@ https://umdgen.en.lo4d.com/windows
 # pspdecrypt
 
 used to decrypt eboot.bin and .prx files
+
+https://github.com/John-K/pspdecrypt/
+

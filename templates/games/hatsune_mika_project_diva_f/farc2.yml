@@ -1,12 +1,14 @@
 # STATUS: 1%
 
 # Used in:
-# Hatsune Miku: Project DIVA F 2nd (PS3)
+# Hatsune Miku: Project DIVA F 2nd (PS3, 2014)
+
+# maybe: Fighting Fury (PS2, 2003)
 
 
 kind: archive
 name: "Hatsune Miku: Project DIVA F archive"
-extensions: [.farc]
+extensions: [.farc, .idx]
 endian: big
 
 magic:

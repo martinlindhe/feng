@@ -1,0 +1,27 @@
+# STATUS: 1%
+#
+# Switch compiled shader file
+#
+# Used in:
+# - Super Meat Boy Forever (switch)
+
+kind: system
+name: Switch compiled shader file
+extensions: [.pobj, .vobj]
+endian: little
+
+magic:
+  - offset: 0000
+    match: 91 68 86 19
+
+structs:
+  header:
+    u8[4] Signature: 91 68 86 19
+    u32 u1: ?? # 0
+    u32 u2: ?? # 04 00 20 00
+    u32 u3: ?? # 0
+    u32 u4: ?? # 17
+    u32 u5: ?? # 21
+
+layout:
+  - header Header

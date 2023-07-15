@@ -1,29 +1,40 @@
-# STATUS: 1%
-#
-# HI: need bitstream parser?
+# STATUS: 5%, EXTRACT: 'CWS' OK
+
+# TODO: samples needed with header 0x53 0x57 0x5a ('ZWS' lzma)
+
+# TODO later: allow decompression of payload and continued mapping of the decompressed data in this template
 
 references:
+  - https://open-flash.github.io/documentation/swf/swf/
+  - https://en.wikipedia.org/wiki/SWF
+  - https://archive.org/details/swf-file-format-spec/mode/2up
   - https://www.sweetscape.com/010editor/repository/files/SWF.bt
 
 software:
-  - https://github.com/mroach/rom64
+  - ffmpeg
+  - https://github.com/Arkq/swfpack
 
-kind: executable
-name: Adobe Flash SWF
+kind: media
+name: Macromedia Compiled Flash app
 extensions: [.swf]
-endian: big # XXX
+endian: little
 
 magic:
   - offset: 0000
-    match: c'FWS'
+    match: c'FWS' # uncompressed payload
+
+  - offset: 0000
+    match: c'CWS' # zlib compressed payload
 
 structs:
   header:
-    ascii[3] Magic: c'FWS'
-    u8 Version: ??
-    u32 FileSize: ??
+    ascii[3] Signature: ??
+    u8 Version: ??  # seen: 6, 8
+    u32 UncompressedSize: ??
 
-    # NEXT follows RECT struct that seems to require bit stream parsing
+    if self.Signature == "CWS":
+      compressed:zlib[FILE_SIZE - 8] Payload: ??
+      parse: stop # TODO map the decompressed data
 
 layout:
   - header Header

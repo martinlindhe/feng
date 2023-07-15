@@ -37,7 +37,7 @@ kind: archive
 Or on a single field:
 
 ```yaml
-be:filetime   Time: ??
+be:filetime Time: ??
 ```
 
 You can also change endianness during struct evaluation, like this:
@@ -98,8 +98,8 @@ This will not match a file unless both magic bytes and file extension matches.
 FILE_SIZE           # int: the file size in bytes
 FILE_NAME           # string: the opened filename, with full path
 OFFSET              # int: current offset
-self                # evaluates to the current struct
-self.index          # slice-based iteration index, 0-based
+self                # this expression evaluates to the name of the current struct
+self.index          # int: slice-based iteration index, 0-based
 ```
 
 
@@ -107,7 +107,7 @@ self.index          # slice-based iteration index, 0-based
 
 You can specify a required byte sequence like this
 ```yaml
-ascii[2] Magic:    c'PK'
+ascii[2] Magic: c'PK'
 
 u16 TYPE: 00 01 ff
 ```
