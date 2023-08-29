@@ -1,0 +1,31 @@
+# STATUS: 1%
+
+# Used in:
+# - Crimson Dragon (2011, xbox360) ue3
+
+kind: game
+name: Crimson Dragon language pack
+
+extensions: [.bin] # XXX Coalesced_*.bin
+endian: big
+
+magic:
+  - offset: 0004
+    match: ff ff ff d8
+
+structs:
+  header:
+    u32 Val1: ??
+    u32 Tag1: ff ff ff d8
+    utf16z Text1: ??
+
+    u32 Val2: ??
+    u32 Tag2: ?? ## ff ff ff e9    FIXME BUG: this second match would fail due to some offset calc error
+    utf16z Text2: ??
+
+    u32 Val3: ??
+    u32 Tag3: ?? ##
+
+
+layout:
+  - header Header

@@ -11,9 +11,12 @@ magic:
   - offset: 0000
     match: c'<?xml'
 
+  - offset: 0000
+    match: fe ff 00 c'<'   # Byte order mark. FE FF = Big endian UTF-16. TODO tag stream for decoding
+
 structs:
   header:
-    ascii[5] Signature: c'<?xml'
+    ascii[3] Signature: ??
 
 layout:
   - header Header

@@ -10,6 +10,8 @@ https://github.com/XboxDev/extract-xiso  # paru -S extract-xiso
 
 # Extract XBox LIVE package
 
+https://github.com/Gualdimar/Velocity
+
 http://gael360.free.fr/wxPirs.php
 
 
