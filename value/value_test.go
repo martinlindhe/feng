@@ -129,6 +129,12 @@ func TestUtf16zString(t *testing.T) {
 		0x31, 0x00, // trailing data that should be ignored
 	}
 	assert.Equal(t, ".exe", Utf16zString(b))
+
+	b2 := []byte{
+		0x4C, 0x00, 0x69, 0x00, 0x73, 0x00, 0x74, 0x00, 0x00,
+		0x00, 0x04, 0xDD, // trailing data that should be ignored
+	}
+	assert.Equal(t, "List", Utf16zString(b2))
 }
 
 func TestUtf8zString(t *testing.T) {
