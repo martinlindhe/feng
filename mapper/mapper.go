@@ -963,8 +963,6 @@ func (fl *FileLayout) expandChildren(fs *Struct, dfParent *value.DataField, ds *
 			if err != nil {
 				return errors.Wrapf(err, "%s at %06x", es.Field.Label, fl.offset)
 			}
-			// append terminator marker since readBytesUntilMarker() excludes it
-			val = append(val, []byte{0, 0}...)
 
 			len := int64(len(val))
 			fs.Fields = append(fs.Fields, Field{

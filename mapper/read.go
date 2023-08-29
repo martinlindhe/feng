@@ -331,10 +331,13 @@ func (fl *FileLayout) readBytesUntilMarkerSequence(chunkSize int64, search []byt
 			return nil, err
 		}
 
-		offset += chunkSize
+		offset, err = fl._f.Seek(0, io.SeekCurrent)
+		if err != nil {
+			return nil, err
+		}
 
 		if DEBUG_READ {
-			log.Info().Msgf("Reading % 2d (READ #2 UNTIL MARKER %02x)", chunkSize, search)
+			log.Info().Msgf("Reading % 2d from %06x (READ #2 UNTIL MARKER %02x)", chunkSize, offset, search)
 		}
 		n, err = fl._f.Read(chunk[:chunkSize])
 		fl.bytesRead += int(n)
