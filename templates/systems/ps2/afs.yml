@@ -9,6 +9,7 @@
 # Monster Hunter (2004, PS2) - has filename table
 # Persona 3 (2006, PS2)
 # Persona 4 (2008, PS2)
+# Fate/unlimited codes (2008, PS2)
 # + many more PS2 titles
 
 
@@ -23,6 +24,10 @@
 
 # Pro Evolution Soccer 4 (2004, PS2)
 # -  offset 0x00498 # Pro Evolution Soccer 4: e_text.afs ... DIRECTLY AFTER file entries
+
+# Fate/unlimited codes
+# - filename struct is different
+#
 
 # TODO: figure out how to auto find the correct filename_header offset
 
@@ -53,7 +58,7 @@ structs:
     u32 Offset: ??
     u32 Size: ??  # 0 == end of list marker
 
-    filename: struct(self.index, "Filename", "Name")
+    #filename: struct(self.index, "Filename", "Name")
 
     offset: self.Offset
     raw:u8[self.Size] Data: ??
@@ -77,10 +82,13 @@ structs:
 layout:
   - header Header
 
-  - offset 0x07FFF8
-  # - offset 0x000090  # Pro Evolution Soccer 3: data_e.afs  ... DIRECTLY AFTER file entries
+  #- offset 0x07FFF8 # Pro Evolution Soccer 2
+  #- offset 0x000090  # Pro Evolution Soccer 3: data_e.afs  ... DIRECTLY AFTER file entries
   #- offset 0x00278   # Pro Evolution Soccer 3: 160game.afs  ... DIRECTLY AFTER file entries
   #- offset 0x00498 # Pro Evolution Soccer 4: e_text.afs ... DIRECTLY AFTER file entries
+  #- offset 0x00188 # Fate/unlimited codes, bgm.afs
+  # Fate/unlimited codes, voice.afs:  maybe 1009:b820  start of file tbl ??? in jap encoding?  the file is strange
+  - offset 0x00a78 # Fate/unlimited codes, data.afs: filenames are blank or "stor", so ignore them. each block seem to have their own clump of filenames + data
   - filename_header FilenameHeader
 
   - offset FilenameHeader.DirectoryOffset
