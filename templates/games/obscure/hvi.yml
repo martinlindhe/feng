@@ -1,0 +1,20 @@
+# STATUS: 1%
+
+kind: game
+name: Obscure hvi file
+extensions: [.hvi]
+endian: little # XXX
+
+magic:
+  - offset: 0000
+    match: c'HVI '
+
+structs:
+  header:
+    ascii[4] Signature: c'HVI '
+    u32 u1: ?? # 1
+    u32 u2: ?? # 0
+    u32 u3: ?? # 64 / 128 / 256
+
+layout:
+  - header Header

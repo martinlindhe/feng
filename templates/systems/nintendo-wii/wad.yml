@@ -1,0 +1,50 @@
+# STATUS: 1%
+
+resources:
+  - https://wiibrew.org/wiki/WAD_files
+
+kind: game
+name: WiiWare wad archive
+extensions: [.wad]
+endian: big
+
+magic:
+  - offset: 0004
+    match: c'ib'  # Installable WAD: boot2 WAD
+
+  - offset: 0004
+    match: c'Is'  # Installable WAD: everything else
+
+  - offset: 0004
+    match: c'Bk'  # Backup WAD
+
+structs:
+  header:
+    u32 HeaderSize: ??
+    ascii[2] Signature: ??
+    u16 Version: ??
+    if self.Signature == "Bk":
+      # Backup WAD
+      u32 Console ID: ??
+      u32 Savegame file count: ??
+      u32 Savegame file size: ??
+      u32 TMD size: ??
+      u32 Encrypted content size: ??
+      u32 Backup area size: ??
+      u8[0x40] Included contents bitfield: ??
+      u64 Title ID: ??
+      u8[6] MAC address: ??
+      u16 Reserved: ??
+      u8[0x10] Padding: ??
+    else:
+      # Installable WAD
+      u32 Certificate chain size: ??
+      u32 Reserved: ??
+      u32 Ticket size: ??
+      u32 TMD size: ??
+      u32 Encrypted content size: ??
+      u32 Footer size: ??
+      u8[0x20] Padding: ??
+
+layout:
+  - header Header

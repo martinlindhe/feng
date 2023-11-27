@@ -1,0 +1,32 @@
+# STATUS: 1%
+
+# Used in:
+# Far Cry 6
+
+# https://reverseengineering.stackexchange.com/questions/32362/need-help-in-opening-of-binary-files
+
+kind: media
+name: Far Cry 6 spx file
+extensions: [.spx]
+endian: big
+
+magic:
+  - offset: 0000
+    match: c'nbCF'
+
+structs:
+  header:
+    ascii[4] Signature: c'nbCF'
+    u8 MaybeVersion: ?? # 2
+    u32 u1: ?? # 2
+    u32 u2: ?? # 1 or 2
+    u32 u3: ?? # 0 or 2
+
+    u8[5] u4: 75 ab 3e f2 00 # XXX
+
+    # font:
+#    ascii[5] Tag: ?? # PHXFT = font, PHXPA = colorpalette, PHXEN = activitystatus
+
+layout:
+  - header Header
+

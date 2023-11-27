@@ -1,0 +1,20 @@
+# STATUS: 1%
+
+kind: game
+name: Obscure hoe file
+extensions: [.hoe]
+endian: big
+
+magic:
+  - offset: 0000
+    match: 40 03 33 33
+
+structs:
+  header:
+    ascii[4] Signature: 40 03 33 33
+    u32 u1: ?? # 2 or 3
+    u32 SomeValue: ?? # or offset?   # 40 80 00 00
+    u32 u3: ?? # 3 or 5
+
+layout:
+  - header Header

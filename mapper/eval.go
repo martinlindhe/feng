@@ -32,7 +32,7 @@ func (fl *FileLayout) EvaluateStringExpression(in string, df *value.DataField) (
 		return "", fmt.Errorf("nothing to eval")
 	}
 
-	log.Info().Msgf("eval string %s, %v", in, fl.scriptFunctions)
+	//log.Info().Msgf("eval string %s, %v", in, fl.scriptFunctions)
 
 	result, err := fl.evaluateExpr(in, df)
 	if err != nil {

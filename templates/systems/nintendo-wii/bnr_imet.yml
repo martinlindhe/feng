@@ -18,7 +18,7 @@ magic:
 
 structs:
   header:
-    u8[64] Padding: ??
+    u8[64] Padding1: ??
     ascii[4] Signature: c'IMET'
     u32 HashSize: ??
     u32 Unknown: ??
@@ -36,7 +36,7 @@ structs:
     ascii[84] UnknownName1: ??
     ascii[84] UnknownName2: ??
     ascii[84] KoreanName: ??
-    u8[588] Padding: ??
+    u8[588] Padding2: ??
     u8[16] Checksum: ?? # MD5 of 0 to 'hashsize' in header
 
   u8_archive_header: # starts at 0x600
@@ -44,7 +44,7 @@ structs:
     u32 RootNodeOffset: ?? # xxx always 0x20
     u32 HeaderSize: ?? # XXX size of header from root_node to end of string table.
     u32 DataOffset: ?? # XXX offset to data -- this is rootnode_offset + header_size, aligned to 0x40.
-    u8[16] Padding: ??
+    u8[16] Padding3: ??
 
   u8_node:
     u16 Type:
@@ -63,7 +63,7 @@ structs:
     offset: "0x0680"   # XXX FIXME BUG: "0680" is parsed as a decimal number, should default to hex
     ascii[4] Signature: c'IMD5'
     u32 Size: ?? # size of the rest of part B, starting from next field.
-    u8[8] Padding: ??
+    u8[8] Padding4: ??
     u8[16] Checksum: ?? # md5.  XXXX u128 data type
     u32 PayloadTag: # XXX match on ascii[4]
       eq c'LZ77': Lz77
