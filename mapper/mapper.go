@@ -99,6 +99,7 @@ func MapReader(cfg *MapReaderConfig) (*FileLayout, error) {
 		if err != nil && !errors.Is(err, ErrParseStop) {
 			if !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
 				log.Error().Err(err).Msgf("mapLayout error processing %s at %06x", df.Label, fl.offset)
+				return &fl, err
 			}
 			return &fl, nil
 		}
