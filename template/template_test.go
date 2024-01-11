@@ -12,8 +12,8 @@ import (
 	"github.com/martinlindhe/feng/value"
 )
 
-// evaluate all templates, validate some fields
-func TestEvaluateAllTemplates(t *testing.T) {
+// evaluate all templates to catch template parse errors, and validate some fields
+func TestValidateAllTemplates(t *testing.T) {
 
 	fs.WalkDir(feng.Templates, ".", func(path string, d fs.DirEntry, err2 error) error {
 		// cannot happen
@@ -108,5 +108,4 @@ layout:
 			{Kind: "other_segment", Range: "", Slice: true, Label: "other_segments"},
 		},
 	}, ds)
-
 }

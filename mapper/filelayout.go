@@ -678,6 +678,15 @@ func (fl *FileLayout) presentStruct(layout *Struct, cfg *PresentFileLayoutConfig
 	return res
 }
 
+// used for tests, buffered, returns when presentation is fully rendered.
+func (fl *FileLayout) PresentFullString(cfg *PresentFileLayoutConfig) string {
+	s := ""
+	for _, layout := range fl.Structs {
+		s += fl.presentStruct(layout, cfg) + "\n"
+	}
+	return s
+}
+
 func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {
 	if fl == nil {
 		panic("Probably input yaml error, look for properly escaped strings and \" characters")

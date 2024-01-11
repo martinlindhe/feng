@@ -12,7 +12,7 @@ import (
 // structure of a evaluated ./templates/ yaml file. see Template for the raw structure corresponding to the yaml file
 type DataStructure struct {
 
-	// constants derived from eq & bit matches
+	// constants derived from eq & bit pattern matches
 	Constants []Constant
 
 	// evaluated file structs
@@ -61,11 +61,13 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 	if DEBUG_PATTERNS {
 		log.Print("NewDataStructureFrom", basename)
 	}
+
 	constants, err := template.evaluateConstants()
 	if err != nil {
 		log.Warn().Err(err).Msgf("%s: evaluateConstants failed", basename)
 		return nil, err
 	}
+
 	structs, err := template.evaluateStructs()
 	if err != nil {
 		log.Warn().Err(err).Msgf("%s: evaluateStructs failed", basename)

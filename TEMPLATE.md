@@ -297,7 +297,7 @@ if self.Signature == BIG:   # where big is a constant or a eq pattern type value
 if self.Signature == 5:
   ...
 
-# example from bmp.yml
+# bit pattern matching example from bmp.yml
 u32 HeaderSize:
   eq 0000_000c: V2   # V2 automatically becomes a constant
   eq 0000_0028: V3
