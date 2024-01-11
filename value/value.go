@@ -356,7 +356,7 @@ func (df *DataField) IsSimpleUnit() bool {
 		return false
 	}
 	switch df.Kind {
-	case "u8", "i8", "u16", "i16", "u32", "i32", "f32", "u64", "i64", "ascii":
+	case "u8", "i8", "u16", "i16", "i24", "u24", "u32", "i32", "f32", "u64", "i64", "ascii":
 		return true
 	}
 	return false
@@ -389,6 +389,9 @@ func AsUint64(kind string, b []byte) uint64 {
 		return uint64(b[0])
 	case "u16", "i16", "dosdate", "dostime":
 		return uint64(binary.BigEndian.Uint16(b))
+	case "u24", "i24":
+		four := append([]byte{0}, b...)
+		return uint64(binary.BigEndian.Uint32(four))
 	case "u32", "i32", "f32", "time_t_32":
 		return uint64(binary.BigEndian.Uint32(b))
 	case "u64", "i64":

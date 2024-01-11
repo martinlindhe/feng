@@ -142,6 +142,7 @@ type EvaluatedStruct struct {
 	Expressions []Expression
 }
 
+// matches data stream with bit patterns
 func (es *Expression) EvaluateMatchPatterns(b []byte, endian string) ([]value.MatchedPattern, error) {
 	res := []value.MatchedPattern{}
 	if len(es.MatchPatterns) == 0 {
