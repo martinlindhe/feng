@@ -1,6 +1,7 @@
 # STATUS: 70%
 
 # TODO access value of Block_Size, auto bit shifted
+# TODO add support for xxh64 hash
 # TODO need more samples
 
 references:
@@ -8,7 +9,7 @@ references:
 
 kind: archive
 name: ZStd compressed data stream
-extensions: [.zstd]
+extensions: [.zst, .zstd]
 endian: little
 
 magic:
@@ -47,6 +48,8 @@ structs:
 
     if (self.Frame_Header_Descriptor & Single_Segment_flag) == 0:
       u8 Window_Descriptor: ??
+    else:
+      u8 Frame_Content_Size: ?? # XXX can be 1,2,4 or 8 bytes long, need samples
 
     # Dictionary_ID   0-4 bytes
     if (self.Frame_Header_Descriptor & Dictionary_ID_flag) == 1:
@@ -73,7 +76,7 @@ structs:
     # N bytes of Block_Content
     if (self.Block_Header & Last_Block) == 1:
       if (Frame.Frame_Header_Descriptor & Content_Checksum_flag) != 0:
-        u32 ContentChecksum: ??
+        u32 ContentChecksum: ?? # XXX xxh64 hash
       parse: stop
 
 layout:
