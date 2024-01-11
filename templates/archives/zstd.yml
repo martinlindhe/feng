@@ -1,4 +1,7 @@
-# STATUS: 1%
+# STATUS: 70%
+
+# TODO access value of Block_Size, auto bit shifted
+# TODO need more samples
 
 references:
   - https://github.com/facebook/zstd/blob/dev/doc/zstd_compression_format.md
@@ -6,7 +9,7 @@ references:
 kind: archive
 name: ZStd compressed data stream
 extensions: [.zstd]
-endian: little # XXX ???
+endian: little
 
 magic:
   - offset: 0001
@@ -20,7 +23,6 @@ magic:
 #25 b5 2f fd    v0.5
 #26 b5 2f fd    v0.6
 #27 b5 2f fd    v0.7
-
 
 structs:
   frame:
@@ -59,15 +61,21 @@ structs:
     if (self.Frame_Header_Descriptor & Frame_Content_Size_flag) != 0:
       u8 Frame_Content_Size: ??   # TODO calc field size correctly (0-8 bytes), need sample
 
+  block:
     # Block_Header (3 bytes)
-    u24 Block_Header:     # TODO impl bit matching on 24-bit field
+    u24 Block_Header:
       bit b1111_1111_1111_1111_1111_1000: Block_Size
-      bit b1111_1111_1111_1111_0000_0110: Block_Type
-      bit b1111_1111_1111_1111_0000_0001: Last_Block
+      bit b0000_0000_0000_0000_0000_0110: Block_Type
+      bit b0000_0000_0000_0000_0000_0001: Last_Block
 
-    # XXX N bytes of Data_Block
-    # XXX 0-X data Blocks
-    # XXX 0-4 bytes of Content checksum ( if Content_Checksum_flag is set)
+    u8[(self.Block_Header & Block_Size) >> 3] Data: ??
+
+    # N bytes of Block_Content
+    if (self.Block_Header & Last_Block) == 1:
+      if (Frame.Frame_Header_Descriptor & Content_Checksum_flag) != 0:
+        u32 ContentChecksum: ??
+      parse: stop
 
 layout:
   - frame Frame
+  - block[] Block
