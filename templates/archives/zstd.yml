@@ -20,11 +20,10 @@ magic:
 #25 b5 2f fd    v0.5
 #26 b5 2f fd    v0.6
 #27 b5 2f fd    v0.7
-#28 b5 2f fd    v0.8
 
 
 structs:
-  frame_header:
+  frame:
     u32 Magic: # XXX match on u8[4]
       #eq FD2FB51e: v0.1
       #eq FD2FB522: v0.2
@@ -37,12 +36,38 @@ structs:
       #default: unseen   # XXX is "unseen" supported here? should be!
 
     u8 Frame_Header_Descriptor:
-      bit b1100_0000: Frame_Content_Size_flag
-      bit b0010_0000: Single_Segment_flag
+      bit b1100_0000: Frame_Content_Size_flag   # TODO support, need non-zero sample
+      bit b0010_0000: Single_Segment_flag       # TODO support, need non-zero sample
       bit b0001_0000: Unused
       bit b0000_1000: Reserved
-      bit b0000_0100: Content_Checksum_flag # XXX If this flag is set, a 32-bits Content_Checksum will be present at frame's end
-      bit b0000_0011: Dictionary_ID_flag
+      bit b0000_0100: Content_Checksum_flag     # XXX If this flag is set, a 32-bits Content_Checksum will be present at frame's end
+      bit b0000_0011: Dictionary_ID_flag        # TODO support, need non-zero sample
+
+    if (self.Frame_Header_Descriptor & Single_Segment_flag) == 0:
+      u8 Window_Descriptor: ??
+
+    # Dictionary_ID   0-4 bytes
+    if (self.Frame_Header_Descriptor & Dictionary_ID_flag) == 1:
+      u8 Dictionary_ID: ??
+
+    if (self.Frame_Header_Descriptor & Dictionary_ID_flag) == 2:
+      u16 Dictionary_ID: ??
+
+    if (self.Frame_Header_Descriptor & Dictionary_ID_flag) == 3:
+      u32 Dictionary_ID: ??
+
+    if (self.Frame_Header_Descriptor & Frame_Content_Size_flag) != 0:
+      u8 Frame_Content_Size: ??   # TODO calc field size correctly (0-8 bytes), need sample
+
+    # Block_Header (3 bytes)
+    u24 Block_Header:     # TODO impl bit matching on 24-bit field
+      bit b1111_1111_1111_1111_1111_1000: Block_Size
+      bit b1111_1111_1111_1111_0000_0110: Block_Type
+      bit b1111_1111_1111_1111_0000_0001: Last_Block
+
+    # XXX N bytes of Data_Block
+    # XXX 0-X data Blocks
+    # XXX 0-4 bytes of Content checksum ( if Content_Checksum_flag is set)
 
 layout:
-  - frame_header FrameHeader
+  - frame Frame
