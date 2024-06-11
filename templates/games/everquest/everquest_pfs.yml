@@ -3,10 +3,16 @@
 # TODO MAX: use file name data when extracting files (is in a zlib-compressed DIRENTRY block)
 #
 #    - need custom scripting:
+#
+# OPTION A (planning):
+#    1. after basic structs parsing: a second run where DIRENTRY is known, and we tag up the block data filenames
+#
+#
+# OPTION B:
 #    1. make parsed struct available to scripting lang
 # use go-lua: https://github.com/Shopify/go-lua (to avoid golang lock-in if we will rewrite project) or use goval more?
 #    2. find DIRENTRY. extract it's zlib block
-#   3. use extracted block to reconstruct filenames and write to disk
+#    3. use extracted block to reconstruct filenames and write to disk
 
 references:
   - https://github.com/martinlindhe/eqformat_pfs
@@ -47,10 +53,27 @@ structs:
 
     if self.CRC == DIRENTRY:
       label: '"DIRENTRY"'
+      # XXX: var VariableName: value                  # TODO IMPL syntax
+      # XXX  var DIRENTRY: self.Data         # TODO IMPL syntax. xxx need to read the uncompressed data
     else:
       label: '"FILEENTRY"'
 
     offset: restore
+
+  # TODO map direntry struct to the decompressed block
+  dir_header:
+    u32 Count: ?? # 0900 0000    TOTAL COUNT
+    dir_entry[self.Count] Entry: ??  # XXX
+
+  dir_entry:
+    u32 xxx: ?? # 0c00 0000
+    asciiz name: ?? #
+
+
+# XXX TODO IMPLEMENT
+patch:
+  # XXX for each block, set filename to entry from the uncompressed $DIRENTRY block
+  #- structs.block.FileName = $DIRENTRY
 
 layout:
   - header Header
