@@ -2,7 +2,6 @@ package compression
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 
 	"github.com/spf13/afero"
@@ -105,7 +104,7 @@ func TestExtractors(t *testing.T) {
 		assert.Nil(t, err, idx)
 
 		comp := out.Bytes()
-		fmt.Printf("compressed %s as %s into % 02x\n", tt.raw, tt.comp, comp)
+		//fmt.Printf("compressed %s as %s into % 02x\n", tt.raw, tt.comp, comp)
 
 		// test that a known compressed stream decompresses to the same input
 		f := mockFile(t, "in", tt.compressed)
