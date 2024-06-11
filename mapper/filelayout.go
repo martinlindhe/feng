@@ -805,11 +805,12 @@ func (fl *FileLayout) reportUnmappedData() {
 		lastOffset := ur.offset + ur.length - 1
 
 		rawData, _ := fl.peekBytesMainFile(ur.offset, end)
+		printable, _ := value.AsciiPrintableString(rawData, 20)
 
 		if lastOffset != ur.offset {
-			feng.Printf("  [%06x-%06x] u8[%d] \t% 02x%s\n", ur.offset, lastOffset, ur.length, rawData, trail)
+			feng.Printf("  [%06x-%06x] u8[%d] \t% 02x %s%s\n", ur.offset, lastOffset, ur.length, rawData, printable, trail)
 		} else {
-			feng.Printf("  [%06x] u8 \t% 02x%s\n", ur.offset, rawData, trail)
+			feng.Printf("  [%06x] u8 \t% 02x %s%s\n", ur.offset, rawData, printable, trail)
 		}
 	}
 }
