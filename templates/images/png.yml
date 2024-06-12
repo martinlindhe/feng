@@ -74,7 +74,7 @@ structs:
     label: self.Type
 
     if self.Type == IDAT:
-      u8[self.Length] Image data: ??
+      compressed:zlib[self.Length] Image data: ??
 
     if self.Type == PLTE:
       rgb8[self.Length / 3] Palette: ??
@@ -185,7 +185,7 @@ structs:
 
     # UNKNOWN CHUNK TYPE
     if not(self.Type, IDAT, PLTE, sBIT, sRGB, pHYs, tEXt, zTXt, iTXt, iCCP, tIME, bKGD, cHRM, gAMA, iDOT):
-      u8[self.Length] Chunk data: ??
+      raw:u8[self.Length] Chunk data: ??
 
     #crc32[Type_IHDR.offset:self.offset] Checksum: ??   # XXX crc32 in big-endian of chunk minus Length and CRC field
     u32 Checksum: ??                        # XXX crc32 type
