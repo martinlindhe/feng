@@ -1,0 +1,37 @@
+# STATUS: 10%
+
+references:
+  - https://atarigamer.com/lynx/lnxhdrgen
+
+kind: executable
+name: Atari Lynx headered rom
+extensions: [.lnx]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'LYNX'
+
+structs:
+  header:
+    ascii[4] Signature: ??
+    u16 Bank0PageSize: ??
+    u16 Bank1PageSize: ??
+    u16 Version: ??
+    ascii[32] Cart name: ??
+    ascii[16] Manufacturer: ??
+    u8 Rotation:
+      eq 01: Left
+      eq 02: Right
+    u8 AUDIN used:
+      eq 00: "No"
+      eq 01: "Yes"
+    u8 EEPROM detail:  # XXX bitmask
+      bit b0000_0111: EEPROMType
+      bit b0011_1000: Reserved
+      bit b0100_0000: REAL/SD
+      bit b1000_0000: 8/16 BIT
+    u8[3] Reserved: ??
+
+layout:
+  - header Header
