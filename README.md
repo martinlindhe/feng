@@ -18,20 +18,39 @@ Flags:
   -h, --help                  Show context-sensitive help.
       --template=STRING       Parse file using this template.
   -x, --extract               Extract data streams from input file.
-      --out-dir=STRING        Write files to this directory. Implies --extract
+  -p, --pack-dir=STRING       Packs directory of data streams according to filename layout.
+  -d, --out-dir=STRING        Write files to this directory. Requires --extract
+  -o, --out-file=STRING       Output filename. Requires --pack-dir
       --offset=INT-64         Starting offset (default is 0).
       --raw                   Show raw values
       --local-time            Show timestamps in local timezone (default is UTC).
       --brief                 Show brief file information.
       --tree                  Show parsed file structure tree.
       --decimal               Show offsets in decimal (default is hex).
-      --unmapped              Print a report on unmapped bytes.
-      --overlapping           Print a report on overlapping bytes.
+      --unmapped              [Dev] Print a report on unmapped bytes.
+      --overlapping           [Dev] Print a report on overlapping bytes.
       --debug                 [Dev] Enable debug logging
       --time                  [Dev] Measure where processing time is spent.
       --cpu-profile=STRING    [Dev] Create CPU profile.
       --mem-profile=STRING    [Dev] Create memory profile.
 ```
+
+## Extracting data streams
+
+If feng recognizes the input file, you can extract the data streams from it.
+
+    feng file.ext -x --out-dir extracted-streams
+
+Hint: A data stream is of a type like "compressed:zlib", "raw:u8" or "encrypted:u8".
+
+
+## Packing the extracted data streams
+
+TODO, https://github.com/martinlindhe/feng/issues/3
+
+After making changes to the files in `extracted-streams`, you can reconstruct a file based on the original file layout.
+
+    feng file.ext -p extracted-streams -o file-modded.ext
 
 
 # Installation

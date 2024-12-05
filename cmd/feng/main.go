@@ -15,18 +15,20 @@ import (
 )
 
 var args struct {
-	Filename    string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
-	Template    string `type:"existingfile" help:"Parse file using this template."`
-	Extract     bool   `help:"Extract data streams from input file." short:"x"`
-	OutDir      string `help:"Write files to this directory. Implies --extract"`
+	Filename string `kong:"arg" name:"filename" type:"existingfile" help:"Input file."`
+	Template string `type:"existingfile" help:"Parse file using this template."`
+	Extract  bool   `help:"Extract data streams from input file." short:"x"`
+	OutDir   string `help:"Write data streams to this directory. Requires --extract" short:"d"`
+	//PackDir     string `help:"Packs directory of data streams according to filename layout." short:"p"`
+	//OutFile     string `help:"Output filename. Requires --pack-dir" short:"o"`
 	Offset      int64  `help:"Starting offset (default is 0)."`
 	Raw         bool   `help:"Show raw values"`
 	LocalTime   bool   `help:"Show timestamps in local timezone (default is UTC)."`
 	Brief       bool   `help:"Show brief file information."`
 	Tree        bool   `help:"Show parsed file structure tree."`
 	Decimal     bool   `help:"Show offsets in decimal (default is hex)."`
-	Unmapped    bool   `help:"Print a report on unmapped bytes."`
-	Overlapping bool   `help:"Print a report on overlapping bytes."`
+	Unmapped    bool   `help:"[Dev] Print a report on unmapped bytes."`
+	Overlapping bool   `help:"[Dev] Print a report on overlapping bytes."`
 	Debug       bool   `help:"[Dev] Enable debug logging"`
 	Time        bool   `help:"[Dev] Measure where processing time is spent."`
 	CPUProfile  string `name:"cpu-profile" help:"[Dev] Create CPU profile."`
@@ -61,6 +63,12 @@ func main() {
 		}
 		defer pprof.StopCPUProfile()
 	}
+
+	/*
+		if args.Extract && args.PackDir != "" {
+			log.Fatal().Msg("--extract and --pack-file are mutually exclusive arguments")
+		}
+	*/
 
 	var fl *mapper.FileLayout
 	var err error
