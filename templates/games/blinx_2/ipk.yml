@@ -1,0 +1,50 @@
+# STATUS: 50%
+
+# USED IN:
+# Blinx 2: Masters of Time and Space (2004, XBox) by Artoon
+
+# TODO MAX:
+# our lzss decoding crashes on sample files,
+# it is not using exactly the same decompression.
+# a working decompress for these blinx2 ipk files exists at
+# https://codeberg.org/KeybadeBlox/blipks/
+
+
+references:
+  - https://codeberg.org/KeybadeBlox/blipks/src/commit/8a0d684871b0a275a5ed91b37465536133e51c2b/blipks.hpp#L17
+
+kind: archive
+name: xxx
+extensions: [.ipk]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'IPK1'
+
+layout:
+  - header Header
+  - entry[Header.FileCount] Entry
+
+structs:
+  header:
+    ascii[4] Magic: ??
+    u32 Alignment: ??
+    u32 FileCount: ??
+    u32 Size: ??
+
+  entry:
+    ascii[64] FullName: ??
+    u32 IsCompressed: ??    # Interpret as boolean
+    u32 CompressedSize: ??
+    u32 Offset: ??
+    u32 ExtractedSize: ??
+
+    offset: self.Offset
+    filename: self.FullName
+    if self.IsCompressed == 0:
+      raw:u8[self.CompressedSize] Data: ??
+    #else:
+    #  # FIXME our "lzss" decompressor is not compatible with this stream/dec 2024
+    #  compressed:lzss[self.CompressedSize] Data: ??
+    offset: restore
