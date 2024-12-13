@@ -252,8 +252,7 @@ func (o Lzss) Extract(f afero.File) ([]byte, error) {
 	}
 
 	lzssMode := lzss.LZSS{Mode: 1, PositionMode: 1}
-	expanded := lzssMode.Decompress(data)
-	return expanded, nil
+	return lzssMode.Decompress(data)
 }
 
 func (o Lzss) Compress(in []byte, w io.Writer) error {
