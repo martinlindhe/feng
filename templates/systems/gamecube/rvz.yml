@@ -1,0 +1,22 @@
+# STATUS: 1%
+
+# EMULATOR FILE FORMAT, NOT FOR CONSOLE
+
+references:
+  - xxx
+
+kind: archive
+name: Nintendo Gamecube/Wii rvz archive
+extensions: [.rvz]
+endian: big # XXX
+
+magic:
+  - offset: 0000
+    match: c'RVZ' 01
+
+structs:
+  header:
+    ascii[4] Magic: ??
+
+layout:
+  - header Header

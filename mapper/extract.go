@@ -78,7 +78,8 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 		return nil
 	}
 
-	feng.Printf("<%s.%s> Extracting %s from %08x to %s:", layout.Name, field.Format.Label, fl.PresentType(&field.Format), field.Offset, fullName)
+	feng.Printf("<%s.%s> %s\n", layout.Name, field.Format.Label, fullName)
+	feng.Printf("  ├╼ Extracting %s from %08x\n", fl.PresentType(&field.Format), field.Offset)
 
 	f, err := fs1.Create(fullName)
 	if err != nil {
@@ -120,7 +121,7 @@ func (fl *FileLayout) extractField(field *Field, layout *Struct, outDir string) 
 			return err
 		}
 
-		feng.Printf(" Extracted %d bytes -> %d\n", field.Length, FileSize(f))
+		feng.Printf("  ╰╼ Extracted %d -> %d bytes\n", field.Length, FileSize(f))
 
 	case "raw":
 		if parts[1] != "u8" {

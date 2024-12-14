@@ -9,13 +9,14 @@ import (
 	"io"
 
 	"github.com/JoshVarga/blast"
-	lzss "github.com/fbonhomm/LZSS/source"
+
 	"github.com/pierrec/lz4/v4"
 	"github.com/rasky/go-lzo"
 	"github.com/spf13/afero"
 	"github.com/ulikunitz/xz/lzma"
 
 	"github.com/martinlindhe/feng/compression/lzf"
+	"github.com/martinlindhe/feng/compression/lzss"
 )
 
 // The Extractor handles compression and decompression for a specific compression format
@@ -242,23 +243,11 @@ type Lzss struct {
 }
 
 func (o Lzss) Extract(f afero.File) ([]byte, error) {
-
-	// TODO need github.com/fbonhomm/LZSS to support reader interface
-	// https://github.com/fbonhomm/LZSS/pull/1
-
-	data := make([]byte, o.CompressedSize)
-	if _, err := io.ReadFull(f, data); err != nil {
-		return nil, err
-	}
-
-	lzssMode := lzss.LZSS{Mode: 1, PositionMode: 1}
-	return lzssMode.Decompress(data)
+	return lzss.Decompress(f, o.CompressedSize)
 }
 
 func (o Lzss) Compress(in []byte, w io.Writer) error {
-	lzssMode := lzss.LZSS{Mode: 1, PositionMode: 0}
-	_, err := w.Write(lzssMode.Compress(in))
-	return err
+	return lzss.Compress(in, w)
 }
 
 // PKWARE DCL compressed data (aka blast/explode/implode)

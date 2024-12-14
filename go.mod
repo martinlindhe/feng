@@ -6,7 +6,6 @@ require (
 	github.com/JoshVarga/blast v0.0.0-20210808061142-eadad17358e8
 	github.com/alecthomas/kong v1.6.0
 	github.com/davecgh/go-spew v1.1.1
-	github.com/fbonhomm/LZSS v0.0.0-20200907090355-ba1a01a92989
 	github.com/maja42/goval v1.4.0
 	github.com/pierrec/lz4/v4 v4.1.22
 	github.com/pkg/errors v0.9.1

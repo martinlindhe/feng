@@ -3,6 +3,9 @@
 # Used in:
 # - Mario Party 4 (2002)
 
+references:
+  - https://github.com/Yoshimaster96/mpgc-sound-tools/blob/1e5ec11eda6cbbf863a533ef0f3dd9d9ffb8c9cc/dump_msm.c
+
 kind: archive
 name: Mario Party 4 gsnd file
 endian: big
@@ -17,8 +20,86 @@ structs:
   header:
     ascii[4] Signature: c'GSND'
     u32 SomeCount: ?? # XXX
-    u32 v2: ?? # 02 31 e1 60 XXX
+    u32 FileSize: ??
+    u32 unk0: ??
 
+    u32 chk5Offs: ??
+    u32 chk5Size: ??
+    u32 chk6Offs: ??
+    u32 chk6Size: ??
+
+    u32 chk2Offs: ??
+    u32 chk2Size: ??
 
 layout:
   - header Header
+
+#    //Extract banks
+#    for(int i=1; i<(chk2Size>>5); i++) {
+#        //Get offset/size data
+#        fseek(fp,chk2Offs+(i<<5),SEEK_SET);
+#        uint16_t groupId = read_u16_be(fp);
+#        fseek(fp,2,SEEK_CUR);
+#        uint32_t groupDataOffs = read_u32_be(fp);
+#        uint32_t groupDataSize = read_u32_be(fp);
+#        uint32_t sampOffs = read_u32_be(fp);
+#        uint32_t sampSize = read_u32_be(fp);
+#        groupDataOffs += chk5Offs;
+#        sampOffs += chk6Offs;
+#
+#        fseek(fp,groupDataOffs,SEEK_SET);
+#        uint32_t poolOffs = read_u32_be(fp);
+#        uint32_t projOffs = read_u32_be(fp);
+#        uint32_t sdirOffs = read_u32_be(fp);
+#        uint32_t SNGOffs = read_u32_be(fp);
+#        uint32_t poolSize = projOffs-poolOffs;
+#        uint32_t projSize = sdirOffs-projOffs;
+#        uint32_t sdirSize = SNGOffs-sdirOffs;
+#        poolOffs += groupDataOffs;
+#        projOffs += groupDataOffs;
+#        sdirOffs += groupDataOffs;
+#
+#        uint8_t * buf;
+#        char fname[0x100];
+#        FILE * out;
+#
+#        //Dump .pool
+#        buf = (uint8_t*)malloc(poolSize);
+#        fseek(fp,poolOffs,SEEK_SET);
+#        fread(buf,1,poolSize,fp);
+#        snprintf(fname,0x100,"%04X.pool",groupId);
+#        out = fopen(fname,"wb");
+#        fwrite(buf,1,poolSize,out);
+#        fclose(out);
+#        free(buf);
+#
+#        //Dump .proj
+#        buf = (uint8_t*)malloc(projSize);
+#        fseek(fp,projOffs,SEEK_SET);
+#        fread(buf,1,projSize,fp);
+#        snprintf(fname,0x100,"%04X.proj",groupId);
+#        out = fopen(fname,"wb");
+#        fwrite(buf,1,projSize,out);
+#        fclose(out);
+#        free(buf);
+#
+#        //Dump .sdir
+#        buf = (uint8_t*)malloc(sdirOffs);
+#        fseek(fp,sdirOffs,SEEK_SET);
+#        fread(buf,1,sdirOffs,fp);
+#        snprintf(fname,0x100,"%04X.sdir",groupId);
+#        out = fopen(fname,"wb");
+#        fwrite(buf,1,sdirOffs,out);
+#        fclose(out);
+#        free(buf);
+#
+#        //Dump .samp
+#        buf = (uint8_t*)malloc(sampSize);
+#        fseek(fp,sampOffs,SEEK_SET);
+#        fread(buf,1,sampSize,fp);
+#        snprintf(fname,0x100,"%04X.samp",groupId);
+#        out = fopen(fname,"wb");
+#        fwrite(buf,1,sampSize,out);
+#        fclose(out);
+#        free(buf);
+#    }
