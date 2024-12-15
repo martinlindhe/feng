@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"path/filepath"
 	"runtime"
 	"runtime/pprof"
@@ -125,6 +126,9 @@ func main() {
 			size := mapper.FileSize(f)
 			feng.Printf("%s: %s (%s)\n", args.Filename, fl.BaseName, mapper.ByteCountSI(size))
 		} else {
+
+			fmt.Printf("# %s (%s)\n", args.Filename, fl.DS.Name)
+
 			fl.Present(&mapper.PresentFileLayoutConfig{
 				ShowRaw:           args.Raw,
 				ShowInDecimal:     args.Decimal,

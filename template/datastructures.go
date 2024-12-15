@@ -11,6 +11,11 @@ import (
 
 // structure of a evaluated ./templates/ yaml file. see Template for the raw structure corresponding to the yaml file
 type DataStructure struct {
+	// Kind of resource, like "image", "archive"
+	Kind string
+
+	// Descriptive name of this template
+	Name string
 
 	// constants derived from eq & bit pattern matches
 	Constants []Constant
@@ -79,8 +84,7 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 		log.Warn().Err(err).Msgf("%s: evaluateLayout failed", basename)
 		return nil, err
 	}
-
-	return &DataStructure{
+	ds := DataStructure{
 		Constants:        constants,
 		EvaluatedStructs: structs,
 		Layout:           layout,
@@ -90,7 +94,12 @@ func NewDataStructureFrom(template *Template, basename string) (*DataStructure, 
 		Extensions:       template.Extensions,
 		Filenames:        template.Filenames,
 		BaseName:         basename,
-	}, nil
+	}
+
+	ds.Name = template.Name
+	ds.Kind = template.Kind
+
+	return &ds, nil
 }
 
 // looks up layout name from sections
