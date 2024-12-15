@@ -450,12 +450,18 @@ func MapFileToMatchingTemplate(cfg *MapperConfig) (fl *FileLayout, err error) {
 		fl.totalEvaluationTimeUntilMatch = time.Since(started)
 		return fl, nil
 	}
+	if err != nil {
+		return nil, err
+	}
 
 	// eval our internal templates
 	fl, err = walkDirMapToTemplate(cfg, feng.Templates, "")
 	if errors.Is(err, errMapFileMatched) {
 		fl.totalEvaluationTimeUntilMatch = time.Since(started)
 		return fl, nil
+	}
+	if err != nil {
+		return nil, err
 	}
 
 	if fl == nil {
