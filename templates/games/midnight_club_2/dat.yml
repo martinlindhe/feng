@@ -1,0 +1,23 @@
+# STATUS: 20%
+#
+# Used in:
+# - Midnight Club 2 (PS2)
+
+kind: archive
+name: Midnight Club 2 DAT file
+endian: little
+
+no_magic: true
+
+structs:
+  header:
+    ascii[4] SomeString: ?? # Dave, DAVE, Hash
+    u32 MaybeCount: ??
+    u32 v2: ?? # 4096  XXX maybe block size ?
+
+    # for ui_async.dat this is offset for next block with data (0800), which seems to have another header
+    # XXX for assets.dat, this is  00 03 40 00 but there is still data starting 0800
+    u32 v3: ??
+
+layout:
+  - header Header

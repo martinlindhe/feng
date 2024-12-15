@@ -1,0 +1,27 @@
+# STATUS: 1%
+
+# USED IN:
+# Storm Lover (PSVita)
+# Storm Lover 2nd (PSVita)
+
+kind: archive
+name: Storm Lover AFS2 archive
+extensions: [.awb]
+endian: little
+
+magic:
+  - offset: 0000
+    match: c'AFS2'
+
+layout:
+  - header Header
+
+structs:
+  header:
+    ascii[4] Magic: ??
+    u32 Unknown1: ??      # 01 04 02 00
+    u32 DataSize: ??
+    u32 Unknown2: ??      # 20 00 00 00
+    u16[self.DataSize] Data: ??
+
+    u8 More: ??
