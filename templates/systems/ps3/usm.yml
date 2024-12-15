@@ -1,18 +1,24 @@
 # STATUS: 50%
 #
-# used on PS3
+# used on PS3 and PSVita
+
+# USED IN:
+# Storm Lover (PSVita)
+# Storm Lover 2nd (PSVita)
+# + many more PS3 and PSVita games
 
 # HI: parse chunk data
 
 references:
   - http://wiki.xentax.com/index.php/USM_Video
+  - https://en.wikipedia.org/wiki/Scaleform_GFx
 
 software:
   - ffmpeg
   - https://github.com/esterTion/UsmDemuxer
 
 kind: system
-name: Sony PS3 USM video
+name: Sony PS3 Scaleform video
 extensions: [.usm]
 endian: big
 

@@ -6,7 +6,7 @@
 # Pro Evolution Soccer 5 (PS2)
 
 resources:
-  - https://wiki.xentax.com/index.php/AFS_AFS
+  - https://web.archive.org/web/20230517103510/https://wiki.xentax.com/index.php/AFS_AFS
 
 kind: game
 name: Pro Evolution Soccer 5 afs file

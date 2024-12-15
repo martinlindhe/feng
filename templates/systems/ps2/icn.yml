@@ -15,6 +15,7 @@ endian: little
 
 magic:
   - offset: 0000
+    # XXX too weak match, many false positives
     match: 00 00 01 00
     extensions: [.icn, .ico]
 
