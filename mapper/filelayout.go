@@ -129,29 +129,13 @@ func (fl *FileLayout) DecryptData(encData []byte) ([]byte, error) {
 }
 
 func decryptCBC(key, cipherText []byte) (plaintext []byte, err error) {
-
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
 	decrypted := make([]byte, len(cipherText))
 	c.Decrypt(decrypted, cipherText)
-
-	/*
-
-		iv := make([]byte, 16) // 0:s
-
-		//if len(cipherText)%aes.BlockSize != 0 {
-		//	panic("cipherText is not a multiple of the block size")
-		//}
-
-		decrypted := make([]byte, aes.BlockSize+len(cipherText))
-
-		mode := cipher.NewCBCDecrypter(block, iv)
-		mode.CryptBlocks(decrypted, cipherText)
-	*/
 	return cipherText, nil
-
 }
 
 // parsed file data section from a template "struct"
@@ -692,9 +676,6 @@ func (fl *FileLayout) Present(cfg *PresentFileLayoutConfig) {
 		panic("Probably input yaml error, look for properly escaped strings and \" characters")
 	}
 	fl.inUTC = cfg.InUTC
-	if fl.BaseName != "" {
-		feng.Print("# " + fl.BaseName + "\n")
-	}
 
 	presentStart := time.Now()
 	for _, layout := range fl.Structs {
