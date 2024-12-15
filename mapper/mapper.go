@@ -528,9 +528,11 @@ func mapFileToNoMagicMatchingExtension(cfg *MapperConfig, fsys fs.FS) (fl *FileL
 		if matched == 0 {
 			// match on extension
 			actualExtension := strings.ToLower(filepath.Ext(cfg.F.Name()))
-			for _, wantedExt := range ds.Extensions {
-				if wantedExt == actualExtension {
-					matched++
+			if actualExtension != ".bin" {
+				for _, wantedExt := range ds.Extensions {
+					if wantedExt == actualExtension {
+						matched++
+					}
 				}
 			}
 		}
