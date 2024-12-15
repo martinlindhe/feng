@@ -8,6 +8,7 @@ references:
   - http://wiki.xentax.com/index.php/USM_Video
 
 software:
+  - ffmpeg
   - https://github.com/esterTion/UsmDemuxer
 
 kind: system

@@ -1,4 +1,4 @@
-# STATUS: 1%
+# STATUS: 2%
 
 # CPK is an archive format developed by CRI Middleware.
 
@@ -6,6 +6,7 @@
 # Naruto Shippuden: Ultimate Ninja Storm Generations (2012) PS3
 # Naruto Shippuden: Ultimate Ninja Storm 3 (2013) PS3
 # Naruto Shippuden: Ultimate Ninja Storm Revolution (2014) PS3
+# STORM LOVER V (2015) PSVita
 
 # Corpse Party 2U (PSP)
 # Time Travelers (PSP)
@@ -25,7 +26,7 @@ software:
 kind: archive
 name: "Naruto: Ultimate Ninja Storm cpk archive"
 extensions: [.cpk]
-endian: big
+endian: little
 
 magic:
   - offset: 0000
@@ -34,9 +35,13 @@ magic:
 structs:
   header:
     ascii[4] Signature: c'CPK '
-    u32 u2: ?? #
-    u32 u3: ?? #
-    u32 u4: ?? # 0
+
+  packet:
+    u32 Unknown1: ?? #
+    u64 UtfSize: ?? #
+    ascii[self.UtfSize] Data: ?? # XXX if it starts with "@UTF" it is not encrypted, else we need to decrypt
 
 layout:
   - header Header
+
+  - packet Packet
