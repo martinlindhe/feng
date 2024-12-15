@@ -12,7 +12,7 @@ var (
 /*
 func TestCompareWithReferenceParses(t *testing.T) {
 
-	data, err := ioutil.ReadFile(smoketestFile)
+	data, err := os.ReadFile(smoketestFile)
 	assert.Nil(t, err)
 
 	smoketests, err := UnmarshalData(data)
@@ -38,7 +38,7 @@ func TestCompareWithReferenceParses(t *testing.T) {
 			ReportOverlapping: true,
 			InUTC:             true,
 		})
-		expected, err := ioutil.ReadFile(expectedOutputFilename)
+		expected, err := os.ReadFile(expectedOutputFilename)
 		if err != nil {
 			assert.Fail(t, err.Error())
 			continue

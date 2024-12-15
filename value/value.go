@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"regexp"
 	"strconv"
 	"strings"
@@ -452,7 +452,7 @@ func Utf16String(b []byte) string {
 
 	unicodeReader := transform.NewReader(bytes.NewReader(b), utf16bom)
 
-	decoded, err := ioutil.ReadAll(unicodeReader)
+	decoded, err := io.ReadAll(unicodeReader)
 	if err != nil {
 		panic(err)
 	}
@@ -491,7 +491,7 @@ func Utf16zString(b []byte) string {
 
 	unicodeReader := transform.NewReader(bytes.NewReader(b[0:end]), utf16bom)
 
-	decoded, err := ioutil.ReadAll(unicodeReader)
+	decoded, err := io.ReadAll(unicodeReader)
 	if err != nil {
 		panic(err)
 	}
@@ -501,7 +501,7 @@ func Utf16zString(b []byte) string {
 // decodes ShiftJIS into a utf8 string
 func ShiftJISString(b []byte) string {
 	decoder := transform.NewReader(bytes.NewReader(b), japanese.ShiftJIS.NewDecoder())
-	decBytes, _ := ioutil.ReadAll(decoder)
+	decBytes, _ := io.ReadAll(decoder)
 	return string(decBytes)
 }
 
